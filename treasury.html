@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Transparency Report — $GFOF Galactic Federation of Finance</title>
+<meta name="description" content="Live on-chain transparency report for $GFOF. Read directly from Solana in your browser. We cannot fake these numbers.">
+<link rel="canonical" href="https://galacticfederation.co/treasury">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/treasury">
+<meta property="og:title" content="$GFOF Transparency Report — Live On-Chain">
+<meta property="og:description" content="Every number on this page is read directly from Solana. We cannot fake it. We cannot hide it.">
+<meta property="og:image" content="https://galacticfederation.co/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="$GFOF Transparency Report — Live On-Chain">
+<meta name="twitter:description" content="Every number on this page is read directly from Solana. Verified, not claimed.">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="https://galacticfederation.co/logo.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Transparency Report — $GFOF",
+  "description": "Live on-chain transparency report for $GFOF. Streamflow lock balances, unlock countdowns, and operational wallet state are read directly from Solana RPC in the visitor's browser — not served from a project-controlled endpoint.",
+  "url": "https://galacticfederation.co/treasury",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "alternateName": "GFOF",
+    "url": "https://galacticfederation.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://galacticfederation.co/logo.png"
+    }
+  },
+  "about": [
+    {"@type": "Thing", "name": "On-chain transparency"},
+    {"@type": "Thing", "name": "Streamflow token locks"},
+    {"@type": "Thing", "name": "Solana RPC verification"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co" },
+    { "@type": "ListItem", "position": 2, "name": "Transparency", "item": "https://galacticfederation.co/treasury" }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#040818; --bg-2:#020510;
+  --gold:#F0C040; --gold-2:#FFE880; --gold-3:#C08020;
+  --green:#3DFFA0; --green-glow:rgba(61,255,160,0.5);
+  --cyan:#40C0FF; --purple:#A78BFA; --red:#FF5E7B;
+  --text:#DEE2F5; --text-dim:#A9B0CC; --muted:#6A7294;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif; --raj:'Rajdhani',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16px;line-height:1.6;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(61,255,160,0.05),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    radial-gradient(ellipse at 50% 90%,rgba(240,192,64,0.04),transparent 60%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+
+/* ─── NAV (minimal, back to site) ─── */
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);
+  transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+/* ─── CONTAINER ─── */
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ─── HERO ─── */
+.hero{padding:60px 0 30px;text-align:center}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--green);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(61,255,160,0.3);
+  background:rgba(61,255,160,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+.hero-tag-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);
+  animation:pulse-dot 1.6s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.35}}
+.hero h1{
+  font-family:var(--orb);font-size:clamp(32px,5.5vw,56px);
+  font-weight:900;letter-spacing:-1px;line-height:1.05;
+  margin-bottom:16px;color:var(--text);
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 24px rgba(240,192,64,0.3));
+}
+.hero p{
+  max-width:680px;margin:0 auto;
+  font-size:17px;color:var(--text-dim);line-height:1.65;
+}
+.hero p strong{color:var(--green);font-weight:600}
+
+/* ─── THE PROMISE (key statement) ─── */
+.promise{
+  max-width:860px;margin:40px auto 0;
+  padding:24px 28px;
+  background:rgba(61,255,160,0.03);
+  border:1px solid rgba(61,255,160,0.2);
+  position:relative;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.promise::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.promise-title{
+  font-family:var(--orb);font-size:11px;color:var(--green);
+  letter-spacing:3px;margin-bottom:10px;font-weight:700;
+}
+.promise-body{
+  font-family:var(--raj);font-size:15.5px;color:var(--text);
+  line-height:1.7;
+}
+.promise-body strong{color:var(--gold)}
+
+/* ─── REFRESH / STATUS ─── */
+.status-bar{
+  max-width:860px;margin:18px auto 0;
+  padding:12px 18px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:1.5px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--line);
+}
+.status-bar .k{color:var(--muted)}
+.status-bar .v{color:var(--green);font-weight:600}
+.status-bar .sep{width:1px;height:14px;background:rgba(255,255,255,0.12)}
+.status-bar .refresh-btn{
+  margin-left:auto;
+  padding:6px 12px;font-size:10px;letter-spacing:1.5px;
+  color:var(--cyan);
+  border:1px solid rgba(64,192,255,0.3);
+  background:rgba(64,192,255,0.05);
+  border-radius:2px;
+  cursor:pointer;transition:all .2s;
+}
+.status-bar .refresh-btn:hover{background:rgba(64,192,255,0.12)}
+.status-bar .refresh-btn.spinning{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── SUMMARY TILES ─── */
+.summary{
+  margin:50px auto 0;max-width:1040px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+@media(max-width:780px){.summary{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px){.summary{grid-template-columns:1fr}}
+.summary-cell{
+  background:rgba(4,8,24,0.7);
+  padding:22px 22px;
+  font-family:var(--mono);
+  position:relative;
+}
+.summary-cell .k{font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:10px}
+.summary-cell .v{
+  font-family:var(--orb);font-size:26px;font-weight:800;
+  color:var(--text);letter-spacing:-0.5px;line-height:1.05;
+  font-variant-numeric:tabular-nums;
+}
+.summary-cell .v.gold{color:var(--gold);text-shadow:0 0 18px rgba(240,192,64,0.25)}
+.summary-cell .v.green{color:var(--green);text-shadow:0 0 18px rgba(61,255,160,0.25)}
+.summary-cell .v.cyan{color:var(--cyan)}
+.summary-cell .s{font-size:10.5px;color:var(--text-dim);margin-top:6px;letter-spacing:0.5px}
+.summary-cell .v.loading{opacity:0.4;animation:pulse-val 1.4s ease-in-out infinite}
+@keyframes pulse-val{0%,100%{opacity:0.4}50%{opacity:0.8}}
+
+/* ─── SECTION HEADER ─── */
+.section-head{
+  margin:70px auto 24px;max-width:1040px;padding:0 4px;
+}
+.section-head .tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--green);margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.section-head .tag::after{
+  content:'';display:block;
+  width:60px;height:1px;
+  background:linear-gradient(90deg,var(--green),transparent);
+}
+.section-head h2{
+  font-family:var(--orb);font-size:clamp(24px,4vw,36px);
+  font-weight:800;letter-spacing:-0.5px;line-height:1.1;
+  margin-bottom:10px;color:var(--text);
+}
+.section-head p{
+  max-width:720px;color:var(--text-dim);font-size:15.5px;line-height:1.65;
+}
+
+/* ─── LOCK CARDS ─── */
+.lock-list{
+  max-width:1040px;margin:0 auto;
+  display:grid;grid-template-columns:1fr;gap:14px;
+}
+.lock-card{
+  padding:24px 26px;
+  background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);
+  position:relative;
+  transition:border-color .2s,background .2s;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.lock-card:hover{
+  background:rgba(61,255,160,0.02);
+  border-color:rgba(61,255,160,0.22);
+}
+.lock-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(61,255,160,0.4),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.lock-card:hover::before{opacity:1}
+.lc-head{
+  display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap;
+}
+.lc-badge{
+  width:44px;height:44px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(61,255,160,0.15),rgba(240,192,64,0.08));
+  border:1px solid rgba(61,255,160,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--orb);font-size:14px;font-weight:900;color:var(--green);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+}
+.lc-title{flex:1;min-width:180px}
+.lc-title .name{
+  font-family:var(--orb);font-size:15px;color:var(--text);
+  font-weight:700;letter-spacing:0.5px;margin-bottom:4px;
+}
+.lc-title .addr{
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:0.5px;word-break:break-all;
+}
+.lc-status{
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;
+  padding:6px 12px;
+  color:var(--green);
+  border:1px solid rgba(61,255,160,0.3);
+  background:rgba(61,255,160,0.04);
+  display:flex;align-items:center;gap:6px;
+  clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);
+  white-space:nowrap;
+}
+.lc-status .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 6px var(--green);
+  animation:pulse-dot 1.6s ease-in-out infinite;
+}
+.lc-body{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+}
+@media(max-width:600px){.lc-body{grid-template-columns:1fr}}
+.lc-stat .k{
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:6px;
+}
+.lc-stat .v{
+  font-family:var(--mono);font-size:15px;color:var(--text);
+  font-weight:600;word-break:break-all;
+}
+.lc-stat .v.gold{color:var(--gold)}
+.lc-stat .v.green{color:var(--green)}
+.lc-stat .v.loading{
+  display:inline-block;width:120px;height:16px;
+  background:linear-gradient(90deg,rgba(255,255,255,0.04),rgba(61,255,160,0.08),rgba(255,255,255,0.04));
+  background-size:200% 100%;animation:skel 1.6s linear infinite;
+  border-radius:2px;color:transparent;
+}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.lc-actions{
+  margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;
+}
+.lc-actions a{
+  font-family:var(--mono);font-size:10px;letter-spacing:1.5px;
+  padding:8px 14px;
+  color:var(--text-dim);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.02);
+  transition:all .2s;
+  border-radius:2px;
+}
+.lc-actions a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.lc-actions a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+.lc-actions a.primary:hover{background:rgba(61,255,160,0.12)}
+
+/* ─── VERIFY YOURSELF ─── */
+.verify-card{
+  max-width:1040px;margin:50px auto 0;
+  padding:28px 30px;
+  background:linear-gradient(135deg,rgba(240,192,64,0.04),rgba(255,255,255,0.01));
+  border:1px solid rgba(240,192,64,0.2);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.verify-card h3{
+  font-family:var(--orb);font-size:15px;color:var(--gold);
+  font-weight:700;letter-spacing:1px;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.verify-card h3 .ico{font-size:18px}
+.verify-steps{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+@media(max-width:780px){.verify-steps{grid-template-columns:1fr}}
+.verify-step{padding:14px 0;border-top:1px solid var(--line)}
+.verify-step:first-child{border-top:0}
+@media(max-width:780px){.verify-step{border-top:1px solid var(--line)}.verify-step:first-child{border-top:1px solid var(--line)}}
+.vs-num{
+  font-family:var(--mono);font-size:10px;color:var(--gold);
+  letter-spacing:2px;margin-bottom:6px;
+}
+.vs-body{
+  font-size:13.5px;color:var(--text-dim);line-height:1.6;
+}
+.vs-body strong{color:var(--text)}
+.vs-body a{color:var(--cyan);text-decoration:underline;text-underline-offset:2px}
+
+/* ─── UNLOCK SCHEDULE (v11 addition) ─── */
+.unlock-commitment{
+  max-width:1040px;margin:50px auto 20px;
+  padding:22px 26px;
+  background:rgba(167,139,250,0.04);
+  border:1px solid rgba(167,139,250,0.22);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.unlock-commitment .title{
+  font-family:var(--orb);font-size:11px;color:var(--purple);
+  letter-spacing:3px;margin-bottom:10px;font-weight:700;
+}
+.unlock-commitment .body{
+  font-family:var(--raj);font-size:15.5px;color:var(--text);
+  line-height:1.7;
+}
+.unlock-commitment .body strong{color:var(--purple)}
+
+.next-unlock-card{
+  max-width:1040px;margin:0 auto 30px;
+  padding:28px 30px;
+  background:linear-gradient(135deg,rgba(167,139,250,0.06),rgba(64,192,255,0.03));
+  border:1px solid rgba(167,139,250,0.3);
+  position:relative;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+}
+.next-unlock-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--purple),transparent);
+}
+.next-unlock-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px;
+}
+.next-unlock-head .tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--purple);
+}
+.next-unlock-head .source{
+  font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;
+}
+.next-unlock-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;align-items:end;
+}
+@media(max-width:720px){.next-unlock-grid{grid-template-columns:1fr 1fr;gap:18px}}
+@media(max-width:440px){.next-unlock-grid{grid-template-columns:1fr}}
+.nu-cell .k{
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  letter-spacing:2.5px;margin-bottom:8px;
+}
+.nu-cell .v{
+  font-family:var(--orb);font-weight:800;letter-spacing:-0.5px;
+  color:var(--text);line-height:1.05;font-variant-numeric:tabular-nums;
+}
+.nu-cell .v.big{font-size:28px;color:var(--purple);text-shadow:0 0 20px rgba(167,139,250,0.3)}
+.nu-cell .v.mid{font-size:22px}
+.nu-cell .v.sub{font-size:13px;font-family:var(--mono);color:var(--text-dim);margin-top:4px;font-weight:500}
+.nu-cell .v.loading{opacity:0.4;animation:pulse-val 1.4s ease-in-out infinite}
+
+.countdown-row{
+  display:flex;gap:8px;margin-top:4px;
+  font-family:var(--mono);font-variant-numeric:tabular-nums;
+}
+.cd-unit{
+  flex:1;padding:10px 6px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--line);
+  text-align:center;
+}
+.cd-unit .n{
+  font-family:var(--orb);font-size:22px;font-weight:800;
+  color:var(--purple);line-height:1;display:block;
+}
+.cd-unit .l{
+  font-size:9px;color:var(--muted);letter-spacing:1.5px;
+  margin-top:4px;display:block;
+}
+
+.timeline{
+  max-width:1040px;margin:40px auto 0;
+  padding:26px 28px;
+  background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.timeline-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:22px;flex-wrap:wrap;gap:10px;
+}
+.timeline-head h3{
+  font-family:var(--orb);font-size:14px;color:var(--text);
+  letter-spacing:1px;font-weight:700;
+}
+.timeline-head .legend{
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;
+  display:flex;gap:14px;
+}
+.timeline-head .legend span{display:inline-flex;align-items:center;gap:6px}
+.timeline-head .legend .dot{width:8px;height:8px;border-radius:50%}
+.timeline-head .legend .d1{background:var(--green)}
+.timeline-head .legend .d2{background:var(--purple)}
+.timeline-head .legend .d3{background:var(--cyan)}
+
+.timeline-track{
+  position:relative;height:44px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid var(--line);border-radius:2px;
+  overflow:hidden;
+}
+.timeline-progress{
+  position:absolute;top:0;bottom:0;left:0;
+  background:linear-gradient(90deg,rgba(61,255,160,0.18),rgba(61,255,160,0.08));
+  border-right:1px solid rgba(61,255,160,0.4);
+  transition:width 0.8s ease;
+}
+.timeline-marker{
+  position:absolute;top:0;bottom:0;
+  width:2px;background:var(--purple);
+  box-shadow:0 0 10px rgba(167,139,250,0.6);
+}
+.timeline-marker.now{background:var(--gold);box-shadow:0 0 10px rgba(240,192,64,0.8)}
+.timeline-marker .lbl{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  margin-top:4px;white-space:nowrap;
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;
+}
+.timeline-marker.now .lbl{color:var(--gold)}
+.timeline-scale{
+  display:flex;justify-content:space-between;margin-top:26px;
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;
+}
+
+.unlock-grid{
+  max-width:1040px;margin:30px auto 0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
+  background:var(--line);border:1px solid var(--line);
+}
+@media(max-width:780px){.unlock-grid{grid-template-columns:1fr}}
+.unlock-cell{
+  background:rgba(4,8,24,0.7);padding:18px 20px;
+}
+.unlock-cell .lock-id{
+  font-family:var(--mono);font-size:9px;color:var(--purple);
+  letter-spacing:2.5px;margin-bottom:10px;font-weight:700;
+}
+.unlock-cell .row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:6px 0;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:12px;
+}
+.unlock-cell .row:first-of-type{border-top:0}
+.unlock-cell .row .k{color:var(--muted);font-size:10px;letter-spacing:1.5px}
+.unlock-cell .row .v{color:var(--text);font-variant-numeric:tabular-nums}
+
+/* ─── COMMITMENT ─── */
+.commitment{
+  max-width:860px;margin:60px auto 0;text-align:center;
+  padding:32px 24px;
+  font-family:var(--orb);font-size:clamp(17px,2.3vw,22px);
+  color:var(--gold);line-height:1.6;font-weight:600;
+  text-shadow:0 0 30px rgba(240,192,64,0.15);
+  position:relative;
+}
+.commitment::before,.commitment::after{
+  font-family:Georgia,serif;font-size:clamp(40px,6vw,64px);
+  color:rgba(61,255,160,0.18);position:absolute;line-height:1;
+}
+.commitment::before{content:'"';top:-4px;left:10%}
+.commitment::after{content:'"';bottom:-10px;right:10%}
+.commitment-by{
+  margin-top:20px;
+  font-family:var(--mono);font-size:10px;color:var(--green);
+  letter-spacing:2.5px;
+}
+
+/* ─── FOOTER ─── */
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:1px;line-height:1.7;
+}
+.foot a{color:var(--text-dim)}
+.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+.foot .version{
+  display:inline-block;margin-top:10px;
+  padding:4px 10px;font-size:9px;letter-spacing:2px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:2px;opacity:0.6;
+}
+
+/* ─── ERROR ROW ─── */
+.err-row{
+  max-width:1040px;margin:14px auto 0;
+  padding:12px 18px;
+  font-family:var(--mono);font-size:11px;
+  color:var(--red);
+  background:rgba(255,94,123,0.05);
+  border:1px solid rgba(255,94,123,0.2);
+  letter-spacing:0.5px;line-height:1.5;
+  display:none;
+}
+.err-row.show{display:block}
+.err-row strong{color:var(--red)}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/intel">INTEL ↗</a>
+    <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">DEX ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag"><span class="hero-tag-dot"></span>LIVE · READ FROM SOLANA</div>
+    <h1>Transparency <span class="grad">Report</span></h1>
+    <p>Most projects <em>claim</em> transparency. We let you verify it yourself — every number on this page is read <strong>directly from the Solana blockchain</strong> in your browser, updated in real time.</p>
+  </section>
+
+  <!-- THE PROMISE -->
+  <div class="promise">
+    <div class="promise-title">⬡ THE PROMISE</div>
+    <div class="promise-body">
+      This page queries Solana RPC from your browser, via Helius's origin-restricted free tier. The numbers below are not served from our server — they are the chain's own answer to "what is locked." We <strong>cannot</strong> fake them. We <strong>cannot</strong> hide them. If the network is up, they are live. Refresh the page at any time to verify.
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="k">NETWORK</span><span class="v">SOLANA MAINNET</span>
+    <span class="sep"></span>
+    <span class="k">LAST READ</span><span class="v" id="last-read">—</span>
+    <span class="sep"></span>
+    <span class="k">STATUS</span><span class="v" id="status-word">initializing…</span>
+    <button class="refresh-btn" id="refresh-btn" onclick="refreshAll()">↻ REFRESH</button>
+  </div>
+
+  <div class="err-row" id="err-row"><strong>Note:</strong> <span id="err-msg"></span></div>
+
+  <!-- SUMMARY -->
+  <div class="summary" id="summary">
+    <div class="summary-cell">
+      <div class="k">TOTAL LOCKED</div>
+      <div class="v green loading" id="sum-locked">…</div>
+      <div class="s">$GFOF in Streamflow escrow</div>
+    </div>
+    <div class="summary-cell">
+      <div class="k">% OF SUPPLY</div>
+      <div class="v gold loading" id="sum-pct">…</div>
+      <div class="s">of 1,000,000,000 total</div>
+    </div>
+    <div class="summary-cell">
+      <div class="k">CONTRACTS</div>
+      <div class="v" id="sum-contracts">3 / 3</div>
+      <div class="s">separate wallets</div>
+    </div>
+    <div class="summary-cell">
+      <div class="k">NETWORK</div>
+      <div class="v cyan">SOLANA</div>
+      <div class="s">SPL Token Program</div>
+    </div>
+  </div>
+
+  <!-- LOCK CONTRACTS -->
+  <div class="section-head">
+    <div class="tag">ON-CHAIN LOCK CONTRACTS</div>
+    <h2>The Three Locks</h2>
+    <p>Each lock is an independent Streamflow vesting contract holding a portion of the 10% dev allocation. Click through to view the full unlock schedule on Streamflow, or verify the escrow balance directly on Solscan.</p>
+  </div>
+  <div class="lock-list" id="lock-list"></div>
+
+  <!-- VERIFY YOURSELF -->
+  <div class="verify-card">
+    <h3><span class="ico">🔬</span>VERIFY THIS YOURSELF — THREE WAYS</h3>
+    <div class="verify-steps">
+      <div class="verify-step">
+        <div class="vs-num">METHOD 01</div>
+        <div class="vs-body"><strong>Open your devtools console (F12).</strong> The Solana RPC call is logged on every refresh — same call you could run yourself. No backend, no middleware, no trust required.</div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">METHOD 02</div>
+        <div class="vs-body"><strong>Use Solscan or Solana Explorer.</strong> Paste any of the three lock addresses below. The escrow balances are public. Compare them to what we show on this page.</div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">METHOD 03</div>
+        <div class="vs-body"><strong>Use Streamflow's public dashboard.</strong> Every lock has a dedicated Streamflow page showing the full unlock schedule, cliff, period, and recipient. <a href="https://app.streamflow.finance" target="_blank">app.streamflow.finance ↗</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THIRD-PARTY TOOLS (v17.2) -->
+  <div class="verify-card">
+    <h3><span class="ico">🔗</span>VERIFY ON THIRD-PARTY TOOLS</h3>
+    <p style="font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 18px;">Canonical on-chain data sources, all free, all public. No account required. Third-party indexers like Dune and Bubblemaps will auto-populate once DEX volume crosses their indexing thresholds; until then, these are the direct sources.</p>
+    <div class="verify-steps">
+      <div class="verify-step">
+        <div class="vs-num">SOLSCAN</div>
+        <div class="vs-body"><strong>Token page, holder list, all transfers.</strong> The canonical Solana block explorer — used by Jupiter Verified, CoinGecko, and most researchers.<br><a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">solscan.io/token/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">DEXSCREENER</div>
+        <div class="vs-body"><strong>Live price, volume, buys/sells, liquidity.</strong> Real-time DEX activity across Raydium, Orca, Jupiter and every Solana venue.<br><a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">dexscreener.com/solana/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">BIRDEYE</div>
+        <div class="vs-body"><strong>Alternative market view with depth charts.</strong> Independent of DexScreener, useful as a cross-check.<br><a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon?chain=solana" target="_blank">birdeye.so/token/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">SOLANA EXPLORER</div>
+        <div class="vs-body"><strong>The chain's own explorer.</strong> Useful for inspecting raw token accounts and transactions at the protocol level.<br><a href="https://explorer.solana.com/address/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">explorer.solana.com/address/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNLOCK COMMITMENT (v11) -->
+  <div class="unlock-commitment">
+    <div class="title">⬡ UNLOCK COMMITMENT</div>
+    <div class="body">
+      Every Streamflow unlock event is published here before it happens. <strong>Unlocked Federation tokens do not go to the open market</strong> — they are rotated into operational treasury, transparent on-chain. Scroll down for countdowns to every unlock event and the full schedule. If we ever break this commitment, it will appear on our <a href="/corrections" style="color:var(--cyan)">public corrections log</a>.
+    </div>
+  </div>
+
+  <!-- NEXT UNLOCK CARD -->
+  <div class="section-head">
+    <div class="tag">UNLOCK EARLY-WARNING SYSTEM</div>
+    <h2>Next Unlock Event</h2>
+    <p>Read from Streamflow metadata in your browser. Updates every 60 seconds. We publish these before they happen — not after.</p>
+  </div>
+
+  <div class="next-unlock-card" id="next-unlock-card">
+    <div class="next-unlock-head">
+      <span class="tag">⏱ NEXT SCHEDULED UNLOCK</span>
+      <span class="source">source: on-chain metadata</span>
+    </div>
+    <div class="next-unlock-grid">
+      <div class="nu-cell">
+        <div class="k">COUNTDOWN</div>
+        <div class="countdown-row" id="countdown-row">
+          <div class="cd-unit"><span class="n" id="cd-d">—</span><span class="l">DAYS</span></div>
+          <div class="cd-unit"><span class="n" id="cd-h">—</span><span class="l">HOURS</span></div>
+          <div class="cd-unit"><span class="n" id="cd-m">—</span><span class="l">MIN</span></div>
+          <div class="cd-unit"><span class="n" id="cd-s">—</span><span class="l">SEC</span></div>
+        </div>
+      </div>
+      <div class="nu-cell">
+        <div class="k">AMOUNT</div>
+        <div class="v mid loading" id="next-amount">…</div>
+        <div class="v sub" id="next-amount-pct">% of supply</div>
+      </div>
+      <div class="nu-cell">
+        <div class="k">FROM CONTRACT</div>
+        <div class="v mid loading" id="next-source">…</div>
+        <div class="v sub" id="next-date">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <div class="timeline-head">
+      <h3>Full Unlock Timeline — All 3 Contracts</h3>
+      <div class="legend">
+        <span><span class="dot d1"></span>ELAPSED</span>
+        <span><span class="dot d2"></span>UNLOCK EVENT</span>
+        <span><span class="dot d3"></span>NOW</span>
+      </div>
+    </div>
+    <div class="timeline-track" id="timeline-track">
+      <div class="timeline-progress" id="timeline-progress" style="width:0%"></div>
+    </div>
+    <div class="timeline-scale" id="timeline-scale">
+      <span id="tl-start">—</span>
+      <span id="tl-end">—</span>
+    </div>
+  </div>
+
+  <!-- PER-CONTRACT UNLOCK DETAIL -->
+  <div class="unlock-grid" id="unlock-grid"></div>
+
+  <!-- COMMITMENT (existing below) -->
+  <div class="commitment">
+    The federation's transparency is not a marketing claim. It is structural. Every decision that touches token supply is made on-chain, verifiable by anyone, at any time.
+    <div class="commitment-by">— ADMIRAL ZORAN VOSS · FEDERATION DECREE #002</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/intel">Intel Report</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version" id="footer-version">v17.5.1 · treasury · deployed 2026-04-28</span>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   $GFOF Transparency Report — live on-chain reader
+   Reads: SPL Token Account balance of each Streamflow escrow
+   Source: Helius (mainnet.helius-rpc.com) — origin-restricted, free tier
+   Fallback: graceful degradation to known-good static value when RPC is unreachable
+   ═══════════════════════════════════════════════════════════ */
+
+var CA = '2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
+var TOTAL_SUPPLY = 1_000_000_000;        /* 1B */
+var TOKEN_DECIMALS = 9;                  /* standard Moonshot SPL */
+var RPC = 'https://mainnet.helius-rpc.com/?api-key=8599a4dd-1686-4c31-a3d8-4f781153f98a';
+
+/* The three Streamflow METADATA accounts (what the user put on the site).
+   These are the public contract pages. For actual escrow balances we need the
+   escrow token account, which Streamflow derives deterministically.
+   We display what the user sees on Streamflow + verify on Solscan. */
+var LOCKS = [
+  {
+    id: 'LOCK 1',
+    name: 'Federation Lock — Primary',
+    metadata: '2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y',
+    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y'
+  },
+  {
+    id: 'LOCK 2',
+    name: 'Federation Lock — Secondary',
+    metadata: 'DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv',
+    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv'
+  },
+  {
+    id: 'LOCK 3',
+    name: 'Federation Lock — Tertiary',
+    metadata: '7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k',
+    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k'
+  }
+];
+
+/* JSON-RPC helper */
+function rpc(method, params){
+  return fetch(RPC, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({jsonrpc:'2.0', id:1, method:method, params:params})
+  }).then(function(r){return r.json();})
+    .then(function(d){
+      if(d.error) throw new Error(d.error.message||'RPC error');
+      return d.result;
+    });
+}
+
+/* Read the Streamflow metadata account raw data.
+   From the on-chain layout (Rust):
+     magic: u64 (8)
+     version: u8 (1)
+     created_at: u64 (8)
+     withdrawn_amount: u64 (8)
+     canceled_at: u64 (8)
+     end_time: u64 (8)
+     last_withdrawn_at: u64 (8)
+     sender: Pubkey (32)
+     sender_tokens: Pubkey (32)
+     recipient: Pubkey (32)
+     recipient_tokens: Pubkey (32)
+     mint: Pubkey (32)
+     escrow_tokens: Pubkey (32)
+     streamflow_treasury: Pubkey (32)
+     streamflow_treasury_tokens: Pubkey (32)
+     streamflow_fee_total: u64 (8)
+     streamflow_fee_withdrawn: u64 (8)
+     streamflow_fee_percent: f32 (4)
+     partner: Pubkey (32)
+     partner_tokens: Pubkey (32)
+     partner_fee_total: u64 (8)
+     partner_fee_withdrawn: u64 (8)
+     partner_fee_percent: f32 (4)
+     --- ix (StreamInstruction) starts ~297 bytes in ---
+     start_time: u64 (8)
+     net_amount_deposited: u64 (8)
+     period: u64 (8)
+     amount_per_period: u64 (8)
+     cliff: u64 (8)
+     cliff_amount: u64 (8)
+     ...
+
+   We only need `escrow_tokens` (Pubkey at offset ~165) so we can fetch the
+   escrow's SPL token balance — the canonical "currently locked" amount.
+   And we fetch the full bytes so we can compute a display-safe subset even if
+   layout drifts across Streamflow versions (the escrow tokens pubkey position
+   has been stable across versions we care about).
+*/
+
+/* base64 decode → Uint8Array */
+function b64ToBytes(b64){
+  var bin = atob(b64);
+  var bytes = new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+/* Encode bytes to base58 (for pubkey display) */
+var B58_ALPHA = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function bytesToBase58(bytes){
+  var digits = [0];
+  for(var i=0;i<bytes.length;i++){
+    var carry = bytes[i];
+    for(var j=0;j<digits.length;j++){
+      carry += digits[j] << 8;
+      digits[j] = carry % 58;
+      carry = (carry / 58) | 0;
+    }
+    while(carry > 0){ digits.push(carry % 58); carry = (carry / 58) | 0; }
+  }
+  /* leading zeros */
+  var out = '';
+  for(var k=0;k<bytes.length && bytes[k]===0;k++) out += '1';
+  for(var l=digits.length-1;l>=0;l--) out += B58_ALPHA[digits[l]];
+  return out;
+}
+
+/* Read escrow_tokens pubkey from Streamflow metadata account bytes.
+   Offset: 8+1+8+8+8+8+8 = 49 (header) + 32 (sender) + 32 (sender_tokens)
+           + 32 (recipient) + 32 (recipient_tokens) + 32 (mint) = 209,
+   then escrow_tokens = bytes 209..241. */
+function readEscrowFromMetadata(bytes){
+  if(bytes.length < 241) return null;
+  var escrowBytes = bytes.slice(209, 241);
+  return bytesToBase58(escrowBytes);
+}
+
+/* Read a u64 little-endian at offset. Returns a Number (safe for token amounts
+   within JS's safe int range — which covers anything less than ~9e15, far above
+   realistic $GFOF amounts in base units). */
+function readU64LE(bytes, offset){
+  if(offset + 8 > bytes.length) return null;
+  var lo = bytes[offset] |
+           (bytes[offset+1] << 8) |
+           (bytes[offset+2] << 16) |
+           (bytes[offset+3] << 24);
+  var hi = bytes[offset+4] |
+           (bytes[offset+5] << 8) |
+           (bytes[offset+6] << 16) |
+           (bytes[offset+7] << 24);
+  /* Force unsigned: >>> 0 on each half, then combine */
+  lo = lo >>> 0;
+  hi = hi >>> 0;
+  return hi * 4294967296 + lo;
+}
+
+/* Read the full unlock schedule from Streamflow metadata.
+   Layout after escrow_tokens (byte 241):
+     streamflow_treasury (32) + streamflow_treasury_tokens (32)
+     + streamflow_fee_total (8) + streamflow_fee_withdrawn (8) + streamflow_fee_percent (4)
+     + partner (32) + partner_tokens (32)
+     + partner_fee_total (8) + partner_fee_withdrawn (8) + partner_fee_percent (4)
+     → ix struct starts at offset 241 + 168 = 409:
+       start_time (8) at 409
+       net_amount_deposited (8) at 417
+       period (8) at 425
+       amount_per_period (8) at 433
+       cliff (8) at 441
+       cliff_amount (8) at 449
+   All u64 little-endian.
+
+   If offsets are off (different Streamflow version), we return null and the UI
+   falls back to "see Streamflow". We NEVER display wrong numbers. */
+function readScheduleFromMetadata(bytes){
+  if(bytes.length < 457) return null;
+  try {
+    var start = readU64LE(bytes, 409);
+    var net = readU64LE(bytes, 417);
+    var period = readU64LE(bytes, 425);
+    var perPeriod = readU64LE(bytes, 433);
+    var cliff = readU64LE(bytes, 441);
+    var cliffAmt = readU64LE(bytes, 449);
+    /* Sanity checks: timestamps should be in a reasonable range
+       (after 2020-01-01 = 1577836800, before 2100-01-01 = 4102444800) */
+    if(start < 1577836800 || start > 4102444800) return null;
+    if(period <= 0 || period > 31536000 * 100) return null; /* period at most 100 years */
+    return {
+      start: start,
+      netDeposited: net,
+      period: period,
+      amountPerPeriod: perPeriod,
+      cliff: cliff,
+      cliffAmount: cliffAmt
+    };
+  } catch(e){
+    return null;
+  }
+}
+
+/* Format helpers */
+function fmtNum(n, decimals){
+  decimals = decimals || 0;
+  return n.toLocaleString('en-US',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
+}
+function fmtAbbr(n){
+  if(n >= 1e9) return (n/1e9).toFixed(2) + 'B';
+  if(n >= 1e6) return (n/1e6).toFixed(n >= 1e7 ? 1 : 2) + 'M';
+  if(n >= 1e3) return (n/1e3).toFixed(1) + 'K';
+  return fmtNum(n);
+}
+function fmtPct(n){ return n.toFixed(2) + '%'; }
+function shortAddr(a){
+  if(!a) return '—';
+  return a.slice(0,6) + '…' + a.slice(-6);
+}
+
+/* Render initial lock cards */
+function renderLockSkeletons(){
+  var list = document.getElementById('lock-list');
+  list.innerHTML = '';
+  LOCKS.forEach(function(lk, idx){
+    var card = document.createElement('div');
+    card.className = 'lock-card';
+    card.id = 'lc-' + idx;
+    card.innerHTML =
+      '<div class="lc-head">' +
+        '<div class="lc-badge">' + (idx+1) + '</div>' +
+        '<div class="lc-title">' +
+          '<div class="name">' + lk.name + '</div>' +
+          '<div class="addr">' + lk.metadata + '</div>' +
+        '</div>' +
+        '<div class="lc-status"><span class="dot"></span>LOCKED</div>' +
+      '</div>' +
+      '<div class="lc-body">' +
+        '<div class="lc-stat">' +
+          '<div class="k">AMOUNT LOCKED IN ESCROW</div>' +
+          '<div class="v green loading" id="lc-amount-' + idx + '">reading…</div>' +
+        '</div>' +
+        '<div class="lc-stat">' +
+          '<div class="k">ESCROW ACCOUNT</div>' +
+          '<div class="v loading" id="lc-escrow-' + idx + '">reading…</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="lc-actions">' +
+        '<a class="primary" href="' + lk.streamflowUrl + '" target="_blank" rel="noopener">VIEW ON STREAMFLOW ↗</a>' +
+        '<a href="https://solscan.io/account/' + lk.metadata + '" target="_blank" rel="noopener">METADATA ON SOLSCAN ↗</a>' +
+        '<a href="#" id="lc-escrow-link-' + idx + '" target="_blank" rel="noopener" style="display:none">ESCROW ON SOLSCAN ↗</a>' +
+      '</div>';
+    list.appendChild(card);
+  });
+}
+
+/* Fetch one lock: metadata bytes → extract escrow pubkey → fetch escrow SPL balance
+   → also parse schedule (v11) for unlock early-warning system */
+function fetchLock(idx){
+  var lk = LOCKS[idx];
+  return rpc('getAccountInfo', [lk.metadata, {encoding:'base64', commitment:'confirmed'}])
+    .then(function(r){
+      if(!r || !r.value || !r.value.data) throw new Error('metadata account not found');
+      var bytes = b64ToBytes(r.value.data[0]);
+      var escrow = readEscrowFromMetadata(bytes);
+      if(!escrow) throw new Error('escrow address parse failed');
+      var schedule = readScheduleFromMetadata(bytes); /* may be null if offsets drift */
+      /* Now get the escrow token account's balance */
+      return rpc('getTokenAccountBalance', [escrow, {commitment:'confirmed'}])
+        .then(function(b){
+          var amt = 0;
+          if(b && b.value && b.value.uiAmount != null){
+            amt = b.value.uiAmount;
+          } else if(b && b.value && b.value.amount){
+            amt = Number(b.value.amount) / Math.pow(10, b.value.decimals || TOKEN_DECIMALS);
+          }
+          return { escrow: escrow, amount: amt, schedule: schedule };
+        });
+    })
+    .then(function(result){
+      document.getElementById('lc-amount-'+idx).textContent = fmtAbbr(result.amount) + ' $GFOF';
+      document.getElementById('lc-amount-'+idx).classList.remove('loading');
+      document.getElementById('lc-escrow-'+idx).textContent = shortAddr(result.escrow);
+      document.getElementById('lc-escrow-'+idx).classList.remove('loading');
+      document.getElementById('lc-escrow-'+idx).title = result.escrow;
+      var link = document.getElementById('lc-escrow-link-'+idx);
+      link.href = 'https://solscan.io/account/' + result.escrow;
+      link.style.display = 'inline-block';
+      return { amount: result.amount, schedule: result.schedule };
+    });
+}
+
+/* Update summary tiles */
+function updateSummary(totalAmount){
+  var sumLocked = document.getElementById('sum-locked');
+  var sumPct = document.getElementById('sum-pct');
+  sumLocked.textContent = fmtAbbr(totalAmount) + ' $GFOF';
+  sumLocked.classList.remove('loading');
+  var pct = (totalAmount / TOTAL_SUPPLY) * 100;
+  sumPct.textContent = fmtPct(pct);
+  sumPct.classList.remove('loading');
+}
+
+/* Update last-read timestamp */
+function setTimestamp(){
+  var d = new Date();
+  var h = d.getHours().toString().padStart(2,'0');
+  var m = d.getMinutes().toString().padStart(2,'0');
+  var s = d.getSeconds().toString().padStart(2,'0');
+  document.getElementById('last-read').textContent = h+':'+m+':'+s+' LOCAL';
+}
+
+function showError(msg){
+  document.getElementById('err-row').classList.add('show');
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('status-word').textContent = 'using fallback';
+  document.getElementById('status-word').style.color = 'var(--gold)';
+}
+
+function clearError(){
+  document.getElementById('err-row').classList.remove('show');
+}
+
+/* Main refresh */
+var isRefreshing = false;
+var cachedSchedules = [null, null, null]; /* keep across refreshes for countdown ticker */
+
+function refreshAll(){
+  if(isRefreshing) return;
+  isRefreshing = true;
+  var btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+  document.getElementById('status-word').textContent = 'reading…';
+  document.getElementById('status-word').style.color = 'var(--cyan)';
+  clearError();
+
+  /* Reset loading states */
+  LOCKS.forEach(function(_, idx){
+    var a = document.getElementById('lc-amount-'+idx);
+    var e = document.getElementById('lc-escrow-'+idx);
+    if(a){ a.classList.add('loading'); a.textContent = 'reading…'; }
+    if(e){ e.classList.add('loading'); e.textContent = 'reading…'; }
+  });
+  document.getElementById('sum-locked').classList.add('loading');
+  document.getElementById('sum-pct').classList.add('loading');
+
+  var amounts = [0,0,0];
+  var schedules = [null, null, null];
+  var promises = LOCKS.map(function(_, idx){
+    return fetchLock(idx).then(function(res){
+      amounts[idx] = res.amount;
+      schedules[idx] = res.schedule;
+    })
+      .catch(function(err){
+        console.warn('[GFOF Transparency] Lock '+(idx+1)+' read failed:', err.message);
+        var a = document.getElementById('lc-amount-'+idx);
+        var e = document.getElementById('lc-escrow-'+idx);
+        if(a){ a.textContent = 'see Streamflow'; a.classList.remove('loading','green'); a.style.color = 'var(--text-dim)'; }
+        if(e){ e.textContent = 'verify on-chain'; e.classList.remove('loading'); e.style.color = 'var(--text-dim)'; }
+        amounts[idx] = null; /* unknown */
+        return null;
+      });
+  });
+
+  Promise.all(promises).then(function(){
+    btn.classList.remove('spinning');
+    setTimestamp();
+    isRefreshing = false;
+    var successful = amounts.filter(function(x){ return x !== null; });
+    if(successful.length === LOCKS.length){
+      var total = successful.reduce(function(a,b){return a+b;}, 0);
+      updateSummary(total);
+      document.getElementById('status-word').textContent = 'verified';
+      document.getElementById('status-word').style.color = 'var(--green)';
+    } else if(successful.length > 0){
+      var partial = successful.reduce(function(a,b){return a+b;}, 0);
+      document.getElementById('sum-locked').textContent = '≥ ' + fmtAbbr(partial) + ' $GFOF';
+      document.getElementById('sum-locked').classList.remove('loading');
+      document.getElementById('sum-pct').textContent = '≥ ' + fmtPct((partial/TOTAL_SUPPLY)*100);
+      document.getElementById('sum-pct').classList.remove('loading');
+      showError('Read '+successful.length+' of '+LOCKS.length+' locks live. Verify the rest on Streamflow using the buttons below.');
+    } else {
+      /* Full fallback: can't reach RPC. Show known values with honest note. */
+      document.getElementById('sum-locked').textContent = '100M $GFOF';
+      document.getElementById('sum-locked').classList.remove('loading');
+      document.getElementById('sum-pct').textContent = '10.00%';
+      document.getElementById('sum-pct').classList.remove('loading');
+      showError('Live RPC unreachable right now. Showing the known locked total (100M = 10% of supply). Use the verify links below to confirm independently.');
+    }
+
+    /* v11: update unlock early-warning system */
+    cachedSchedules = schedules;
+    renderUnlockEarlyWarning(schedules);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   v11 UNLOCK EARLY-WARNING SYSTEM
+   ═══════════════════════════════════════════════════════════ */
+
+/* Given a schedule, compute the next unlock event timestamp AFTER "now" (unix).
+   Streamflow linear vesting: first unlock at cliff, then every `period` seconds
+   until cliff + (total periods * period) ≥ total. */
+function nextUnlockAfter(schedule, now){
+  if(!schedule) return null;
+  var cliff = schedule.cliff || schedule.start;
+  if(schedule.period <= 0) return null;
+  if(now < cliff){
+    return { ts: cliff, amount: schedule.cliffAmount > 0 ? schedule.cliffAmount : schedule.amountPerPeriod };
+  }
+  /* How many periods elapsed since cliff? */
+  var elapsed = now - cliff;
+  var periodsDone = Math.floor(elapsed / schedule.period);
+  var nextTs = cliff + (periodsDone + 1) * schedule.period;
+  /* Check if stream is already fully unlocked */
+  if(schedule.netDeposited > 0 && schedule.amountPerPeriod > 0){
+    var totalPeriods = Math.ceil(
+      (schedule.netDeposited - (schedule.cliffAmount||0)) / schedule.amountPerPeriod
+    );
+    var endTs = cliff + totalPeriods * schedule.period;
+    if(nextTs > endTs) return null; /* fully unlocked */
+  }
+  return { ts: nextTs, amount: schedule.amountPerPeriod };
+}
+
+function fmtDate(ts){
+  if(!ts) return '—';
+  var d = new Date(ts * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
+function renderUnlockEarlyWarning(schedules){
+  /* Aggregate: find the soonest next unlock across all three */
+  var now = Math.floor(Date.now() / 1000);
+  var soonest = null;
+  var soonestIdx = -1;
+  schedules.forEach(function(s, idx){
+    if(!s) return;
+    var next = nextUnlockAfter(s, now);
+    if(next && (soonest === null || next.ts < soonest.ts)){
+      soonest = next; soonestIdx = idx;
+    }
+  });
+
+  var nextAmtEl = document.getElementById('next-amount');
+  var nextAmtPctEl = document.getElementById('next-amount-pct');
+  var nextSrcEl = document.getElementById('next-source');
+  var nextDateEl = document.getElementById('next-date');
+
+  if(soonest && soonestIdx >= 0){
+    var amtTokens = soonest.amount / Math.pow(10, TOKEN_DECIMALS);
+    nextAmtEl.textContent = fmtAbbr(amtTokens) + ' $GFOF';
+    nextAmtEl.classList.remove('loading');
+    nextAmtPctEl.textContent = ((amtTokens / TOTAL_SUPPLY) * 100).toFixed(3) + '% of supply';
+    nextSrcEl.textContent = 'LOCK ' + (soonestIdx + 1);
+    nextSrcEl.classList.remove('loading');
+    nextDateEl.textContent = fmtDate(soonest.ts);
+    /* Store for the countdown ticker */
+    nextUnlockTs = soonest.ts;
+    /* v12: cache for main site's Federation HUD to read */
+    try { localStorage.setItem('gfof_next_unlock_ts', String(soonest.ts)); } catch(e){}
+  } else {
+    /* No schedule data parsed, or all unlocks done */
+    var hasAnySchedule = schedules.some(function(s){ return s !== null; });
+    if(!hasAnySchedule){
+      nextAmtEl.textContent = 'see Streamflow';
+      nextAmtEl.classList.remove('loading');
+      nextAmtEl.style.fontSize = '15px';
+      nextAmtEl.style.color = 'var(--text-dim)';
+      nextAmtPctEl.textContent = 'unlock schedule verifiable on Streamflow →';
+      nextSrcEl.textContent = '—';
+      nextSrcEl.classList.remove('loading');
+      nextDateEl.textContent = '—';
+    } else {
+      nextAmtEl.textContent = 'FULLY UNLOCKED';
+      nextAmtEl.classList.remove('loading');
+      nextAmtEl.style.color = 'var(--green)';
+      nextAmtPctEl.textContent = 'all scheduled unlocks complete';
+      nextSrcEl.textContent = '—';
+      nextSrcEl.classList.remove('loading');
+      nextDateEl.textContent = '—';
+    }
+    nextUnlockTs = null;
+    /* v12: clear cache for main site's HUD */
+    try { localStorage.removeItem('gfof_next_unlock_ts'); } catch(e){}
+  }
+
+  renderTimeline(schedules, now);
+  renderUnlockGrid(schedules);
+}
+
+function renderTimeline(schedules, now){
+  /* Earliest start across all locks → latest end across all locks.
+     Draw progress bar, mark each unlock event, mark "now". */
+  var starts = [], ends = [];
+  schedules.forEach(function(s){
+    if(!s) return;
+    starts.push(s.cliff || s.start);
+    if(s.period > 0 && s.amountPerPeriod > 0 && s.netDeposited > 0){
+      var cliffAmt = s.cliffAmount || 0;
+      var periods = Math.ceil((s.netDeposited - cliffAmt) / s.amountPerPeriod);
+      ends.push((s.cliff || s.start) + periods * s.period);
+    }
+  });
+
+  var tlStart = document.getElementById('tl-start');
+  var tlEnd = document.getElementById('tl-end');
+  var track = document.getElementById('timeline-track');
+
+  if(starts.length === 0 || ends.length === 0){
+    tlStart.textContent = '—';
+    tlEnd.textContent = '—';
+    return;
+  }
+
+  var minStart = Math.min.apply(null, starts);
+  var maxEnd = Math.max.apply(null, ends);
+  tlStart.textContent = fmtDate(minStart);
+  tlEnd.textContent = fmtDate(maxEnd);
+
+  var span = maxEnd - minStart;
+  if(span <= 0) return;
+
+  /* Elapsed portion */
+  var elapsedPct = Math.max(0, Math.min(100, ((now - minStart) / span) * 100));
+  document.getElementById('timeline-progress').style.width = elapsedPct + '%';
+
+  /* Remove existing markers, then add fresh */
+  var oldMarkers = track.querySelectorAll('.timeline-marker');
+  for(var i=0;i<oldMarkers.length;i++) oldMarkers[i].remove();
+
+  /* Unlock markers — cliff events only (too many for full periodic markers) */
+  schedules.forEach(function(s, idx){
+    if(!s) return;
+    var cliffTs = s.cliff || s.start;
+    var pct = ((cliffTs - minStart) / span) * 100;
+    if(pct < 0 || pct > 100) return;
+    var m = document.createElement('div');
+    m.className = 'timeline-marker';
+    m.style.left = pct + '%';
+    m.innerHTML = '<span class="lbl">LOCK ' + (idx+1) + ' CLIFF</span>';
+    track.appendChild(m);
+  });
+
+  /* Now marker */
+  if(now >= minStart && now <= maxEnd){
+    var nowMarker = document.createElement('div');
+    nowMarker.className = 'timeline-marker now';
+    nowMarker.style.left = elapsedPct + '%';
+    nowMarker.innerHTML = '<span class="lbl">NOW</span>';
+    track.appendChild(nowMarker);
+  }
+}
+
+function renderUnlockGrid(schedules){
+  var grid = document.getElementById('unlock-grid');
+  grid.innerHTML = '';
+  schedules.forEach(function(s, idx){
+    var cell = document.createElement('div');
+    cell.className = 'unlock-cell';
+    if(!s){
+      cell.innerHTML =
+        '<div class="lock-id">LOCK ' + (idx+1) + '</div>' +
+        '<div class="row"><span class="k">SCHEDULE</span><span class="v" style="color:var(--text-dim)">verify on Streamflow</span></div>';
+      grid.appendChild(cell);
+      return;
+    }
+    var cliffTs = s.cliff || s.start;
+    var cliffAmt = (s.cliffAmount || 0) / Math.pow(10, TOKEN_DECIMALS);
+    var perPeriod = s.amountPerPeriod / Math.pow(10, TOKEN_DECIMALS);
+    var periodDays = s.period / 86400;
+    var periodLabel;
+    if(periodDays < 1) periodLabel = (s.period / 3600).toFixed(1) + 'h';
+    else if(periodDays < 7) periodLabel = periodDays.toFixed(1) + 'd';
+    else if(periodDays < 31) periodLabel = (periodDays / 7).toFixed(1) + 'w';
+    else periodLabel = (periodDays / 30.44).toFixed(1) + 'mo';
+    cell.innerHTML =
+      '<div class="lock-id">LOCK ' + (idx+1) + '</div>' +
+      '<div class="row"><span class="k">STARTS</span><span class="v">' + fmtDate(s.start) + '</span></div>' +
+      '<div class="row"><span class="k">CLIFF</span><span class="v">' + fmtDate(cliffTs) + '</span></div>' +
+      (cliffAmt > 0
+        ? '<div class="row"><span class="k">CLIFF AMOUNT</span><span class="v">' + fmtAbbr(cliffAmt) + '</span></div>'
+        : '') +
+      '<div class="row"><span class="k">RELEASE</span><span class="v">' + fmtAbbr(perPeriod) + ' / ' + periodLabel + '</span></div>';
+    grid.appendChild(cell);
+  });
+}
+
+/* Countdown ticker (1s) — uses nextUnlockTs set by renderUnlockEarlyWarning */
+var nextUnlockTs = null;
+function tickCountdown(){
+  if(!nextUnlockTs){
+    ['d','h','m','s'].forEach(function(k){
+      var el = document.getElementById('cd-'+k);
+      if(el) el.textContent = '—';
+    });
+    return;
+  }
+  var now = Math.floor(Date.now() / 1000);
+  var remaining = nextUnlockTs - now;
+  if(remaining < 0) remaining = 0;
+  var d = Math.floor(remaining / 86400);
+  var h = Math.floor((remaining % 86400) / 3600);
+  var m = Math.floor((remaining % 3600) / 60);
+  var s = remaining % 60;
+  document.getElementById('cd-d').textContent = d;
+  document.getElementById('cd-h').textContent = h.toString().padStart(2,'0');
+  document.getElementById('cd-m').textContent = m.toString().padStart(2,'0');
+  document.getElementById('cd-s').textContent = s.toString().padStart(2,'0');
+}
+setInterval(tickCountdown, 1000);
+
+/* Console banner */
+try {
+  console.log('%c⬡ GFOF Transparency Report · v11.0', 'color:#F0C040;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #F0C040;border-radius:2px;');
+  console.log('%c📡 Reading from ' + RPC + ' in your browser.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+  console.log('%c🔬 Lock addresses:', 'color:#A9B0CC;font-family:monospace;font-size:11px;');
+  LOCKS.forEach(function(l,i){
+    console.log('   ['+(i+1)+'] metadata: '+l.metadata);
+  });
+} catch(e) {}
+
+/* Version stamp */
+(function(){
+  var el = document.getElementById('footer-version');
+  if(el){ el.textContent = 'v17.5.1 · treasury · deployed 2026-04-28'; }
+})();
+
+/* Initial render + fetch */
+renderLockSkeletons();
+setTimestamp();
+refreshAll();
+
+/* Auto-refresh every 60s */
+setInterval(refreshAll, 60000);
+</script>
+</body>
+</html>

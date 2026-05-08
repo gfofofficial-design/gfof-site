@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Federation Intel Report — briefings and analysis from the $GFOF research division. Solana DeFi, market structure, borrower-protective design.">
+<link rel="canonical" href="https://galacticfederation.co/intel">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/intel">
+<meta property="og:title" content="Federation Intel Report — $GFOF">
+<meta property="og:description" content="Federation Intel Report — briefings and analysis from the $GFOF research division.">
+<meta property="og:image" content="https://galacticfederation.co/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="Federation Intel Report — $GFOF">
+<meta name="twitter:description" content="Briefings and analysis from the $GFOF research division.">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
+<title>$GFOF — Federation Intel Report</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Federation Intel Report — $GFOF",
+  "description": "Federation intelligence: briefings and analysis from the $GFOF research division. Solana DeFi, market structure, borrower-protective design.",
+  "url": "https://galacticfederation.co/intel",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "alternateName": "GFOF",
+    "url": "https://galacticfederation.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://galacticfederation.co/logo.png"
+    }
+  },
+  "about": [
+    {"@type": "Thing", "name": "Solana DeFi"},
+    {"@type": "Thing", "name": "Market structure analysis"},
+    {"@type": "Thing", "name": "DeFi research"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co" },
+    { "@type": "ListItem", "position": 2, "name": "Intel Report", "item": "https://galacticfederation.co/intel" }
+  ]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #030a14; --panel: rgba(8,18,36,0.95);
+  --gold: #F0C040; --gold2: #FFE880;
+  --green: #3DFFA0; --cyan: #00E5FF;
+  --muted: rgba(255,255,255,0.45);
+  --border: rgba(0,229,255,0.18);
+  --orb: 'Orbitron',sans-serif;
+  --mono: 'Share Tech Mono',monospace;
+}
+
+body {
+  background: var(--bg); color:#fff;
+  font-family: var(--mono);
+  min-height:100vh;
+  padding: 28px 20px 60px;
+  display: flex; flex-direction:column; align-items:center;
+}
+
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 10% 80%, rgba(240,192,64,0.04) 0%, transparent 60%);
+}
+
+/* ── CONTROLS ── */
+.controls {
+  position:relative; z-index:1;
+  width:100%; max-width:680px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:24px 28px;
+  margin-bottom:28px;
+}
+.controls::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--gold),transparent);
+}
+
+.ctrl-head {
+  font-family:var(--orb); font-size:11px; color:var(--green);
+  letter-spacing:3px; margin-bottom:20px;
+  display:flex; align-items:center; gap:10px;
+}
+.ctrl-head::before { content:''; width:24px; height:1px; background:var(--green); }
+
+.field-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.field { display:flex; flex-direction:column; gap:5px; }
+.field-full { grid-column:1/-1; }
+.field label { font-size:8px; letter-spacing:3px; color:rgba(0,229,255,0.5); text-transform:uppercase; }
+.field input, .field textarea {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#fff; font-family:var(--mono); font-size:12px;
+  padding:9px 12px; outline:none; transition:border-color .2s;
+  clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+}
+.field input:focus, .field textarea:focus { border-color:var(--cyan); }
+.field textarea { resize:vertical; min-height:72px; line-height:1.6; }
+
+.btn-update {
+  width:100%; background:linear-gradient(135deg,var(--gold2),var(--gold),#C08020);
+  color:#030a14; border:none; font-family:var(--orb); font-size:11px; font-weight:700;
+  letter-spacing:3px; padding:13px; cursor:pointer; transition:opacity .2s;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+}
+.btn-update:hover { opacity:.88; }
+
+.hint {
+  margin-top:12px; font-size:9px; color:var(--muted); letter-spacing:1px;
+  text-align:center; line-height:1.8;
+}
+
+/* ── CARD ── */
+#card {
+  position:relative; z-index:1;
+  width:680px; max-width:100%;
+  background:#020c18;
+  overflow:hidden;
+}
+
+.card-tbar { height:3px; background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan),var(--green)); }
+
+.card-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 24px 14px;
+  border-bottom:1px solid rgba(61,255,160,0.12);
+}
+.logo-area { display:flex; align-items:center; gap:10px; }
+.logo-hex {
+  width:40px; height:40px; flex-shrink:0;
+  background:linear-gradient(135deg,rgba(61,255,160,0.15),rgba(240,192,64,0.15));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--orb); font-size:7px; font-weight:700; color:var(--gold);
+  border:1px solid rgba(61,255,160,0.25);
+}
+.proj-name { font-family:var(--orb); font-size:16px; font-weight:900; color:var(--gold); letter-spacing:3px; line-height:1; text-shadow:0 0 20px rgba(240,192,64,0.3); }
+.proj-sub { font-size:9px; letter-spacing:2px; color:var(--green); margin-top:3px; }
+.date-block { text-align:right; }
+.report-lbl { font-size:8px; letter-spacing:3px; color:rgba(255,255,255,0.25); }
+.report-date { font-family:var(--orb); font-size:12px; color:var(--cyan); margin-top:3px; letter-spacing:1px; }
+.report-week { font-size:9px; color:rgba(255,255,255,0.25); margin-top:2px; letter-spacing:1px; }
+
+.tx-label { padding:8px 24px 0; font-size:8px; letter-spacing:4px; color:rgba(61,255,160,0.3); text-transform:uppercase; }
+
+/* Stats */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:12px 20px 16px; }
+.sbox { background:rgba(4,12,28,0.9); padding:13px 10px; text-align:center; position:relative; overflow:hidden; }
+.sbox::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--a),transparent); }
+.sbox.g  { --a:var(--gold);  border:1px solid rgba(240,192,64,0.2); }
+.sbox.gr { --a:var(--green); border:1px solid rgba(61,255,160,0.2); }
+.sbox.c  { --a:var(--cyan);  border:1px solid rgba(0,229,255,0.15); }
+.sbox.p  { --a:#a78bfa;      border:1px solid rgba(167,139,250,0.18); }
+.slbl { font-size:7px; letter-spacing:2px; color:rgba(255,255,255,0.3); text-transform:uppercase; margin-bottom:5px; }
+.sval { font-family:var(--orb); font-size:15px; font-weight:700; line-height:1; margin-bottom:2px; }
+.gold   { color:var(--gold); text-shadow:0 0 12px rgba(240,192,64,0.4); }
+.green  { color:var(--green); text-shadow:0 0 12px rgba(61,255,160,0.4); }
+.cyan   { color:var(--cyan); }
+.purple { color:#a78bfa; }
+.schg   { font-size:8px; letter-spacing:1px; color:rgba(255,255,255,0.25); }
+.up     { color:var(--green); }
+
+/* Bond */
+.bond-wrap {
+  margin:0 20px 14px;
+  background:rgba(4,12,28,0.9);
+  border:1px solid rgba(61,255,160,0.18);
+  padding:14px 18px; position:relative; overflow:hidden;
+}
+.bond-wrap::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan)); }
+.bond-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.bond-ttl { font-size:9px; letter-spacing:3px; color:var(--green); text-shadow:0 0 8px rgba(61,255,160,0.4); }
+.bond-pct-disp { font-family:var(--orb); font-size:14px; font-weight:700; color:var(--gold); text-shadow:0 0 12px rgba(240,192,64,0.4); }
+.bond-track { height:10px; background:rgba(255,255,255,0.05); overflow:hidden; margin-bottom:7px; border:1px solid rgba(61,255,160,0.1); }
+.bond-fill { height:100%; background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan)); transition:width .6s; position:relative; }
+.bond-fill::after { content:''; position:absolute; right:0;top:0;bottom:0;width:4px; background:#fff; opacity:.45; }
+.bond-marks { display:flex; justify-content:space-between; font-size:8px; color:rgba(255,255,255,0.25); }
+.bond-marks span:last-child { color:var(--gold); }
+.bond-row { display:flex; gap:16px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); }
+.bstat { flex:1; text-align:center; }
+.bsval { font-family:var(--orb); font-size:12px; font-weight:700; color:var(--gold); margin-bottom:2px; }
+.bslbl { font-size:7px; letter-spacing:2px; color:rgba(255,255,255,0.25); text-transform:uppercase; }
+
+/* Decree */
+.decree-wrap {
+  margin:0 20px 14px;
+  border-left:3px solid var(--green); padding:12px 18px;
+  background:rgba(61,255,160,0.03);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%);
+}
+.dec-lbl { font-size:8px; letter-spacing:3px; color:rgba(61,255,160,0.4); margin-bottom:7px; }
+.dec-txt { font-size:12px; color:rgba(200,216,240,0.9); line-height:1.8; font-style:italic; }
+.dec-sig { font-size:8px; letter-spacing:2px; color:var(--green); margin-top:8px; text-shadow:0 0 6px rgba(61,255,160,0.3); }
+
+/* Next */
+.next-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 20px 14px; }
+.nbox { background:rgba(4,12,28,0.9); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; display:flex; gap:10px; align-items:flex-start; }
+.nicon { color:var(--green); font-size:13px; flex-shrink:0; margin-top:1px; }
+.nlbl { font-size:7px; letter-spacing:2px; color:rgba(255,255,255,0.3); margin-bottom:3px; }
+.nval { font-family:var(--orb); font-size:11px; color:var(--gold); font-weight:700; }
+
+/* Footer */
+.card-footer {
+  padding:12px 24px; border-top:1px solid rgba(61,255,160,0.1);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.fca { font-size:7px; color:rgba(255,255,255,0.15); letter-spacing:.5px; word-break:break-all; max-width:340px; line-height:1.7; }
+.fright { text-align:right; }
+.fsite { font-family:var(--orb); font-size:9px; color:var(--cyan); letter-spacing:1px; }
+.fnfa { font-size:7px; color:rgba(255,255,255,0.2); letter-spacing:1px; margin-top:2px; }
+.card-bbar { height:3px; background:linear-gradient(90deg,var(--cyan),var(--green),var(--gold),var(--cyan)); }
+
+/* Stars canvas */
+#card-canvas { position:absolute; inset:0; pointer-events:none; z-index:0; }
+.z1 { position:relative; z-index:1; }
+
+/* ── PRINT STYLESHEET ── institutional-grade printout */
+@media print {
+  @page { margin: 18mm 16mm; size: A4; }
+  body, html {
+    background: #fff !important; color: #000 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important; line-height: 1.45 !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after { display: none !important; }
+  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
+  .toc-title, .doc-tag, .breadcrumbs, .verify-banner, .nav-bottom,
+  .actions, video, audio, iframe, canvas, .hunt-tracker, #bond-bar,
+  .skel, .live-dot, [class*="loading"], button, .stat-live, .copy-btn { display: none !important; }
+  a { color: #000 !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
+  a[href^="/"]::after, a[href^="#"]::after { content: ""; }
+  h1, h2, h3, h4, h5 {
+    color: #000 !important; font-family: Georgia, serif !important;
+    font-weight: 700 !important; page-break-after: avoid;
+    background: none !important; -webkit-text-fill-color: initial !important;
+    text-shadow: none !important; border: none !important; padding: 0 !important;
+  }
+  h1 { font-size: 22pt !important; margin: 0 0 8pt; }
+  h2 { font-size: 14pt !important; margin: 16pt 0 6pt; padding-top: 8pt !important; border-top: 1px solid #aaa !important; }
+  h3 { font-size: 12pt !important; margin: 12pt 0 4pt; }
+  h2 .num { color: #666 !important; font-size: 9pt !important; }
+  h1 .grad, h1 .accent { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
+  p, li { color: #111 !important; font-size: 11pt !important; orphans: 3; widows: 3; }
+  strong, b { color: #000 !important; font-weight: 700; }
+  code {
+    background: #f0f0f0 !important; color: #000 !important;
+    border: 1px solid #ccc !important; font-family: 'Courier New', monospace;
+    font-size: 9.5pt !important; padding: 1pt 3pt;
+  }
+  ul, ol { margin-left: 20pt !important; }
+  .callout {
+    background: #fafafa !important; border: 1px solid #999 !important;
+    border-left: 3px solid #000 !important; padding: 8pt 12pt !important;
+    margin: 10pt 0 !important; page-break-inside: avoid;
+  }
+  .callout .k { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
+  .callout p { color: #111 !important; }
+  .compare-table, table { border: 1px solid #000 !important; page-break-inside: avoid; }
+  .compare-table th, table th, .compare-table td, table td {
+    border: 1px solid #888 !important; color: #000 !important;
+    padding: 4pt 6pt !important; font-size: 10pt !important;
+  }
+  .doc-meta { border-color: #888 !important; color: #444 !important; font-size: 9pt !important; }
+  .doc-meta strong { color: #000 !important; }
+  .doc-sub, p.lede { color: #222 !important; font-size: 12pt !important; font-style: italic; }
+  /* Footer note for print: where readers came from */
+  .container::after {
+    content: "Printed from galacticfederation.co · Always verify against the live document and corrections log.";
+    display: block; margin-top: 24pt; padding-top: 12pt;
+    border-top: 1px solid #999; font-size: 8.5pt; color: #555;
+    font-style: italic; text-align: center;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <div class="ctrl-head">FEDERATION INTEL REPORT — WEEKLY UPDATER</div>
+  <div class="field-grid">
+    <div class="field"><label>Week #</label><input id="f-week" value="02"></div>
+    <div class="field"><label>Date</label><input id="f-date" value="APR 14, 2026"></div>
+    <div class="field"><label>Price (USD)</label><input id="f-price" value="$0.00001885"></div>
+    <div class="field"><label>Market Cap</label><input id="f-mc" value="$21K"></div>
+    <div class="field"><label>Holders</label><input id="f-holders" value="41+"></div>
+    <div class="field"><label>24h Volume</label><input id="f-vol" value="$156"></div>
+    <div class="field"><label>Bond Progress %</label><input id="f-pct" type="number" min="0" max="100" value="28"></div>
+    <div class="field"><label>Remaining to Bond</label><input id="f-rem" value="$52K"></div>
+    <div class="field"><label>Next Milestone</label><input id="f-mile" value="Raydium Listing"></div>
+    <div class="field"><label>Status</label><input id="f-status" value="PRE-BOND · LIVE"></div>
+    <div class="field field-full"><label>Admiral Voss Decree</label>
+      <textarea id="f-decree">28% bonded. Founding Member NFT badges are now live — every wallet holding before $73K is eligible. Dev tokens locked on-chain. The federation is not waiting. Those who arrive before Raydium will be remembered as the founding generation.</textarea>
+    </div>
+  </div>
+  <button class="btn-update" onclick="update()">UPDATE INTEL REPORT ↗</button>
+  <p class="hint">Every Monday: update the numbers → click UPDATE → screenshot the card → post to X &amp; Telegram</p>
+  <p class="hint" style="font-size:11px;opacity:0.5;margin-top:6px;" id="footer-version">v13.0 · intel · deployed 2026-04-20</p>
+</div>
+
+<div id="card">
+  <canvas id="card-canvas"></canvas>
+  <div class="card-tbar z1"></div>
+
+  <div class="card-header z1">
+    <div class="logo-area">
+      <div class="logo-hex">$GFOF</div>
+      <div>
+        <div class="proj-name">$GFOF</div>
+        <div class="proj-sub">GALACTIC FEDERATION OF FINANCE · SOLANA</div>
+      </div>
+    </div>
+    <div class="date-block">
+      <div class="report-lbl">Intel Report</div>
+      <div class="report-date" id="d-date">APR 14, 2026</div>
+      <div class="report-week" id="d-week">WEEK #02</div>
+    </div>
+  </div>
+
+  <div class="tx-label z1">// TRANSMISSION FROM GALACTIC COMMAND · CLASSIFIED</div>
+
+  <div class="stats-grid z1">
+    <div class="sbox g"><div class="slbl">Price USD</div><div class="sval gold" id="d-price">$0.0000188</div><div class="schg">SOLANA · SPL</div></div>
+    <div class="sbox gr"><div class="slbl">Holders</div><div class="sval green" id="d-holders">41+</div><div class="schg up">● LIVE</div></div>
+    <div class="sbox c"><div class="slbl">Market Cap</div><div class="sval cyan" id="d-mc">$21K</div><div class="schg">FDV</div></div>
+    <div class="sbox p"><div class="slbl">24H Volume</div><div class="sval purple" id="d-vol">$156</div><div class="schg">DEXSCREENER</div></div>
+  </div>
+
+  <div class="bond-wrap z1">
+    <div class="bond-hdr">
+      <span class="bond-ttl">⬡ BOND MISSION — RAYDIUM TARGET $73K</span>
+      <span class="bond-pct-disp" id="d-bpct">28%</span>
+    </div>
+    <div class="bond-track"><div class="bond-fill" id="d-bfill" style="width:28%"></div></div>
+    <div class="bond-marks"><span>$0</span><span>$18K</span><span>$36K</span><span>$55K</span><span>$73K 🎯</span></div>
+    <div class="bond-row">
+      <div class="bstat"><div class="bsval" id="d-bmc">$21K</div><div class="bslbl">Current MC</div></div>
+      <div class="bstat"><div class="bsval" id="d-bpct2">28%</div><div class="bslbl">Progress</div></div>
+      <div class="bstat"><div class="bsval" id="d-brem">$52K</div><div class="bslbl">To Raydium</div></div>
+    </div>
+  </div>
+
+  <div class="decree-wrap z1">
+    <div class="dec-lbl">// Admiral Voss — Weekly Decree</div>
+    <div class="dec-txt" id="d-decree">28% bonded. Founding Member NFT badges are now live — every wallet holding before $73K is eligible. Dev tokens locked on-chain. The federation is not waiting. Those who arrive before Raydium will be remembered as the founding generation.</div>
+    <div class="dec-sig">— ADMIRAL ZORAN VOSS · GALACTIC FEDERATION OF FINANCE</div>
+  </div>
+
+  <div class="next-grid z1">
+    <div class="nbox"><span class="nicon">🚀</span><div><div class="nlbl">Next Milestone</div><div class="nval" id="d-mile">Raydium Listing</div></div></div>
+    <div class="nbox"><span class="nicon">⬡</span><div><div class="nlbl">Status</div><div class="nval" id="d-status">PRE-BOND · LIVE</div></div></div>
+  </div>
+
+  <div class="card-footer z1">
+    <div class="fca">CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</div>
+    <div class="fright">
+      <div class="fsite">galacticfederation.co</div>
+      <div class="fnfa">Not financial advice · DYOR</div>
+    </div>
+  </div>
+  <div class="card-bbar z1"></div>
+</div>
+
+<script>
+(function(){
+  var c=document.getElementById('card-canvas'),card=document.getElementById('card');
+  function draw(){
+    c.width=card.offsetWidth; c.height=card.offsetHeight;
+    var x=c.getContext('2d');
+    x.clearRect(0,0,c.width,c.height);
+    var cols=['#3DFFA0','#F0C040','#00E5FF','rgba(200,220,255,'];
+    for(var i=0;i<140;i++){
+      var sx=Math.random()*c.width, sy=Math.random()*c.height;
+      var sr=Math.random()*1.4+0.1, so=Math.random()*0.3+0.05;
+      var r=Math.random();
+      var col=r<0.07?'#3DFFA0':r<0.12?'#F0C040':r<0.16?'#00E5FF':'rgba(200,220,255,'+so+')';
+      x.beginPath(); x.arc(sx,sy,sr,0,Math.PI*2);
+      x.fillStyle=col; x.fill();
+    }
+  }
+  window.addEventListener('resize',draw); draw();
+})();
+
+function s(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+
+function update(){
+  var week=document.getElementById('f-week').value||'01';
+  var date=document.getElementById('f-date').value||'';
+  var price=document.getElementById('f-price').value||'—';
+  var mc=document.getElementById('f-mc').value||'—';
+  var holders=document.getElementById('f-holders').value||'—';
+  var vol=document.getElementById('f-vol').value||'—';
+  var pct=Math.min(100,Math.max(0,parseInt(document.getElementById('f-pct').value)||0));
+  var rem=document.getElementById('f-rem').value||'—';
+  var mile=document.getElementById('f-mile').value||'—';
+  var status=document.getElementById('f-status').value||'—';
+  var decree=document.getElementById('f-decree').value||'—';
+  s('d-week','WEEK #'+week); s('d-date',date);
+  s('d-price',price); s('d-mc',mc); s('d-holders',holders); s('d-vol',vol);
+  s('d-bpct',pct+'%'); s('d-bpct2',pct+'%');
+  s('d-bmc',mc); s('d-brem',rem);
+  s('d-decree',decree); s('d-mile',mile); s('d-status',status);
+  document.getElementById('d-bfill').style.width=pct+'%';
+}
+</script>
+</body>
+</html>

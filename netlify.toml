@@ -1,0 +1,118 @@
+# Galactic Federation of Finance — Netlify configuration
+# Security headers, API redirects, clean-URL rewrites.
+
+# ─── Security headers (applied to every response) ───
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Framing / MIME / referrer basics
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # HSTS — tells browsers to only ever load this origin over HTTPS.
+    # 1 year, include subdomains, preload-eligible.
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Permissions-Policy — opt out of browser APIs the site does not use.
+    # If any future feature needs one of these, remove from this list.
+    Permissions-Policy = "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), xr-spatial-tracking=()"
+
+    # COOP — hardens against cross-origin window attacks (spectre class,
+    # cross-origin window.opener abuse). "same-origin-allow-popups" keeps
+    # normal external links working (Telegram, X, DexScreener).
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+
+    # COEP is intentionally NOT set. Enabling require-corp would break the
+    # DexScreener iframe and Google Fonts. Revisit if the site self-hosts
+    # fonts and removes the iframe.
+
+    # X-XSS-Protection is deprecated in modern browsers; omitted.
+
+# ─── API CORS (functions) ───
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "POST, GET, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+
+# ─── Function redirects ───
+[[redirects]]
+  from = "/api/price"
+  to = "/.netlify/functions/price"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+  force = true
+
+# ─── Clean URL rewrites ───
+[[redirects]]
+  from = "/intel"
+  to = "/intel.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/treasury"
+  to = "/treasury.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/liquidation-spec"
+  to = "/liquidation-spec.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/security"
+  to = "/security.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/corrections"
+  to = "/corrections.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/faq"
+  to = "/faq.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/classified"
+  to = "/classified.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/research"
+  to = "/research.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/app"
+  to = "/app/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/app/*"
+  to = "/app/index.html"
+  status = 200
+  force = true
+
+# Catch-all — serve custom 404 page with proper 404 status
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

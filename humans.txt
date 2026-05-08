@@ -1,0 +1,36 @@
+/* TEAM */
+  Project: Galactic Federation of Finance ($GFOF)
+  Mission: Research-first DeFi on Solana
+  Liaison: @WelksCrypto on X
+  Commander (in-universe): Admiral Zoran Voss
+  Community: t.me/GFOF_SOL
+
+/* DISCIPLINE */
+  Designed in public.
+  Specs before code.
+  Locks before asks.
+  Corrections, never deletions.
+
+/* CHANNELS */
+  X: https://x.com/GFOF_Offcial (note the deliberate typo)
+  Telegram: https://t.me/GFOF_SOL
+  Site: https://galacticfederation.co
+  Research: see /intel and llms.txt
+
+/* THANKS */
+  To every Recruit who challenged the spec, filed a finding,
+  caught a typo, or pushed the federation toward the bond.
+  The corrections log records the work — appended, never deleted.
+
+/* TECH */
+  Stack: Static HTML/CSS/JS, Netlify hosting, Solana RPC reads in-browser
+  Standards: RFC 9116 security.txt, llmstxt.org for AI research tools
+  Token: Solana SPL · CA 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon
+  Locks: Streamflow · 3 contracts · 10% of supply
+
+/* NOTE */
+  The Federation does not predict prices.
+  It builds infrastructure that makes prices irrelevant.
+  Always DYOR. Not financial advice.
+
+  — Voss, out.

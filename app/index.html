@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="$GFOF">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#020818">
+<title>$GFOF — Federation App</title>
+<link rel="manifest" href="/app/manifest.json">
+<link rel="apple-touch-icon" href="/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#f0c040; --gold2:#ffd060; --gold-glow:rgba(240,192,64,.3);
+  --green:#3dffa0; --green-glow:rgba(61,255,160,.25);
+  --cyan:#40c0ff; --cyan-glow:rgba(64,192,255,.25);
+  --purple:#a78bfa;
+  --bg:#020818; --bg2:rgba(3,9,22,.95); --bg3:rgba(4,12,30,.9);
+  --text:#e8f0ff; --muted:#6a7a9a;
+  --border:rgba(61,255,160,.15);
+  --orb:'Orbitron',sans-serif;
+  --mono:'Share Tech Mono',monospace;
+  --raj:'Rajdhani',sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{
+  height:100%;width:100%;overflow:hidden;
+  background:var(--bg);color:var(--text);
+  font-family:var(--raj);
+  overscroll-behavior:none;
+}
+
+/* ── STARFIELD ── */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── APP SHELL ── */
+#app{
+  position:fixed;inset:0;z-index:1;
+  display:flex;flex-direction:column;
+  padding-top:var(--safe-top);
+  padding-bottom:var(--safe-bot);
+}
+
+/* ── STATUS BAR ── */
+.status-bar{
+  height:40px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;flex-shrink:0;
+  background:rgba(2,8,24,.8);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.sb-logo{font-family:var(--orb);font-size:14px;font-weight:900;color:var(--gold);letter-spacing:2px;text-shadow:0 0 12px var(--gold-glow);}
+.sb-right{display:flex;align-items:center;gap:10px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 1.5s infinite;}
+.sb-price{font-family:var(--mono);font-size:11px;color:var(--green);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── SCREENS ── */
+.screens{flex:1;overflow:hidden;position:relative;}
+.screen{
+  position:absolute;inset:0;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:16px 16px 24px;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+  transform:translateY(12px);
+}
+.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  height:60px;flex-shrink:0;
+  display:flex;align-items:stretch;
+  background:rgba(2,6,18,.95);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(20px);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  border:none;background:transparent;cursor:pointer;
+  color:var(--muted);transition:color .2s;
+  font-family:var(--mono);font-size:8px;letter-spacing:1px;
+  position:relative;
+}
+.nav-btn.active{color:var(--green);}
+.nav-btn.active::before{
+  content:'';position:absolute;top:0;left:20%;right:20%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.nav-icon{font-size:18px;line-height:1;}
+
+/* ── CARDS ── */
+.card{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:12px;
+  position:relative;overflow:hidden;
+}
+.card-accent{position:absolute;top:0;left:0;right:0;height:2px;}
+.card-accent.gold{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.card-accent.green{background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.card-accent.cyan{background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.card-accent.purple{background:linear-gradient(90deg,transparent,var(--purple),transparent);}
+.card-title{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+
+/* ── HOME SCREEN ── */
+.hero-block{text-align:center;padding:20px 0 16px;}
+.hero-ticker{font-family:var(--orb);font-size:36px;font-weight:900;color:var(--gold);text-shadow:0 0 30px var(--gold-glow);letter-spacing:3px;}
+.hero-price{font-family:var(--mono);font-size:22px;color:var(--green);text-shadow:0 0 16px var(--green-glow);margin:4px 0;}
+.hero-net{font-size:11px;color:var(--muted);letter-spacing:2px;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.stat-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.stat-lbl{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--muted);margin-bottom:4px;}
+.stat-val{font-family:var(--orb);font-size:16px;font-weight:700;}
+.stat-val.gold{color:var(--gold);}
+.stat-val.green{color:var(--green);}
+.stat-val.cyan{color:var(--cyan);}
+.stat-val.purple{color:var(--purple);}
+
+/* Bond bar */
+.bond-card{background:var(--bg3);border:1px solid rgba(61,255,160,.2);border-radius:12px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
+.bond-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan));}
+.bond-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.bond-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--green);}
+.bond-pct{font-family:var(--orb);font-size:16px;font-weight:700;color:var(--gold);}
+.bond-track{height:8px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden;margin-bottom:8px;border:1px solid rgba(61,255,160,.1);}
+.bond-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:4px;transition:width .8s ease;position:relative;}
+.bond-fill::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:#fff;opacity:.6;border-radius:2px;}
+.bond-row{display:flex;justify-content:space-between;}
+.bond-stat{text-align:center;}
+.bs-val{font-family:var(--orb);font-size:12px;font-weight:700;color:var(--gold);}
+.bs-lbl{font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:1px;}
+
+/* Action buttons */
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.btn-buy{
+  background:linear-gradient(135deg,rgba(240,192,64,.15),rgba(240,192,64,.05));
+  border:1px solid rgba(240,192,64,.4);border-radius:10px;
+  color:var(--gold);font-family:var(--orb);font-size:11px;font-weight:700;
+  letter-spacing:1px;padding:14px;cursor:pointer;
+  transition:all .2s;text-align:center;display:block;text-decoration:none;
+}
+.btn-buy:active{transform:scale(.96);background:rgba(240,192,64,.2);}
+.btn-tg{
+  background:linear-gradient(135deg,rgba(61,255,160,.1),rgba(61,255,160,.03));
+  border:1px solid rgba(61,255,160,.3);border-radius:10px;
+  color:var(--green);font-family:var(--orb);font-size:11px;font-weight:700;
+  letter-spacing:1px;padding:14px;cursor:pointer;
+  transition:all .2s;text-align:center;display:block;text-decoration:none;
+}
+.btn-tg:active{transform:scale(.96);}
+
+/* Roadmap pills */
+.phase-row{display:flex;flex-direction:column;gap:8px;}
+.phase-pill{
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;display:flex;align-items:center;gap:12px;
+}
+.phase-num{font-family:var(--orb);font-size:18px;font-weight:900;width:28px;flex-shrink:0;}
+.phase-num.live{color:var(--green);text-shadow:0 0 10px var(--green-glow);}
+.phase-num.next{color:var(--gold);}
+.phase-num.fut{color:var(--muted);}
+.phase-info{}
+.phase-name{font-family:var(--orb);font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.phase-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+.phase-badge{margin-left:auto;font-family:var(--mono);font-size:8px;padding:3px 8px;border-radius:10px;flex-shrink:0;}
+.badge-live{background:rgba(61,255,160,.1);color:var(--green);border:1px solid rgba(61,255,160,.3);}
+.badge-next{background:rgba(240,192,64,.1);color:var(--gold);border:1px solid rgba(240,192,64,.3);}
+.badge-fut{background:rgba(106,122,154,.1);color:var(--muted);border:1px solid rgba(106,122,154,.2);}
+
+/* ── STAKING SCREEN ── */
+.stake-tiers{display:flex;flex-direction:column;gap:10px;}
+.tier{
+  background:var(--bg3);border-radius:12px;padding:16px;
+  display:flex;align-items:center;gap:14px;
+  border:1px solid var(--border);
+  transition:border-color .2s;
+}
+.tier.featured{border-color:rgba(240,192,64,.3);}
+.tier-mult{font-family:var(--orb);font-size:28px;font-weight:900;width:52px;text-align:center;flex-shrink:0;}
+.tier-mult.t1{color:var(--green);}
+.tier-mult.t2{color:var(--gold);}
+.tier-mult.t3{color:var(--cyan);}
+.tier-info{flex:1;}
+.tier-name{font-family:var(--orb);font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.tier-days{font-size:13px;color:var(--muted);}
+.tier-badge{font-family:var(--mono);font-size:8px;padding:2px 8px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+
+.perk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.perk{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.perk-icon{font-size:20px;margin-bottom:6px;}
+.perk-title{font-family:var(--orb);font-size:10px;color:var(--gold);margin-bottom:3px;}
+.perk-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+
+/* ── AI CHAT SCREEN ── */
+.chat-wrap{display:flex;flex-direction:column;height:100%;padding:0;}
+.chat-messages{
+  flex:1;overflow-y:auto;padding:12px;
+  display:flex;flex-direction:column;gap:10px;
+  -webkit-overflow-scrolling:touch;
+}
+.msg{max-width:85%;animation:msgIn .3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.ai{align-self:flex-start;}
+.msg.user{align-self:flex-end;}
+.msg-bubble{
+  padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.6;
+}
+.msg.ai .msg-bubble{
+  background:rgba(4,12,30,.9);border:1px solid var(--border);
+  color:var(--text);border-radius:4px 16px 16px 16px;
+}
+.msg.user .msg-bubble{
+  background:linear-gradient(135deg,rgba(61,255,160,.15),rgba(61,255,160,.08));
+  border:1px solid rgba(61,255,160,.25);color:var(--text);
+  border-radius:16px 4px 16px 16px;
+}
+.msg-name{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:4px;}
+.chat-suggestions{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;flex-shrink:0;scrollbar-width:none;}
+.chat-suggestions::-webkit-scrollbar{display:none;}
+.sug{
+  background:rgba(61,255,160,.06);border:1px solid rgba(61,255,160,.2);
+  border-radius:20px;padding:6px 12px;white-space:nowrap;
+  font-family:var(--mono);font-size:10px;color:var(--green);cursor:pointer;
+  flex-shrink:0;transition:all .15s;
+}
+.sug:active{background:rgba(61,255,160,.15);}
+.chat-input-row{
+  display:flex;gap:8px;padding:10px 12px;
+  background:rgba(2,6,18,.95);border-top:1px solid var(--border);
+  flex-shrink:0;
+}
+.chat-input{
+  flex:1;background:rgba(4,12,30,.9);border:1px solid var(--border);
+  border-radius:20px;padding:10px 16px;color:var(--text);
+  font-family:var(--raj);font-size:14px;outline:none;
+  transition:border-color .2s;
+}
+.chat-input:focus{border-color:rgba(61,255,160,.4);}
+.chat-input::placeholder{color:var(--muted);}
+.chat-send{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green),#0f6e56);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;transition:transform .15s;
+}
+.chat-send:active{transform:scale(.9);}
+.typing{display:flex;gap:4px;align-items:center;padding:4px 2px;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:dot 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes dot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* ── GOVERNANCE SCREEN ── */
+.gov-platform{
+  background:linear-gradient(135deg,rgba(64,192,255,.08),rgba(61,255,160,.04));
+  border:1px solid rgba(64,192,255,.2);border-radius:12px;padding:16px;margin-bottom:12px;
+}
+.gov-plat-name{font-family:var(--orb);font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:4px;}
+.gov-plat-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.vote-list{display:flex;flex-direction:column;gap:8px;}
+.vote-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.vote-title{font-family:var(--orb);font-size:12px;color:var(--text);margin-bottom:6px;}
+.vote-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.vote-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);width:30px;flex-shrink:0;}
+.vote-bar{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.vote-fill{height:100%;border-radius:3px;}
+.vote-pct{font-family:var(--mono);font-size:9px;color:var(--muted);width:32px;text-align:right;}
+.vote-meta{font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:6px;}
+
+/* ── INSTALL PROMPT ── */
+#install-prompt{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(2,8,24,.98);border-top:1px solid rgba(61,255,160,.2);
+  padding:16px 20px calc(16px + var(--safe-bot));
+  backdrop-filter:blur(20px);
+  transform:translateY(100%);transition:transform .4s ease;
+}
+#install-prompt.show{transform:translateY(0);}
+.prompt-row{display:flex;align-items:center;gap:14px;}
+.prompt-icon{width:44px;height:44px;background:linear-gradient(135deg,rgba(240,192,64,.2),rgba(61,255,160,.1));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.prompt-text{flex:1;}
+.prompt-title{font-family:var(--orb);font-size:12px;color:var(--gold);font-weight:700;margin-bottom:2px;}
+.prompt-sub{font-size:12px;color:var(--muted);}
+.prompt-btns{display:flex;gap:8px;margin-top:12px;}
+.btn-install{flex:1;background:linear-gradient(135deg,rgba(61,255,160,.15),rgba(61,255,160,.05));border:1px solid rgba(61,255,160,.3);border-radius:8px;padding:10px;color:var(--green);font-family:var(--orb);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;}
+.btn-dismiss{background:transparent;border:1px solid var(--border);border-radius:8px;padding:10px 16px;color:var(--muted);font-family:var(--mono);font-size:10px;cursor:pointer;}
+
+/* ── MISC ── */
+.section-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--green);text-transform:uppercase;margin-bottom:6px;}
+.section-title{font-family:var(--orb);font-size:20px;font-weight:700;color:var(--text);margin-bottom:14px;line-height:1.2;}
+.decree-block{border-left:2px solid var(--green);padding:10px 14px;background:rgba(61,255,160,.03);border-radius:0 8px 8px 0;margin-bottom:12px;}
+.decree-text{font-size:13px;color:var(--muted);line-height:1.7;font-style:italic;margin-bottom:6px;}
+.decree-sig{font-family:var(--mono);font-size:8px;color:var(--green);letter-spacing:1px;}
+.ca-box{background:rgba(2,6,18,.8);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;}
+.ca-text{font-family:var(--mono);font-size:9px;color:var(--muted);word-break:break-all;line-height:1.5;flex:1;}
+.ca-copy{background:rgba(61,255,160,.1);border:1px solid rgba(61,255,160,.25);border-radius:6px;padding:6px 10px;color:var(--green);font-family:var(--mono);font-size:9px;cursor:pointer;flex-shrink:0;transition:all .15s;}
+.ca-copy:active{background:rgba(61,255,160,.25);}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:14px 0;}
+a{color:inherit;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div id="app">
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="sb-logo">$GFOF</div>
+    <div class="sb-right">
+      <span class="live-dot"></span>
+      <span class="sb-price" id="sb-price">Loading...</span>
+    </div>
+  </div>
+
+  <!-- SCREENS -->
+  <div class="screens">
+
+    <!-- ── HOME ── -->
+    <div class="screen active" id="screen-home">
+      <div class="hero-block">
+        <div class="hero-ticker">$GFOF</div>
+        <div class="hero-price" id="hp-price">—</div>
+        <div class="hero-net">GALACTIC FEDERATION OF FINANCE · SOLANA</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-lbl">Market Cap</div><div class="stat-val gold" id="hp-mc">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">Holders</div><div class="stat-val green" id="hp-holders">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">24h Volume</div><div class="stat-val cyan" id="hp-vol">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">Network</div><div class="stat-val purple">SOLANA</div></div>
+      </div>
+
+      <div class="bond-card">
+        <div class="bond-hdr">
+          <span class="bond-lbl">⬡ BOND MISSION — $73K TARGET</span>
+          <span class="bond-pct" id="hp-bpct">~20%</span>
+        </div>
+        <div class="bond-track"><div class="bond-fill" id="hp-bfill" style="width:20%"></div></div>
+        <div class="bond-row">
+          <div class="bond-stat"><div class="bs-val" id="hp-bmc">~$15K</div><div class="bs-lbl">Current MC</div></div>
+          <div class="bond-stat"><div class="bs-val" id="hp-bpct2">~20%</div><div class="bs-lbl">Progress</div></div>
+          <div class="bond-stat"><div class="bs-val" id="hp-brem">~$58K</div><div class="bs-lbl">Remaining</div></div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-buy">🚀 BUY $GFOF</a>
+        <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-tg">✈️ TELEGRAM</a>
+      </div>
+
+      <div class="card">
+        <div class="card-accent gold"></div>
+        <div class="card-title">// The Federation Roadmap</div>
+        <div class="phase-row">
+          <div class="phase-pill">
+            <div class="phase-num live">01</div>
+            <div class="phase-info"><div class="phase-name">Launch & Foundation</div><div class="phase-desc">Token live · Website live · Community building</div></div>
+            <span class="phase-badge badge-live">LIVE</span>
+          </div>
+          <div class="phase-pill">
+            <div class="phase-num next">02</div>
+            <div class="phase-info"><div class="phase-name">Bond & Raydium</div><div class="phase-desc">$73K bond → Raydium listing → Staking + DAO</div></div>
+            <span class="phase-badge badge-next">NEXT</span>
+          </div>
+          <div class="phase-pill">
+            <div class="phase-num fut">03</div>
+            <div class="phase-info"><div class="phase-name">DeFi Lending</div><div class="phase-desc">Community-governed lending protocol launch</div></div>
+            <span class="phase-badge badge-fut">FUTURE</span>
+          </div>
+          <div class="phase-pill">
+            <div class="phase-num fut">04</div>
+            <div class="phase-info"><div class="phase-name">Expanding Universe</div><div class="phase-desc">Exchange listings · Yield programs · More</div></div>
+            <span class="phase-badge badge-fut">BEYOND</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="decree-block">
+        <div class="decree-text">"I have seen a thousand financial systems collapse. $GFOF is built on the lessons of every single one. We are early. We are intentional. We are building something real."</div>
+        <div class="decree-sig">— ADMIRAL ZORAN VOSS · COMMANDER, GFOF</div>
+      </div>
+
+      <div class="ca-box">
+        <div class="ca-text">CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</div>
+        <button class="ca-copy" onclick="copyCA()">COPY</button>
+      </div>
+    </div>
+
+    <!-- ── STAKING ── -->
+    <div class="screen" id="screen-stake">
+      <div class="section-tag">$GFOF Staking</div>
+      <div class="section-title">Lock. Earn. Grow.</div>
+
+      <div class="stake-tiers">
+        <div class="tier">
+          <div class="tier-mult t1">1.5x</div>
+          <div class="tier-info">
+            <div class="tier-name">30-DAY LOCK</div>
+            <div class="tier-days">Base tier · Lock for 30 days · Standard rewards</div>
+          </div>
+          <span class="tier-badge badge-next" style="background:rgba(61,255,160,.08);color:var(--green);border:1px solid rgba(61,255,160,.25)">BASE</span>
+        </div>
+        <div class="tier featured">
+          <div class="tier-mult t2">2x</div>
+          <div class="tier-info">
+            <div class="tier-name">90-DAY LOCK</div>
+            <div class="tier-days">Commander tier · Double multiplier · Most popular</div>
+          </div>
+          <span class="tier-badge" style="background:rgba(240,192,64,.1);color:var(--gold);border:1px solid rgba(240,192,64,.3)">⭐ TOP</span>
+        </div>
+        <div class="tier">
+          <div class="tier-mult t3">3x</div>
+          <div class="tier-info">
+            <div class="tier-name">180-DAY LOCK</div>
+            <div class="tier-days">Admiral tier · Maximum multiplier · True believers</div>
+          </div>
+          <span class="tier-badge" style="background:rgba(64,192,255,.08);color:var(--cyan);border:1px solid rgba(64,192,255,.2)">MAX</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="card">
+        <div class="card-accent gold"></div>
+        <div class="card-title">// NFT Badge Boost</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7">Founding Member NFT holders receive an additional <span style="color:var(--gold);font-weight:700">+0.5x multiplier</span> on any staking tier — permanently. Buy before the bond to qualify for your free NFT.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent green"></div>
+        <div class="card-title">// Staking Perks</div>
+        <div class="perk-grid">
+          <div class="perk"><div class="perk-icon">🔒</div><div class="perk-title">Non-Custodial</div><div class="perk-desc">Your tokens never leave your wallet</div></div>
+          <div class="perk"><div class="perk-icon">🗳</div><div class="perk-title">Gov Power</div><div class="perk-desc">Staked tokens earn voting weight</div></div>
+          <div class="perk"><div class="perk-icon">⚡</div><div class="perk-title">Auto Rewards</div><div class="perk-desc">Earn $GFOF passively over time</div></div>
+          <div class="perk"><div class="perk-icon">🎖</div><div class="perk-title">Admiral Role</div><div class="perk-desc">Exclusive Telegram rank</div></div>
+        </div>
+      </div>
+
+      <div class="bond-card" style="margin-bottom:12px">
+        <div class="card-title">// LAUNCH TIMELINE</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:12px">Staking launches at the <span style="color:var(--gold)">$73K bond milestone</span>. Buy now to qualify for Founding Member NFT and highest multipliers.</div>
+        <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-tg" style="display:block;text-align:center">GET LAUNCH ALERT ✈️</a>
+      </div>
+    </div>
+
+    <!-- ── AI CHAT ── -->
+    <div class="screen" id="screen-ai" style="padding:0;display:flex;flex-direction:column;">
+      <div style="padding:12px 16px 8px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2)">
+        <div style="font-family:var(--orb);font-size:13px;font-weight:700;color:var(--gold)">Federation AI</div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--green);margin-top:2px">● GALACTIC COMMAND · ONLINE</div>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg ai">
+          <div class="msg-name">FEDERATION AI</div>
+          <div class="msg-bubble">Welcome to the Galactic Federation of Finance. I am your AI — ask me anything about $GFOF, our mission, roadmap, staking, or how to join. The council is listening. 🌌</div>
+        </div>
+      </div>
+      <div class="chat-suggestions">
+        <div class="sug" onclick="askQ('What is $GFOF?')">What is $GFOF?</div>
+        <div class="sug" onclick="askQ('How do I buy?')">How do I buy?</div>
+        <div class="sug" onclick="askQ('Tell me about staking')">Staking</div>
+        <div class="sug" onclick="askQ('What happens at the bond?')">Bond milestone</div>
+        <div class="sug" onclick="askQ('What is the roadmap?')">Roadmap</div>
+      </div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chat-input" placeholder="Ask the federation AI..." type="text" autocomplete="off">
+        <button class="chat-send" onclick="sendChat()">↑</button>
+      </div>
+    </div>
+
+    <!-- ── GOVERNANCE ── -->
+    <div class="screen" id="screen-gov">
+      <div class="section-tag">Federation Governance</div>
+      <div class="section-title">Your Vote. Your Protocol.</div>
+
+      <div class="gov-platform">
+        <div class="gov-plat-name">⬡ Realms by Solana</div>
+        <div class="gov-plat-desc">On-chain governance built on Solana's native SPL Governance. 1 token = 1 vote. No ENS, no ETH required. Connect your Phantom wallet and vote directly.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-accent cyan"></div>
+        <div class="card-title">// How It Works</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:var(--green);font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:2px">01 →</span><span style="font-size:13px;color:var(--muted);line-height:1.6">Hold $GFOF — automatic voting power. 1 token = 1 vote.</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:var(--green);font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:2px">02 →</span><span style="font-size:13px;color:var(--muted);line-height:1.6">Visit app.realms.today — connect Phantom or Solflare wallet.</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:var(--green);font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:2px">03 →</span><span style="font-size:13px;color:var(--muted);line-height:1.6">Vote on proposals — 72 hour voting windows, results on-chain.</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:var(--green);font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:2px">04 →</span><span style="font-size:13px;color:var(--muted);line-height:1.6">Passed proposals executed by the core team — publicly verifiable.</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-accent purple"></div>
+        <div class="card-title">// What You Vote On</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:6px"><span style="color:var(--green)">◆</span>Treasury allocation</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:6px"><span style="color:var(--green)">◆</span>Staking reward rates</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:6px"><span style="color:var(--green)">◆</span>Alliance partners</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:6px"><span style="color:var(--green)">◆</span>New features</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:6px"><span style="color:var(--green)">◆</span>Marketing spend</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:6px"><span style="color:var(--green)">◆</span>Protocol upgrades</div>
+        </div>
+      </div>
+
+      <a href="https://app.realms.today" target="_blank" class="btn-buy" style="display:block;text-align:center;margin-bottom:10px">VOTE ON REALMS ↗</a>
+      <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-tg" style="display:block;text-align:center">DISCUSS IN TELEGRAM ↗</a>
+
+      <div class="divider"></div>
+      <div class="decree-block">
+        <div class="decree-text">"A federation without the voice of its members is just another empire. Every vote cast is a declaration that this protocol belongs to the people who built it."</div>
+        <div class="decree-sig">— ADMIRAL ZORAN VOSS · FEDERATION DECREE #001</div>
+      </div>
+    </div>
+
+    <!-- ── MORE / ABOUT ── -->
+    <div class="screen" id="screen-more">
+      <div class="section-tag">Federation Intel</div>
+      <div class="section-title">About $GFOF</div>
+
+      <div class="card">
+        <div class="card-accent gold"></div>
+        <div class="card-title">// Token Details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px">TICKER</div><div style="font-family:var(--orb);font-size:14px;font-weight:700;color:var(--gold)">$GFOF</div></div>
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px">NETWORK</div><div style="font-family:var(--orb);font-size:14px;font-weight:700;color:var(--green)">SOLANA</div></div>
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px">STANDARD</div><div style="font-family:var(--orb);font-size:14px;font-weight:700;color:var(--cyan)">SPL</div></div>
+          <div><div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px">STATUS</div><div style="font-family:var(--orb);font-size:14px;font-weight:700;color:var(--green)">LIVE</div></div>
+        </div>
+      </div>
+
+      <div class="ca-box">
+        <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:4px;letter-spacing:2px">CONTRACT ADDRESS</div>
+        <div class="ca-text" style="font-size:9px">2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</div>
+        <button class="ca-copy" onclick="copyCA()">COPY</button>
+      </div>
+
+      <div class="card">
+        <div class="card-accent green"></div>
+        <div class="card-title">// Official Links</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="https://galacticfederation.co" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(61,255,160,.04);border:1px solid var(--border);border-radius:8px">
+            <span style="font-size:18px">🌐</span>
+            <div><div style="font-family:var(--orb);font-size:11px;color:var(--text)">Website</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted)">galacticfederation.co</div></div>
+            <span style="margin-left:auto;color:var(--muted)">↗</span>
+          </a>
+          <a href="https://x.com/GFOF_Offcial" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(61,255,160,.04);border:1px solid var(--border);border-radius:8px">
+            <span style="font-size:18px">𝕏</span>
+            <div><div style="font-family:var(--orb);font-size:11px;color:var(--text)">X (Twitter)</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted)">@GFOF_Offcial</div></div>
+            <span style="margin-left:auto;color:var(--muted)">↗</span>
+          </a>
+          <a href="https://t.me/GFOF_SOL" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(61,255,160,.04);border:1px solid var(--border);border-radius:8px">
+            <span style="font-size:18px">✈️</span>
+            <div><div style="font-family:var(--orb);font-size:11px;color:var(--text)">Telegram</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted)">t.me/GFOF_SOL</div></div>
+            <span style="margin-left:auto;color:var(--muted)">↗</span>
+          </a>
+          <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(240,192,64,.04);border:1px solid rgba(240,192,64,.2);border-radius:8px">
+            <span style="font-size:18px">📊</span>
+            <div><div style="font-family:var(--orb);font-size:11px;color:var(--text)">DexScreener</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted)">Live chart & trading</div></div>
+            <span style="margin-left:auto;color:var(--muted)">↗</span>
+          </a>
+          <a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(61,255,160,.04);border:1px solid var(--border);border-radius:8px">
+            <span style="font-size:18px">🦅</span>
+            <div><div style="font-family:var(--orb);font-size:11px;color:var(--text)">Birdeye</div><div style="font-family:var(--mono);font-size:9px;color:var(--muted)">Token analytics</div></div>
+            <span style="margin-left:auto;color:var(--muted)">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:16px 0 4px">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px">Not financial advice · Always DYOR</div>
+        <div style="font-family:var(--mono);font-size:8px;color:rgba(106,122,154,.4);margin-top:4px">galacticfederation.co · $GFOF on Solana</div>
+      </div>
+    </div>
+
+  </div><!-- /screens -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-home" onclick="showScreen('home')">
+      <span class="nav-icon">⬡</span>HOME
+    </button>
+    <button class="nav-btn" id="nav-stake" onclick="showScreen('stake')">
+      <span class="nav-icon">🔒</span>STAKE
+    </button>
+    <button class="nav-btn" id="nav-ai" onclick="showScreen('ai')">
+      <span class="nav-icon">🤖</span>AI
+    </button>
+    <button class="nav-btn" id="nav-gov" onclick="showScreen('gov')">
+      <span class="nav-icon">🗳</span>VOTE
+    </button>
+    <button class="nav-btn" id="nav-more" onclick="showScreen('more')">
+      <span class="nav-icon">◎</span>MORE
+    </button>
+  </nav>
+</div>
+
+<!-- INSTALL PROMPT -->
+<div id="install-prompt">
+  <div class="prompt-row">
+    <div class="prompt-icon">⚔</div>
+    <div class="prompt-text">
+      <div class="prompt-title">Install Federation App</div>
+      <div class="prompt-sub">Add to home screen for instant access — works like a real app</div>
+    </div>
+  </div>
+  <div class="prompt-btns">
+    <button class="btn-install" id="btn-install-action">⬡ ADD TO HOME SCREEN</button>
+    <button class="btn-dismiss" onclick="dismissInstall()">Later</button>
+  </div>
+</div>
+
+<script>
+const CA = '2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
+const BOND_TARGET = 73000;
+
+/* ── STARFIELD ── */
+(function(){
+  var c=document.getElementById('stars'),x=c.getContext('2d');
+  function draw(){
+    c.width=window.innerWidth; c.height=window.innerHeight;
+    x.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<120;i++){
+      var sx=Math.random()*c.width, sy=Math.random()*c.height;
+      var sr=Math.random()*1.2+0.1, so=Math.random()*.3+.05;
+      var col=Math.random()<.08?'#3dffa0':Math.random()<.05?'#f0c040':'rgba(200,220,255,'+so+')';
+      x.beginPath(); x.arc(sx,sy,sr,0,Math.PI*2); x.fillStyle=col; x.fill();
+    }
+  }
+  draw(); window.addEventListener('resize',draw);
+})();
+
+/* ── NAVIGATION ── */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+  // Scroll to top
+  var s=document.getElementById('screen-'+id);
+  if(s) s.scrollTop=0;
+}
+
+/* ── LIVE DATA ── */
+function fmt(n){
+  if(!n||n===0) return '—';
+  if(n>=1000000) return '$'+(n/1000000).toFixed(1)+'M';
+  if(n>=1000) return '$'+(n/1000).toFixed(0)+'K';
+  return '$'+n.toFixed(0);
+}
+function fmtP(p){
+  if(!p||p===0) return '—';
+  var v=parseFloat(p);
+  if(v<0.001) return '$'+v.toFixed(8);
+  if(v<1) return '$'+v.toFixed(4);
+  return '$'+v.toFixed(2);
+}
+function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+
+function updateBond(mc){
+  var pct=Math.min(100,Math.round((mc/BOND_TARGET)*100));
+  var rem=Math.max(0,BOND_TARGET-mc);
+  set('hp-bpct',pct+'%');
+  set('hp-bpct2',pct+'%');
+  set('hp-bmc',fmt(mc));
+  set('hp-brem',fmt(rem));
+  var fill=document.getElementById('hp-bfill');
+  if(fill) fill.style.width=pct+'%';
+}
+
+function fetchData(){
+  fetch('/api/price')
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.error||!d.price||parseFloat(d.price)===0) throw new Error('no data');
+      var price=parseFloat(d.price), mc=parseInt(d.mc||0);
+      var ps=fmtP(price);
+      set('sb-price',ps);
+      set('hp-price',ps);
+      set('hp-mc',fmt(mc));
+      set('hp-vol',fmt(d.vol24h));
+      if(mc>0) updateBond(mc);
+    })
+    .catch(()=>{
+      fetch('https://api.dexscreener.com/tokens/v1/solana/'+CA)
+        .then(r=>r.json())
+        .then(d=>{
+          var pairs=Array.isArray(d)?d:(d.pairs||[]);
+          if(!pairs.length) return;
+          pairs.sort((a,b)=>((b.liquidity&&b.liquidity.usd)||0)-((a.liquidity&&a.liquidity.usd)||0));
+          var p=pairs[0], mc=parseInt(p.fdv||p.marketCap||0), price=parseFloat(p.priceUsd||0);
+          if(price>0){
+            var ps=fmtP(price);
+            set('sb-price',ps); set('hp-price',ps);
+            set('hp-mc',fmt(mc)); set('hp-vol',fmt(p.volume&&p.volume.h24));
+            if(mc>0) updateBond(mc);
+          }
+        }).catch(()=>{set('sb-price','View Chart');});
+    });
+
+  fetch('https://public-api.solscan.io/token/holders?tokenAddress='+CA+'&limit=1&offset=0',{headers:{'accept':'application/json'}})
+    .then(r=>r.json())
+    .then(d=>{ var c=d.total||d.holder||0; if(c>0) set('hp-holders',c.toLocaleString()); })
+    .catch(()=>{});
+}
+
+/* Initial defaults */
+set('hp-bpct','~20%'); set('hp-bpct2','~20%');
+set('hp-bmc','~$15K'); set('hp-brem','~$58K');
+
+fetchData();
+setInterval(fetchData, 30000);
+
+/* ── AI CHAT ── */
+function addMsg(role, text){
+  var wrap=document.getElementById('chat-messages');
+  var div=document.createElement('div');
+  div.className='msg '+role;
+  div.innerHTML='<div class="msg-name">'+(role==='ai'?'FEDERATION AI':'YOU')+'</div><div class="msg-bubble">'+text+'</div>';
+  wrap.appendChild(div);
+  wrap.scrollTop=wrap.scrollHeight;
+}
+
+function addTyping(){
+  var wrap=document.getElementById('chat-messages');
+  var div=document.createElement('div');
+  div.className='msg ai'; div.id='typing-indicator';
+  div.innerHTML='<div class="msg-name">FEDERATION AI</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  wrap.appendChild(div);
+  wrap.scrollTop=wrap.scrollHeight;
+}
+
+function removeTyping(){
+  var t=document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+
+async function sendChat(){
+  var input=document.getElementById('chat-input');
+  var msg=input.value.trim();
+  if(!msg) return;
+  input.value='';
+  addMsg('user', msg);
+  addTyping();
+
+  // Maintain a short conversation history on this widget
+  if (!window._appChatHistory) window._appChatHistory = [];
+  window._appChatHistory.push({role:'user', content: msg});
+
+  try {
+    var res=await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages: window._appChatHistory.slice(-10)})
+    });
+    var data=await res.json();
+    removeTyping();
+    var reply=data.reply||'Federation comms offline — please try again shortly. 🌌';
+    window._appChatHistory.push({role:'assistant', content: reply});
+    addMsg('ai', reply);
+  } catch(e){
+    removeTyping();
+    addMsg('ai','Federation comms offline — please try again shortly. For direct support, join t.me/GFOF_SOL 🌌');
+  }
+}
+
+function askQ(q){
+  document.getElementById('chat-input').value=q;
+  sendChat();
+  showScreen('ai');
+}
+
+document.getElementById('chat-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter') sendChat();
+});
+
+/* ── COPY CA ── */
+function copyCA(){
+  navigator.clipboard.writeText(CA).then(()=>{
+    var btns=document.querySelectorAll('.ca-copy');
+    btns.forEach(b=>{ b.textContent='✓ COPIED'; setTimeout(()=>b.textContent='COPY',2000); });
+  }).catch(()=>{
+    var ta=document.createElement('textarea');
+    ta.value=CA; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    var btns=document.querySelectorAll('.ca-copy');
+    btns.forEach(b=>{ b.textContent='✓ COPIED'; setTimeout(()=>b.textContent='COPY',2000); });
+  });
+}
+
+/* ── PWA INSTALL ── */
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  deferredPrompt=e;
+  setTimeout(function(){
+    document.getElementById('install-prompt').classList.add('show');
+  }, 3000);
+});
+
+document.getElementById('btn-install-action').addEventListener('click',function(){
+  document.getElementById('install-prompt').classList.remove('show');
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(){ deferredPrompt=null; });
+  } else {
+    // iOS instructions
+    alert('To install: tap the Share button (box with arrow) then "Add to Home Screen"');
+  }
+});
+
+function dismissInstall(){
+  document.getElementById('install-prompt').classList.remove('show');
+}
+
+/* ── SERVICE WORKER ── */
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/app/sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

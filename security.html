@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Security — $GFOF Galactic Federation of Finance</title>
+<meta name="description" content="Security posture, responsible disclosure policy, and the Federation Red-Team Bounty Program for $GFOF.">
+<link rel="canonical" href="https://galacticfederation.co/security">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/security">
+<meta property="og:title" content="$GFOF Security — Red-Team Bounty Program">
+<meta property="og:description" content="Operational security bounty — help break what we're building before someone else does.">
+<meta property="og:image" content="https://galacticfederation.co/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="$GFOF Security — Red-Team Bounty Program">
+<meta name="twitter:description" content="Operational security bounty — help break what we're building before someone else does.">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "$GFOF Security Posture and Responsible Disclosure Policy",
+  "name": "Security — Galactic Federation of Finance",
+  "description": "The Federation's operational security posture: responsible disclosure policy, bug bounty program for the pre-launch site and social infrastructure, RFC 9116 security.txt, and hall-of-honor for disclosed findings.",
+  "url": "https://galacticfederation.co/security",
+  "datePublished": "2026-04-20",
+  "dateModified": "2026-04-21",
+  "inLanguage": "en",
+  "author": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "url": "https://galacticfederation.co"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "url": "https://galacticfederation.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://galacticfederation.co/logo.png"
+    }
+  },
+  "keywords": "security, responsible disclosure, bug bounty, security.txt, rfc 9116, solana defi, galactic federation of finance, gfof",
+  "about": [
+    "Solana DeFi security",
+    "Responsible disclosure",
+    "Bug bounty programs",
+    "Operational security"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co" },
+    { "@type": "ListItem", "position": 2, "name": "Security", "item": "https://galacticfederation.co/security" }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#040818; --bg-2:#020510;
+  --gold:#F0C040; --gold-2:#FFE880; --gold-3:#C08020;
+  --green:#3DFFA0; --cyan:#40C0FF; --purple:#A78BFA; --red:#FF5E7B;
+  --text:#DEE2F5; --text-dim:#A9B0CC; --muted:#6A7294;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif; --raj:'Rajdhani',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16px;line-height:1.65;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(255,94,123,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    radial-gradient(ellipse at 50% 90%,rgba(240,192,64,0.04),transparent 60%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--gold)}
+
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+.container{max-width:1040px;margin:0 auto;padding:0 24px}
+
+.hero{padding:60px 0 30px;text-align:center}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--red);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(255,94,123,0.3);
+  background:rgba(255,94,123,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+.hero-tag-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--red);box-shadow:0 0 8px var(--red);
+  animation:pulse-dot 1.6s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.35}}
+.hero h1{
+  font-family:var(--orb);font-size:clamp(32px,5.5vw,52px);
+  font-weight:900;letter-spacing:-1px;line-height:1.05;
+  margin-bottom:16px;color:var(--text);
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 24px rgba(240,192,64,0.3));
+}
+.hero p{
+  max-width:680px;margin:0 auto;
+  font-size:17px;color:var(--text-dim);
+}
+
+.section-head{margin:60px auto 22px;max-width:1040px}
+.section-head .tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--red);margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.section-head .tag::after{
+  content:'';display:block;width:60px;height:1px;
+  background:linear-gradient(90deg,var(--red),transparent);
+}
+.section-head h2{
+  font-family:var(--orb);font-size:clamp(22px,3.5vw,32px);
+  font-weight:800;letter-spacing:-0.5px;line-height:1.15;
+  margin-bottom:10px;color:var(--text);
+}
+.section-head p{max-width:720px;color:var(--text-dim);font-size:15.5px}
+
+.panel{
+  padding:26px 30px;
+  background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+  margin-bottom:18px;
+}
+.panel p{font-size:15.5px;color:var(--text-dim);margin-bottom:12px;line-height:1.7}
+.panel p:last-child{margin-bottom:0}
+.panel strong{color:var(--text)}
+
+.panel-accent-red{
+  background:linear-gradient(135deg,rgba(255,94,123,0.04),rgba(255,255,255,0.01));
+  border-color:rgba(255,94,123,0.22);
+}
+
+.bounty-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:2px;
+  background:var(--line);border:1px solid var(--line);
+  margin-bottom:20px;
+}
+@media(max-width:680px){.bounty-grid{grid-template-columns:1fr}}
+.bounty-cell{background:rgba(4,8,24,0.7);padding:20px 22px}
+.bounty-cell .sev{
+  font-family:var(--mono);font-size:9px;letter-spacing:2.5px;margin-bottom:6px;
+}
+.bounty-cell.critical .sev{color:var(--red)}
+.bounty-cell.high .sev{color:var(--gold)}
+.bounty-cell.medium .sev{color:var(--cyan)}
+.bounty-cell.low .sev{color:var(--text-dim)}
+.bounty-cell .reward{
+  font-family:var(--orb);font-size:22px;font-weight:800;
+  color:var(--text);letter-spacing:-0.5px;margin-bottom:8px;
+}
+.bounty-cell .desc{font-size:13.5px;color:var(--text-dim);line-height:1.55}
+
+.scope-row{
+  padding:16px 0;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:1fr 3fr;gap:20px;align-items:start;
+}
+.scope-row:first-child{border-top:0;padding-top:4px}
+@media(max-width:680px){.scope-row{grid-template-columns:1fr;gap:6px}}
+.scope-row .cat{
+  font-family:var(--mono);font-size:10.5px;color:var(--gold);
+  letter-spacing:2px;font-weight:700;
+}
+.scope-row .body{font-size:14.5px;color:var(--text-dim);line-height:1.6}
+.scope-row.out .cat{color:var(--red)}
+
+.contact-block{
+  margin-top:14px;padding:18px 22px;
+  background:rgba(61,255,160,0.03);
+  border:1px solid rgba(61,255,160,0.2);
+  font-family:var(--mono);font-size:13px;color:var(--text);
+}
+.contact-block .k{color:var(--muted);font-size:10px;letter-spacing:2px;margin-right:10px}
+
+.security-txt-block{
+  margin-top:14px;padding:18px 22px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--line);
+  font-family:var(--mono);font-size:12.5px;color:var(--text-dim);
+  line-height:1.7;white-space:pre;overflow-x:auto;
+}
+.security-txt-block .cmt{color:var(--muted)}
+.security-txt-block .key{color:var(--cyan)}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:1px;line-height:1.7;
+}
+.foot a{color:var(--text-dim)}.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+.foot .version{
+  display:inline-block;margin-top:10px;padding:4px 10px;
+  font-size:9px;letter-spacing:2px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:2px;opacity:0.6;
+}
+
+/* ── PRINT STYLESHEET ── institutional-grade printout */
+@media print {
+  @page { margin: 18mm 16mm; size: A4; }
+  body, html {
+    background: #fff !important; color: #000 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important; line-height: 1.45 !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after { display: none !important; }
+  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
+  .toc-title, .doc-tag, .breadcrumbs, .verify-banner, .nav-bottom,
+  .actions, video, audio, iframe, canvas, .hunt-tracker, #bond-bar,
+  .skel, .live-dot, [class*="loading"], button, .stat-live, .copy-btn { display: none !important; }
+  a { color: #000 !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
+  a[href^="/"]::after, a[href^="#"]::after { content: ""; }
+  h1, h2, h3, h4, h5 {
+    color: #000 !important; font-family: Georgia, serif !important;
+    font-weight: 700 !important; page-break-after: avoid;
+    background: none !important; -webkit-text-fill-color: initial !important;
+    text-shadow: none !important; border: none !important; padding: 0 !important;
+  }
+  h1 { font-size: 22pt !important; margin: 0 0 8pt; }
+  h2 { font-size: 14pt !important; margin: 16pt 0 6pt; padding-top: 8pt !important; border-top: 1px solid #aaa !important; }
+  h3 { font-size: 12pt !important; margin: 12pt 0 4pt; }
+  h2 .num { color: #666 !important; font-size: 9pt !important; }
+  h1 .grad, h1 .accent { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
+  p, li { color: #111 !important; font-size: 11pt !important; orphans: 3; widows: 3; }
+  strong, b { color: #000 !important; font-weight: 700; }
+  code {
+    background: #f0f0f0 !important; color: #000 !important;
+    border: 1px solid #ccc !important; font-family: 'Courier New', monospace;
+    font-size: 9.5pt !important; padding: 1pt 3pt;
+  }
+  ul, ol { margin-left: 20pt !important; }
+  .callout {
+    background: #fafafa !important; border: 1px solid #999 !important;
+    border-left: 3px solid #000 !important; padding: 8pt 12pt !important;
+    margin: 10pt 0 !important; page-break-inside: avoid;
+  }
+  .callout .k { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
+  .callout p { color: #111 !important; }
+  .compare-table, table { border: 1px solid #000 !important; page-break-inside: avoid; }
+  .compare-table th, table th, .compare-table td, table td {
+    border: 1px solid #888 !important; color: #000 !important;
+    padding: 4pt 6pt !important; font-size: 10pt !important;
+  }
+  .doc-meta { border-color: #888 !important; color: #444 !important; font-size: 9pt !important; }
+  .doc-meta strong { color: #000 !important; }
+  .doc-sub, p.lede { color: #222 !important; font-size: 12pt !important; font-style: italic; }
+  /* Footer note for print: where readers came from */
+  .container::after {
+    content: "Printed from galacticfederation.co · Always verify against the live document and corrections log.";
+    display: block; margin-top: 24pt; padding-top: 12pt;
+    border-top: 1px solid #999; font-size: 8.5pt; color: #555;
+    font-style: italic; text-align: center;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/treasury">TREASURY ↗</a>
+    <a href="/corrections">CORRECTIONS ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class="hero">
+    <div class="hero-tag"><span class="hero-tag-dot"></span>RESPONSIBLE DISCLOSURE · ACTIVE BOUNTY</div>
+    <h1>Help Us <span class="grad">Break</span> It First</h1>
+    <p>The Federation's security posture is a matter of public record. Our smart contracts will be audited before they ship. Our operational surface — Telegram admins, DNS, website, API, social accounts — is where the real attacks happen. That's why we pay researchers to find the gaps.</p>
+  </section>
+
+  <!-- THE PROGRAM -->
+  <div class="section-head">
+    <div class="tag">RED-TEAM BOUNTY</div>
+    <h2>The Federation Red-Team Program</h2>
+    <p>Most DeFi bug bounties cover smart contract vulnerabilities. Ours starts earlier — with the operational attack surface that accounts for the majority of crypto losses in 2026. Paid in $GFOF.</p>
+  </div>
+
+  <div class="panel panel-accent-red">
+    <p><strong>Why this program exists.</strong> Most crypto losses in 2026 do not come from exploited smart contracts. They come from phishing Telegram admins, DNS hijacks, cloned landing pages, social engineering, and X impersonation. Our smart contracts are not live yet — but these attack vectors are active right now. We treat operational security with the same rigor we intend to apply to our on-chain code.</p>
+  </div>
+
+  <div class="bounty-grid">
+    <div class="bounty-cell critical">
+      <div class="sev">CRITICAL</div>
+      <div class="reward">$500 in $GFOF</div>
+      <div class="desc">DNS hijack attempts successfully caught, active phishing sites using our branding, successful social engineering of a team admin, verified private key exposure, or any vulnerability that could enable direct theft of user funds once lending is live.</div>
+    </div>
+    <div class="bounty-cell high">
+      <div class="sev">HIGH</div>
+      <div class="reward">$250 in $GFOF</div>
+      <div class="desc">Cloned landing pages, verified Telegram/Discord admin impersonation attempts, X account takeovers of affiliated accounts, working XSS on galacticfederation.co, or leaked credentials tied to any federation-owned service.</div>
+    </div>
+    <div class="bounty-cell medium">
+      <div class="sev">MEDIUM</div>
+      <div class="reward">$100 in $GFOF</div>
+      <div class="desc">Identified copycat tokens, typosquat domains, impersonation accounts not already known to us, open redirect vulnerabilities on our web surface, or CSP bypasses allowing phishing payload injection.</div>
+    </div>
+    <div class="bounty-cell low">
+      <div class="sev">LOW</div>
+      <div class="reward">$50 in $GFOF</div>
+      <div class="desc">Minor information disclosure, subdomain takeover opportunities, misconfigured headers with demonstrable risk, or well-documented OSINT findings that reveal accidental exposure of federation infrastructure.</div>
+    </div>
+  </div>
+
+  <!-- IN SCOPE / OUT OF SCOPE -->
+  <div class="section-head">
+    <div class="tag">PROGRAM SCOPE</div>
+    <h2>In Scope / Out of Scope</h2>
+  </div>
+
+  <div class="panel">
+    <div class="scope-row">
+      <div class="cat">✓ IN SCOPE</div>
+      <div class="body">galacticfederation.co · all subdomains · the /app widget · the /treasury page · Netlify functions at /api/* · @GFOF_Offcial on X · t.me/GFOF_SOL · the three Streamflow lock contracts · any operational wallet published on /treasury · any federation-owned service disclosed publicly.</div>
+    </div>
+    <div class="scope-row out">
+      <div class="cat">✗ OUT OF SCOPE</div>
+      <div class="body">Third-party services (Solana RPC endpoints, DexScreener, Streamflow itself, Raydium, Moonshot) — report to their own programs. Attacks requiring privileged physical access to a team member's hardware. DDoS or rate-limit attacks. Vulnerabilities requiring severely outdated or unpatched user software. Any test that requires unauthorized access to other users' wallets, funds, or personal data.</div>
+    </div>
+    <div class="scope-row">
+      <div class="cat">✓ RULES OF ENGAGEMENT</div>
+      <div class="body">Do not exploit the finding beyond what is necessary to prove it. Do not publish the finding until we have confirmed and remediated it. Do not access, modify, or destroy data belonging to any user. Do not use findings to extort, blackmail, or otherwise harm the federation or its community. Violations void the bounty and may result in legal action.</div>
+    </div>
+    <div class="scope-row out">
+      <div class="cat">✗ NOT ELIGIBLE</div>
+      <div class="body">Theoretical findings without proof of exploitability. Duplicates of already-reported issues. Self-XSS. Missing security headers without demonstrated impact. Reports generated solely by automated scanners with no validation. Any report from a researcher under 18 or from a jurisdiction sanctioned by the US, UK, or EU.</div>
+    </div>
+  </div>
+
+  <!-- HOW TO REPORT -->
+  <div class="section-head">
+    <div class="tag">REPORT A FINDING</div>
+    <h2>Responsible Disclosure</h2>
+    <p>We commit to acknowledging every valid report within 72 hours, providing a triage decision within 7 days, and paying out verified bounties within 14 days of remediation.</p>
+  </div>
+
+  <div class="panel">
+    <p><strong>Step 1.</strong> Draft a clear writeup. Include: (a) the vulnerability class, (b) reproduction steps, (c) proof of exploitability, (d) your suggested severity and requested bounty tier, (e) whether you want public credit.</p>
+    <p><strong>Step 2.</strong> Send it via DM to <strong>@WelksCrypto</strong> on X or to the Telegram admin of t.me/GFOF_SOL. If the finding is sensitive enough that it cannot pass through an unencrypted channel, request a PGP key and we will provide one.</p>
+    <p><strong>Step 3.</strong> Do not publicly disclose the finding until we confirm remediation. If we do not respond within 7 days, you are free to escalate by publishing a non-exploitable summary and requesting public response.</p>
+    <p><strong>Step 4.</strong> Once remediated, payout is made in $GFOF to a Solana wallet of your choice. USD equivalent locked at the moment the finding is confirmed. If you prefer alternative compensation (anonymous credit, donation to a charity of your choice), we will accommodate.</p>
+
+    <div class="contact-block">
+      <div><span class="k">Primary contact</span>@WelksCrypto on X · admins in t.me/GFOF_SOL</div>
+      <div style="margin-top:8px"><span class="k">Response SLA</span>72 hours to acknowledge · 7 days to triage · 14 days to pay</div>
+    </div>
+  </div>
+
+  <!-- HALL OF HONOR -->
+  <div class="section-head">
+    <div class="tag">RECOGNITION</div>
+    <h2>Hall of Honor</h2>
+    <p>Researchers who have disclosed verified findings are credited here with their permission. The list is public because trust in a security process is itself a feature.</p>
+  </div>
+
+  <div class="panel">
+    <p style="color:var(--muted);font-style:italic;text-align:center;padding:12px 0">
+      No findings reported yet. Be the first. The list is permanent.
+    </p>
+  </div>
+
+  <!-- SECURITY.TXT REFERENCE -->
+  <div class="section-head">
+    <div class="tag">MACHINE-READABLE</div>
+    <h2>/.well-known/security.txt</h2>
+    <p>Per <a href="https://www.rfc-editor.org/rfc/rfc9116.html" target="_blank" style="color:var(--cyan);text-decoration:underline">RFC 9116</a>, we publish a standard security.txt so researchers and automated scanners can find our disclosure policy programmatically. It lives at <code>galacticfederation.co/.well-known/security.txt</code>.</p>
+  </div>
+
+  <div class="panel">
+    <div class="security-txt-block"><span class="cmt"># Galactic Federation of Finance — security.txt (RFC 9116)</span>
+<span class="cmt"># Canonical URL: https://galacticfederation.co/.well-known/security.txt</span>
+
+<span class="key">Contact:</span> https://x.com/WelksCrypto
+<span class="key">Contact:</span> https://t.me/GFOF_SOL
+<span class="key">Expires:</span> 2027-04-20T00:00:00.000Z
+<span class="key">Preferred-Languages:</span> en
+<span class="key">Canonical:</span> https://galacticfederation.co/.well-known/security.txt
+<span class="key">Policy:</span> https://galacticfederation.co/security
+<span class="key">Acknowledgments:</span> https://galacticfederation.co/security#hall-of-honor</div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/treasury">Treasury</a>
+  <span class="sep">·</span>
+  <a href="/corrections">Corrections</a>
+  <span class="sep">·</span>
+  <a href="/liquidation-spec">Liquidation Spec</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version" id="footer-version">v17.0 · security · deployed 2026-04-21</span>
+</div>
+
+<script>
+try {
+  console.log('%c⬡ GFOF Security · v11.0', 'color:#FF5E7B;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #FF5E7B;border-radius:2px;');
+  console.log('%c📣 Responsible disclosure program active. See /security for scope + rewards.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+} catch(e) {}
+(function(){
+  var el = document.getElementById('footer-version');
+  if(el){ el.textContent = 'v17.0 · security · deployed 2026-04-21'; }
+})();
+</script>
+</body>
+</html>

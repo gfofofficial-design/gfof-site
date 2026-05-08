@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classified — Federation Capital Command Advance Briefing</title>
+<meta name="description" content="Classified Federation transmission. Phase 3 advance briefing. Filed under Federation Authority.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;--amber:#FFB84D;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#6A7294;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16px;line-height:1.7;min-height:100vh;
+  display:flex;flex-direction:column;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 10%,rgba(64,192,255,0.04),transparent 55%),
+    radial-gradient(ellipse at 80% 80%,rgba(167,139,250,0.035),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.018) 0,rgba(255,255,255,0.018) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+strong{color:var(--text)}
+
+/* Top classification banner */
+.classification{
+  background:var(--gold);color:#040818;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;font-weight:700;
+  padding:6px 16px;text-align:center;
+  border-bottom:1px solid var(--gold-3);
+}
+
+/* Diagonal CONFIDENTIAL watermark */
+.watermark{
+  position:fixed;inset:0;pointer-events:none;z-index:-1;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.watermark span{
+  font-family:var(--orb);font-weight:900;font-size:clamp(80px,16vw,180px);
+  color:rgba(255,184,77,0.025);
+  letter-spacing:8px;
+  transform:rotate(-22deg);
+  white-space:nowrap;
+  user-select:none;
+}
+
+.stage{
+  flex:1;
+  padding:50px 24px 80px;
+  max-width:780px;width:100%;
+  margin:0 auto;
+}
+
+/* Document header */
+.doc-meta-bar{
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:2px;
+  border:1px solid var(--line);
+  padding:14px 18px;
+  margin-bottom:32px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;
+  background:rgba(255,255,255,0.015);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.doc-meta-bar .field{display:flex;flex-direction:column;gap:3px}
+.doc-meta-bar .k{color:var(--muted);font-size:9px}
+.doc-meta-bar .v{color:var(--text);font-size:11px;letter-spacing:1.5px}
+.doc-meta-bar .v.amber{color:var(--amber)}
+.doc-meta-bar .v.cyan{color:var(--cyan)}
+
+.tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--amber);
+  border:1px solid rgba(255,184,77,0.3);
+  background:rgba(255,184,77,0.04);
+  padding:7px 14px;
+  margin-bottom:24px;
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+.tag::before{content:'◤'}
+
+h1.cb-title{
+  font-family:var(--orb);font-weight:900;
+  font-size:clamp(32px,5vw,52px);
+  letter-spacing:-1px;line-height:1.05;
+  margin-bottom:16px;color:var(--text);
+}
+h1.cb-title .accent{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  display:block;
+}
+h1.cb-title .sub{
+  display:block;
+  font-family:var(--mono);font-weight:500;
+  font-size:0.28em;letter-spacing:5px;
+  color:var(--cyan);margin-top:18px;
+}
+
+.lede{
+  font-size:17px;color:var(--text-dim);line-height:1.6;
+  margin-bottom:18px;
+}
+.lede strong{color:var(--text)}
+
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold) 20%,var(--gold) 80%,transparent);
+  opacity:0.5;
+  margin:36px 0;
+}
+
+/* Body copy */
+.briefing-body{
+  font-size:15.5px;line-height:1.75;color:var(--text-dim);
+  font-style:italic;
+}
+.briefing-body p{margin-bottom:18px}
+.briefing-body p::first-line{color:var(--text)}
+.briefing-body strong{color:var(--gold);font-style:normal}
+
+/* Status block */
+.status-block{
+  margin:36px 0;padding:22px 26px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;
+  font-family:var(--mono);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.status-block .item{display:flex;flex-direction:column;gap:6px}
+.status-block .k{font-size:10px;color:var(--muted);letter-spacing:2.5px}
+.status-block .v{font-size:13px;color:var(--text);letter-spacing:1.5px}
+.status-block .v.amber{color:var(--amber)}
+.status-block .v.green{color:var(--green);display:flex;align-items:center;gap:8px}
+.status-block .v.green::before{content:'●';animation:pulse 1.5s infinite;font-size:11px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* Signature */
+.signature{
+  margin-top:48px;padding-top:30px;
+  border-top:1px dashed rgba(255,255,255,0.12);
+  display:flex;justify-content:space-between;align-items:end;
+  flex-wrap:wrap;gap:18px;
+}
+.sig-name{
+  font-family:var(--orb);font-weight:700;
+  font-size:17px;color:var(--gold);letter-spacing:2px;
+  margin-bottom:4px;
+}
+.sig-title{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:2.5px;color:var(--muted);
+}
+.sig-id{
+  font-family:var(--mono);font-size:10px;
+  color:var(--muted);text-align:right;line-height:1.7;
+}
+
+/* Note */
+.notice{
+  margin-top:48px;padding:18px 22px;
+  background:rgba(64,192,255,0.04);
+  border:1px solid rgba(64,192,255,0.2);
+  border-left:3px solid var(--cyan);
+  font-size:14px;color:var(--text-dim);
+}
+.notice .k{
+  font-family:var(--mono);font-size:10px;color:var(--cyan);
+  letter-spacing:2px;margin-bottom:6px;font-weight:700;
+}
+.notice strong{color:var(--text)}
+
+/* Bottom nav */
+.nav-bottom{
+  margin-top:48px;text-align:center;
+  font-family:var(--mono);font-size:11px;letter-spacing:2px;
+}
+.nav-bottom a{
+  color:var(--text-dim);
+  padding:8px 16px;border:1px solid var(--line);
+  display:inline-flex;align-items:center;gap:6px;
+  transition:all .2s;
+}
+.nav-bottom a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.04)}
+
+/* Footer */
+.foot{
+  padding:24px;border-top:1px solid var(--line);
+  text-align:center;font-family:var(--mono);font-size:10px;
+  color:var(--muted);letter-spacing:1px;line-height:1.7;
+}
+.foot a{color:var(--text-dim)}.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+
+@media(max-width:600px){
+  .stage{padding:32px 18px 60px}
+  .doc-meta-bar{padding:12px 14px}
+  .status-block{padding:18px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="classification">CLASSIFIED // FCC-ADVANCE // PHASE-3 PENDING</div>
+
+<div class="watermark"><span>CLASSIFIED</span></div>
+
+<main class="stage">
+
+  <div class="doc-meta-bar">
+    <div class="field"><span class="k">DOCUMENT</span><span class="v">CB-PRE-001</span></div>
+    <div class="field"><span class="k">CLASSIFICATION</span><span class="v amber">ADVANCE</span></div>
+    <div class="field"><span class="k">DIVISION</span><span class="v">02 / FCC</span></div>
+    <div class="field"><span class="k">PARENT</span><span class="v">GFOF FED.</span></div>
+    <div class="field"><span class="k">AUTHORITY</span><span class="v cyan">VOSS / HELIX</span></div>
+  </div>
+
+  <div class="tag">FILED UNDER FEDERATION AUTHORITY · ADVANCE BRIEFING</div>
+
+  <h1 class="cb-title">
+    The Federation has<br>
+    <span class="accent">a Second Division.</span>
+    <span class="sub">FEDERATION CAPITAL COMMAND</span>
+  </h1>
+
+  <p class="lede">
+    What you are reading is a <strong>provisional document.</strong> No product. No timeline. No allocation form. The Federation does not promise faster than it can ship.
+  </p>
+
+  <p class="lede" style="font-size:15px;color:var(--muted)">
+    The page exists because the registry name was reserved before any announcement could be made — exactly the same discipline applied to the token contract, the corrections log, and the lending spec. <strong style="color:var(--text-dim)">Reservation is not a commitment to ship. It is a commitment to ship correctly when the time arrives.</strong>
+  </p>
+
+  <div class="divider"></div>
+
+  <div class="briefing-body">
+    <p>The Galactic Federation of Finance was always more than a token. The name implies a federation — a coalition of mandates — and a federation cannot be a single product. It is a structure under which separate mandates operate, each with its own discipline.</p>
+
+    <p>The current operational division is the <strong>Civilian Corps</strong> — what you have been seeing on the live channels. The token, the community, the transparency infrastructure, the corrections log, the research log. This is Division 01.</p>
+
+    <p>A second division is in design. Its working name is <strong>Federation Capital Command (FCC)</strong>. Its mandate is institutional: tokenized real-world assets, autonomous capital strategies, restaking-secured underwriting. It will operate under separate legal structure, with separate disclosures, with separate counsel. It will not ship until the Civilian Corps milestones — bond, Raydium migration, Realms governance, Streamflow staking — have been operationally complete.</p>
+
+    <p>The Commanding Officer of FCC will be Commodore V. Helix. Helix's voice is austere, terminal-driven, briefing-format — the operational counterpart to Admiral Voss's recruiting voice. Where the Admiral addresses Recruits, Helix addresses Allocators. Both serve the same Federation.</p>
+
+    <p>None of this is announced publicly. None of it appears on the homepage roadmap. The corrections log makes no commitment to a date. <strong>That is the discipline of the document you are reading: it exists, but it does not promise.</strong></p>
+  </div>
+
+  <div class="status-block">
+    <div class="item">
+      <span class="k">DIVISION 02 STATUS</span>
+      <span class="v amber">DESIGN PHASE</span>
+    </div>
+    <div class="item">
+      <span class="k">ANNOUNCEMENT</span>
+      <span class="v">PHASE 3 GATED</span>
+    </div>
+    <div class="item">
+      <span class="k">FED-NET</span>
+      <span class="v green">ONLINE</span>
+    </div>
+  </div>
+
+  <div class="notice">
+    <div class="k">⬡ NOTE TO THE READER</div>
+    <p>If you found this page through URL enumeration, by hint, or by accident — welcome to the Federation's quiet build. <strong>This is not an investment thesis. This is not an allocation invitation.</strong> Capital Command does not exist as a product. When it does, the announcement will pass through the Admiral, the corrections log, and the same disciplines that govern every other Federation operation. Until then, no waitlist will be offered. No early access will be sold. The Federation will speak when it is ready to ship.</p>
+  </div>
+
+  <div class="signature">
+    <div>
+      <div class="sig-name">CMDR. V. HELIX</div>
+      <div class="sig-title">COMMANDING OFFICER · CAPITAL COMMAND (DESIGN)</div>
+    </div>
+    <div class="sig-id">
+      // FCC-AUTH-PRE-0001<br>
+      // FILED FED-NET — UNDATED
+    </div>
+  </div>
+
+  <div class="nav-bottom">
+    <a href="/">← RETURN TO CIVILIAN CORPS</a>
+  </div>
+
+</main>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/corrections">Corrections Log</a>
+  <span class="sep">·</span>
+  <a href="/faq">FAQ</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank" rel="noopener">X / Twitter</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. DYOR.
+  <br>
+  <span style="opacity:0.4">// CLASSIFICATION: ADVANCE // PHASE-3 PENDING</span>
+</div>
+
+<script>
+try {
+  console.log('%c⬡ FED-NET · CLASSIFIED // FCC-ADVANCE', 'color:#F0C040;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #F0C040;border-radius:2px;');
+  console.log('%c"Capital follows discipline, not noise." — Helix', 'color:#A78BFA;font-family:monospace;font-size:11px;font-style:italic;');
+  console.log('%cReservation is not a commitment to ship. It is a commitment to ship correctly.', 'color:#A9B0CC;font-family:monospace;font-size:10px;');
+} catch(e) {}
+</script>
+</body>
+</html>

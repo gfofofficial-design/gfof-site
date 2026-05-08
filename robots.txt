@@ -1,0 +1,13 @@
+# Galactic Federation of Finance — robots.txt
+# galacticfederation.co
+
+User-agent: *
+Allow: /
+
+Sitemap: https://galacticfederation.co/sitemap.xml
+
+# Structured content index for AI research tools (llmstxt.org convention)
+# https://galacticfederation.co/llms.txt
+
+# Corrections RSS feed (public commitments log)
+# https://galacticfederation.co/corrections-feed.xml

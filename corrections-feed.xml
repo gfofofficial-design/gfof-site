@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>$GFOF Corrections Log</title>
+    <link>https://galacticfederation.co/corrections</link>
+    <atom:link href="https://galacticfederation.co/corrections-feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
+    <language>en-us</language>
+    <copyright>Galactic Federation of Finance</copyright>
+    <lastBuildDate>Tue, 05 May 2026 22:00:00 +0000</lastBuildDate>
+    <pubDate>Tue, 05 May 2026 00:00:00 +0000</pubDate>
+    <ttl>1440</ttl>
+    <image>
+      <url>https://galacticfederation.co/logo.png</url>
+      <title>$GFOF Corrections Log</title>
+      <link>https://galacticfederation.co/corrections</link>
+    </image>
+    <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#H008 · KEPT — Commitment #008 corrected (Mirror.xyz migrated into Paragraph and no longer exists as a separate platform)</title>
+      <link>https://galacticfederation.co/corrections#h008</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h008</guid>
+      <pubDate>Tue, 05 May 2026 22:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Commitment #008 was published earlier today with the text "Research Log cross-posted to Medium and Mirror within 24 hours of Paragraph publication." That text is not executable: Mirror.xyz consolidated into Paragraph in September 2025 and the migration completed in late 2025. Mirror is no longer a separate publishing surface. Commitment #008 is hereby revised to read "Research Log cross-posted to Medium within 24 hours of Paragraph publication." Paragraph remains the canonical surface; Medium remains the secondary surface; Mirror is removed because it no longer exists as a distinct platform. The correction is filed pre-execution — before the first scheduled cross-post (Week 03, due 2026-05-06) — so the first test of #008 runs against corrected text. The original text of #008 is preserved in this correction entry as the historical record of what was committed before the fix. A corrections log that cannot correct itself in public has no integrity; this entry is the discipline being applied to the discipline itself.</description>
+    </item>
+
+    <item>
+      <title>#H007 · KEPT — @GFOF_Offcial cadence rule clarified to permit engagement activity alongside originated posts</title>
+      <link>https://galacticfederation.co/corrections#h007</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h007</guid>
+      <pubDate>Tue, 05 May 2026 18:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The Federation has operated under an implicit @GFOF_Offcial posting rule of 2-4 measured originated posts per week, but the rule was ambiguous about engagement activity. This revision clarifies the rule rather than loosens it: the 2-4 originated posts per week discipline stands unchanged. Alongside it, three additional bounded practices are now binding commitments on this page — Research Log cross-posting to Medium within 24h (#008, revised by #H008), monthly Federation Office Hours in Telegram (#009), and daily reply engagement within bounded discipline (#010). Off-limits remain: volume bots, paid KOL (paused under #007), hype framing, urgency framing around bond, simulated activity, daily originated posts, raid coordination. The discipline distinguishing the Federation from category norms is preserved.</description>
+    </item>
+
+    <item>
+      <title>#010 · COMMITMENT — Daily reply engagement on @GFOF_Offcial within bounded discipline</title>
+      <link>https://galacticfederation.co/corrections#c010</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c010</guid>
+      <pubDate>Tue, 05 May 2026 18:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Alongside the unchanged 2-4 originated posts per week rule, the Federation now engages substantively with the broader DeFi conversation on a daily cadence: replies to substantive DeFi research threads, retweets-with-comment of relevant analytical work, and replies to mentions of the Federation account. Engagement window is bounded to ~5-15 minutes per day, substantive threads only. No promotional commentary, no shilling. Casual Federation voice acceptable; Voss voice reserved for substantive declarations and Office Hours opening/closing. Tracked weekly: KEPT if engagement occurs at least 5 of 7 days; MISSED if absent 3+ consecutive days without stated reason.</description>
+    </item>
+
+    <item>
+      <title>#009 · COMMITMENT — Federation Office Hours held monthly in Telegram</title>
+      <link>https://galacticfederation.co/corrections#c009</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c009</guid>
+      <pubDate>Tue, 05 May 2026 18:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The Federation will hold Office Hours monthly in the Telegram community (t.me/GFOF_SOL) — third Wednesday of each month at 2 PM EST / 7 PM UTC, 30-45 minutes maximum. Pre-announced 7 days prior on @GFOF_Offcial; pinned in Telegram 24 hours prior; archived within 48 hours of completion. Substantive Q&amp;A only — not a hype event, not a price discussion, not a roadmap announcement venue. Voss-voiced opening and closing; founder voice for Q&amp;A. Off-topic questions (price predictions, financial advice, unrelated crypto) declined politely. Inaugural session: Wednesday, May 21, 2026.</description>
+    </item>
+
+    <item>
+      <title>#008 · COMMITMENT — Research Log cross-posted to Medium within 24 hours of Paragraph publication (revised by #H008)</title>
+      <link>https://galacticfederation.co/corrections#c008</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c008</guid>
+      <pubDate>Tue, 05 May 2026 18:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Beginning with Week 03 (due 2026-05-06), each weekly Federation Research Log issue is cross-posted to Medium within 24 hours of Paragraph publication, with a clearly stated canonical link back to the Paragraph original. The cross-post is not new writing — it is the same essay, distributed to an additional surface. Paragraph remains the source of record. Tracked weekly: KEPT if the cross-post publishes within 24 hours; DELAYED if delayed beyond 48 hours; MISSED if a week is skipped without a public reason recorded. Originally published as "Medium and Mirror"; revised by #H008 on 2026-05-05 because Mirror.xyz consolidated into Paragraph in late 2025 and no longer exists as a separate platform.</description>
+    </item>
+
+    <item>
+      <title>#H006 · KEPT — Federation Research Log Week 02 published on schedule</title>
+      <link>https://galacticfederation.co/corrections#h006</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h006</guid>
+      <pubDate>Wed, 29 Apr 2026 18:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>On 2026-04-29 the Federation Research Log published Week 02: "The indexer gap — what pre-bond projects can't see and what to do about it." The essay covers the structural reasons projects below a certain scale are invisible to standard indexing tools (Dune decoded tables, Bubblemaps, DefiLlama) and argues that the surfaces a project controls become the canonical source of trust during this period. First scheduled cadence test under #H005 — kept on time. Week 03 is due 2026-05-06.</description>
+    </item>
+
+    <item>
+      <title>#H005 · KEPT — Federation Research Log launched on Paragraph — Week 01 published</title>
+      <link>https://galacticfederation.co/corrections#h005</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h005</guid>
+      <pubDate>Wed, 22 Apr 2026 18:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>On 2026-04-22 the Federation Research Log launched on Paragraph with Week 01: "Why intent-based DeFi changes everything" — an analysis of the imperative/declarative split in DeFi UX, the solver-competition model (CoW Protocol, UniswapX, Anoma), and why the Federation is studying intent-based architecture for Solana. The post explicitly states the Federation is not announcing an intent-based product, only documenting that it is studying the direction. Five publication terms committed to on the corrections log: weekly cadence, no paywalls, no price predictions, no roadmap announcements, and analytical-not-promotional. Future entries will record each weekly publication (or acknowledge its absence), and the first break of any of the five terms becomes its own correction entry.</description>
+    </item>
+
+    <item>
+      <title>#H004 · KEPT — Home page revised to align with research-first discipline</title>
+      <link>https://galacticfederation.co/corrections#h004</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h004</guid>
+      <pubDate>Tue, 21 Apr 2026 22:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The v17 deploy revised the home page to remove marketing patterns that contradicted the disciplined posture established across the liquidation spec, treasury page, corrections log, security policy, and the hardened v16 server-side chatbot prompt. Federation Points System reframed to remove specific point values and token-allocation promises. Staking section given a "DESIGN DIRECTION · NOT YET SPEC'D" banner; specific multipliers and "20% APY base" projections reframed as draft proposals. Founding Member NFT perks rewritten as "Proposed" with cross-links to forthcoming specs; FOMO language removed. Tokenomics pie, roadmap Phase 02 and 03, and community card blurbs rewritten. Both client-side chatbot widgets (home + app) rerouted to /api/chat so the disciplined server-side prompt is the single source of truth. Meta and structured data updated to the research-first voice. Machine-readable JSON-LD added to corrections (Dataset) and security (TechArticle).</description>
+    </item>
+
+    <item>
+      <title>#007 · COMMITMENT — No paid promotional spend resumes without a written, published liquidity trigger</title>
+      <link>https://galacticfederation.co/corrections#c007</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c007</guid>
+      <pubDate>Tue, 21 Apr 2026 18:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The federation has paused paid KOL campaigns and paid promotional spend pending a return of macro liquidity. Before paid spend resumes, the federation commits to publishing a written set of market signals (the "trigger") that must be met. Loosening the trigger requires a 14-day waiting period with the amendment logged here. Tightening is unconstrained. First-draft framework: a 3-of-4 threshold across TOTAL3 reclaim, SOL price sustain, Solana DEX volume, and Pump.fun/Moonshot graduate trend. Published as a draft; will be marked v1.0 after one round of refinement, at which point it becomes binding under the amendment rules.</description>
+    </item>
+
+    <item>
+      <title>#H003 · KEPT — Publish a substantive revision to the liquidation spec within one week of v0.1</title>
+      <link>https://galacticfederation.co/corrections#h003</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h003</guid>
+      <pubDate>Tue, 21 Apr 2026 12:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>When v0.1 of the liquidation spec was published on 2026-04-20, the federation committed to substantive iteration rather than the more common pattern of publishing a design doc once and never revisiting it. Resolution: Kept. v0.2 published 2026-04-21, adding Section 7 on non-standard collateral types — connecting the existing mechanism to the broader DeFi capital-efficiency conversation. No mechanism changes from v0.1; framing addition only. Full diff in the revision log on the spec page.</description>
+    </item>
+
+    <item>
+      <title>#006 · COMMITMENT — Public liquidation design spec before any lending code ships</title>
+      <link>https://galacticfederation.co/corrections#c006</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c006</guid>
+      <pubDate>Mon, 20 Apr 2026 12:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Before writing any smart contract code for the lending protocol, the federation publishes a public design spec for borrower-protective liquidation. The spec is open to public criticism, and its revisions will be tracked here. Status: v0.2 of the spec is live at /liquidation-spec (v0.1 published 2026-04-20, v0.2 published 2026-04-21 adding Section 7 on non-standard collateral types). Revisions are versioned. Each revision's diff is documented in the spec's own revision log and as a corrections entry.</description>
+    </item>
+
+    <item>
+      <title>#H002 · KEPT — Ship a live on-chain transparency page before asking for trust on the lending protocol</title>
+      <link>https://galacticfederation.co/corrections#h002</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h002</guid>
+      <pubDate>Sun, 19 Apr 2026 12:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The federation publicly committed that before any lending-product trust ask, we would ship a live transparency page that reads directly from Solana. Resolution: Kept. /treasury shipped v1 on 2026-04-19, extended on 2026-04-20 with the Unlock Early-Warning System. All numbers are read from the chain in the visitor's browser — not served from our server.</description>
+    </item>
+
+    <item>
+      <title>#005 · COMMITMENT — Monthly Federation Intelligence Report</title>
+      <link>https://galacticfederation.co/corrections#c005</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c005</guid>
+      <pubDate>Fri, 10 Apr 2026 12:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>A substantive monthly publication — DeFi trend analysis, protocol teardowns, security issues in our space. Free. No paywall. Published as both a PDF and a pinned X thread. Status: First issue in preparation, target May 2026. If a scheduled issue ships more than 7 days late, it will be marked DELAYED with the reason. If we skip a month entirely, it will be marked MISSED.</description>
+    </item>
+
+    <item>
+      <title>#002 · COMMITMENT — Unlocked Federation tokens do not go to the open market</title>
+      <link>https://galacticfederation.co/corrections#c002</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c002</guid>
+      <pubDate>Wed, 08 Apr 2026 12:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>When the first Streamflow unlock event occurs, the released tokens will not be sold into the market. They will either be re-locked, rotated into operational treasury (visible on-chain), or used per a specific, pre-announced purpose. This will be verifiable on-chain both before and after the event. Status: Commitment standing. Will be tested at the next unlock — see countdown on /treasury.</description>
+    </item>
+
+    <item>
+      <title>#H001 · KEPT — Launch without paid KOLs, without an influencer round, without promises we couldn't keep</title>
+      <link>https://galacticfederation.co/corrections#h001</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h001</guid>
+      <pubDate>Tue, 01 Apr 2026 12:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Before launch, the federation committed to a quiet start: no paid KOL campaigns, no influencer allocations, no roadmap items promised without a clear path to delivery. Resolution: Kept. Launch was organic. No KOL checks have been cut. Roadmap items are documented on the corrections page as specific commitments with status, not as generic future promises.</description>
+    </item>
+
+    <item>
+      <title>#001 · COMMITMENT — 10% of supply locked on Streamflow across 3 immutable contracts</title>
+      <link>https://galacticfederation.co/corrections#c001</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c001</guid>
+      <pubDate>Sun, 15 Mar 2026 12:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Before launch, the federation committed to locking 10% of total supply across 3 separate Streamflow contracts. The lock contracts are on-chain and immutable. This promise is verifiable in real time on the treasury page. Status: Kept from day one. The three contracts are live. Balances are readable by anyone from Solana RPC.</description>
+    </item>
+
+    <item>
+      <title>#003 · COMMITMENT — Bond at $73K MC triggers Raydium migration</title>
+      <link>https://galacticfederation.co/corrections#c003</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c003</guid>
+      <pubDate>Sun, 15 Mar 2026 12:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Per Moonshot's standard launchpad mechanics, when $GFOF reaches $73K market cap, the token migrates to Raydium. Mint and freeze authorities are revoked automatically as part of the migration. Status: In flight. This is a mechanical trigger, not a team-controlled event — it happens when the market cap is reached. If the bond is not reached and the project winds down, this will be documented here as a cancelled commitment, not silently forgotten.</description>
+    </item>
+
+    <item>
+      <title>#004 · COMMITMENT — Realms DAO governance post-bond</title>
+      <link>https://galacticfederation.co/corrections#c004</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c004</guid>
+      <pubDate>Sun, 15 Mar 2026 12:00:00 +0000</pubDate>
+      <category>ON TRACK</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The federation has committed to launching on-chain governance via the Realms platform within 60 days of reaching the bond. Holders will have real voting weight on treasury allocation, staking parameters, and protocol direction. Status: Prerequisite (bond) is still in flight. Advisory polls are being run in Telegram before the formal DAO launches so there's a record of honored community decisions from before vote weight kicks in.</description>
+    </item>
+
+  </channel>
+</rss>

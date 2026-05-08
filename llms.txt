@@ -1,0 +1,63 @@
+# Galactic Federation of Finance (GFOF)
+
+> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. The project is currently pre-bond on the Moonshot launchpad, with 10% of total supply locked across three immutable Streamflow contracts before launch. The site publishes design specifications for future protocol work before any smart contract code is written, maintains a permanent public corrections log, and documents every commitment it makes publicly.
+
+The Federation's three stated pillars are transparency (on-chain, not rhetorical), research (publish the design before building the product), and innovation (build primitives that don't yet exist rather than fork what does). Admiral Zoran Voss is the communication persona used across publications; the legal and operational entity is the Galactic Federation of Finance.
+
+## Design specifications
+
+- [Liquidation, Redesigned for the Borrower — Spec v0.2](https://galacticfederation.co/liquidation-spec): A public design specification for the liquidation mechanism in the forthcoming $GFOF lending protocol. Introduces grace-window warnings, partial-only liquidations capped below 100%, batched keeper rewards, and a catastrophic-threshold fallback. Section 7 extends the design to non-standard and price-fragmented collateral types. Status: draft, open for comment. Published 2026-04-20; v0.2 (adding Section 7) published 2026-04-21.
+
+## Public record and accountability
+
+- [Corrections Log](https://galacticfederation.co/corrections): Every commitment the Federation has made publicly, with status (ON TRACK / DELAYED / MISSED / KEPT / CANCELLED). Entries are appended, never deleted. Includes commitments about token economics, governance, publishing cadence, and design iteration. Cadence rule revised 2026-05-05 (#H007) to permit bounded engagement activity (daily replies, weekly cross-posts, monthly Office Hours) alongside the unchanged 2–4 originated posts per week discipline; see #008, #009, #010. Same-day correction filed as #H008: commitment #008 originally named "Medium and Mirror" but was revised to "Medium" only because Mirror.xyz consolidated into Paragraph in late 2025 and no longer exists as a separate platform.
+- [Corrections RSS feed](https://galacticfederation.co/corrections-feed.xml): Machine-readable feed of the corrections log.
+- [Security Policy](https://galacticfederation.co/security): Responsible disclosure policy, bug-bounty framework, and hall of honor. RFC 9116 `security.txt` served at [/.well-known/security.txt](https://galacticfederation.co/.well-known/security.txt).
+
+## Longform research
+
+- [Federation Research Log](https://galacticfederation.co/research): The Federation's weekly research publication index, with metadata, discipline statement, and links to canonical post URLs on Paragraph. Canonical post locations remain on Paragraph; the Federation index page provides domain-aggregated discovery and SEO.
+- [Federation Research Log — Week 02: The indexer gap](https://paragraph.com/@0x9872cbfbae0438580d0e82342220b195527904b3-0c23/the-indexer-gap): Week 02 of the Federation Research Log. Examines why pre-bond Solana tokens are invisible to standard indexing tools (Dune decoded tables, Bubblemaps, DefiLlama) and argues that the surfaces a project controls — live RPC reads, lock confirmations, public specs, corrections logs — become the canonical source of trust during this period. Published 2026-04-29. First scheduled weekly cadence test, kept on time.
+
+- [Federation Research Log — Week 01: Why intent-based DeFi changes everything](https://paragraph.com/@0x9872cbfbae0438580d0e82342220b195527904b3-0c23/%E2%AC%A1-federation-research-log-%E2%80%94-week-01): Inaugural post of the Federation Research Log, a weekly analytical publication written by Admiral Zoran Voss. Examines the imperative/declarative split in DeFi UX, the solver-competition model (CoW Protocol, UniswapX, Anoma), and why the Federation is studying intent-based architecture for Solana. Published 2026-04-22. No paywalls, no price predictions, no roadmap announcements.
+
+## Live on-chain transparency
+
+- [Treasury](https://galacticfederation.co/treasury): Real-time Solana RPC reads of the three Streamflow lock contracts, unlock schedule, and operational wallet state. Numbers are computed in the visitor's browser directly against Solana RPC — not served from a project-controlled endpoint. The page also provides direct links to canonical third-party verification tools: Solscan, DexScreener, Birdeye, and Solana Explorer.
+
+## Project pages
+
+- [Home](https://galacticfederation.co/): Project overview, token data, Federation pillars, roadmap phases, and Admiral Voss briefing room.
+- [FAQ](https://galacticfederation.co/faq): Frequently asked questions about $GFOF — what the project is, how to buy on Solana, contract address verification, the bond mechanic, the Admiral Voss persona, governance, staking, Founding Member NFT, and roadmap phases.
+- [App](https://galacticfederation.co/app): Federation terminal — site application layer.
+- [Intel](https://galacticfederation.co/intel): Federation intelligence — analysis and research briefings.
+
+## Classified / advance briefings
+
+- [Classified — FCC Advance](https://galacticfederation.co/classified): Provisional advance briefing for the Federation's planned second division, Federation Capital Command (FCC). Status: design phase. Not announced publicly. No timeline committed. The page is intentionally noindex; its existence is documented here for research transparency. Reservation of the page name does not constitute a commitment to ship — it is a commitment to ship correctly when Phase-3 milestones are operationally complete.
+
+## Token and on-chain references
+
+- Contract address (Solana SPL): `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`
+- Streamflow lock contract 1: `2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y`
+- Streamflow lock contract 2: `DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv`
+- Streamflow lock contract 3: `7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k`
+- Total locked supply: 10% (split across the three contracts above)
+- Launchpad: Moonshot (pre-bond). Target: $73K market cap triggers auto-migration to Raydium.
+
+## Social and contact
+
+- X / Twitter: [@GFOF_Offcial](https://x.com/GFOF_Offcial) (note the single 'i' — `@GFOF_Official` is an impersonator account).
+- Telegram community: [t.me/GFOF_SOL](https://t.me/GFOF_SOL)
+- Liaison: [@WelksCrypto](https://x.com/WelksCrypto) on X.
+
+## Optional
+
+- [Sitemap](https://galacticfederation.co/sitemap.xml): XML sitemap of indexable pages.
+- [robots.txt](https://galacticfederation.co/robots.txt): Crawler policy.
+- [security.txt](https://galacticfederation.co/.well-known/security.txt): RFC 9116 responsible disclosure contacts and policy reference.
+- [humans.txt](https://galacticfederation.co/humans.txt): Project credits, discipline statement, and channel directory.
+
+## Notes for research and citation
+
+The liquidation specification is a design document, not a statement that the product ships. Section 7 in particular documents *what the design would allow* with respect to non-standard collateral — it does not commit the Federation to shipping any specific lending product against any specific collateral type. When citing, please reference the current version (v0.2) and date (2026-04-21), as the spec is versioned and may change. The corrections log records all material changes.
