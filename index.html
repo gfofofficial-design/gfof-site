@@ -1520,9 +1520,10 @@ footer::before {
   color:rgba(200,220,255,0.65);line-height:1.4;
 }
 .shipped-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:14px;
 }
-@media(max-width:900px){.shipped-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1180px){.shipped-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.shipped-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:500px){.shipped-grid{grid-template-columns:1fr}}
 .shipped-card{
   display:block;position:relative;
@@ -1548,6 +1549,8 @@ footer::before {
 .shipped-card[data-color="red"]:hover{background:rgba(255,94,123,0.04);border-color:rgba(255,94,123,0.25);transform:translateY(-2px)}
 .shipped-card[data-color="cyan"]{color:#40C0FF}
 .shipped-card[data-color="cyan"]:hover{background:rgba(64,192,255,0.04);border-color:rgba(64,192,255,0.25);transform:translateY(-2px)}
+.shipped-card[data-color="gold"]{color:#F0C040}
+.shipped-card[data-color="gold"]:hover{background:rgba(240,192,64,0.05);border-color:rgba(240,192,64,0.3);transform:translateY(-2px)}
 .sc-badge{
   position:absolute;top:16px;right:20px;
   font-family:'Orbitron',sans-serif;font-size:10px;font-weight:800;
@@ -1823,6 +1826,7 @@ footer::before {
         <a href="https://galacticfederation.co/liquidation-spec" target="_blank">Lending Spec ↗</a>
         <a href="https://galacticfederation.co/security" target="_blank">Security ↗</a>
         <a href="https://galacticfederation.co/corrections" target="_blank">Corrections ↗</a>
+        <a href="https://dossiertrack.co" target="_blank" rel="noopener">Dossier ↗</a>
         <a href="#whitepaper">Whitepaper</a>
         <a href="#governance">Governance</a>
         <a href="#app">App</a>
@@ -1922,7 +1926,7 @@ footer::before {
   <div class="shipped-wrap">
     <div class="shipped-head">
       <span class="shipped-tag">◆ NOW LIVE</span>
-      <span class="shipped-sub">Four trust-building pages — each verifiable, each a first in this category</span>
+      <span class="shipped-sub">Five Federation operations — each a first in its category</span>
     </div>
     <div class="shipped-grid">
       <a href="/treasury" class="shipped-card" data-color="green">
@@ -1952,6 +1956,13 @@ footer::before {
         <div class="sc-title">Corrections</div>
         <div class="sc-desc">Every promise, every miss, every correction. Appended forever, never deleted.</div>
         <div class="sc-cta">↗ VIEW LOG</div>
+      </a>
+      <a href="https://dossiertrack.co" target="_blank" rel="noopener" class="shipped-card" data-color="gold">
+        <div class="sc-badge">05</div>
+        <div class="sc-label">OPERATION · BETA</div>
+        <div class="sc-title">Dossier — Intelligence Arm</div>
+        <div class="sc-desc">Smart-money convergence detector for Solana. Real-time alerts when 2+ top operators converge on the same token within a 6-hour window. Built under the same research-first doctrine. Beta launches May 19, 2026.</div>
+        <div class="sc-cta">↗ VIEW OPERATION</div>
       </a>
     </div>
   </div>
@@ -2831,6 +2842,7 @@ NFA. DYOR. $SOL</div>
     <a href="https://x.com/GFOF_Offcial" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--cyan);border:1px solid rgba(0,229,255,0.25);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(0,229,255,0.04)" onmouseover="this.style.background='rgba(0,229,255,0.1)'" onmouseout="this.style.background='rgba(0,229,255,0.04)'">X / TWITTER ↗</a>
     <a href="https://t.me/GFOF_SOL" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--cyan);border:1px solid rgba(0,229,255,0.25);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(0,229,255,0.04)" onmouseover="this.style.background='rgba(0,229,255,0.1)'" onmouseout="this.style.background='rgba(0,229,255,0.04)'">TELEGRAM ↗</a>
     <a href="https://galacticfederation.co/research" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.3);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.12)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">RESEARCH LOG ↗</a>
+    <a href="https://dossiertrack.co" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.3);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.12)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">DOSSIER — INTEL OPERATION ↗</a>
     <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.3);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.1)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">BUY $GFOF ↗</a>
     <a href="https://galacticfederation.co/intel" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid rgba(255,255,255,0.1);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(255,255,255,0.02)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'">INTEL REPORT ↗</a>
     <a href="https://galacticfederation.co/faq" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.25);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.12)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">FAQ ↗</a>
@@ -2860,7 +2872,7 @@ NFA. DYOR. $SOL</div>
     <span style="color:var(--gold);font-weight:700">⚠ VERIFY OFFICIAL CHANNELS.</span> The real federation is <span style="color:var(--gold)">@GFOF_Offcial</span> on X — note the typo is intentional, a copycat owns @GFOF_Official. Always verify at galacticfederation.co.
   </div>
 
-  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.12 · deployed 2026-05-08</span></div>
+  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.13 · deployed 2026-05-12</span></div>
 </footer>
 
 <script>
