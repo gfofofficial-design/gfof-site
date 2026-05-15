@@ -111,7 +111,7 @@
   --bg2: rgba(3,9,22,0.9);
   --panel: rgba(4,12,28,0.85);
   --text: #c8d8f0;
-  --muted: #6878a0;
+  --muted: #8896BC;
   --orb: 'Orbitron', sans-serif;
   --raj: 'Rajdhani', sans-serif;
   --mono: 'Share Tech Mono', monospace;
@@ -299,7 +299,7 @@ section { position:relative; z-index:2; }
   color:var(--gold); margin-bottom:14px; line-height:1.1;
   text-shadow:0 0 30px rgba(240,192,64,0.2);
 }
-.section-sub { font-family:var(--raj); color:var(--muted); font-size:16px; line-height:1.8; max-width:620px; }
+.section-sub { font-family:var(--raj); color:var(--text-dim); font-size:16px; line-height:1.8; max-width:620px; }
 
 /* hex-clip divider */
 .divider {
@@ -541,7 +541,7 @@ section { position:relative; z-index:2; }
 .bond-inner { max-width:740px; margin:0 auto; text-align:center; position:relative; z-index:1; }
 .bond-mission-label { font-family:var(--mono); font-size:10px; letter-spacing:5px; color:var(--green); margin-bottom:10px; text-transform:uppercase; text-shadow:0 0 10px var(--green-glow); }
 .bond-headline { font-family:var(--orb); font-size:clamp(18px,3vw,28px); color:var(--gold); font-weight:700; margin-bottom:8px; text-shadow:0 0 20px rgba(240,192,64,0.2); }
-.bond-desc { font-family:var(--raj); color:var(--muted); font-size:16px; margin-bottom:30px; line-height:1.8; }
+.bond-desc { font-family:var(--raj); color:var(--text-dim); font-size:16px; margin-bottom:30px; line-height:1.8; }
 .bond-track-large {
   height:18px; border-radius:2px; overflow:hidden; position:relative; margin-bottom:10px;
   background:rgba(255,255,255,0.04);
@@ -567,7 +567,7 @@ section { position:relative; z-index:2; }
 .bond-stat-val { font-family:var(--orb); font-size:20px; font-weight:700; color:var(--gold); margin-bottom:4px; text-shadow:0 0 12px var(--gold-glow); }
 .bond-stat-lbl { font-family:var(--mono); font-size:9px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; }
 .bond-unlock-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; text-align:left; margin-bottom:28px; }
-.bond-unlock-item { display:flex; align-items:flex-start; gap:8px; font-family:var(--raj); font-size:14px; color:var(--muted); line-height:1.5; }
+.bond-unlock-item { display:flex; align-items:flex-start; gap:8px; font-family:var(--raj); font-size:14px; color:var(--text-dim); line-height:1.5; }
 .bond-unlock-icon { color:var(--green); flex-shrink:0; text-shadow:0 0 6px var(--green); }
 
 /* ── MISSION CARDS ── */
@@ -578,7 +578,7 @@ section { position:relative; z-index:2; }
 }
 .mission-icon { font-size:24px; margin-bottom:14px; display:block; filter:drop-shadow(0 0 8px var(--green)); }
 .mission-title { font-family:var(--orb); font-size:13px; color:var(--gold); font-weight:700; margin-bottom:8px; letter-spacing:1px; }
-.mission-desc { font-family:var(--raj); font-size:14px; color:var(--muted); line-height:1.7; }
+.mission-desc { font-family:var(--raj); font-size:14px; color:var(--text-dim); line-height:1.7; }
 
 /* ── ADMIRAL ── */
 .nav-more { position:relative; }
@@ -657,9 +657,9 @@ section { position:relative; z-index:2; }
 }
 .phase-num { font-family:var(--mono); font-size:10px; color:var(--green); letter-spacing:3px; margin-bottom:10px; text-shadow:0 0 6px var(--green-glow); }
 .phase-title { font-family:var(--orb); font-size:14px; color:var(--gold); font-weight:700; margin-bottom:8px; }
-.phase-desc { font-family:var(--raj); font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:10px; }
+.phase-desc { font-family:var(--raj); font-size:14px; color:var(--text-dim); line-height:1.7; margin-bottom:10px; }
 .phase-items { display:flex; flex-direction:column; gap:6px; margin-top:12px; border-top:1px solid rgba(61,255,160,0.1); padding-top:12px; }
-.phase-item { font-family:var(--raj); font-size:13px; color:var(--muted); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
+.phase-item { font-family:var(--raj); font-size:13px; color:var(--text-dim); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
 .phase-item::before { content:'→'; color:var(--green); flex-shrink:0; text-shadow:0 0 6px var(--green); }
 
 /* ── ROADMAP ── */
@@ -672,7 +672,7 @@ section { position:relative; z-index:2; }
 .roadmap-num { font-family:var(--orb); font-size:32px; font-weight:900; color:rgba(61,255,160,0.15); flex-shrink:0; line-height:1; }
 .roadmap-phase { font-family:var(--mono); font-size:10px; letter-spacing:3px; color:var(--green); margin-bottom:4px; text-transform:uppercase; }
 .roadmap-title { font-family:var(--orb); font-size:17px; color:var(--gold); font-weight:700; margin-bottom:6px; }
-.roadmap-desc { font-family:var(--raj); font-size:14px; color:var(--muted); line-height:1.7; }
+.roadmap-desc { font-family:var(--raj); font-size:14px; color:var(--text-dim); line-height:1.7; }
 .roadmap-status { margin-top:10px; display:inline-block; font-family:var(--mono); font-size:9px; letter-spacing:2px; padding:2px 10px; border-radius:2px; text-transform:uppercase; }
 .status-live { color:var(--green); background:rgba(61,255,160,0.06); border:1px solid var(--green-border); text-shadow:0 0 6px var(--green); }
 .status-next { color:var(--gold); background:rgba(240,192,64,0.06); border:1px solid rgba(240,192,64,0.25); }
@@ -687,7 +687,7 @@ section { position:relative; z-index:2; }
 .wp-card::before { background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan)) !important; opacity:1 !important; height:2px !important; }
 .wp-icon { font-size:44px; flex-shrink:0; filter:drop-shadow(0 0 12px var(--green)); }
 .wp-title { font-family:var(--orb); font-size:15px; color:var(--gold); font-weight:700; letter-spacing:1px; margin-bottom:6px; }
-.wp-sub { font-family:var(--raj); font-size:14px; color:var(--muted); margin-bottom:16px; line-height:1.6; }
+.wp-sub { font-family:var(--raj); font-size:14px; color:var(--text-dim); margin-bottom:16px; line-height:1.6; }
 
 /* ── TOKENOMICS ── */
 .token-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:40px; }
@@ -729,7 +729,7 @@ section { position:relative; z-index:2; }
 .points-card:hover { border-color:rgba(61,255,160,0.4) !important; transform:translateY(-4px); background:rgba(61,255,160,0.04) !important; }
 .points-val { font-family:var(--orb); font-size:36px; font-weight:900; color:var(--green); margin-bottom:6px; text-shadow:0 0 20px var(--green-glow); }
 .points-action { font-family:var(--orb); font-size:12px; color:var(--gold); margin-bottom:10px; letter-spacing:2px; }
-.points-desc { font-family:var(--raj); font-size:13px; color:var(--muted); line-height:1.6; }
+.points-desc { font-family:var(--raj); font-size:13px; color:var(--text-dim); line-height:1.6; }
 
 /* ── COMMUNITY ── */
 .community-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:40px; }
@@ -739,7 +739,7 @@ section { position:relative; z-index:2; }
 }
 .comm-platform { font-family:var(--mono); font-size:9px; letter-spacing:4px; color:var(--green); margin-bottom:8px; text-transform:uppercase; text-shadow:0 0 6px var(--green); }
 .comm-handle { font-family:var(--orb); font-size:15px; color:var(--gold); font-weight:700; margin-bottom:8px; }
-.comm-note { font-family:var(--raj); font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:16px; }
+.comm-note { font-family:var(--raj); font-size:14px; color:var(--text-dim); line-height:1.7; margin-bottom:16px; }
 .verify-banner {
   margin-top:24px; background:rgba(61,255,160,0.04);
   border:1px solid rgba(61,255,160,0.18); padding:18px 22px;
@@ -747,7 +747,7 @@ section { position:relative; z-index:2; }
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
 }
 .verify-icon { color:var(--green); font-size:18px; flex-shrink:0; margin-top:2px; text-shadow:0 0 8px var(--green); }
-.verify-text { font-family:var(--raj); font-size:14px; color:var(--muted); line-height:1.7; }
+.verify-text { font-family:var(--raj); font-size:14px; color:var(--text-dim); line-height:1.7; }
 .verify-text b { color:var(--green); }
 .verify-text a { color:var(--cyan); text-decoration:underline; }
 
@@ -2880,7 +2880,7 @@ NFA. DYOR. $SOL</div>
     <span style="color:var(--gold);font-weight:700">⚠ VERIFY OFFICIAL CHANNELS.</span> The real federation is <span style="color:var(--gold)">@GFOF_Offcial</span> on X — note the typo is intentional, a copycat owns @GFOF_Official. Always verify at galacticfederation.co.
   </div>
 
-  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.14 · deployed 2026-05-14</span></div>
+  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.16 · deployed 2026-05-15</span></div>
 </footer>
 
 <script>
