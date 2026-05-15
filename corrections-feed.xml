@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 05 May 2026 22:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 05 May 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Thu, 14 May 2026 16:00:00 +0000</lastBuildDate>
+    <pubDate>Thu, 14 May 2026 16:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,16 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#011 · COMMITMENT — Intelligence arm revenue contribution: Dossier feeds Federation liquidity</title>
+      <link>https://galacticfederation.co/corrections#c011</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c011</guid>
+      <pubDate>Thu, 14 May 2026 16:00:00 +0000</pubDate>
+      <category>COMMITMENT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The Galactic Federation operates products. The first operational product is Dossier — the Federation's intelligence arm, a smart-money convergence detector for Solana, live at dossiertrack.co. Dossier has independent branding and pricing, but it operates inside the Federation's structural commitments. One of those commitments is that revenue flows back. Dossier has committed publicly (Dossier Corrections #006) to deploying a staged percentage of its net revenue directly into $GFOF/SOL liquidity on Raydium, quarterly, with on-chain transaction proof. Phase 1 (beta through ~Aug 2026): no revenue, no contribution. Phase 2 (paid launch through first $5K MRR): 25% of net revenue to Raydium LP, quarterly. Phase 3 ($5K MRR sustained two consecutive quarters): 50% of net revenue, same cadence. Dossier Treasury Wallet: G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y, public on Solscan. Mechanism: Stripe payouts to dedicated treasury wallet, quarterly conversion, addition to $GFOF/SOL Raydium LP. LP receipt permanently held by Dossier Treasury. Quarterly injection details appended to Dossier Corrections #006 with transaction signatures verifiable on Solscan. This is not a marketing promise. It is a structural commitment from a Federation operation back into Federation liquidity. The Galactic Federation does not extract value from its operations — its operations feed it. Dossier is the first such operation. Future Federation operations will follow the same pattern, with each commitment logged here and on the operation's own corrections log. Status: Phase 1, pre-revenue, beta. First obligated contribution begins on Dossier paid launch.</description>
+    </item>
 
     <item>
       <title>#H008 · KEPT — Commitment #008 corrected (Mirror.xyz migrated into Paragraph and no longer exists as a separate platform)</title>
