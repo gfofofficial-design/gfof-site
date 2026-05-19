@@ -7,7 +7,7 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 19 May 2026 19:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 May 2026 20:00:00 +0000</lastBuildDate>
     <pubDate>Tue, 19 May 2026 19:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
@@ -16,6 +16,26 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#012 · COMMITMENT — Post-quantum posture: research-tracking commitment, no claims</title>
+      <link>https://galacticfederation.co/corrections#c012</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c012</guid>
+      <pubDate>Tue, 19 May 2026 20:00:00 +0000</pubDate>
+      <category>COMMITMENT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The Federation formally logs its post-quantum posture as a research-tracking commitment, not a feature or guarantee. Four parts: (1) a cryptographic-dependency inventory mapping which transparency artifacts are hash-durable versus signature-exposed, inaugural inventory published as Research Log Week 06; (2) tracking NIST and Solana-ecosystem developments on the existing research cadence; (3) trigger-based re-evaluation, not dates — triggers are protocol-level PQC shipping on Solana, a credible dated quantum-computer forecast, or NIST finalizing FN-DSA; (4) a standing anti-claim: no quantum-resistance marketing, no quantum-secured badge, no QFS framing. The anti-claim is binding: any quantum-security claim the Federation publishes is by definition a corrections-log event. Trigger status at filing: trigger (a) partially activated 2026-04-27 (Anza/Firedancer Falcon convergence + prototypes) but did not fully fire (not protocol-level adoption, per Jump Crypto's own write-up); the documented re-assessment obligation was met in Week 06; no Federation action obligated. Standing commitment, active, reviewed on research cadence, appended never edited.</description>
+    </item>
+
+    <item>
+      <title>#H010 · KEPT — Cross-post canonical commitment revised; Medium machine-canonical confirmed not externally settable (third revision of the cross-post commitment)</title>
+      <link>https://galacticfederation.co/corrections#h010</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h010</guid>
+      <pubDate>Tue, 19 May 2026 20:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>Third revision of the cross-post commitment (#008 to #H008 to #H010), stated plainly as a signal rather than framed as routine refinement. The machine-readable Medium canonical was tested two ways: retroactively on Week 03/04 (per #H009) and at first-publish on Week 06 (the #H009 forward-fix hypothesis). Both failed — Medium's published canonical meta tag self-references the Medium URL in both cases. Confirmed finding: Medium does not honor a custom external-domain canonical regardless of when set. The #H009 forward-fix is marked invalidated — a reasonable hypothesis that testing disproved. Revised commitment: Paragraph remains canonical and published first; the Medium cross-post carries human-readable canonical pointers (a header reference and a foot Cross-posting section with the full clickable Paragraph URL); the machine-readable tag limitation is documented once here, not re-footnoted per post. Honest note on the Week 06 Medium post specifically: the bottom Cross-posting section is present with a working clickable Paragraph link (the functioning mitigation); the header Canonical line is present but plain text not a link (weak). #008, #H008, #H009 unchanged and remain in full.</description>
+    </item>
 
     <item>
       <title>#H009 · KEPT — Research Log Week 03/04 catch-up published (CLARITY Act); cadence resolved</title>
