@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Thu, 14 May 2026 16:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 14 May 2026 16:00:00 +0000</pubDate>
+    <lastBuildDate>Tue, 19 May 2026 19:00:00 +0000</lastBuildDate>
+    <pubDate>Tue, 19 May 2026 19:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,26 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#H009 · KEPT — Research Log Week 03/04 catch-up published (CLARITY Act); cadence resolved</title>
+      <link>https://galacticfederation.co/corrections#h009</link>
+      <guid isPermaLink="false">https://galacticfederation.co/corrections#h009-resolved-20260519</guid>
+      <pubDate>Tue, 19 May 2026 19:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>RESOLUTION appended 2026-05-19. The combined Week 03/04 catch-up post, "The CLARITY Act and the Federation's Posture," is published. #H009 moves DELAYED to KEPT. Week 05 window (2026-05-13 through 2026-05-20) was met. Canonical on Paragraph: paragraph.com/@gfofofficial/federation-research-log-week-0304. Cross-posted to Medium: medium.com/@gfofofficial/federation-research-log-week-03-04. Honest note on #H008 compliance: the Medium cross-post points to the Paragraph canonical in two human-readable places (a "Canonical: Paragraph" link under the title, and a full Cross-posting section with the complete Paragraph URL), but Medium's machine-readable canonical meta tag continues to self-reference the Medium URL. This is a known Medium platform limitation — a custom canonical set retroactively on an already-published native Medium post is not reliably honored. It was attempted and did not take. This is a platform constraint, not a discipline lapse, recorded rather than hidden. Forward fix: future cross-posts set the Medium canonical at first-publish time, not retroactively. The original DELAYED entry text is preserved in full on the corrections page; this resolution is appended, not overwritten. Cadence resumes weekly per #H005 — Week 06 due 2026-05-27.</description>
+    </item>
+
+    <item>
+      <title>#H009 · DELAYED — Research Log cadence missed for Week 03 and Week 04, resumed Week 05 with combined catch-up post</title>
+      <link>https://galacticfederation.co/corrections#h009</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h009</guid>
+      <pubDate>Thu, 15 May 2026 18:00:00 +0000</pubDate>
+      <category>DELAYED</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The Federation Research Log committed to a weekly cadence under #H005 on launch (2026-04-22). Week 01 (2026-04-22) and Week 02 (2026-04-29) shipped on time. Week 03 (due 2026-05-06) and Week 04 (due 2026-05-13) did not ship. Two scheduled posts were missed. Federation development bandwidth during the May 5–14 window was concentrated on shipping infrastructure work — SEO foundation, performance pass, FAQ page, research index, custom 404, FCC advance briefing, Dossier integration as the Federation's first Intelligence operation, and supporting corrections entries. The Research Log was deprioritized. The discipline says missed posts get logged whether the reason was reasonable or not. Resolution path: a combined Week 03/04 catch-up post ships in Week 05 (window: 2026-05-13 through 2026-05-20) covering the CLARITY Act draft released May 12 and the Federation's posture under its provisions. Cadence going forward: weekly resumes. Week 06 due 2026-05-27. Status transitions from DELAYED to KEPT once the catch-up post is published; transitions to MISSED if Week 05 itself slips beyond 2026-05-20. A weekly publication that goes silent for two weeks without acknowledgment is the failure mode the Federation built the corrections log to prevent. This entry is that discipline being applied to itself.</description>
+    </item>
 
     <item>
       <title>#011 · COMMITMENT — Intelligence arm revenue contribution: Dossier feeds Federation liquidity</title>
