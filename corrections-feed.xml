@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 19 May 2026 22:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 19 May 2026 22:00:00 +0000</pubDate>
+    <lastBuildDate>Tue, 19 May 2026 23:30:00 +0000</lastBuildDate>
+    <pubDate>Tue, 19 May 2026 23:30:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,16 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#014 · COMMITMENT — Formal audit engagement initiated at bond completion</title>
+      <link>https://galacticfederation.co/corrections#c014</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c014</guid>
+      <pubDate>Tue, 19 May 2026 23:30:00 +0000</pubDate>
+      <category>COMMITMENT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>On 2026-05-19, in the bond-trigger commitment thread published from @GFOF_Offcial (cross-posted to Telegram and to Week 07 of the Federation Research Log), the Federation publicly committed to initiating formal audit engagement immediately upon $73K bond completion. The engagement covers any deployed contract code before activation. The commitment is to the engagement process, not to a finished audit by any specific date or by any specific firm. Audit firms have been researched but will not be named publicly until findings are delivered and published — avoiding the common DeFi pattern of "audited by X" claims made before findings exist. What activates at trigger: engagement process begins immediately; bug bounty scope expands to cover all newly-deployed contracts; when findings deliver, they are published in full including findings inconvenient to the project. What is NOT committed: a finished audit by date X, a named firm, an audit cost, or an audit duration — these are outside the team's unilateral control. Status: standing commitment, ON TRACK pending bond. Appended, never edited retroactively.</description>
+    </item>
 
     <item>
       <title>#013 · COMMITMENT — Voluntary supply lock: 30M added in 4th Streamflow contract; tokenomics figure updated to 77/10/13</title>
