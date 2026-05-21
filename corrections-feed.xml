@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 19 May 2026 20:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 19 May 2026 19:00:00 +0000</pubDate>
+    <lastBuildDate>Tue, 19 May 2026 22:00:00 +0000</lastBuildDate>
+    <pubDate>Tue, 19 May 2026 22:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,16 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#013 · COMMITMENT — Voluntary supply lock: 30M added in 4th Streamflow contract; tokenomics figure updated to 77/10/13</title>
+      <link>https://galacticfederation.co/corrections#c013</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c013</guid>
+      <pubDate>Tue, 19 May 2026 22:00:00 +0000</pubDate>
+      <category>COMMITMENT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>On 2026-05-19, an additional 30,000,000 $GFOF from team-controlled treasury were committed to a new Streamflow lock contract — a 4th immutable contract supplementing the existing 3. Recipient: project treasury wallet. Full cliff release 2028-05-31. Contract: Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x. New locked total: 130M $GFOF (13% of total supply) across 4 Streamflow contracts, verifiable on-chain. Tokenomics figure update: the previous public breakdown of 80% community/liquidity, 10% rewards/reserve, 10% dev rounded team-held treasury tokens into the community/liquidity bucket; the new lock moves 30M of those team-held tokens explicitly into the locked-dev column. Site copy updated this deploy to reflect on-chain reality: 77% community/liquidity, 10% rewards/reserve, 13% dev locked. The original 10%-dev / 100M / 3-contract claim was accurate for the previously-locked portion (Lock 1 30M + Lock 2 30M + Lock 3 40M = 100M); this entry documents the expansion to 130M / 4 contracts and the more precise breakdown going forward. Non-circulation discipline rationale. Standing commitment, active; appended, never edited retroactively.</description>
+    </item>
 
     <item>
       <title>#012 · COMMITMENT — Post-quantum posture: research-tracking commitment, no claims</title>

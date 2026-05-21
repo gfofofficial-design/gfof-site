@@ -388,11 +388,11 @@ a{color:inherit;text-decoration:none}
   <div class="stats">
     <div class="stat-cell">
       <div class="k">TOTAL ENTRIES</div>
-      <div class="v">17</div>
+      <div class="v">18</div>
     </div>
     <div class="stat-cell">
       <div class="k">ON TRACK</div>
-      <div class="v green">9</div>
+      <div class="v green">10</div>
     </div>
     <div class="stat-cell">
       <div class="k">KEPT</div>
@@ -643,6 +643,25 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
 
+  <div class="entry status-on-track" id="c013">
+    <div class="entry-head">
+      <span class="entry-id">#013 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Voluntary supply lock &mdash; 30M added in a 4th Streamflow contract; tokenomics figure updated to 77/10/13</h3>
+    <div class="meta">
+      <span>Made 2026-05-19</span>
+      <span>Verify: <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a></span>
+    </div>
+    <div class="body">
+      <p>On 2026-05-19, an additional 30,000,000 $GFOF from team-controlled treasury were committed to a new Streamflow lock contract &mdash; a 4th immutable contract supplementing the existing 3 (<a href="#c001" style="color:var(--cyan);text-decoration:underline">#001</a>). Recipient: project treasury wallet. Full cliff release: <strong>2028-05-31</strong>. Contract address: <a href="https://app.streamflow.finance/contract/solana/mainnet/Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;font-family:var(--mono);font-size:13px">Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x</a>.</p>
+      <p><strong>New locked total:</strong> 130M $GFOF (13% of total supply) across 4 Streamflow contracts. Verifiable on-chain on the <a href="/treasury" style="color:var(--cyan);text-decoration:underline">treasury page</a> and on Solscan.</p>
+      <p><strong>Tokenomics figure update.</strong> The previous public breakdown of 80% community/liquidity, 10% rewards/reserve, 10% dev rounded team-held treasury tokens into the community/liquidity bucket. The new lock moves 30M of those team-held tokens explicitly into the locked-dev column. Site copy is updated this deploy to reflect on-chain reality: <strong>77% community/liquidity, 10% rewards/reserve, 13% dev locked</strong>. The original 10%-dev / 100M / 3-contract claim was accurate for the previously-locked portion (verified individually: Lock 1 30M, Lock 2 30M, Lock 3 40M); this entry documents the expansion to 130M / 4 contracts and the more precise breakdown going forward.</p>
+      <p><strong>Why now:</strong> non-circulation discipline. Tokens under team control that could theoretically be moved are now contractually immobilized until 2028-05-31. Capital follows discipline, not noise.</p>
+      <p><strong>Status:</strong> Standing commitment, active. The 130M remains locked until the earliest scheduled unlock event &mdash; see <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a> for the full timeline. This entry is appended, not edited retroactively. If any of the 4 contracts is ever cancelled, accelerated, or otherwise modified, that change will appear here as a separate, appended status update.</p>
+    </div>
+  </div>
+
   <!-- HISTORICAL (entries become permanent once added) -->
   <div class="section-head">
     <div class="tag">HISTORICAL RECORD</div>
@@ -881,7 +900,7 @@ a{color:inherit;text-decoration:none}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.9 · corrections · deployed 2026-05-05</span>
+  <span class="version" id="footer-version">v17.10 · corrections · deployed 2026-05-19</span>
 </div>
 
 <script>
@@ -891,7 +910,7 @@ try {
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.9 · corrections · deployed 2026-05-05'; }
+  if(el){ el.textContent = 'v17.10 · corrections · deployed 2026-05-19'; }
 })();
 </script>
 </body>

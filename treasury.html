@@ -648,7 +648,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     </div>
     <div class="summary-cell">
       <div class="k">CONTRACTS</div>
-      <div class="v" id="sum-contracts">3 / 3</div>
+      <div class="v" id="sum-contracts">4 / 4</div>
       <div class="s">separate wallets</div>
     </div>
     <div class="summary-cell">
@@ -661,8 +661,8 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <!-- LOCK CONTRACTS -->
   <div class="section-head">
     <div class="tag">ON-CHAIN LOCK CONTRACTS</div>
-    <h2>The Three Locks</h2>
-    <p>Each lock is an independent Streamflow vesting contract holding a portion of the 10% dev allocation. Click through to view the full unlock schedule on Streamflow, or verify the escrow balance directly on Solscan.</p>
+    <h2>The Four Locks</h2>
+    <p>Each lock is an independent Streamflow vesting contract holding a portion of the 13% dev allocation. Click through to view the full unlock schedule on Streamflow, or verify the escrow balance directly on Solscan.</p>
   </div>
   <div class="lock-list" id="lock-list"></div>
 
@@ -676,7 +676,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       </div>
       <div class="verify-step">
         <div class="vs-num">METHOD 02</div>
-        <div class="vs-body"><strong>Use Solscan or Solana Explorer.</strong> Paste any of the three lock addresses below. The escrow balances are public. Compare them to what we show on this page.</div>
+        <div class="vs-body"><strong>Use Solscan or Solana Explorer.</strong> Paste any of the four lock addresses below. The escrow balances are public. Compare them to what we show on this page.</div>
       </div>
       <div class="verify-step">
         <div class="vs-num">METHOD 03</div>
@@ -755,7 +755,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <!-- TIMELINE -->
   <div class="timeline">
     <div class="timeline-head">
-      <h3>Full Unlock Timeline — All 3 Contracts</h3>
+      <h3>Full Unlock Timeline — All 4 Contracts</h3>
       <div class="legend">
         <span><span class="dot d1"></span>ELAPSED</span>
         <span><span class="dot d2"></span>UNLOCK EVENT</span>
@@ -794,7 +794,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.5.1 · treasury · deployed 2026-04-28</span>
+  <span class="version" id="footer-version">v17.6 · treasury · deployed 2026-05-19</span>
 </div>
 
 <script>
@@ -810,7 +810,7 @@ var TOTAL_SUPPLY = 1_000_000_000;        /* 1B */
 var TOKEN_DECIMALS = 9;                  /* standard Moonshot SPL */
 var RPC = 'https://mainnet.helius-rpc.com/?api-key=8599a4dd-1686-4c31-a3d8-4f781153f98a';
 
-/* The three Streamflow METADATA accounts (what the user put on the site).
+/* The four Streamflow METADATA accounts (what the user put on the site).
    These are the public contract pages. For actual escrow balances we need the
    escrow token account, which Streamflow derives deterministically.
    We display what the user sees on Streamflow + verify on Solscan. */
@@ -832,6 +832,12 @@ var LOCKS = [
     name: 'Federation Lock — Tertiary',
     metadata: '7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k',
     streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k'
+  },
+  {
+    id: 'LOCK 4',
+    name: 'Federation Lock — Supplementary',
+    metadata: 'Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x',
+    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x'
   }
 ];
 
@@ -1169,11 +1175,11 @@ function refreshAll(){
       showError('Read '+successful.length+' of '+LOCKS.length+' locks live. Verify the rest on Streamflow using the buttons below.');
     } else {
       /* Full fallback: can't reach RPC. Show known values with honest note. */
-      document.getElementById('sum-locked').textContent = '100M $GFOF';
+      document.getElementById('sum-locked').textContent = '130M $GFOF';
       document.getElementById('sum-locked').classList.remove('loading');
       document.getElementById('sum-pct').textContent = '10.00%';
       document.getElementById('sum-pct').classList.remove('loading');
-      showError('Live RPC unreachable right now. Showing the known locked total (100M = 10% of supply). Use the verify links below to confirm independently.');
+      showError('Live RPC unreachable right now. Showing the known locked total (130M = 13% of supply). Use the verify links below to confirm independently.');
     }
 
     /* v11: update unlock early-warning system */
@@ -1219,7 +1225,7 @@ function fmtDate(ts){
 }
 
 function renderUnlockEarlyWarning(schedules){
-  /* Aggregate: find the soonest next unlock across all three */
+  /* Aggregate: find the soonest next unlock across all four */
   var now = Math.floor(Date.now() / 1000);
   var soonest = null;
   var soonestIdx = -1;
@@ -1412,7 +1418,7 @@ try {
 /* Version stamp */
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.5.1 · treasury · deployed 2026-04-28'; }
+  if(el){ el.textContent = 'v17.6 · treasury · deployed 2026-05-19'; }
 })();
 
 /* Initial render + fetch */

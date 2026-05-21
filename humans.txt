@@ -26,7 +26,7 @@
   Stack: Static HTML/CSS/JS, Netlify hosting, Solana RPC reads in-browser
   Standards: RFC 9116 security.txt, llmstxt.org for AI research tools
   Token: Solana SPL · CA 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon
-  Locks: Streamflow · 3 contracts · 10% of supply
+  Locks: Streamflow · 4 contracts · 13% of supply
 
 /* NOTE */
   The Federation does not predict prices.

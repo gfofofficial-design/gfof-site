@@ -1,6 +1,6 @@
 # Galactic Federation of Finance (GFOF)
 
-> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. The project is currently pre-bond on the Moonshot launchpad, with 10% of total supply locked across three immutable Streamflow contracts before launch. The site publishes design specifications for future protocol work before any smart contract code is written, maintains a permanent public corrections log, and documents every commitment it makes publicly.
+> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. The project is currently pre-bond on the Moonshot launchpad, with 13% of total supply locked across four immutable Streamflow contracts. The site publishes design specifications for future protocol work before any smart contract code is written, maintains a permanent public corrections log, and documents every commitment it makes publicly.
 
 The Federation's three stated pillars are transparency (on-chain, not rhetorical), research (publish the design before building the product), and innovation (build primitives that don't yet exist rather than fork what does). Admiral Zoran Voss is the communication persona used across publications; the legal and operational entity is the Galactic Federation of Finance.
 
@@ -23,7 +23,7 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 
 ## Live on-chain transparency
 
-- [Treasury](https://galacticfederation.co/treasury): Real-time Solana RPC reads of the three Streamflow lock contracts, unlock schedule, and operational wallet state. Numbers are computed in the visitor's browser directly against Solana RPC — not served from a project-controlled endpoint. The page also provides direct links to canonical third-party verification tools: Solscan, DexScreener, Birdeye, and Solana Explorer.
+- [Treasury](https://galacticfederation.co/treasury): Real-time Solana RPC reads of the four Streamflow lock contracts, unlock schedule, and operational wallet state. Numbers are computed in the visitor's browser directly against Solana RPC — not served from a project-controlled endpoint. The page also provides direct links to canonical third-party verification tools: Solscan, DexScreener, Birdeye, and Solana Explorer.
 
 ## Project pages
 
@@ -42,7 +42,8 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 - Streamflow lock contract 1: `2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y`
 - Streamflow lock contract 2: `DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv`
 - Streamflow lock contract 3: `7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k`
-- Total locked supply: 10% (split across the three contracts above)
+- Streamflow lock contract 4: `Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x`
+- Total locked supply: 13% (split across the four contracts above; previously 10% across three — see corrections #013 for the breakdown reframe filed 2026-05-19)
 - Launchpad: Moonshot (pre-bond). Target: $73K market cap triggers auto-migration to Raydium.
 
 ## Social and contact
