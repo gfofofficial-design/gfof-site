@@ -185,6 +185,36 @@ a{color:inherit;text-decoration:none}
 .stat-cell .v.red{color:var(--red)}
 .stat-cell .v.cyan{color:var(--cyan)}
 
+/* KEEP-RATE DASHBOARD — derived metric displayed below the stats strip */
+.keep-rate-card{
+  background:linear-gradient(180deg,rgba(61,255,160,0.04),rgba(4,8,24,0.7));
+  border:1px solid rgba(61,255,160,0.3);
+  border-radius:2px;
+  padding:24px 26px;
+  margin:32px 0;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.kr-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(61,255,160,0.15);
+  flex-wrap:wrap;
+  gap:8px;
+}
+.kr-tag{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:2.5px}
+.kr-asof{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px}
+.kr-body{display:grid;grid-template-columns:180px 1fr;gap:28px;align-items:start}
+@media(max-width:640px){.kr-body{grid-template-columns:1fr;gap:18px}}
+.kr-figure{text-align:center;padding:12px 0}
+.kr-pct{font-family:var(--orb);font-size:56px;font-weight:900;color:var(--green);letter-spacing:-2px;line-height:1}
+.kr-pct-label{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:10px;text-transform:uppercase}
+.kr-narrative p{font-size:14px;color:var(--text-dim);line-height:1.7;margin-bottom:10px}
+.kr-narrative p:last-child{margin-bottom:0}
+.kr-narrative .kr-method{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);letter-spacing:0.3px}
+
 .section-head{margin:60px auto 24px;max-width:900px}
 .section-head .tag{
   font-family:var(--mono);font-size:10px;letter-spacing:3px;
@@ -401,6 +431,25 @@ a{color:inherit;text-decoration:none}
     <div class="stat-cell">
       <div class="k">DELAYED / MISSED</div>
       <div class="v gold">0 / 0</div>
+    </div>
+  </div>
+
+  <!-- KEEP-RATE DASHBOARD — derived metric, manually updated alongside the stats strip -->
+  <div class="keep-rate-card">
+    <div class="kr-head">
+      <span class="kr-tag">// COMMITMENT KEEP-RATE</span>
+      <span class="kr-asof">As of 2026-05-26</span>
+    </div>
+    <div class="kr-body">
+      <div class="kr-figure">
+        <div class="kr-pct">100%</div>
+        <div class="kr-pct-label">of resolved commitments kept</div>
+      </div>
+      <div class="kr-narrative">
+        <p>Of 8 commitments that have been resolved, 8 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 11 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
+        <p>One historical commitment &mdash; <a href="#h009" style="color:var(--cyan);text-decoration:underline">#H009</a> (Research Log cadence) &mdash; was filed as <strong style="color:var(--gold)">DELAYED</strong> after a Week 03 / Week 04 miss, then recovered to <strong style="color:var(--green)">KEPT</strong> with the combined catch-up post for Week 05. The original DELAYED state is preserved in the entry. <strong>The slip itself was logged, which is the discipline.</strong></p>
+        <p class="kr-method">Method: resolved commitments = entries with status KEPT, MISSED, or CANCELLED. ON TRACK entries are pending and excluded from the rate. Recovered entries (DELAYED &rarr; KEPT) count as KEPT in the current rate; the original DELAYED state remains visible in the entry. Updated manually with the stats strip on every deploy that adds or resolves an entry.</p>
+      </div>
     </div>
   </div>
 
@@ -919,7 +968,7 @@ a{color:inherit;text-decoration:none}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.11 · corrections · deployed 2026-05-19</span>
+  <span class="version" id="footer-version">v17.12 · corrections · deployed 2026-05-26</span>
 </div>
 
 <script>
@@ -929,7 +978,7 @@ try {
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.11 · corrections · deployed 2026-05-19'; }
+  if(el){ el.textContent = 'v17.12 · corrections · deployed 2026-05-26'; }
 })();
 </script>
 </body>
