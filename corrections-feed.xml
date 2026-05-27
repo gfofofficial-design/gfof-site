@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 19 May 2026 23:30:00 +0000</lastBuildDate>
-    <pubDate>Tue, 19 May 2026 23:30:00 +0000</pubDate>
+    <lastBuildDate>Tue, 26 May 2026 22:00:00 +0000</lastBuildDate>
+    <pubDate>Tue, 26 May 2026 22:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,16 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#015 · COMMITMENT — Structural position: not pursuing buyback-and-burn under current conditions</title>
+      <link>https://galacticfederation.co/corrections#c015</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c015</guid>
+      <pubDate>Tue, 26 May 2026 22:00:00 +0000</pubDate>
+      <category>COMMITMENT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>On 2026-05-26, the Federation published a structural position in Week 08 of the Research Log ("Why the Federation Is Not Pursuing a Buyback-and-Burn") stating that no buyback-and-burn program is being pursued at this time. The position is conditional: a buyback would be revisited only if recurring protocol revenue at material scale emerges from a post-bond product surface (not treasury reserves), that revenue exists in addition to the Dossier revenue loop committed under #011, a versioned public specification is drafted and reviewed on the standard spec-before-code timeline, and the program is structured to operate mechanistically with verification surfaces equivalent to the rest of the Federation's transparency posture. The Federation's existing value-return mechanism is the Dossier net revenue loop to the $GFOF/SOL Raydium LP per #011. Status: standing position, active. Appended, never edited retroactively. If conditions materially change, that change will be documented as an appended status update. If the Federation ever does pursue a buyback-and-burn, the rationale will be filed as a new corrections entry referencing this one.</description>
+    </item>
 
     <item>
       <title>#014 · COMMITMENT — Formal audit engagement initiated at bond completion</title>

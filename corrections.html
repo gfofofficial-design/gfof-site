@@ -418,11 +418,11 @@ a{color:inherit;text-decoration:none}
   <div class="stats">
     <div class="stat-cell">
       <div class="k">TOTAL ENTRIES</div>
-      <div class="v">19</div>
+      <div class="v">20</div>
     </div>
     <div class="stat-cell">
       <div class="k">ON TRACK</div>
-      <div class="v green">11</div>
+      <div class="v green">12</div>
     </div>
     <div class="stat-cell">
       <div class="k">KEPT</div>
@@ -446,7 +446,7 @@ a{color:inherit;text-decoration:none}
         <div class="kr-pct-label">of resolved commitments kept</div>
       </div>
       <div class="kr-narrative">
-        <p>Of 8 commitments that have been resolved, 8 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 11 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
+        <p>Of 8 commitments that have been resolved, 8 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 12 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
         <p>One historical commitment &mdash; <a href="#h009" style="color:var(--cyan);text-decoration:underline">#H009</a> (Research Log cadence) &mdash; was filed as <strong style="color:var(--gold)">DELAYED</strong> after a Week 03 / Week 04 miss, then recovered to <strong style="color:var(--green)">KEPT</strong> with the combined catch-up post for Week 05. The original DELAYED state is preserved in the entry. <strong>The slip itself was logged, which is the discipline.</strong></p>
         <p class="kr-method">Method: resolved commitments = entries with status KEPT, MISSED, or CANCELLED. ON TRACK entries are pending and excluded from the rate. Recovered entries (DELAYED &rarr; KEPT) count as KEPT in the current rate; the original DELAYED state remains visible in the entry. Updated manually with the stats strip on every deploy that adds or resolves an entry.</p>
       </div>
@@ -730,6 +730,30 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
 
+  <div class="entry status-on-track" id="c015">
+    <div class="entry-head">
+      <span class="entry-id">#015 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Structural position: not pursuing buyback-and-burn under current conditions</h3>
+    <div class="meta">
+      <span>Made 2026-05-26</span>
+      <span>Reference: <a href="/research" style="color:var(--cyan);text-decoration:underline">Week 08 Research Log</a></span>
+    </div>
+    <div class="body">
+      <p>On 2026-05-26, the Federation published a structural position in <a href="https://paragraph.com/@gfofofficial@gmail.com/why-the-federation-is-not-pursuing-a-buyback-and-burn" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Week 08 of the Research Log</a> &mdash; "Why the Federation Is Not Pursuing a Buyback-and-Burn" &mdash; stating that no buyback-and-burn program is being pursued at this time.</p>
+      <p><strong>The position is conditional.</strong> The Federation would revisit a buyback-and-burn if all four of the following materialize:</p>
+      <ul style="margin:6px 0 10px 22px;color:var(--text-dim);line-height:1.7">
+        <li>Recurring protocol revenue at material scale emerges from a post-bond product surface (not treasury reserves)</li>
+        <li>That revenue exists in addition to, not in replacement of, the Dossier revenue loop committed under <a href="#c011" style="color:var(--cyan);text-decoration:underline">correction #011</a></li>
+        <li>A versioned public specification for the program is drafted and reviewed on the project's standard spec-before-code timeline</li>
+        <li>The program is structured to operate mechanistically (not at team discretion) with verification surfaces equivalent to the rest of the Federation's transparency posture</li>
+      </ul>
+      <p><strong>The Federation's existing value-return mechanism</strong> is the Dossier net revenue loop to the $GFOF/SOL Raydium LP per <a href="#c011" style="color:var(--cyan);text-decoration:underline">#011</a>. The Week 08 entry explains why a revenue-routed liquidity reinforcement mechanism is structurally different from &mdash; and arguably better suited to the Federation's discipline framework than &mdash; a buyback-and-burn.</p>
+      <p><strong>Status:</strong> Standing position, active. If the conditions described in Week 08 materially change, that change will be documented here as an appended status update. If the Federation ever does pursue a buyback-and-burn, the rationale and the changed conditions will be filed as a new corrections entry referencing this one. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
   <!-- HISTORICAL (entries become permanent once added) -->
   <div class="section-head">
     <div class="tag">HISTORICAL RECORD</div>
@@ -968,7 +992,7 @@ a{color:inherit;text-decoration:none}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.12 · corrections · deployed 2026-05-26</span>
+  <span class="version" id="footer-version">v17.13 · corrections · deployed 2026-05-26</span>
 </div>
 
 <script>
@@ -978,7 +1002,7 @@ try {
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.12 · corrections · deployed 2026-05-26'; }
+  if(el){ el.textContent = 'v17.13 · corrections · deployed 2026-05-26'; }
 })();
 </script>
 </body>
