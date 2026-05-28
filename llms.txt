@@ -7,6 +7,7 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 ## Design specifications
 
 - [Liquidation, Redesigned for the Borrower — Spec v0.2](https://galacticfederation.co/liquidation-spec): A public design specification for the liquidation mechanism in the forthcoming $GFOF lending protocol. Introduces grace-window warnings, partial-only liquidations capped below 100%, batched keeper rewards, and a catastrophic-threshold fallback. Section 7 extends the design to non-standard and price-fragmented collateral types. Status: draft, open for comment. Published 2026-04-20; v0.2 (adding Section 7) published 2026-04-21.
+- [Federation Governance Specification v0.1](https://galacticfederation.co/governance-spec): A public specification for the $GFOF DAO governance system, built on Realms / spl-governance. All parameters (proposal threshold, quorum, two-tier approval, voting periods, execution timelock) are proposed for public comment, not committed. Documents the exclusion of the 13% locked dev allocation from voting, an explicit list of what governance cannot do (corrections log, #007, #012, #003, locked tokens, and mint/freeze authority are permanently outside governance scope), and a no-permanent-council position. Status: draft, open for comment. DAO deploys post-bond. Published 2026-05-26.
 
 ## Public record and accountability
 

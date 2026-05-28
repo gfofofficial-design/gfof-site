@@ -393,6 +393,7 @@ a{color:inherit;text-decoration:none}
   <div class="top-nav-links">
     <a href="/" class="primary">← BACK TO SITE</a>
     <a href="/treasury">TREASURY ↗</a>
+    <a href="/governance-spec">GOVERNANCE ↗</a>
     <a href="/security">SECURITY ↗</a>
   </div>
 </nav>
@@ -418,11 +419,11 @@ a{color:inherit;text-decoration:none}
   <div class="stats">
     <div class="stat-cell">
       <div class="k">TOTAL ENTRIES</div>
-      <div class="v">20</div>
+      <div class="v">21</div>
     </div>
     <div class="stat-cell">
       <div class="k">ON TRACK</div>
-      <div class="v green">12</div>
+      <div class="v green">13</div>
     </div>
     <div class="stat-cell">
       <div class="k">KEPT</div>
@@ -446,7 +447,7 @@ a{color:inherit;text-decoration:none}
         <div class="kr-pct-label">of resolved commitments kept</div>
       </div>
       <div class="kr-narrative">
-        <p>Of 8 commitments that have been resolved, 8 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 12 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
+        <p>Of 8 commitments that have been resolved, 8 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 13 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
         <p>One historical commitment &mdash; <a href="#h009" style="color:var(--cyan);text-decoration:underline">#H009</a> (Research Log cadence) &mdash; was filed as <strong style="color:var(--gold)">DELAYED</strong> after a Week 03 / Week 04 miss, then recovered to <strong style="color:var(--green)">KEPT</strong> with the combined catch-up post for Week 05. The original DELAYED state is preserved in the entry. <strong>The slip itself was logged, which is the discipline.</strong></p>
         <p class="kr-method">Method: resolved commitments = entries with status KEPT, MISSED, or CANCELLED. ON TRACK entries are pending and excluded from the rate. Recovered entries (DELAYED &rarr; KEPT) count as KEPT in the current rate; the original DELAYED state remains visible in the entry. Updated manually with the stats strip on every deploy that adds or resolves an entry.</p>
       </div>
@@ -754,6 +755,24 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
 
+  <div class="entry status-on-track" id="c016">
+    <div class="entry-head">
+      <span class="entry-id">#016 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Governance specification published before deployment; public comment period open</h3>
+    <div class="meta">
+      <span>Made 2026-05-26</span>
+      <span>Spec: <a href="/governance-spec" style="color:var(--cyan);text-decoration:underline">/governance-spec</a></span>
+    </div>
+    <div class="body">
+      <p>On 2026-05-26, the Federation published <a href="/governance-spec" style="color:var(--cyan);text-decoration:underline">Governance Specification v0.1</a> &mdash; a complete design for the $GFOF DAO on Realms &mdash; before deploying any governance infrastructure. This applies the spec-before-code discipline to governance, the same way <a href="/liquidation-spec" style="color:var(--cyan);text-decoration:underline">/liquidation-spec</a> applies it to the lending mechanism.</p>
+      <p><strong>The commitment:</strong> all governance parameters (proposal threshold, quorum, approval thresholds, voting periods, execution timelock) are proposed as v0.1 draft-for-comment, not committed. A public comment period is open. Parameters are refined into v0.2 in response to comment, and ratified by the first on-chain governance vote &mdash; not set unilaterally. The DAO does not deploy until after the $73K bond completes.</p>
+      <p><strong>Two structural decisions documented in the spec:</strong> (1) the 13% locked dev allocation does not participate in governance voting &mdash; locked-for-discipline does not double as locked-for-control; (2) an explicit list of what governance <em>cannot</em> do, placing the corrections log, correction #007, correction #012, correction #003, the locked dev tokens, and the revoked mint/freeze authorities permanently outside governance scope. These constraints cannot be changed by any vote, standard or constitutional.</p>
+      <p><strong>Status:</strong> Standing commitment, active. Comment period open. v0.2 will be published incorporating feedback. DAO deployment is post-bond per the stated sequence. Any deviation from this sequence will be documented here. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
   <!-- HISTORICAL (entries become permanent once added) -->
   <div class="section-head">
     <div class="tag">HISTORICAL RECORD</div>
@@ -992,7 +1011,7 @@ a{color:inherit;text-decoration:none}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.13 · corrections · deployed 2026-05-26</span>
+  <span class="version" id="footer-version">v17.14 · corrections · deployed 2026-05-26</span>
 </div>
 
 <script>
@@ -1002,7 +1021,7 @@ try {
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.13 · corrections · deployed 2026-05-26'; }
+  if(el){ el.textContent = 'v17.14 · corrections · deployed 2026-05-26'; }
 })();
 </script>
 </body>

@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 26 May 2026 22:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 26 May 2026 22:00:00 +0000</pubDate>
+    <lastBuildDate>Tue, 26 May 2026 23:30:00 +0000</lastBuildDate>
+    <pubDate>Tue, 26 May 2026 23:30:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,16 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#016 · COMMITMENT — Governance specification published before deployment; public comment period open</title>
+      <link>https://galacticfederation.co/corrections#c016</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c016</guid>
+      <pubDate>Tue, 26 May 2026 23:30:00 +0000</pubDate>
+      <category>COMMITMENT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>On 2026-05-26, the Federation published Governance Specification v0.1 at /governance-spec — a complete design for the $GFOF DAO on Realms — before deploying any governance infrastructure, applying the spec-before-code discipline to governance. All governance parameters (proposal threshold, quorum, approval thresholds, voting periods, execution timelock) are proposed as v0.1 draft-for-comment, not committed. A public comment period is open. Parameters are refined into v0.2 in response to comment and ratified by the first on-chain governance vote, not set unilaterally. The DAO does not deploy until after the $73K bond completes. Two structural decisions: (1) the 13% locked dev allocation does not participate in governance voting — locked-for-discipline does not double as locked-for-control; (2) an explicit list of what governance cannot do, placing the corrections log, #007, #012, #003, the locked dev tokens, and the revoked mint/freeze authorities permanently outside governance scope, unchangeable by any vote. Status: standing commitment, active, comment period open, DAO deployment post-bond.</description>
+    </item>
 
     <item>
       <title>#015 · COMMITMENT — Structural position: not pursuing buyback-and-burn under current conditions</title>
