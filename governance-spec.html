@@ -3,104 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Federation Governance Specification v0.1 — $GFOF</title>
-<meta name="description" content="A public specification for the $GFOF DAO governance system on Realms. Parameters proposed for comment before any governance infrastructure is deployed. Published before code.">
-<link rel="canonical" href="https://galacticfederation.co/governance-spec">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://galacticfederation.co/governance-spec">
-<meta property="og:title" content="Federation Governance Specification v0.1 — $GFOF">
-<meta property="og:description" content="A public spec for $GFOF DAO governance. Parameters proposed for comment. Before code. Open to challenge.">
+<title>FAQ — $GFOF Galactic Federation of Finance</title>
+<meta name="description" content="Answers to the questions Recruits, Officers, and skeptics ask about $GFOF: how to buy on Solana, contract address, the bond mechanic, Admiral Voss, governance, staking, and more. Verify everything against the corrections log.">
+<link rel="canonical" href="https://galacticfederation.co/faq">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/faq">
+<meta property="og:title" content="FAQ — $GFOF Galactic Federation of Finance">
+<meta property="og:description" content="The questions Recruits, Officers, and skeptics actually ask. Answered with Federation discipline. Verify against corrections.">
 <meta property="og:image" content="https://galacticfederation.co/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
-<meta name="twitter:title" content="Federation Governance Specification v0.1 — $GFOF">
-<meta name="twitter:description" content="A public spec for $GFOF DAO governance. Parameters proposed for comment. Before code. Open to challenge.">
+<meta name="twitter:title" content="FAQ — $GFOF Galactic Federation of Finance">
+<meta name="twitter:description" content="The questions Recruits, Officers, and skeptics actually ask — answered with Federation discipline.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<meta name="robots" content="index, follow">
+
+<!-- Schema: FAQPage -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "TechArticle",
-  "headline": "Federation Governance Specification v0.1",
-  "name": "Federation Governance Specification",
-  "description": "A public specification for the $GFOF DAO governance system built on Realms / spl-governance. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.",
-  "abstract": "Specifies genuine token-holder governance on Realms with proposed parameters (proposal threshold, quorum, two-tier approval, voting periods, execution timelock), the exclusion of locked dev tokens from voting, an explicit list of what governance cannot do, and a no-permanent-council position. All numbers are v0.1 draft-for-comment, not committed.",
-  "inLanguage": "en",
-  "articleSection": [
-    "DAO governance",
-    "Solana governance design",
-    "Token-holder governance",
-    "Realms spl-governance"
-  ],
-  "keywords": "DAO, governance, Realms, spl-governance, Solana, token-holder voting, quorum, proposal threshold, timelock, GFOF",
-  "about": [
-    {"@type": "Thing", "name": "DAO governance design"},
-    {"@type": "Thing", "name": "Token-holder governance on Solana"},
-    {"@type": "Thing", "name": "Realms spl-governance"}
-  ],
-  "version": "0.1",
-  "datePublished": "2026-05-26",
-  "dateModified": "2026-05-26",
-  "url": "https://galacticfederation.co/governance-spec",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://galacticfederation.co/governance-spec"
-  },
-  "image": {
-    "@type": "ImageObject",
-    "url": "https://galacticfederation.co/og-image.png",
-    "width": 1200,
-    "height": 630
-  },
-  "author": {
-    "@type": "Organization",
-    "name": "Galactic Federation of Finance",
-    "alternateName": "GFOF",
-    "url": "https://galacticfederation.co"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Galactic Federation of Finance",
-    "alternateName": "GFOF",
-    "url": "https://galacticfederation.co",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://galacticfederation.co/logo.png"
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is GFOF (Galactic Federation of Finance)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Galactic Federation of Finance ($GFOF) is a research-first DeFi project on Solana. The Federation publishes design specifications publicly before any code ships, maintains a permanent corrections log of every commitment, and operates with live on-chain transparency. 13% of total token supply is locked on Streamflow across four separate contracts, verifiable on-chain. Community-led, with governance planned via Realms DAO post-bond."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I buy $GFOF on Solana?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$GFOF is currently live on the Moonshot launchpad in pre-bond phase. To buy: (1) set up a Solana wallet such as Phantom or Solflare, (2) fund it with SOL, (3) buy via DexScreener or Moonshot using the contract address 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon, (4) always verify the contract address from galacticfederation.co before transacting. At the $73K bond milestone, $GFOF migrates to Raydium for deep liquidity."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is GFOF safe? Is the contract verified?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$GFOF launched on Moonshot, which handles standard launchpad security automatically: mint and freeze authorities are held by Moonshot's program during pre-bond and revoked at the Raydium migration. 13% of total supply is locked on Streamflow across four separate contracts, fully verifiable on-chain. The Federation maintains a permanent corrections log and operates an active red-team bounty program. Always do your own research and verify the contract address from galacticfederation.co — never from DMs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is Admiral Voss?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Admiral Zoran Voss is the in-universe commander and brand voice of the Galactic Federation of Finance. Public communications use Voss's voice: commanding, research-first, transparency-driven. The on-site chatbot is AI-powered and represents Voss's voice; the Federation itself is community-led and community-governed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the $GFOF bond? When does it migrate to Raydium?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$GFOF launched on the Moonshot bonding curve. When the token reaches a $73,000 market cap (the bond), it automatically migrates to Raydium, Solana's largest decentralized exchange. The migration unlocks deep liquidity, enables Phase 2 governance via Realms DAO, and triggers the Founding Member NFT snapshot. Live bond progress is tracked on the homepage."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the contract address for $GFOF?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The official $GFOF contract address on Solana is 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon. Verify on Solscan, Birdeye, or DexScreener before any transaction. Never trust contract addresses shared in DMs — always confirm from galacticfederation.co."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much of the $GFOF supply is locked?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "13% of the total 1 billion supply (130M $GFOF) is locked on Streamflow across four separate contracts. All locks are publicly verifiable on-chain at app.streamflow.finance. Distribution: 77% community and liquidity, 10% rewards and reserve allocated by governance post-bond, 13% dev locked. The breakdown was updated 2026-05-19 with the addition of the 4th lock — see corrections #013."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the official X (Twitter) account for GFOF?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "@GFOF_Offcial — note the spelling. The handle is intentionally missing the second i in Official because @GFOF_Official was held by an impersonator account before the project's X presence was established. Always verify by checking that the account is linked from galacticfederation.co."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the GFOF roadmap?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Phase 1 (now): token launch on Solana, community building, transparency infrastructure. Phase 2 (next): bond completion at $73K, Raydium migration, Realms DAO governance, Streamflow staking, Founding Member NFT badges. Phase 3 (future): DeFi lending protocol with ZK privacy layer, Wyoming DAO LLC formation, smart contract audit. Phase 4 (beyond): community-voted utilities and protocol expansion. Every commitment is logged on the corrections log."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does $GFOF have staking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Staking is on the post-bond roadmap. The Federation will publish a versioned staking specification, open for public comment, before any contract is written — following the same pattern as the published liquidation spec. No APY, multipliers, or rates have been committed. Anyone presenting specific staking numbers as 'what GFOF will pay' is not speaking for the Federation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the Founding Member NFT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A soulbound, non-transferable NFT badge available to wallets that hold $GFOF before the $73K bond milestone. Snapshot occurs at bond. The badge is a permanent on-chain record of pre-bond participation. Proposed (not committed): additional governance weight and staking multiplier for badge holders, defined in their respective specs before launch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is the GFOF Federation governed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Governance is via Realms DAO — Solana's native SPL governance platform — activated post-bond. Voting weight is based on $GFOF holdings (1 token = 1 vote), with proposed additional weight for Founding Member NFT holders. Proposed governance scope: treasury allocation, staking parameters, alliance partnerships, lending protocol parameters."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is $GFOF quantum-secured or quantum-proof?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and the Federation will never claim it is. GFOF makes no quantum-security claims, displays no quantum-secured badge, and does not use quantum-finance or QFS narrative framing. If GFOF ever publishes a quantum-security claim, that is by definition a corrections-log event. Instead, the Federation treats post-quantum cryptography as a research-tracking commitment, not a feature: maintaining a public cryptographic-dependency inventory, tracking NIST and Solana-ecosystem developments on the existing research cadence, and re-evaluating on defined triggers rather than dates. No migration is planned or claimed. Anyone selling a token on the basis that it is quantum-proof today is selling hype."
+      }
     }
-  },
-  "license": "https://galacticfederation.co/governance-spec",
-  "creativeWorkStatus": "Draft — open for comment",
-  "copyrightYear": 2026,
-  "isAccessibleForFree": true,
-  "hasPart": [
-    {"@type": "WebPageElement", "name": "Status of this document", "url": "https://galacticfederation.co/governance-spec#status"},
-    {"@type": "WebPageElement", "name": "Design principles", "url": "https://galacticfederation.co/governance-spec#principles"},
-    {"@type": "WebPageElement", "name": "Platform", "url": "https://galacticfederation.co/governance-spec#platform"},
-    {"@type": "WebPageElement", "name": "Voting power", "url": "https://galacticfederation.co/governance-spec#voting-power"},
-    {"@type": "WebPageElement", "name": "Proposed parameters", "url": "https://galacticfederation.co/governance-spec#parameters"},
-    {"@type": "WebPageElement", "name": "What governance cannot do", "url": "https://galacticfederation.co/governance-spec#cannot"},
-    {"@type": "WebPageElement", "name": "What governance controls", "url": "https://galacticfederation.co/governance-spec#controls"},
-    {"@type": "WebPageElement", "name": "The council question", "url": "https://galacticfederation.co/governance-spec#council"},
-    {"@type": "WebPageElement", "name": "The first proposal", "url": "https://galacticfederation.co/governance-spec#first-proposal"},
-    {"@type": "WebPageElement", "name": "Phased rollout", "url": "https://galacticfederation.co/governance-spec#rollout"},
-    {"@type": "WebPageElement", "name": "Open questions for public comment", "url": "https://galacticfederation.co/governance-spec#open-questions"},
-    {"@type": "WebPageElement", "name": "Revision history", "url": "https://galacticfederation.co/governance-spec#versions"}
   ]
 }
 </script>
+
+<!-- Schema: BreadcrumbList -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co/"},
-    {"@type": "ListItem", "position": 2, "name": "Governance Specification", "item": "https://galacticfederation.co/governance-spec"}
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co" },
+    { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://galacticfederation.co/faq" }
   ]
 }
 </script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --bg:#040818;--bg-2:#020510;
@@ -130,7 +180,7 @@ body::after{
   mix-blend-mode:overlay;
 }
 a{color:inherit;text-decoration:none}
-code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple)}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple);word-break:break-all}
 strong{color:var(--text)}
 
 .top-nav{
@@ -216,6 +266,7 @@ h2{
   font-family:var(--orb);font-size:24px;font-weight:800;
   letter-spacing:-0.3px;line-height:1.2;color:var(--text);
   margin:50px 0 8px;padding-top:20px;border-top:1px solid var(--line);
+  scroll-margin-top:80px;
 }
 h2 .num{
   font-family:var(--mono);font-size:11px;color:var(--purple);
@@ -230,6 +281,9 @@ p{margin-bottom:14px;color:var(--text-dim);font-size:15.5px}
 p strong{color:var(--text)}
 ul,ol{margin:10px 0 16px 20px;color:var(--text-dim)}
 ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
+
+a.in{color:var(--cyan);border-bottom:1px dashed rgba(64,192,255,0.4);transition:color 0.15s, border-color 0.15s}
+a.in:hover{color:var(--gold);border-color:rgba(240,192,64,0.6)}
 
 .callout{
   margin:20px 0;padding:18px 22px;
@@ -252,62 +306,98 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
 .callout.green{background:rgba(61,255,160,0.04);border-color:rgba(61,255,160,0.22);border-left-color:var(--green)}
 .callout.green .k{color:var(--green)}
 
-.compare-table{
-  margin:24px 0;width:100%;
-  border:1px solid var(--line);
-  font-size:13.5px;
-}
-.compare-table thead th{
-  background:rgba(255,255,255,0.03);
-  font-family:var(--mono);font-size:10.5px;color:var(--text);
-  letter-spacing:1.5px;text-align:left;padding:12px 14px;
-  border-bottom:1px solid var(--line);font-weight:700;
-}
-.compare-table tbody td{
-  padding:12px 14px;border-top:1px solid var(--line);
-  color:var(--text-dim);vertical-align:top;
-}
-.compare-table tbody tr td:first-child{
-  font-family:var(--mono);font-size:11px;color:var(--gold);
-  letter-spacing:1px;font-weight:600;width:30%;
-}
-
-.versions{
-  margin:40px 0 20px;padding:20px 22px;
-  background:rgba(255,255,255,0.02);border:1px solid var(--line);
-  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
-}
-.versions h3{font-size:13px;margin:0 0 12px;color:var(--gold)}
-.v-row{
-  display:flex;gap:14px;padding:8px 0;
-  border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;
-}
-.v-row:first-of-type{border-top:0}
-.v-row .ver{color:var(--cyan);width:60px;flex-shrink:0}
-.v-row .dt{color:var(--muted);width:110px;flex-shrink:0}
-.v-row .ch{color:var(--text-dim);flex:1}
+.callout.cyan{background:rgba(64,192,255,0.04);border-color:rgba(64,192,255,0.22);border-left-color:var(--cyan)}
+.callout.cyan .k{color:var(--cyan)}
 
 .foot{
   margin-top:80px;padding:32px 24px;
   border-top:1px solid var(--line);
   text-align:center;
   font-family:var(--mono);font-size:10.5px;color:var(--muted);
-  line-height:2;
+  letter-spacing:1px;line-height:1.7;
 }
-.foot a{color:var(--text-dim);transition:color .15s}
-.foot a:hover{color:var(--gold)}
-.foot .sep{margin:0 8px;color:var(--line)}
-.foot .version{display:block;margin-top:14px;color:var(--muted);font-size:10px;letter-spacing:1px}
+.foot a{color:var(--text-dim)}.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+.foot .version{
+  display:inline-block;margin-top:10px;padding:4px 10px;
+  font-size:9px;letter-spacing:2px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:2px;opacity:0.6;
+}
 
-@media print{
-  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
-  body::before, body::after{display:none !important}
-  body{background:#fff;color:#000}
-  h1.doc-title,h2,h3,strong,p strong{color:#000}
-  p,li{color:#222}
+@media(max-width:600px){
+  .top-nav{padding:12px 16px;flex-direction:column;align-items:flex-start;gap:10px}
+  .top-nav-links{font-size:10px}
+  .container{padding:0 18px}
+  .doc-header{padding:36px 0 20px}
+  h2{font-size:20px;margin:36px 0 8px}
+  .doc-meta{gap:14px;font-size:10px}
 }
+
+/* ── PRINT STYLESHEET ── institutional-grade printout */
+@media print {
+  @page { margin: 18mm 16mm; size: A4; }
+  body, html {
+    background: #fff !important; color: #000 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important; line-height: 1.45 !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after { display: none !important; }
+  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
+  .toc-title, .doc-tag, .breadcrumbs, .verify-banner, .nav-bottom,
+  .actions, video, audio, iframe, canvas, .hunt-tracker, #bond-bar,
+  .skel, .live-dot, [class*="loading"], button, .stat-live, .copy-btn { display: none !important; }
+  a { color: #000 !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
+  a[href^="/"]::after, a[href^="#"]::after { content: ""; }
+  h1, h2, h3, h4, h5 {
+    color: #000 !important; font-family: Georgia, serif !important;
+    font-weight: 700 !important; page-break-after: avoid;
+    background: none !important; -webkit-text-fill-color: initial !important;
+    text-shadow: none !important; border: none !important; padding: 0 !important;
+  }
+  h1 { font-size: 22pt !important; margin: 0 0 8pt; }
+  h2 { font-size: 14pt !important; margin: 16pt 0 6pt; padding-top: 8pt !important; border-top: 1px solid #aaa !important; }
+  h3 { font-size: 12pt !important; margin: 12pt 0 4pt; }
+  h2 .num { color: #666 !important; font-size: 9pt !important; }
+  h1 .grad, h1 .accent { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
+  p, li { color: #111 !important; font-size: 11pt !important; orphans: 3; widows: 3; }
+  strong, b { color: #000 !important; font-weight: 700; }
+  code {
+    background: #f0f0f0 !important; color: #000 !important;
+    border: 1px solid #ccc !important; font-family: 'Courier New', monospace;
+    font-size: 9.5pt !important; padding: 1pt 3pt;
+  }
+  ul, ol { margin-left: 20pt !important; }
+  .callout {
+    background: #fafafa !important; border: 1px solid #999 !important;
+    border-left: 3px solid #000 !important; padding: 8pt 12pt !important;
+    margin: 10pt 0 !important; page-break-inside: avoid;
+  }
+  .callout .k { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
+  .callout p { color: #111 !important; }
+  .compare-table, table { border: 1px solid #000 !important; page-break-inside: avoid; }
+  .compare-table th, table th, .compare-table td, table td {
+    border: 1px solid #888 !important; color: #000 !important;
+    padding: 4pt 6pt !important; font-size: 10pt !important;
+  }
+  .doc-meta { border-color: #888 !important; color: #444 !important; font-size: 9pt !important; }
+  .doc-meta strong { color: #000 !important; }
+  .doc-sub, p.lede { color: #222 !important; font-size: 12pt !important; font-style: italic; }
+  /* Footer note for print: where readers came from */
+  .container::after {
+    content: "Printed from galacticfederation.co · Always verify against the live document and corrections log.";
+    display: block; margin-top: 24pt; padding-top: 12pt;
+    border-top: 1px solid #999; font-size: 8.5pt; color: #555;
+    font-style: italic; text-align: center;
+  }
+}
+
 </style>
 </head>
+
 <body>
 
 <nav class="top-nav">
@@ -317,8 +407,9 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   </a>
   <div class="top-nav-links">
     <a href="/" class="primary">← BACK TO SITE</a>
-    <a href="/liquidation-spec">LIQUIDATION SPEC ↗</a>
-    <a href="/research">RESEARCH ↗</a>
+    <a href="/treasury">TREASURY ↗</a>
+    <a href="/liquidation-spec">LENDING SPEC ↗</a>
+    <a href="/security">SECURITY ↗</a>
     <a href="/corrections">CORRECTIONS ↗</a>
   </div>
 </nav>
@@ -326,183 +417,135 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
 <div class="container">
 
   <header class="doc-header">
-    <div class="doc-tag">GOVERNANCE SPECIFICATION · OPEN FOR COMMENT</div>
-    <h1 class="doc-title">Federation <span class="grad">Governance</span> Specification</h1>
-    <p class="doc-sub">A public specification for the $GFOF DAO governance system, built on Realms. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.</p>
+    <div class="doc-tag">FEDERATION TRANSMISSIONS · ANSWERED</div>
+    <h1 class="doc-title">Frequently <span class="grad">Asked Questions</span></h1>
+    <p class="doc-sub">The questions Recruits, Officers, and skeptics ask most often about <strong>$GFOF</strong> — answered with the Federation's standard discipline. No hype, no committed numbers, no promises this document doesn't already keep. Verify everything against the <a class="in" href="/corrections">corrections log</a> and on-chain reality.</p>
     <div class="doc-meta">
-      <span><strong>Version:</strong> v0.1</span>
-      <span><strong>Status:</strong> DRAFT · OPEN FOR COMMENT</span>
-      <span><strong>Published:</strong> 2026-05-26</span>
-      <span><strong>Deploys:</strong> POST-BOND</span>
+      <span><strong>Document:</strong> FAQ</span>
+      <span><strong>Status:</strong> LIVING · UPDATED AS NEEDED</span>
+      <span><strong>Verify:</strong> galacticfederation.co</span>
     </div>
   </header>
 
   <!-- TOC -->
   <div class="toc">
-    <div class="toc-title">// CONTENTS</div>
+    <div class="toc-title">TABLE OF CONTENTS</div>
     <ol>
-      <li><a href="#status">Status of this document</a></li>
-      <li><a href="#principles">Design principles</a></li>
-      <li><a href="#platform">Platform</a></li>
-      <li><a href="#voting-power">Voting power</a></li>
-      <li><a href="#parameters">Proposed parameters (v0.1 — for comment)</a></li>
-      <li><a href="#cannot">What governance cannot do</a></li>
-      <li><a href="#controls">What governance controls</a></li>
-      <li><a href="#council">The council question</a></li>
-      <li><a href="#first-proposal">The first proposal</a></li>
-      <li><a href="#rollout">Phased rollout</a></li>
-      <li><a href="#open-questions">Open questions for public comment</a></li>
+      <li><a href="#what-is-gfof">What is GFOF?</a></li>
+      <li><a href="#how-to-buy">How do I buy $GFOF on Solana?</a></li>
+      <li><a href="#is-it-safe">Is GFOF safe? Is the contract verified?</a></li>
+      <li><a href="#admiral-voss">Who is Admiral Voss?</a></li>
+      <li><a href="#bond-mechanic">What is the bond? When does it migrate to Raydium?</a></li>
+      <li><a href="#contract-address">What is the contract address?</a></li>
+      <li><a href="#supply-locked">How much of the supply is locked?</a></li>
+      <li><a href="#official-x">Official X / Twitter account?</a></li>
+      <li><a href="#roadmap">What is the GFOF roadmap?</a></li>
+      <li><a href="#staking">Does $GFOF have staking?</a></li>
+      <li><a href="#founding-nft">What is the Founding Member NFT?</a></li>
+      <li><a href="#governance">How is the Federation governed?</a></li>
     </ol>
   </div>
 
-  <h2 id="status"><span class="num">SECTION 01</span>Status of this document</h2>
-  <p>This is a <strong>draft specification, published before code, for public comment.</strong> It is version 0.1.</p>
-  <p>Nothing in this document is a committed parameter. Per the Federation's standing discipline (<a href="/corrections#c003" style="color:var(--cyan)">corrections #003</a>), no governance number — proposal threshold, quorum, voting period, approval percentage — becomes a commitment until a specification defines it, the public has had the opportunity to comment, and the parameter is ratified. The figures below are <strong>proposed starting points</strong>, presented with their reasoning so that the reasoning can be challenged. They will change in response to comment. When they stabilize, a later version of this document will mark them as settled, and the first on-chain governance vote will ratify them.</p>
   <div class="callout amber">
-    <div class="k">SEQUENCE</div>
-    <p>The Federation DAO does not deploy until after the $73K bond completes. This specification exists now so the design is settled in the open before any of it goes live — the same spec-before-code discipline applied to the lending mechanism at <a href="/liquidation-spec" style="color:var(--gold)">/liquidation-spec</a>.</p>
+    <div class="k">⚠ READ FIRST</div>
+    <p>This page is informational. Nothing here is financial advice. The Federation does not predict prices and does not commit to numbers it has not yet earned. Always verify on-chain. Always DYOR. The official channels — and only those — are listed below.</p>
   </div>
 
-  <h2 id="principles"><span class="num">SECTION 02</span>Design principles</h2>
-  <p>Governance is not a feature the Federation is adding because DAOs are expected. It is the mechanism by which the project's discipline survives the people who started it. A governance system designed well outlasts its founders; a governance system designed as theater concentrates power while appearing to distribute it.</p>
-  <p>Four principles govern every choice in this document:</p>
-  <h3>Genuine token-holder governance, not a gatekept shell</h3>
-  <p>Many projects launch "DAOs" that are centralized shells with marketing attached — token holders are locked out by councils, multisigs, or proposal gates that only insiders can pass. The Federation's governance is designed so token holders can propose, vote, and execute without requiring core-team permission. Where any centralized control exists during the transition, it is minimal, disclosed, and time-boxed with a defined sunset.</p>
-  <h3>On-chain and verifiable, consistent with the rest of the project</h3>
-  <p>Every proposal, every vote, every treasury action is recorded on-chain and publicly inspectable. Governance uses the same transparency posture as the corrections log and the live-RPC treasury page. No off-chain "signaling votes" that the team then interprets at its discretion.</p>
-  <h3>Governance has limits, and the limits are the point</h3>
-  <p>A DAO that can vote to do anything can vote to undo the discipline that makes the project worth governing. This specification defines, explicitly, what governance cannot do — including things a simple majority might want to do in a moment of pressure. The constraints are not a hedge against token holders; they are a commitment that the project's core disciplines survive even a vote to abandon them.</p>
-  <h3>Spec before code, parameters before deployment</h3>
-  <p>The governance system is fully specified and publicly reviewed before it is deployed. Parameters are proposed here, refined through comment, and ratified by the first governance vote — not set unilaterally and announced as done.</p>
+  <!-- Q1 -->
+  <h2 id="what-is-gfof"><span class="num">QUESTION 01</span>What is GFOF (Galactic Federation of Finance)?</h2>
+  <p>Galactic Federation of Finance (<strong>$GFOF</strong>) is a research-first DeFi project on Solana. The Federation publishes design specifications publicly <strong>before</strong> any code ships, maintains a permanent <a class="in" href="/corrections">corrections log</a> of every commitment, and operates with <a class="in" href="/treasury">live on-chain transparency</a>.</p>
+  <p>13% of total token supply is locked on Streamflow across four separate contracts — verifiable on-chain. The project is community-led, with governance planned via Realms DAO post-bond.</p>
 
-  <h2 id="platform"><span class="num">SECTION 03</span>Platform</h2>
-  <p>The Federation DAO will be built on <strong>Realms</strong> (the web interface for spl-governance, the on-chain governance program built by Solana Labs). This choice was committed publicly in the Week 07 Research Log and the bond-trigger commitment thread, and this specification confirms it.</p>
-  <p>Reasoning: Realms is the native Solana governance standard, with proposals, votes, and treasury actions recorded entirely on-chain. It is the same infrastructure used by established Solana protocols. Its on-chain-everything property matches the Federation's transparency posture — there is no off-chain layer where votes get reinterpreted.</p>
-  <p>The governance stack:</p>
+  <!-- Q2 -->
+  <h2 id="how-to-buy"><span class="num">QUESTION 02</span>How do I buy $GFOF on Solana?</h2>
+  <p>$GFOF is currently live on the Moonshot launchpad in pre-bond phase. To buy:</p>
+  <ol>
+    <li>Set up a Solana wallet — <strong>Phantom</strong> or <strong>Solflare</strong> are the two most-used.</li>
+    <li>Fund the wallet with SOL (from any exchange that supports Solana withdrawals).</li>
+    <li>Buy via <a class="in" href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">DexScreener</a> or directly on Moonshot using contract address <code>2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code>.</li>
+    <li>Always verify the contract address from this site — never from DMs or replies.</li>
+  </ol>
+  <p>At the <strong>$73K bond milestone</strong>, $GFOF migrates to Raydium for deep liquidity.</p>
+
+  <!-- Q3 -->
+  <h2 id="is-it-safe"><span class="num">QUESTION 03</span>Is GFOF safe? Is the contract verified?</h2>
+  <p>$GFOF launched on Moonshot, which handles standard launchpad security automatically: <strong>mint and freeze authorities</strong> are held by Moonshot's program during pre-bond and revoked at the Raydium migration as part of the same flow.</p>
+  <p>13% of total supply is locked on Streamflow across four separate contracts — fully verifiable on-chain. The Federation maintains a permanent <a class="in" href="/corrections">corrections log</a> and operates an active <a class="in" href="/security">red-team bounty program</a> ($50–$500 in $GFOF for verified findings).</p>
+  <p>Always do your own research and verify the contract address from this site — never from DMs or replies.</p>
+
+  <!-- Q4 -->
+  <h2 id="admiral-voss"><span class="num">QUESTION 04</span>Who is Admiral Voss?</h2>
+  <p>Admiral Zoran Voss is the in-universe commander and brand voice of the Galactic Federation of Finance. Public communications use Voss's voice: commanding, research-first, transparency-driven.</p>
+  <p>The on-site chatbot is AI-powered and represents Voss's voice; the Federation itself is community-led and community-governed.</p>
+
+  <!-- Q5 -->
+  <h2 id="bond-mechanic"><span class="num">QUESTION 05</span>What is the $GFOF bond? When does it migrate to Raydium?</h2>
+  <p>$GFOF launched on the Moonshot bonding curve. When the token reaches a <strong>$73,000 market cap</strong> (the "bond"), it automatically migrates to <strong>Raydium</strong>, Solana's largest decentralized exchange.</p>
+  <p>The migration unlocks deep liquidity, enables Phase 2 governance via Realms DAO, and triggers the Founding Member NFT snapshot. Live bond progress is tracked on the <a class="in" href="/">homepage</a>.</p>
+
+  <!-- Q6 -->
+  <h2 id="contract-address"><span class="num">QUESTION 06</span>What is the contract address for $GFOF?</h2>
+  <p>The official $GFOF contract address on Solana is:</p>
+  <p><code>2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code></p>
+  <p>Verify on <a class="in" href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">Solscan</a>, <a class="in" href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">Birdeye</a>, or <a class="in" href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">DexScreener</a> before any transaction. <strong>Never trust contract addresses shared in DMs.</strong></p>
+
+  <!-- Q7 -->
+  <h2 id="supply-locked"><span class="num">QUESTION 07</span>How much of the $GFOF supply is locked?</h2>
+  <p>13% of the total <strong>1 billion supply (130M $GFOF)</strong> is locked on Streamflow across four separate contracts. All locks are publicly verifiable on-chain at <a class="in" href="https://app.streamflow.finance" target="_blank" rel="noopener">app.streamflow.finance</a>.</p>
+  <p>Distribution:</p>
   <ul>
-    <li><strong>Realms / spl-governance</strong> — proposals, voting, on-chain execution</li>
-    <li><strong>Streamflow</strong> — already in use for the four dev lock contracts; integrates with Realms for any vesting-aware voting logic</li>
-    <li><strong>Squads</strong> — optional multisig for treasury operations requiring multiple signatures, used <em>inside</em> the governance structure rather than as a replacement for it</li>
+    <li><strong>77%</strong> — Community and liquidity (open market, circulating)</li>
+    <li><strong>10%</strong> — Rewards and reserve (allocated by governance post-bond)</li>
+    <li><strong>13%</strong> — Dev (locked, immutable on Streamflow across 4 contracts)</li>
   </ul>
-  <p>The Federation does not fork Realms or build a custom governance frontend in v0.1. Custom UI is a possible later addition, specified separately if pursued. Starting on standard, audited infrastructure is the disciplined default.</p>
+  <p class="callout" style="font-size:13px;margin-top:14px"><strong>Note:</strong> the breakdown was updated 2026-05-19 with the addition of the 4th lock. The previous 80/10/10 figure rounded team-held treasury tokens into the community/liquidity bucket; the new lock moves 30M of those tokens explicitly into the locked-dev column. See <a class="in" href="/corrections#c013">corrections #013</a> for the full record.</p>
+  <p>The treasury page reads these contracts directly from Solana RPC in your browser — see <a class="in" href="/treasury">/treasury</a>.</p>
 
-  <h2 id="voting-power"><span class="num">SECTION 04</span>Voting power</h2>
-  <h3>What confers voting power</h3>
-  <p>Voting power is conferred by <strong>holding the $GFOF community token.</strong> One token, one vote, subject to the exclusions below. The DAO is a Community Token DAO in Realms terms — governance is gated by token ownership, and voting weight is proportional to tokens held at the time of the vote.</p>
-  <h3>Locked dev tokens do not vote</h3>
-  <p>The 13% dev allocation locked across the four Streamflow contracts <strong>does not participate in governance voting.</strong> This is a deliberate design choice and one of the more important in this document.</p>
-  <p>Reasoning: the dev tokens are locked for supply discipline — to demonstrate the team will not dump and to immobilize a large block of supply until 2026-2028. Allowing those same tokens to vote would give the team a 13% governance bloc while the tokens are nominally "locked," which would contradict the decentralization principle. Locked-for-discipline should not double as locked-for-control. The cleaner design excludes them from governance entirely.</p>
-  <div class="callout">
-    <div class="k">OPEN FOR COMMENT</div>
-    <p>The alternative — letting locked tokens vote — is the more common DAO default, but the Federation's positioning argues against it. If the community comments otherwise during the review period, the decision is revisited.</p>
-  </div>
-  <h3>The Founding Member NFT does not confer voting weight</h3>
-  <p>The Founding Member NFT (snapshot at the migration block) is <strong>recognition, not governance power.</strong> It does not grant additional votes, voting multipliers, or proposal privileges. This was stated when the NFT was first committed and is reaffirmed here: the NFT is a permanent role marker for the bond-era community, nothing more. Governance weight comes from tokens held, full stop.</p>
-
-  <h2 id="parameters"><span class="num">SECTION 05</span>Proposed parameters (v0.1 — for comment)</h2>
-  <p>Every figure in this section is a <strong>proposed starting point.</strong> The reasoning is given so it can be argued with. None is committed.</p>
-  <h3>5.1 Proposal threshold</h3>
-  <p><strong>Proposed: 0.1% of circulating supply to submit a proposal.</strong></p>
-  <p>Reasoning: a proposal threshold prevents spam — without one, the proposal queue fills with noise and real proposals get buried. But set too high, and only the largest holders can ever propose, which recreates the gatekeeping this design exists to avoid. 0.1% of a 1B supply is 1,000,000 $GFOF — a meaningful but not exclusionary stake. As circulating supply and token value change post-bond, this threshold may warrant adjustment, which is itself something governance can vote on.</p>
-  <h3>5.2 Quorum</h3>
-  <p><strong>Proposed: 10% of eligible voting supply must participate for a vote to be valid.</strong></p>
-  <p>Reasoning: quorum prevents a tiny group from passing proposals while everyone else is inactive. But voter apathy is real in every DAO, and a quorum set too high means nothing ever passes — which paradoxically concentrates power in whoever can reliably turn out votes. 10% is a deliberately moderate starting point. The Federation would rather start moderate and raise quorum through governance once participation patterns are known than start high and discover the DAO is paralyzed.</p>
-  <h3>5.3 Approval threshold — two tiers</h3>
-  <p><strong>Proposed: two classes of proposal with different bars.</strong></p>
-  <ul>
-    <li><strong>Standard proposals</strong> (treasury spending within limits, parameter tweaks, operational decisions): simple majority, &gt;50% of votes cast.</li>
-    <li><strong>Constitutional proposals</strong> (changes to governance parameters themselves, changes to what governance controls, anything touching the constraints in Section 06): supermajority, &ge;66% of votes cast.</li>
-  </ul>
-  <p>Reasoning: not all decisions carry equal weight. A routine treasury allocation should not require the same bar as a change to the governance system's own rules. The two-tier structure makes high-stakes changes deliberately harder to pass than routine ones — which protects the discipline anchors from a transient majority.</p>
-  <h3>5.4 Voting period</h3>
-  <p><strong>Proposed: 5 days for standard proposals, 7 days for constitutional proposals.</strong></p>
-  <p>Reasoning: the voting window must be long enough for a globally distributed token-holder base to participate across time zones, and short enough that the DAO can actually act. 5 days covers a full week's worth of weekday and weekend availability. Constitutional proposals get the longer 7-day window because their stakes justify maximum participation opportunity.</p>
-  <h3>5.5 Execution timelock</h3>
-  <p><strong>Proposed: 48-hour hold between a proposal passing and its execution, extended to 72 hours for any treasury action above a threshold to be defined in v0.2.</strong></p>
-  <p>Reasoning: a timelock is a safety mechanism. It gives the community a window to react if a malicious or erroneous proposal passes — to raise alarm, to coordinate, to exit if necessary — before the action executes on-chain. The larger the treasury impact, the longer the window should be. This is standard practice in mature governance systems and is non-negotiable in principle; the exact durations are open for comment.</p>
-
-  <h2 id="cannot"><span class="num">SECTION 06</span>What governance cannot do</h2>
-  <p>This is the section that distinguishes the Federation's governance from a DAO that can vote to do anything. The following are <strong>outside the scope of governance</strong> and cannot be changed by any vote, standard or constitutional:</p>
+  <!-- Q8 -->
+  <h2 id="official-x"><span class="num">QUESTION 08</span>What is the official X (Twitter) account for GFOF?</h2>
+  <p>The official handle is <strong><a class="in" href="https://x.com/GFOF_Offcial" target="_blank" rel="noopener">@GFOF_Offcial</a></strong> — note the spelling. The handle is intentionally missing the second "i" in "Official" because <code>@GFOF_Official</code> was held by an impersonator account before the project's X presence was established.</p>
   <div class="callout red">
-    <div class="k">OUTSIDE GOVERNANCE SCOPE</div>
-    <p><strong>Governance cannot unlock the dev tokens early.</strong> The four Streamflow contracts are immutable by design. No governance vote can accelerate, cancel, or modify them. They unlock on their contractual schedule (2026-2028) or not at all.</p>
+    <div class="k">⚠ IMPERSONATOR WARNING</div>
+    <p>Always verify by checking that the X account is linked from this site. Admins will <strong>never</strong> DM you first. Do not trust contract addresses, links, or instructions from DMs.</p>
   </div>
-  <p><strong>Governance cannot delete or alter the corrections log.</strong> The corrections log is append-only by design and by discipline. No vote can remove an entry, edit a historical entry, or suspend the logging discipline. A governance system empowered to erase its own accountability record would defeat the purpose of having one.</p>
-  <p><strong>Governance cannot introduce paid promotion.</strong> <a href="/corrections#c007" style="color:var(--cyan)">Correction #007</a> — no paid promotion — is a foundational discipline, outside governance scope. A DAO vote cannot authorize paying for coverage, shilling, or any form of the paid promotion the project has committed against.</p>
-  <p><strong>Governance cannot publish a quantum-security claim.</strong> <a href="/corrections#c012" style="color:var(--cyan)">Correction #012</a> — no quantum-security claims — is outside governance scope. The constraint stands regardless of vote.</p>
-  <p><strong>Governance cannot commit numbers without a spec.</strong> <a href="/corrections#c003" style="color:var(--cyan)">Correction #003</a> applies to governance itself. A proposal cannot commit an APY, a multiplier, an allocation size, or any mechanism parameter that lacks a published specification. The proposal can <em>direct that a spec be written</em>; it cannot skip the spec.</p>
-  <p><strong>Governance cannot reintroduce mint or freeze authority.</strong> These are revoked at the Raydium migration and cannot be restored. Supply is fixed at 1 billion permanently.</p>
-  <p>These constraints are not anti-democratic. They are the terms under which token holders acquired the token in the first place — the disciplines that defined the project. Governance distributes control over everything those disciplines leave open. It does not distribute the power to abandon the disciplines, because the disciplines are what the token represents.</p>
-  <p>If the community ever genuinely wishes to change one of these constraints, the honest mechanism is not a governance vote — it is a publicly argued, corrections-logged proposal to amend the constitution itself, with the change documented permanently as a departure from the original terms. That path exists. It is deliberately heavier than a normal vote, and any use of it is itself a permanent corrections-log event.</p>
 
-  <h2 id="controls"><span class="num">SECTION 07</span>What governance controls</h2>
-  <p>Governance has real, meaningful authority over everything the constraints leave open:</p>
+  <!-- Q9 -->
+  <h2 id="roadmap"><span class="num">QUESTION 09</span>What is the GFOF roadmap?</h2>
+  <p>The Federation operates in phases:</p>
   <ul>
-    <li><strong>The rewards/reserve allocation (10% of supply).</strong> How the rewards and reserve bucket is allocated post-bond is a governance decision. This is the subject of the first proposal (Section 09).</li>
-    <li><strong>Treasury spending</strong> within the timelock and threshold rules.</li>
-    <li><strong>Governance parameters themselves</strong> — quorum, thresholds, voting periods — adjustable by constitutional proposal as the DAO learns what works.</li>
-    <li><strong>Future mechanism direction</strong> — governance can direct that specifications be written for new mechanisms, subject to the spec-before-code discipline.</li>
-    <li><strong>Grants, partnerships, and ecosystem spending</strong> funded from the treasury.</li>
+    <li><strong>Phase 1 (Now):</strong> Token launch on Solana, community building, transparency infrastructure.</li>
+    <li><strong>Phase 2 (Next):</strong> Bond completion at $73K, Raydium migration, Realms DAO governance, Streamflow staking, Founding Member NFT badges.</li>
+    <li><strong>Phase 3 (Future):</strong> DeFi lending protocol with ZK privacy layer, Wyoming DAO LLC formation, smart contract audit.</li>
+    <li><strong>Phase 4 (Beyond):</strong> Community-voted utilities and protocol expansion.</li>
   </ul>
-  <p>Governance authority is genuine. The constraints in Section 06 are narrow and specific; everything outside them is the community's to decide.</p>
+  <p>Every commitment is logged on the <a class="in" href="/corrections">corrections log</a>, where commitments are appended with status (ON TRACK / KEPT / DELAYED / MISSED / CANCELLED) and never deleted.</p>
 
-  <h2 id="council"><span class="num">SECTION 08</span>The council question</h2>
-  <p>Realms permits an optional "council" — a small set of wallets holding a council token, with elevated permissions. Many Solana DAOs use one.</p>
-  <div class="callout green">
-    <div class="k">PROPOSED POSITION</div>
-    <p>No permanent council. A permanent council is precisely the gatekeeping structure the design principles argue against. If a small group of wallets can gate or override token-holder votes, the DAO is a shell.</p>
-  </div>
-  <p>The one defensible use of a council is a <strong>time-boxed transition council</strong> during the initial setup period — a small group (the founding team plus optionally one or two trusted community members) that exists only to execute the mechanical setup of the DAO and steps down via a scheduled, automatic sunset. If a transition council is used:</p>
-  <ul>
-    <li>It is disclosed in full (which wallets, what permissions)</li>
-    <li>Its powers are limited to setup mechanics, not proposal vetoes</li>
-    <li>It sunsets on a defined date or after a defined number of successful governance cycles, whichever the community ratifies</li>
-    <li>Its dissolution is itself a corrections-log event</li>
-  </ul>
-  <p><strong>Proposed for comment:</strong> whether to use a transition council at all, or to launch with pure token-holder governance from the first block. The Federation leans toward minimal-or-none, and is publishing this question rather than deciding it unilaterally.</p>
-
-  <h2 id="first-proposal"><span class="num">SECTION 09</span>The first proposal</h2>
-  <p>Per the bond-trigger commitments, the Federation's first governance proposal is already determined in topic: <strong>confirm or amend the framework for allocating the 10% rewards/reserve bucket.</strong></p>
-  <p>The framework itself will be drafted as its own specification (separate from this governance spec) and published for review before the proposal opens. The first proposal is therefore a test of the governance system on a real, bounded decision with a pre-published spec — exactly the conditions under which governance should be exercised.</p>
-  <p>The first proposal will not be a trivial "ratify the team's choice" vote. The rewards/reserve framework spec will present genuine options with tradeoffs, and the proposal will let token holders choose or amend. If the first exercise of governance is theater, the whole system is theater.</p>
-
-  <h2 id="rollout"><span class="num">SECTION 10</span>Phased rollout</h2>
-  <p>Governance does not arrive all at once. The proposed sequence:</p>
-  <ol>
-    <li><strong>Pre-bond (now):</strong> this specification published, public comment period open.</li>
-    <li><strong>Comment integration:</strong> v0.2 of this spec incorporates feedback, settles parameters.</li>
-    <li><strong>Bond completion:</strong> Realms DAO setup begins (per the committed roadmap).</li>
-    <li><strong>DAO deployment:</strong> the DAO is created on Realms with the ratified parameters; treasury authority transferred per the spec; transition council (if any) installed with its sunset scheduled.</li>
-    <li><strong>First proposal:</strong> the rewards/reserve framework proposal opens once its underlying spec is published and reviewed.</li>
-    <li><strong>Ongoing:</strong> governance operates; parameter adjustments happen through constitutional proposals as the DAO learns.</li>
-  </ol>
-  <p>Each step that constitutes a public commitment is logged on <a href="/corrections" style="color:var(--cyan)">/corrections</a> when it occurs.</p>
-
-  <h2 id="open-questions"><span class="num">SECTION 11</span>Open questions for public comment</h2>
-  <p>The Federation is specifically seeking comment on:</p>
-  <ol>
-    <li>Proposal threshold: fixed token amount or percentage of supply? What level?</li>
-    <li>Quorum: is 10% too low, too high, or right for a project at this stage?</li>
-    <li>Locked dev tokens: confirmed exclusion from voting, or should they participate?</li>
-    <li>Transition council: none at all, or minimal-and-sunset? If sunset, on what trigger?</li>
-    <li>Timelock durations and the treasury threshold above which the longer hold applies.</li>
-    <li>Anything in Section 06 (what governance cannot do) that the community believes should be inside governance scope rather than outside it.</li>
-  </ol>
-  <p>Comments can be raised through the channels the Federation operates. Substantive comments may be addressed directly in v0.2 of this specification.</p>
-
-  <div class="callout">
-    <div class="k">CLOSING</div>
-    <p>Governance is the mechanism by which a project's discipline outlives the people who started it. Designed honestly, it distributes real control over everything the project's core disciplines leave open — while placing those disciplines themselves beyond the reach of a transient majority. This is version 0.1. It proposes; it does not commit. Spec before code. Comment before deployment. Receipts throughout. — Voss, out.</p>
+  <!-- Q10 -->
+  <h2 id="staking"><span class="num">QUESTION 10</span>Does $GFOF have staking?</h2>
+  <p>Staking is on the post-bond roadmap. The Federation will publish a <strong>versioned staking specification</strong> — open for public comment — before any contract is written, following the same pattern as the published <a class="in" href="/liquidation-spec">liquidation spec</a>.</p>
+  <div class="callout amber">
+    <div class="k">⚠ NO COMMITTED NUMBERS</div>
+    <p><strong>No APY, multipliers, or rates have been committed.</strong> Anyone presenting specific staking numbers as "what GFOF will pay" is not speaking for the Federation. Numbers come from the spec, not from marketing.</p>
   </div>
 
-  <!-- VERSIONS -->
-  <div class="versions" id="versions">
-    <h3>REVISION HISTORY</h3>
-    <div class="v-row">
-      <span class="ver">v0.1</span>
-      <span class="dt">2026-05-26</span>
-      <span class="ch">Initial publication. All parameters proposed for comment. Public comment period open. DAO deploys post-bond.</span>
-    </div>
+  <!-- Q11 -->
+  <h2 id="founding-nft"><span class="num">QUESTION 11</span>What is the Founding Member NFT?</h2>
+  <p>A <strong>soulbound, non-transferable NFT badge</strong> available to wallets that hold $GFOF before the $73K bond milestone. Snapshot occurs at bond. The badge is a permanent on-chain record of pre-bond participation.</p>
+  <p><em>Proposed (not committed):</em> additional governance weight and staking multiplier for badge holders, defined in their respective specs before launch.</p>
+
+  <!-- Q12 -->
+  <h2 id="governance"><span class="num">QUESTION 12</span>How is the GFOF Federation governed?</h2>
+  <p>Governance is via <strong>Realms DAO</strong> — Solana's native SPL governance platform — activated post-bond. Voting weight is based on $GFOF holdings (1 token = 1 vote), with proposed additional weight for Founding Member NFT holders.</p>
+  <p>Proposed governance scope: treasury allocation, staking parameters, alliance partnerships, lending protocol parameters. The full scope is ratified before the DAO goes live.</p>
+
+  <h2 id="quantum"><span class="num">QUESTION 13</span>Is $GFOF "quantum-secured" or "quantum-proof"?</h2>
+  <p><strong>No, and the Federation will never claim it is.</strong> GFOF makes no quantum-security claims, displays no "quantum-secured" badge, and does not use "quantum finance" / QFS narrative framing. If GFOF ever publishes a quantum-security claim, that is by definition a <a class="in" href="/corrections">corrections-log</a> event.</p>
+  <p>What the Federation does instead is treat post-quantum cryptography as a <strong>research-tracking commitment</strong>, not a feature. GFOF's value is durable, auditable, on-chain records — and the long-run integrity of those records rests on cryptographic assumptions worth tracking honestly in the open. Solana transactions are authenticated by Ed25519 signatures today, which a sufficiently capable future quantum computer could eventually threaten; hash-based structures (transaction hashes, PDAs, Merkle roots) are far more durable. No cryptographically-relevant quantum computer exists, and credible timelines are genuinely contested among serious researchers.</p>
+  <p>The Federation commits to maintaining a public cryptographic-dependency inventory (which records depend on which assumptions), tracking NIST and Solana-ecosystem developments on the existing research cadence, and re-evaluating on defined triggers — not dates. No migration is planned or claimed. Anyone selling you a token on the basis that it is "quantum-proof" today is selling hype; the Federation will not be among them.</p>
+
+  <div class="callout cyan">
+    <div class="k">⬡ MISSING A QUESTION?</div>
+    <p>If a question you wish were answered isn't here, raise it in <a class="in" href="https://t.me/GFOF_SOL" target="_blank" rel="noopener">t.me/GFOF_SOL</a> or to <strong>@WelksCrypto</strong> on X. The FAQ is a living document — substantive questions get added.</p>
   </div>
 
 </div>
@@ -510,29 +553,31 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
 <div class="foot">
   <a href="/">galacticfederation.co</a>
   <span class="sep">·</span>
+  <a href="/treasury">Treasury</a>
+  <span class="sep">·</span>
   <a href="/liquidation-spec">Liquidation Spec</a>
   <span class="sep">·</span>
-  <a href="/research">Research</a>
+  <a href="/security">Security</a>
   <span class="sep">·</span>
   <a href="/corrections">Corrections</a>
   <span class="sep">·</span>
-  <a href="https://x.com/GFOF_Offcial" target="_blank">X / Twitter</a>
+  <a href="https://x.com/GFOF_Offcial" target="_blank" rel="noopener">X / Twitter</a>
   <span class="sep">·</span>
-  <a href="https://t.me/GFOF_SOL" target="_blank">Telegram</a>
+  <a href="https://t.me/GFOF_SOL" target="_blank" rel="noopener">Telegram</a>
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.25 · governance-spec · deployed 2026-05-26</span>
+  <span class="version" id="footer-version">v17.10 · faq · deployed 2026-05-19</span>
 </div>
 
 <script>
 try {
-  console.log('%c⬡ GFOF Governance Spec v0.1 · Design Doc', 'color:#A78BFA;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #A78BFA;border-radius:2px;');
-  console.log('%c📖 Open for public comment. See section 11.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+  console.log('%c⬡ GFOF FAQ · Federation Transmissions Answered', 'color:#F0C040;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #F0C040;border-radius:2px;');
+  console.log('%c❓ Verify everything. The Federation does not predict prices.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.25 · governance-spec · deployed 2026-05-26'; }
+  if(el){ el.textContent = 'v17.10 · faq · deployed 2026-05-19'; }
 })();
 </script>
 </body>

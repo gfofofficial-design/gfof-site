@@ -2,31 +2,62 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Federation Intel Report — briefings and analysis from the $GFOF research division. Solana DeFi, market structure, borrower-protective design.">
-<link rel="canonical" href="https://galacticfederation.co/intel">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://galacticfederation.co/intel">
-<meta property="og:title" content="Federation Intel Report — $GFOF">
-<meta property="og:description" content="Federation Intel Report — briefings and analysis from the $GFOF research division.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Federation Governance Specification v0.2 — $GFOF</title>
+<meta name="description" content="A public specification for the $GFOF DAO governance system on Realms. Parameters proposed for comment before any governance infrastructure is deployed. Published before code.">
+<link rel="canonical" href="https://galacticfederation.co/governance-spec">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://galacticfederation.co/governance-spec">
+<meta property="og:title" content="Federation Governance Specification v0.1 — $GFOF">
+<meta property="og:description" content="A public spec for $GFOF DAO governance. Parameters proposed for comment. Before code. Open to challenge.">
 <meta property="og:image" content="https://galacticfederation.co/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
-<meta name="twitter:title" content="Federation Intel Report — $GFOF">
-<meta name="twitter:description" content="Briefings and analysis from the $GFOF research division.">
+<meta name="twitter:title" content="Federation Governance Specification v0.1 — $GFOF">
+<meta name="twitter:description" content="A public spec for $GFOF DAO governance. Parameters proposed for comment. Before code. Open to challenge.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
-<title>$GFOF — Federation Intel Report</title>
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Federation Intel Report — $GFOF",
-  "description": "Federation intelligence: briefings and analysis from the $GFOF research division. Solana DeFi, market structure, borrower-protective design.",
-  "url": "https://galacticfederation.co/intel",
+  "@type": "TechArticle",
+  "headline": "Federation Governance Specification v0.1",
+  "name": "Federation Governance Specification",
+  "description": "A public specification for the $GFOF DAO governance system built on Realms / spl-governance. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.",
+  "abstract": "Specifies genuine token-holder governance on Realms with proposed parameters (proposal threshold, quorum, two-tier approval, voting periods, execution timelock), the exclusion of locked dev tokens from voting, an explicit list of what governance cannot do, and a no-permanent-council position. All numbers are v0.1 draft-for-comment, not committed.",
   "inLanguage": "en",
-  "isAccessibleForFree": true,
+  "articleSection": [
+    "DAO governance",
+    "Solana governance design",
+    "Token-holder governance",
+    "Realms spl-governance"
+  ],
+  "keywords": "DAO, governance, Realms, spl-governance, Solana, token-holder voting, quorum, proposal threshold, timelock, GFOF",
+  "about": [
+    {"@type": "Thing", "name": "DAO governance design"},
+    {"@type": "Thing", "name": "Token-holder governance on Solana"},
+    {"@type": "Thing", "name": "Realms spl-governance"}
+  ],
+  "version": "0.1",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "url": "https://galacticfederation.co/governance-spec",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://galacticfederation.co/governance-spec"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://galacticfederation.co/og-image.png",
+    "width": 1200,
+    "height": 630
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "alternateName": "GFOF",
+    "url": "https://galacticfederation.co"
+  },
   "publisher": {
     "@type": "Organization",
     "name": "Galactic Federation of Finance",
@@ -37,10 +68,23 @@
       "url": "https://galacticfederation.co/logo.png"
     }
   },
-  "about": [
-    {"@type": "Thing", "name": "Solana DeFi"},
-    {"@type": "Thing", "name": "Market structure analysis"},
-    {"@type": "Thing", "name": "DeFi research"}
+  "license": "https://galacticfederation.co/governance-spec",
+  "creativeWorkStatus": "Draft — open for comment",
+  "copyrightYear": 2026,
+  "isAccessibleForFree": true,
+  "hasPart": [
+    {"@type": "WebPageElement", "name": "Status of this document", "url": "https://galacticfederation.co/governance-spec#status"},
+    {"@type": "WebPageElement", "name": "Design principles", "url": "https://galacticfederation.co/governance-spec#principles"},
+    {"@type": "WebPageElement", "name": "Platform", "url": "https://galacticfederation.co/governance-spec#platform"},
+    {"@type": "WebPageElement", "name": "Voting power", "url": "https://galacticfederation.co/governance-spec#voting-power"},
+    {"@type": "WebPageElement", "name": "Proposed parameters", "url": "https://galacticfederation.co/governance-spec#parameters"},
+    {"@type": "WebPageElement", "name": "What governance cannot do", "url": "https://galacticfederation.co/governance-spec#cannot"},
+    {"@type": "WebPageElement", "name": "What governance controls", "url": "https://galacticfederation.co/governance-spec#controls"},
+    {"@type": "WebPageElement", "name": "The council question", "url": "https://galacticfederation.co/governance-spec#council"},
+    {"@type": "WebPageElement", "name": "The first proposal", "url": "https://galacticfederation.co/governance-spec#first-proposal"},
+    {"@type": "WebPageElement", "name": "Phased rollout", "url": "https://galacticfederation.co/governance-spec#rollout"},
+    {"@type": "WebPageElement", "name": "Open questions for public comment", "url": "https://galacticfederation.co/governance-spec#open-questions"},
+    {"@type": "WebPageElement", "name": "Revision history", "url": "https://galacticfederation.co/governance-spec#versions"}
   ]
 }
 </script>
@@ -49,382 +93,457 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co" },
-    { "@type": "ListItem", "position": 2, "name": "Intel Report", "item": "https://galacticfederation.co/intel" }
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co/"},
+    {"@type": "ListItem", "position": 2, "name": "Governance Specification", "item": "https://galacticfederation.co/governance-spec"}
   ]
 }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-
-:root {
-  --bg: #030a14; --panel: rgba(8,18,36,0.95);
-  --gold: #F0C040; --gold2: #FFE880;
-  --green: #3DFFA0; --cyan: #00E5FF;
-  --muted: rgba(255,255,255,0.45);
-  --border: rgba(0,229,255,0.18);
-  --orb: 'Orbitron',sans-serif;
-  --mono: 'Share Tech Mono',monospace;
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#6A7294;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
 }
-
-body {
-  background: var(--bg); color:#fff;
-  font-family: var(--mono);
-  min-height:100vh;
-  padding: 28px 20px 60px;
-  display: flex; flex-direction:column; align-items:center;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16.5px;line-height:1.7;min-height:100vh;
+  overflow-x:hidden;position:relative;
 }
-
-body::before {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 10% 80%, rgba(240,192,64,0.04) 0%, transparent 60%);
+    radial-gradient(ellipse at 15% 10%,rgba(167,139,250,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
 }
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple)}
+strong{color:var(--text)}
 
-/* ── CONTROLS ── */
-.controls {
-  position:relative; z-index:1;
-  width:100%; max-width:680px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  padding:24px 28px;
-  margin-bottom:28px;
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
 }
-.controls::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg,transparent,var(--cyan),var(--gold),transparent);
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
 }
-
-.ctrl-head {
-  font-family:var(--orb); font-size:11px; color:var(--green);
-  letter-spacing:3px; margin-bottom:20px;
-  display:flex; align-items:center; gap:10px;
-}
-.ctrl-head::before { content:''; width:24px; height:1px; background:var(--green); }
-
-.field-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
-.field { display:flex; flex-direction:column; gap:5px; }
-.field-full { grid-column:1/-1; }
-.field label { font-size:8px; letter-spacing:3px; color:rgba(0,229,255,0.5); text-transform:uppercase; }
-.field input, .field textarea {
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.08);
-  color:#fff; font-family:var(--mono); font-size:12px;
-  padding:9px 12px; outline:none; transition:border-color .2s;
-  clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
-}
-.field input:focus, .field textarea:focus { border-color:var(--cyan); }
-.field textarea { resize:vertical; min-height:72px; line-height:1.6; }
-
-.btn-update {
-  width:100%; background:linear-gradient(135deg,var(--gold2),var(--gold),#C08020);
-  color:#030a14; border:none; font-family:var(--orb); font-size:11px; font-weight:700;
-  letter-spacing:3px; padding:13px; cursor:pointer; transition:opacity .2s;
-  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
-}
-.btn-update:hover { opacity:.88; }
-
-.hint {
-  margin-top:12px; font-size:9px; color:var(--muted); letter-spacing:1px;
-  text-align:center; line-height:1.8;
-}
-
-/* ── CARD ── */
-#card {
-  position:relative; z-index:1;
-  width:680px; max-width:100%;
-  background:#020c18;
-  overflow:hidden;
-}
-
-.card-tbar { height:3px; background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan),var(--green)); }
-
-.card-header {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:18px 24px 14px;
-  border-bottom:1px solid rgba(61,255,160,0.12);
-}
-.logo-area { display:flex; align-items:center; gap:10px; }
-.logo-hex {
-  width:40px; height:40px; flex-shrink:0;
-  background:linear-gradient(135deg,rgba(61,255,160,0.15),rgba(240,192,64,0.15));
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
   clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--orb); font-size:7px; font-weight:700; color:var(--gold);
-  border:1px solid rgba(61,255,160,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
 }
-.proj-name { font-family:var(--orb); font-size:16px; font-weight:900; color:var(--gold); letter-spacing:3px; line-height:1; text-shadow:0 0 20px rgba(240,192,64,0.3); }
-.proj-sub { font-size:9px; letter-spacing:2px; color:var(--green); margin-top:3px; }
-.date-block { text-align:right; }
-.report-lbl { font-size:8px; letter-spacing:3px; color:rgba(255,255,255,0.25); }
-.report-date { font-family:var(--orb); font-size:12px; color:var(--cyan); margin-top:3px; letter-spacing:1px; }
-.report-week { font-size:9px; color:rgba(255,255,255,0.25); margin-top:2px; letter-spacing:1px; }
-
-.tx-label { padding:8px 24px 0; font-size:8px; letter-spacing:4px; color:rgba(61,255,160,0.3); text-transform:uppercase; }
-
-/* Stats */
-.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:12px 20px 16px; }
-.sbox { background:rgba(4,12,28,0.9); padding:13px 10px; text-align:center; position:relative; overflow:hidden; }
-.sbox::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--a),transparent); }
-.sbox.g  { --a:var(--gold);  border:1px solid rgba(240,192,64,0.2); }
-.sbox.gr { --a:var(--green); border:1px solid rgba(61,255,160,0.2); }
-.sbox.c  { --a:var(--cyan);  border:1px solid rgba(0,229,255,0.15); }
-.sbox.p  { --a:#a78bfa;      border:1px solid rgba(167,139,250,0.18); }
-.slbl { font-size:7px; letter-spacing:2px; color:rgba(255,255,255,0.3); text-transform:uppercase; margin-bottom:5px; }
-.sval { font-family:var(--orb); font-size:15px; font-weight:700; line-height:1; margin-bottom:2px; }
-.gold   { color:var(--gold); text-shadow:0 0 12px rgba(240,192,64,0.4); }
-.green  { color:var(--green); text-shadow:0 0 12px rgba(61,255,160,0.4); }
-.cyan   { color:var(--cyan); }
-.purple { color:#a78bfa; }
-.schg   { font-size:8px; letter-spacing:1px; color:rgba(255,255,255,0.25); }
-.up     { color:var(--green); }
-
-/* Bond */
-.bond-wrap {
-  margin:0 20px 14px;
-  background:rgba(4,12,28,0.9);
-  border:1px solid rgba(61,255,160,0.18);
-  padding:14px 18px; position:relative; overflow:hidden;
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;flex-wrap:wrap}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
 }
-.bond-wrap::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan)); }
-.bond-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.bond-ttl { font-size:9px; letter-spacing:3px; color:var(--green); text-shadow:0 0 8px rgba(61,255,160,0.4); }
-.bond-pct-disp { font-family:var(--orb); font-size:14px; font-weight:700; color:var(--gold); text-shadow:0 0 12px rgba(240,192,64,0.4); }
-.bond-track { height:10px; background:rgba(255,255,255,0.05); overflow:hidden; margin-bottom:7px; border:1px solid rgba(61,255,160,0.1); }
-.bond-fill { height:100%; background:linear-gradient(90deg,var(--green),var(--gold),var(--cyan)); transition:width .6s; position:relative; }
-.bond-fill::after { content:''; position:absolute; right:0;top:0;bottom:0;width:4px; background:#fff; opacity:.45; }
-.bond-marks { display:flex; justify-content:space-between; font-size:8px; color:rgba(255,255,255,0.25); }
-.bond-marks span:last-child { color:var(--gold); }
-.bond-row { display:flex; gap:16px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); }
-.bstat { flex:1; text-align:center; }
-.bsval { font-family:var(--orb); font-size:12px; font-weight:700; color:var(--gold); margin-bottom:2px; }
-.bslbl { font-size:7px; letter-spacing:2px; color:rgba(255,255,255,0.25); text-transform:uppercase; }
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
 
-/* Decree */
-.decree-wrap {
-  margin:0 20px 14px;
-  border-left:3px solid var(--green); padding:12px 18px;
-  background:rgba(61,255,160,0.03);
-  clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%);
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+
+.doc-header{padding:60px 0 30px}
+.doc-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--purple);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(167,139,250,0.3);
+  background:rgba(167,139,250,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
 }
-.dec-lbl { font-size:8px; letter-spacing:3px; color:rgba(61,255,160,0.4); margin-bottom:7px; }
-.dec-txt { font-size:12px; color:rgba(200,216,240,0.9); line-height:1.8; font-style:italic; }
-.dec-sig { font-size:8px; letter-spacing:2px; color:var(--green); margin-top:8px; text-shadow:0 0 6px rgba(61,255,160,0.3); }
-
-/* Next */
-.next-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 20px 14px; }
-.nbox { background:rgba(4,12,28,0.9); border:1px solid rgba(255,255,255,0.06); padding:10px 14px; display:flex; gap:10px; align-items:flex-start; }
-.nicon { color:var(--green); font-size:13px; flex-shrink:0; margin-top:1px; }
-.nlbl { font-size:7px; letter-spacing:2px; color:rgba(255,255,255,0.3); margin-bottom:3px; }
-.nval { font-family:var(--orb); font-size:11px; color:var(--gold); font-weight:700; }
-
-/* Footer */
-.card-footer {
-  padding:12px 24px; border-top:1px solid rgba(61,255,160,0.1);
-  display:flex; align-items:center; justify-content:space-between;
+h1.doc-title{
+  font-family:var(--orb);font-size:clamp(30px,5vw,48px);
+  font-weight:900;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:14px;color:var(--text);
 }
-.fca { font-size:7px; color:rgba(255,255,255,0.15); letter-spacing:.5px; word-break:break-all; max-width:340px; line-height:1.7; }
-.fright { text-align:right; }
-.fsite { font-family:var(--orb); font-size:9px; color:var(--cyan); letter-spacing:1px; }
-.fnfa { font-size:7px; color:rgba(255,255,255,0.2); letter-spacing:1px; margin-top:2px; }
-.card-bbar { height:3px; background:linear-gradient(90deg,var(--cyan),var(--green),var(--gold),var(--cyan)); }
+h1.doc-title .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.doc-sub{font-size:17px;color:var(--text-dim);max-width:720px;line-height:1.6;margin-bottom:12px}
+.doc-meta{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:1.5px;padding:14px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;
+}
+.doc-meta span strong{color:var(--cyan);font-weight:500}
 
-/* Stars canvas */
-#card-canvas { position:absolute; inset:0; pointer-events:none; z-index:0; }
-.z1 { position:relative; z-index:1; }
+.toc{
+  margin:30px 0;padding:20px 24px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.toc-title{
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:2.5px;margin-bottom:10px;
+}
+.toc ol{list-style:none;counter-reset:toc;padding:0}
+.toc li{
+  counter-increment:toc;padding:4px 0;
+  font-family:var(--mono);font-size:13px;color:var(--text-dim);
+}
+.toc li::before{
+  content:counter(toc,decimal-leading-zero) '  ';color:var(--muted);margin-right:8px;
+}
+.toc a{color:var(--text-dim);transition:color .15s}
+.toc a:hover{color:var(--cyan)}
 
-/* ── PRINT STYLESHEET ── institutional-grade printout */
-@media print {
-  @page { margin: 18mm 16mm; size: A4; }
-  body, html {
-    background: #fff !important; color: #000 !important;
-    font-family: Georgia, 'Times New Roman', serif !important;
-    font-size: 11pt !important; line-height: 1.45 !important;
-    text-shadow: none !important;
-  }
-  body::before, body::after { display: none !important; }
+h2{
+  font-family:var(--orb);font-size:24px;font-weight:800;
+  letter-spacing:-0.3px;line-height:1.2;color:var(--text);
+  margin:50px 0 8px;padding-top:20px;border-top:1px solid var(--line);
+}
+h2 .num{
+  font-family:var(--mono);font-size:11px;color:var(--purple);
+  letter-spacing:2.5px;display:block;margin-bottom:6px;font-weight:600;
+}
+h3{
+  font-family:var(--orb);font-size:17px;font-weight:700;
+  color:var(--text);letter-spacing:0.1px;line-height:1.3;
+  margin:28px 0 8px;
+}
+p{margin-bottom:14px;color:var(--text-dim);font-size:15.5px}
+p strong{color:var(--text)}
+ul,ol{margin:10px 0 16px 20px;color:var(--text-dim)}
+ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
+
+.callout{
+  margin:20px 0;padding:18px 22px;
+  background:rgba(167,139,250,0.04);
+  border:1px solid rgba(167,139,250,0.2);
+  border-left:3px solid var(--purple);
+}
+.callout .k{
+  font-family:var(--mono);font-size:10px;color:var(--purple);
+  letter-spacing:2px;margin-bottom:6px;font-weight:700;
+}
+.callout p{color:var(--text);font-size:15px;margin:0}
+
+.callout.amber{background:rgba(240,192,64,0.04);border-color:rgba(240,192,64,0.22);border-left-color:var(--gold)}
+.callout.amber .k{color:var(--gold)}
+
+.callout.red{background:rgba(255,94,123,0.04);border-color:rgba(255,94,123,0.22);border-left-color:var(--red)}
+.callout.red .k{color:var(--red)}
+
+.callout.green{background:rgba(61,255,160,0.04);border-color:rgba(61,255,160,0.22);border-left-color:var(--green)}
+.callout.green .k{color:var(--green)}
+
+.compare-table{
+  margin:24px 0;width:100%;
+  border:1px solid var(--line);
+  font-size:13.5px;
+}
+.compare-table thead th{
+  background:rgba(255,255,255,0.03);
+  font-family:var(--mono);font-size:10.5px;color:var(--text);
+  letter-spacing:1.5px;text-align:left;padding:12px 14px;
+  border-bottom:1px solid var(--line);font-weight:700;
+}
+.compare-table tbody td{
+  padding:12px 14px;border-top:1px solid var(--line);
+  color:var(--text-dim);vertical-align:top;
+}
+.compare-table tbody tr td:first-child{
+  font-family:var(--mono);font-size:11px;color:var(--gold);
+  letter-spacing:1px;font-weight:600;width:30%;
+}
+
+.versions{
+  margin:40px 0 20px;padding:20px 22px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.versions h3{font-size:13px;margin:0 0 12px;color:var(--gold)}
+.v-row{
+  display:flex;gap:14px;padding:8px 0;
+  border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;
+}
+.v-row:first-of-type{border-top:0}
+.v-row .ver{color:var(--cyan);width:60px;flex-shrink:0}
+.v-row .dt{color:var(--muted);width:110px;flex-shrink:0}
+.v-row .ch{color:var(--text-dim);flex:1}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  line-height:2;
+}
+.foot a{color:var(--text-dim);transition:color .15s}
+.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 8px;color:var(--line)}
+.foot .version{display:block;margin-top:14px;color:var(--muted);font-size:10px;letter-spacing:1px}
+
+@media print{
   .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
-  .toc-title, .doc-tag, .breadcrumbs, .verify-banner, .nav-bottom,
-  .actions, video, audio, iframe, canvas, .hunt-tracker, #bond-bar,
-  .skel, .live-dot, [class*="loading"], button, .stat-live, .copy-btn { display: none !important; }
-  a { color: #000 !important; text-decoration: underline; }
-  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
-  a[href^="/"]::after, a[href^="#"]::after { content: ""; }
-  h1, h2, h3, h4, h5 {
-    color: #000 !important; font-family: Georgia, serif !important;
-    font-weight: 700 !important; page-break-after: avoid;
-    background: none !important; -webkit-text-fill-color: initial !important;
-    text-shadow: none !important; border: none !important; padding: 0 !important;
-  }
-  h1 { font-size: 22pt !important; margin: 0 0 8pt; }
-  h2 { font-size: 14pt !important; margin: 16pt 0 6pt; padding-top: 8pt !important; border-top: 1px solid #aaa !important; }
-  h3 { font-size: 12pt !important; margin: 12pt 0 4pt; }
-  h2 .num { color: #666 !important; font-size: 9pt !important; }
-  h1 .grad, h1 .accent { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
-  p, li { color: #111 !important; font-size: 11pt !important; orphans: 3; widows: 3; }
-  strong, b { color: #000 !important; font-weight: 700; }
-  code {
-    background: #f0f0f0 !important; color: #000 !important;
-    border: 1px solid #ccc !important; font-family: 'Courier New', monospace;
-    font-size: 9.5pt !important; padding: 1pt 3pt;
-  }
-  ul, ol { margin-left: 20pt !important; }
-  .callout {
-    background: #fafafa !important; border: 1px solid #999 !important;
-    border-left: 3px solid #000 !important; padding: 8pt 12pt !important;
-    margin: 10pt 0 !important; page-break-inside: avoid;
-  }
-  .callout .k { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
-  .callout p { color: #111 !important; }
-  .compare-table, table { border: 1px solid #000 !important; page-break-inside: avoid; }
-  .compare-table th, table th, .compare-table td, table td {
-    border: 1px solid #888 !important; color: #000 !important;
-    padding: 4pt 6pt !important; font-size: 10pt !important;
-  }
-  .doc-meta { border-color: #888 !important; color: #444 !important; font-size: 9pt !important; }
-  .doc-meta strong { color: #000 !important; }
-  .doc-sub, p.lede { color: #222 !important; font-size: 12pt !important; font-style: italic; }
-  /* Footer note for print: where readers came from */
-  .container::after {
-    content: "Printed from galacticfederation.co · Always verify against the live document and corrections log.";
-    display: block; margin-top: 24pt; padding-top: 12pt;
-    border-top: 1px solid #999; font-size: 8.5pt; color: #555;
-    font-style: italic; text-align: center;
-  }
+  body::before, body::after{display:none !important}
+  body{background:#fff;color:#000}
+  h1.doc-title,h2,h3,strong,p strong{color:#000}
+  p,li{color:#222}
 }
-
 </style>
 </head>
 <body>
 
-<div class="controls">
-  <div class="ctrl-head">FEDERATION INTEL REPORT — WEEKLY UPDATER</div>
-  <div class="field-grid">
-    <div class="field"><label>Week #</label><input id="f-week" value="02"></div>
-    <div class="field"><label>Date</label><input id="f-date" value="APR 14, 2026"></div>
-    <div class="field"><label>Price (USD)</label><input id="f-price" value="$0.00001885"></div>
-    <div class="field"><label>Market Cap</label><input id="f-mc" value="$21K"></div>
-    <div class="field"><label>Holders</label><input id="f-holders" value="41+"></div>
-    <div class="field"><label>24h Volume</label><input id="f-vol" value="$156"></div>
-    <div class="field"><label>Bond Progress %</label><input id="f-pct" type="number" min="0" max="100" value="28"></div>
-    <div class="field"><label>Remaining to Bond</label><input id="f-rem" value="$52K"></div>
-    <div class="field"><label>Next Milestone</label><input id="f-mile" value="Raydium Listing"></div>
-    <div class="field"><label>Status</label><input id="f-status" value="PRE-BOND · LIVE"></div>
-    <div class="field field-full"><label>Admiral Voss Decree</label>
-      <textarea id="f-decree">28% bonded. Founding Member NFT badges are now live — every wallet holding before $73K is eligible. Dev tokens locked on-chain. The federation is not waiting. Those who arrive before Raydium will be remembered as the founding generation.</textarea>
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/liquidation-spec">LIQUIDATION SPEC ↗</a>
+    <a href="/research">RESEARCH ↗</a>
+    <a href="/corrections">CORRECTIONS ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <header class="doc-header">
+    <div class="doc-tag">GOVERNANCE SPECIFICATION · OPEN FOR COMMENT</div>
+    <h1 class="doc-title">Federation <span class="grad">Governance</span> Specification</h1>
+    <p class="doc-sub">A public specification for the $GFOF DAO governance system, built on Realms. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.</p>
+    <div class="doc-meta">
+      <span><strong>Version:</strong> v0.2</span>
+      <span><strong>Status:</strong> v0.2 · LIVE (ADVISORY)</span>
+      <span><strong>Published:</strong> 2026-05-26</span>
+      <span><strong>Deploys:</strong> POST-BOND</span>
+    </div>
+  </header>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">// CONTENTS</div>
+    <ol>
+      <li><a href="#deployed">Deployment status (v0.2)</a></li>
+      <li><a href="#status">Status of this document</a></li>
+      <li><a href="#principles">Design principles</a></li>
+      <li><a href="#platform">Platform</a></li>
+      <li><a href="#voting-power">Voting power</a></li>
+      <li><a href="#parameters">Proposed parameters (v0.1 — for comment)</a></li>
+      <li><a href="#cannot">What governance cannot do</a></li>
+      <li><a href="#controls">What governance controls</a></li>
+      <li><a href="#council">The council question</a></li>
+      <li><a href="#first-proposal">The first proposal</a></li>
+      <li><a href="#rollout">Phased rollout</a></li>
+      <li><a href="#open-questions">Open questions for public comment</a></li>
+    </ol>
+  </div>
+
+  <h2 id="deployed"><span class="num">SECTION 00</span>Deployment status (v0.2)</h2>
+  <p><strong>Governance is live.</strong> The $GFOF DAO is deployed on-chain via SPL Governance, hosted on Realms, gated to the $GFOF mint. Realm: <a href="https://v2.realms.today/dao/6tFtnnjDu97nmJeiegZDqhDASdfKpToiNWcuL8t5UsGp" style="color:var(--cyan)">v2.realms.today/dao/6tFtnnj&hellip;t5UsGp</a>.</p>
+  <p><strong>Deployed parameters:</strong> 1% community approval quorum &middot; 3-day voting period &middot; 24-hour cool-off &middot; 1,000,000 $GFOF proposal threshold &middot; vote-tipping disabled.</p>
+  <p><strong>Scope at launch is advisory.</strong> Holders vote on direction; no treasury funds or site/repo/token authorities are routed through the DAO yet. Authority migrates in deliberately, one proposal at a time, post-bond.</p>
+  <p><strong>Council (disclosed):</strong> a single-member council (the founder wallet) holds a 60% veto quorum during the bootstrap phase &mdash; a safety valve against a malicious proposal, not a tool to pass things. It sunsets, by governance vote, once the project is post-bond and the holder base has materially broadened.</p>
+  <p><strong>Changes from v0.1, reconciled openly:</strong> (1) the two-tier 51% / 66% approval structure is not expressible in a single SPL Governance config, so the DAO launched with one standard tier at 1% quorum; the constitutional-tier prohibitions remain binding via this spec and the corrections log until a second config is added. (2) Realms provisioned a 60% council veto not present in v0.1; retained as a disclosed bootstrap safety valve. (3) Deployment ran ahead of the post-bond sequence stated in <a href="/corrections#c016" style="color:var(--cyan)">corrections #016</a> &mdash; the DAO launched pre-bond in advisory mode; this deviation is logged at <a href="/corrections#c017" style="color:var(--cyan)">corrections #017</a>.</p>
+  <p>The structurally-locked 13% dev allocation cannot vote: it is held in Streamflow escrow, not a wallet, so it cannot be deposited into the realm. Exclusion is enforced by architecture, not promise.</p>
+  <p><em>The sections below are the v0.1 design reasoning, retained for transparency. Where a deployed parameter differs from a v0.1 proposal, the deployed value in this section governs.</em></p>
+
+  <h2 id="status"><span class="num">SECTION 01</span>Status of this document</h2>
+  <p>This is a <strong>draft specification, published before code, for public comment.</strong> It is version 0.1.</p>
+  <p>Nothing in this document is a committed parameter. Per the Federation's standing discipline (<a href="/corrections#c003" style="color:var(--cyan)">corrections #003</a>), no governance number — proposal threshold, quorum, voting period, approval percentage — becomes a commitment until a specification defines it, the public has had the opportunity to comment, and the parameter is ratified. The figures below are <strong>proposed starting points</strong>, presented with their reasoning so that the reasoning can be challenged. They will change in response to comment. When they stabilize, a later version of this document will mark them as settled, and the first on-chain governance vote will ratify them.</p>
+  <div class="callout amber">
+    <div class="k">SEQUENCE</div>
+    <p>The Federation DAO does not deploy until after the $73K bond completes. This specification exists now so the design is settled in the open before any of it goes live — the same spec-before-code discipline applied to the lending mechanism at <a href="/liquidation-spec" style="color:var(--gold)">/liquidation-spec</a>.</p>
+  </div>
+
+  <h2 id="principles"><span class="num">SECTION 02</span>Design principles</h2>
+  <p>Governance is not a feature the Federation is adding because DAOs are expected. It is the mechanism by which the project's discipline survives the people who started it. A governance system designed well outlasts its founders; a governance system designed as theater concentrates power while appearing to distribute it.</p>
+  <p>Four principles govern every choice in this document:</p>
+  <h3>Genuine token-holder governance, not a gatekept shell</h3>
+  <p>Many projects launch "DAOs" that are centralized shells with marketing attached — token holders are locked out by councils, multisigs, or proposal gates that only insiders can pass. The Federation's governance is designed so token holders can propose, vote, and execute without requiring core-team permission. Where any centralized control exists during the transition, it is minimal, disclosed, and time-boxed with a defined sunset.</p>
+  <h3>On-chain and verifiable, consistent with the rest of the project</h3>
+  <p>Every proposal, every vote, every treasury action is recorded on-chain and publicly inspectable. Governance uses the same transparency posture as the corrections log and the live-RPC treasury page. No off-chain "signaling votes" that the team then interprets at its discretion.</p>
+  <h3>Governance has limits, and the limits are the point</h3>
+  <p>A DAO that can vote to do anything can vote to undo the discipline that makes the project worth governing. This specification defines, explicitly, what governance cannot do — including things a simple majority might want to do in a moment of pressure. The constraints are not a hedge against token holders; they are a commitment that the project's core disciplines survive even a vote to abandon them.</p>
+  <h3>Spec before code, parameters before deployment</h3>
+  <p>The governance system is fully specified and publicly reviewed before it is deployed. Parameters are proposed here, refined through comment, and ratified by the first governance vote — not set unilaterally and announced as done.</p>
+
+  <h2 id="platform"><span class="num">SECTION 03</span>Platform</h2>
+  <p>The Federation DAO will be built on <strong>Realms</strong> (the web interface for spl-governance, the on-chain governance program built by Solana Labs). This choice was committed publicly in the Week 07 Research Log and the bond-trigger commitment thread, and this specification confirms it.</p>
+  <p>Reasoning: Realms is the native Solana governance standard, with proposals, votes, and treasury actions recorded entirely on-chain. It is the same infrastructure used by established Solana protocols. Its on-chain-everything property matches the Federation's transparency posture — there is no off-chain layer where votes get reinterpreted.</p>
+  <p>The governance stack:</p>
+  <ul>
+    <li><strong>Realms / spl-governance</strong> — proposals, voting, on-chain execution</li>
+    <li><strong>Streamflow</strong> — already in use for the four dev lock contracts; integrates with Realms for any vesting-aware voting logic</li>
+    <li><strong>Squads</strong> — optional multisig for treasury operations requiring multiple signatures, used <em>inside</em> the governance structure rather than as a replacement for it</li>
+  </ul>
+  <p>The Federation does not fork Realms or build a custom governance frontend in v0.1. Custom UI is a possible later addition, specified separately if pursued. Starting on standard, audited infrastructure is the disciplined default.</p>
+
+  <h2 id="voting-power"><span class="num">SECTION 04</span>Voting power</h2>
+  <h3>What confers voting power</h3>
+  <p>Voting power is conferred by <strong>holding the $GFOF community token.</strong> One token, one vote, subject to the exclusions below. The DAO is a Community Token DAO in Realms terms — governance is gated by token ownership, and voting weight is proportional to tokens held at the time of the vote.</p>
+  <h3>Locked dev tokens do not vote</h3>
+  <p>The 13% dev allocation locked across the four Streamflow contracts <strong>does not participate in governance voting.</strong> This is a deliberate design choice and one of the more important in this document.</p>
+  <p>Reasoning: the dev tokens are locked for supply discipline — to demonstrate the team will not dump and to immobilize a large block of supply until 2026-2028. Allowing those same tokens to vote would give the team a 13% governance bloc while the tokens are nominally "locked," which would contradict the decentralization principle. Locked-for-discipline should not double as locked-for-control. The cleaner design excludes them from governance entirely.</p>
+  <div class="callout">
+    <div class="k">OPEN FOR COMMENT</div>
+    <p>The alternative — letting locked tokens vote — is the more common DAO default, but the Federation's positioning argues against it. If the community comments otherwise during the review period, the decision is revisited.</p>
+  </div>
+  <h3>The Founding Member NFT does not confer voting weight</h3>
+  <p>The Founding Member NFT (snapshot at the migration block) is <strong>recognition, not governance power.</strong> It does not grant additional votes, voting multipliers, or proposal privileges. This was stated when the NFT was first committed and is reaffirmed here: the NFT is a permanent role marker for the bond-era community, nothing more. Governance weight comes from tokens held, full stop.</p>
+
+  <h2 id="parameters"><span class="num">SECTION 05</span>Proposed parameters (v0.1 — for comment)</h2>
+  <p>Every figure in this section is a <strong>proposed starting point.</strong> The reasoning is given so it can be argued with. None is committed.</p>
+  <h3>5.1 Proposal threshold</h3>
+  <p><strong>Proposed: 0.1% of circulating supply to submit a proposal.</strong></p>
+  <p>Reasoning: a proposal threshold prevents spam — without one, the proposal queue fills with noise and real proposals get buried. But set too high, and only the largest holders can ever propose, which recreates the gatekeeping this design exists to avoid. 0.1% of a 1B supply is 1,000,000 $GFOF — a meaningful but not exclusionary stake. As circulating supply and token value change post-bond, this threshold may warrant adjustment, which is itself something governance can vote on.</p>
+  <h3>5.2 Quorum</h3>
+  <p><strong>Proposed: 10% of eligible voting supply must participate for a vote to be valid.</strong></p>
+  <p>Reasoning: quorum prevents a tiny group from passing proposals while everyone else is inactive. But voter apathy is real in every DAO, and a quorum set too high means nothing ever passes — which paradoxically concentrates power in whoever can reliably turn out votes. 10% is a deliberately moderate starting point. The Federation would rather start moderate and raise quorum through governance once participation patterns are known than start high and discover the DAO is paralyzed.</p>
+  <h3>5.3 Approval threshold — two tiers</h3>
+  <p><strong>Proposed: two classes of proposal with different bars.</strong></p>
+  <ul>
+    <li><strong>Standard proposals</strong> (treasury spending within limits, parameter tweaks, operational decisions): simple majority, &gt;50% of votes cast.</li>
+    <li><strong>Constitutional proposals</strong> (changes to governance parameters themselves, changes to what governance controls, anything touching the constraints in Section 06): supermajority, &ge;66% of votes cast.</li>
+  </ul>
+  <p>Reasoning: not all decisions carry equal weight. A routine treasury allocation should not require the same bar as a change to the governance system's own rules. The two-tier structure makes high-stakes changes deliberately harder to pass than routine ones — which protects the discipline anchors from a transient majority.</p>
+  <h3>5.4 Voting period</h3>
+  <p><strong>Proposed: 5 days for standard proposals, 7 days for constitutional proposals.</strong></p>
+  <p>Reasoning: the voting window must be long enough for a globally distributed token-holder base to participate across time zones, and short enough that the DAO can actually act. 5 days covers a full week's worth of weekday and weekend availability. Constitutional proposals get the longer 7-day window because their stakes justify maximum participation opportunity.</p>
+  <h3>5.5 Execution timelock</h3>
+  <p><strong>Proposed: 48-hour hold between a proposal passing and its execution, extended to 72 hours for any treasury action above a threshold to be defined in v0.2.</strong></p>
+  <p>Reasoning: a timelock is a safety mechanism. It gives the community a window to react if a malicious or erroneous proposal passes — to raise alarm, to coordinate, to exit if necessary — before the action executes on-chain. The larger the treasury impact, the longer the window should be. This is standard practice in mature governance systems and is non-negotiable in principle; the exact durations are open for comment.</p>
+
+  <h2 id="cannot"><span class="num">SECTION 06</span>What governance cannot do</h2>
+  <p>This is the section that distinguishes the Federation's governance from a DAO that can vote to do anything. The following are <strong>outside the scope of governance</strong> and cannot be changed by any vote, standard or constitutional:</p>
+  <div class="callout red">
+    <div class="k">OUTSIDE GOVERNANCE SCOPE</div>
+    <p><strong>Governance cannot unlock the dev tokens early.</strong> The four Streamflow contracts are immutable by design. No governance vote can accelerate, cancel, or modify them. They unlock on their contractual schedule (2026-2028) or not at all.</p>
+  </div>
+  <p><strong>Governance cannot delete or alter the corrections log.</strong> The corrections log is append-only by design and by discipline. No vote can remove an entry, edit a historical entry, or suspend the logging discipline. A governance system empowered to erase its own accountability record would defeat the purpose of having one.</p>
+  <p><strong>Governance cannot introduce paid promotion.</strong> <a href="/corrections#c007" style="color:var(--cyan)">Correction #007</a> — no paid promotion — is a foundational discipline, outside governance scope. A DAO vote cannot authorize paying for coverage, shilling, or any form of the paid promotion the project has committed against.</p>
+  <p><strong>Governance cannot publish a quantum-security claim.</strong> <a href="/corrections#c012" style="color:var(--cyan)">Correction #012</a> — no quantum-security claims — is outside governance scope. The constraint stands regardless of vote.</p>
+  <p><strong>Governance cannot commit numbers without a spec.</strong> <a href="/corrections#c003" style="color:var(--cyan)">Correction #003</a> applies to governance itself. A proposal cannot commit an APY, a multiplier, an allocation size, or any mechanism parameter that lacks a published specification. The proposal can <em>direct that a spec be written</em>; it cannot skip the spec.</p>
+  <p><strong>Governance cannot reintroduce mint or freeze authority.</strong> These are revoked at the Raydium migration and cannot be restored. Supply is fixed at 1 billion permanently.</p>
+  <p>These constraints are not anti-democratic. They are the terms under which token holders acquired the token in the first place — the disciplines that defined the project. Governance distributes control over everything those disciplines leave open. It does not distribute the power to abandon the disciplines, because the disciplines are what the token represents.</p>
+  <p>If the community ever genuinely wishes to change one of these constraints, the honest mechanism is not a governance vote — it is a publicly argued, corrections-logged proposal to amend the constitution itself, with the change documented permanently as a departure from the original terms. That path exists. It is deliberately heavier than a normal vote, and any use of it is itself a permanent corrections-log event.</p>
+
+  <h2 id="controls"><span class="num">SECTION 07</span>What governance controls</h2>
+  <p>Governance has real, meaningful authority over everything the constraints leave open:</p>
+  <ul>
+    <li><strong>The rewards/reserve allocation (10% of supply).</strong> How the rewards and reserve bucket is allocated post-bond is a governance decision. This is the subject of the first proposal (Section 09).</li>
+    <li><strong>Treasury spending</strong> within the timelock and threshold rules.</li>
+    <li><strong>Governance parameters themselves</strong> — quorum, thresholds, voting periods — adjustable by constitutional proposal as the DAO learns what works.</li>
+    <li><strong>Future mechanism direction</strong> — governance can direct that specifications be written for new mechanisms, subject to the spec-before-code discipline.</li>
+    <li><strong>Grants, partnerships, and ecosystem spending</strong> funded from the treasury.</li>
+  </ul>
+  <p>Governance authority is genuine. The constraints in Section 06 are narrow and specific; everything outside them is the community's to decide.</p>
+
+  <h2 id="council"><span class="num">SECTION 08</span>The council question</h2>
+  <p>Realms permits an optional "council" — a small set of wallets holding a council token, with elevated permissions. Many Solana DAOs use one.</p>
+  <div class="callout green">
+    <div class="k">PROPOSED POSITION</div>
+    <p>No permanent council. A permanent council is precisely the gatekeeping structure the design principles argue against. If a small group of wallets can gate or override token-holder votes, the DAO is a shell.</p>
+  </div>
+  <p>The one defensible use of a council is a <strong>time-boxed transition council</strong> during the initial setup period — a small group (the founding team plus optionally one or two trusted community members) that exists only to execute the mechanical setup of the DAO and steps down via a scheduled, automatic sunset. If a transition council is used:</p>
+  <ul>
+    <li>It is disclosed in full (which wallets, what permissions)</li>
+    <li>Its powers are limited to setup mechanics, not proposal vetoes</li>
+    <li>It sunsets on a defined date or after a defined number of successful governance cycles, whichever the community ratifies</li>
+    <li>Its dissolution is itself a corrections-log event</li>
+  </ul>
+  <p><strong>Proposed for comment:</strong> whether to use a transition council at all, or to launch with pure token-holder governance from the first block. The Federation leans toward minimal-or-none, and is publishing this question rather than deciding it unilaterally.</p>
+
+  <h2 id="first-proposal"><span class="num">SECTION 09</span>The first proposal</h2>
+  <p>Per the bond-trigger commitments, the Federation's first governance proposal is already determined in topic: <strong>confirm or amend the framework for allocating the 10% rewards/reserve bucket.</strong></p>
+  <p>The framework itself will be drafted as its own specification (separate from this governance spec) and published for review before the proposal opens. The first proposal is therefore a test of the governance system on a real, bounded decision with a pre-published spec — exactly the conditions under which governance should be exercised.</p>
+  <p>The first proposal will not be a trivial "ratify the team's choice" vote. The rewards/reserve framework spec will present genuine options with tradeoffs, and the proposal will let token holders choose or amend. If the first exercise of governance is theater, the whole system is theater.</p>
+
+  <h2 id="rollout"><span class="num">SECTION 10</span>Phased rollout</h2>
+  <p>Governance does not arrive all at once. The proposed sequence:</p>
+  <ol>
+    <li><strong>Pre-bond (now):</strong> this specification published, public comment period open.</li>
+    <li><strong>Comment integration:</strong> v0.2 of this spec incorporates feedback, settles parameters.</li>
+    <li><strong>Bond completion:</strong> Realms DAO setup begins (per the committed roadmap).</li>
+    <li><strong>DAO deployment:</strong> the DAO is created on Realms with the ratified parameters; treasury authority transferred per the spec; transition council (if any) installed with its sunset scheduled.</li>
+    <li><strong>First proposal:</strong> the rewards/reserve framework proposal opens once its underlying spec is published and reviewed.</li>
+    <li><strong>Ongoing:</strong> governance operates; parameter adjustments happen through constitutional proposals as the DAO learns.</li>
+  </ol>
+  <p>Each step that constitutes a public commitment is logged on <a href="/corrections" style="color:var(--cyan)">/corrections</a> when it occurs.</p>
+
+  <h2 id="open-questions"><span class="num">SECTION 11</span>Open questions for public comment</h2>
+  <p>The Federation is specifically seeking comment on:</p>
+  <ol>
+    <li>Proposal threshold: fixed token amount or percentage of supply? What level?</li>
+    <li>Quorum: is 10% too low, too high, or right for a project at this stage?</li>
+    <li>Locked dev tokens: confirmed exclusion from voting, or should they participate?</li>
+    <li>Transition council: none at all, or minimal-and-sunset? If sunset, on what trigger?</li>
+    <li>Timelock durations and the treasury threshold above which the longer hold applies.</li>
+    <li>Anything in Section 06 (what governance cannot do) that the community believes should be inside governance scope rather than outside it.</li>
+  </ol>
+  <p>Comments can be raised through the channels the Federation operates. Substantive comments may be addressed directly in v0.2 of this specification.</p>
+
+  <div class="callout">
+    <div class="k">CLOSING</div>
+    <p>Governance is the mechanism by which a project's discipline outlives the people who started it. Designed honestly, it distributes real control over everything the project's core disciplines leave open — while placing those disciplines themselves beyond the reach of a transient majority. This is version 0.1. It proposes; it does not commit. Spec before code. Comment before deployment. Receipts throughout. — Voss, out.</p>
+  </div>
+
+  <!-- VERSIONS -->
+  <div class="versions" id="versions">
+    <h3>REVISION HISTORY</h3>
+    <div class="v-row">
+      <span class="ver">v0.1</span>
+      <span class="dt">2026-05-26</span>
+      <span class="ch">Initial publication. All parameters proposed for comment. Public comment period open. DAO deploys post-bond.</span>
     </div>
   </div>
-  <button class="btn-update" onclick="update()">UPDATE INTEL REPORT ↗</button>
-  <p class="hint">Every Monday: update the numbers → click UPDATE → screenshot the card → post to X &amp; Telegram</p>
-  <p class="hint" style="font-size:11px;opacity:0.5;margin-top:6px;" id="footer-version">v13.0 · intel · deployed 2026-04-20</p>
+
 </div>
 
-<div id="card">
-  <canvas id="card-canvas"></canvas>
-  <div class="card-tbar z1"></div>
-
-  <div class="card-header z1">
-    <div class="logo-area">
-      <div class="logo-hex">$GFOF</div>
-      <div>
-        <div class="proj-name">$GFOF</div>
-        <div class="proj-sub">GALACTIC FEDERATION OF FINANCE · SOLANA</div>
-      </div>
-    </div>
-    <div class="date-block">
-      <div class="report-lbl">Intel Report</div>
-      <div class="report-date" id="d-date">APR 14, 2026</div>
-      <div class="report-week" id="d-week">WEEK #02</div>
-    </div>
-  </div>
-
-  <div class="tx-label z1">// TRANSMISSION FROM GALACTIC COMMAND · CLASSIFIED</div>
-
-  <div class="stats-grid z1">
-    <div class="sbox g"><div class="slbl">Price USD</div><div class="sval gold" id="d-price">$0.0000188</div><div class="schg">SOLANA · SPL</div></div>
-    <div class="sbox gr"><div class="slbl">Holders</div><div class="sval green" id="d-holders">41+</div><div class="schg up">● LIVE</div></div>
-    <div class="sbox c"><div class="slbl">Market Cap</div><div class="sval cyan" id="d-mc">$21K</div><div class="schg">FDV</div></div>
-    <div class="sbox p"><div class="slbl">24H Volume</div><div class="sval purple" id="d-vol">$156</div><div class="schg">DEXSCREENER</div></div>
-  </div>
-
-  <div class="bond-wrap z1">
-    <div class="bond-hdr">
-      <span class="bond-ttl">⬡ BOND MISSION — RAYDIUM TARGET $73K</span>
-      <span class="bond-pct-disp" id="d-bpct">28%</span>
-    </div>
-    <div class="bond-track"><div class="bond-fill" id="d-bfill" style="width:28%"></div></div>
-    <div class="bond-marks"><span>$0</span><span>$18K</span><span>$36K</span><span>$55K</span><span>$73K 🎯</span></div>
-    <div class="bond-row">
-      <div class="bstat"><div class="bsval" id="d-bmc">$21K</div><div class="bslbl">Current MC</div></div>
-      <div class="bstat"><div class="bsval" id="d-bpct2">28%</div><div class="bslbl">Progress</div></div>
-      <div class="bstat"><div class="bsval" id="d-brem">$52K</div><div class="bslbl">To Raydium</div></div>
-    </div>
-  </div>
-
-  <div class="decree-wrap z1">
-    <div class="dec-lbl">// Admiral Voss — Weekly Decree</div>
-    <div class="dec-txt" id="d-decree">28% bonded. Founding Member NFT badges are now live — every wallet holding before $73K is eligible. Dev tokens locked on-chain. The federation is not waiting. Those who arrive before Raydium will be remembered as the founding generation.</div>
-    <div class="dec-sig">— ADMIRAL ZORAN VOSS · GALACTIC FEDERATION OF FINANCE</div>
-  </div>
-
-  <div class="next-grid z1">
-    <div class="nbox"><span class="nicon">🚀</span><div><div class="nlbl">Next Milestone</div><div class="nval" id="d-mile">Raydium Listing</div></div></div>
-    <div class="nbox"><span class="nicon">⬡</span><div><div class="nlbl">Status</div><div class="nval" id="d-status">PRE-BOND · LIVE</div></div></div>
-  </div>
-
-  <div class="card-footer z1">
-    <div class="fca">CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</div>
-    <div class="fright">
-      <div class="fsite">galacticfederation.co</div>
-      <div class="fnfa">Not financial advice · DYOR</div>
-    </div>
-  </div>
-  <div class="card-bbar z1"></div>
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/liquidation-spec">Liquidation Spec</a>
+  <span class="sep">·</span>
+  <a href="/research">Research</a>
+  <span class="sep">·</span>
+  <a href="/corrections">Corrections</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version" id="footer-version">v17.25 · governance-spec · deployed 2026-05-26</span>
 </div>
 
 <script>
+try {
+  console.log('%c⬡ GFOF Governance Spec v0.1 · Design Doc', 'color:#A78BFA;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #A78BFA;border-radius:2px;');
+  console.log('%c📖 Open for public comment. See section 11.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+} catch(e) {}
 (function(){
-  var c=document.getElementById('card-canvas'),card=document.getElementById('card');
-  function draw(){
-    c.width=card.offsetWidth; c.height=card.offsetHeight;
-    var x=c.getContext('2d');
-    x.clearRect(0,0,c.width,c.height);
-    var cols=['#3DFFA0','#F0C040','#00E5FF','rgba(200,220,255,'];
-    for(var i=0;i<140;i++){
-      var sx=Math.random()*c.width, sy=Math.random()*c.height;
-      var sr=Math.random()*1.4+0.1, so=Math.random()*0.3+0.05;
-      var r=Math.random();
-      var col=r<0.07?'#3DFFA0':r<0.12?'#F0C040':r<0.16?'#00E5FF':'rgba(200,220,255,'+so+')';
-      x.beginPath(); x.arc(sx,sy,sr,0,Math.PI*2);
-      x.fillStyle=col; x.fill();
-    }
-  }
-  window.addEventListener('resize',draw); draw();
+  var el = document.getElementById('footer-version');
+  if(el){ el.textContent = 'v17.25 · governance-spec · deployed 2026-05-26'; }
 })();
-
-function s(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
-
-function update(){
-  var week=document.getElementById('f-week').value||'01';
-  var date=document.getElementById('f-date').value||'';
-  var price=document.getElementById('f-price').value||'—';
-  var mc=document.getElementById('f-mc').value||'—';
-  var holders=document.getElementById('f-holders').value||'—';
-  var vol=document.getElementById('f-vol').value||'—';
-  var pct=Math.min(100,Math.max(0,parseInt(document.getElementById('f-pct').value)||0));
-  var rem=document.getElementById('f-rem').value||'—';
-  var mile=document.getElementById('f-mile').value||'—';
-  var status=document.getElementById('f-status').value||'—';
-  var decree=document.getElementById('f-decree').value||'—';
-  s('d-week','WEEK #'+week); s('d-date',date);
-  s('d-price',price); s('d-mc',mc); s('d-holders',holders); s('d-vol',vol);
-  s('d-bpct',pct+'%'); s('d-bpct2',pct+'%');
-  s('d-bmc',mc); s('d-brem',rem);
-  s('d-decree',decree); s('d-mile',mile); s('d-status',status);
-  document.getElementById('d-bfill').style.width=pct+'%';
-}
 </script>
 </body>
 </html>
