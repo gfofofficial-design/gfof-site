@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Token Access &amp; Payment Spec v0.2 — $GFOF Galactic Federation of Finance</title>
+<meta name="description" content="Design specification for $GFOF as an optional payment method for the Dossier intelligence product. Optional payment, never a gate. Fiat always available. No discount, no yield, no holding requirement. Spec published before code.">
+<link rel="canonical" href="https://galacticfederation.co/access-spec">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/access-spec">
+<meta property="og:title" content="Token Access &amp; Payment Spec v0.2 — $GFOF">
+<meta property="og:description" content="$GFOF as an optional way to pay for Dossier. A payment option, not a gate. Spec before code.">
+<meta property="og:image" content="https://galacticfederation.co/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="Token Access &amp; Payment Spec v0.2 — $GFOF">
+<meta name="twitter:description" content="$GFOF as an optional way to pay for Dossier. A payment option, not a gate.">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<meta name="robots" content="index, follow">
+<style>
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#6A7294;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16.5px;line-height:1.7;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(167,139,250,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple);word-break:break-all}
+strong{color:var(--text)}
+
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;flex-wrap:wrap}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+
+.doc-header{padding:60px 0 30px}
+.doc-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--purple);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(167,139,250,0.3);
+  background:rgba(167,139,250,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+h1.doc-title{
+  font-family:var(--orb);font-size:clamp(30px,5vw,48px);
+  font-weight:900;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:14px;color:var(--text);
+}
+h1.doc-title .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.doc-sub{font-size:17px;color:var(--text-dim);max-width:720px;line-height:1.6;margin-bottom:12px}
+.doc-meta{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:1.5px;padding:14px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;
+}
+.doc-meta span strong{color:var(--cyan);font-weight:500}
+
+.toc{
+  margin:30px 0;padding:20px 24px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.toc-title{
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:2.5px;margin-bottom:10px;
+}
+.toc ol{list-style:none;counter-reset:toc;padding:0}
+.toc li{
+  counter-increment:toc;padding:4px 0;
+  font-family:var(--mono);font-size:13px;color:var(--text-dim);
+}
+.toc li::before{
+  content:counter(toc,decimal-leading-zero) '  ';color:var(--muted);margin-right:8px;
+}
+.toc a{color:var(--text-dim);transition:color .15s}
+.toc a:hover{color:var(--cyan)}
+
+h2{
+  font-family:var(--orb);font-size:24px;font-weight:800;
+  letter-spacing:-0.3px;line-height:1.2;color:var(--text);
+  margin:50px 0 8px;padding-top:20px;border-top:1px solid var(--line);
+  scroll-margin-top:80px;
+}
+h2 .num{
+  font-family:var(--mono);font-size:11px;color:var(--purple);
+  letter-spacing:2.5px;display:block;margin-bottom:6px;font-weight:600;
+}
+h3{
+  font-family:var(--orb);font-size:17px;font-weight:700;
+  color:var(--text);letter-spacing:0.1px;line-height:1.3;
+  margin:28px 0 8px;
+}
+p{margin-bottom:14px;color:var(--text-dim);font-size:15.5px}
+p strong{color:var(--text)}
+ul,ol{margin:10px 0 16px 20px;color:var(--text-dim)}
+ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
+
+a.in{color:var(--cyan);border-bottom:1px dashed rgba(64,192,255,0.4);transition:color 0.15s, border-color 0.15s}
+a.in:hover{color:var(--gold);border-color:rgba(240,192,64,0.6)}
+
+.callout{
+  margin:20px 0;padding:18px 22px;
+  background:rgba(167,139,250,0.04);
+  border:1px solid rgba(167,139,250,0.2);
+  border-left:3px solid var(--purple);
+}
+.callout .k{
+  font-family:var(--mono);font-size:10px;color:var(--purple);
+  letter-spacing:2px;margin-bottom:6px;font-weight:700;
+}
+.callout p{color:var(--text);font-size:15px;margin:0}
+
+.callout.amber{background:rgba(240,192,64,0.04);border-color:rgba(240,192,64,0.22);border-left-color:var(--gold)}
+.callout.amber .k{color:var(--gold)}
+
+.callout.red{background:rgba(255,94,123,0.04);border-color:rgba(255,94,123,0.22);border-left-color:var(--red)}
+.callout.red .k{color:var(--red)}
+
+.callout.green{background:rgba(61,255,160,0.04);border-color:rgba(61,255,160,0.22);border-left-color:var(--green)}
+.callout.green .k{color:var(--green)}
+
+.callout.cyan{background:rgba(64,192,255,0.04);border-color:rgba(64,192,255,0.22);border-left-color:var(--cyan)}
+.callout.cyan .k{color:var(--cyan)}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:1px;line-height:1.7;
+}
+.foot a{color:var(--text-dim)}.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+.foot .version{
+  display:inline-block;margin-top:10px;padding:4px 10px;
+  font-size:9px;letter-spacing:2px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:2px;opacity:0.6;
+}
+
+@media(max-width:600px){
+  .top-nav{padding:12px 16px;flex-direction:column;align-items:flex-start;gap:10px}
+  .top-nav-links{font-size:10px}
+  .container{padding:0 18px}
+  .doc-header{padding:36px 0 20px}
+  h2{font-size:20px;margin:36px 0 8px}
+  .doc-meta{gap:14px;font-size:10px}
+}
+
+/* ── PRINT STYLESHEET ── institutional-grade printout */
+@media print {
+  @page { margin: 18mm 16mm; size: A4; }
+  body, html {
+    background: #fff !important; color: #000 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important; line-height: 1.45 !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after { display: none !important; }
+  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
+  .toc-title, .doc-tag, .breadcrumbs, .verify-banner, .nav-bottom,
+  .actions, video, audio, iframe, canvas, .hunt-tracker, #bond-bar,
+  .skel, .live-dot, [class*="loading"], button, .stat-live, .copy-btn { display: none !important; }
+  a { color: #000 !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
+  a[href^="/"]::after, a[href^="#"]::after { content: ""; }
+  h1, h2, h3, h4, h5 {
+    color: #000 !important; font-family: Georgia, serif !important;
+    font-weight: 700 !important; page-break-after: avoid;
+    background: none !important; -webkit-text-fill-color: initial !important;
+    text-shadow: none !important; border: none !important; padding: 0 !important;
+  }
+  h1 { font-size: 22pt !important; margin: 0 0 8pt; }
+  h2 { font-size: 14pt !important; margin: 16pt 0 6pt; padding-top: 8pt !important; border-top: 1px solid #aaa !important; }
+  h3 { font-size: 12pt !important; margin: 12pt 0 4pt; }
+  h2 .num { color: #666 !important; font-size: 9pt !important; }
+  h1 .grad, h1 .accent { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
+  p, li { color: #111 !important; font-size: 11pt !important; orphans: 3; widows: 3; }
+  strong, b { color: #000 !important; font-weight: 700; }
+  code {
+    background: #f0f0f0 !important; color: #000 !important;
+    border: 1px solid #ccc !important; font-family: 'Courier New', monospace;
+    font-size: 9.5pt !important; padding: 1pt 3pt;
+  }
+  ul, ol { margin-left: 20pt !important; }
+  .callout {
+    background: #fafafa !important; border: 1px solid #999 !important;
+    border-left: 3px solid #000 !important; padding: 8pt 12pt !important;
+    margin: 10pt 0 !important; page-break-inside: avoid;
+  }
+  .callout .k { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
+  .callout p { color: #111 !important; }
+  .compare-table, table { border: 1px solid #000 !important; page-break-inside: avoid; }
+  .compare-table th, table th, .compare-table td, table td {
+    border: 1px solid #888 !important; color: #000 !important;
+    padding: 4pt 6pt !important; font-size: 10pt !important;
+  }
+  .doc-meta { border-color: #888 !important; color: #444 !important; font-size: 9pt !important; }
+  .doc-meta strong { color: #000 !important; }
+  .doc-sub, p.lede { color: #222 !important; font-size: 12pt !important; font-style: italic; }
+  /* Footer note for print: where readers came from */
+  .container::after {
+    content: "Printed from galacticfederation.co · Always verify against the live document and corrections log.";
+    display: block; margin-top: 24pt; padding-top: 12pt;
+    border-top: 1px solid #999; font-size: 8.5pt; color: #555;
+    font-style: italic; text-align: center;
+  }
+}
+
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/treasury">TREASURY ↗</a>
+    <a href="/liquidation-spec">LENDING SPEC ↗</a>
+    <a href="/security">SECURITY ↗</a>
+    <a href="/corrections">CORRECTIONS ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <header class="doc-header">
+    <div class="doc-tag">FEDERATION DESIGN SPEC · ACCESS &amp; PAYMENT</div>
+    <h1 class="doc-title">Token Access &amp; <span class="grad">Payment Specification</span></h1>
+    <p class="doc-sub">How $GFOF works as an <strong>optional</strong> way to pay for <strong>Dossier</strong> (Operation 02). A payment option, never a gate. Published before the payment flow is built — spec before code. Verify everything against the <a class="in" href="/corrections">corrections log</a>.</p>
+    <div class="doc-meta">VERSION v0.2 · STATUS draft, ready to publish · UPDATED 2026-06-17</div>
+  </header>
+
+  <div class="callout amber">
+    <div class="k">⚠ READ FIRST — WHAT THIS IS AND ISN'T</div>
+    <p>$GFOF is an <strong>optional</strong> way to pay for a Dossier subscription. It is <strong>not</strong> a gate: fiat is always available, nothing is locked behind the token, and you never have to hold or buy $GFOF to use any tier. It is not an investment, pays no yield, and carries no promise of price appreciation. This is a design specification — the payment flow it describes is published <em>before</em> it is built.</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">TABLE OF CONTENTS</div>
+    <ol>
+      <li><a href="#purpose">Purpose &amp; scope</a></li>
+      <li><a href="#principle">Design principle</a></li>
+      <li><a href="#mechanism">Mechanism — pay with $GFOF</a></li>
+      <li><a href="#no-gate">Hold-to-access — excluded</a></li>
+      <li><a href="#pricing">Pricing &amp; volatility</a></li>
+      <li><a href="#routing">Routing of received $GFOF</a></li>
+      <li><a href="#parameters">Parameters</a></li>
+      <li><a href="#anti-claims">Anti-claims &amp; guardrails</a></li>
+      <li><a href="#regulatory">Regulatory posture</a></li>
+      <li><a href="#relationship">Relationship to specs &amp; corrections</a></li>
+      <li><a href="#versioning">Versioning &amp; status</a></li>
+    </ol>
+  </div>
+
+  <h2 id="purpose"><span class="num">SECTION 01</span>Purpose &amp; scope</h2>
+  <p>This specification defines how the $GFOF token functions as an <strong>optional payment method</strong> for the Dossier intelligence product — a concrete, non-speculative reason to hold and use the token: paying for the product.</p>
+  <p><strong>In scope:</strong> paying for Dossier with $GFOF; how received $GFOF is handled; the framing rules that keep this utility rather than investment. <strong>Out of scope:</strong> yield, lending, staking-for-return, hold-to-access gating (Section 04), and any claim that $GFOF will appreciate (Section 08).</p>
+
+  <h2 id="principle"><span class="num">SECTION 02</span>Design principle</h2>
+  <p><strong>Value through use, not through promised returns.</strong> Spending a token for a service is consumptive utility. Paying a holder a return for holding is the category currently unsettled in US law — the Digital Asset Market Clarity Act was not enacted as of June 2026, and yield was its most contested provision. This specification stays on the utility side of that line by design. Nothing here is legal advice.</p>
+
+  <h2 id="mechanism"><span class="num">SECTION 03</span>Mechanism — pay with $GFOF</h2>
+  <p>The single mechanism in this spec: the token is <strong>spent</strong> to buy the product.</p>
+  <ul>
+    <li>Dossier subscriptions are payable in $GFOF as an <strong>optional</strong> payment method. Fiat / card remains available; <strong>$GFOF is never required</strong> for any tier.</li>
+    <li>Live prices the $GFOF path uses (same prices, no discount): <strong>Operative — $29 / mo</strong>; <strong>Handler — $99 / mo</strong>. (Operative · Beta locks in $19 / mo after its six-month free term.)</li>
+    <li>The $GFOF amount due at checkout is the USD price divided by the $GFOF spot rate, within a short quote-validity window plus a small slippage buffer.</li>
+    <li>Payment is sent to a dedicated receiving wallet (Section 06). Access begins on confirmed on-chain payment and runs the subscription term.</li>
+    <li><strong>No discount</strong> on the $GFOF path — same price as card. This keeps it a payment option, not a token-promotion nudge.</li>
+  </ul>
+
+  <h2 id="no-gate"><span class="num">SECTION 04</span>Hold-to-access — explicitly excluded</h2>
+  <div class="callout cyan">
+    <div class="k">NO TOKEN-GATE</div>
+    <p>Gating a tier behind <em>holding</em> $GFOF is <strong>not</strong> part of this spec and will not be built. Dossier is pay-for-what-you-need with no token-gate. Accepting $GFOF as a payment method gates nothing — fiat is always available and no tier requires the token. Any future reconsideration of holding-based access would require its own specification and a corrections-log entry.</p>
+  </div>
+
+  <h2 id="pricing"><span class="num">SECTION 05</span>Pricing &amp; volatility handling</h2>
+  <p>Subscription value is set in <strong>USD</strong> so product economics do not swing with the token. The $GFOF amount due is computed at checkout from a single, named price source — DexScreener (pair <code>3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE</code>) — recorded here so the method is auditable.</p>
+
+  <h2 id="routing"><span class="num">SECTION 06</span>Routing of received $GFOF</h2>
+  <p>$GFOF received this way is Dossier revenue. It flows through the existing routing commitment recorded in <a class="in" href="/corrections">corrections #011</a>: staged 25% rising to 50% into $GFOF/SOL Raydium liquidity, quarterly, with on-chain proof. The remainder routes to operating treasury. There is no burn mechanism in this version. $GFOF-denominated subscription revenue is counted inside the #011 net-revenue base, so there is one routing rule, not two. The receiving wallet is a dedicated subscription wallet, separate from general treasury, with its address published on creation. Routing is described as plumbing, never as a price-support action.</p>
+
+  <h2 id="parameters"><span class="num">SECTION 07</span>Parameters</h2>
+  <p>Set as of this version. Publication is the act that makes them live.</p>
+  <ul>
+    <li><strong>Tier mapping:</strong> all paid tiers (Operative, Handler) accept $GFOF as optional payment. No tier is gated.</li>
+    <li><strong>Prices (USD):</strong> Operative $29/mo; Handler $99/mo; Operative · Beta &rarr; $19/mo post-beta. The $GFOF path uses these same prices.</li>
+    <li><strong>$GFOF-path discount:</strong> none — same price as fiat.</li>
+    <li><strong>Hold-to-access:</strong> not enabled (excluded — Section 04).</li>
+    <li><strong>Routing of received $GFOF:</strong> through the #011 policy (25% &rarr; 50% to liquidity), remainder to treasury; counted inside the #011 base; no burn.</li>
+    <li><strong>Receiving wallet:</strong> dedicated subscription wallet; address published on creation.</li>
+    <li><strong>Refund / grace:</strong> subscription runs its paid term; aligned to the existing fiat refund policy; no crypto-specific carve-out.</li>
+    <li><strong>Quote window &amp; slippage buffer:</strong> an operational detail, set and recorded at build time.</li>
+  </ul>
+
+  <h2 id="anti-claims"><span class="num">SECTION 08</span>Anti-claims &amp; standing guardrails</h2>
+  <div class="callout red">
+    <div class="k">STANDING ANTI-CLAIMS</div>
+    <p>These appear, in substance, wherever this mechanism is described publicly:</p>
+    <ol>
+      <li>$GFOF access utility is <strong>not an investment</strong> — no yield, no interest, no return for holding.</li>
+      <li>The value of access is <strong>independent of token price</strong>; access does not require, imply, or promise appreciation.</li>
+      <li>The project will <strong>not</strong> market "buy $GFOF to profit."</li>
+      <li><strong>No staking-for-yield and no lending</strong> under this spec; both remain parked pending regulatory clarity, each requiring its own spec if pursued.</li>
+      <li>Token routing (Section 06) is described as a mechanism, never as price support.</li>
+      <li><strong>$GFOF is never required to access Dossier.</strong> Fiat is always available. Accepting it as payment is an option, not a gate.</li>
+    </ol>
+  </div>
+
+  <h2 id="regulatory"><span class="num">SECTION 09</span>Regulatory posture</h2>
+  <p>The Digital Asset Market Clarity Act was <strong>not law</strong> as of June 17, 2026; the security / commodity line it would draw is not yet in force, and yield mechanics were its most contested element. This spec is designed to sit on the utility / consumption side of that uncertainty rather than to test it. This document is a design artifact, <strong>not legal advice</strong>; counsel reviews Sections 03–08 before any public launch.</p>
+
+  <h2 id="relationship"><span class="num">SECTION 10</span>Relationship to specs &amp; corrections</h2>
+  <ul>
+    <li><strong>#011</strong> — received $GFOF feeds the committed revenue loop (Section 06).</li>
+    <li><strong>Spec-before-code</strong> — parameters go live on publication; no code precedes publication.</li>
+    <li><strong>Append-only corrections</strong> — post-publication parameter changes are appended as corrections, never silently edited.</li>
+    <li><strong>Price-exclusion discipline</strong> — Sections 06 and 08 keep all token-flow language mechanical.</li>
+    <li><strong>No token-gate</strong> — this spec adds an optional payment method, not a gate (Sections 03, 04, 08).</li>
+  </ul>
+
+  <h2 id="versioning"><span class="num">SECTION 11</span>Versioning &amp; status</h2>
+  <p>This is <strong>v0.2 — parameters set, ready to publish.</strong> Publication is the act that makes these parameters live. Post-publication parameter changes are appended to the corrections log, never edited in place. Sequence from here: publish &rarr; counsel review of Sections 03–08 &rarr; announce &rarr; build the payment flow.</p>
+
+</div>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/treasury">Treasury</a>
+  <span class="sep">·</span>
+  <a href="/governance-spec">Governance Spec</a>
+  <span class="sep">·</span>
+  <a href="/corrections">Corrections</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank" rel="noopener">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank" rel="noopener">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version" id="footer-version">spec v0.2 · access-spec · 2026-06-17</span>
+</div>
+
+<script>
+try {
+  console.log('%c⛬ GFOF ACCESS & PAYMENT SPEC v0.2', 'color:#F0C040;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #F0C040;border-radius:2px;');
+  console.log('%cOptional payment, never a gate. The Federation does not predict prices.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+} catch(e) {}
+(function(){
+  var el = document.getElementById('footer-version');
+  if(el){ el.textContent = 'spec v0.2 · access-spec · 2026-06-17'; }
+})();
+</script>
+</body>
+</html>
