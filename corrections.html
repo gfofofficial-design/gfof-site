@@ -419,15 +419,15 @@ a{color:inherit;text-decoration:none}
   <div class="stats">
     <div class="stat-cell">
       <div class="k">TOTAL ENTRIES</div>
-      <div class="v">22</div>
+      <div class="v">31</div>
     </div>
     <div class="stat-cell">
       <div class="k">ON TRACK</div>
-      <div class="v green">14</div>
+      <div class="v green">17</div>
     </div>
     <div class="stat-cell">
       <div class="k">KEPT</div>
-      <div class="v green">8</div>
+      <div class="v green">14</div>
     </div>
     <div class="stat-cell">
       <div class="k">DELAYED / MISSED</div>
@@ -439,7 +439,7 @@ a{color:inherit;text-decoration:none}
   <div class="keep-rate-card">
     <div class="kr-head">
       <span class="kr-tag">// COMMITMENT KEEP-RATE</span>
-      <span class="kr-asof">As of 2026-05-26</span>
+      <span class="kr-asof">As of 2026-06-18</span>
     </div>
     <div class="kr-body">
       <div class="kr-figure">
@@ -447,7 +447,7 @@ a{color:inherit;text-decoration:none}
         <div class="kr-pct-label">of resolved commitments kept</div>
       </div>
       <div class="kr-narrative">
-        <p>Of 8 commitments that have been resolved, 8 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 13 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
+        <p>Of 14 commitments that have been resolved, 14 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 17 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
         <p>One historical commitment &mdash; <a href="#h009" style="color:var(--cyan);text-decoration:underline">#H009</a> (Research Log cadence) &mdash; was filed as <strong style="color:var(--gold)">DELAYED</strong> after a Week 03 / Week 04 miss, then recovered to <strong style="color:var(--green)">KEPT</strong> with the combined catch-up post for Week 05. The original DELAYED state is preserved in the entry. <strong>The slip itself was logged, which is the discipline.</strong></p>
         <p class="kr-method">Method: resolved commitments = entries with status KEPT, MISSED, or CANCELLED. ON TRACK entries are pending and excluded from the rate. Recovered entries (DELAYED &rarr; KEPT) count as KEPT in the current rate; the original DELAYED state remains visible in the entry. Updated manually with the stats strip on every deploy that adds or resolves an entry.</p>
       </div>
@@ -998,6 +998,77 @@ a{color:inherit;text-decoration:none}
       <p><strong>Revised commitment (effective now):</strong> Paragraph remains the canonical platform and is published first. The Medium cross-post carries <strong>human-readable</strong> canonical pointers: (1) a "Canonical: Paragraph" reference in the post header, and (2) a "Cross-posting" section near the foot of the post naming #008/#H008 and containing the full clickable Paragraph URL. The machine-readable canonical tag on Medium is acknowledged as <strong>not externally settable</strong> &mdash; a documented Medium platform limitation, recorded here once, and not re-footnoted on every future post. SEO source-of-record protection rests on Paragraph's first-publication precedence plus the human-readable pointers, which is weaker than a machine canonical but is what the platform permits.</p>
       <p><strong>Honest note on the current Week 06 Medium post specifically:</strong> the bottom "Cross-posting" section is present and contains a working clickable Paragraph link &mdash; this is the functioning mitigation. The header "Canonical: Paragraph" line is present but rendered as plain text rather than a link, due to Medium formatting; it is a weak pointer. The primary functioning human-readable mitigation is the cross-posting section, and it works. The Federation states this granular reality rather than claiming both pointers are equally strong.</p>
       <p><strong>Status:</strong> KEPT &mdash; the commitment is now revised to what the platform can actually deliver, the limitation is documented, and the mitigation that exists is described accurately including its weak point. This entry is appended; #008, #H008, and #H009 are unchanged and remain on the page in full.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h011">
+    <div class="entry-head">
+      <span class="entry-id">#H011 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Federation Artifact Hunt removed &mdash; token-prize raffle retired for lottery-law risk</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Caught on internal review</span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> the &ldquo;Federation Artifact Hunt&rdquo; &mdash; a homepage feature that awarded $GFOF by random draw &mdash; has been removed and will not return. It is retired, not paused, and has no replacement.</p>
+      <p><strong>Why:</strong> a mechanic that distributes tokens by chance is, in substance, a lottery, and operating one without the licensing such draws require is legal exposure the Federation will not carry. This was caught on internal review, before any complaint &mdash; stated plainly rather than implying the design was always clean.</p>
+      <p><strong>Status:</strong> KEPT &mdash; the mechanic is gone from the live site (the homepage no longer references it, which is verifiable), and this entry records that it existed and why it was pulled, instead of quietly deleting it.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h012">
+    <div class="entry-head">
+      <span class="entry-id">#H012 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Token Access &amp; Payment Spec v0.2 published before any payment code ships</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Spec: <a href="/access-spec" style="color:var(--cyan);text-decoration:underline">/access-spec</a></span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> the specification governing whether and how $GFOF may be used to pay for <a href="https://dossiertrack.co" style="color:var(--cyan);text-decoration:underline">Dossier</a> is published at <a href="/access-spec" style="color:var(--cyan);text-decoration:underline">/access-spec</a> &mdash; in full, before a single line of payment code exists. This holds the specs-before-code doctrine the rest of this log is built on.</p>
+      <p><strong>The load-bearing anti-claim:</strong> $GFOF is <strong>never required</strong> for Dossier access. Every tier remains fully payable in ordinary currency. The token is, at most, an <em>optional</em> payment rail offered at no discount versus fiat &mdash; it buys nothing fiat does not, and gates nothing.</p>
+      <p><strong>What is not yet done, stated plainly:</strong> the payment flow itself is not built. It is gated on outside-counsel review of the spec&rsquo;s legal sections, and that review is still pending. Publishing the spec is the milestone marked KEPT here; the build is a separate, still-open step and is not claimed as finished.</p>
+      <p><strong>Status:</strong> KEPT &mdash; spec shipped ahead of code, with the access guarantee stated as an anti-claim and the unfinished build disclosed rather than glossed.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h013">
+    <div class="entry-head">
+      <span class="entry-id">#H013 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Hold-to-access token gating ruled out &mdash; the no-token-gate promise upheld</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Relates to <a href="#h012" style="color:var(--cyan);text-decoration:underline">#H012</a></span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> a design option to gate Dossier features behind a held $GFOF balance &mdash; &ldquo;hold this much to unlock that&rdquo; &mdash; was evaluated and <strong>rejected</strong>.</p>
+      <p><strong>Why:</strong> Dossier&rsquo;s pricing publicly commits to no token-gate. Introducing one would contradict a promise already made to users. The only $GFOF integration that survives that constraint is the optional payment rail described in <a href="#h012" style="color:var(--cyan);text-decoration:underline">#H012</a>, which gates nothing.</p>
+      <p><strong>Status:</strong> KEPT &mdash; the no-token-gate promise is preserved by ruling the gating mechanism out on the record, rather than leaving it an ambiguous &ldquo;maybe later&rdquo; that quietly erodes the commitment.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h014">
+    <div class="entry-head">
+      <span class="entry-id">#H014 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Site-wide content scramble found and corrected &mdash; the corrections log itself was among the broken pages</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Affected: /corrections, /governance-spec, /liquidation-spec, +others</span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> for a period ending 2026-06-18, several public pages on this site served the <strong>wrong content</strong> &mdash; including this corrections log, which rendered raw application code instead of the log. This is the most serious site failure recorded to date, and the maintenance rule below (corrections public within 48 hours of notice) requires it to appear here.</p>
+      <p><strong>What happened:</strong> a bulk file upload dated 2026-06-13 wrote roughly twenty-one files&rsquo; contents under the wrong filenames &mdash; a rotation. The corrections log, FAQ, governance spec, liquidation spec, classified page, the RSS feed, and several images were all misfiled. The visible effect: <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">/corrections</code> served chatbot code, <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">/governance-spec</code> served the FAQ, and <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">/liquidation-spec</code> served a plain-text file.</p>
+      <p><strong>Honest scope:</strong> site navigation and the VOSS chatbot kept working, because they live in folders the bad upload did not touch. But the core transparency pages &mdash; the exact ones this project points people to as proof of its claims &mdash; were broken. The precise window is not known: the misfiled upload was 2026-06-13 and the fix deployed 2026-06-18, so the worst case is roughly five days. The Federation states the upper bound, not a flattering guess.</p>
+      <p><strong>Fix:</strong> the repository&rsquo;s full history was intact. Every page was restored to its correct content, keeping the newest legitimate work (the current homepage, governance spec v0.2, and this log through #017) and recovering destroyed files from the last clean commit. Each page was verified to serve its intended content before this entry was filed. The cause &mdash; uploading from a local folder whose files had been shuffled &mdash; is now avoided by changing files individually from a verified clean source.</p>
+      <p><strong>Status:</strong> KEPT &mdash; the failure is disclosed in full, the pages are corrected and verified, and the cause and prevention are on the record. A corrections log that concealed its own outage would be worthless; this entry exists so that it doesn&rsquo;t.</p>
     </div>
   </div>
 
