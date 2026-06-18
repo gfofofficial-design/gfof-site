@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 26 May 2026 23:30:00 +0000</lastBuildDate>
-    <pubDate>Tue, 26 May 2026 23:30:00 +0000</pubDate>
+    <lastBuildDate>Thu, 18 Jun 2026 20:03:00 +0000</lastBuildDate>
+    <pubDate>Thu, 18 Jun 2026 20:03:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,56 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#H014 · KEPT — Site-wide content scramble found and corrected; the corrections log itself was among the broken pages</title>
+      <link>https://galacticfederation.co/corrections#h014</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h014</guid>
+      <pubDate>Thu, 18 Jun 2026 20:03:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>For a period ending 2026-06-18, several public pages served the wrong content — including this corrections log, which rendered raw application code instead of the log. Cause: a bulk upload dated 2026-06-13 wrote roughly 21 files' contents under the wrong filenames (a rotation) — the corrections log, FAQ, governance spec, liquidation spec, classified page, RSS feed, and several images all misfiled, so /corrections served chatbot code, /governance-spec served the FAQ, and /liquidation-spec served a plain-text file. Site navigation and the VOSS chatbot kept working, because they live in folders the upload did not touch. The precise outage window is not known; worst case is roughly five days (upload 2026-06-13, fix deployed 2026-06-18) — the upper bound is stated rather than a flattering guess. Fix: the full git history was intact; every page was restored to correct content, keeping the newest legitimate work (current homepage, governance spec v0.2, this log through #017) and recovering destroyed files from the last clean commit; each page was verified before this entry was filed. Prevention: changes are now made file-by-file from a verified clean source. Status: KEPT.</description>
+    </item>
+
+    <item>
+      <title>#H013 · KEPT — Hold-to-access token gating ruled out; no-token-gate promise upheld</title>
+      <link>https://galacticfederation.co/corrections#h013</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h013</guid>
+      <pubDate>Thu, 18 Jun 2026 20:02:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>A design option to gate Dossier features behind a held $GFOF balance (hold-to-access) was evaluated and rejected. Dossier's pricing publicly commits to no token-gate; introducing one would contradict a promise already made to users. The only $GFOF integration that survives that constraint is the optional payment rail described in #H012, which gates nothing. The no-token-gate promise is preserved by ruling the mechanism out on the record rather than leaving it an ambiguous maybe-later that quietly erodes the commitment. Status: KEPT.</description>
+    </item>
+
+    <item>
+      <title>#H012 · KEPT — Token Access &amp; Payment Spec v0.2 published before any payment code ships</title>
+      <link>https://galacticfederation.co/corrections#h012</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h012</guid>
+      <pubDate>Thu, 18 Jun 2026 20:01:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The specification governing whether and how $GFOF may be used to pay for Dossier is published at /access-spec — in full, before any payment code exists — holding the specs-before-code doctrine. Load-bearing anti-claim: $GFOF is never required for Dossier access; every tier is fully payable in ordinary currency, and the token is at most an optional payment rail offered at no discount versus fiat, gating nothing. Stated plainly: the payment flow is not built and is gated on outside-counsel review of the spec's legal sections, which is still pending. Publishing the spec is the milestone marked KEPT; the build is a separate, still-open step and is not claimed as finished. Status: KEPT.</description>
+    </item>
+
+    <item>
+      <title>#H011 · KEPT — Federation Artifact Hunt removed; token-prize raffle retired for lottery-law risk</title>
+      <link>https://galacticfederation.co/corrections#h011</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#h011</guid>
+      <pubDate>Thu, 18 Jun 2026 20:00:00 +0000</pubDate>
+      <category>KEPT</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The Federation Artifact Hunt — a homepage feature that awarded $GFOF by random draw — was removed and will not return; it is retired, not paused, with no replacement. A mechanic that distributes tokens by chance is, in substance, a lottery, and operating one without the licensing such draws require is legal exposure the Federation will not carry. It was caught on internal review, before any complaint. Verifiable: the live homepage no longer references it. Status: KEPT.</description>
+    </item>
+
+    <item>
+      <title>#017 · UPDATE — Advisory DAO deployed on Realms (pre-bond); governance spec reconciled v0.1 to v0.2</title>
+      <link>https://galacticfederation.co/corrections#c017</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c017</guid>
+      <pubDate>Sat, 13 Jun 2026 17:37:00 +0000</pubDate>
+      <category>UPDATE</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>On 2026-06-13 the $GFOF DAO was deployed on-chain via SPL Governance on Realms, gated to the $GFOF mint, in advisory scope only — holders vote on direction; no treasury funds or site/repo/token authorities are routed through it yet. Disclosed deviation from #016 (which stated no DAO until after the $73K bond): it was deployed pre-bond in advisory mode, logged here per #016 rather than left unstated. Spec reconciled v0.1 to v0.2: the two-tier 51%/66% approval structure is not expressible in a single SPL Governance config, so the DAO launched with one standard tier (1% quorum, 3-day voting, 24-hour cool-off, 1,000,000 $GFOF proposal threshold, vote-tipping disabled); a 60% single-member council veto provisioned by Realms is retained as a disclosed bootstrap safety valve that sunsets by governance vote post-bond. The 13% dev allocation cannot vote — it is in Streamflow escrow, not a wallet. Binding and treasury governance remain tracked to post-bond under #004. Status: ON TRACK.</description>
+    </item>
 
     <item>
       <title>#016 · COMMITMENT — Governance specification published before deployment; public comment period open</title>
