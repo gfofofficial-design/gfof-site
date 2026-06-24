@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Thu, 18 Jun 2026 20:03:00 +0000</lastBuildDate>
-    <pubDate>Thu, 18 Jun 2026 20:03:00 +0000</pubDate>
+    <lastBuildDate>Wed, 24 Jun 2026 16:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,16 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#018 · DISCLOSURE — On-chain token name carries a typo ("Galatic" not "Galactic"); immutable, and not re-minting to fix it</title>
+      <link>https://galacticfederation.co/corrections#c018</link>
+      <guid isPermaLink="true">https://galacticfederation.co/corrections#c018</guid>
+      <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
+      <category>ACKNOWLEDGED</category>
+      <dc:creator>Galactic Federation of Finance</dc:creator>
+      <description>The token's on-chain metadata name reads "Galatic Federation of Finance" — missing the second "c" in "Galactic." It was set this way at mint on Moonshot and went unnoticed at the time; the ticker ($GFOF), symbol, and contract address are all correct — only the long-form display name carries the typo. It is immutable: Moonshot fixes metadata at launch and no update authority was retained, consistent with the revoked mint and freeze authorities. The same property that prevents anyone diluting supply or freezing a wallet also prevents editing the name. We are not re-minting: the only way to change the spelling would be a new token at a new contract address, which would fracture liquidity and the holder base for a purely cosmetic reason and break the standing rule against re-minting for appearances. The original contract stays. How to confirm you hold the real $GFOF: (1) the only canonical contract address is 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon, published and linked across this site including /treasury, which reads it live from the chain in your browser; (2) on any block explorer (Solscan, Solana Explorer, DexScreener) the token at that address shows the name "Galatic Federation of Finance" with the typo — the typo is a verification signal, a correctly-spelled "Galactic" token is not this one; (3) mint and freeze authorities are revoked and supply is fixed at 1,000,000,000 $GFOF; (4) never accept a contract address from a DM — verify only against links on this site. Status: ACKNOWLEDGED — name immutable, no re-mint, canonical contract address unchanged.</description>
+    </item>
 
     <item>
       <title>#H014 · KEPT — Site-wide content scramble found and corrected; the corrections log itself was among the broken pages</title>

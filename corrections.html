@@ -791,6 +791,31 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
 
+  <div class="entry status-cancelled" id="c018">
+    <div class="entry-head">
+      <span class="entry-id">#018 &middot; DISCLOSURE</span>
+      <span class="entry-status">ACKNOWLEDGED</span>
+    </div>
+    <h3>On-chain token name carries a typo &mdash; &ldquo;Galatic&rdquo; instead of &ldquo;Galactic&rdquo; &mdash; it is immutable, and we are not re-minting to fix it</h3>
+    <div class="meta">
+      <span>Made 2026-06-24</span>
+      <span>On-chain: <a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">solscan.io</a></span>
+    </div>
+    <div class="body">
+      <p>The token&rsquo;s on-chain metadata name reads <strong>&ldquo;Galatic Federation of Finance&rdquo;</strong> &mdash; missing the second &ldquo;c&rdquo; in &ldquo;Galactic.&rdquo; It was set this way at mint on Moonshot and went unnoticed at the time. The ticker (<strong>$GFOF</strong>), the symbol, and the contract address are all correct; only the long-form display name carries the typo.</p>
+      <p><strong>It is immutable.</strong> Moonshot fixes a token&rsquo;s metadata at launch, and no update authority was retained &mdash; consistent with the revoked mint and freeze authorities documented in <a href="/faq" style="color:var(--cyan);text-decoration:underline">/faq</a>. The same property that means no one can dilute the supply or freeze a wallet also means the display name cannot be edited. That is the trade we want; we are not going to complain about it when it costs us a cosmetic point.</p>
+      <p><strong>We are not re-minting.</strong> The only way to &ldquo;fix&rdquo; the spelling would be to mint a new token at a new contract address &mdash; fracturing liquidity and the holder base for a purely cosmetic reason, and breaking the standing rule against re-minting for appearances. We are keeping the original contract. The typo stays.</p>
+      <p><strong>How to confirm you hold the real $GFOF:</strong></p>
+      <ol style="margin:6px 0 10px 22px;color:var(--text-dim);line-height:1.7">
+        <li>The only canonical contract address is <code style="word-break:break-all">2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code>. It is published and linked across this site &mdash; including on <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a>, which reads it live from the chain in your own browser, and on every chart link.</li>
+        <li>On any block explorer &mdash; <a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Solscan</a>, <a href="https://explorer.solana.com/address/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Solana Explorer</a>, or <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">DexScreener</a> &mdash; the token at that address shows the name &ldquo;Galatic Federation of Finance,&rdquo; with the typo. <strong>The typo is a verification signal:</strong> a token spelled correctly as &ldquo;Galactic&rdquo; is not this one.</li>
+        <li>Mint and freeze authorities are revoked. Supply is fixed at 1,000,000,000 $GFOF; no one &mdash; including the team &mdash; can mint more or freeze a wallet.</li>
+        <li>Never accept a contract address from a DM. Verify only against the links on this site. Admins do not DM first &mdash; see the impersonator warning on <a href="/faq#official-x" style="color:var(--cyan);text-decoration:underline">/faq</a>.</li>
+      </ol>
+      <p><strong>Status:</strong> Acknowledged and permanent. On-chain name immutable; no re-mint; canonical contract address unchanged. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
   <!-- HISTORICAL (entries become permanent once added) -->
   <div class="section-head">
     <div class="tag">HISTORICAL RECORD</div>
