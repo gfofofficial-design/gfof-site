@@ -801,14 +801,14 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 /* ═══════════════════════════════════════════════════════════
    $GFOF Transparency Report — live on-chain reader
    Reads: SPL Token Account balance of each Streamflow escrow
-   Source: Helius (mainnet.helius-rpc.com) — origin-restricted, free tier
+   Source: Helius (mainnet.helius-rpc.com) — public key, domain-locked to galacticfederation.co
    Fallback: graceful degradation to known-good static value when RPC is unreachable
    ═══════════════════════════════════════════════════════════ */
 
 var CA = '2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
 var TOTAL_SUPPLY = 1_000_000_000;        /* 1B */
 var TOKEN_DECIMALS = 9;                  /* standard Moonshot SPL */
-var RPC = 'https://mainnet.helius-rpc.com/?api-key=8599a4dd-1686-4c31-a3d8-4f781153f98a';
+var RPC = 'https://mainnet.helius-rpc.com/?api-key=2c3716b7-1814-4983-8b0e-7bf63243c053';
 
 /* The four Streamflow METADATA accounts (what the user put on the site).
    These are the public contract pages. For actual escrow balances we need the
