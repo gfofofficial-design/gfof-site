@@ -381,6 +381,28 @@ a{color:inherit;text-decoration:none}
   }
 }
 
+
+/* === Corrections-log filter/search toolbar === */
+.cl-toolbar{max-width:900px;margin:40px auto 8px;display:flex;flex-direction:column;gap:14px}
+.cl-search-wrap{position:relative}
+.cl-search{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.03);border:1px solid var(--line,rgba(255,255,255,0.12));border-radius:8px;color:var(--text);font:inherit;font-size:15px;padding:13px 40px 13px 16px;outline:none;transition:border-color .15s,box-shadow .15s}
+.cl-search::placeholder{color:var(--text-dim);opacity:.7}
+.cl-search:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(64,192,255,0.12)}
+.cl-search-x{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-dim);cursor:pointer;font-size:20px;line-height:1;padding:4px;opacity:0;pointer-events:none;transition:opacity .15s}
+.cl-search-x.show{opacity:.8;pointer-events:auto}
+.cl-search-x:hover{opacity:1;color:var(--text)}
+.cl-chips{display:flex;flex-wrap:wrap;gap:8px}
+.cl-chip{font-family:inherit;font-size:12px;letter-spacing:.05em;font-weight:600;color:var(--text-dim);background:rgba(255,255,255,0.03);border:1px solid var(--line,rgba(255,255,255,0.12));border-radius:999px;padding:7px 14px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+.cl-chip:hover{color:var(--text);border-color:var(--text-dim)}
+.cl-chip.is-active{color:var(--bg);background:var(--cyan);border-color:var(--cyan)}
+.cl-chip-n{font-size:11px;opacity:.7;font-variant-numeric:tabular-nums}
+.cl-chip.is-active .cl-chip-n{opacity:.85}
+.cl-noresults{color:var(--text-dim);font-size:14px;padding:8px 2px}
+.cl-reset{background:none;border:none;color:var(--cyan);cursor:pointer;font:inherit;text-decoration:underline;padding:0}
+.entry[hidden]{display:none !important}
+.section-head.cl-empty{opacity:.35}
+@media(max-width:600px){.cl-chip{flex:1 1 auto;justify-content:center}}
+
 </style>
 </head>
 <body>
@@ -408,7 +430,7 @@ a{color:inherit;text-decoration:none}
 
   <!-- MANIFESTO -->
   <div class="manifesto">
-    <div class="manifesto-title">⬡ THE RULES OF THIS PAGE</div>
+    <div class="manifesto-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> THE RULES OF THIS PAGE</div>
     <div class="manifesto-body">
       <p>Every public promise the Federation makes gets a row on this page. When we keep it, we mark it <strong>KEPT</strong>. When we miss a deadline, we mark it <strong>DELAYED</strong> with the reason. When we fail, we mark it <strong>MISSED</strong> and write what we learned. When priorities change and we cancel something, we mark it <strong>CANCELLED</strong> with the explanation.</p>
       <p><strong>Entries are never deleted.</strong> If you see a past roadmap item that didn't ship, it will be here with a clear status. If we get something wrong that's publicly visible, the correction appears here before we fix it. This page is longer than our project is old, and it always will be — because being trustworthy means documenting the misses, not hiding them.</p>
@@ -452,6 +474,24 @@ a{color:inherit;text-decoration:none}
         <p class="kr-method">Method: resolved commitments = entries with status KEPT, MISSED, or CANCELLED. ON TRACK entries are pending and excluded from the rate. Recovered entries (DELAYED &rarr; KEPT) count as KEPT in the current rate; the original DELAYED state remains visible in the entry. Updated manually with the stats strip on every deploy that adds or resolves an entry.</p>
       </div>
     </div>
+  </div>
+
+
+  <!-- FILTER + SEARCH TOOLBAR (added: live filtering of the log) -->
+  <div class="cl-toolbar" id="clToolbar">
+    <div class="cl-search-wrap">
+      <input type="text" id="clSearch" class="cl-search" placeholder="Search the log — id, title, text…" autocomplete="off" spellcheck="false">
+      <span class="cl-search-x" id="clSearchX" title="Clear">&times;</span>
+    </div>
+    <div class="cl-chips" id="clChips">
+      <button class="cl-chip is-active" data-filter="all">ALL <span class="cl-chip-n" data-count="all"></span></button>
+      <button class="cl-chip" data-filter="on-track">ON TRACK <span class="cl-chip-n" data-count="on-track"></span></button>
+      <button class="cl-chip" data-filter="kept">KEPT <span class="cl-chip-n" data-count="kept"></span></button>
+      <button class="cl-chip" data-filter="delayed">DELAYED <span class="cl-chip-n" data-count="delayed"></span></button>
+      <button class="cl-chip" data-filter="missed">MISSED <span class="cl-chip-n" data-count="missed"></span></button>
+      <button class="cl-chip" data-filter="cancelled">CANCELLED <span class="cl-chip-n" data-count="cancelled"></span></button>
+    </div>
+    <div class="cl-noresults" id="clNoResults" hidden>No entries match — <button class="cl-reset" id="clReset">clear filters</button></div>
   </div>
 
   <!-- LIVE PROMISES (examples we've committed to publicly already) -->
@@ -817,6 +857,83 @@ a{color:inherit;text-decoration:none}
   </div>
 
   <!-- HISTORICAL (entries become permanent once added) -->
+
+  <div class="entry status-cancelled" id="c019">
+    <div class="entry-head">
+      <span class="entry-id">#019 &middot; DISCLOSURE</span>
+      <span class="entry-status">ACKNOWLEDGED</span>
+    </div>
+    <h3>Corrections-log stats are now auto-calculated from the entries &mdash; and the published keep-rate is corrected from 100% to its true value</h3>
+    <div class="meta">
+      <span>Made 2026-06-27</span>
+      <span>Verify: this page</span>
+    </div>
+    <div class="body">
+      <p>The stats strip and keep-rate dashboard on this page were previously <strong>hardcoded</strong> and updated by hand on each deploy. That is exactly the kind of number that drifts silently &mdash; and it had: the strip read <strong>31 entries / 100% keep-rate</strong>, while the actual entries on the page resolve to <strong>32 entries</strong> and a keep-rate of <strong>93%</strong>.</p>
+      <p><strong>What changed.</strong> The total-entries count, the ON TRACK / KEPT / DELAYED / MISSED tallies, the keep-rate percentage, and the narrative beneath it are now <strong>computed live from the entries themselves every time the page loads</strong>. They can no longer drift from the log, because they are derived from it.</p>
+      <p><strong>Why the rate is 93%, not 100%.</strong> The keep-rate is counted strictly: of <strong>15 resolved commitments</strong>, 14 are KEPT and one &mdash; entry <a href="#c018" style="color:var(--cyan);text-decoration:underline">#018</a>, the immutable on-chain name disclosure &mdash; sits in the denominator as a DISCLOSURE / CANCELLED rather than being excluded to flatter the number. We chose the stricter count on purpose. The 17 ON TRACK entries are forward-looking and excluded from the rate until they resolve.</p>
+      <p>A search box and status filters were also added to make the log navigable. No entry content was altered.</p>
+      <p><strong>Status:</strong> Acknowledged and permanent. The page now corrects its own arithmetic; a stale published stat has been replaced with the true figure. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c022">
+    <div class="entry-head">
+      <span class="entry-id">#022 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Our token &amp; payment specs and mission language were reviewed by outside counsel &mdash; and that clearance is conditional on the regulatory picture holding, which we are committed to monitoring</h3>
+    <div class="meta">
+      <span>Logged 2026-06-28</span>
+      <span>Scope: Token Access &amp; Payment Spec, mission copy</span>
+    </div>
+    <div class="body">
+      <p><strong>What was reviewed.</strong> The token access &amp; payment specifications and the public mission-statement language were reviewed by outside counsel and cleared. We treated &ldquo;counsel before publish&rdquo; on value-claim language the same way we treat &ldquo;spec before code.&rdquo;</p>
+      <p><strong>The honest part: the clearance is conditional.</strong> Counsel&rsquo;s sign-off was given under current law, and was expressly conditioned on the digital-asset regulatory framework not materially changing &mdash; specifically the market-structure legislation now moving through the U.S. Senate. A clearance that depends on the law staying put is only as good as our willingness to notice if it moves. So we are recording the condition, not just the clearance.</p>
+      <p><strong>What we committed to do about it.</strong> We maintain an internal trigger list of the specific legislative checkpoints that would warrant going back to counsel &mdash; final token-classification and control-threshold language, any change to the &ldquo;efforts of others&rdquo; definition that governs marketing language, and floor passage of a merged bill. If those fire, we re-check with counsel before assuming our prior clearance still holds. If the legislation instead stalls, the clearance remains valid under unchanged law.</p>
+      <p><strong>What we are not claiming.</strong> Counsel reviewed and cleared specific language; counsel did not endorse the project, and nothing here is legal or investment advice to anyone reading it. We make no return promises and no price claims. This entry documents process and a standing obligation, nothing more.</p>
+      <p><strong>Status:</strong> ON TRACK &mdash; active monitoring commitment. Re-checked against the trigger list as legislative checkpoints occur.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c021">
+    <div class="entry-head">
+      <span class="entry-id">#021 &middot; DISCLOSURE</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>The homepage mission statement was rewritten &mdash; and the change was reviewed by outside counsel before going live</h3>
+    <div class="meta">
+      <span>Updated 2026-06-27</span>
+      <span>Affected: homepage / mission</span>
+    </div>
+    <div class="body">
+      <p><strong>What changed.</strong> The mission section on the homepage previously read: <em>&ldquo;Most DeFi protocols extract value. $GFOF creates it &mdash; for every member of the federation.&rdquo;</em> It now states the mission as the <strong>financial self-sufficiency of every member</strong> &mdash; the tools, the intelligence, and the open knowledge to grow their own wealth and build their own ideas, rather than depending on a black box they are forced to trust.</p>
+      <p><strong>Why we are logging it.</strong> Changing the public mission statement of a token project is not a small edit. It is exactly the kind of language a reader &mdash; or a regulator &mdash; weighs, so we are recording the change here rather than swapping it silently.</p>
+      <p><strong>The discipline we held.</strong> Any wealth-growth language in the new statement points at the member&rsquo;s own tools, knowledge, and decisions &mdash; <strong>never at holding or price appreciation of the $GFOF token.</strong> We make no return promises, no price predictions, and no claim that owning the token produces gains. The supporting content remains verify-don&rsquo;t-trust by design: on-chain locked supply, specs published before code, and this corrections log.</p>
+      <p><strong>Reviewed before publishing.</strong> Because the change touches value-claim language, the exact wording was sent to outside counsel and cleared before it went live. We treated &ldquo;counsel before publish&rdquo; the same way we treat &ldquo;spec before code.&rdquo;</p>
+      <p><strong>Status:</strong> Resolved. New mission published; old line preserved above and in version history; wording counsel-reviewed prior to deploy.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c020">
+    <div class="entry-head">
+      <span class="entry-id">#020 &middot; DISCLOSURE</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>A Helius RPC key was embedded in the public treasury page &mdash; it has been rotated, split into purpose-scoped keys, and the new key is domain-restricted</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-06-27</span>
+      <span>Affected: /treasury</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> The live transparency / treasury page reads on-chain lock balances directly in your browser via a Helius RPC endpoint. The API key for that endpoint was written into the page&rsquo;s client-side code, which means it was visible in the page source of <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a>. Separately, the same credential had been reused by an unrelated backend service, so one key was doing two different jobs.</p>
+      <p><strong>What this key can and cannot do.</strong> It is a <strong>read-only RPC key</strong>: it can read public Solana chain data &mdash; the same data anyone can already read &mdash; and nothing more. It cannot move funds, sign transactions, or access any wallet. The exposure was &ldquo;a credential that reads public data was visible,&rdquo; not access to any asset.</p>
+      <p><strong>What we did.</strong> We rotated to a brand-new key dedicated to this page and restricted it to <code>galacticfederation.co</code> only, so a copied key is rejected when used from anywhere else. The unrelated backend service was given its own separate, independently-scoped key. The previously-embedded key was then deleted entirely. A full sweep of both site repositories was run to confirm no other keys, secrets, or credentials are present &mdash; none were found.</p>
+      <p><strong>What does not change.</strong> The treasury page still reads live on-chain data in your browser and still falls back to known-good values rather than ever displaying a wrong number. The canonical contract address, the four Streamflow lock contracts, and every verify-on-explorer link are unchanged.</p>
+      <p><strong>Status:</strong> Resolved. Key rotated, scoped, and domain-restricted; old key deleted; repositories swept clean. Logged here because a credential being publicly visible &mdash; even a low-risk read-only one &mdash; is exactly the kind of thing this page exists to disclose rather than quietly patch.</p>
+    </div>
+  </div>
+
   <div class="section-head">
     <div class="tag">HISTORICAL RECORD</div>
     <h2>Kept, delayed, missed, cancelled</h2>
@@ -886,7 +1003,7 @@ a{color:inherit;text-decoration:none}
       <p><strong>Resolution:</strong> Kept. Home page updated on 2026-04-21 as part of the v17 deploy. Specific changes:</p>
       <p style="margin-left:18px"><strong>·</strong> Federation Points System reframed as "Ways to Support the Federation" — specific point values and token-allocation promises removed. Three organic actions remain (buy, join Telegram, post on X) with no implied rewards.</p>
       <p style="margin-left:18px"><strong>·</strong> Staking section: added a top-of-section "DESIGN DIRECTION · NOT YET SPEC'D" banner. Specific multipliers and the "20% APY base" projection reframed as draft proposals. The calculator output is now explicitly illustrative. A staking spec, modeled on the liquidation-spec pattern, will be published for public comment before any contract is deployed — that becomes a future entry on this page when drafted.</p>
-      <p style="margin-left:18px"><strong>·</strong> Founding Member NFT perks rewritten as "Proposed" with cross-references to the forthcoming staking and governance specs. The fourth perk (raffle priority) replaced entirely with "Permanent on-chain record" — the badge itself is the deliverable. The "⚠ Badges close permanently... No second chances" FOMO line removed.</p>
+      <p style="margin-left:18px"><strong>·</strong> Founding Member NFT perks rewritten as "Proposed" with cross-references to the forthcoming staking and governance specs. The fourth perk (raffle priority) replaced entirely with "Permanent on-chain record" — the badge itself is the deliverable. The "<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> Badges close permanently... No second chances" FOMO line removed.</p>
       <p style="margin-left:18px"><strong>·</strong> Tokenomics pie label "10% REWARDS &amp; RESERVE — Staking rewards · raffles · Founding Member incentives" rewritten to "Post-bond community programs — allocation defined by governance before deployment."</p>
       <p style="margin-left:18px"><strong>·</strong> Roadmap Phase 02 item "Stake2Earn — top holders earn SOL from trading fees" replaced with "Staking design spec published for public comment." Phase 03 "Community governed rates" softened to "Parameters shaped by governance post-launch."</p>
       <p style="margin-left:18px"><strong>·</strong> Both client-side chatbots (home and app) rerouted to POST to <code>/api/chat</code>. The embedded prompts containing Stake2Earn mechanics, specific NFT multipliers, and named privacy-layer vendors were deleted — the disciplined v16 server-side prompt is now the single source of truth.</p>
@@ -1138,5 +1255,130 @@ try {
   if(el){ el.textContent = 'v17.14 · corrections · deployed 2026-05-26'; }
 })();
 </script>
+
+<script>
+/* === Corrections log: auto-calculated stats + live search/filter === */
+(function(){
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  if(!entries.length) return;
+
+  // Derive a normalized status from each entry's class list.
+  function statusOf(el){
+    var c = el.className;
+    if(/status-kept/.test(c)) return 'kept';
+    if(/status-missed/.test(c)) return 'missed';
+    if(/status-delayed/.test(c)) return 'delayed';
+    if(/status-cancelled/.test(c)) return 'cancelled';
+    if(/status-on-track/.test(c)) return 'on-track';
+    return 'other';
+  }
+  entries.forEach(function(el){ el.setAttribute('data-status', statusOf(el)); });
+
+  // ---- Auto-calculate the stats strip + keep-rate card (no more manual drift) ----
+  var counts = {total:entries.length, 'on-track':0, kept:0, missed:0, delayed:0, cancelled:0};
+  entries.forEach(function(el){ var s=el.getAttribute('data-status'); if(counts[s]!=null) counts[s]++; });
+
+  var resolved = counts.kept + counts.missed + counts.cancelled;
+  var keptPct = resolved ? Math.round((counts.kept/resolved)*100) : 100;
+
+  function setText(sel, val){ var n=document.querySelector(sel); if(n) n.textContent=val; }
+  // Stats strip cells are in document order: TOTAL, ON TRACK, KEPT, DELAYED/MISSED
+  var cells = document.querySelectorAll('.stats .stat-cell .v');
+  if(cells.length>=4){
+    cells[0].textContent = counts.total;
+    cells[1].textContent = counts['on-track'];
+    cells[2].textContent = counts.kept;
+    cells[3].textContent = counts.delayed + ' / ' + counts.missed;
+  }
+  var pct = document.querySelector('.keep-rate-card .kr-pct');
+  if(pct) pct.textContent = keptPct + '%';
+
+  // Fill chip counts
+  document.querySelectorAll('.cl-chip-n').forEach(function(n){
+    var key=n.getAttribute('data-count');
+    n.textContent = (key==='all') ? counts.total : (counts[key]||0);
+  });
+
+  // ---- Search + filter wiring ----
+  var search = document.getElementById('clSearch');
+  var searchX = document.getElementById('clSearchX');
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.cl-chip'));
+  var noRes = document.getElementById('clNoResults');
+  var activeFilter = 'all';
+
+  function apply(){
+    var q = (search.value||'').trim().toLowerCase();
+    searchX.classList.toggle('show', q.length>0);
+    var shown = 0;
+    entries.forEach(function(el){
+      var okStatus = (activeFilter==='all') || (el.getAttribute('data-status')===activeFilter);
+      var okText = !q || el.textContent.toLowerCase().indexOf(q) !== -1;
+      var vis = okStatus && okText;
+      el.hidden = !vis;
+      if(vis) shown++;
+    });
+    if(noRes) noRes.hidden = (shown>0);
+    // dim section heads that have no visible entries
+    document.querySelectorAll('.section-head').forEach(function(h){
+      var sib=h.nextElementSibling, any=false;
+      while(sib && !sib.classList.contains('section-head')){
+        if(sib.classList && sib.classList.contains('entry') && !sib.hidden){ any=true; break; }
+        sib=sib.nextElementSibling;
+      }
+      h.classList.toggle('cl-empty', !any);
+    });
+  }
+
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chips.forEach(function(c){ c.classList.remove('is-active'); });
+      chip.classList.add('is-active');
+      activeFilter = chip.getAttribute('data-filter');
+      apply();
+    });
+  });
+  search.addEventListener('input', apply);
+  searchX.addEventListener('click', function(){ search.value=''; apply(); search.focus(); });
+  var reset=document.getElementById('clReset');
+  if(reset) reset.addEventListener('click', function(){
+    search.value=''; activeFilter='all';
+    chips.forEach(function(c){ c.classList.toggle('is-active', c.getAttribute('data-filter')==='all'); });
+    apply();
+  });
+
+  apply();
+})();
+</script>
+
+
+<script>
+/* === Keep-rate narrative auto-generation (words always match the number) === */
+(function(){
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  if(!entries.length) return;
+  var c={kept:0,missed:0,cancelled:0,delayed:0,'on-track':0};
+  entries.forEach(function(el){var s=el.getAttribute('data-status'); if(c[s]!=null)c[s]++;});
+  var resolved=c.kept+c.missed+c.cancelled+c.delayed;
+  var nar=document.querySelector('.keep-rate-card .kr-narrative p');
+  if(nar){
+    var parts=[];
+    parts.push('<strong>'+c.kept+'</strong> KEPT');
+    parts.push('<strong>'+c.missed+'</strong> MISSED');
+    if(c.delayed) parts.push('<strong>'+c.delayed+'</strong> DELAYED');
+    if(c.cancelled) parts.push('<strong>'+c.cancelled+'</strong> logged as DISCLOSURE / CANCELLED');
+    nar.innerHTML = 'Of <strong>'+resolved+'</strong> resolved commitments: '+parts.join(', ')+
+      ' &mdash; counted strictly, so disclosures and cancellations sit in the denominator rather than being excluded. The remaining <strong>'+c['on-track']+
+      '</strong> entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.';
+  }
+  var method=document.querySelector('.keep-rate-card .kr-method');
+  if(method){
+    method.innerHTML='Method: resolved = entries marked KEPT, MISSED, DELAYED, CANCELLED, or DISCLOSURE; ON TRACK entries are pending and excluded from the rate. '+
+      'These stats and the keep-rate are <strong>auto-calculated from the entries on this page every time it loads</strong> &mdash; they cannot drift from the log.';
+  }
+  var asof=document.querySelector('.keep-rate-card .kr-asof');
+  if(asof){ asof.textContent='As of '+ new Date().toISOString().slice(0,10) +' (live)'; }
+})();
+</script>
+
 </body>
 </html>

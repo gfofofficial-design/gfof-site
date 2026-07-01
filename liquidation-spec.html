@@ -424,7 +424,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   </ul>
 
   <div class="callout amber">
-    <div class="k">⚠ NOTE ON SCOPE</div>
+    <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> NOTE ON SCOPE</div>
     <p>This document covers <strong>collateralized borrowing liquidation only</strong>. It does not cover stablecoin redemption, synthetic asset liquidation, insurance-fund design, or the oracle architecture the protocol will use. Those are separate specs that will follow.</p>
   </div>
 
@@ -496,7 +496,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <p>If the position exits grace LTV during the window, the timer resets. If the position stays in grace and the window closes, the position becomes liquidatable — but only up to a partial amount (4.3).</p>
 
   <div class="callout red">
-    <div class="k">⚠ CATASTROPHIC DROP EXCEPTION</div>
+    <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> CATASTROPHIC DROP EXCEPTION</div>
     <p>If the collateral price drops below a <strong>catastrophic threshold</strong> (proposed: more than 30% below the liquidation LTV, in a single block), the grace period is bypassed and immediate partial liquidation is permitted. This prevents the mechanism from becoming a protocol-level risk during genuine market ruptures. This exception must never be used as a workaround to liquidate positions the protocol could otherwise protect — its use is logged on-chain and reviewed publicly after every event.</p>
   </div>
 
@@ -576,7 +576,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <p>This section makes that claim explicit. None of the use cases below are commitments to ship — they are illustrations of what becomes <em>possible</em> when liquidation stops behaving like a guillotine. Each one is a domain where industry discourse has been loud and execution has been roughly nonexistent.</p>
 
   <div class="callout amber">
-    <div class="k">⚠ READ THIS BEFORE THE SECTION</div>
+    <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> READ THIS BEFORE THE SECTION</div>
     <p>This section describes <strong>what the design enables</strong>, not what we are promising to build next. Lending against prediction-market positions, illiquid real-world assets, or partial credit is technically and commercially hard for reasons beyond liquidation alone. We document this here so the design's distinguishing claim is on the record. We do not document it to set near-term expectations.</p>
   </div>
 
@@ -656,7 +656,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   </div>
 
   <div class="callout green">
-    <div class="k">⬡ HOW TO COMMENT</div>
+    <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> HOW TO COMMENT</div>
     <p>This spec is live for public criticism. If you see a flaw — a game-theoretic attack we missed, a parameter choice that won't survive contact with real markets, a scenario we haven't considered — we want to know. Send feedback to <strong>@WelksCrypto</strong> on X or to the admins in t.me/GFOF_SOL. All substantive public comments will be acknowledged in the revision log of the next version, with attribution unless the author requests otherwise.</p>
   </div>
 
