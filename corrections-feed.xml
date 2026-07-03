@@ -7,7 +7,7 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Sun, 28 Jun 2026 16:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2026 16:00:00 +0000</lastBuildDate>
     <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#023 · CORRECTION — The Federation App showed a staking tier structure and NFT multiplier that were never real; corrected to the published no-commitments position</title>
+      <link>https://galacticfederation.co/corrections#c023</link>
+      <guid isPermaLink="false">gfof-correction-023-app-staking-contradiction</guid>
+      <pubDate>Fri, 03 Jul 2026 16:00:00 +0000</pubDate>
+      <description>The Federation App at /app displayed a concrete staking tier structure (30/90/180-day locks with multipliers), a claimed permanent +0.5x NFT staking boost, passive-earning language, and purchase prompts — all contradicting the main site's explicit position that no staking specification exists and the Founding Member NFT carries no boost, yield, or utility. The app copy predated our formalized disciplines and was missed by later quality passes. The staking screen now states the published position, the NFT copy matches the main site exactly, promotional language was removed, and the service-worker cache was rotated. Nothing was ever committed; the numbers shown were never real. Counted as a CORRECTION in the denominator.</description>
+    </item>
 
     <item>
       <title>#022 · COMMITMENT — Token/payment specs and mission copy counsel-reviewed; clearance is conditional on regulatory stability, which we monitor</title>

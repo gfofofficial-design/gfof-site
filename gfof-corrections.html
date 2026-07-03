@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Corrections — $GFOF Galactic Federation of Finance</title>
+<meta name="description" content="A public log of promises made, promises missed, and what we learned. Never deleted.">
+<link rel="canonical" href="https://galacticfederation.co/corrections">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/corrections">
+<meta property="og:title" content="$GFOF Corrections — Public Promises Log">
+<meta property="og:description" content="What we promised. What we missed. What we learned. Never deleted.">
+<meta property="og:image" content="https://galacticfederation.co/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="$GFOF Corrections — Public Promises Log">
+<meta name="twitter:description" content="What we promised. What we missed. What we learned. Never deleted.">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<link rel="alternate" type="application/rss+xml" title="GFOF Corrections Log" href="https://galacticfederation.co/corrections-feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "$GFOF Corrections Log",
+  "alternateName": "Galactic Federation of Finance — Public Commitments Log",
+  "description": "A permanent public record of every commitment the Galactic Federation of Finance has made — with status (ON TRACK, KEPT, DELAYED, MISSED, CANCELLED). Entries are appended, never deleted. Each entry has a stable anchor id. A companion RSS feed is available for machine consumption.",
+  "url": "https://galacticfederation.co/corrections",
+  "license": "https://galacticfederation.co/corrections",
+  "isAccessibleForFree": true,
+  "creator": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "url": "https://galacticfederation.co"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "url": "https://galacticfederation.co"
+  },
+  "distribution": [
+    {
+      "@type": "DataDownload",
+      "encodingFormat": "application/rss+xml",
+      "contentUrl": "https://galacticfederation.co/corrections-feed.xml"
+    },
+    {
+      "@type": "DataDownload",
+      "encodingFormat": "text/html",
+      "contentUrl": "https://galacticfederation.co/corrections"
+    }
+  ],
+  "keywords": "transparency, commitments, corrections, public record, solana defi, accountability, galactic federation of finance, gfof",
+  "variableMeasured": [
+    "ON TRACK",
+    "KEPT",
+    "DELAYED",
+    "MISSED",
+    "CANCELLED"
+  ],
+  "dateModified": "2026-05-19"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co" },
+    { "@type": "ListItem", "position": 2, "name": "Corrections Log", "item": "https://galacticfederation.co/corrections" }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#8896BC;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16px;line-height:1.65;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(64,192,255,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(240,192,64,0.04),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;flex-wrap:wrap}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+.container{max-width:900px;margin:0 auto;padding:0 24px}
+
+.hero{padding:60px 0 30px;text-align:center}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--cyan);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(64,192,255,0.3);
+  background:rgba(64,192,255,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+.hero h1{
+  font-family:var(--orb);font-size:clamp(32px,5.5vw,52px);
+  font-weight:900;letter-spacing:-1px;line-height:1.05;
+  margin-bottom:16px;color:var(--text);
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;filter:drop-shadow(0 0 24px rgba(240,192,64,0.3));
+}
+.hero p{max-width:680px;margin:0 auto;font-size:17px;color:var(--text-dim)}
+
+.manifesto{
+  max-width:900px;margin:40px auto 0;
+  padding:24px 28px;
+  background:rgba(64,192,255,0.04);
+  border:1px solid rgba(64,192,255,0.22);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.manifesto-title{
+  font-family:var(--orb);font-size:11px;color:var(--cyan);
+  letter-spacing:3px;margin-bottom:10px;font-weight:700;
+}
+.manifesto-body{font-size:15.5px;color:var(--text);line-height:1.7}
+.manifesto-body strong{color:var(--cyan)}
+.manifesto-body p+p{margin-top:10px}
+
+.stats{
+  max-width:900px;margin:50px auto 30px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  background:var(--line);border:1px solid var(--line);
+}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat-cell{background:rgba(4,8,24,0.7);padding:18px 20px}
+.stat-cell .k{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:8px}
+.stat-cell .v{font-family:var(--orb);font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.stat-cell .v.green{color:var(--green)}
+.stat-cell .v.gold{color:var(--gold)}
+.stat-cell .v.red{color:var(--red)}
+.stat-cell .v.cyan{color:var(--cyan)}
+
+/* KEEP-RATE DASHBOARD — derived metric displayed below the stats strip */
+.keep-rate-card{
+  background:linear-gradient(180deg,rgba(61,255,160,0.04),rgba(4,8,24,0.7));
+  border:1px solid rgba(61,255,160,0.3);
+  border-radius:2px;
+  padding:24px 26px;
+  margin:32px 0;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.kr-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(61,255,160,0.15);
+  flex-wrap:wrap;
+  gap:8px;
+}
+.kr-tag{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:2.5px}
+.kr-asof{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px}
+.kr-body{display:grid;grid-template-columns:180px 1fr;gap:28px;align-items:start}
+@media(max-width:640px){.kr-body{grid-template-columns:1fr;gap:18px}}
+.kr-figure{text-align:center;padding:12px 0}
+.kr-pct{font-family:var(--orb);font-size:56px;font-weight:900;color:var(--green);letter-spacing:-2px;line-height:1}
+.kr-pct-label{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:10px;text-transform:uppercase}
+.kr-narrative p{font-size:14px;color:var(--text-dim);line-height:1.7;margin-bottom:10px}
+.kr-narrative p:last-child{margin-bottom:0}
+.kr-narrative .kr-method{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);letter-spacing:0.3px}
+
+.section-head{margin:60px auto 24px;max-width:900px}
+.section-head .tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--cyan);margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.section-head .tag::after{
+  content:'';display:block;width:60px;height:1px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+.section-head h2{
+  font-family:var(--orb);font-size:clamp(22px,3.5vw,30px);
+  font-weight:800;letter-spacing:-0.5px;line-height:1.15;
+  margin-bottom:10px;color:var(--text);
+}
+.section-head p{max-width:720px;color:var(--text-dim);font-size:15px}
+
+.entry{
+  max-width:900px;margin:0 auto 14px;
+  padding:22px 26px;
+  background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);border-left-width:3px;
+  position:relative;
+}
+.entry.status-on-track{border-left-color:var(--green)}
+.entry.status-delayed{border-left-color:var(--gold)}
+.entry.status-missed{border-left-color:var(--red)}
+.entry.status-kept{border-left-color:var(--green)}
+.entry.status-cancelled{border-left-color:var(--muted)}
+
+.entry-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:14px;margin-bottom:12px;flex-wrap:wrap;
+}
+.entry-id{
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:2px;
+}
+.entry-status{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:2px;
+  padding:4px 10px;border-radius:2px;font-weight:700;
+}
+.entry.status-on-track .entry-status{color:var(--green);background:rgba(61,255,160,0.08);border:1px solid rgba(61,255,160,0.25)}
+.entry.status-delayed .entry-status{color:var(--gold);background:rgba(240,192,64,0.08);border:1px solid rgba(240,192,64,0.25)}
+.entry.status-missed .entry-status{color:var(--red);background:rgba(255,94,123,0.08);border:1px solid rgba(255,94,123,0.25)}
+.entry.status-kept .entry-status{color:var(--green);background:rgba(61,255,160,0.08);border:1px solid rgba(61,255,160,0.25)}
+.entry.status-cancelled .entry-status{color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--line)}
+
+.entry h3{
+  font-family:var(--orb);font-size:16px;color:var(--text);
+  font-weight:700;margin-bottom:10px;letter-spacing:0.2px;line-height:1.3;
+}
+.entry .meta{
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:0.5px;margin-bottom:14px;
+}
+.entry .meta span+span{margin-left:14px;padding-left:14px;border-left:1px solid var(--line)}
+.entry .body{font-size:14.5px;color:var(--text-dim);line-height:1.65}
+.entry .body p+p{margin-top:8px}
+.entry .body strong{color:var(--text)}
+.entry .body .quote{
+  display:block;margin:12px 0;padding:10px 14px;
+  background:rgba(255,255,255,0.02);
+  border-left:2px solid var(--muted);
+  font-style:italic;color:var(--text-dim);font-size:13.5px;
+}
+
+.rules{
+  max-width:900px;margin:50px auto 0;
+  padding:26px 30px;
+  background:linear-gradient(135deg,rgba(240,192,64,0.04),rgba(255,255,255,0.01));
+  border:1px solid rgba(240,192,64,0.2);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.rules h3{
+  font-family:var(--orb);font-size:14px;color:var(--gold);
+  letter-spacing:1px;margin-bottom:14px;font-weight:700;
+}
+.rules-list{display:grid;gap:10px}
+.rules-list div{
+  font-size:14px;color:var(--text-dim);line-height:1.55;
+  padding-left:22px;position:relative;
+}
+.rules-list div::before{
+  content:'◆';position:absolute;left:0;top:0;color:var(--gold);
+  font-size:10px;line-height:1.75;
+}
+.rules-list strong{color:var(--text)}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:1px;line-height:1.7;
+}
+.foot a{color:var(--text-dim)}.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+.foot .version{
+  display:inline-block;margin-top:10px;padding:4px 10px;
+  font-size:9px;letter-spacing:2px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:2px;opacity:0.6;
+}
+
+/* ── PRINT STYLESHEET ── institutional-grade printout */
+@media print {
+  @page { margin: 18mm 16mm; size: A4; }
+  body, html {
+    background: #fff !important; color: #000 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important; line-height: 1.45 !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after { display: none !important; }
+  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
+  .toc-title, .doc-tag, .breadcrumbs, .verify-banner, .nav-bottom,
+  .actions, video, audio, iframe, canvas, .hunt-tracker, #bond-bar,
+  .skel, .live-dot, [class*="loading"], button, .stat-live, .copy-btn { display: none !important; }
+  a { color: #000 !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
+  a[href^="/"]::after, a[href^="#"]::after { content: ""; }
+  h1, h2, h3, h4, h5 {
+    color: #000 !important; font-family: Georgia, serif !important;
+    font-weight: 700 !important; page-break-after: avoid;
+    background: none !important; -webkit-text-fill-color: initial !important;
+    text-shadow: none !important; border: none !important; padding: 0 !important;
+  }
+  h1 { font-size: 22pt !important; margin: 0 0 8pt; }
+  h2 { font-size: 14pt !important; margin: 16pt 0 6pt; padding-top: 8pt !important; border-top: 1px solid #aaa !important; }
+  h3 { font-size: 12pt !important; margin: 12pt 0 4pt; }
+  h2 .num { color: #666 !important; font-size: 9pt !important; }
+  h1 .grad, h1 .accent { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
+  p, li { color: #111 !important; font-size: 11pt !important; orphans: 3; widows: 3; }
+  strong, b { color: #000 !important; font-weight: 700; }
+  code {
+    background: #f0f0f0 !important; color: #000 !important;
+    border: 1px solid #ccc !important; font-family: 'Courier New', monospace;
+    font-size: 9.5pt !important; padding: 1pt 3pt;
+  }
+  ul, ol { margin-left: 20pt !important; }
+  .callout {
+    background: #fafafa !important; border: 1px solid #999 !important;
+    border-left: 3px solid #000 !important; padding: 8pt 12pt !important;
+    margin: 10pt 0 !important; page-break-inside: avoid;
+  }
+  .callout .k { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
+  .callout p { color: #111 !important; }
+  .compare-table, table { border: 1px solid #000 !important; page-break-inside: avoid; }
+  .compare-table th, table th, .compare-table td, table td {
+    border: 1px solid #888 !important; color: #000 !important;
+    padding: 4pt 6pt !important; font-size: 10pt !important;
+  }
+  .doc-meta { border-color: #888 !important; color: #444 !important; font-size: 9pt !important; }
+  .doc-meta strong { color: #000 !important; }
+  .doc-sub, p.lede { color: #222 !important; font-size: 12pt !important; font-style: italic; }
+  /* Footer note for print: where readers came from */
+  .container::after {
+    content: "Printed from galacticfederation.co · Always verify against the live document and corrections log.";
+    display: block; margin-top: 24pt; padding-top: 12pt;
+    border-top: 1px solid #999; font-size: 8.5pt; color: #555;
+    font-style: italic; text-align: center;
+  }
+}
+
+
+/* === Corrections-log filter/search toolbar === */
+.cl-toolbar{max-width:900px;margin:40px auto 8px;display:flex;flex-direction:column;gap:14px}
+.cl-search-wrap{position:relative}
+.cl-search{width:100%;box-sizing:border-box;background:rgba(255,255,255,0.03);border:1px solid var(--line,rgba(255,255,255,0.12));border-radius:8px;color:var(--text);font:inherit;font-size:15px;padding:13px 40px 13px 16px;outline:none;transition:border-color .15s,box-shadow .15s}
+.cl-search::placeholder{color:var(--text-dim);opacity:.7}
+.cl-search:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(64,192,255,0.12)}
+.cl-search-x{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-dim);cursor:pointer;font-size:20px;line-height:1;padding:4px;opacity:0;pointer-events:none;transition:opacity .15s}
+.cl-search-x.show{opacity:.8;pointer-events:auto}
+.cl-search-x:hover{opacity:1;color:var(--text)}
+.cl-chips{display:flex;flex-wrap:wrap;gap:8px}
+.cl-chip{font-family:inherit;font-size:12px;letter-spacing:.05em;font-weight:600;color:var(--text-dim);background:rgba(255,255,255,0.03);border:1px solid var(--line,rgba(255,255,255,0.12));border-radius:999px;padding:7px 14px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+.cl-chip:hover{color:var(--text);border-color:var(--text-dim)}
+.cl-chip.is-active{color:var(--bg);background:var(--cyan);border-color:var(--cyan)}
+.cl-chip-n{font-size:11px;opacity:.7;font-variant-numeric:tabular-nums}
+.cl-chip.is-active .cl-chip-n{opacity:.85}
+.cl-noresults{color:var(--text-dim);font-size:14px;padding:8px 2px}
+.cl-reset{background:none;border:none;color:var(--cyan);cursor:pointer;font:inherit;text-decoration:underline;padding:0}
+.entry[hidden]{display:none !important}
+.section-head.cl-empty{opacity:.35}
+@media(max-width:600px){.cl-chip{flex:1 1 auto;justify-content:center}}
+
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/treasury">TREASURY ↗</a>
+    <a href="/governance-spec">GOVERNANCE ↗</a>
+    <a href="/security">SECURITY ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class="hero">
+    <div class="hero-tag">PUBLIC · PERMANENT · NEVER DELETED</div>
+    <h1>The <span class="grad">Corrections</span> Log</h1>
+    <p>A running public record of what we promised, what we delivered, what we missed, and what we learned. We write it because most projects quietly rewrite their roadmaps. We won't.</p>
+  </section>
+
+  <!-- MANIFESTO -->
+  <div class="manifesto">
+    <div class="manifesto-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> THE RULES OF THIS PAGE</div>
+    <div class="manifesto-body">
+      <p>Every public promise the Federation makes gets a row on this page. When we keep it, we mark it <strong>KEPT</strong>. When we miss a deadline, we mark it <strong>DELAYED</strong> with the reason. When we fail, we mark it <strong>MISSED</strong> and write what we learned. When priorities change and we cancel something, we mark it <strong>CANCELLED</strong> with the explanation.</p>
+      <p><strong>Entries are never deleted.</strong> If you see a past roadmap item that didn't ship, it will be here with a clear status. If we get something wrong that's publicly visible, the correction appears here before we fix it. This page is longer than our project is old, and it always will be — because being trustworthy means documenting the misses, not hiding them.</p>
+    </div>
+  </div>
+
+  <!-- STATS STRIP — hardcoded; bump manually when entries are added/resolved -->
+  <div class="stats">
+    <div class="stat-cell">
+      <div class="k">TOTAL ENTRIES</div>
+      <div class="v">31</div>
+    </div>
+    <div class="stat-cell">
+      <div class="k">ON TRACK</div>
+      <div class="v green">17</div>
+    </div>
+    <div class="stat-cell">
+      <div class="k">KEPT</div>
+      <div class="v green">14</div>
+    </div>
+    <div class="stat-cell">
+      <div class="k">DELAYED / MISSED</div>
+      <div class="v gold">0 / 0</div>
+    </div>
+  </div>
+
+  <!-- KEEP-RATE DASHBOARD — derived metric, manually updated alongside the stats strip -->
+  <div class="keep-rate-card">
+    <div class="kr-head">
+      <span class="kr-tag">// COMMITMENT KEEP-RATE</span>
+      <span class="kr-asof">As of 2026-06-18</span>
+    </div>
+    <div class="kr-body">
+      <div class="kr-figure">
+        <div class="kr-pct">100%</div>
+        <div class="kr-pct-label">of resolved commitments kept</div>
+      </div>
+      <div class="kr-narrative">
+        <p>Of 14 commitments that have been resolved, 14 are <strong style="color:var(--green)">KEPT</strong>, 0 are <strong style="color:var(--red)">MISSED</strong>, 0 are <strong style="color:var(--gold)">CANCELLED</strong>. The remaining 17 entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.</p>
+        <p>One historical commitment &mdash; <a href="#h009" style="color:var(--cyan);text-decoration:underline">#H009</a> (Research Log cadence) &mdash; was filed as <strong style="color:var(--gold)">DELAYED</strong> after a Week 03 / Week 04 miss, then recovered to <strong style="color:var(--green)">KEPT</strong> with the combined catch-up post for Week 05. The original DELAYED state is preserved in the entry. <strong>The slip itself was logged, which is the discipline.</strong></p>
+        <p class="kr-method">Method: resolved commitments = entries with status KEPT, MISSED, or CANCELLED. ON TRACK entries are pending and excluded from the rate. Recovered entries (DELAYED &rarr; KEPT) count as KEPT in the current rate; the original DELAYED state remains visible in the entry. Updated manually with the stats strip on every deploy that adds or resolves an entry.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FILTER + SEARCH TOOLBAR (added: live filtering of the log) -->
+  <div class="cl-toolbar" id="clToolbar">
+    <div class="cl-search-wrap">
+      <input type="text" id="clSearch" class="cl-search" placeholder="Search the log — id, title, text…" autocomplete="off" spellcheck="false">
+      <span class="cl-search-x" id="clSearchX" title="Clear">&times;</span>
+    </div>
+    <div class="cl-chips" id="clChips">
+      <button class="cl-chip is-active" data-filter="all">ALL <span class="cl-chip-n" data-count="all"></span></button>
+      <button class="cl-chip" data-filter="on-track">ON TRACK <span class="cl-chip-n" data-count="on-track"></span></button>
+      <button class="cl-chip" data-filter="kept">KEPT <span class="cl-chip-n" data-count="kept"></span></button>
+      <button class="cl-chip" data-filter="delayed">DELAYED <span class="cl-chip-n" data-count="delayed"></span></button>
+      <button class="cl-chip" data-filter="missed">MISSED <span class="cl-chip-n" data-count="missed"></span></button>
+      <button class="cl-chip" data-filter="cancelled">CANCELLED <span class="cl-chip-n" data-count="cancelled"></span></button>
+    </div>
+    <div class="cl-noresults" id="clNoResults" hidden>No entries match — <button class="cl-reset" id="clReset">clear filters</button></div>
+  </div>
+
+  <!-- LIVE PROMISES (examples we've committed to publicly already) -->
+  <div class="section-head">
+    <div class="tag">OPEN COMMITMENTS</div>
+    <h2>Commitments currently in flight</h2>
+    <p>Promises we've made publicly — on the site, in Telegram, on X, or in published writing — that we are still working to deliver.</p>
+  </div>
+
+  <div class="entry status-on-track" id="c001">
+    <div class="entry-head">
+      <span class="entry-id">#001 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>10% of supply locked on Streamflow — 3 contracts, immutable</h3>
+    <div class="meta">
+      <span>Made 2026-03</span>
+      <span>Verify: /treasury</span>
+    </div>
+    <div class="body">
+      <p>Before launch, the federation committed to locking 10% of total supply across 3 separate Streamflow contracts. The lock contracts are on-chain and immutable. This promise is verifiable in real time on the <a href="/treasury" style="color:var(--cyan);text-decoration:underline">treasury page</a>.</p>
+      <p><strong>Status:</strong> Kept from day one. The three contracts are live. Balances are readable by anyone from Solana RPC.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c002">
+    <div class="entry-head">
+      <span class="entry-id">#002 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Unlocked Federation tokens do not go to the open market</h3>
+    <div class="meta">
+      <span>Made 2026-04</span>
+      <span>First test: first unlock event</span>
+    </div>
+    <div class="body">
+      <p>When the first Streamflow unlock event occurs, the released tokens will not be sold into the market. They will either be re-locked, rotated into operational treasury (visible on-chain), or used per a specific, pre-announced purpose. This will be verifiable on-chain both before and after the event.</p>
+      <p><strong>Status:</strong> Commitment standing. Will be tested at the next unlock — see countdown on /treasury. If we break this, it will appear as <strong>MISSED</strong> on this page before any other coverage.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c003">
+    <div class="entry-head">
+      <span class="entry-id">#003 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Bond at $73K MC triggers Raydium migration</h3>
+    <div class="meta">
+      <span>Made 2026-03</span>
+      <span>Target: $73,000 market cap</span>
+    </div>
+    <div class="body">
+      <p>Per Moonshot's standard launchpad mechanics, when $GFOF reaches $73K market cap, the token migrates to Raydium. Mint and freeze authorities are revoked automatically as part of the migration. The federation has publicly stated this path since launch.</p>
+      <p><strong>Status:</strong> In flight. This is a mechanical trigger, not a team-controlled event — it happens when the market cap is reached. If the bond is not reached and the project winds down, this will be documented here as a cancelled commitment, not silently forgotten.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c004">
+    <div class="entry-head">
+      <span class="entry-id">#004 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Realms DAO governance post-bond</h3>
+    <div class="meta">
+      <span>Made 2026-03</span>
+      <span>Target: within 60 days of Raydium migration</span>
+    </div>
+    <div class="body">
+      <p>The federation has committed to launching on-chain governance via the Realms platform within 60 days of reaching the bond. Holders will have real voting weight on treasury allocation, staking parameters, and protocol direction.</p>
+      <p><strong>Status:</strong> Prerequisite (bond) is still in flight. Advisory polls are being run in Telegram before the formal DAO launches so there's a record of honored community decisions from before vote weight kicks in.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c005">
+    <div class="entry-head">
+      <span class="entry-id">#005 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Monthly Federation Intelligence Report</h3>
+    <div class="meta">
+      <span>Made 2026-04</span>
+      <span>Target: first issue May 2026</span>
+    </div>
+    <div class="body">
+      <p>A substantive monthly publication — DeFi trend analysis, protocol teardowns, security issues in our space. Free. No paywall. Published as both a PDF and a pinned X thread.</p>
+      <p><strong>Status:</strong> First issue in preparation. If a scheduled issue ships more than 7 days late, it will be marked DELAYED with the reason. If we skip a month entirely, it will be marked MISSED.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c006">
+    <div class="entry-head">
+      <span class="entry-id">#006 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Public liquidation design spec before any lending code ships</h3>
+    <div class="meta">
+      <span>Made 2026-04</span>
+      <span>Published: /liquidation-spec</span>
+    </div>
+    <div class="body">
+      <p>Before writing any smart contract code for the lending protocol, the federation publishes a public design spec for borrower-protective liquidation. The spec is open to public criticism, and its revisions will be tracked here.</p>
+      <p><strong>Status:</strong> v0.2 of the spec is live at <a href="/liquidation-spec" style="color:var(--cyan);text-decoration:underline">/liquidation-spec</a> (v0.1 published 2026-04-20, v0.2 published 2026-04-21 adding Section 7 on non-standard collateral types). Revisions are versioned. Each revision's diff is documented in the spec's own revision log and as a corrections entry below.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c007">
+    <div class="entry-head">
+      <span class="entry-id">#007 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>No paid promotional spend resumes without a written, published liquidity trigger</h3>
+    <div class="meta">
+      <span>Made 2026-04-21</span>
+      <span>Governs: resumption of paid KOL / promo spend</span>
+    </div>
+    <div class="body">
+      <p>The federation has paused paid KOL campaigns and paid promotional spend pending a return of macro liquidity. This commitment is not about the pause itself &mdash; it is about the conditions under which the pause ends.</p>
+      <p>Before any paid promotional spend resumes, the federation commits to publishing a written set of market signals that must be met. The trigger will live on this page. Loosening it &mdash; firing the trigger earlier than the published thresholds would allow &mdash; requires a minimum 14-day waiting period with the change logged here as a public amendment before any spend occurs. Tightening the trigger (delaying spend further) is unconstrained and does not require a waiting period.</p>
+      <p><strong>First-draft framework (v1, subject to one round of refinement before activation):</strong></p>
+      <p>A 3-of-4 threshold. At least three of the following four conditions must be met before paid spend resumes:</p>
+      <ol style="margin-left:24px;color:var(--text-dim);line-height:1.9">
+        <li>TOTAL3 (total crypto market cap excluding BTC and ETH) reclaims and sustains above $850B for at least 7 consecutive days, with a rising weekly trend.</li>
+        <li>SOL sustains above $200 for at least 10 consecutive days.</li>
+        <li>Solana DEX 7-day volume (Jupiter + Raydium combined, tracked via DefiLlama) sustains above $20B for at least 7 consecutive days.</li>
+        <li>Pump.fun and Moonshot daily graduates show rising week-over-week trend for at least 3 consecutive weeks.</li>
+      </ol>
+      <p><strong>Rationale:</strong> The risk being addressed is firing paid spend too early on vibes &mdash; deploying runway into a dry market where paid impressions don't convert. A written trigger, published externally, creates a pre-commitment against that impulse. The 3-of-4 threshold allows for conditions where macro lags one indicator but the other three have turned clearly constructive. The 14-day loosening-only waiting period prevents same-week revision of the trigger to justify spending that was already decided emotionally.</p>
+      <p><strong>Acknowledged failure mode:</strong> If the trigger is set too strict, we miss the first leg of a liquidity return while waiting for confirmation. The loosening-with-waiting-period provision is the release valve for that case &mdash; it allows amendment, but forces the amendment to be made 14 days before any spend, in public, with reasoning. This is intentionally uncomfortable.</p>
+      <p><strong>Status:</strong> Framework published 2026-04-21. Subject to one round of refinement before activation &mdash; community feedback via Telegram or <a href="/security" style="color:var(--cyan);text-decoration:underline">/security</a> channel. Confirmed version will be marked v1.0 here. Once marked v1.0, the commitment is binding under the amendment rules above.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c008">
+    <div class="entry-head">
+      <span class="entry-id">#008 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Research Log cross-posted to Medium within 24 hours of Paragraph publication</h3>
+    <div class="meta">
+      <span>Made 2026-05-05</span>
+      <span>Revised 2026-05-05 by <a href="#h008" style="color:var(--cyan);text-decoration:underline">#H008</a></span>
+      <span>Governs: distribution of weekly Research Log</span>
+    </div>
+    <div class="body">
+      <p><strong>Revised 2026-05-05:</strong> The original commitment named "Medium and Mirror" as cross-post surfaces. Mirror.xyz consolidated into Paragraph in late 2025 and no longer exists as a separate publishing platform. The commitment is hereby revised to Medium only. See <a href="#h008" style="color:var(--cyan);text-decoration:underline">#H008</a> for the full correction record.</p>
+      <p>The Federation Research Log publishes weekly on Paragraph (commitment <a href="#h005" style="color:var(--cyan);text-decoration:underline">#H005</a>). Beginning with Week 03 (due 2026-05-06), each issue is also cross-posted to Medium within 24 hours of Paragraph publication, with a clearly stated canonical link back to the Paragraph original.</p>
+      <p>The cross-post is not new writing &mdash; it is the same essay, distributed to an additional surface. Paragraph remains the source of record. The cross-post exists so the work meets readers where they already read, without diluting the canonical archive.</p>
+      <p><strong>Tracking:</strong> KEPT each week if the Medium cross-post is published within 24 hours of the Paragraph original. DELAYED if delayed beyond 48 hours, with reason logged. MISSED if a week is skipped without a public reason recorded here.</p>
+      <p><strong>Status:</strong> Commitment standing. First test: Week 03, due 2026-05-06.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c009">
+    <div class="entry-head">
+      <span class="entry-id">#009 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Federation Office Hours held monthly in Telegram</h3>
+    <div class="meta">
+      <span>Made 2026-05-05</span>
+      <span>Governs: monthly substantive Q&amp;A cadence</span>
+    </div>
+    <div class="body">
+      <p>The Federation will hold Office Hours monthly in the Telegram community (t.me/GFOF_SOL). Format: third Wednesday of each month at 2 PM EST / 7 PM UTC. Duration: 30&ndash;45 minutes maximum. The session is pre-announced seven days prior on @GFOF_Offcial and pinned in Telegram twenty-four hours prior. A transcript or recording is published within 48 hours of completion.</p>
+      <p>Office Hours is substantive Q&amp;A only &mdash; not a hype event, not a price discussion, not a roadmap announcement venue. Voss-voiced opening and closing transmissions; founder voice for the Q&amp;A itself. Off-topic questions (price predictions, financial advice, unrelated crypto) are politely declined and the floor moves on.</p>
+      <p><strong>Inaugural session:</strong> Wednesday, May 21, 2026 at 2 PM EST / 7 PM UTC.</p>
+      <p><strong>Tracking:</strong> KEPT each month if the session is held within the announced window and archived within 48 hours. DELAYED if held but archived late, with reason logged. MISSED if cancelled or postponed without 48-hour advance notice. CANCELLED if the practice is discontinued, with public explanation.</p>
+      <p><strong>Status:</strong> Commitment standing. First test: 2026-05-21.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c010">
+    <div class="entry-head">
+      <span class="entry-id">#010 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Daily reply engagement on @GFOF_Offcial within bounded discipline</h3>
+    <div class="meta">
+      <span>Made 2026-05-05</span>
+      <span>Governs: engagement activity on the Federation X account</span>
+    </div>
+    <div class="body">
+      <p>The 2&ndash;4 originated posts per week rule on @GFOF_Offcial remains unchanged. Alongside that rule, the Federation now engages substantively with the broader DeFi conversation on a daily cadence: replies to substantive DeFi research threads, retweets-with-comment of relevant analytical work from credible accounts, and replies to mentions of the Federation account.</p>
+      <p>The engagement window is bounded: approximately 5&ndash;15 minutes per day, replies on substantive threads only. No promotional commentary. No engagement-bait. No shilling. Casual Federation voice is acceptable for this activity; Voss voice remains reserved for substantive Federation declarations and Office Hours opening/closing.</p>
+      <p>This commitment exists to clarify what was previously ambiguous in the original posting cadence rule (<a href="#h007" style="color:var(--cyan);text-decoration:underline">#H007</a>). Engaging with the broader DeFi conversation is on-brand even when the originated-post cadence stays disciplined.</p>
+      <p><strong>Tracking:</strong> KEPT each week if engagement occurred at least 5 of 7 days. DELAYED if a single week dips below 3 days without a stated reason. MISSED if engagement is absent for 3 or more consecutive days without a stated reason. CANCELLED if the practice is discontinued, with public explanation.</p>
+      <p><strong>Off-limits, restated:</strong> Volume bots, paid KOL spend (paused under <a href="#c007" style="color:var(--cyan);text-decoration:underline">#007</a>), hype framing, urgency framing around bond, simulated activity, daily originated posts on @GFOF_Offcial, raid coordination. None of these are permitted under this commitment.</p>
+      <p><strong>Status:</strong> Commitment standing. Begins 2026-05-05.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c011">
+    <div class="entry-head">
+      <span class="entry-id">#011 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Intelligence arm revenue contribution &mdash; Dossier feeds Federation liquidity</h3>
+    <div class="meta">
+      <span>Made 2026-05-14</span>
+      <span>Governs: structural revenue flow from Federation operations into $GFOF liquidity</span>
+    </div>
+    <div class="body">
+      <p>The Galactic Federation operates products. The first operational product is <strong>Dossier</strong> &mdash; the Federation's intelligence arm, a smart-money convergence detector for Solana, live at <a href="https://dossiertrack.co" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">dossiertrack.co</a>. Dossier has independent branding and pricing, but it operates inside the Federation's structural commitments. One of those commitments is that revenue flows back.</p>
+      <p>Dossier has committed publicly (see <a href="https://dossiertrack.co/corrections#006" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline"><strong>Dossier Corrections #006</strong></a>) to deploying a staged percentage of its net revenue directly into $GFOF/SOL liquidity on Raydium, quarterly, with on-chain transaction proof. The schedule:</p>
+      <p style="margin-left:18px;padding-left:14px;border-left:2px solid var(--line-strong)">
+        <strong>Phase 1</strong> &mdash; Beta period (now through ~Aug 2026): no revenue, no contribution.<br>
+        <strong>Phase 2</strong> &mdash; Paid launch through first $5K MRR: 25% of Dossier net revenue &rarr; Raydium LP, quarterly.<br>
+        <strong>Phase 3</strong> &mdash; $5K MRR sustained two consecutive quarters: steps up to 50% of net revenue &rarr; Raydium LP, same quarterly cadence.
+      </p>
+      <p><strong>Dossier Treasury Wallet:</strong> <a href="https://solscan.io/account/G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple);word-break:break-all;text-decoration:none;transition:color 0.15s, border-color 0.15s" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='rgba(64,192,255,0.4)'" onmouseout="this.style.color='var(--purple)';this.style.borderColor='var(--line)'">G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y &nearr;</a> (verifiable on Solscan)</p>
+      <p><strong>Mechanism:</strong> Stripe payouts &rarr; dedicated treasury wallet &rarr; quarterly conversion &rarr; addition to $GFOF/SOL Raydium LP. LP receipt permanently held by Dossier Treasury. Quarterly injection details appended to <a href="https://dossiertrack.co/corrections#006" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Dossier Corrections #006</a> with transaction signatures verifiable on Solscan.</p>
+      <p>This is not a marketing promise. It is a structural commitment from a Federation operation back into Federation liquidity. <strong>The Galactic Federation does not extract value from its operations &mdash; its operations feed it.</strong> Dossier is the first such operation. Future Federation operations will follow the same pattern, with each commitment logged here and on the operation's own corrections log.</p>
+      <p><strong>Status:</strong> Phase 1 (pre-revenue, beta). First obligated contribution begins on Dossier paid launch. Phase transitions and quarterly injection details will be appended to this entry as they occur &mdash; never deleted, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c012">
+    <div class="entry-head">
+      <span class="entry-id">#012 · COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Post-quantum posture &mdash; research-tracking commitment, no claims</h3>
+    <div class="meta">
+      <span>Made 2026-05-19</span>
+      <span>Governs: cryptographic-dependency transparency and the standing anti-claim on quantum marketing</span>
+    </div>
+    <div class="body">
+      <p>The Federation's value rests on records that are verifiable now and later. Every verifiable record inherits the security assumptions of the cryptographic layer beneath it. Stating those assumptions in the open is itself a transparency deliverable. This entry logs that commitment formally.</p>
+      <p><strong>What the Federation commits to:</strong></p>
+      <p style="margin-left:18px;padding-left:14px;border-left:2px solid var(--line-strong)">
+        1. A <strong>cryptographic-dependency inventory</strong> &mdash; a plain-language map of which Federation transparency artifacts are hash-durable versus signature-exposed. The inaugural inventory is published as Federation Research Log Week 06 (<a href="https://paragraph.com/@gfofofficial@gmail.com/federation-research-log-%E2%80%94-week-06" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Paragraph, canonical</a>).<br>
+        2. <strong>Tracking</strong> NIST and Solana-ecosystem post-quantum developments on the existing research cadence (<a href="#h005" style="color:var(--cyan);text-decoration:underline">#H005</a>) &mdash; not a separate workstream.<br>
+        3. <strong>Trigger-based re-evaluation, not dates:</strong> (a) Anza/Firedancer shipping protocol-level post-quantum cryptography on Solana; (b) a credible, dated forecast of a cryptographically-relevant quantum computer; (c) NIST finalizing FN-DSA or a signature scheme materially better suited to Solana's constraints. Reaching a trigger obligates a documented re-assessment here &mdash; nothing automatic.<br>
+        4. A <strong>standing anti-claim:</strong> the Federation will not market quantum resistance, will not display a "quantum-secured" badge, and will not adopt QFS / "quantum finance" narrative framing.
+      </p>
+      <p><strong>The anti-claim is the binding part.</strong> If the Federation ever publishes a quantum-security claim, that is by definition a corrections-log event and should be treated with the skepticism this rule exists to earn. The public statement of this posture lives in the <a href="/faq#quantum" style="color:var(--cyan);text-decoration:underline">FAQ</a>; the constructive demonstration is the Week 06 inventory.</p>
+      <p><strong>Trigger status at filing:</strong> Trigger (a) <em>partially</em> activated 2026-04-27 &mdash; Anza and Firedancer publicly converged on Falcon and published prototype implementations. It did <em>not</em> fully fire: per Jump Crypto's own technical write-up, this "does not amount to adopting Falcon as a new protocol-level signature scheme." The obligation imposed (a documented re-assessment) was met in the Week 06 post. No Federation action is obligated, because the trigger condition &mdash; protocol-level shipping &mdash; has not been met. Recorded here so the framework's first real test is on the log, not just in the research post.</p>
+      <p><strong>Status:</strong> Standing commitment, active. Reviewed on the research cadence. This entry is appended, never edited retroactively; trigger activations and re-assessments are added here as they occur.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c013">
+    <div class="entry-head">
+      <span class="entry-id">#013 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Voluntary supply lock &mdash; 30M added in a 4th Streamflow contract; tokenomics figure updated to 77/10/13</h3>
+    <div class="meta">
+      <span>Made 2026-05-19</span>
+      <span>Verify: <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a></span>
+    </div>
+    <div class="body">
+      <p>On 2026-05-19, an additional 30,000,000 $GFOF from team-controlled treasury were committed to a new Streamflow lock contract &mdash; a 4th immutable contract supplementing the existing 3 (<a href="#c001" style="color:var(--cyan);text-decoration:underline">#001</a>). Recipient: project treasury wallet. Full cliff release: <strong>2028-05-31</strong>. Contract address: <a href="https://app.streamflow.finance/contract/solana/mainnet/Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;font-family:var(--mono);font-size:13px">Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x</a>.</p>
+      <p><strong>New locked total:</strong> 130M $GFOF (13% of total supply) across 4 Streamflow contracts. Verifiable on-chain on the <a href="/treasury" style="color:var(--cyan);text-decoration:underline">treasury page</a> and on Solscan.</p>
+      <p><strong>Tokenomics figure update.</strong> The previous public breakdown of 80% community/liquidity, 10% rewards/reserve, 10% dev rounded team-held treasury tokens into the community/liquidity bucket. The new lock moves 30M of those team-held tokens explicitly into the locked-dev column. Site copy is updated this deploy to reflect on-chain reality: <strong>77% community/liquidity, 10% rewards/reserve, 13% dev locked</strong>. The original 10%-dev / 100M / 3-contract claim was accurate for the previously-locked portion (verified individually: Lock 1 30M, Lock 2 30M, Lock 3 40M); this entry documents the expansion to 130M / 4 contracts and the more precise breakdown going forward.</p>
+      <p><strong>Why now:</strong> non-circulation discipline. Tokens under team control that could theoretically be moved are now contractually immobilized until 2028-05-31. Capital follows discipline, not noise.</p>
+      <p><strong>Status:</strong> Standing commitment, active. The 130M remains locked until the earliest scheduled unlock event &mdash; see <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a> for the full timeline. This entry is appended, not edited retroactively. If any of the 4 contracts is ever cancelled, accelerated, or otherwise modified, that change will appear here as a separate, appended status update.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c014">
+    <div class="entry-head">
+      <span class="entry-id">#014 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Formal audit engagement initiated at bond completion</h3>
+    <div class="meta">
+      <span>Made 2026-05-19</span>
+      <span>Trigger: $73K bond completion</span>
+    </div>
+    <div class="body">
+      <p>On 2026-05-19, in the bond-trigger commitment thread published from <a href="https://x.com/GFOF_Offcial" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">@GFOF_Offcial</a> (cross-posted to Telegram and to <a href="/research" style="color:var(--cyan);text-decoration:underline">Week 07 of the Federation Research Log</a>), the Federation publicly committed to initiating formal audit engagement immediately upon $73K bond completion. The engagement covers any deployed contract code before activation.</p>
+      <p><strong>The commitment is to the engagement process, not to a finished audit by any specific date or by any specific firm.</strong> Audit firms have been researched but will not be named publicly until findings are delivered and published. This avoids the common DeFi pattern of "audited by X" claims made before findings exist.</p>
+      <p><strong>What activates at trigger:</strong> the engagement process begins immediately; the bug bounty scope (currently on <a href="/security" style="color:var(--cyan);text-decoration:underline">/security</a> at $50&ndash;$500 per verified finding) expands to cover all newly-deployed contracts; when findings deliver, they are published in full &mdash; including findings inconvenient to the project.</p>
+      <p><strong>What is NOT committed:</strong> a finished audit by date X, a named firm, an audit cost, or an audit duration. These are outside the team's unilateral control. Committing to events outside our control would be the kind of overcommitment the corrections log exists to catch.</p>
+      <p><strong>Status:</strong> Standing commitment, ON TRACK pending bond. This entry is appended, never edited retroactively. When engagement begins, a status update will be appended below. When findings are published, those publications will be linked back from this entry.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c015">
+    <div class="entry-head">
+      <span class="entry-id">#015 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Structural position: not pursuing buyback-and-burn under current conditions</h3>
+    <div class="meta">
+      <span>Made 2026-05-26</span>
+      <span>Reference: <a href="/research" style="color:var(--cyan);text-decoration:underline">Week 08 Research Log</a></span>
+    </div>
+    <div class="body">
+      <p>On 2026-05-26, the Federation published a structural position in <a href="https://paragraph.com/@gfofofficial@gmail.com/why-the-federation-is-not-pursuing-a-buyback-and-burn" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Week 08 of the Research Log</a> &mdash; "Why the Federation Is Not Pursuing a Buyback-and-Burn" &mdash; stating that no buyback-and-burn program is being pursued at this time.</p>
+      <p><strong>The position is conditional.</strong> The Federation would revisit a buyback-and-burn if all four of the following materialize:</p>
+      <ul style="margin:6px 0 10px 22px;color:var(--text-dim);line-height:1.7">
+        <li>Recurring protocol revenue at material scale emerges from a post-bond product surface (not treasury reserves)</li>
+        <li>That revenue exists in addition to, not in replacement of, the Dossier revenue loop committed under <a href="#c011" style="color:var(--cyan);text-decoration:underline">correction #011</a></li>
+        <li>A versioned public specification for the program is drafted and reviewed on the project's standard spec-before-code timeline</li>
+        <li>The program is structured to operate mechanistically (not at team discretion) with verification surfaces equivalent to the rest of the Federation's transparency posture</li>
+      </ul>
+      <p><strong>The Federation's existing value-return mechanism</strong> is the Dossier net revenue loop to the $GFOF/SOL Raydium LP per <a href="#c011" style="color:var(--cyan);text-decoration:underline">#011</a>. The Week 08 entry explains why a revenue-routed liquidity reinforcement mechanism is structurally different from &mdash; and arguably better suited to the Federation's discipline framework than &mdash; a buyback-and-burn.</p>
+      <p><strong>Status:</strong> Standing position, active. If the conditions described in Week 08 materially change, that change will be documented here as an appended status update. If the Federation ever does pursue a buyback-and-burn, the rationale and the changed conditions will be filed as a new corrections entry referencing this one. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c016">
+    <div class="entry-head">
+      <span class="entry-id">#016 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Governance specification published before deployment; public comment period open</h3>
+    <div class="meta">
+      <span>Made 2026-05-26</span>
+      <span>Spec: <a href="/governance-spec" style="color:var(--cyan);text-decoration:underline">/governance-spec</a></span>
+    </div>
+    <div class="body">
+      <p>On 2026-05-26, the Federation published <a href="/governance-spec" style="color:var(--cyan);text-decoration:underline">Governance Specification v0.1</a> &mdash; a complete design for the $GFOF DAO on Realms &mdash; before deploying any governance infrastructure. This applies the spec-before-code discipline to governance, the same way <a href="/liquidation-spec" style="color:var(--cyan);text-decoration:underline">/liquidation-spec</a> applies it to the lending mechanism.</p>
+      <p><strong>The commitment:</strong> all governance parameters (proposal threshold, quorum, approval thresholds, voting periods, execution timelock) are proposed as v0.1 draft-for-comment, not committed. A public comment period is open. Parameters are refined into v0.2 in response to comment, and ratified by the first on-chain governance vote &mdash; not set unilaterally. The DAO does not deploy until after the $73K bond completes.</p>
+      <p><strong>Two structural decisions documented in the spec:</strong> (1) the 13% locked dev allocation does not participate in governance voting &mdash; locked-for-discipline does not double as locked-for-control; (2) an explicit list of what governance <em>cannot</em> do, placing the corrections log, correction #007, correction #012, correction #003, the locked dev tokens, and the revoked mint/freeze authorities permanently outside governance scope. These constraints cannot be changed by any vote, standard or constitutional.</p>
+      <p><strong>Status:</strong> Standing commitment, active. Comment period open. v0.2 will be published incorporating feedback. DAO deployment is post-bond per the stated sequence. Any deviation from this sequence will be documented here. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c017">
+    <div class="entry-head">
+      <span class="entry-id">#017 &middot; UPDATE</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Advisory DAO deployed on Realms (pre-bond); governance spec reconciled v0.1 &rarr; v0.2</h3>
+    <div class="meta">
+      <span>Made 2026-06-13</span>
+      <span>Realm: <a href="https://app.realms.today/dao/6tFtnnjDu97nmJeiegZDqhDASdfKpToiNWcuL8t5UsGp" style="color:var(--cyan);text-decoration:underline">app.realms.today</a> <em style="color:var(--muted);font-style:normal;font-size:0.9em">[link updated 2026-07-01: Realms v2 UI retired; DAO address unchanged]</em></span>
+    </div>
+    <div class="body">
+      <p>The $GFOF DAO is now live on-chain via SPL Governance, hosted on Realms, gated to the $GFOF mint. Deployed parameters: 1% community quorum, 3-day voting, 24-hour cool-off, 1,000,000 $GFOF proposal threshold, vote-tipping disabled. Scope at launch is <strong>advisory</strong> &mdash; holders vote on direction; no treasury funds or site/repo/token authorities are routed through the DAO yet. The first proposal ratifies the realm as the official venue.</p>
+      <p><strong>Deviation, disclosed per <a href="#c016" style="color:var(--cyan);text-decoration:underline">#016</a>:</strong> #016 stated the DAO would not deploy until after the $73K bond. It was deployed pre-bond, in advisory mode, ahead of that sequence. This is a deliberate change &mdash; advisory governance running early, with no authority transferred &mdash; logged here rather than left unstated, exactly as #016 committed.</p>
+      <p><strong>Spec reconciliation (v0.1 &rarr; v0.2):</strong> (1) the two-tier 51% / 66% approval structure is not expressible in a single SPL Governance config, so the DAO launched with one standard tier at 1% quorum; the constitutional-tier prohibitions remain binding via the spec and this log until a second config is added. (2) Realms provisioned a 60% single-member council veto not present in v0.1; it is retained as a disclosed bootstrap safety valve and sunsets, by governance vote, post-bond as the holder base broadens.</p>
+      <p><strong>Status:</strong> Advisory governance live and active; binding/treasury governance remains tracked to post-bond under <a href="#c004" style="color:var(--cyan);text-decoration:underline">#004</a>. The 13% dev allocation cannot vote &mdash; it is in Streamflow escrow, not a wallet, so it cannot be deposited into the realm. Enforced by architecture, not promise.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c018">
+    <div class="entry-head">
+      <span class="entry-id">#018 &middot; DISCLOSURE</span>
+      <span class="entry-status">ACKNOWLEDGED</span>
+    </div>
+    <h3>On-chain token name carries a typo &mdash; &ldquo;Galatic&rdquo; instead of &ldquo;Galactic&rdquo; &mdash; it is immutable, and we are not re-minting to fix it</h3>
+    <div class="meta">
+      <span>Made 2026-06-24</span>
+      <span>On-chain: <a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">solscan.io</a></span>
+    </div>
+    <div class="body">
+      <p>The token&rsquo;s on-chain metadata name reads <strong>&ldquo;Galatic Federation of Finance&rdquo;</strong> &mdash; missing the second &ldquo;c&rdquo; in &ldquo;Galactic.&rdquo; It was set this way at mint on Moonshot and went unnoticed at the time. The ticker (<strong>$GFOF</strong>), the symbol, and the contract address are all correct; only the long-form display name carries the typo.</p>
+      <p><strong>It is immutable.</strong> Moonshot fixes a token&rsquo;s metadata at launch, and no update authority was retained &mdash; consistent with the revoked mint and freeze authorities documented in <a href="/faq" style="color:var(--cyan);text-decoration:underline">/faq</a>. The same property that means no one can dilute the supply or freeze a wallet also means the display name cannot be edited. That is the trade we want; we are not going to complain about it when it costs us a cosmetic point.</p>
+      <p><strong>We are not re-minting.</strong> The only way to &ldquo;fix&rdquo; the spelling would be to mint a new token at a new contract address &mdash; fracturing liquidity and the holder base for a purely cosmetic reason, and breaking the standing rule against re-minting for appearances. We are keeping the original contract. The typo stays.</p>
+      <p><strong>How to confirm you hold the real $GFOF:</strong></p>
+      <ol style="margin:6px 0 10px 22px;color:var(--text-dim);line-height:1.7">
+        <li>The only canonical contract address is <code style="word-break:break-all">2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code>. It is published and linked across this site &mdash; including on <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a>, which reads it live from the chain in your own browser, and on every chart link.</li>
+        <li>On any block explorer &mdash; <a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Solscan</a>, <a href="https://explorer.solana.com/address/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">Solana Explorer</a>, or <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">DexScreener</a> &mdash; the token at that address shows the name &ldquo;Galatic Federation of Finance,&rdquo; with the typo. <strong>The typo is a verification signal:</strong> a token spelled correctly as &ldquo;Galactic&rdquo; is not this one.</li>
+        <li>Mint and freeze authorities are revoked. Supply is fixed at 1,000,000,000 $GFOF; no one &mdash; including the team &mdash; can mint more or freeze a wallet.</li>
+        <li>Never accept a contract address from a DM. Verify only against the links on this site. Admins do not DM first &mdash; see the impersonator warning on <a href="/faq#official-x" style="color:var(--cyan);text-decoration:underline">/faq</a>.</li>
+      </ol>
+      <p><strong>Status:</strong> Acknowledged and permanent. On-chain name immutable; no re-mint; canonical contract address unchanged. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <!-- HISTORICAL (entries become permanent once added) -->
+
+  <div class="entry status-cancelled" id="c019">
+    <div class="entry-head">
+      <span class="entry-id">#019 &middot; DISCLOSURE</span>
+      <span class="entry-status">ACKNOWLEDGED</span>
+    </div>
+    <h3>Corrections-log stats are now auto-calculated from the entries &mdash; and the published keep-rate is corrected from 100% to its true value</h3>
+    <div class="meta">
+      <span>Made 2026-06-27</span>
+      <span>Verify: this page</span>
+    </div>
+    <div class="body">
+      <p>The stats strip and keep-rate dashboard on this page were previously <strong>hardcoded</strong> and updated by hand on each deploy. That is exactly the kind of number that drifts silently &mdash; and it had: the strip read <strong>31 entries / 100% keep-rate</strong>, while the actual entries on the page resolve to <strong>32 entries</strong> and a keep-rate of <strong>93%</strong>.</p>
+      <p><strong>What changed.</strong> The total-entries count, the ON TRACK / KEPT / DELAYED / MISSED tallies, the keep-rate percentage, and the narrative beneath it are now <strong>computed live from the entries themselves every time the page loads</strong>. They can no longer drift from the log, because they are derived from it.</p>
+      <p><strong>Why the rate is 93%, not 100%.</strong> The keep-rate is counted strictly: of <strong>15 resolved commitments</strong>, 14 are KEPT and one &mdash; entry <a href="#c018" style="color:var(--cyan);text-decoration:underline">#018</a>, the immutable on-chain name disclosure &mdash; sits in the denominator as a DISCLOSURE / CANCELLED rather than being excluded to flatter the number. We chose the stricter count on purpose. The 17 ON TRACK entries are forward-looking and excluded from the rate until they resolve.</p>
+      <p>A search box and status filters were also added to make the log navigable. No entry content was altered.</p>
+      <p><strong>Status:</strong> Acknowledged and permanent. The page now corrects its own arithmetic; a stale published stat has been replaced with the true figure. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c023">
+    <div class="entry-head">
+      <span class="entry-id">#023 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>The Federation App carried a staking tier structure and NFT multiplier that were never real &mdash; contradicting our published no-commitments position. It has been corrected.</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-07-03</span>
+      <span>Affected: /app</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> The Federation App at <a href="/app" style="color:var(--cyan);text-decoration:underline">/app</a> displayed staking content that contradicted this site&rsquo;s published position: a concrete tier structure (30/90/180-day locks with 1.5x, 2x, and 3x multipliers), a claim that the Founding Member NFT grants a permanent +0.5x staking multiplier, &ldquo;earn passively&rdquo; reward language, and purchase prompts (&ldquo;Buy now to qualify&rdquo;). Our main site states explicitly &mdash; and has stated throughout &mdash; that <strong>no staking specification exists</strong>: no APY, no multipliers, no rates, no tier structure, and that the Founding Member NFT carries no boost, yield, or utility of any kind.</p>
+      <p><strong>How it happened.</strong> The app copy was written early, before these disciplines were formalized, and was missed by every subsequent quality pass because it lives at a separate path. That is an explanation, not an excuse: the contradiction was live and public, linked from our own homepage.</p>
+      <p><strong>What we did.</strong> The app&rsquo;s staking screen now states the published position &mdash; spec before code; no numbers until a versioned specification is published for public comment. The NFT description now matches the main site exactly. Promotional purchase language and persona-voice quotes were removed from product copy. The app&rsquo;s service-worker cache version was bumped so installed copies rotate to the corrected version rather than serving the old one from cache.</p>
+      <p><strong>What this means for holders.</strong> Nothing was ever committed. The tier structure and NFT multiplier shown in the app were never specified, never promised anywhere else, and never real. If you made any decision based on the app&rsquo;s staking screen, the accurate position is the one on this site: the staking specification has not been written, and it will be published for public comment before any contract exists.</p>
+      <p><strong>Status:</strong> Resolved. App copy corrected and deployed; cache rotated. Counted as a CORRECTION in the denominator per our strict rules. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c022">
+    <div class="entry-head">
+      <span class="entry-id">#022 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Our token &amp; payment specs and mission language were reviewed by outside counsel &mdash; and that clearance is conditional on the regulatory picture holding, which we are committed to monitoring</h3>
+    <div class="meta">
+      <span>Logged 2026-06-28</span>
+      <span>Scope: Token Access &amp; Payment Spec, mission copy</span>
+    </div>
+    <div class="body">
+      <p><strong>What was reviewed.</strong> The token access &amp; payment specifications and the public mission-statement language were reviewed by outside counsel and cleared. We treated &ldquo;counsel before publish&rdquo; on value-claim language the same way we treat &ldquo;spec before code.&rdquo;</p>
+      <p><strong>The honest part: the clearance is conditional.</strong> Counsel&rsquo;s sign-off was given under current law, and was expressly conditioned on the digital-asset regulatory framework not materially changing &mdash; specifically the market-structure legislation now moving through the U.S. Senate. A clearance that depends on the law staying put is only as good as our willingness to notice if it moves. So we are recording the condition, not just the clearance.</p>
+      <p><strong>What we committed to do about it.</strong> We maintain an internal trigger list of the specific legislative checkpoints that would warrant going back to counsel &mdash; final token-classification and control-threshold language, any change to the &ldquo;efforts of others&rdquo; definition that governs marketing language, and floor passage of a merged bill. If those fire, we re-check with counsel before assuming our prior clearance still holds. If the legislation instead stalls, the clearance remains valid under unchanged law.</p>
+      <p><strong>What we are not claiming.</strong> Counsel reviewed and cleared specific language; counsel did not endorse the project, and nothing here is legal or investment advice to anyone reading it. We make no return promises and no price claims. This entry documents process and a standing obligation, nothing more.</p>
+      <p><strong>Status:</strong> ON TRACK &mdash; active monitoring commitment. Re-checked against the trigger list as legislative checkpoints occur.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c021">
+    <div class="entry-head">
+      <span class="entry-id">#021 &middot; DISCLOSURE</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>The homepage mission statement was rewritten &mdash; and the change was reviewed by outside counsel before going live</h3>
+    <div class="meta">
+      <span>Updated 2026-06-27</span>
+      <span>Affected: homepage / mission</span>
+    </div>
+    <div class="body">
+      <p><strong>What changed.</strong> The mission section on the homepage previously read: <em>&ldquo;Most DeFi protocols extract value. $GFOF creates it &mdash; for every member of the federation.&rdquo;</em> It now states the mission as the <strong>financial self-sufficiency of every member</strong> &mdash; the tools, the intelligence, and the open knowledge to grow their own wealth and build their own ideas, rather than depending on a black box they are forced to trust.</p>
+      <p><strong>Why we are logging it.</strong> Changing the public mission statement of a token project is not a small edit. It is exactly the kind of language a reader &mdash; or a regulator &mdash; weighs, so we are recording the change here rather than swapping it silently.</p>
+      <p><strong>The discipline we held.</strong> Any wealth-growth language in the new statement points at the member&rsquo;s own tools, knowledge, and decisions &mdash; <strong>never at holding or price appreciation of the $GFOF token.</strong> We make no return promises, no price predictions, and no claim that owning the token produces gains. The supporting content remains verify-don&rsquo;t-trust by design: on-chain locked supply, specs published before code, and this corrections log.</p>
+      <p><strong>Reviewed before publishing.</strong> Because the change touches value-claim language, the exact wording was sent to outside counsel and cleared before it went live. We treated &ldquo;counsel before publish&rdquo; the same way we treat &ldquo;spec before code.&rdquo;</p>
+      <p><strong>Status:</strong> Resolved. New mission published; old line preserved above and in version history; wording counsel-reviewed prior to deploy.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c020">
+    <div class="entry-head">
+      <span class="entry-id">#020 &middot; DISCLOSURE</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>A Helius RPC key was embedded in the public treasury page &mdash; it has been rotated, split into purpose-scoped keys, and the new key is domain-restricted</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-06-27</span>
+      <span>Affected: /treasury</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> The live transparency / treasury page reads on-chain lock balances directly in your browser via a Helius RPC endpoint. The API key for that endpoint was written into the page&rsquo;s client-side code, which means it was visible in the page source of <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a>. Separately, the same credential had been reused by an unrelated backend service, so one key was doing two different jobs.</p>
+      <p><strong>What this key can and cannot do.</strong> It is a <strong>read-only RPC key</strong>: it can read public Solana chain data &mdash; the same data anyone can already read &mdash; and nothing more. It cannot move funds, sign transactions, or access any wallet. The exposure was &ldquo;a credential that reads public data was visible,&rdquo; not access to any asset.</p>
+      <p><strong>What we did.</strong> We rotated to a brand-new key dedicated to this page and restricted it to <code>galacticfederation.co</code> only, so a copied key is rejected when used from anywhere else. The unrelated backend service was given its own separate, independently-scoped key. The previously-embedded key was then deleted entirely. A full sweep of both site repositories was run to confirm no other keys, secrets, or credentials are present &mdash; none were found.</p>
+      <p><strong>What does not change.</strong> The treasury page still reads live on-chain data in your browser and still falls back to known-good values rather than ever displaying a wrong number. The canonical contract address, the four Streamflow lock contracts, and every verify-on-explorer link are unchanged.</p>
+      <p><strong>Status:</strong> Resolved. Key rotated, scoped, and domain-restricted; old key deleted; repositories swept clean. Logged here because a credential being publicly visible &mdash; even a low-risk read-only one &mdash; is exactly the kind of thing this page exists to disclose rather than quietly patch.</p>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="tag">HISTORICAL RECORD</div>
+    <h2>Kept, delayed, missed, cancelled</h2>
+    <p>Commitments that have been resolved one way or another. These entries are permanent. We do not edit or remove them, only append corrections.</p>
+  </div>
+
+  <div class="entry status-kept" id="h001">
+    <div class="entry-head">
+      <span class="entry-id">#H001 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Launch without paid KOLs, without an influencer round, without promises we couldn't keep</h3>
+    <div class="meta">
+      <span>Made pre-launch</span>
+      <span>Resolved: 2026-04</span>
+    </div>
+    <div class="body">
+      <p>Before launch, the federation committed to a quiet start: no paid KOL campaigns, no influencer allocations, no roadmap items promised without a clear path to delivery.</p>
+      <p><strong>Resolution:</strong> Kept. Launch was organic. No KOL checks have been cut. Roadmap items are documented on this page as specific commitments with status, not as generic future promises.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h002">
+    <div class="entry-head">
+      <span class="entry-id">#H002 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Ship a live on-chain transparency page before asking for trust on the lending protocol</h3>
+    <div class="meta">
+      <span>Made 2026-04</span>
+      <span>Resolved: 2026-04-19</span>
+    </div>
+    <div class="body">
+      <p>The federation publicly committed that before any lending-product trust ask, we would ship a live transparency page that reads directly from Solana.</p>
+      <p><strong>Resolution:</strong> Kept. <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a> shipped v1 on 2026-04-19, extended on 2026-04-20 with the Unlock Early-Warning System. All numbers are read from the chain in the visitor's browser — not served from our server.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h003">
+    <div class="entry-head">
+      <span class="entry-id">#H003 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Publish a substantive revision to the liquidation spec within one week of v0.1</h3>
+    <div class="meta">
+      <span>Made 2026-04-20</span>
+      <span>Resolved: 2026-04-21</span>
+    </div>
+    <div class="body">
+      <p>When v0.1 of the liquidation spec was published on 2026-04-20, the federation committed to substantive iteration rather than the more common pattern of publishing a design doc once and never revisiting it.</p>
+      <p><strong>Resolution:</strong> Kept. <a href="/liquidation-spec" style="color:#A78BFA;text-decoration:underline">v0.2</a> published 2026-04-21, adding Section 7 on non-standard collateral types — connecting the existing mechanism to the broader DeFi capital-efficiency conversation. No mechanism changes from v0.1; framing addition only. Full diff in the revision log on the spec page.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h004">
+    <div class="entry-head">
+      <span class="entry-id">#H004 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Home page revised to align with research-first discipline</h3>
+    <div class="meta">
+      <span>Made 2026-04-21</span>
+      <span>Resolved: 2026-04-21</span>
+    </div>
+    <div class="body">
+      <p>The federation built a series of disciplined surfaces across 2026-04 — the <a href="/liquidation-spec" style="color:var(--cyan);text-decoration:underline">liquidation spec</a>, the <a href="/treasury" style="color:var(--cyan);text-decoration:underline">treasury page</a>, this corrections log, the <a href="/security" style="color:var(--cyan);text-decoration:underline">security policy</a>, and the server-side chatbot prompt (hardened in v16 against citing undocumented features). The home page, however, still carried older marketing patterns that contradicted that discipline: a "Federation Points System" with specific 500/750/250 point values and a promise that points would "convert to $GFOF allocations"; a staking section presenting 1.5×/2×/3× multipliers and a "20% APY base" projection as though the numbers were committed; Founding Member NFT benefits listed as concrete ("+0.5× staking, 2× governance vote, 2× raffle entries"); a Stake2Earn roadmap item with a specific mechanism ("top holders earn SOL from trading fees"); and two client-side chatbot widgets (home + app) that embedded their own system prompts with phantom-feature claims separate from the disciplined server-side prompt.</p>
+      <p><strong>Resolution:</strong> Kept. Home page updated on 2026-04-21 as part of the v17 deploy. Specific changes:</p>
+      <p style="margin-left:18px"><strong>·</strong> Federation Points System reframed as "Ways to Support the Federation" — specific point values and token-allocation promises removed. Three organic actions remain (buy, join Telegram, post on X) with no implied rewards.</p>
+      <p style="margin-left:18px"><strong>·</strong> Staking section: added a top-of-section "DESIGN DIRECTION · NOT YET SPEC'D" banner. Specific multipliers and the "20% APY base" projection reframed as draft proposals. The calculator output is now explicitly illustrative. A staking spec, modeled on the liquidation-spec pattern, will be published for public comment before any contract is deployed — that becomes a future entry on this page when drafted.</p>
+      <p style="margin-left:18px"><strong>·</strong> Founding Member NFT perks rewritten as "Proposed" with cross-references to the forthcoming staking and governance specs. The fourth perk (raffle priority) replaced entirely with "Permanent on-chain record" — the badge itself is the deliverable. The "<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> Badges close permanently... No second chances" FOMO line removed.</p>
+      <p style="margin-left:18px"><strong>·</strong> Tokenomics pie label "10% REWARDS &amp; RESERVE — Staking rewards · raffles · Founding Member incentives" rewritten to "Post-bond community programs — allocation defined by governance before deployment."</p>
+      <p style="margin-left:18px"><strong>·</strong> Roadmap Phase 02 item "Stake2Earn — top holders earn SOL from trading fees" replaced with "Staking design spec published for public comment." Phase 03 "Community governed rates" softened to "Parameters shaped by governance post-launch."</p>
+      <p style="margin-left:18px"><strong>·</strong> Both client-side chatbots (home and app) rerouted to POST to <code>/api/chat</code>. The embedded prompts containing Stake2Earn mechanics, specific NFT multipliers, and named privacy-layer vendors were deleted — the disciplined v16 server-side prompt is now the single source of truth.</p>
+      <p>Home page meta description, Open Graph description, Twitter card description, and JSON-LD Organization description all updated to match the research-first voice in <a href="/llms.txt" style="color:var(--cyan);text-decoration:underline">llms.txt</a>. Machine-readable structured data added to this page (<code>Dataset</code> schema) and <a href="/security" style="color:var(--cyan);text-decoration:underline">/security</a> (<code>TechArticle</code> schema).</p>
+      <p>This entry is part of the public record because the revision itself matters: the point of the corrections log is to document material changes to public-facing claims, not only unbacked promises. A revision this large without an entry here would have been its own kind of failure.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h005">
+    <div class="entry-head">
+      <span class="entry-id">#H005 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Federation Research Log launched on Paragraph — Week 01 published</h3>
+    <div class="meta">
+      <span>Made 2026-04-22</span>
+      <span>Resolved: 2026-04-22</span>
+    </div>
+    <div class="body">
+      <p>The Federation committed to research-first posture — publishing design thinking in public before shipping code. Up to this point, that posture was visible in the <a href="/liquidation-spec" style="color:var(--cyan);text-decoration:underline">liquidation spec v0.2</a> and in this corrections log, but there was no dedicated venue for analytical writing that looks outward at where DeFi is heading, separate from the specifications themselves.</p>
+      <p><strong>Resolution:</strong> Kept. On 2026-04-22 the Federation Research Log launched on Paragraph with Week 01: <em>Why intent-based DeFi changes everything</em> — an analysis of the imperative/declarative split in DeFi UX, the solver-competition model (CoW Protocol, UniswapX, Anoma), and why the Federation is studying intent-based architecture for Solana. The post explicitly states that the Federation is not announcing an intent-based product, only documenting that it is studying the direction. Same discipline as Section 7 of the liquidation spec.</p>
+      <p>Publication terms stated in the post and committed here:</p>
+      <p style="margin-left:18px"><strong>·</strong> <strong>Weekly cadence.</strong> One post per week. Missed weeks will be acknowledged on this page.</p>
+      <p style="margin-left:18px"><strong>·</strong> <strong>No paywalls.</strong> Every post remains free to read.</p>
+      <p style="margin-left:18px"><strong>·</strong> <strong>No price predictions.</strong> The Research Log will not issue targets, forecasts, or trading calls for $GFOF or any other asset.</p>
+      <p style="margin-left:18px"><strong>·</strong> <strong>No roadmap announcements.</strong> New product commitments will continue to happen through the corrections log and versioned specs, not through the Research Log.</p>
+      <p style="margin-left:18px"><strong>·</strong> <strong>Analytical, not promotional.</strong> Posts will analyze the DeFi and Solana landscape. If a post references $GFOF, it will do so in the context of research the Federation is conducting, not as a sales pitch.</p>
+      <p>The record of the launch: <a href="https://paragraph.com/@0x9872cbfbae0438580d0e82342220b195527904b3-0c23/%E2%AC%A1-federation-research-log-%E2%80%94-week-01" style="color:var(--cyan);text-decoration:underline" target="_blank" rel="noopener">Week 01 on Paragraph ↗</a>. This entry exists because launching a weekly publication with no paywalls or price predictions is itself a public commitment — future entries here will record each Monday's publication (or acknowledge its absence), and the first time any of the five terms above is broken, that break gets its own correction.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h006">
+    <div class="entry-head">
+      <span class="entry-id">#H006 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Federation Research Log Week 02 published on schedule</h3>
+    <div class="meta">
+      <span>Made 2026-04-22</span>
+      <span>Resolved: 2026-04-29</span>
+    </div>
+    <div class="body">
+      <p>The Federation Research Log launched on 2026-04-22 with a binding commitment to a weekly publication cadence. Week 01 published that day. Week 02 was due 2026-04-29 — the first scheduled cadence test.</p>
+      <p><strong>Resolution:</strong> Kept. On 2026-04-29 the Federation Research Log published Week 02: <em>The indexer gap — what pre-bond projects can't see and what to do about it.</em> The essay covers the structural reasons projects below a certain scale are invisible to standard indexing tools (Dune decoded tables, Bubblemaps, DefiLlama) and argues that the surfaces a project controls become the canonical source of trust during this period. It explicitly frames the discipline of pre-bond transparency as the foundation post-bond credibility builds on.</p>
+      <p>The publication terms committed in <a href="#h005" style="color:var(--cyan);text-decoration:underline">#H005</a> remain in force: weekly cadence, no paywalls, no price predictions, no roadmap announcements, analytical not promotional. Week 02 honors all five.</p>
+      <p>The record: <a href="https://paragraph.com/@0x9872cbfbae0438580d0e82342220b195527904b3-0c23/the-indexer-gap" style="color:var(--cyan);text-decoration:underline" target="_blank" rel="noopener">Week 02 on Paragraph ↗</a>. Week 03 is due 2026-05-06. If it ships, the next entry on this page will record it. If it doesn't, the next entry will record the miss.</p>
+    </div>
+  </div>
+  <div class="entry status-kept" id="h007">
+    <div class="entry-head">
+      <span class="entry-id">#H007 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>@GFOF_Offcial cadence rule clarified to permit engagement activity alongside originated posts</h3>
+    <div class="meta">
+      <span>Made 2026-05-05</span>
+      <span>Resolved: 2026-05-05</span>
+    </div>
+    <div class="body">
+      <p>The Federation has operated under an implicit posting rule on @GFOF_Offcial: 2&ndash;4 measured originated posts per week, reserved for announcements, milestones, Research Log issues, corrections updates, and treasury notes. The rule was correct in spirit but ambiguous about engagement activity &mdash; replies, retweets-with-comment, and participation in the broader DeFi conversation.</p>
+      <p><strong>Resolution:</strong> The cadence rule is clarified, not loosened. The 2&ndash;4 originated posts per week discipline stands unchanged. Alongside it, three additional bounded practices are now binding commitments on this page:</p>
+      <ul style="margin-left:24px;color:var(--text-dim);line-height:1.9">
+        <li><a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a> &mdash; Research Log cross-posted to Medium within 24 hours of Paragraph publication. <em>(Originally named Medium and Mirror; revised by <a href="#h008" style="color:var(--cyan);text-decoration:underline">#H008</a>.)</em></li>
+        <li><a href="#c009" style="color:var(--cyan);text-decoration:underline">#009</a> &mdash; Federation Office Hours held monthly in Telegram, third Wednesday of each month.</li>
+        <li><a href="#c010" style="color:var(--cyan);text-decoration:underline">#010</a> &mdash; Daily reply engagement on @GFOF_Offcial within bounded discipline (~5&ndash;15 minutes/day, substantive threads only).</li>
+      </ul>
+      <p><strong>Off-limits, restated explicitly:</strong> Volume bots, paid KOL (paused under <a href="#c007" style="color:var(--cyan);text-decoration:underline">#007</a>), hype framing, urgency framing around bond, simulated activity, daily originated posts, raid coordination. None of these are introduced by this revision. The discipline that distinguishes the Federation from category norms is preserved.</p>
+      <p><strong>Reasoning recorded:</strong> The original rule could be read as restricting engagement entirely, or as silent on it. Both readings are unhelpful. This revision clarifies that engagement with the broader DeFi conversation is on-brand at a bounded scale, and creates the tracking infrastructure (<a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a>, <a href="#c009" style="color:var(--cyan);text-decoration:underline">#009</a>, <a href="#c010" style="color:var(--cyan);text-decoration:underline">#010</a>) to make the new commitments measurable rather than aspirational.</p>
+    </div>
+  </div>
+  <div class="entry status-kept" id="h008">
+    <div class="entry-head">
+      <span class="entry-id">#H008 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Commitment <a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a> corrected — Mirror.xyz migrated into Paragraph and no longer exists as a separate platform</h3>
+    <div class="meta">
+      <span>Made 2026-05-05</span>
+      <span>Resolved: 2026-05-05</span>
+    </div>
+    <div class="body">
+      <p>Earlier today, commitment <a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a> was published with the text "Research Log cross-posted to Medium and Mirror within 24 hours of Paragraph publication." That commitment, as written, is not executable. Mirror.xyz announced its consolidation into Paragraph in September 2025 and the migration completed in late 2025. Mirror no longer exists as a separate publishing surface; visits to mirror.xyz now redirect to Paragraph.</p>
+      <p><strong>Resolution:</strong> Commitment <a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a> is hereby revised. The cross-post commitment now reads: "Research Log cross-posted to Medium within 24 hours of Paragraph publication." Paragraph remains the canonical surface. Medium remains the secondary surface. Mirror is removed because it is no longer a distinct surface. The original text of #008 is preserved in this entry as the historical record of what was committed before the correction.</p>
+      <p><strong>Why this entry exists:</strong> The Federation's maintenance rules require that "if we find a past statement on the site, in a tweet, or in an article that turned out to be wrong, a correction entry appears here within 48 hours of us noticing." The factual error in #008 was identified before the first scheduled execution of the commitment (Week 03 cross-post, due 2026-05-06), so this correction is filed pre-execution. The first test of #008 will run against the corrected text rather than the original.</p>
+      <p><strong>Reasoning recorded:</strong> Mirror was a credible Web3-native publishing platform when prior cadence-rule drafts referenced it. The platform's consolidation into Paragraph was public information at the time #008 was written and should have been caught before publication. Filing the correction transparently — rather than silently editing the entry or quietly substituting another platform — preserves the discipline that the corrections log itself is designed to enforce. A corrections log that cannot correct itself in public has no integrity.</p>
+      <p><strong>What this entry does not do:</strong> It does not add a replacement platform. The cross-post commitment goes from three platforms (Paragraph + Medium + Mirror) to two (Paragraph + Medium). It does not modify cadence rule <a href="#h007" style="color:var(--cyan);text-decoration:underline">#H007</a>'s underlying principle. It does not affect commitments <a href="#c009" style="color:var(--cyan);text-decoration:underline">#009</a> or <a href="#c010" style="color:var(--cyan);text-decoration:underline">#010</a>.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h009">
+    <div class="entry-head">
+      <span class="entry-id">#H009 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Research Log cadence missed for Week 03 and Week 04 &mdash; resumed Week 05 with combined catch-up post</h3>
+    <div class="meta">
+      <span>Made 2026-05-15</span>
+      <span>Concerns: weekly cadence rule from <a href="#h005" style="color:var(--cyan);text-decoration:underline">#H005</a></span>
+    </div>
+    <div class="body">
+      <p>The Federation Research Log committed to a <strong>weekly cadence</strong> under <a href="#h005" style="color:var(--cyan);text-decoration:underline">#H005</a> on launch (2026-04-22). Week 01 (2026-04-22) and Week 02 (2026-04-29) shipped on time. <strong>Week 03 (due 2026-05-06) and Week 04 (due 2026-05-13) did not ship.</strong> Two scheduled posts were missed.</p>
+      <p><strong>What happened:</strong> Federation development bandwidth during the May 5&ndash;14 window was concentrated on shipping infrastructure work &mdash; SEO foundation, performance pass, FAQ page, research index, custom 404 handling, FCC advance briefing, Dossier integration as the Federation's first Intelligence operation, and the supporting corrections entries for those changes. The Research Log was deprioritized against shipping work. That was a real tradeoff and the Federation made it, but the discipline says missed posts get logged whether the reason was reasonable or not.</p>
+      <p><strong>Resolution path:</strong> A combined Week 03/04 catch-up post ships in Week 05 (window: 2026-05-13 through 2026-05-20) covering the CLARITY Act draft released May 12 and the Federation's posture under its provisions &mdash; a topic that genuinely benefited from the delay because the bill text was not available at the original Week 03 deadline. The combined post is filed on Paragraph and cross-posted to Medium per <a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a> (as revised by <a href="#h008" style="color:var(--cyan);text-decoration:underline">#H008</a>).</p>
+      <p><strong>Cadence going forward:</strong> Weekly cadence resumes. Week 06 due 2026-05-27. Week 07 due 2026-06-03. The cadence rule from <a href="#h005" style="color:var(--cyan);text-decoration:underline">#H005</a> stands unchanged &mdash; one post per week, missed weeks acknowledged on this page. If volume is genuinely impossible during a given week due to development pressure, the post may be combined with the following week's post on a single topic, but that pattern is the exception not the rule and gets logged here when used.</p>
+      <p><strong>Status transition:</strong> This entry will move from DELAYED to KEPT once the Week 03/04 combined catch-up post is published. Status will be updated in place with the publication date appended. If Week 05 itself slips beyond the 2026-05-20 window, this entry transitions to MISSED and a separate correction is filed addressing why the cadence resumption itself failed.</p>
+      <p><strong>Reasoning recorded:</strong> A weekly publication that goes silent for two weeks without acknowledgment is the failure mode the Federation built the corrections log to prevent. The discipline that distinguishes the Federation from category norms is not "we never miss" &mdash; it is "every miss appears on the log, dated, without spin." This entry is that discipline being applied to itself. The Federation's credibility is not damaged by missing two posts; it would be damaged by hiding that they were missed.</p>
+
+      <div style="margin-top:22px;padding:18px 20px;background:rgba(61,255,160,0.04);border:1px solid rgba(61,255,160,0.2);border-left:3px solid var(--green)">
+        <p style="margin-top:0"><strong style="color:var(--green)">RESOLUTION &mdash; appended 2026-05-19</strong></p>
+        <p>The combined Week 03/04 catch-up post, <em>"The CLARITY Act and the Federation's Posture,"</em> is published. This entry moves <strong>DELAYED &rarr; KEPT</strong>. Week 05 window (2026-05-13 through 2026-05-20) was met; the entry does not transition to MISSED.</p>
+        <p><strong>Canonical (Paragraph):</strong> <a href="https://paragraph.com/@gfofofficial@gmail.com/federation-research-log-%E2%80%94-week-0304" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">paragraph.com/@gfofofficial/federation-research-log-week-0304 &nearr;</a></p>
+        <p><strong>Cross-post (Medium):</strong> <a href="https://medium.com/@gfofofficial/federation-research-log-week-03-04-477f30add82c" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">medium.com/@gfofofficial/federation-research-log-week-03-04 &nearr;</a></p>
+        <p><strong>Honest note on <a href="#h008" style="color:var(--cyan);text-decoration:underline">#H008</a> compliance:</strong> #H008 specifies the Medium cross-post should point back to the Paragraph canonical. The Medium post does this in two human-readable places: a "Canonical: Paragraph" link directly under the title, and a full "Cross-posting" section near the foot that names #008/#H008 and includes the complete Paragraph URL. However, Medium's machine-readable <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">&lt;link rel="canonical"&gt;</code> meta tag continues to self-reference the Medium URL. This is a known Medium platform limitation: a custom canonical tag set retroactively on an already-published, natively-authored Medium post is not reliably honored. It was attempted and did not take. This is a platform constraint, not a discipline lapse, and it is recorded here rather than hidden. <strong>Forward fix:</strong> future Research Log cross-posts will set the Medium canonical at first-publish time (when Medium does honor it), not retroactively. If Medium ships a working retroactive canonical control, this post will be corrected and the change appended here &mdash; never silently.</p>
+        <p style="margin-bottom:0"><strong>Cadence status going forward:</strong> Weekly resumes per <a href="#h005" style="color:var(--cyan);text-decoration:underline">#H005</a>. Week 06 due 2026-05-27. Week 07 due 2026-06-03.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h010">
+    <div class="entry-head">
+      <span class="entry-id">#H010 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Cross-post canonical commitment revised &mdash; Medium machine-readable canonical confirmed not externally settable</h3>
+    <div class="meta">
+      <span>Made 2026-05-19</span>
+      <span>Revises: <a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a> as previously revised by <a href="#h008" style="color:var(--cyan);text-decoration:underline">#H008</a></span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> this is the <strong>third revision</strong> of the cross-post commitment. The chain is <a href="#c008" style="color:var(--cyan);text-decoration:underline">#008</a> &rarr; <a href="#h008" style="color:var(--cyan);text-decoration:underline">#H008</a> &rarr; #H010. A commitment revised three times is a signal, and the Federation states it as one rather than framing it as routine refinement: the cross-post commitment has been unstable, and this revision exists to make it finally match platform reality so it stops being restated as something it cannot be.</p>
+      <p><strong>What was committed:</strong> Under #008/#H008, Research Log posts are cross-posted to Medium within 24 hours of Paragraph publication, "with canonical link back to the Paragraph original." The implicit expectation was a machine-readable <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">&lt;link rel="canonical"&gt;</code> tag on the Medium post pointing to Paragraph.</p>
+      <p><strong>What was tested:</strong> The machine-readable canonical was attempted two ways. First, <em>retroactively</em> on the Week 03/04 post (documented in <a href="#h009" style="color:var(--cyan);text-decoration:underline">#H009</a>) &mdash; it did not take. The #H009 forward-fix hypothesized that setting the canonical <em>at first publish</em> would work. That hypothesis was then tested on the Week 06 post: canonical set at first publish. <strong>It also did not take.</strong> Medium's published meta tag self-references the Medium URL in both cases.</p>
+      <p><strong>Confirmed finding:</strong> Medium does not honor a custom canonical tag pointing to an external domain, regardless of whether it is set retroactively or at first-publish. This is now established by two independent tests, not assumed from one. <strong>The #H009 forward-fix is therefore marked invalidated</strong> &mdash; it was a reasonable hypothesis that testing disproved, and saying so is the discipline working, not failing.</p>
+      <p><strong>Revised commitment (effective now):</strong> Paragraph remains the canonical platform and is published first. The Medium cross-post carries <strong>human-readable</strong> canonical pointers: (1) a "Canonical: Paragraph" reference in the post header, and (2) a "Cross-posting" section near the foot of the post naming #008/#H008 and containing the full clickable Paragraph URL. The machine-readable canonical tag on Medium is acknowledged as <strong>not externally settable</strong> &mdash; a documented Medium platform limitation, recorded here once, and not re-footnoted on every future post. SEO source-of-record protection rests on Paragraph's first-publication precedence plus the human-readable pointers, which is weaker than a machine canonical but is what the platform permits.</p>
+      <p><strong>Honest note on the current Week 06 Medium post specifically:</strong> the bottom "Cross-posting" section is present and contains a working clickable Paragraph link &mdash; this is the functioning mitigation. The header "Canonical: Paragraph" line is present but rendered as plain text rather than a link, due to Medium formatting; it is a weak pointer. The primary functioning human-readable mitigation is the cross-posting section, and it works. The Federation states this granular reality rather than claiming both pointers are equally strong.</p>
+      <p><strong>Status:</strong> KEPT &mdash; the commitment is now revised to what the platform can actually deliver, the limitation is documented, and the mitigation that exists is described accurately including its weak point. This entry is appended; #008, #H008, and #H009 are unchanged and remain on the page in full.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h011">
+    <div class="entry-head">
+      <span class="entry-id">#H011 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Federation Artifact Hunt removed &mdash; token-prize raffle retired for lottery-law risk</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Caught on internal review</span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> the &ldquo;Federation Artifact Hunt&rdquo; &mdash; a homepage feature that awarded $GFOF by random draw &mdash; has been removed and will not return. It is retired, not paused, and has no replacement.</p>
+      <p><strong>Why:</strong> a mechanic that distributes tokens by chance is, in substance, a lottery, and operating one without the licensing such draws require is legal exposure the Federation will not carry. This was caught on internal review, before any complaint &mdash; stated plainly rather than implying the design was always clean.</p>
+      <p><strong>Status:</strong> KEPT &mdash; the mechanic is gone from the live site (the homepage no longer references it, which is verifiable), and this entry records that it existed and why it was pulled, instead of quietly deleting it.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h012">
+    <div class="entry-head">
+      <span class="entry-id">#H012 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Token Access &amp; Payment Spec v0.2 published before any payment code ships</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Spec: <a href="/access-spec" style="color:var(--cyan);text-decoration:underline">/access-spec</a></span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> the specification governing whether and how $GFOF may be used to pay for <a href="https://dossiertrack.co" style="color:var(--cyan);text-decoration:underline">Dossier</a> is published at <a href="/access-spec" style="color:var(--cyan);text-decoration:underline">/access-spec</a> &mdash; in full, before a single line of payment code exists. This holds the specs-before-code doctrine the rest of this log is built on.</p>
+      <p><strong>The load-bearing anti-claim:</strong> $GFOF is <strong>never required</strong> for Dossier access. Every tier remains fully payable in ordinary currency. The token is, at most, an <em>optional</em> payment rail offered at no discount versus fiat &mdash; it buys nothing fiat does not, and gates nothing.</p>
+      <p><strong>What is not yet done, stated plainly:</strong> the payment flow itself is not built. It is gated on outside-counsel review of the spec&rsquo;s legal sections, and that review is still pending. Publishing the spec is the milestone marked KEPT here; the build is a separate, still-open step and is not claimed as finished.</p>
+      <p><strong>Status:</strong> KEPT &mdash; spec shipped ahead of code, with the access guarantee stated as an anti-claim and the unfinished build disclosed rather than glossed.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h013">
+    <div class="entry-head">
+      <span class="entry-id">#H013 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Hold-to-access token gating ruled out &mdash; the no-token-gate promise upheld</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Relates to <a href="#h012" style="color:var(--cyan);text-decoration:underline">#H012</a></span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> a design option to gate Dossier features behind a held $GFOF balance &mdash; &ldquo;hold this much to unlock that&rdquo; &mdash; was evaluated and <strong>rejected</strong>.</p>
+      <p><strong>Why:</strong> Dossier&rsquo;s pricing publicly commits to no token-gate. Introducing one would contradict a promise already made to users. The only $GFOF integration that survives that constraint is the optional payment rail described in <a href="#h012" style="color:var(--cyan);text-decoration:underline">#H012</a>, which gates nothing.</p>
+      <p><strong>Status:</strong> KEPT &mdash; the no-token-gate promise is preserved by ruling the gating mechanism out on the record, rather than leaving it an ambiguous &ldquo;maybe later&rdquo; that quietly erodes the commitment.</p>
+    </div>
+  </div>
+
+  <div class="entry status-kept" id="h014">
+    <div class="entry-head">
+      <span class="entry-id">#H014 · KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>Site-wide content scramble found and corrected &mdash; the corrections log itself was among the broken pages</h3>
+    <div class="meta">
+      <span>Made 2026-06-18</span>
+      <span>Affected: /corrections, /governance-spec, /liquidation-spec, +others</span>
+    </div>
+    <div class="body">
+      <p><strong>Plain statement first:</strong> for a period ending 2026-06-18, several public pages on this site served the <strong>wrong content</strong> &mdash; including this corrections log, which rendered raw application code instead of the log. This is the most serious site failure recorded to date, and the maintenance rule below (corrections public within 48 hours of notice) requires it to appear here.</p>
+      <p><strong>What happened:</strong> a bulk file upload dated 2026-06-13 wrote roughly twenty-one files&rsquo; contents under the wrong filenames &mdash; a rotation. The corrections log, FAQ, governance spec, liquidation spec, classified page, the RSS feed, and several images were all misfiled. The visible effect: <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">/corrections</code> served chatbot code, <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">/governance-spec</code> served the FAQ, and <code style="font-family:var(--mono);font-size:0.85em;background:rgba(255,255,255,0.04);padding:1px 5px;border:1px solid var(--line)">/liquidation-spec</code> served a plain-text file.</p>
+      <p><strong>Honest scope:</strong> site navigation and the VOSS chatbot kept working, because they live in folders the bad upload did not touch. But the core transparency pages &mdash; the exact ones this project points people to as proof of its claims &mdash; were broken. The precise window is not known: the misfiled upload was 2026-06-13 and the fix deployed 2026-06-18, so the worst case is roughly five days. The Federation states the upper bound, not a flattering guess.</p>
+      <p><strong>Fix:</strong> the repository&rsquo;s full history was intact. Every page was restored to its correct content, keeping the newest legitimate work (the current homepage, governance spec v0.2, and this log through #017) and recovering destroyed files from the last clean commit. Each page was verified to serve its intended content before this entry was filed. The cause &mdash; uploading from a local folder whose files had been shuffled &mdash; is now avoided by changing files individually from a verified clean source.</p>
+      <p><strong>Status:</strong> KEPT &mdash; the failure is disclosed in full, the pages are corrected and verified, and the cause and prevention are on the record. A corrections log that concealed its own outage would be worthless; this entry exists so that it doesn&rsquo;t.</p>
+    </div>
+  </div>
+
+  <div class="rules">
+    <h3>HOW THIS PAGE IS MAINTAINED</h3>
+    <div class="rules-list">
+      <div><strong>Entries are appended, never deleted.</strong> Every commitment the federation makes publicly gets a row. Once added, it stays — with its final status.</div>
+      <div><strong>Status is one of five values.</strong> ON TRACK (in flight, no slippage), DELAYED (past deadline, in progress, reason published), MISSED (explicitly failed, learned something), KEPT (delivered), CANCELLED (priorities changed, explained).</div>
+      <div><strong>Deadlines are published before they apply.</strong> We cannot mark something DELAYED if we never said when it was due. Every committed item gets a target date.</div>
+      <div><strong>Corrections are public within 48 hours.</strong> If we find a past statement on the site, in a tweet, or in an article that turned out to be wrong, a correction entry appears here within 48 hours of us noticing.</div>
+      <div><strong>You can request an entry.</strong> If you've seen a commitment that should be on this page and isn't, DM @WelksCrypto or post in Telegram. We will add it.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/treasury">Treasury</a>
+  <span class="sep">·</span>
+  <a href="/security">Security</a>
+  <span class="sep">·</span>
+  <a href="/liquidation-spec">Liquidation Spec</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version" id="footer-version">v17.14 · corrections · deployed 2026-05-26</span>
+</div>
+
+<script>
+try {
+  console.log('%c⬡ GFOF Corrections Log · v11.0', 'color:#40C0FF;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #40C0FF;border-radius:2px;');
+  console.log('%c📋 Every promise. Every miss. Never deleted.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+} catch(e) {}
+(function(){
+  var el = document.getElementById('footer-version');
+  if(el){ el.textContent = 'v17.14 · corrections · deployed 2026-05-26'; }
+})();
+</script>
+
+<script>
+/* === Corrections log: auto-calculated stats + live search/filter === */
+(function(){
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  if(!entries.length) return;
+
+  // Derive a normalized status from each entry's class list.
+  function statusOf(el){
+    var c = el.className;
+    if(/status-kept/.test(c)) return 'kept';
+    if(/status-missed/.test(c)) return 'missed';
+    if(/status-delayed/.test(c)) return 'delayed';
+    if(/status-cancelled/.test(c)) return 'cancelled';
+    if(/status-on-track/.test(c)) return 'on-track';
+    return 'other';
+  }
+  entries.forEach(function(el){ el.setAttribute('data-status', statusOf(el)); });
+
+  // ---- Auto-calculate the stats strip + keep-rate card (no more manual drift) ----
+  var counts = {total:entries.length, 'on-track':0, kept:0, missed:0, delayed:0, cancelled:0};
+  entries.forEach(function(el){ var s=el.getAttribute('data-status'); if(counts[s]!=null) counts[s]++; });
+
+  var resolved = counts.kept + counts.missed + counts.cancelled;
+  var keptPct = resolved ? Math.round((counts.kept/resolved)*100) : 100;
+
+  function setText(sel, val){ var n=document.querySelector(sel); if(n) n.textContent=val; }
+  // Stats strip cells are in document order: TOTAL, ON TRACK, KEPT, DELAYED/MISSED
+  var cells = document.querySelectorAll('.stats .stat-cell .v');
+  if(cells.length>=4){
+    cells[0].textContent = counts.total;
+    cells[1].textContent = counts['on-track'];
+    cells[2].textContent = counts.kept;
+    cells[3].textContent = counts.delayed + ' / ' + counts.missed;
+  }
+  var pct = document.querySelector('.keep-rate-card .kr-pct');
+  if(pct) pct.textContent = keptPct + '%';
+
+  // Fill chip counts
+  document.querySelectorAll('.cl-chip-n').forEach(function(n){
+    var key=n.getAttribute('data-count');
+    n.textContent = (key==='all') ? counts.total : (counts[key]||0);
+  });
+
+  // ---- Search + filter wiring ----
+  var search = document.getElementById('clSearch');
+  var searchX = document.getElementById('clSearchX');
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.cl-chip'));
+  var noRes = document.getElementById('clNoResults');
+  var activeFilter = 'all';
+
+  function apply(){
+    var q = (search.value||'').trim().toLowerCase();
+    searchX.classList.toggle('show', q.length>0);
+    var shown = 0;
+    entries.forEach(function(el){
+      var okStatus = (activeFilter==='all') || (el.getAttribute('data-status')===activeFilter);
+      var okText = !q || el.textContent.toLowerCase().indexOf(q) !== -1;
+      var vis = okStatus && okText;
+      el.hidden = !vis;
+      if(vis) shown++;
+    });
+    if(noRes) noRes.hidden = (shown>0);
+    // dim section heads that have no visible entries
+    document.querySelectorAll('.section-head').forEach(function(h){
+      var sib=h.nextElementSibling, any=false;
+      while(sib && !sib.classList.contains('section-head')){
+        if(sib.classList && sib.classList.contains('entry') && !sib.hidden){ any=true; break; }
+        sib=sib.nextElementSibling;
+      }
+      h.classList.toggle('cl-empty', !any);
+    });
+  }
+
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chips.forEach(function(c){ c.classList.remove('is-active'); });
+      chip.classList.add('is-active');
+      activeFilter = chip.getAttribute('data-filter');
+      apply();
+    });
+  });
+  search.addEventListener('input', apply);
+  searchX.addEventListener('click', function(){ search.value=''; apply(); search.focus(); });
+  var reset=document.getElementById('clReset');
+  if(reset) reset.addEventListener('click', function(){
+    search.value=''; activeFilter='all';
+    chips.forEach(function(c){ c.classList.toggle('is-active', c.getAttribute('data-filter')==='all'); });
+    apply();
+  });
+
+  apply();
+})();
+</script>
+
+
+<script>
+/* === Keep-rate narrative auto-generation (words always match the number) === */
+(function(){
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  if(!entries.length) return;
+  var c={kept:0,missed:0,cancelled:0,delayed:0,'on-track':0};
+  entries.forEach(function(el){var s=el.getAttribute('data-status'); if(c[s]!=null)c[s]++;});
+  var resolved=c.kept+c.missed+c.cancelled+c.delayed;
+  var nar=document.querySelector('.keep-rate-card .kr-narrative p');
+  if(nar){
+    var parts=[];
+    parts.push('<strong>'+c.kept+'</strong> KEPT');
+    parts.push('<strong>'+c.missed+'</strong> MISSED');
+    if(c.delayed) parts.push('<strong>'+c.delayed+'</strong> DELAYED');
+    if(c.cancelled) parts.push('<strong>'+c.cancelled+'</strong> logged as DISCLOSURE / CANCELLED');
+    nar.innerHTML = 'Of <strong>'+resolved+'</strong> resolved commitments: '+parts.join(', ')+
+      ' &mdash; counted strictly, so disclosures and cancellations sit in the denominator rather than being excluded. The remaining <strong>'+c['on-track']+
+      '</strong> entries are <strong style="color:var(--green)">ON TRACK</strong> &mdash; forward-looking commitments not yet resolvable.';
+  }
+  var method=document.querySelector('.keep-rate-card .kr-method');
+  if(method){
+    method.innerHTML='Method: resolved = entries marked KEPT, MISSED, DELAYED, CANCELLED, or DISCLOSURE; ON TRACK entries are pending and excluded from the rate. '+
+      'These stats and the keep-rate are <strong>auto-calculated from the entries on this page every time it loads</strong> &mdash; they cannot drift from the log.';
+  }
+  var asof=document.querySelector('.keep-rate-card .kr-asof');
+  if(asof){ asof.textContent='As of '+ new Date().toISOString().slice(0,10) +' (live)'; }
+})();
+</script>
+
+</body>
+</html>
