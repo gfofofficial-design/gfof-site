@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Creator-Fee Liquidity Loop — Specification v1.0 — $GFOF</title>
+<meta name="description" content="The Federation's counsel-reviewed specification for routing its Moonshot creator-fee share (paid in SOL): 50% to $GFOF/SOL liquidity weekly with on-chain proof, 50% to operating treasury. Activates at the $73K bond. Plumbing, never price support.">
+<link rel="canonical" href="https://galacticfederation.co/creator-fee-spec">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://galacticfederation.co/creator-fee-spec">
+<meta property="og:title" content="Creator-Fee Liquidity Loop — Specification v1.0">
+<meta property="og:description" content="50% of the Federation's Moonshot creator-fee SOL to $GFOF/SOL liquidity, weekly, with on-chain proof. Counsel-reviewed. Activates at bond.">
+<meta property="og:image" content="https://galacticfederation.co/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="Federation Governance Specification v0.1 — $GFOF">
+<meta name="twitter:description" content="A public spec for $GFOF DAO governance. Parameters proposed for comment. Before code. Open to challenge.">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Federation Governance Specification v0.1",
+  "name": "Federation Governance Specification",
+  "description": "A public specification for the $GFOF DAO governance system built on Realms / spl-governance. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.",
+  "abstract": "Specifies genuine token-holder governance on Realms with proposed parameters (proposal threshold, quorum, two-tier approval, voting periods, execution timelock), the exclusion of locked dev tokens from voting, an explicit list of what governance cannot do, and a no-permanent-council position. All numbers are v0.1 draft-for-comment, not committed.",
+  "inLanguage": "en",
+  "articleSection": [
+    "DAO governance",
+    "Solana governance design",
+    "Token-holder governance",
+    "Realms spl-governance"
+  ],
+  "keywords": "DAO, governance, Realms, spl-governance, Solana, token-holder voting, quorum, proposal threshold, timelock, GFOF",
+  "about": [
+    {"@type": "Thing", "name": "DAO governance design"},
+    {"@type": "Thing", "name": "Token-holder governance on Solana"},
+    {"@type": "Thing", "name": "Realms spl-governance"}
+  ],
+  "version": "0.1",
+  "datePublished": "2026-05-26",
+  "dateModified": "2026-05-26",
+  "url": "https://galacticfederation.co/governance-spec",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://galacticfederation.co/governance-spec"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://galacticfederation.co/og-image.png",
+    "width": 1200,
+    "height": 630
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "alternateName": "GFOF",
+    "url": "https://galacticfederation.co"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "alternateName": "GFOF",
+    "url": "https://galacticfederation.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://galacticfederation.co/logo.png"
+    }
+  },
+  "license": "https://galacticfederation.co/governance-spec",
+  "creativeWorkStatus": "Draft — open for comment",
+  "copyrightYear": 2026,
+  "isAccessibleForFree": true,
+  "hasPart": [
+    {"@type": "WebPageElement", "name": "Status of this document", "url": "https://galacticfederation.co/governance-spec#status"},
+    {"@type": "WebPageElement", "name": "Design principles", "url": "https://galacticfederation.co/governance-spec#principles"},
+    {"@type": "WebPageElement", "name": "Platform", "url": "https://galacticfederation.co/governance-spec#platform"},
+    {"@type": "WebPageElement", "name": "Voting power", "url": "https://galacticfederation.co/governance-spec#voting-power"},
+    {"@type": "WebPageElement", "name": "Proposed parameters", "url": "https://galacticfederation.co/governance-spec#parameters"},
+    {"@type": "WebPageElement", "name": "What governance cannot do", "url": "https://galacticfederation.co/governance-spec#cannot"},
+    {"@type": "WebPageElement", "name": "What governance controls", "url": "https://galacticfederation.co/governance-spec#controls"},
+    {"@type": "WebPageElement", "name": "The council question", "url": "https://galacticfederation.co/governance-spec#council"},
+    {"@type": "WebPageElement", "name": "The first proposal", "url": "https://galacticfederation.co/governance-spec#first-proposal"},
+    {"@type": "WebPageElement", "name": "Phased rollout", "url": "https://galacticfederation.co/governance-spec#rollout"},
+    {"@type": "WebPageElement", "name": "Open questions for public comment", "url": "https://galacticfederation.co/governance-spec#open-questions"},
+    {"@type": "WebPageElement", "name": "Revision history", "url": "https://galacticfederation.co/governance-spec#versions"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co/"},
+    {"@type": "ListItem", "position": 2, "name": "Governance Specification", "item": "https://galacticfederation.co/governance-spec"}
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#8896BC;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16.5px;line-height:1.7;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(167,139,250,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple)}
+strong{color:var(--text)}
+
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;flex-wrap:wrap}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+
+.doc-header{padding:60px 0 30px}
+.doc-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--purple);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(167,139,250,0.3);
+  background:rgba(167,139,250,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+h1.doc-title{
+  font-family:var(--orb);font-size:clamp(30px,5vw,48px);
+  font-weight:900;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:14px;color:var(--text);
+}
+h1.doc-title .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.doc-sub{font-size:17px;color:var(--text-dim);max-width:720px;line-height:1.6;margin-bottom:12px}
+.doc-meta{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:1.5px;padding:14px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;
+}
+.doc-meta span strong{color:var(--cyan);font-weight:500}
+
+.toc{
+  margin:30px 0;padding:20px 24px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.toc-title{
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:2.5px;margin-bottom:10px;
+}
+.toc ol{list-style:none;counter-reset:toc;padding:0}
+.toc li{
+  counter-increment:toc;padding:4px 0;
+  font-family:var(--mono);font-size:13px;color:var(--text-dim);
+}
+.toc li::before{
+  content:counter(toc,decimal-leading-zero) '  ';color:var(--muted);margin-right:8px;
+}
+.toc a{color:var(--text-dim);transition:color .15s}
+.toc a:hover{color:var(--cyan)}
+
+h2{
+  font-family:var(--orb);font-size:24px;font-weight:800;
+  letter-spacing:-0.3px;line-height:1.2;color:var(--text);
+  margin:50px 0 8px;padding-top:20px;border-top:1px solid var(--line);
+}
+h2 .num{
+  font-family:var(--mono);font-size:11px;color:var(--purple);
+  letter-spacing:2.5px;display:block;margin-bottom:6px;font-weight:600;
+}
+h3{
+  font-family:var(--orb);font-size:17px;font-weight:700;
+  color:var(--text);letter-spacing:0.1px;line-height:1.3;
+  margin:28px 0 8px;
+}
+p{margin-bottom:14px;color:var(--text-dim);font-size:15.5px}
+p strong{color:var(--text)}
+ul,ol{margin:10px 0 16px 20px;color:var(--text-dim)}
+ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
+
+.callout{
+  margin:20px 0;padding:18px 22px;
+  background:rgba(167,139,250,0.04);
+  border:1px solid rgba(167,139,250,0.2);
+  border-left:3px solid var(--purple);
+}
+.callout .k{
+  font-family:var(--mono);font-size:10px;color:var(--purple);
+  letter-spacing:2px;margin-bottom:6px;font-weight:700;
+}
+.callout p{color:var(--text);font-size:15px;margin:0}
+
+.callout.amber{background:rgba(240,192,64,0.04);border-color:rgba(240,192,64,0.22);border-left-color:var(--gold)}
+.callout.amber .k{color:var(--gold)}
+
+.callout.red{background:rgba(255,94,123,0.04);border-color:rgba(255,94,123,0.22);border-left-color:var(--red)}
+.callout.red .k{color:var(--red)}
+
+.callout.green{background:rgba(61,255,160,0.04);border-color:rgba(61,255,160,0.22);border-left-color:var(--green)}
+.callout.green .k{color:var(--green)}
+
+.compare-table{
+  margin:24px 0;width:100%;
+  border:1px solid var(--line);
+  font-size:13.5px;
+}
+.compare-table thead th{
+  background:rgba(255,255,255,0.03);
+  font-family:var(--mono);font-size:10.5px;color:var(--text);
+  letter-spacing:1.5px;text-align:left;padding:12px 14px;
+  border-bottom:1px solid var(--line);font-weight:700;
+}
+.compare-table tbody td{
+  padding:12px 14px;border-top:1px solid var(--line);
+  color:var(--text-dim);vertical-align:top;
+}
+.compare-table tbody tr td:first-child{
+  font-family:var(--mono);font-size:11px;color:var(--gold);
+  letter-spacing:1px;font-weight:600;width:30%;
+}
+
+.versions{
+  margin:40px 0 20px;padding:20px 22px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.versions h3{font-size:13px;margin:0 0 12px;color:var(--gold)}
+.v-row{
+  display:flex;gap:14px;padding:8px 0;
+  border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;
+}
+.v-row:first-of-type{border-top:0}
+.v-row .ver{color:var(--cyan);width:60px;flex-shrink:0}
+.v-row .dt{color:var(--muted);width:110px;flex-shrink:0}
+.v-row .ch{color:var(--text-dim);flex:1}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  line-height:2;
+}
+.foot a{color:var(--text-dim);transition:color .15s}
+.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 8px;color:var(--line)}
+.foot .version{display:block;margin-top:14px;color:var(--muted);font-size:10px;letter-spacing:1px}
+
+@media print{
+  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
+  body::before, body::after{display:none !important}
+  body{background:#fff;color:#000}
+  h1.doc-title,h2,h3,strong,p strong{color:#000}
+  p,li{color:#222}
+}
+</style></head>
+<body>
+
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">&larr; BACK TO SITE</a>
+    <a href="/governance-spec">GOVERNANCE SPEC &#8599;</a>
+    <a href="/liquidation-spec">LIQUIDATION SPEC &#8599;</a>
+    <a href="/corrections">CORRECTIONS &#8599;</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <header class="doc-header">
+    <div class="doc-tag">FINANCIAL MECHANISM SPECIFICATION &middot; COUNSEL-REVIEWED</div>
+    <h1 class="doc-title">Creator-Fee <span class="grad">Liquidity Loop</span> Specification</h1>
+    <p class="doc-sub">A public specification for what the Federation does with its Moonshot creator-fee share. Reviewed by outside counsel before publication, committed on the corrections log, and not yet live &mdash; the mechanism activates at the $73K bond.</p>
+    <div class="doc-meta">
+      <span><strong>Version:</strong> v1.0</span>
+      <span><strong>Status:</strong> COMMITTED &middot; NOT YET LIVE</span>
+      <span><strong>Published:</strong> 2026-07-22</span>
+      <span><strong>Activates:</strong> AT BOND</span>
+    </div>
+  </header>
+
+  <div class="toc">
+    <div class="toc-title">// CONTENTS</div>
+    <ol>
+      <li><a href="#mechanism">The mechanism, factually</a></li>
+      <li><a href="#commitment">The commitment</a></li>
+      <li><a href="#framing">What this is &mdash; and is not</a></li>
+      <li><a href="#proof">Proof discipline</a></li>
+      <li><a href="#counsel">Review &amp; conditions</a></li>
+      <li><a href="#anticlaims">Anti-claims</a></li>
+      <li><a href="#versions">Revision history</a></li>
+    </ol>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">SEQUENCE</div>
+    <p>Nothing in this document is live today. The creator-fee share activates when $GFOF completes its $73K bond and migrates to Raydium. This specification exists now &mdash; reviewed and committed before activation &mdash; so the design is settled in the open before a single SOL moves. Same spec-before-code discipline as <a href="/governance-spec" style="color:var(--gold)">/governance-spec</a> and <a href="/liquidation-spec" style="color:var(--gold)">/liquidation-spec</a>.</p>
+  </div>
+
+  <h2 id="mechanism"><span class="num">SECTION 01</span>The mechanism, factually</h2>
+  <p>$GFOF launched on Moonshot. Under Moonshot&rsquo;s standard terms, the token creator receives a share of <strong>swap (trading) fees, denominated in SOL</strong> &mdash; a 0.5% swap fee pre-bond, dropping to 0.3% post-bond, with up to 50% of swap fees payable to the creator. The creator-fee share activates at the bond event.</p>
+  <p>To be precise about what this is: a <strong>&ldquo;creator-fee share paid in SOL.&rdquo;</strong> It is not &ldquo;creator coins,&rdquo; not a separate token, and not a per-trade payout of $GFOF. It is a SOL revenue stream to the Federation treasury wallet, arising from trading activity on $GFOF, and it becomes meaningful only after the bond.</p>
+  <p>These figures are Moonshot platform mechanics, confirmed against $GFOF&rsquo;s live settings at publication. If Moonshot changes its terms, this mechanism changes with them &mdash; and that change gets logged.</p>
+
+  <h2 id="commitment"><span class="num">SECTION 02</span>The commitment</h2>
+  <p>The Federation commits to the following, effective from activation at bond:</p>
+  <ul>
+    <li><strong>50%</strong> of received creator-fee SOL is deployed into the <strong>$GFOF/SOL liquidity pool</strong> (Raydium) on a <strong>weekly</strong> cadence.</li>
+    <li><strong>50%</strong> goes to operating treasury &mdash; development, infrastructure, operations.</li>
+    <li>Every liquidity deployment is posted with its <strong>on-chain transaction signature</strong>, verifiable by anyone.</li>
+    <li>No burn. No buyback framing. No discretionary timing &mdash; the cadence is fixed and published.</li>
+  </ul>
+  <div class="callout">
+    <div class="k">SYMMETRY</div>
+    <p>This is the Federation&rsquo;s second disclosed liquidity mechanism. The first &mdash; Dossier&rsquo;s revenue loop (commitment #011 on the Dossier log) &mdash; steps from 25% to 50% of net revenue at sustained $5K MRR. Both mechanisms land at the same 50% commitment, are described identically, and follow the same proof rules: plumbing, on-chain, scheduled, checkable.</p>
+  </div>
+
+  <h2 id="framing"><span class="num">SECTION 03</span>What this is &mdash; and is not</h2>
+  <p>This is a <strong>transparent, scheduled treasury mechanism with on-chain proof.</strong> Deepening the pool&rsquo;s liquidity reduces slippage and improves market quality for anyone trading $GFOF &mdash; that is the plumbing function, and it is the entire claim.</p>
+  <p>It is <strong>not</strong> price support, a price floor, a buyback, or a mechanism with any claimed price outcome. It creates <strong>no expectation of return</strong> for holders: holding $GFOF earns nothing from this loop. It is not a distribution, dividend, or yield of any kind.</p>
+
+  <h2 id="proof"><span class="num">SECTION 04</span>Proof discipline</h2>
+  <p>Each weekly deployment is published with its transaction signature. The record of deployments is cumulative and public. If a scheduled deployment does not happen &mdash; for any reason &mdash; that is a corrections-log event, disclosed under the same strict counting rules as every other commitment the Federation makes.</p>
+
+  <h2 id="counsel"><span class="num">SECTION 05</span>Review &amp; conditions</h2>
+  <p>This specification was reviewed by outside counsel before publication and approved as drafted. The same standing condition that governs the Federation&rsquo;s other counsel-reviewed positions applies here: clearance is conditional on the regulatory picture holding. The Federation maintains a public trigger framework for U.S. market-structure legislation; if a trigger fires, this mechanism returns to counsel before continuing, and that review is logged.</p>
+
+  <h2 id="anticlaims"><span class="num">SECTION 06</span>Anti-claims</h2>
+  <ul>
+    <li>This is not a distribution, dividend, or yield. Holding $GFOF earns nothing from it.</li>
+    <li>It is not price support and makes no claim about price.</li>
+    <li>The creator-fee share is a Moonshot platform mechanic, not a Federation revenue promise. If Moonshot&rsquo;s terms change, this loop changes, and the change is logged.</li>
+    <li>The cadence and percentages are commitments to a <em>mechanism</em>, never to any amount or outcome.</li>
+    <li>If the Federation ever describes this mechanism in a way that contradicts this section, that is by definition a corrections-log event.</li>
+  </ul>
+
+  <div class="versions" id="versions">
+    <h3>REVISION HISTORY</h3>
+    <div class="v-row">
+      <span class="ver">v1.0</span>
+      <span class="dt">2026-07-22</span>
+      <span class="ch">Initial publication. Reviewed by outside counsel and approved as drafted. Committed on the corrections log. Mechanism activates at the $73K bond; nothing is live before then.</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">&middot;</span>
+  <a href="/governance-spec">Governance Spec</a>
+  <span class="sep">&middot;</span>
+  <a href="/liquidation-spec">Liquidation Spec</a>
+  <span class="sep">&middot;</span>
+  <a href="/corrections">Corrections Log</a>
+</div>
+
+</body>
+</html>
