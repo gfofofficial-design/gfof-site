@@ -19,6 +19,9 @@
 <meta name="twitter:description" content="$GFOF as an optional way to pay for Dossier. A payment option, not a gate.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image.png">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <meta name="robots" content="index, follow">
 <style>
 :root{
@@ -264,6 +267,13 @@ a.in:hover{color:var(--gold);border-color:rgba(240,192,64,0.6)}
   }
 }
 
+
+/* ═══════════ BOLD TIER OVERRIDES — readability (2026-07-22, ported from Dossier) ═══════════ */
+:root{--font-read:'Inter',system-ui,sans-serif;}
+p, .callout p{font-family:var(--font-read); letter-spacing:0;}
+p{font-size:16.5px; line-height:1.64;}
+.callout p{font-size:15.5px;}
+@media(max-width:520px){p{font-size:15.5px}.callout p{font-size:15px}}
 </style>
 </head>
 <body>
