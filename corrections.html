@@ -73,7 +73,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#040818;--bg-2:#020510;
@@ -403,6 +403,13 @@ a{color:inherit;text-decoration:none}
 .section-head.cl-empty{opacity:.35}
 @media(max-width:600px){.cl-chip{flex:1 1 auto;justify-content:center}}
 
+
+/* ═══════════ BOLD TIER OVERRIDES — readability (2026-07-22, ported from Dossier) ═══════════ */
+:root{--font-read:'Inter',system-ui,sans-serif;}
+p{font-family:var(--font-read); letter-spacing:0;}
+.hero p{font-size:17.5px; line-height:1.6;}
+.kr-narrative p{font-size:15.5px; line-height:1.62;}
+@media(max-width:520px){.hero p{font-size:16px}.kr-narrative p{font-size:14.5px}}
 </style>
 </head>
 <body>
@@ -874,6 +881,63 @@ a{color:inherit;text-decoration:none}
       <p><strong>Why the rate is 93%, not 100%.</strong> The keep-rate is counted strictly: of <strong>15 resolved commitments</strong>, 14 are KEPT and one &mdash; entry <a href="#c018" style="color:var(--cyan);text-decoration:underline">#018</a>, the immutable on-chain name disclosure &mdash; sits in the denominator as a DISCLOSURE / CANCELLED rather than being excluded to flatter the number. We chose the stricter count on purpose. The 17 ON TRACK entries are forward-looking and excluded from the rate until they resolve.</p>
       <p>A search box and status filters were also added to make the log navigable. No entry content was altered.</p>
       <p><strong>Status:</strong> Acknowledged and permanent. The page now corrects its own arithmetic; a stale published stat has been replaced with the true figure. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-on-track" id="c025">
+    <div class="entry-head">
+      <span class="entry-id">#025 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>Creator-fee liquidity loop: 50% of the Federation&rsquo;s Moonshot creator-fee SOL to $GFOF/SOL liquidity, weekly, with on-chain proof &mdash; counsel-reviewed, activates at bond.</h3>
+    <div class="meta">
+      <span>Committed 2026-07-22</span>
+      <span>Affected: treasury mechanism &middot; spec at /creator-fee-spec</span>
+    </div>
+    <div class="body">
+      <p><strong>The commitment.</strong> Under Moonshot&rsquo;s standard terms, the token creator receives a share of swap fees, paid in SOL, activating at the bond. The Federation commits that from activation, <strong>50% of received creator-fee SOL is deployed into the $GFOF/SOL liquidity pool weekly, with every deployment&rsquo;s transaction signature published</strong>; the remaining 50% funds operating treasury. No burn, no buyback framing, no discretionary timing. Full specification: <a href="/creator-fee-spec" style="color:var(--cyan);text-decoration:underline">/creator-fee-spec</a>.</p>
+      <p><strong>What this is not.</strong> Not price support, not a floor, not a distribution, not yield. Holding $GFOF earns nothing from this loop. It is treasury plumbing with a published schedule and on-chain proof &mdash; the same framing, deliberately, as Dossier&rsquo;s revenue loop (#011 on the Dossier log), which steps to the same 50% at sustained $5K MRR.</p>
+      <p><strong>Review.</strong> The specification was reviewed by outside counsel before publication and approved as drafted. The standing condition applies: clearance is conditional on the regulatory picture holding, under the same public trigger framework as entry #022. If a trigger fires, the mechanism returns to counsel before continuing.</p>
+      <p><strong>Accountability.</strong> Nothing is live before the bond. From activation: a missed weekly deployment, for any reason, is a corrections-log event. If the Federation ever describes this mechanism in terms that contradict its published anti-claims, that too is a loggable event, by the spec&rsquo;s own definition.</p>
+      <p><strong>Status:</strong> Committed, not yet active. Counted as a COMMITMENT in the denominator from the moment of this entry, per our strict rules. This entry is appended, never edited.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c024">
+    <div class="entry-head">
+      <span class="entry-id">#024 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>Entry #021 said the counsel-reviewed mission statement went live. It never did &mdash; the old line stayed on the homepage. Now actually deployed.</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-07-03</span>
+      <span>Affected: homepage / mission &middot; entry #021</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> Entry <a href="#c021" style="color:var(--cyan);text-decoration:underline">#021</a> (logged 2026-06-27) reported that the homepage mission statement had been rewritten, reviewed by outside counsel, and published. A site audit on 2026-07-03 found the homepage still carrying the old line &mdash; <em>&ldquo;Most DeFi protocols extract value. $GFOF creates it&rdquo;</em> &mdash; and no trace of the new wording anywhere in the deployed site. We checked the deploy history: no deploy between #021 and today ever contained the new mission. The reviewed change was logged as live, but the deploy that was supposed to carry it never happened &mdash; most likely a silent upload failure of the kind documented elsewhere in this log.</p>
+      <p><strong>What that means.</strong> For six days, this log&rsquo;s entry #021 said RESOLVED about a change that was not live, and the homepage continued to display value-creation language that had been retired precisely because it was the kind of claim we do not make. Both halves of that are exactly what this page exists to record.</p>
+      <p><strong>What we did.</strong> The mission statement now live states the mission as the <strong>financial self-sufficiency of every member</strong> &mdash; the tools, the intelligence, and the open knowledge to grow their own wealth and build their own ideas, rather than depending on a black box they are forced to trust. Because the original reviewed file was lost to the failed deploy, this wording is reconstructed from the description published in entry #021 itself; the substance matches what counsel reviewed, and any wealth-growth language points at the member&rsquo;s own tools and decisions, never at holding or price appreciation of the token.</p>
+      <p><strong>Process fix.</strong> Entries that report a deploy will state what was verified live, not what was uploaded. #021 itself is not edited &mdash; entries here are never edited &mdash; this entry corrects the record beside it.</p>
+      <p><strong>Status:</strong> Resolved. Mission deployed and verified live; counted as a CORRECTION in the denominator per our strict rules. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+  <div class="entry status-cancelled" id="c023">
+    <div class="entry-head">
+      <span class="entry-id">#023 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>The Federation App carried a staking tier structure and NFT multiplier that were never real &mdash; contradicting our published no-commitments position. It has been corrected.</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-07-03</span>
+      <span>Affected: /app</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> The Federation App at <a href="/app" style="color:var(--cyan);text-decoration:underline">/app</a> displayed staking content that contradicted this site&rsquo;s published position: a concrete tier structure (30/90/180-day locks with 1.5x, 2x, and 3x multipliers), a claim that the Founding Member NFT grants a permanent +0.5x staking multiplier, &ldquo;earn passively&rdquo; reward language, and purchase prompts (&ldquo;Buy now to qualify&rdquo;). Our main site states explicitly &mdash; and has stated throughout &mdash; that <strong>no staking specification exists</strong>: no APY, no multipliers, no rates, no tier structure, and that the Founding Member NFT carries no boost, yield, or utility of any kind.</p>
+      <p><strong>How it happened.</strong> The app copy was written early, before these disciplines were formalized, and was missed by every subsequent quality pass because it lives at a separate path. That is an explanation, not an excuse: the contradiction was live and public, linked from our own homepage.</p>
+      <p><strong>What we did.</strong> The app&rsquo;s staking screen now states the published position &mdash; spec before code; no numbers until a versioned specification is published for public comment. The NFT description now matches the main site exactly. Promotional purchase language and persona-voice quotes were removed from product copy. The app&rsquo;s service-worker cache version was bumped so installed copies rotate to the corrected version rather than serving the old one from cache.</p>
+      <p><strong>What this means for holders.</strong> Nothing was ever committed. The tier structure and NFT multiplier shown in the app were never specified, never promised anywhere else, and never real. If you made any decision based on the app&rsquo;s staking screen, the accurate position is the one on this site: the staking specification has not been written, and it will be published for public comment before any contract exists.</p>
+      <p><strong>Status:</strong> Resolved. App copy corrected and deployed; cache rotated. Counted as a CORRECTION in the denominator per our strict rules. This entry is appended, never edited retroactively.</p>
     </div>
   </div>
 
