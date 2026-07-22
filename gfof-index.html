@@ -93,7 +93,7 @@
 <link rel="dns-prefetch" href="https://dexscreener.com">
 <link rel="dns-prefetch" href="https://x.com">
 <link rel="dns-prefetch" href="https://t.me">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --gold: #f0c040;
@@ -1589,6 +1589,54 @@ footer::before {
 }
 .kb-label{color:rgba(200,220,255,0.65);letter-spacing:1px}
 @media(max-width:640px){.kb-hints{display:none}}
+
+/* ═══════════ BOLD TIER OVERRIDES — readability + hierarchy (2026-07-22) ═══════════
+   Ported from the Dossier 2026-07-21 treatment. Reading copy moves to Inter at
+   readable sizes; Orbitron/Rajdhani/mono stay for display, labels, and data.
+   Also defines --text-dim, which was referenced site-wide but never declared. */
+:root{
+  --font-read:'Inter',system-ui,sans-serif;
+  --text-dim:#93a4c9;
+  --text-bright:#e9f1ff;
+}
+p, .section-sub, .hero-desc, .bond-desc, .mission-desc, .phase-desc,
+.roadmap-desc, .points-desc, .sc-desc, .x-embed-body{
+  font-family:var(--font-read); letter-spacing:0;
+}
+p{font-size:16.5px; line-height:1.66;}
+.section-sub{font-size:16.5px; line-height:1.62; color:var(--text-dim); max-width:640px;}
+.hero-desc{font-size:18px; line-height:1.6; color:var(--text-bright); font-weight:500; max-width:560px;}
+.bond-desc{font-size:16.5px; line-height:1.62;}
+.mission-desc,.phase-desc,.roadmap-desc{font-size:15.5px; line-height:1.62;}
+.points-desc{font-size:15px; line-height:1.58;}
+.sc-desc{font-size:15.5px; line-height:1.6;}
+
+/* hierarchy: brighter title glow, calmer tracking on long headings */
+.hero-h1{letter-spacing:-.5px; text-shadow:0 0 55px rgba(240,192,64,.32), 0 0 90px rgba(240,192,64,.12);}
+.section-title{letter-spacing:1.5px;}
+
+/* subtle depth vignette — layers under content, over canvas starfield */
+html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 55% at 15% -8%, rgba(240,192,64,.05), transparent 52%),
+    radial-gradient(ellipse 65% 45% at 92% 8%, rgba(64,192,255,.05), transparent 50%),
+    radial-gradient(ellipse 90% 60% at 60% 108%, rgba(240,192,64,.04), transparent 55%);}
+
+/* micro-polish: gold signal line on stat hover, gentle card lift */
+.stat-card{position:relative; overflow:hidden; transition:transform .25s;}
+.stat-card::after{content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--gold), transparent); opacity:0; transition:opacity .3s;}
+.stat-card:hover::after{opacity:.6;}
+.holo-card{transition:transform .25s, box-shadow .25s;}
+.holo-card:hover{transform:translateY(-2px); box-shadow:0 8px 40px rgba(240,192,64,.08);}
+
+@media(max-width:520px){
+  p,.section-sub,.bond-desc{font-size:15.5px;}
+  .hero-desc{font-size:16.5px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .stat-card,.holo-card{transition:none;}
+}
 </style>
 </head>
 <body>
@@ -1957,7 +2005,7 @@ footer::before {
   <div class="container">
     <div class="section-tag reveal">Core Mission</div>
     <h2 class="section-title reveal delay-1">Built Different. From the Ground Up.</h2>
-    <p class="section-sub">The mission of the Federation is the financial self-sufficiency of every member — the tools, the intelligence, and the open knowledge to grow their own wealth and build their own ideas, rather than depending on a black box they are forced to trust.</p>
+    <p class="section-sub">Most DeFi protocols extract value. $GFOF creates it — for every member of the federation.</p>
     <div class="mission-grid">
       <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M6 3h12l3 5-9 13L3 8l3-5z"/><path d="M3 8h18M9 3l3 18 3-18"/></svg></span><div class="mission-title">Store of Value</div><div class="mission-desc">13% of supply locked on-chain via Streamflow. Verifiable live — <a href="/treasury" style="color:var(--green);text-decoration:underline;text-underline-offset:2px">read from Solana in your browser ↗</a></div></div>
       <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg></span><div class="mission-title">DeFi Lending — Designed in Public</div><div class="mission-desc">Borrower-protective liquidation spec published before any code ships. Open for criticism — <a href="/liquidation-spec" style="color:#A78BFA;text-decoration:underline;text-underline-offset:2px">read v0.2 ↗</a></div></div>
