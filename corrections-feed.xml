@@ -7,7 +7,7 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Fri, 03 Jul 2026 20:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jul 2026 16:00:00 +0000</lastBuildDate>
     <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#025 · COMMITMENT — Creator-fee liquidity loop: 50% of Moonshot creator-fee SOL to $GFOF/SOL liquidity weekly with on-chain proof; 50% to treasury. Counsel-reviewed, activates at bond.</title>
+      <link>https://galacticfederation.co/corrections#c025</link>
+      <guid isPermaLink="false">gfof-commitment-025-creator-fee-loop</guid>
+      <pubDate>Wed, 22 Jul 2026 16:00:00 +0000</pubDate>
+      <description>The Federation commits that from activation at the $73K bond, 50% of its Moonshot creator-fee share (paid in SOL) is deployed into the $GFOF/SOL liquidity pool weekly, every deployment published with its on-chain transaction signature; 50% funds operating treasury. Reviewed by outside counsel and approved as drafted; clearance conditional on regulatory stability per the #022 trigger framework. Not price support, not a distribution — plumbing with proof. A missed deployment after activation is itself a loggable event. Full spec: galacticfederation.co/creator-fee-spec</description>
+    </item>
 
     <item>
       <title>#024 · CORRECTION — Entry #021 reported the counsel-reviewed mission as live; it never deployed. The old line stayed up six days. Now actually deployed and verified.</title>
