@@ -54,7 +54,7 @@
   ]
 }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -295,6 +295,10 @@ body::before {
   }
 }
 
+
+/* ═══════════ BOLD TIER OVERRIDES — readability (2026-07-22, ported from Dossier) ═══════════ */
+:root{--font-read:'Inter',system-ui,sans-serif;}
+p{font-family:var(--font-read); letter-spacing:0; font-size:15.5px; line-height:1.6;}
 </style>
 </head>
 <body>
