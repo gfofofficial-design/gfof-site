@@ -127,7 +127,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -325,6 +325,13 @@ h1.doc-title .grad{
     font-style: italic; text-align: center;
   }
 }
+
+/* ═══════════ BOLD TIER OVERRIDES — readability (2026-07-22, ported from Dossier) ═══════════ */
+:root{--font-read:'Inter',system-ui,sans-serif;}
+.doc-sub, .post p{font-family:var(--font-read); letter-spacing:0;}
+.doc-sub{font-size:17px; line-height:1.6;}
+.post p{font-size:16px; line-height:1.62;}
+@media(max-width:520px){.post p{font-size:15px}.doc-sub{font-size:15.5px}}
 </style>
 </head>
 
