@@ -8,7 +8,8 @@
 <meta property="og:title" content="$GFOF — Galactic Federation of Finance">
 <meta property="og:description" content="Research-first DeFi on Solana. Public design specs before code. Permanent corrections log. Live on-chain transparency.">
 <meta property="og:url" content="https://galacticfederation.co">
-<meta property="og:image" content="https://galacticfederation.co/og-image-v2.png">
+<meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:type" content="website">
@@ -16,7 +17,7 @@
 <meta name="twitter:site" content="@GFOF_Offcial">
 <meta name="twitter:title" content="$GFOF — Galactic Federation of Finance">
 <meta name="twitter:description" content="Research-first DeFi on Solana. Design specs before code. Public corrections log. Live on-chain transparency at galacticfederation.co.">
-<meta name="twitter:image" content="https://galacticfederation.co/og-image-v2.png">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
 <link rel="apple-touch-icon" href="https://galacticfederation.co/logo.png">
 <link rel="canonical" href="https://galacticfederation.co">
@@ -93,7 +94,7 @@
 <link rel="dns-prefetch" href="https://dexscreener.com">
 <link rel="dns-prefetch" href="https://x.com">
 <link rel="dns-prefetch" href="https://t.me">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --gold: #f0c040;
@@ -1589,6 +1590,54 @@ footer::before {
 }
 .kb-label{color:rgba(200,220,255,0.65);letter-spacing:1px}
 @media(max-width:640px){.kb-hints{display:none}}
+
+/* ═══════════ BOLD TIER OVERRIDES — readability + hierarchy (2026-07-22) ═══════════
+   Ported from the Dossier 2026-07-21 treatment. Reading copy moves to Inter at
+   readable sizes; Orbitron/Rajdhani/mono stay for display, labels, and data.
+   Also defines --text-dim, which was referenced site-wide but never declared. */
+:root{
+  --font-read:'Inter',system-ui,sans-serif;
+  --text-dim:#93a4c9;
+  --text-bright:#e9f1ff;
+}
+p, .section-sub, .hero-desc, .bond-desc, .mission-desc, .phase-desc,
+.roadmap-desc, .points-desc, .sc-desc, .x-embed-body{
+  font-family:var(--font-read); letter-spacing:0;
+}
+p{font-size:16.5px; line-height:1.66;}
+.section-sub{font-size:16.5px; line-height:1.62; color:var(--text-dim); max-width:640px;}
+.hero-desc{font-size:18px; line-height:1.6; color:var(--text-bright); font-weight:500; max-width:560px;}
+.bond-desc{font-size:16.5px; line-height:1.62;}
+.mission-desc,.phase-desc,.roadmap-desc{font-size:15.5px; line-height:1.62;}
+.points-desc{font-size:15px; line-height:1.58;}
+.sc-desc{font-size:15.5px; line-height:1.6;}
+
+/* hierarchy: brighter title glow, calmer tracking on long headings */
+.hero-h1{letter-spacing:-.5px; text-shadow:0 0 55px rgba(240,192,64,.32), 0 0 90px rgba(240,192,64,.12);}
+.section-title{letter-spacing:1.5px;}
+
+/* subtle depth vignette — layers under content, over canvas starfield */
+html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 55% at 15% -8%, rgba(240,192,64,.05), transparent 52%),
+    radial-gradient(ellipse 65% 45% at 92% 8%, rgba(64,192,255,.05), transparent 50%),
+    radial-gradient(ellipse 90% 60% at 60% 108%, rgba(240,192,64,.04), transparent 55%);}
+
+/* micro-polish: gold signal line on stat hover, gentle card lift */
+.stat-card{position:relative; overflow:hidden; transition:transform .25s;}
+.stat-card::after{content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--gold), transparent); opacity:0; transition:opacity .3s;}
+.stat-card:hover::after{opacity:.6;}
+.holo-card{transition:transform .25s, box-shadow .25s;}
+.holo-card:hover{transform:translateY(-2px); box-shadow:0 8px 40px rgba(240,192,64,.08);}
+
+@media(max-width:520px){
+  p,.section-sub,.bond-desc{font-size:15.5px;}
+  .hero-desc{font-size:16.5px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .stat-card,.holo-card{transition:none;}
+}
 </style>
 </head>
 <body>
