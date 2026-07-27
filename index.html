@@ -3103,9 +3103,10 @@ setInterval(fetchHolders,60000);
 
 /* ── CHATBOT ── */
 var chatHistory=[],chatLoading=false;
+var OFFLINE_HTML='Federation comms offline — please try again shortly. <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg>';
 /* Chatbot routes through /api/chat (netlify function) — prompt is defined server-side in chat.js.
    This avoids exposing API keys client-side and keeps one source of truth for chatbot behavior. */
-function addMsg(role,text){
+function addMsg(role,text,allowHtml){
   var msgs=document.getElementById('chat-messages');
   var div=document.createElement('div');
   div.className='chat-msg'+(role==='user'?' user':'');
@@ -3113,7 +3114,13 @@ function addMsg(role,text){
   var avatar=isUser
     ?'<div class="chat-avatar user">YOU</div>'
     :'<div class="chat-avatar bot" style="background:transparent;clip-path:none;overflow:hidden;border-radius:4px;border:1px solid rgba(240,192,64,0.3)"><img src="voss-avatar.png" alt="Admiral Zoran Voss" style="width:100%;height:100%;object-fit:cover;object-position:center top"></div>';
-  div.innerHTML=avatar+'<div class="chat-bubble '+(isUser?'user':'bot')+'">'+text+'</div>';
+  /* Bubble content is set as TEXT, never HTML. Only our own OFFLINE_HTML constant
+     is allowed through as markup (allowHtml=true) — visitor input and model output
+     are both escaped, so neither can inject an onerror/onload handler here. */
+  var bubble=document.createElement('div');
+  bubble.className='chat-bubble '+(isUser?'user':'bot');
+  if(allowHtml){ bubble.innerHTML=text; } else { bubble.textContent=text; }
+  div.innerHTML=avatar; div.appendChild(bubble);
   msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
 }
 function showTyping(){
@@ -3137,11 +3144,24 @@ function sendChat(){
   }).then(function(r){return r.json();})
     .then(function(d){
       var t2=document.getElementById('chat-typing');if(t2)t2.remove();
-      var reply=d.reply||'Federation comms offline — please try again shortly. <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg>';
-      chatHistory.push({role:'assistant',content:reply}); addMsg('bot',reply);
+      /* Commit to history ONLY on a genuine reply. The server marks failures with
+         code!=='OK'; the string check keeps this correct against the older function
+         too. On failure we roll the user's turn back off so chatHistory never
+         accumulates error text and never breaks role alternation. */
+      var good = d && d.reply && (!d.code || d.code==='OK')
+                 && d.reply.indexOf('Federation comms offline') !== 0;
+      if(good){
+        chatHistory.push({role:'assistant',content:d.reply});
+        addMsg('bot', d.reply);
+      } else {
+        if(chatHistory.length && chatHistory[chatHistory.length-1].role==='user') chatHistory.pop();
+        if(d && d.code && d.code!=='OK') console.warn('[voss] server code:', d.code);
+        addMsg('bot', OFFLINE_HTML, true);
+      }
     }).catch(function(){
       var t2=document.getElementById('chat-typing');if(t2)t2.remove();
-      addMsg('bot','Federation comms offline — please try again shortly. <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg>');
+      if(chatHistory.length && chatHistory[chatHistory.length-1].role==='user') chatHistory.pop();
+      addMsg('bot', OFFLINE_HTML, true);
     }).finally(function(){
       chatLoading=false; document.getElementById('chat-send').disabled=false;
       document.getElementById('chat-input').focus();
