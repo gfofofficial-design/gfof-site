@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>The Federation Record — public scored forecasts — $GFOF</title>
+<meta name="description" content="A public, timestamped, append-only forecast record open to the Federation. Falsifiable claims only, no price predictions, scored on resolution and never deleted. Standing is your record — it converts to nothing.">
+<link rel="canonical" href="https://galacticfederation.co/record">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://galacticfederation.co/record">
+<meta property="og:title" content="The Federation Record — public scored forecasts">
+<meta property="og:description" content="Falsifiable claims only. No price predictions. Timestamped, scored on resolution, never deleted. Standing is your record and converts to nothing.">
+<meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="The Federation Record — public scored forecasts">
+<meta name="twitter:description" content="Falsifiable claims only. No price predictions. Timestamped, scored on resolution, never deleted.">
+<meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#8896BC;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
+  --font-read:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16.5px;line-height:1.7;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(167,139,250,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple)}
+strong{color:var(--text)}
+
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;flex-wrap:wrap}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+
+.doc-header{padding:60px 0 30px}
+.doc-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--purple);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(167,139,250,0.3);
+  background:rgba(167,139,250,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+h1.doc-title{
+  font-family:var(--orb);font-size:clamp(30px,5vw,48px);
+  font-weight:900;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:14px;color:var(--text);
+}
+h1.doc-title .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.doc-sub{font-family:var(--font-read);font-size:17px;color:var(--text-dim);max-width:720px;line-height:1.6;margin-bottom:12px}
+.doc-meta{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:1.5px;padding:14px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;
+}
+.doc-meta span strong{color:var(--cyan);font-weight:500}
+
+.toc{
+  margin:30px 0;padding:20px 24px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.toc-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-bottom:10px}
+.toc ol{list-style:none;counter-reset:toc;padding:0}
+.toc li{counter-increment:toc;padding:4px 0;font-family:var(--mono);font-size:13px;color:var(--text-dim)}
+.toc li::before{content:counter(toc,decimal-leading-zero) '  ';color:var(--muted);margin-right:8px}
+.toc a{color:var(--text-dim);transition:color .15s}
+.toc a:hover{color:var(--cyan)}
+
+h2{
+  font-family:var(--orb);font-size:24px;font-weight:800;
+  letter-spacing:-0.3px;line-height:1.2;color:var(--text);
+  margin:50px 0 8px;padding-top:20px;border-top:1px solid var(--line);
+}
+h2 .num{
+  font-family:var(--mono);font-size:11px;color:var(--purple);
+  letter-spacing:2.5px;display:block;margin-bottom:6px;font-weight:600;
+}
+h3{font-family:var(--orb);font-size:17px;font-weight:700;color:var(--text);letter-spacing:0.1px;line-height:1.3;margin:28px 0 8px}
+p{margin-bottom:14px;color:var(--text-dim);font-family:var(--font-read);font-size:16.5px;line-height:1.64;letter-spacing:0}
+p strong{color:var(--text)}
+ul,ol{margin:10px 0 16px 20px;color:var(--text-dim)}
+ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
+
+.callout{margin:20px 0;padding:18px 22px;background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.2);border-left:3px solid var(--purple)}
+.callout .k{font-family:var(--mono);font-size:10px;color:var(--purple);letter-spacing:2px;margin-bottom:6px;font-weight:700}
+.callout p{color:var(--text);font-family:var(--font-read);font-size:15.5px;margin:0}
+.callout.amber{background:rgba(240,192,64,0.04);border-color:rgba(240,192,64,0.22);border-left-color:var(--gold)}
+.callout.amber .k{color:var(--gold)}
+.callout.red{background:rgba(255,94,123,0.04);border-color:rgba(255,94,123,0.22);border-left-color:var(--red)}
+.callout.red .k{color:var(--red)}
+.callout.green{background:rgba(61,255,160,0.04);border-color:rgba(61,255,160,0.22);border-left-color:var(--green)}
+.callout.green .k{color:var(--green)}
+
+.rule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:22px 0}
+.rule{padding:16px 18px;background:rgba(255,255,255,0.02);border:1px solid var(--line);border-left:2px solid var(--cyan)}
+.rule .rk{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:6px}
+.rule .rv{font-family:var(--font-read);font-size:14.5px;color:var(--text-dim);line-height:1.55}
+.rule.no{border-left-color:var(--red)}
+.rule.no .rk{color:var(--red)}
+
+.entry-card{
+  margin:14px 0;padding:18px 22px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+}
+.entry-card.open{border-left:3px solid var(--cyan)}
+.entry-card.correct{border-left:3px solid var(--green)}
+.entry-card.wrong{border-left:3px solid var(--red)}
+.ec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.ec-id{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:1px}
+.ec-badge{font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:4px 10px;border:1px solid var(--line)}
+.ec-badge.open{color:var(--cyan);border-color:rgba(64,192,255,0.3);background:rgba(64,192,255,0.05)}
+.ec-badge.correct{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+.ec-badge.wrong{color:var(--red);border-color:rgba(255,94,123,0.3);background:rgba(255,94,123,0.05)}
+.ec-claim{font-family:var(--font-read);font-size:16px;color:var(--text);line-height:1.55;margin-bottom:12px}
+.ec-meta{display:flex;flex-wrap:wrap;gap:18px;padding-top:10px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:0.5px}
+.ec-meta strong{color:var(--text-dim);font-weight:500}
+
+.empty{
+  margin:20px 0;padding:34px 24px;text-align:center;
+  border:1px dashed var(--line);background:rgba(255,255,255,0.015);
+}
+.empty .et{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--muted);margin-bottom:10px}
+.empty p{margin:0 auto;max-width:460px;font-size:15px;color:var(--text-dim)}
+
+.standings{margin:22px 0;width:100%;border:1px solid var(--line);border-collapse:collapse}
+.standings th,.standings td{padding:11px 14px;text-align:left;font-family:var(--mono);font-size:12px;border-bottom:1px solid var(--line)}
+.standings th{color:var(--muted);letter-spacing:2px;font-size:10px;font-weight:500;background:rgba(255,255,255,0.02)}
+.standings td{color:var(--text-dim)}
+.standings tr:last-child td{border-bottom:0}
+
+.formwrap{margin:24px 0;padding:24px;background:rgba(255,255,255,0.02);border:1px solid var(--line)}
+.fld{margin-bottom:16px}
+.fld label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:6px}
+.fld .hint{font-family:var(--font-read);font-size:13px;color:var(--muted);margin-top:5px;line-height:1.5}
+.fld input,.fld textarea,.fld select{
+  width:100%;padding:10px 12px;
+  background:rgba(0,0,0,0.3);border:1px solid var(--line);border-radius:2px;
+  color:var(--text);font-family:var(--font-read);font-size:15px;
+}
+.fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:rgba(64,192,255,0.45)}
+.fld textarea{min-height:88px;resize:vertical}
+.hp{position:absolute;left:-9999px}
+.submit-btn{
+  padding:12px 26px;background:rgba(240,192,64,0.08);
+  border:1px solid rgba(240,192,64,0.4);color:var(--gold);
+  font-family:var(--mono);font-size:12px;letter-spacing:2px;
+  cursor:pointer;transition:all .2s;border-radius:2px;
+}
+.submit-btn:hover{background:rgba(240,192,64,0.16);border-color:var(--gold)}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:2;
+}
+.foot a{color:var(--text-dim);transition:color .15s}
+.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 8px;color:var(--line)}
+.foot .version{display:block;margin-top:14px;color:var(--muted);font-size:10px;letter-spacing:1px}
+
+@media print{
+  .top-nav,.foot,nav,.toc,.formwrap,body::before,body::after{display:none !important}
+  body{background:#fff;color:#000}
+  h1.doc-title,h2,h3,strong,p strong{color:#000}
+  p,li{color:#222}
+}
+@media(max-width:520px){
+  p{font-size:15.5px}.callout p{font-size:15px}.ec-claim{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/research">RESEARCH ↗</a>
+    <a href="/corrections">CORRECTIONS ↗</a>
+    <a href="https://dossiertrack.co/forecasts" target="_blank" rel="noopener">DOSSIER RECORD ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <header class="doc-header">
+    <div class="doc-tag">THE FEDERATION RECORD · OPEN FOR SUBMISSIONS</div>
+    <h1 class="doc-title">The Federation <span class="grad">Record</span></h1>
+    <p class="doc-sub">A public, timestamped, append-only forecast record open to anyone in the Federation. Falsifiable claims only. No price predictions. Scored when they resolve, and never deleted &mdash; including the wrong ones. Especially the wrong ones.</p>
+    <div class="doc-meta">
+      <span>VERSION <strong>v0.1</strong></span>
+      <span>OPENED <strong>2026-07-27</strong></span>
+      <span>ADMITTED <strong id="stat-admitted">0</strong></span>
+      <span>RESOLVED <strong id="stat-resolved">0</strong></span>
+    </div>
+  </header>
+
+  <div class="toc">
+    <div class="toc-title">CONTENTS</div>
+    <ol>
+      <li><a href="#what">What this is</a></li>
+      <li><a href="#admissible">What qualifies</a></li>
+      <li><a href="#excluded">What does not</a></li>
+      <li><a href="#scoring">How it is scored</a></li>
+      <li><a href="#standing">What standing is &mdash; and is not</a></li>
+      <li><a href="#submit">Submit a forecast</a></li>
+      <li><a href="#record">The record</a></li>
+    </ol>
+  </div>
+
+  <h2 id="what"><span class="num">SECTION 01</span>What this is</h2>
+  <p>Anyone can claim they called it. Almost nobody publishes the calls they got wrong. The Federation Record exists to make the second thing normal.</p>
+  <p>You submit a claim about the future that can only turn out true or false. If it is admissible, it is published with a timestamp, cryptographically anchored so the timestamp cannot be backdated, and left alone. When the resolution date arrives it is scored against what actually happened. It is never edited and never removed. Your standing is the whole record, wins and losses together.</p>
+  <p>This is the same discipline Dossier applies to its own forecasts at <a href="https://dossiertrack.co/forecasts" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">dossiertrack.co/forecasts</a>, opened up to the Federation. Dossier&rsquo;s record is the product&rsquo;s. This one is yours.</p>
+
+  <div class="callout">
+    <div class="k">WHY IT IS BUILT THIS WAY</div>
+    <p>A track record that can be edited is not a track record. Anchoring means anyone can verify a forecast existed before its outcome was known, without trusting us. Append-only means a bad call cannot quietly disappear. Those two properties are the entire product.</p>
+  </div>
+
+  <h2 id="admissible"><span class="num">SECTION 02</span>What qualifies</h2>
+  <p>A submission needs all four of these. Most first submissions fail on the first one, and that is expected &mdash; writing a genuinely falsifiable claim is a skill, and it is most of the skill.</p>
+
+  <div class="rule-grid">
+    <div class="rule">
+      <div class="rk">01 · FALSIFIABLE</div>
+      <div class="rv">There is a possible future in which you are plainly wrong, and both of us would agree you were.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">02 · DATED</div>
+      <div class="rv">A specific resolution date. Not &ldquo;soon&rdquo;, not &ldquo;this cycle&rdquo;.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">03 · SOURCED</div>
+      <div class="rv">You name in advance what will settle it &mdash; an explorer, a registry, an official announcement, a public dataset.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">04 · CALIBRATED</div>
+      <div class="rv">A confidence between 50% and 99%, unless it is a plain yes or no.</div>
+    </div>
+  </div>
+
+  <p><strong>Things that qualify.</strong> Whether a protocol ships a named feature by a date. Whether a bill clears a chamber. Whether an on-chain metric crosses a threshold in a stated window. Whether a named project&rsquo;s TVL sits above or below a figure on a date. Whether an audit is published. Whether a listing happens.</p>
+
+  <h2 id="excluded"><span class="num">SECTION 03</span>What does not</h2>
+  <p>These are hard exclusions, inherited from the Dossier forecast specification. They are not judgement calls and they are not appealable.</p>
+
+  <div class="rule-grid">
+    <div class="rule no">
+      <div class="rk">NO PRICE</div>
+      <div class="rv">No token price, market cap, or valuation target. For any token, including this one.</div>
+    </div>
+    <div class="rule no">
+      <div class="rk">NO $GFOF CALLS</div>
+      <div class="rv">Nothing about $GFOF&rsquo;s own price, bond timing, or holder count.</div>
+    </div>
+    <div class="rule no">
+      <div class="rk">NO VIBES</div>
+      <div class="rv">&ldquo;The market will be volatile.&rdquo; &ldquo;X is undervalued.&rdquo; Unfalsifiable by construction.</div>
+    </div>
+    <div class="rule no">
+      <div class="rk">NO PEOPLE</div>
+      <div class="rv">No claims about a named individual&rsquo;s conduct, character, or private life.</div>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <div class="k">ON REJECTIONS</div>
+    <p>Submissions that do not qualify are declined with the reason stated publicly, without naming the submitter. The reasons are the point. A record where everything gets in would tell you nothing about the people in it.</p>
+  </div>
+
+  <h2 id="scoring"><span class="num">SECTION 04</span>How it is scored</h2>
+  <p>Probabilistic forecasts are scored with a <strong>Brier score</strong>: the square of the gap between what you said and what happened. Say 80% and it happens, you score 0.04. Say 80% and it does not, you score 0.64. Lower is better, zero is perfect, and 0.25 is what a coin flip earns. Plain yes/no claims are scored as correct or incorrect and counted separately.</p>
+  <p>Standing is reported three ways once there is enough volume to mean anything: your Brier average across resolved forecasts, your count resolved, and your <strong>calibration</strong> &mdash; whether the things you called at 70% actually happen about 70% of the time. Calibration is the hard one and the only one worth boasting about.</p>
+  <p>The standings table below opens once anyone reaches five resolved forecasts. Ranking on one lucky call is not a track record.</p>
+
+  <h2 id="standing"><span class="num">SECTION 05</span>What standing is &mdash; and is not</h2>
+  <p>Standing in this record is a public reputation for being right, held by you, verifiable by anyone, and portable to wherever else you want to point at it.</p>
+
+  <div class="callout amber">
+    <div class="k">STANDING CONVERTS TO NOTHING</div>
+    <p>Standing in the Federation Record does not convert to tokens, airdrop eligibility, governance weight, Founding Member NFT utility, Dossier discounts, or any other economic benefit &mdash; now or later. There is no points balance, no redemption, and no plan for one. Participating is not an investment and earns nothing but the record itself. This is a permanent condition of the Record, not a current phase of it.</p>
+  </div>
+
+  <p>That rule exists for two reasons. It is the honest description of what this is. And a reputation system that pays out is a reputation system people farm &mdash; which would destroy the only thing that makes the record worth reading.</p>
+
+  <h2 id="submit"><span class="num">SECTION 06</span>Submit a forecast</h2>
+  <p>Submissions are reviewed by hand for admissibility. Expect a few days, and expect to be declined the first time or two. Nothing you submit is published until it has been reviewed.</p>
+
+  <div class="formwrap">
+    <form name="federation-record" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/record?submitted=1">
+      <input type="hidden" name="form-name" value="federation-record">
+      <p class="hp"><label>Leave this empty: <input name="bot-field"></label></p>
+
+      <div class="fld">
+        <label for="handle">HANDLE</label>
+        <input type="text" id="handle" name="handle" required maxlength="32" placeholder="how you want to be credited">
+        <div class="hint">Published with the forecast. A pseudonym is fine. Use the same one every time or your record will not accumulate.</div>
+      </div>
+
+      <div class="fld">
+        <label for="claim">THE CLAIM</label>
+        <textarea id="claim" name="claim" required maxlength="500" placeholder="A single sentence that can only resolve true or false."></textarea>
+        <div class="hint">One claim per submission. If it contains the word &ldquo;and&rdquo;, it is probably two forecasts.</div>
+      </div>
+
+      <div class="fld">
+        <label for="confidence">CONFIDENCE</label>
+        <select id="confidence" name="confidence" required>
+          <option value="">Select…</option>
+          <option>Plain yes / no (not probabilistic)</option>
+          <option>50%</option><option>55%</option><option>60%</option><option>65%</option>
+          <option>70%</option><option>75%</option><option>80%</option><option>85%</option>
+          <option>90%</option><option>95%</option><option>99%</option>
+        </select>
+        <div class="hint">Be honest rather than bold. Overconfidence is the most expensive habit in Brier scoring.</div>
+      </div>
+
+      <div class="fld">
+        <label for="resolves">RESOLUTION DATE</label>
+        <input type="date" id="resolves" name="resolution_date" required>
+      </div>
+
+      <div class="fld">
+        <label for="source">RESOLUTION SOURCE</label>
+        <input type="text" id="source" name="resolution_source" required maxlength="200" placeholder="what will settle this, named in advance">
+        <div class="hint">Solscan, a GitHub release page, congress.gov, an official blog. If nobody can check it, it cannot be admitted.</div>
+      </div>
+
+      <div class="fld">
+        <label for="reasoning">REASONING <span style="color:var(--muted)">— OPTIONAL</span></label>
+        <textarea id="reasoning" name="reasoning" maxlength="1200" placeholder="Why you think this. Published alongside the forecast if you provide it."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">SUBMIT FOR REVIEW</button>
+    </form>
+  </div>
+
+  <h2 id="record"><span class="num">SECTION 07</span>The record</h2>
+
+  <div class="empty" id="record-empty">
+    <div class="et">NO FORECASTS ADMITTED YET</div>
+    <p>The Record opened on 2026-07-27. The first admitted forecast will appear here, with its timestamp and anchor. Nothing has been backfilled and nothing will be.</p>
+  </div>
+
+  <table class="standings">
+    <thead>
+      <tr><th>HANDLE</th><th>RESOLVED</th><th>BRIER</th><th>CALIBRATION</th></tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="4" style="color:var(--muted);text-align:center;padding:22px">Standings open when a participant reaches five resolved forecasts.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="k">HOW TO READ THIS PAGE IN SIX MONTHS</div>
+    <p>If it is full of correct calls, be suspicious &mdash; ask what was excluded. If it contains plainly wrong calls, still published, still attributed, then it is doing what it was built for.</p>
+  </div>
+
+</div>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/research">Research</a>
+  <span class="sep">·</span>
+  <a href="/corrections">Corrections</a>
+  <span class="sep">·</span>
+  <a href="https://dossiertrack.co/forecasts" target="_blank" rel="noopener">Dossier Record</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank" rel="noopener">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank" rel="noopener">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version">v17.28 · record · deployed 2026-07-27</span>
+</div>
+
+<script>
+(function(){
+  var cards = document.querySelectorAll('.entry-card');
+  var resolved = document.querySelectorAll('.entry-card.correct, .entry-card.wrong');
+  var a = document.getElementById('stat-admitted');
+  var r = document.getElementById('stat-resolved');
+  if (a) a.textContent = cards.length;
+  if (r) r.textContent = resolved.length;
+  var empty = document.getElementById('record-empty');
+  if (empty && cards.length > 0) empty.style.display = 'none';
+
+  if (location.search.indexOf('submitted=1') !== -1) {
+    var f = document.querySelector('.formwrap');
+    if (f) {
+      f.innerHTML = '<div class="callout green" style="margin:0"><div class="k">SUBMISSION RECEIVED</div>' +
+        '<p>It will be reviewed by hand for admissibility. If it qualifies it appears in the record below with its timestamp. ' +
+        'If it does not, the reason is published without your handle attached.</p></div>';
+    }
+  }
+})();
+</script>
+
+</body>
+</html>
