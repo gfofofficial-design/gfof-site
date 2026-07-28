@@ -887,6 +887,86 @@ p{font-family:var(--font-read); letter-spacing:0;}
     </div>
   </div>
 
+<div class="entry status-on-track" id="c029">
+    <div class="entry-head">
+      <span class="entry-id">#029 &middot; COMMITMENT</span>
+      <span class="entry-status">ON TRACK</span>
+    </div>
+    <h3>The Federation Record opens: a public, anchored, append-only forecast log where standing converts to nothing &mdash; not tokens, not governance weight, not NFT utility, ever.</h3>
+    <div class="meta">
+      <span>Committed 2026-07-27</span>
+      <span>Affected: community participation &middot; page at /record</span>
+    </div>
+    <div class="body">
+      <p><strong>The commitment.</strong> The Federation opens a public forecast record at <a href="/record" style="color:var(--cyan);text-decoration:underline">/record</a>. Anyone may submit a falsifiable, dated, sourced claim about the future. Admitted forecasts are published with a timestamp, cryptographically anchored so the timestamp cannot be backdated, scored when they resolve, and <strong>never edited or deleted</strong> &mdash; including the ones that turn out wrong. It applies the discipline already running on Dossier&rsquo;s own scored record to the Federation as a whole.</p>
+      <p><strong>The binding term.</strong> Standing in the Record converts to nothing. Not tokens, not airdrop eligibility, not governance weight, not Founding Member NFT utility, not Dossier discounts, not any other economic benefit &mdash; not now and not later. There is no points balance and no redemption mechanism, and none will be added. <strong>This is committed as a permanent property of the Record, not a current phase of it.</strong> If the Federation ever attaches an economic benefit to standing, that is a broken commitment and is loggable here as one.</p>
+      <p><strong>Why that term is the first thing stated.</strong> A reputation system that pays out gets farmed, and a farmed record is worth nothing to read. Separately and more importantly: this project has an open retroactive-distribution question with counsel. A participation program whose standing might later convert to tokens would create exactly the expectation of profit-from-others&rsquo;-efforts that question turns on. Committing publicly, in advance, that standing never converts keeps the Record clear of it &mdash; and is cheaper to state now than to walk back later.</p>
+      <p><strong>What is deliberately not being built.</strong> No ranks, no missions, no seasons, no leaderboard of activity, no referral rewards, no token-gated channels, no rewards paid from the reserve allocation. Every one of those was considered and rejected. Ranking by volume rewards whoever has the most free time; ranking by accuracy rewards being right, and being right is the only thing worth building a reputation on. If ranks are ever introduced they will be a mechanical function of resolved-forecast count and calibration, published as a spec first, and they will still convert to nothing.</p>
+      <p><strong>Accountability.</strong> Submissions that do not qualify are declined with the reason published, without naming the submitter. Admitted forecasts are never removed at a participant&rsquo;s request after resolution. A forecast quietly disappearing from the Record is a loggable event. The Record either accumulates losses in public or it is not doing anything.</p>
+      <p><strong>Honest starting position.</strong> At the time of this entry the Federation has 58 holders. This may attract a handful of participants, and that is the expected outcome rather than a disappointing one &mdash; a small number of people with anchored, scored, public records after six months is a real asset, and the only way to get one is to start and wait.</p>
+      <p><strong>Status:</strong> Committed and live. Counted as a COMMITMENT in the denominator from the moment of this entry, per our strict rules. This entry is appended, never edited.</p>
+    </div>
+  </div>
+
+<div class="entry status-cancelled" id="c028">
+    <div class="entry-head">
+      <span class="entry-id">#028 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>The Federation AI was telling visitors 10% of supply is locked across three contracts &mdash; a figure this log retired in #013. It has been corrected at the source.</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-07-24</span>
+      <span>Affected: Federation AI (/#chatbot) &middot; entry #013</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> The Federation AI &mdash; the Admiral Voss chatbot on the homepage &mdash; carried a system prompt stating that <em>10% of total supply is locked across three Streamflow contracts</em>. That figure was superseded by entry <a href="#c013" style="color:var(--cyan);text-decoration:underline">#013</a>, which corrected the locked supply to <strong>130,000,000 $GFOF (13%) across four immutable Streamflow contracts</strong>. Anyone who asked the bot how much supply was locked received the retired number, stated as fact, while every other surface on this site &mdash; the homepage, /treasury, and this log &mdash; carried the corrected one.</p>
+      <p><strong>How it happened.</strong> The bot&rsquo;s facts live in a system prompt inside a serverless function, not in any page of this site. When #013 corrected the tokenomics across the site, that function was not part of the pass, because it is not a page and does not appear in any site audit. This is the same failure shape as <a href="#c023" style="color:var(--cyan);text-decoration:underline">#023</a>, where the Federation App contradicted the main site because it lives at a separate path. A surface that speaks for the Federation was outside the process that keeps the Federation&rsquo;s statements true.</p>
+      <p><strong>What we cannot establish.</strong> We do not know how long the bot carried the retired figure, or how many visitors asked it. The function had no logging of any kind (see <a href="#c027" style="color:var(--cyan);text-decoration:underline">#027</a>). We are not going to estimate a number we cannot support.</p>
+      <p><strong>What we did.</strong> The system prompt now states the corrected locked supply and the 77/10/13 split, and it was audited against every current published position rather than only the one that was wrong. It now also knows the specifications it had never heard of &mdash; /access-spec, /governance-spec, /creator-fee-spec &mdash; along with the no-staking-specification position, the Dossier no-token-gate commitment, and the immutable on-chain name disclosure in <a href="#c018" style="color:var(--cyan);text-decoration:underline">#018</a>. Where a number could go stale again, it now points at /treasury, which reads the chain in the visitor&rsquo;s own browser, rather than reciting a figure from memory.</p>
+      <p><strong>Process fix.</strong> Any surface that answers questions in the Federation&rsquo;s voice is part of the correction process, not just the pages of this site. When a published figure changes, the chatbot prompt is checked in the same pass as the pages.</p>
+      <p><strong>Status:</strong> Resolved. Corrected prompt deployed and verified live by asking the bot the same question and confirming the 13% / four-contract answer. Counted as a CORRECTION in the denominator per our strict rules. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+<div class="entry status-cancelled" id="c027">
+    <div class="entry-head">
+      <span class="entry-id">#027 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>The Federation AI answered every question with &ldquo;comms offline&rdquo; for an unknown period. Its API credential had never been configured, and the code was built so that no failure could be told apart from any other.</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-07-24</span>
+      <span>Affected: Federation AI (/#chatbot)</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> Every message sent to the Federation AI returned <em>&ldquo;Federation comms offline &mdash; please try again shortly.&rdquo;</em> The cause was that the function&rsquo;s API credential was not present in the hosting environment at all. Not expired, not revoked &mdash; never set.</p>
+      <p><strong>How long.</strong> We do not know, and we will not guess. The function logged nothing, so there is no record of when it started failing. It is possible the bot has never worked for any visitor since the credential was last rotated.</p>
+      <p><strong>The design defect underneath.</strong> Every failure path in that function returned the identical message, with an HTTP 200 success status and no logging: missing credential, rejected credential, rate limit, billing failure, malformed request, upstream error. From outside, a working bot and a permanently dead one were indistinguishable; from inside, there was nothing to read. The system was built so that it could not report its own failure &mdash; which is the opposite of what this project says it does.</p>
+      <p><strong>What we did.</strong> The credential is now configured, scoped to the production environment only and marked secret so it cannot appear in build output. The function was rewritten so that each failure mode returns a distinct diagnostic code, logged server-side and visible in the network response, while visitors still see one clean message. Upstream error text is logged and never returned to the browser. A retry now covers transient upstream conditions, and a request timeout prevents an indefinite hang.</p>
+      <p><strong>What this means for anyone who used it.</strong> Nothing was misreported to you by the bot during this window &mdash; it said nothing at all. The accuracy problem in the bot&rsquo;s content is logged separately as <a href="#c028" style="color:var(--cyan);text-decoration:underline">#028</a>, and that one matters more.</p>
+      <p><strong>Status:</strong> Resolved. Credential configured, rewritten function deployed, bot verified answering live. Counted as a CORRECTION in the denominator per our strict rules. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+<div class="entry status-cancelled" id="c026">
+    <div class="entry-head">
+      <span class="entry-id">#026 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>Two silent CSS defects were degrading this site&rsquo;s readability &mdash; an undefined colour variable on the homepage and a specification page that was rendering in fallback fonts rather than the typefaces it declared.</h3>
+    <div class="meta">
+      <span>Found &amp; fixed 2026-07-22</span>
+      <span>Affected: all 12 pages &middot; /access-spec &middot; homepage</span>
+    </div>
+    <div class="body">
+      <p><strong>What happened.</strong> A readability pass across the site surfaced two defects that had been live and unnoticed. First, the homepage referenced a colour variable for muted text that was never defined anywhere in its stylesheet. Because the variable did not exist, secondary text fell back to inherited colour and rendered at the same weight as primary text &mdash; the visual hierarchy the page was designed around simply was not there. Second, <a href="/access-spec" style="color:var(--cyan);text-decoration:underline">/access-spec</a> declared three typefaces in its stylesheet but never loaded them. When the defect was found, that page was rendering entirely in whatever fallback fonts the reader&rsquo;s device chose. We have not established how long that was true, and are not claiming a duration we cannot verify.</p>
+      <p><strong>Why it went unnoticed.</strong> Neither defect throws an error or breaks a layout. An undefined CSS variable fails silently by design, and a page with no font link still renders perfectly readable text in a system font. Nothing was broken enough to notice; it was only wrong enough to be worse. Both were found by comparing the pages against each other rather than by reading any single page.</p>
+      <p><strong>What we did.</strong> The missing variable is defined. The specification page loads the typefaces it declares. Reading copy across all twelve pages now uses a typeface intended for continuous reading at sizes appropriate to it, rather than the condensed display face and monospace that were carrying body text. Display headings, data tables, and the terminal-styled interfaces keep the original faces. This was applied as an additive stylesheet block on each page &mdash; no markup, no wiring, and no live on-chain reads were touched.</p>
+      <p><strong>Why this is logged at all.</strong> Nobody complained and no commitment was broken. It is logged because a site whose entire argument is <em>read the specifications</em> was, in one case, publishing a specification it had never rendered as designed &mdash; and because entries here are not reserved for the failures that happen to be embarrassing.</p>
+      <p><strong>Status:</strong> Resolved. All twelve pages deployed and verified live. Counted as a CORRECTION in the denominator per our strict rules. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
   <div class="entry status-on-track" id="c025">
     <div class="entry-head">
       <span class="entry-id">#025 &middot; COMMITMENT</span>
