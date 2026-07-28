@@ -18,6 +18,38 @@
     <generator>Galactic Federation of Finance — static RSS</generator>
 
     <item>
+      <title>#029 · COMMITMENT — The Federation Record opens: a public, anchored, append-only forecast log where standing converts to nothing.</title>
+      <link>https://galacticfederation.co/corrections#c029</link>
+      <guid isPermaLink="false">gfof-commitment-029-federation-record</guid>
+      <pubDate>Tue, 28 Jul 2026 12:00:00 +0000</pubDate>
+      <description>The Federation opens a public forecast record at /record. Anyone may submit a falsifiable, dated, sourced claim about the future. Admitted forecasts are published with a timestamp, cryptographically anchored so the date cannot be backdated, scored when they resolve, and never edited or deleted — including the ones that turn out wrong. The binding term, committed as permanent rather than as a current phase: standing in the Record converts to nothing — not tokens, airdrop eligibility, governance weight, Founding Member NFT utility, discounts, or any other economic benefit, now or later. Deliberately not built: ranks, missions, seasons, activity leaderboards, referral rewards, token-gated channels, and rewards paid from the reserve allocation. Ranking by volume rewards free time; ranking by accuracy rewards being right.</description>
+    </item>
+
+<item>
+      <title>#028 · CORRECTION — The Federation AI was stating a retired locked-supply figure (10% / three contracts) that entry #013 had already corrected to 13% / four contracts.</title>
+      <link>https://galacticfederation.co/corrections#c028</link>
+      <guid isPermaLink="false">gfof-correction-028-chatbot-stale-tokenomics</guid>
+      <pubDate>Fri, 24 Jul 2026 20:00:00 +0000</pubDate>
+      <description>The Federation AI chatbot carried a system prompt stating that 10% of supply was locked across three Streamflow contracts — the figure superseded by entry #013, which corrected it to 130,000,000 $GFOF (13%) across four immutable contracts. Every page of the site carried the corrected number; the chatbot did not, because its facts live in a serverless function that no page audit covers. Same failure shape as #023. We cannot establish how long it carried the retired figure or how many visitors asked, because the function had no logging (see #027), and we will not estimate a number we cannot support. The prompt has been corrected, audited against every current published position, and now points at /treasury for live figures rather than reciting them.</description>
+    </item>
+
+    <item>
+      <title>#027 · CORRECTION — The Federation AI returned "comms offline" to every visitor for an unknown period; its API credential had never been configured and the code could not report its own failure.</title>
+      <link>https://galacticfederation.co/corrections#c027</link>
+      <guid isPermaLink="false">gfof-correction-027-chatbot-outage</guid>
+      <pubDate>Fri, 24 Jul 2026 19:00:00 +0000</pubDate>
+      <description>Every message to the Federation AI returned "Federation comms offline". The cause was that the function's API credential was not present in the hosting environment at all — never set, rather than expired or revoked. Duration is unknown and will not be estimated: the function logged nothing. The underlying defect was that every failure mode — missing credential, rejected credential, rate limit, billing failure, malformed request, upstream error — returned an identical message with an HTTP 200 status and no logging, making a working bot and a permanently dead one indistinguishable from outside and undiagnosable from inside. Credential now configured and scoped to production; function rewritten so each failure returns a distinct diagnostic code, logged server-side, while visitors still see one clean message.</description>
+    </item>
+
+    <item>
+      <title>#026 · CORRECTION — Two silent CSS defects were degrading readability: an undefined colour variable flattened the homepage hierarchy, and /access-spec was rendering in fallback fonts rather than the typefaces it declared.</title>
+      <link>https://galacticfederation.co/corrections#c026</link>
+      <guid isPermaLink="false">gfof-correction-026-readability-defects</guid>
+      <pubDate>Wed, 22 Jul 2026 22:00:00 +0000</pubDate>
+      <description>A site-wide readability pass surfaced two defects that had been live and unnoticed. The homepage referenced a colour variable for muted text that was never defined, so secondary text rendered at the same weight as primary text and the intended visual hierarchy was absent. Separately, /access-spec declared three typefaces but never loaded them, and was rendering in device fallback fonts when found; the duration is not established and is not claimed. Neither defect throws an error or breaks a layout, which is why both survived every previous pass. Both are fixed, and reading copy across all twelve pages now uses a typeface intended for continuous reading. Logged because a site whose argument is "read the specifications" was publishing a specification it had never rendered as designed.</description>
+    </item>
+
+    <item>
       <title>#025 · COMMITMENT — Creator-fee liquidity loop: 50% of Moonshot creator-fee SOL to $GFOF/SOL liquidity weekly with on-chain proof; 50% to treasury. Counsel-reviewed, activates at bond.</title>
       <link>https://galacticfederation.co/corrections#c025</link>
       <guid isPermaLink="false">gfof-commitment-025-creator-fee-loop</guid>
