@@ -252,8 +252,9 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <h1 class="doc-title">The Adjudication <span class="grad">Record</span></h1>
     <p class="doc-sub">A prediction market price is read as a probability about an event. It pays out on whatever the resolution mechanism certifies. Those are two different things. This is a public, timestamped log of how often they disagree &mdash; filed before resolution, scored both ways, and never edited.</p>
     <div class="doc-meta">
-      <span>VERSION <strong>v0.1</strong></span>
+      <span>VERSION <strong>v0.2</strong></span>
       <span>PUBLISHED <strong>2026-08-10</strong></span>
+      <span>AMENDED <strong>2026-08-10</strong></span>
       <span>ENTRIES FILED <strong>0</strong></span>
       <span>STATUS <strong>METHOD ONLY</strong></span>
     </div>
@@ -315,32 +316,36 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
 
   <h2 id="selection"><span class="num">SECTION 03</span>Which markets get filed</h2>
   <p>This is the section that decides whether the rest of the page is worth anything. Every accuracy claim in this industry founders on the same thing: the results are real, and the selection was not. Filing only the markets that later proved interesting produces a flawless record and tells the reader nothing.</p>
-  <p>So the rule is fixed in advance, published here, and applied without exception. A market is filed if it meets <strong>all four</strong>:</p>
+  <p>So the rule is fixed in advance, published here, and applied without exception. It is deliberately <strong>mechanical</strong>: nothing in it requires a judgement call by us.</p>
 
   <div class="rule-grid">
     <div class="rule">
       <div class="rk">01 &middot; COVERED VENUE</div>
-      <div class="rv">Listed on a venue named in this document. At v0.1: Polymarket and Kalshi.</div>
+      <div class="rv">Listed on a venue named in this document. At v0.2: Polymarket and Kalshi.</div>
     </div>
     <div class="rule">
-      <div class="rk">02 &middot; SIZE FLOOR</div>
-      <div class="rv">At least $250,000 in reported volume on the contract at the moment of filing.</div>
-    </div>
-    <div class="rule">
-      <div class="rk">03 &middot; FORWARD WINDOW</div>
+      <div class="rk">02 &middot; FORWARD WINDOW</div>
       <div class="rv">A stated resolution date falling within 45 days of the filing date.</div>
     </div>
     <div class="rule">
-      <div class="rk">04 &middot; AMBIGUITY MARKER</div>
-      <div class="rv">The rule text shows at least one of: no named settling source; an undefined qualitative term; a compound condition; or a named source that can publish after the stated deadline.</div>
+      <div class="rk">03 &middot; TOP FIVE BY VOLUME</div>
+      <div class="rv">Of the markets meeting 01 and 02, the five largest by reported volume at the moment of filing. All five are filed. Every week.</div>
     </div>
   </div>
 
-  <p><strong>Every</strong> qualifying market is filed, including the ones where the answer is obvious and the two probabilities are identical. Those entries are the majority and they are what makes a divergence rate mean anything.</p>
+  <p>There is no discretion at any point. We do not read the rule text and decide whether it looks interesting before choosing to file &mdash; the five markets are determined by venue, date, and size alone. Most will show no divergence at all. Those entries are the majority and they are what makes a divergence rate mean anything.</p>
 
   <div class="callout red">
     <div class="k">THE RULE THAT MAKES THE REST CREDIBLE</div>
-    <p>Declining to file a market that meets all four criteria is a failure, not an editorial decision, and it is logged in the <a href="/corrections">corrections log</a> as one. If the rule ever produces more qualifying markets than can be filed by hand, the fix is to tighten the published criteria by amendment &mdash; never to quietly file a subset.</p>
+    <p>Declining to file a market that the rule selects is a failure, not an editorial decision, and it is logged in the <a href="/corrections">corrections log</a> as one. Changes to this section happen by dated amendment published here, never by quietly filing a different set.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-08-10 &middot; v0.1 &rarr; v0.2 &middot; ORIGINAL TEXT RETAINED</div>
+    <p><strong>v0.1 of this section, published earlier today, read:</strong> a market was filed if it met all four of &mdash; listed on a covered venue; at least $250,000 in reported volume at filing; a resolution date within 45 days; and the rule text showing at least one ambiguity marker, being no named settling source, an undefined qualitative term, a compound condition, or a named source able to publish after the stated deadline.</p>
+    <p><strong>Why it changed.</strong> Before filing any entry we tested the rule against live markets. Four were assessed and none qualified. The largest markets inside the window turned out to be carefully drafted from templates &mdash; one named its settling source, linked the official calendar, defined rounding for off-bracket outcomes, and specified what happens if the source publishes late. The loosely worded markets were novelty contracts carrying four-figure volume, which the floor excluded. On this venue, ambiguity and size run in opposite directions, so the v0.1 rule selected for the markets least likely to produce the thing this record exists to measure.</p>
+    <p><strong>The deeper problem.</strong> The ambiguity criterion required <em>us</em> to judge whether wording was loose before deciding to file. That is the discretion this section exists to remove, and a reader would have been right to ask what we chose not to see. Ambiguity assessment now happens inside the entry, as the divergence thesis, where it can be scored and shown wrong &mdash; rather than in the selection, where it cannot.</p>
+    <p>The cost is stated plainly: a mechanical top-five rule is duller, and it makes a null result more likely. That is the correct direction for the trade to run.</p>
   </div>
 
   <p>Amendments to this section are versioned, dated, and published here with the old text retained. Any entry filed under a previous version keeps that version stamped on it.</p>
@@ -438,7 +443,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version">v17.29 · adjudication-method · published 2026-08-10</span>
+  <span class="version">v17.30 · adjudication-method · v0.2 amended 2026-08-10</span>
 </div>
 
 </body>
