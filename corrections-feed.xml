@@ -7,7 +7,7 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Wed, 22 Jul 2026 16:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 10 Aug 2026 17:00:00 +0000</lastBuildDate>
     <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#030 · COMMITMENT — The Adjudication Record: the rule for what gets measured is published before anything has been measured.</title>
+      <link>https://galacticfederation.co/corrections#c030</link>
+      <guid isPermaLink="false">gfof-commitment-030-adjudication-record</guid>
+      <pubDate>Mon, 10 Aug 2026 17:00:00 +0000</pubDate>
+      <description>The Federation Record gains a second class of entry, specified at /adjudication-method. A prediction market's price is read as a probability about an event, but the contract pays out on whatever its resolution mechanism certifies; how often those diverge is not measured by anyone without a position in the answer. Each entry quotes one market's written rule verbatim, states what the rule read literally requires and what the mechanism is expected to certify with a separate probability on each, and is filed before resolution. The binding term: the selection rule is fixed in public in advance — covered venue, $250,000 volume floor, resolution within 45 days, at least one ambiguity marker — and every qualifying market is filed, including the dull ones. Declining to file a qualifying market is a loggable failure. Deliberately not built: a resolver, a trust score or rating of any platform, claims about named individuals, price talk of any kind. Zero entries exist; if after twenty resolved entries rule and certification agree essentially every time, that null result is published and the record stops.</description>
+    </item>
 
     <item>
       <title>#029 · COMMITMENT — The Federation Record opens: a public, anchored, append-only forecast log where standing converts to nothing.</title>
