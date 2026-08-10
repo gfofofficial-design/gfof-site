@@ -7,7 +7,7 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Mon, 10 Aug 2026 17:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 10 Aug 2026 21:00:00 +0000</lastBuildDate>
     <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#031 · CORRECTION — We tested our own selection rule against live markets before filing anything. It failed, and is amended today with the original text retained.</title>
+      <link>https://galacticfederation.co/corrections#c031</link>
+      <guid isPermaLink="false">gfof-correction-031-adjudication-selection-rule</guid>
+      <pubDate>Mon, 10 Aug 2026 21:00:00 +0000</pubDate>
+      <description>Entry #030 fixed a selection rule for the Adjudication Record in advance: covered venue, $250,000 volume floor, resolution within 45 days, and at least one ambiguity marker in the rule text. Before filing any entry we tested it against live markets. Four were assessed and none qualified. The largest markets inside the window are template-drafted and tight — one named its settling source, linked the official calendar, defined rounding, and specified what happens if the source publishes late. The loosely worded markets were novelty contracts with four-figure volume, excluded by the floor. On this venue ambiguity and size run in opposite directions, so the rule selected for the markets least likely to show divergence. The deeper defect: the ambiguity criterion required us to judge wording before deciding to file, which is the discretion the section exists to remove. Selection is now mechanical — covered venue, 45-day window, five largest by volume, all filed, no judgement. The v0.1 text stays published beside the amendment. Zero entries filed.</description>
+    </item>
 
     <item>
       <title>#030 · COMMITMENT — The Adjudication Record: the rule for what gets measured is published before anything has been measured.</title>
