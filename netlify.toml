@@ -106,6 +106,12 @@
   force = true
 
 [[redirects]]
+  from = "/adjudication-method"
+  to = "/adjudication-method.html"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/app"
   to = "/app/index.html"
   status = 200
