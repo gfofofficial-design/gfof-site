@@ -129,6 +129,35 @@
   status = 200
   force = true
 
+# ─── Retired duplicate files (301 to canonical) ───
+# These stale copies were reachable at live URLs. Redirects ship before the
+# files are deleted so the URLs never 404. force = true so the redirect wins
+# while the file still exists.
+
+[[redirects]]
+  from = "/gfof-corrections.html"
+  to = "/corrections"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/gfof-index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/app-index.html"
+  to = "/app"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/dossier-corrections.html"
+  to = "https://dossiertrack.co/corrections"
+  status = 301
+  force = true
+
 # Catch-all — serve custom 404 page with proper 404 status
 [[redirects]]
   from = "/*"
