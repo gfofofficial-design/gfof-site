@@ -252,7 +252,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <h1 class="doc-title">The Adjudication <span class="grad">Record</span></h1>
     <p class="doc-sub">A prediction market price is read as a probability about an event. It pays out on whatever the resolution mechanism certifies. Those are two different things. This is a public, timestamped log of how often they disagree &mdash; filed before resolution, scored both ways, and never edited.</p>
     <div class="doc-meta">
-      <span>VERSION <strong>v0.3</strong></span>
+      <span>VERSION <strong>v0.4</strong></span>
       <span>PUBLISHED <strong>2026-08-10</strong></span>
       <span>AMENDED <strong>2026-08-11</strong></span>
       <span>ENTRIES FILED <strong>0</strong></span>
@@ -321,15 +321,19 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <div class="rule-grid">
     <div class="rule">
       <div class="rk">01 &middot; COVERED VENUE</div>
-      <div class="rv">Listed on a venue named in this document. At v0.3: Polymarket and Kalshi.</div>
+      <div class="rv">Listed on a venue named in this document. At v0.4: Polymarket and Kalshi.</div>
     </div>
     <div class="rule">
       <div class="rk">02 &middot; FORWARD WINDOW</div>
       <div class="rv">A stated resolution date falling within 45 days of the filing date.</div>
     </div>
     <div class="rule">
-      <div class="rk">03 &middot; TOP FIVE BY VOLUME</div>
-      <div class="rv">Of the markets meeting 01 and 02, the five largest by reported volume at the moment of filing. All five are filed. Every week. A <em>market</em> is the individually-resolving contract &mdash; the unit carrying its own rule text and settling on its own terms &mdash; not a grouping of contracts a venue displays together. <em>Volume</em> is the USD figure the venue itself displays for that contract, evidenced by a dated capture at filing; a figure displayed only for a grouping ranks no single contract.</div>
+      <div class="rk">03 &middot; NOT AN ASSET-PRICE CONTRACT</div>
+      <div class="rv">Excluded: any contract whose written rule resolves on the traded price, level, or yield of a financial instrument or index &mdash; a cryptocurrency price, an equity or index level, a Treasury yield, a commodity price. An economic statistic (CPI, payrolls) or a policy decision (a Fed rate decision) is not an asset price and is not excluded.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">04 &middot; TOP FIVE BY VOLUME</div>
+      <div class="rv">Of the markets meeting 01, 02 and 03, the five largest by reported volume at the moment of filing. All five are filed. Every week. A <em>market</em> is the individually-resolving contract &mdash; the unit carrying its own rule text and settling on its own terms &mdash; not a grouping of contracts a venue displays together. <em>Volume</em> is the USD figure the venue itself displays for that contract, evidenced by a dated capture at filing; a figure displayed only for a grouping ranks no single contract.</div>
     </div>
   </div>
 
@@ -354,6 +358,13 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <p><strong>What changed.</strong> Two definitions were added. No criterion was added, removed, or reweighted. Whether the selection differs from what v0.2 would have produced cannot be stated, because v0.2 did not determine one &mdash; which is the defect.</p>
     <p><strong>Why.</strong> Preparing the first filing exposed that v0.2 left two words undefined at the venues where they must be applied. Polymarket groups several individually-settling contracts under a single event page &mdash; a rate-decision event, for example, is one contract per outcome bracket, each with its own rule text &mdash; and the venues display volume at more than one level. Left undefined, both words would have required a choice at filing time, which is exactly the discretion this section exists to remove. So: a <em>market</em> is the individually-resolving contract, the unit carrying its own rule text and settling on its own terms; <em>volume</em> is the USD figure the venue displays for that contract at the moment of filing, evidenced by a dated capture. A figure displayed only for a grouping of contracts ranks no single contract.</p>
     <p>This amendment is published before the first selection is made under it, for the same reason the whole document was published before the first entry.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-08-11 &middot; v0.3 &rarr; v0.4 &middot; ORIGINAL TEXT RETAINED</div>
+    <p><strong>What changed.</strong> A third selection criterion was added, excluding contracts that resolve on the traded price, level, or yield of a financial instrument or index. The remaining criteria are unchanged and were renumbered.</p>
+    <p><strong>Why.</strong> Capturing the venues for the first filing showed that the highest-volume contracts inside the 45-day window are hourly and daily asset-price brackets &mdash; a cryptocurrency&rsquo;s price at 11am, an index level at the close, a Treasury yield today. Under v0.3 the mechanical top-five would have been dominated by them every week. But an entry&rsquo;s rule-implied reading carries a mandatory probability on the observable the rule names, and when that observable is an asset price, the number is an asset-price forecast &mdash; which Section 06 of this document forbids, and has forbidden since v0.1. Section 03 as written selected what Section 06 prohibits. The exclusion was always implied by the hard exclusions; the selection rule simply failed to encode it, and the failure only became visible on contact with the venue. This is the third amendment this section has needed in two days, each found the same way. That is stated here rather than smoothed over, because a selection rule that survives its author&rsquo;s imagination and fails at the venue is the expected order of events, and the record of the repairs is part of the record.</p>
+    <p><strong>The judgement-call check.</strong> A criterion is only admissible in this section if applying it requires no discretion. The test for this one: does the contract&rsquo;s written rule name, as its deciding observable, the traded price, level, or yield of a financial instrument or index? A Fed rate decision resolves on a policy announcement, not a traded price &mdash; included. CPI resolves on a published statistic &mdash; included. &ldquo;Bitcoin above $65,000&rdquo; resolves on a traded price &mdash; excluded. If a contract ever genuinely straddles this line, it will be filed rather than skipped, with the ambiguity stated in the entry, since filing is the non-discretionary default.</p>
   </div>
 
   <p>Amendments to this section are versioned, dated, and published here with the old text retained. Any entry filed under a previous version keeps that version stamped on it.</p>
@@ -451,7 +462,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version">v17.31 · adjudication-method · v0.3 amended 2026-08-11</span>
+  <span class="version">v17.32 · adjudication-method · v0.4 amended 2026-08-11</span>
 </div>
 
 </body>
