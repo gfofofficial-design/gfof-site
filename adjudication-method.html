@@ -252,9 +252,9 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <h1 class="doc-title">The Adjudication <span class="grad">Record</span></h1>
     <p class="doc-sub">A prediction market price is read as a probability about an event. It pays out on whatever the resolution mechanism certifies. Those are two different things. This is a public, timestamped log of how often they disagree &mdash; filed before resolution, scored both ways, and never edited.</p>
     <div class="doc-meta">
-      <span>VERSION <strong>v0.2</strong></span>
+      <span>VERSION <strong>v0.3</strong></span>
       <span>PUBLISHED <strong>2026-08-10</strong></span>
-      <span>AMENDED <strong>2026-08-10</strong></span>
+      <span>AMENDED <strong>2026-08-11</strong></span>
       <span>ENTRIES FILED <strong>0</strong></span>
       <span>STATUS <strong>METHOD ONLY</strong></span>
     </div>
@@ -321,7 +321,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <div class="rule-grid">
     <div class="rule">
       <div class="rk">01 &middot; COVERED VENUE</div>
-      <div class="rv">Listed on a venue named in this document. At v0.2: Polymarket and Kalshi.</div>
+      <div class="rv">Listed on a venue named in this document. At v0.3: Polymarket and Kalshi.</div>
     </div>
     <div class="rule">
       <div class="rk">02 &middot; FORWARD WINDOW</div>
@@ -329,7 +329,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     </div>
     <div class="rule">
       <div class="rk">03 &middot; TOP FIVE BY VOLUME</div>
-      <div class="rv">Of the markets meeting 01 and 02, the five largest by reported volume at the moment of filing. All five are filed. Every week.</div>
+      <div class="rv">Of the markets meeting 01 and 02, the five largest by reported volume at the moment of filing. All five are filed. Every week. A <em>market</em> is the individually-resolving contract &mdash; the unit carrying its own rule text and settling on its own terms &mdash; not a grouping of contracts a venue displays together. <em>Volume</em> is the USD figure the venue itself displays for that contract, evidenced by a dated capture at filing; a figure displayed only for a grouping ranks no single contract.</div>
     </div>
   </div>
 
@@ -346,6 +346,14 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <p><strong>Why it changed.</strong> Before filing any entry we tested the rule against live markets. Four were assessed and none qualified. The largest markets inside the window turned out to be carefully drafted from templates &mdash; one named its settling source, linked the official calendar, defined rounding for off-bracket outcomes, and specified what happens if the source publishes late. The loosely worded markets were novelty contracts carrying four-figure volume, which the floor excluded. On this venue, ambiguity and size run in opposite directions, so the v0.1 rule selected for the markets least likely to produce the thing this record exists to measure.</p>
     <p><strong>The deeper problem.</strong> The ambiguity criterion required <em>us</em> to judge whether wording was loose before deciding to file. That is the discretion this section exists to remove, and a reader would have been right to ask what we chose not to see. Ambiguity assessment now happens inside the entry, as the divergence thesis, where it can be scored and shown wrong &mdash; rather than in the selection, where it cannot.</p>
     <p>The cost is stated plainly: a mechanical top-five rule is duller, and it makes a null result more likely. That is the correct direction for the trade to run.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-08-11 &middot; v0.2 &rarr; v0.3 &middot; ORIGINAL TEXT RETAINED</div>
+    <p><strong>v0.2 of criterion 03 read:</strong> Of the markets meeting 01 and 02, the five largest by reported volume at the moment of filing. All five are filed. Every week.</p>
+    <p><strong>What changed.</strong> Two definitions were added. No criterion was added, removed, or reweighted. Whether the selection differs from what v0.2 would have produced cannot be stated, because v0.2 did not determine one &mdash; which is the defect.</p>
+    <p><strong>Why.</strong> Preparing the first filing exposed that v0.2 left two words undefined at the venues where they must be applied. Polymarket groups several individually-settling contracts under a single event page &mdash; a rate-decision event, for example, is one contract per outcome bracket, each with its own rule text &mdash; and the venues display volume at more than one level. Left undefined, both words would have required a choice at filing time, which is exactly the discretion this section exists to remove. So: a <em>market</em> is the individually-resolving contract, the unit carrying its own rule text and settling on its own terms; <em>volume</em> is the USD figure the venue displays for that contract at the moment of filing, evidenced by a dated capture. A figure displayed only for a grouping of contracts ranks no single contract.</p>
+    <p>This amendment is published before the first selection is made under it, for the same reason the whole document was published before the first entry.</p>
   </div>
 
   <p>Amendments to this section are versioned, dated, and published here with the old text retained. Any entry filed under a previous version keeps that version stamped on it.</p>
@@ -443,7 +451,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version">v17.30 · adjudication-method · v0.2 amended 2026-08-10</span>
+  <span class="version">v17.31 · adjudication-method · v0.3 amended 2026-08-11</span>
 </div>
 
 </body>
