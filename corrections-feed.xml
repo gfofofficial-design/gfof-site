@@ -7,7 +7,7 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Mon, 10 Aug 2026 21:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 11 Aug 2026 19:30:00 +0000</lastBuildDate>
     <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#032 · CORRECTION — The selection rule failed twice more on first contact with the venues, before any entry was filed. Both amendments logged same-day.</title>
+      <link>https://galacticfederation.co/corrections#c032</link>
+      <guid isPermaLink="false">gfof-correction-032-adjudication-v03-v04</guid>
+      <pubDate>Tue, 11 Aug 2026 19:30:00 +0000</pubDate>
+      <description>Preparing the first Adjudication Record filing broke the mechanical selection rule twice in one day, both times before any selection was made. First (v0.2→v0.3): "market" and "volume" were undefined at the venues — Polymarket groups separately-settling contracts under one event page and both venues display volume at more than one level, so applying the rule required a choice at filing time, the exact discretion the section exists to remove. Now defined: the individually-resolving contract, ranked by the USD figure the venue displays for that contract, evidenced by a dated capture. Second (v0.3→v0.4): the highest-volume contracts inside the 45-day window are hourly and daily asset-price brackets, and an entry's mandatory probability on such a contract is the asset-price forecast Section 06 has forbidden since v0.1 — the selection rule was choosing what the exclusions prohibit. v0.4 excludes contracts resolving on the traded price, level, or yield of a financial instrument or index; policy decisions and published statistics stay in. Three amendments in two days, each from contact with the venue, each with the superseded text retained. Zero entries filed, so the guarantee that no rule change ever followed a result still holds.</description>
+    </item>
 
     <item>
       <title>#031 · CORRECTION — We tested our own selection rule against live markets before filing anything. It failed, and is amended today with the original text retained.</title>
