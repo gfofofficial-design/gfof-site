@@ -1,0 +1,678 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FEDERATION OS — COMMAND PREVIEW STYLES
+   fed-command.css · BUILD 04 · branch federation-os-v2
+   ───────────────────────────────────────────────────────────────────────────
+   Page-level composition for /command-preview.html only.
+   Requires the full stack: tokens → base → components → shell.
+   No design-system duplication: every color/size/motion value is a token.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══ ATMOSPHERE — deep-space character, institutional restraint ════════
+   Static layers only: sparse star depth (two gradient fields), two
+   oversized faint orbital arcs, sparse coordinate geometry. No animation,
+   no scanning, no telemetry. Sits behind all content. */
+.cmd-atmos { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.cmd-atmos__stars {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, color-mix(in srgb, var(--fed-text) 55%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 9%,  color-mix(in srgb, var(--fed-text) 40%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 32% 64%, color-mix(in srgb, var(--fed-text) 35%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 91% 43%, color-mix(in srgb, var(--fed-command) 45%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 88%, color-mix(in srgb, var(--fed-text) 30%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 8% 84%,  color-mix(in srgb, var(--fed-text) 30%, transparent) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 67% 28%, color-mix(in srgb, var(--fed-authority) 50%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 44% 6%,  color-mix(in srgb, var(--fed-text) 40%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 85% 74%, color-mix(in srgb, var(--fed-text) 30%, transparent) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 21% 41%, color-mix(in srgb, var(--fed-command) 35%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 62% 55%, color-mix(in srgb, var(--fed-text) 25%, transparent) 50%, transparent 51%),
+    radial-gradient(1px 1px at 38% 92%, color-mix(in srgb, var(--fed-authority) 35%, transparent) 50%, transparent 51%);
+}
+.cmd-atmos__arc {
+  position: absolute;
+  border: 1px solid var(--fed-border-soft);
+  border-radius: 50%;
+}
+.cmd-atmos__arc--a { width: 140vmax; height: 140vmax; top: -90vmax; right: -60vmax;
+  border-color: color-mix(in srgb, var(--fed-command) 7%, transparent); }
+.cmd-atmos__arc--b { width: 110vmax; height: 110vmax; bottom: -80vmax; left: -50vmax;
+  border-color: color-mix(in srgb, var(--fed-authority) 7%, transparent); }
+.cmd-atmos__coord {
+  position: absolute;
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: color-mix(in srgb, var(--fed-muted) 40%, transparent);
+}
+.cmd-atmos__coord--a { top: 22%; left: 3%; }
+.cmd-atmos__coord--b { bottom: 14%; right: 3%; }
+.cmd-atmos__cross {
+  position: absolute; width: 14px; height: 14px;
+  color: color-mix(in srgb, var(--fed-muted) 35%, transparent);
+}
+.cmd-atmos__cross::before, .cmd-atmos__cross::after {
+  content: ""; position: absolute; background: currentColor;
+}
+.cmd-atmos__cross::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+.cmd-atmos__cross::after  { top: 50%; left: 0; right: 0; height: 1px; }
+.cmd-atmos__cross--a { top: 12%; right: 8%; }
+.cmd-atmos__cross--b { bottom: 30%; left: 6%; }
+
+/* ═══ CONTINUITY — one Command environment, not separate sections ═══════
+   Local decorative layer inside <main>: oversized arcs crossing section
+   boundaries, one cyan structural path with sparse nodes, a gold marker
+   approaching the final statement, sparse coordinates. All aria-hidden,
+   static, comprehension-irrelevant. */
+.cmd-main { position: relative; overflow-x: clip; }
+.cmd-flow { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.cmd-main > section, .cmd-main > .fed-container { position: relative; z-index: 1; }
+.cmd-flow__arc {
+  position: absolute;
+  border: 1px solid color-mix(in srgb, var(--fed-command) 6%, transparent);
+  border-radius: 50%;
+}
+.cmd-flow__arc--fcc { width: 120vmax; height: 120vmax; left: -70vmax; top: 52%; }
+.cmd-flow__arc--voss { width: 100vmax; height: 100vmax; right: -65vmax; top: 78%;
+  border-color: color-mix(in srgb, var(--fed-authority) 6%, transparent); }
+/* Structural path: Research/Council → Voss → final */
+.cmd-flow__path {
+  position: absolute;
+  left: max(var(--fed-gutter-mobile), calc((100% - var(--fed-content-max)) / 2 + 8px));
+  top: 66%; bottom: 4%;
+  width: 1px;
+  background: linear-gradient(
+    color-mix(in srgb, var(--fed-command) 0%, transparent),
+    color-mix(in srgb, var(--fed-command) 22%, transparent) 30%,
+    color-mix(in srgb, var(--fed-command) 22%, transparent) 70%,
+    color-mix(in srgb, var(--fed-authority) 28%, transparent));
+}
+.cmd-flow__node {
+  position: absolute;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: color-mix(in srgb, var(--fed-command) 45%, transparent);
+  transform: translateX(-2.5px);
+  left: max(var(--fed-gutter-mobile), calc((100% - var(--fed-content-max)) / 2 + 8px));
+}
+.cmd-flow__node--a { top: 72%; }
+.cmd-flow__node--b { top: 84%; }
+.cmd-flow__node--gold { top: 94%;
+  background: var(--fed-authority);
+  box-shadow: 0 0 8px var(--fed-authority-glow); }
+.cmd-flow__coord {
+  position: absolute;
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: color-mix(in srgb, var(--fed-muted) 45%, transparent);
+  text-transform: uppercase;
+}
+.cmd-flow__coord--a { right: 4%; top: 69%; }
+.cmd-flow__coord--b { left: 5%; top: 90.5%; }
+@media (max-width: 1023px) {
+  .cmd-flow__path, .cmd-flow__node { left: 9px; }
+  .cmd-flow__coord--a { display: none; }
+}
+
+/* ═══ RHYTHM — cinematic space alternating with structured data ═════════ */
+.cmd-section { padding-block: var(--space-9); }
+.cmd-section--tight { padding-block: var(--space-7); }
+.cmd-ident {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--fed-muted);
+  display: block;
+  margin-bottom: var(--space-4);
+}
+.cmd-ident b { color: var(--fed-command); font-weight: 400; }
+
+/* Reveal — restrained; JS adds .is-revealed; static without JS/reduced motion */
+.cmd-reveal { opacity: 0; transform: translateY(12px);
+  transition: opacity var(--motion-structural) var(--ease-fed),
+              transform var(--motion-structural) var(--ease-fed); }
+.cmd-reveal.is-revealed { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .cmd-reveal { opacity: 1; transform: none; transition: none; }
+}
+.no-js .cmd-reveal { opacity: 1; transform: none; }
+
+/* ═══ HERO — ARRIVAL ════════════════════════════════════════════════════ */
+.cmd-hero {
+  min-height: calc(100vh - var(--fed-nav-height-desktop));
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;          /* ≈60% narrative / 40% seal */
+  align-items: center;
+  gap: var(--space-7);
+  padding-block: var(--space-8);
+}
+.cmd-hero__access {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  color: var(--fed-command);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.cmd-hero__access::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+.cmd-hero__title {
+  font-family: var(--font-fed-display);
+  font-weight: 900;
+  font-size: var(--display-lg);
+  line-height: var(--line-display);
+  letter-spacing: -0.01em;
+  color: var(--fed-text-display);
+  text-transform: uppercase;
+}
+.cmd-hero__thesis {
+  font-family: var(--font-fed-interface);
+  font-weight: 700;
+  font-size: var(--heading-sm);
+  line-height: var(--line-heading);
+  letter-spacing: 0.04em;
+  color: var(--fed-command);
+  text-transform: uppercase;
+  margin-top: var(--space-5);
+}
+.cmd-hero__arch {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  color: var(--fed-authority);
+  margin-top: var(--space-4);
+  text-transform: uppercase;
+}
+.cmd-hero__arch b { color: var(--fed-muted); font-weight: 400; margin-inline: var(--space-1); }
+.cmd-hero__position {
+  font-family: var(--font-fed-body);
+  font-size: var(--text-lg);
+  line-height: var(--line-body);
+  color: var(--fed-text);
+  max-width: 52ch;
+  margin-top: var(--space-4);
+}
+.cmd-hero__actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-6); }
+.cmd-hero__meta {
+  margin-top: var(--space-6);
+  display: flex;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+}
+
+/* Seal — the exact logo carries the identity; geometry stays behind it */
+.cmd-seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  max-width: 640px;
+  justify-self: end;
+  margin-inline: auto;
+  width: min(640px, 100%);
+}
+.cmd-seal__img {
+  width: 88%;                                   /* circular canonical asset —
+                                                   no rectangular boundary */
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity var(--motion-cinematic) var(--ease-fed),
+              transform var(--motion-cinematic) var(--ease-fed);
+}
+.cmd-seal.is-arrived .cmd-seal__img { opacity: 1; transform: none; }
+.cmd-seal__orbit { opacity: 0; transition: opacity var(--motion-cinematic) var(--ease-fed) 300ms; }
+.cmd-seal.is-arrived .cmd-seal__orbit { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .cmd-seal__img, .cmd-seal__orbit { opacity: 1; transform: none; transition: none; }
+}
+.no-js .cmd-seal__img, .no-js .cmd-seal__orbit { opacity: 1; }
+/* Orbital geometry — decorative, aria-hidden in markup */
+.cmd-seal__orbit {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--fed-border-soft);
+  border-radius: 50%;
+}
+.cmd-seal__orbit--mid { inset: 9%; border-color: var(--fed-border-default); }
+.cmd-seal__orbit--tick { inset: 9%; border: none; }
+.cmd-seal__orbit--tick::before,
+.cmd-seal__orbit--tick::after {
+  content: "";
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--fed-command);
+}
+.cmd-seal__orbit--tick::before { top: -2px; left: 50%; background: var(--fed-authority);
+  box-shadow: 0 0 10px var(--fed-authority-glow); }
+.cmd-seal__orbit--tick::after  { bottom: 10%; right: 4%; background: var(--fed-authority); }
+.cmd-seal__orbit--mid { border-color: color-mix(in srgb, var(--fed-authority) 22%, transparent); }
+.cmd-seal__mark {
+  position: absolute;
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+}
+.cmd-seal__mark--tl { top: 2%; left: 0; color: var(--fed-authority); }
+.cmd-seal__mark--br { bottom: 2%; right: 0; }
+
+/* ═══ FEDERATION NETWORK ════════════════════════════════════════════════ */
+.cmd-network { background: var(--surface-system); border-block: 1px solid var(--fed-border-soft); }
+.cmd-network__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+  margin-top: var(--space-7);
+}
+.cmd-net {
+  position: relative;
+  aspect-ratio: 1;
+  max-width: 560px;
+  width: 100%;
+}
+.cmd-net__lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cmd-net__lines line {
+  stroke: var(--fed-border-strong);
+  stroke-width: 1;
+  transition: stroke var(--motion-interface) var(--ease-fed),
+              opacity var(--motion-interface) var(--ease-fed);
+}
+.cmd-net__lines .orbit {
+  fill: none;
+  stroke: var(--fed-border-soft);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+}
+.cmd-net__lines circle.anchor {
+  fill: var(--fed-border-strong);
+  transition: fill var(--motion-interface) var(--ease-fed);
+}
+.cmd-net[data-active="dossier"]  circle.anchor[data-link="dossier"],
+.cmd-net[data-active="archive"]  circle.anchor[data-link="archive"],
+.cmd-net[data-active="fcc"]      circle.anchor[data-link="fcc"],
+.cmd-net[data-active="research"] circle.anchor[data-link="research"],
+.cmd-net[data-active="council"]  circle.anchor[data-link="council"] {
+  fill: var(--fed-command);
+}
+.cmd-net[data-active] .cmd-net__lines line { opacity: 0.35; }
+.cmd-net[data-active="dossier"]  .cmd-net__lines line[data-link="dossier"],
+.cmd-net[data-active="archive"]  .cmd-net__lines line[data-link="archive"],
+.cmd-net[data-active="fcc"]      .cmd-net__lines line[data-link="fcc"],
+.cmd-net[data-active="research"] .cmd-net__lines line[data-link="research"],
+.cmd-net[data-active="council"]  .cmd-net__lines line[data-link="council"] {
+  stroke: var(--fed-command);
+  opacity: 1;
+  filter: drop-shadow(0 0 3px var(--fed-command-glow));
+}
+.cmd-net__core {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  z-index: 2;
+}
+.cmd-net__core img { width: 196px; height: 196px; }
+.cmd-net__core-ring {
+  position: absolute;
+  width: 236px; height: 236px;
+  left: 50%; top: 0;
+  transform: translateX(-50%) translateY(-20px);
+  border: 1px solid color-mix(in srgb, var(--fed-authority) 35%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cmd-net__core-ring::before {
+  content: "";
+  position: absolute; top: -3px; left: 50%;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--fed-authority);
+  box-shadow: 0 0 8px var(--fed-authority-glow);
+}
+.cmd-net__core-label {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-text);
+}
+.cmd-net__node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-panel);
+  border: 1px solid var(--fed-border-default);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-fed-interface);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fed-text);
+  cursor: pointer;
+  transition: border-color var(--motion-interface) var(--ease-fed);
+  z-index: 2;
+}
+.cmd-net__node small {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+  font-weight: 400;
+}
+.cmd-net__node:hover,
+.cmd-net__node:focus-visible,
+.cmd-net__node[aria-pressed="true"] {
+  border-color: var(--fed-command);
+  color: var(--fed-command);
+  box-shadow: 0 0 0 3px var(--fed-command-soft);
+}
+.cmd-net__state {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--fed-warning);
+}
+.cmd-net__state--op { color: var(--fed-verified); }
+.cmd-net__node--n1 { left: 50%; top: 7%; }
+.cmd-net__node--n2 { left: 89%; top: 36%; }
+.cmd-net__node--n3 { left: 74%; top: 85%; }
+.cmd-net__node--n4 { left: 26%; top: 85%; }
+.cmd-net__node--n5 { left: 11%; top: 36%; }
+.cmd-net__node .cmd-net__desc { display: none; }   /* desktop: mirrored to panel */
+.cmd-net__panel { display: grid; gap: var(--space-3); align-content: start; }
+.cmd-net__panel-title {
+  font-family: var(--font-fed-display);
+  font-weight: 700;
+  font-size: var(--heading-sm);
+  color: var(--fed-text-display);
+  text-transform: uppercase;
+}
+.cmd-net__panel-coord {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+}
+.cmd-net__panel-body {
+  font-family: var(--font-fed-body);
+  font-size: var(--text-base);
+  line-height: var(--line-body);
+  color: var(--fed-text);
+  max-width: 46ch;
+}
+
+/* Network mobile/tablet — intentional vertical constellation, not a squeeze */
+@media (max-width: 1023px) {
+  .cmd-network__layout { grid-template-columns: 1fr; }
+  .cmd-net { aspect-ratio: auto; max-width: none; display: grid; gap: var(--space-3); }
+  .cmd-net__lines { display: none; }
+  .cmd-net__core { position: static; transform: none; justify-items: start; text-align: left;
+    grid-auto-flow: column; align-items: center; gap: var(--space-4);
+    padding: var(--space-4); border: 1px solid var(--fed-border-default);
+    border-radius: var(--radius-xs); background: var(--surface-panel); }
+  .cmd-net__core img { width: 64px; height: 64px; }
+  .cmd-net { position: relative; padding-left: var(--space-5); }
+  .cmd-net::before {
+    content: "";
+    position: absolute; left: 7px; top: 40px; bottom: 24px;
+    width: 1px;
+    background: linear-gradient(var(--fed-authority-soft), var(--fed-border-default));
+  }
+  .cmd-net__core { position: relative; }
+  .cmd-net__core::before, .cmd-net__node::before {
+    content: "";
+    position: absolute; left: calc(-1 * var(--space-5) + 4px); top: 50%;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--fed-border-strong);
+  }
+  .cmd-net__core::before { background: var(--fed-authority); }
+  .cmd-net__node { position: relative; transform: none; justify-items: start; text-align: left; width: 100%; padding: var(--space-4); }
+  .cmd-net__node[aria-pressed="true"]::before { background: var(--fed-command); }
+  .cmd-net__core-ring { display: none; }
+  .cmd-net__node .cmd-net__desc {
+    display: block;
+    font-family: var(--font-fed-body);
+    font-size: var(--text-sm);
+    line-height: var(--line-body);
+    color: var(--fed-muted);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    margin-top: var(--space-1);
+  }
+  .cmd-net__panel { display: none; }               /* descs are inline on mobile */
+}
+
+/* ═══ CURRENT MISSION ═══════════════════════════════════════════════════ */
+.cmd-mission { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-7); align-items: start; }
+@media (max-width: 1023px) { .cmd-mission { grid-template-columns: 1fr; } }
+.cmd-mission__objective { display: grid; gap: var(--space-3); }
+
+/* ═══ DIVISION SECTIONS ═════════════════════════════════════════════════ */
+.cmd-div-head { max-width: var(--fed-reading-max); margin-bottom: var(--space-6); }
+.cmd-div-title {
+  font-family: var(--font-fed-display);
+  font-weight: 900;
+  font-size: var(--display-sm);
+  line-height: var(--line-display);
+  color: var(--fed-text-display);
+  text-transform: uppercase;
+}
+.cmd-div-line {
+  font-family: var(--font-fed-interface);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--fed-command);
+  margin-top: var(--space-3);
+}
+.cmd-div-body { margin-top: var(--space-4); }
+.cmd-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-7); align-items: start; }
+@media (max-width: 1023px) { .cmd-two-col { grid-template-columns: 1fr; } }
+
+/* Archive destinations */
+.cmd-archive-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-top: var(--space-6); }
+
+/* FCC — restrained gold, more space, less motion */
+.cmd-fcc { background: var(--surface-system); border-block: 1px solid color-mix(in srgb, var(--fed-authority) 18%, transparent); }
+.cmd-fcc .cmd-div-line { color: var(--fed-authority); }
+.cmd-fcc .cmd-ident b { color: var(--fed-authority); }
+
+/* ═══ VOSS — FEDERATION COMMUNICATIONS INTERFACE ════════════════════════
+   A communication entering Command: framed channel around the exact
+   portrait, one cyan transmission connector to the content, one gold
+   authority identifier. No scanlines, glitch, holograms, or loops. */
+.cmd-voss { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: var(--space-8); align-items: center; position: relative; }
+@media (max-width: 1023px) { .cmd-voss { grid-template-columns: 1fr; } }
+
+.cmd-voss__channel {
+  position: relative;
+  max-width: 400px;
+  background: var(--surface-panel);
+  border: 1px solid var(--fed-border-default);
+  border-radius: var(--radius-xs);
+}
+.cmd-voss__channel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--fed-border-soft);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);  /* QA-C1: normalized to established system/ident metadata recipe */
+  color: var(--fed-muted);
+  text-transform: uppercase;
+}
+.cmd-voss__authority {                       /* gold authority identifier */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--fed-authority);
+}
+.cmd-voss__authority::before {
+  content: "";
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--fed-authority);
+  box-shadow: 0 0 8px var(--fed-authority-glow);
+}
+.cmd-voss__portrait { position: relative; overflow: hidden; }
+.cmd-voss__portrait img { width: 100%; display: block; }
+/* corner registration ticks — sparse, static */
+.cmd-voss__portrait::before,
+.cmd-voss__portrait::after {
+  content: "";
+  position: absolute;
+  width: 14px; height: 14px;
+  border: 1px solid color-mix(in srgb, var(--fed-command) 55%, transparent);
+  pointer-events: none;
+}
+.cmd-voss__portrait::before { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.cmd-voss__portrait::after  { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+.cmd-voss__channel-foot {
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--fed-command) 25%, transparent);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+  text-transform: uppercase;
+}
+/* single transmission connector: channel → content (desktop only) */
+.cmd-voss__link {
+  position: absolute;
+  left: calc(0.8 / 2 * 100% + 200px);        /* fallback; sized below */
+  display: none;
+}
+@media (min-width: 1024px) {
+  .cmd-voss__content { position: relative; }
+  .cmd-voss__content::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--space-8));
+    top: 50%;
+    width: var(--space-8);
+    height: 1px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--fed-command) 55%, transparent), transparent);
+  }
+  .cmd-voss__content::after {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--space-8) - 3px);
+    top: calc(50% - 3px);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--fed-command);
+    box-shadow: 0 0 8px var(--fed-command-glow);
+  }
+}
+.cmd-voss__guardrails { margin-top: var(--space-5); max-width: 52ch; }
+
+/* ═══ CONTINUITY SEAMS — one Command environment, not stacked sections ══
+   All decorative, aria-hidden, static, token-derived, cheap. */
+.cmd-seam {
+  position: relative;
+  height: var(--space-9);
+  pointer-events: none;
+}
+.cmd-seam__path {                            /* restrained cyan structural path */
+  position: absolute;
+  left: 50%; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    color-mix(in srgb, var(--fed-command) 30%, transparent),
+    color-mix(in srgb, var(--fed-command) 8%, transparent));
+}
+.cmd-seam__node {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  width: 5px; height: 5px; border-radius: 50%;
+  background: color-mix(in srgb, var(--fed-command) 55%, transparent);
+}
+.cmd-seam__node--a { top: 22%; }
+.cmd-seam__node--b { top: 68%; width: 4px; height: 4px;
+  background: color-mix(in srgb, var(--fed-authority) 55%, transparent); }
+.cmd-seam__coord {
+  position: absolute;
+  left: calc(50% + var(--space-4)); top: 40%;
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: color-mix(in srgb, var(--fed-muted) 45%, transparent);
+  white-space: nowrap;
+}
+/* oversized arcs crossing section boundaries */
+.cmd-section--arc { position: relative; overflow: visible; }
+.cmd-section--arc::before {
+  content: "";
+  position: absolute;
+  width: 90vmax; height: 90vmax;
+  border: 1px solid color-mix(in srgb, var(--fed-command) 6%, transparent);
+  border-radius: 50%;
+  left: -35vmax; bottom: -70vmax;
+  pointer-events: none;
+}
+.cmd-fcc.cmd-section--arc::before {
+  border-color: color-mix(in srgb, var(--fed-authority) 6%, transparent);
+  left: auto; right: -30vmax; bottom: auto; top: -65vmax;
+}
+/* gradual atmospheric transition into the final statement */
+.cmd-final {
+  background: radial-gradient(ellipse 70% 55% at 50% 42%,
+    color-mix(in srgb, var(--fed-authority) 4%, transparent), transparent 70%);
+}
+
+/* ═══ FINAL ═════════════════════════════════════════════════════════════ */
+.cmd-final { text-align: center; padding-block: var(--space-8) var(--space-10); }
+.cmd-final img { width: 88px; height: 88px; margin-inline: auto; }
+.cmd-final__title {
+  font-family: var(--font-fed-display);
+  font-weight: 900;
+  font-size: var(--display-sm);
+  line-height: var(--line-display);
+  color: var(--fed-text-display);
+  text-transform: uppercase;
+  margin-top: var(--space-5);
+}
+.cmd-final__sub {
+  font-family: var(--font-fed-body);
+  font-size: var(--text-lg);
+  color: var(--fed-muted);
+  max-width: 44ch;
+  margin: var(--space-4) auto 0;
+}
+.cmd-final__actions { display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap; margin-top: var(--space-6); }
+
+/* ═══ RESPONSIVE HERO / TYPE ════════════════════════════════════════════ */
+@media (max-width: 1023px) {
+  .cmd-hero { grid-template-columns: 1fr; min-height: 0; gap: var(--space-6); }
+  .cmd-seal { max-width: 380px; justify-self: center; order: -1; }
+  .cmd-section { padding-block: var(--space-8); }
+}
+@media (max-width: 639px) {
+  .cmd-hero__title { font-size: var(--display-sm); }   /* no desktop display type on phones */
+  .cmd-div-title { font-size: var(--heading-lg); }
+  .cmd-final__title { font-size: var(--heading-lg); }
+  .cmd-seal { max-width: 270px; }
+  .cmd-section { padding-block: var(--space-7); }
+}

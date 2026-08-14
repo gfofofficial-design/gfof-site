@@ -1,0 +1,482 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FEDERATION OS — CORE COMPONENTS
+   fed-components.css · BUILD 02 · branch federation-os-v2
+   ───────────────────────────────────────────────────────────────────────────
+   Reusable visual primitives for Command / Dossier / FCC / Archive /
+   Research / Council. NOT attached to any production page in BUILD 02.
+   Requires: fed-tokens.css, fed-base.css loaded first.
+
+   Palette rule: every color consumes a token. Alpha variants not tokenized
+   are derived via color-mix() from tokens — no duplicate hex values.
+
+   Lighting rule (enforced across all components):
+     cyan = system activity/communication · green = verification ·
+     gold = Federation authority/history · red = failure/critical.
+   Glow is informational, not decorative.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══ 1. BUTTONS — exactly three interaction patterns ═══════════════════ */
+.fed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target-min);          /* 44px */
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-fed-interface);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-xs);              /* no pill primaries */
+  cursor: pointer;
+  transition: border-color var(--motion-micro) var(--ease-fed),
+              box-shadow  var(--motion-micro) var(--ease-fed),
+              background  var(--motion-micro) var(--ease-fed);
+}
+.fed-btn:disabled,
+.fed-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Primary Command — dark Federation surface, Command cyan emphasis */
+.fed-btn--command {
+  background: var(--fed-command-soft);
+  border: 1px solid var(--fed-command);
+  color: var(--fed-command);
+}
+.fed-btn--command:hover:not(:disabled),
+.fed-btn--command:focus-visible {
+  box-shadow: 0 0 14px var(--fed-command-glow); /* restrained illumination */
+  background: color-mix(in srgb, var(--fed-command) 18%, transparent);
+}
+
+/* Secondary — transparent/dark surface, Federation border */
+.fed-btn--secondary {
+  background: transparent;
+  border: 1px solid var(--fed-border-strong);
+  color: var(--fed-text-display);
+}
+.fed-btn--secondary:hover:not(:disabled),
+.fed-btn--secondary:focus-visible {
+  border-color: var(--fed-text-display);
+  background: color-mix(in srgb, var(--fed-text) 6%, transparent);
+}
+
+/* Text Action — text + directional arrow */
+.fed-btn--text {
+  min-height: var(--touch-target-min);
+  padding: var(--space-2) var(--space-2);
+  background: none;
+  border: none;
+  border-radius: 2px;
+  color: var(--fed-command);
+}
+.fed-btn--text::after {
+  content: "→";
+  font-family: var(--font-fed-system);
+  transition: transform var(--motion-micro) var(--ease-fed);
+}
+.fed-btn--text:hover:not(:disabled)::after,
+.fed-btn--text:focus-visible::after { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fed-btn--text::after { transition: none; }
+  .fed-btn--text:hover::after { transform: none; }
+}
+
+/* ═══ 2. STATUS — semantic state types; labels are HTML content ═════════ */
+.fed-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 3px var(--space-3);
+  border-radius: 999px;                          /* pill permitted: status */
+  border: 1px solid var(--fed-border-default);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);                     /* 12px floor */
+  letter-spacing: var(--system-letter-spacing);
+  text-transform: uppercase;
+  color: var(--fed-neutral);
+}
+.fed-status::before {                            /* indicator dot — never the
+                                                    only carrier; label required */
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.fed-status--operational {
+  color: var(--status-operational);
+  background: var(--status-operational-soft);
+  border-color: color-mix(in srgb, var(--status-operational) 30%, transparent);
+}
+.fed-status--provisional {
+  color: var(--status-provisional);
+  background: color-mix(in srgb, var(--status-provisional) 10%, transparent);
+  border-color: color-mix(in srgb, var(--status-provisional) 30%, transparent);
+}
+.fed-status--impaired {
+  color: var(--status-impaired);
+  background: color-mix(in srgb, var(--status-impaired) 10%, transparent);
+  border-color: color-mix(in srgb, var(--status-impaired) 35%, transparent);
+}
+.fed-status--impaired::before {                  /* shape differentiator vs
+                                                    provisional (same hue) */
+  border-radius: 1px;
+}
+.fed-status--failed {
+  color: var(--status-failed);
+  background: color-mix(in srgb, var(--status-failed) 10%, transparent);
+  border-color: color-mix(in srgb, var(--status-failed) 35%, transparent);
+}
+.fed-status--unknown { color: var(--status-unknown); }
+
+/* ═══ 3. FEDERATION PANEL — signature surface ═══════════════════════════ */
+.fed-panel {
+  background: var(--surface-panel);
+  border: 1px solid var(--fed-border-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-6);
+}
+.fed-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--fed-border-soft);
+}
+.fed-panel--active {
+  background: var(--surface-active);
+  border-color: var(--fed-border-default);
+}
+.fed-panel--authority { border-color: color-mix(in srgb, var(--fed-authority) 35%, transparent); }
+.fed-panel--verified  { border-color: color-mix(in srgb, var(--fed-verified) 30%, transparent); }
+
+/* Signature corner cut — OPT-IN modifier for select major panels only */
+.fed-panel--cut {
+  border-radius: 0;
+  clip-path: polygon(
+    var(--fed-corner-cut) 0, 100% 0,
+    100% calc(100% - var(--fed-corner-cut)),
+    calc(100% - var(--fed-corner-cut)) 100%,
+    0 100%, 0 var(--fed-corner-cut));
+}
+
+/* ═══ 4. METADATA BLOCK ═════════════════════════════════════════════════ */
+.fed-meta {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  line-height: var(--line-system);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+  display: grid;
+  gap: var(--space-2);
+}
+.fed-meta__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  text-transform: uppercase;
+}
+.fed-meta__k { color: var(--fed-muted); }
+.fed-meta__sep { color: var(--fed-border-strong); }
+.fed-meta__v { color: var(--fed-text); }
+.fed-meta__v--authority { color: var(--fed-authority); }
+
+/* ═══ 5. EVIDENCE CHAIN — CLAIM → SOURCE → EVIDENCE → RECORD → PROOF ════
+   Semantic: use <ol class="fed-chain"> with <li> steps.
+   Readable on mobile (vertical stack) and fully usable without animation. */
+.fed-chain {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) 0;
+  counter-reset: chain;
+}
+.fed-chain__step {
+  counter-increment: chain;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.fed-chain__node {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--fed-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--surface-system);
+  min-width: 0;
+}
+.fed-chain__label {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  text-transform: uppercase;
+  color: var(--fed-text);
+}
+.fed-chain__label::before {
+  content: counter(chain, decimal-leading-zero) " ";
+  color: var(--fed-muted);
+}
+.fed-chain__detail {
+  font-family: var(--font-fed-body);
+  font-size: var(--text-xs);
+  color: var(--fed-muted);
+}
+.fed-chain__step::after {                        /* connector */
+  content: "";
+  width: var(--space-5);
+  height: 1px;
+  background: var(--fed-border-strong);
+  margin-inline: var(--space-1);
+  flex-shrink: 0;
+}
+.fed-chain__step:last-child::after { display: none; }
+.fed-chain__step--proof .fed-chain__node { border-color: color-mix(in srgb, var(--fed-verified) 35%, transparent); }
+.fed-chain__step--proof .fed-chain__label { color: var(--fed-verified); }
+
+@media (max-width: 639px) {                      /* vertical on mobile */
+  .fed-chain { flex-direction: column; }
+  .fed-chain__step { flex-direction: column; align-items: flex-start; }
+  .fed-chain__step::after {
+    width: 1px;
+    height: var(--space-4);
+    margin: var(--space-1) 0 var(--space-1) var(--space-4);
+  }
+  .fed-chain__node { width: 100%; }
+}
+
+/* ═══ 6. RECORD CARD ════════════════════════════════════════════════════ */
+.fed-record-card {
+  background: var(--surface-panel);
+  border: 1px solid var(--fed-border-soft);
+  border-left: 2px solid var(--fed-border-strong);
+  border-radius: var(--radius-xs);
+  padding: var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+}
+.fed-record-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.fed-record-card__class {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--fed-authority);
+}
+.fed-record-card__title {
+  font-family: var(--font-fed-interface);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--fed-text-display);
+}
+.fed-record-card__summary {
+  font-family: var(--font-fed-body);
+  font-size: var(--text-sm);
+  line-height: var(--line-body);
+  color: var(--fed-text);
+  max-width: var(--fed-reading-max);
+}
+.fed-record-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+/* Record states — border + labelled status, never color alone */
+.fed-record-card--current    { border-left-color: var(--fed-verified); }
+.fed-record-card--corrected  { border-left-color: var(--fed-warning); }
+.fed-record-card--superseded { border-left-color: var(--fed-neutral); opacity: 0.85; }
+
+/* ═══ 7. DOSSIER SIGNAL — component shell only, no functionality ════════ */
+.fed-signal {
+  background: var(--surface-panel);
+  border: 1px solid var(--fed-border-default);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.fed-signal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-5);
+  background: color-mix(in srgb, var(--fed-space) 55%, transparent);
+  border-bottom: 1px solid var(--fed-border-soft);
+}
+.fed-signal__id {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-command);
+}
+.fed-signal__body {
+  padding: var(--space-5);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--space-4);
+}
+.fed-signal__field { display: grid; gap: 2px; min-width: 0; }
+.fed-signal__label {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  text-transform: uppercase;
+  color: var(--fed-muted);
+}
+.fed-signal__value {
+  font-family: var(--font-fed-interface);
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: var(--fed-text-display);
+  overflow-wrap: anywhere;
+}
+.fed-signal__value--asset { color: var(--fed-command); }
+
+/* ═══ 8. FCC MANDATE — CONCEPT INTERFACE shell only ═════════════════════ */
+.fed-mandate {
+  background: var(--surface-panel);
+  border: 1px solid color-mix(in srgb, var(--fed-authority) 30%, transparent);
+  border-radius: 0;
+  clip-path: polygon(
+    var(--fed-corner-cut) 0, 100% 0,
+    100% calc(100% - var(--fed-corner-cut)),
+    calc(100% - var(--fed-corner-cut)) 100%,
+    0 100%, 0 var(--fed-corner-cut));
+}
+.fed-mandate__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--fed-border-soft);
+}
+.fed-mandate__brand {
+  font-family: var(--font-fed-display);
+  font-weight: 700;
+  font-size: var(--text-base);
+  letter-spacing: 0.12em;
+  color: var(--fed-authority);
+}
+.fed-mandate__phase {                            /* mandatory phase flag */
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  color: var(--fed-warning);
+  border: 1px solid color-mix(in srgb, var(--fed-warning) 40%, transparent);
+  padding: 2px var(--space-3);
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+.fed-mandate__body { padding: var(--space-6); display: grid; gap: var(--space-5); }
+.fed-mandate__section { display: grid; gap: var(--space-1); }
+.fed-mandate__section-label {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--fed-authority) 75%, var(--fed-muted));
+}
+.fed-mandate__section-text {
+  font-family: var(--font-fed-body);
+  font-size: var(--text-sm);
+  line-height: var(--line-body);
+  color: var(--fed-text);
+  max-width: var(--fed-reading-max);
+}
+
+/* ═══ 9. SYSTEM RAIL — horizontal status strip ══════════════════════════ */
+.fed-rail {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;                              /* scrolls on narrow views */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: var(--space-1);
+  border: 1px solid var(--fed-border-soft);
+  border-radius: var(--radius-xs);
+  background: var(--surface-system);
+  padding: var(--space-2);
+}
+.fed-rail__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  min-height: 36px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  text-transform: uppercase;
+  color: var(--fed-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.fed-rail__item .fed-status { border: none; background: none; padding: 0; }
+@media (max-width: 639px) {
+  .fed-rail--stack { flex-direction: column; overflow-x: visible; }
+  .fed-rail--stack .fed-rail__item { white-space: normal; }
+}
+
+/* ═══ 10. DIVISION IDENTIFIER ═══════════════════════════════════════════ */
+.fed-division {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-5);
+  border-bottom: 1px solid var(--fed-border-soft);
+}
+.fed-division__org {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--fed-muted);
+}
+.fed-division__org img { width: 28px; height: 28px; }
+.fed-division__name {
+  font-family: var(--font-fed-display);
+  font-weight: 900;
+  font-size: var(--heading-lg);
+  line-height: var(--line-heading);
+  letter-spacing: 0.02em;
+  color: var(--fed-text-display);
+  text-transform: uppercase;
+}
+.fed-division__desc {
+  font-family: var(--font-fed-interface);
+  font-weight: 600;
+  font-size: var(--text-lg);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fed-command);
+}
+.fed-division__coord {                           /* lore identifier only */
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+}

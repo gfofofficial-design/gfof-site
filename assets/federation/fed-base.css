@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FEDERATION OS — BASE LAYER
+   fed-base.css · BUILD 02 · branch federation-os-v2
+   ───────────────────────────────────────────────────────────────────────────
+   Future shared baseline for Command / Dossier / FCC / Archive / Research /
+   Council. NOT attached to any production page in BUILD 02.
+   Requires: fed-tokens.css loaded first (canonical token source).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Box model ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+/* ── Document defaults ─────────────────────────────────────────────────── */
+html { -webkit-text-size-adjust: 100%; }
+
+body.fed-body-root {
+  background: var(--surface-space);
+  color: var(--fed-text);
+  font-family: var(--font-fed-body);
+  font-size: var(--text-base);            /* 16px body target */
+  line-height: var(--line-body);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── Typography role utilities ─────────────────────────────────────────── */
+.fed-display {
+  font-family: var(--font-fed-display);
+  font-weight: 900;
+  font-size: var(--display-sm);
+  line-height: var(--line-display);
+  color: var(--fed-text-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.fed-display--lg { font-size: var(--display-lg); }
+
+.fed-heading {
+  font-family: var(--font-fed-display);
+  font-weight: 700;
+  font-size: var(--heading-md);
+  line-height: var(--line-heading);
+  color: var(--fed-text-display);
+}
+.fed-heading--sm { font-size: var(--heading-sm); }
+.fed-heading--lg { font-size: var(--heading-lg); }
+
+.fed-body-text {
+  font-family: var(--font-fed-body);
+  font-size: var(--text-base);
+  line-height: var(--line-body);
+  color: var(--fed-text);
+  max-width: var(--fed-reading-max);       /* ≈65–75ch */
+}
+
+.fed-interface {
+  font-family: var(--font-fed-interface);
+  font-weight: 600;
+  font-size: var(--text-base);
+  line-height: var(--line-heading);
+}
+
+/* System/metadata type — 12px floor enforced here. Never 8–9px. */
+.fed-system {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);               /* 12px floor */
+  line-height: var(--line-system);
+  letter-spacing: var(--system-letter-spacing);
+  color: var(--fed-muted);
+}
+.fed-system--wide { letter-spacing: var(--system-letter-spacing-wide); }
+.fed-system--bright { color: var(--fed-text); }
+
+.fed-eyebrow {
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: var(--system-letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--fed-command);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.fed-eyebrow::before {
+  content: "";
+  width: 20px; height: 1px;
+  background: currentColor;
+}
+
+/* ── Selection ─────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--fed-command-soft);
+  color: var(--fed-text-display);
+}
+
+/* ── Focus — canonical ring, visible, never removed ────────────────────── */
+:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ── Links ─────────────────────────────────────────────────────────────── */
+.fed-scope a {
+  color: var(--fed-command);
+  text-decoration: underline;
+  text-decoration-color: var(--fed-command-soft);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--motion-micro) var(--ease-fed);
+}
+.fed-scope a:hover { text-decoration-color: var(--fed-command); }
+
+/* ── Media defaults ────────────────────────────────────────────────────── */
+img, svg, video { display: block; max-width: 100%; height: auto; }
+
+/* ── Screen-reader utility ─────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Containers & gutters (breakpoints: 640 / 1024 / 1440 explicit) ────── */
+.fed-container {
+  width: 100%;
+  max-width: var(--fed-content-max);
+  margin-inline: auto;
+  padding-inline: var(--fed-gutter-mobile);       /* ≤639 → 20px */
+}
+@media (min-width: 640px)  { .fed-container { padding-inline: var(--fed-gutter-tablet); } }
+@media (min-width: 1024px) { .fed-container { padding-inline: var(--fed-gutter-desktop); } }
+
+.fed-reading {
+  max-width: var(--fed-reading-max);
+  margin-inline: auto;
+}
+
+/* ── Reduced motion — FEDERATION OS convention (tokens file §motion):
+     remove non-essential reveals / seal activation / network-line drawing /
+     decorative motion; preserve functional transitions. ─────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
