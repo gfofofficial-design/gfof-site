@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FEDERATION OS — Shell Lab (internal)</title>
+<!-- INTERNAL VALIDATION DOCUMENT — BUILD 03.
+     Not linked from production. All states are SAMPLE states.
+     No real metrics, no invented URLs: FCC has no destination and is
+     rendered disabled; ARCHIVE/COUNCIL destinations are real existing
+     routes flagged as mapping-pending-approval in the config. -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/federation/fed-tokens.css">
+<link rel="stylesheet" href="../../assets/federation/fed-base.css">
+<link rel="stylesheet" href="../../assets/federation/fed-components.css">
+<link rel="stylesheet" href="../../assets/federation/fed-shell.css">
+</head>
+<body class="fed-body-root fed-scope">
+
+<!-- ═══ COMMAND BAR ═══ -->
+<header class="fed-shell-bar">
+  <a class="fed-shell-brand" href="https://galacticfederation.co">
+    <img src="../../logo-circle.png" alt="Galactic Federation — canonical mark">
+    <span class="fed-shell-brand__names">
+      <span class="fed-shell-brand__primary">GALACTIC FEDERATION</span>
+      <span class="fed-shell-brand__system">FEDERATION OS</span>
+    </span>
+  </a>
+
+  <nav class="fed-shell-nav" aria-label="Federation systems">
+    <a class="fed-shell-nav__item" data-fed-system="command" href="https://galacticfederation.co">Command</a>
+    <a class="fed-shell-nav__item" data-fed-system="dossier" href="https://dossiertrack.co">Dossier</a>
+    <span class="fed-shell-nav__item" data-fed-system="fcc" aria-disabled="true" role="link" tabindex="-1">FCC <span class="fed-shell-nav__flag">DESIGN PHASE</span></span>
+    <a class="fed-shell-nav__item" data-fed-system="research" href="https://galacticfederation.co/research">Research</a>
+    <a class="fed-shell-nav__item" data-fed-system="archive" href="https://galacticfederation.co/record">Archive</a>
+    <a class="fed-shell-nav__item" data-fed-system="council" href="https://galacticfederation.co/governance-spec">Council</a>
+  </nav>
+
+  <div class="fed-shell-controls">
+    <span class="fed-shell-coord">COMMAND // GF-00</span>
+    <button class="fed-shell-voss" data-fed-voss-trigger type="button">VOSS</button>
+    <button class="fed-shell-status" data-fed-status-trigger data-state="unknown" type="button">
+      <span class="fed-shell-status__dot" aria-hidden="true"></span>
+      <span data-fed-status-label>SYSTEM STATUS</span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══ LAB CONTENT ═══ -->
+<main class="fed-container" style="padding-block: var(--space-7)">
+  <div class="fed-division">
+    <span class="fed-division__org">SHELL LAB · BUILD 03 · INTERNAL VALIDATION</span>
+    <h1 class="fed-division__name">Shared Shell</h1>
+    <span class="fed-division__desc">All states on this page are samples</span>
+    <span class="fed-division__coord">Resize to 768px and 390px to inspect tablet collapse and the mobile bottom navigation. Tab through the bar, open both drawers, press Escape.</span>
+  </div>
+
+  <section style="margin-top: var(--space-7); display: grid; gap: var(--space-4)">
+    <h2 class="fed-heading fed-heading--sm">What to verify</h2>
+    <p class="fed-body-text">Desktop: 72px Command Bar, restrained cyan active line under COMMAND, FCC visibly disabled with DESIGN PHASE flag and no destination, Voss and System Status open focus-trapped drawers, Escape closes and focus returns to the trigger.</p>
+    <p class="fed-body-text">Tablet/mobile (≤1023px): center navigation collapses, bottom bar appears with readable COMMAND / DOSSIER / ARCHIVE / MORE labels, MORE opens the sheet with the remaining systems — future destinations visibly identified, none invented.</p>
+    <p class="fed-body-text">With JavaScript disabled: every real navigation link in the bar, bottom nav, and footer still works; only drawers and the MORE sheet require JS.</p>
+  </section>
+</main>
+
+<!-- ═══ SHARED FOOTER ═══ -->
+<footer class="fed-shell-footer">
+  <div class="fed-container">
+    <div class="fed-shell-footer__grid">
+      <div>
+        <div class="fed-shell-footer__brand">
+          <img src="../../logo-circle.png" alt="Galactic Federation — canonical mark">
+          <div>
+            <span class="fed-shell-brand__primary">GALACTIC FEDERATION</span>
+            <p class="fed-shell-footer__desc">Research-first DeFi on Solana. Design specifications before code. A permanent public corrections log.</p>
+          </div>
+        </div>
+      </div>
+      <div class="fed-shell-footer__col">
+        <h3>Systems</h3>
+        <a href="https://galacticfederation.co">Command</a>
+        <a href="https://dossiertrack.co">Dossier</a>
+        <a href="https://galacticfederation.co/research">Research</a>
+        <a href="https://galacticfederation.co/governance-spec">Council</a>
+      </div>
+      <div class="fed-shell-footer__col">
+        <h3>Record</h3>
+        <a href="https://galacticfederation.co/record">Public Record</a>
+        <a href="https://galacticfederation.co/corrections">Corrections</a>
+        <a href="https://galacticfederation.co/treasury">Treasury</a>
+        <a href="https://galacticfederation.co/security">Security</a>
+      </div>
+      <div class="fed-shell-footer__col">
+        <h3>Community</h3>
+        <a href="https://x.com/GFOF_Offcial" rel="noopener">X / Twitter</a>
+        <a href="https://t.me/GFOF_SOL" rel="noopener">Telegram</a>
+        <a href="https://galacticfederation.co/faq">FAQ</a>
+      </div>
+    </div>
+    <div class="fed-shell-footer__legal">
+      <span>© <span data-fed-year>2026</span> Galactic Federation of Finance. Not financial advice. Always DYOR.</span>
+      <span>SHELL LAB — INTERNAL</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ MOBILE BOTTOM NAV ═══ -->
+<nav class="fed-shell-bottom" aria-label="Federation systems (mobile)">
+  <a class="fed-shell-bottom__item" data-fed-system="command" href="https://galacticfederation.co">Command</a>
+  <a class="fed-shell-bottom__item" data-fed-system="dossier" href="https://dossiertrack.co">Dossier</a>
+  <a class="fed-shell-bottom__item" data-fed-system="archive" href="https://galacticfederation.co/record">Archive</a>
+  <button class="fed-shell-bottom__item" data-fed-more-trigger type="button">More</button>
+</nav>
+
+<!-- ═══ SYSTEM STATUS DRAWER ═══ -->
+<div class="fed-drawer__scrim" data-fed-scrim="status"></div>
+<aside class="fed-drawer" data-fed-drawer="status" role="dialog" aria-modal="true" aria-labelledby="status-drawer-title">
+  <div class="fed-drawer__head">
+    <span class="fed-drawer__title" id="status-drawer-title">Federation Network</span>
+    <button class="fed-drawer__close" data-drawer-close data-drawer-initial type="button" aria-label="Close system status">×</button>
+  </div>
+  <div class="fed-drawer__body">
+    <p class="fed-system fed-system--wide" style="margin-bottom: var(--space-4)">SYSTEM STATUS — SAMPLE STATES ONLY</p>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Command</span><span class="fed-sysrow__coord">GF-00</span></div><span class="fed-status fed-status--unknown">Sample</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Dossier</span><span class="fed-sysrow__coord">GF-I01</span></div><span class="fed-status fed-status--unknown">Sample</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Archive</span><span class="fed-sysrow__coord">GF-A01</span></div><span class="fed-status fed-status--unknown">Sample</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Research</span><span class="fed-sysrow__coord">GF-R01</span></div><span class="fed-status fed-status--unknown">Sample</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Council</span><span class="fed-sysrow__coord">GF-G01</span></div><span class="fed-status fed-status--unknown">Sample</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">FCC</span><span class="fed-sysrow__coord">GF-C01</span></div><span class="fed-status fed-status--provisional">Design phase</span></div>
+    <p class="fed-drawer__verified">LAST VERIFIED // — (populated by configured state in a later build; no timestamp invented)</p>
+  </div>
+</aside>
+
+<!-- ═══ VOSS PLACEHOLDER DRAWER ═══ -->
+<div class="fed-drawer__scrim" data-fed-scrim="voss"></div>
+<aside class="fed-drawer" data-fed-drawer="voss" role="dialog" aria-modal="true" aria-labelledby="voss-drawer-title">
+  <div class="fed-drawer__head">
+    <span class="fed-drawer__title" id="voss-drawer-title">Federation Communications</span>
+    <button class="fed-drawer__close" data-drawer-close data-drawer-initial type="button" aria-label="Close communications">×</button>
+  </div>
+  <div class="fed-drawer__body">
+    <div class="fed-voss-id">
+      <img src="../../voss-avatar.png" alt="Admiral Zoran Voss">
+      <div>
+        <span class="fed-shell-brand__primary">ADMIRAL VOSS</span>
+        <span class="fed-sysrow__coord">COMMAND INTELLIGENCE LIAISON</span>
+      </div>
+    </div>
+    <p class="fed-system fed-system--wide">COMMUNICATIONS INTERFACE — BUILD 12</p>
+    <p class="fed-body-text" style="font-size: var(--text-sm); margin-top: var(--space-3)">The Voss communications interface arrives in a later build. The existing production chatbot is unchanged.</p>
+    <div class="fed-voss-modes" aria-label="Future communication modes (disabled)">
+      <button type="button" disabled>Command</button>
+      <button type="button" disabled>Intelligence</button>
+      <button type="button" disabled>Transmission</button>
+    </div>
+    <p class="fed-sysrow__coord" style="margin-top: var(--space-2)">TRANSMISSION will be labeled FEDERATION LORE.</p>
+  </div>
+</aside>
+
+<!-- ═══ MORE SHEET ═══ -->
+<div class="fed-drawer__scrim" data-fed-scrim="more"></div>
+<aside class="fed-drawer" data-fed-drawer="more" role="dialog" aria-modal="true" aria-labelledby="more-drawer-title">
+  <div class="fed-drawer__head">
+    <span class="fed-drawer__title" id="more-drawer-title">More Systems</span>
+    <button class="fed-drawer__close" data-drawer-close data-drawer-initial type="button" aria-label="Close menu">×</button>
+  </div>
+  <div class="fed-drawer__body">
+    <div class="fed-more-list">
+      <span class="fed-more-disabled">FCC <span class="fed-shell-nav__flag">DESIGN PHASE — NO DESTINATION</span></span>
+      <a href="https://galacticfederation.co/research">Research</a>
+      <a href="https://galacticfederation.co/governance-spec">Council</a>
+      <button class="fed-more-list-voss fed-more-disabled" style="text-align:left;background:none;border:none;cursor:not-allowed" type="button">Voss <span class="fed-shell-nav__flag">BUILD 12</span></button>
+      <a href="https://t.me/GFOF_SOL" rel="noopener">Community</a>
+      <a href="https://galacticfederation.co/faq">Knowledge Base</a>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* Shell configuration — lab instance. Sample status state; real known
+   destinations only. FCC: url null, available false (never invented).
+   ARCHIVE→/record and COUNCIL→/governance-spec are real existing routes;
+   the system mapping itself is PENDING PRODUCT APPROVAL. */
+window.FED_SHELL_CONFIG = {
+  active: "command",
+  systems: [
+    { id: "command",  label: "Command",  coord: "GF-00",  url: "https://galacticfederation.co",                 available: true  },
+    { id: "dossier",  label: "Dossier",  coord: "GF-I01", url: "https://dossiertrack.co",                       available: true  },
+    { id: "fcc",      label: "FCC",      coord: "GF-C01", url: null,                                            available: false },
+    { id: "research", label: "Research", coord: "GF-R01", url: "https://galacticfederation.co/research",        available: true  },
+    { id: "archive",  label: "Archive",  coord: "GF-A01", url: "https://galacticfederation.co/record",          available: true  },
+    { id: "council",  label: "Council",  coord: "GF-G01", url: "https://galacticfederation.co/governance-spec", available: true  }
+  ],
+  status: { label: "SYSTEM STATUS", state: "unknown" }   /* sample — not a claim */
+};
+</script>
+<script src="../../assets/federation/fed-shell.js"></script>
+</body>
+</html>

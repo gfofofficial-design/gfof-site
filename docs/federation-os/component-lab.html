@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FEDERATION OS — Component Lab (internal)</title>
+<!-- INTERNAL VALIDATION DOCUMENT — BUILD 02.
+     Not linked from production. Contains NO real project metrics.
+     Dossier examples are labeled DEMO. FCC examples are labeled
+     CONCEPT INTERFACE / DESIGN PHASE. -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/federation/fed-tokens.css">
+<link rel="stylesheet" href="../../assets/federation/fed-base.css">
+<link rel="stylesheet" href="../../assets/federation/fed-components.css">
+<style>
+  /* Lab chrome only — not part of the design system */
+  .lab-section { margin-bottom: var(--space-8); }
+  .lab-title { margin-bottom: var(--space-4); }
+  .lab-note { font-size: var(--text-sm); color: var(--fed-muted); margin-top: var(--space-3); max-width: var(--fed-reading-max); }
+  .lab-row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
+  .lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); }
+  .lab-demo-flag { font-family: var(--font-fed-system); font-size: var(--text-xs); letter-spacing: var(--system-letter-spacing-wide); color: var(--fed-warning); }
+</style>
+</head>
+<body class="fed-body-root fed-scope">
+<main class="fed-container" style="padding-block: var(--space-7)">
+
+  <header class="lab-section">
+    <div class="fed-division" style="border-bottom: 1px solid var(--fed-border-default)">
+      <span class="fed-division__org"><img src="../../logo-circle.png" alt="Galactic Federation — exact canonical circular mark"> GALACTIC FEDERATION</span>
+      <h1 class="fed-division__name">Component Lab</h1>
+      <span class="fed-division__desc">FEDERATION OS · BUILD 02</span>
+      <span class="fed-division__coord">INTERNAL VALIDATION · NOT A PRODUCTION PAGE · NO REAL PROJECT DATA</span>
+    </div>
+  </header>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Typography roles</h2>
+    <p class="fed-display" style="font-size: var(--heading-lg)">Command Display</p>
+    <p class="fed-heading" style="margin-top: var(--space-3)">Heading — Orbitron 700</p>
+    <p class="fed-body-text" style="margin-top: var(--space-3)">Body — Inter at the 16px target with 1.65 line height, constrained to the reading measure so long-form Federation records and specifications stay comfortable.</p>
+    <p class="fed-system fed-system--wide" style="margin-top: var(--space-3)">SYSTEM METADATA — 12PX FLOOR · WIDE TRACKING</p>
+    <p class="fed-eyebrow" style="margin-top: var(--space-3)">Eyebrow Component</p>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Buttons — three patterns</h2>
+    <div class="lab-row">
+      <button class="fed-btn fed-btn--command">Primary Command</button>
+      <button class="fed-btn fed-btn--secondary">Secondary</button>
+      <button class="fed-btn fed-btn--text">Text Action</button>
+      <button class="fed-btn fed-btn--command" disabled>Disabled</button>
+    </div>
+    <p class="lab-note">Tab through for the canonical focus ring. 44px targets. No pill primaries. Hover illumination is restrained and disabled under reduced motion.</p>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Status — state types (visual types only, not project claims)</h2>
+    <div class="lab-row">
+      <span class="fed-status fed-status--operational">Operational sample</span>
+      <span class="fed-status fed-status--provisional">Provisional sample</span>
+      <span class="fed-status fed-status--impaired">Impaired sample</span>
+      <span class="fed-status fed-status--failed">Failed sample</span>
+      <span class="fed-status fed-status--unknown">Unknown sample</span>
+    </div>
+    <p class="lab-note">Labels always ship in HTML — the dot is never the only carrier. Impaired uses a square dot to differ from provisional beyond hue.</p>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Federation panels</h2>
+    <div class="lab-grid">
+      <div class="fed-panel"><div class="fed-panel__head"><span class="fed-system fed-system--bright">DEFAULT PANEL</span></div><p class="fed-body-text" style="font-size: var(--text-sm)">Deep-space surface, thin border, no glassmorphism, no constant glow.</p></div>
+      <div class="fed-panel fed-panel--active"><div class="fed-panel__head"><span class="fed-system fed-system--bright">ACTIVE PANEL</span></div><p class="fed-body-text" style="font-size: var(--text-sm)">Raised active surface with the stronger border.</p></div>
+      <div class="fed-panel fed-panel--authority"><div class="fed-panel__head"><span class="fed-system fed-system--bright">AUTHORITY PANEL</span></div><p class="fed-body-text" style="font-size: var(--text-sm)">Gold-bordered institutional variant.</p></div>
+      <div class="fed-panel fed-panel--verified fed-panel--cut"><div class="fed-panel__head"><span class="fed-system fed-system--bright">VERIFIED + CORNER CUT</span></div><p class="fed-body-text" style="font-size: var(--text-sm)">Signature clipped corner — opt-in, select panels only.</p></div>
+    </div>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Metadata block</h2>
+    <div class="fed-panel" style="max-width: 380px">
+      <div class="fed-meta">
+        <div class="fed-meta__row"><span class="fed-meta__k">Federation</span><span class="fed-meta__sep">//</span><span class="fed-meta__v fed-meta__v--authority">Archive</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">Record</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">0000 (sample)</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">Version</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">0.0 (sample)</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">Status</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Design-system sample</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Evidence chain</h2>
+    <ol class="fed-chain">
+      <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Claim</span><span class="fed-chain__detail">sample statement</span></span></li>
+      <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Source</span><span class="fed-chain__detail">sample origin</span></span></li>
+      <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Evidence</span><span class="fed-chain__detail">sample artifact</span></span></li>
+      <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Record</span><span class="fed-chain__detail">sample entry</span></span></li>
+      <li class="fed-chain__step fed-chain__step--proof"><span class="fed-chain__node"><span class="fed-chain__label">Proof</span><span class="fed-chain__detail">sample anchor</span></span></li>
+    </ol>
+    <p class="lab-note">Semantic ordered list. Stacks vertically below 640px. Fully readable without animation.</p>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Record cards</h2>
+    <div class="lab-grid">
+      <article class="fed-record-card fed-record-card--current">
+        <div class="fed-record-card__top"><span class="fed-record-card__class">Sample classification</span><span class="fed-status fed-status--operational">Current</span></div>
+        <h3 class="fed-record-card__title">Design-system sample record</h3>
+        <p class="fed-record-card__summary">Placeholder summary text for layout validation. Not a project claim.</p>
+        <div class="fed-record-card__foot"><span class="fed-system">DATE // ---- · VERSION // -</span><button class="fed-btn fed-btn--text">Open</button></div>
+      </article>
+      <article class="fed-record-card fed-record-card--corrected">
+        <div class="fed-record-card__top"><span class="fed-record-card__class">Sample classification</span><span class="fed-status fed-status--provisional">Corrected</span></div>
+        <h3 class="fed-record-card__title">Corrected-state sample</h3>
+        <p class="fed-record-card__summary">Warning-edged state with labelled status.</p>
+        <div class="fed-record-card__foot"><span class="fed-system">DATE // ---- · VERSION // -</span><button class="fed-btn fed-btn--text">Open</button></div>
+      </article>
+      <article class="fed-record-card fed-record-card--superseded">
+        <div class="fed-record-card__top"><span class="fed-record-card__class">Sample classification</span><span class="fed-status fed-status--unknown">Superseded</span></div>
+        <h3 class="fed-record-card__title">Superseded-state sample</h3>
+        <p class="fed-record-card__summary">Neutral edge, slightly receded. History preserved, never hidden.</p>
+        <div class="fed-record-card__foot"><span class="fed-system">DATE // ---- · VERSION // -</span><button class="fed-btn fed-btn--text">Open</button></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Dossier signal shell <span class="lab-demo-flag">· DEMO — NOT A REAL SIGNAL</span></h2>
+    <div class="fed-signal" style="max-width: 720px">
+      <div class="fed-signal__bar">
+        <span class="fed-signal__id">SIGNAL // DEMO-0000</span>
+        <span class="fed-status fed-status--provisional">Demo state</span>
+      </div>
+      <div class="fed-signal__body">
+        <div class="fed-signal__field"><span class="fed-signal__label">Asset</span><span class="fed-signal__value fed-signal__value--asset">$DEMO</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Independent wallets</span><span class="fed-signal__value">N (demo)</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Window</span><span class="fed-signal__value">— (demo)</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Detected</span><span class="fed-signal__value">— (demo)</span></div>
+      </div>
+    </div>
+    <p class="lab-note">Component shell only. No Dossier functionality, no real convergence data anywhere.</p>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">FCC mandate shell <span class="lab-demo-flag">· CONCEPT INTERFACE · DESIGN PHASE</span></h2>
+    <div class="fed-mandate" style="max-width: 720px">
+      <div class="fed-mandate__head">
+        <span class="fed-mandate__brand">FCC // MANDATE</span>
+        <span class="fed-mandate__phase">Concept Interface · Design Phase</span>
+      </div>
+      <div class="fed-mandate__body">
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Intent</span><p class="fed-mandate__section-text">Sample intent text for layout validation only.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Decision</span><p class="fed-mandate__section-text">Sample decision text.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Evidence</span><p class="fed-mandate__section-text">Sample evidence reference.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Outcome</span><p class="fed-mandate__section-text">Sample outcome text.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Final record</span><p class="fed-mandate__section-text">Sample final-record reference.</p></div>
+      </div>
+    </div>
+    <p class="lab-note">FCC is not operational. This shell exists so the future division inherits the system; nothing here implies operation.</p>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">System rail</h2>
+    <div class="fed-rail" role="list" aria-label="System status rail (sample)">
+      <span class="fed-rail__item" role="listitem">GFOF <span class="fed-status fed-status--unknown">sample</span></span>
+      <span class="fed-rail__item" role="listitem">NETWORK <span class="fed-status fed-status--unknown">sample</span></span>
+      <span class="fed-rail__item" role="listitem">DOSSIER <span class="fed-status fed-status--unknown">sample</span></span>
+      <span class="fed-rail__item" role="listitem">ARCHIVE <span class="fed-status fed-status--unknown">sample</span></span>
+      <span class="fed-rail__item" role="listitem">COUNCIL <span class="fed-status fed-status--unknown">sample</span></span>
+      <span class="fed-rail__item" role="listitem">FCC <span class="fed-status fed-status--unknown">sample</span></span>
+    </div>
+    <p class="lab-note">Scrolls horizontally on narrow viewports; the <code style="font-family:var(--font-fed-system)">--stack</code> modifier stacks instead. All states here are unlabeled samples — not wired to any data.</p>
+  </section>
+
+  <section class="lab-section">
+    <h2 class="fed-heading fed-heading--sm lab-title">Division identifier</h2>
+    <div class="fed-division">
+      <span class="fed-division__org"><img src="../../logo-circle.png" alt="Galactic Federation — exact canonical circular mark"> GALACTIC FEDERATION</span>
+      <p class="fed-division__name">Dossier</p>
+      <span class="fed-division__desc">Federation Intelligence</span>
+      <span class="fed-division__coord">NODE // GF-I01 — fictional interface identifier, not an address of any kind</span>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
