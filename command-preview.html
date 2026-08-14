@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FEDERATION OS — Command Preview (development)</title>
+<!-- COMMAND v1 DEVELOPMENT PREVIEW (design frozen at BUILD 07) — not production, not in sitemap,
+     not linked from any production page. All factual statements are
+     sourced from existing repository content; nothing is invented. -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/federation/fed-tokens.css">
+<link rel="stylesheet" href="assets/federation/fed-base.css">
+<link rel="stylesheet" href="assets/federation/fed-components.css">
+<link rel="stylesheet" href="assets/federation/fed-shell.css">
+<link rel="stylesheet" href="assets/federation/fed-command.css">
+</head>
+<body class="fed-body-root fed-scope">
+
+<!-- Atmosphere — decorative deep-space layer, hidden from AT -->
+<div class="cmd-atmos" aria-hidden="true">
+  <div class="cmd-atmos__stars"></div>
+  <span class="cmd-atmos__arc cmd-atmos__arc--a"></span>
+  <span class="cmd-atmos__arc cmd-atmos__arc--b"></span>
+  <span class="cmd-atmos__coord cmd-atmos__coord--a">GF // 00 · SECTOR PUBLIC</span>
+  <span class="cmd-atmos__coord cmd-atmos__coord--b">FEDERATION OS</span>
+  <span class="cmd-atmos__cross cmd-atmos__cross--a"></span>
+  <span class="cmd-atmos__cross cmd-atmos__cross--b"></span>
+</div>
+
+<!-- ═══ SHELL: COMMAND BAR ═══ -->
+<header class="fed-shell-bar">
+  <a class="fed-shell-brand" href="/">
+    <img src="logo-circle.png" alt="Galactic Federation — canonical mark">
+    <span class="fed-shell-brand__names">
+      <span class="fed-shell-brand__primary">GALACTIC FEDERATION</span>
+      <span class="fed-shell-brand__system">FEDERATION OS</span>
+    </span>
+  </a>
+  <nav class="fed-shell-nav" aria-label="Federation systems">
+    <a class="fed-shell-nav__item" data-fed-system="command" href="/command-preview.html">Command</a>
+    <a class="fed-shell-nav__item" data-fed-system="dossier" href="https://dossiertrack.co">Dossier</a>
+    <span class="fed-shell-nav__item" data-fed-system="fcc" aria-disabled="true" role="link" tabindex="-1">FCC <span class="fed-shell-nav__flag">DESIGN PHASE</span></span>
+    <a class="fed-shell-nav__item" data-fed-system="research" href="/research">Research</a>
+    <a class="fed-shell-nav__item" data-fed-system="archive" href="/record">Archive</a>
+    <a class="fed-shell-nav__item" data-fed-system="council" href="/governance-spec">Council</a>
+  </nav>
+  <div class="fed-shell-controls">
+    <span class="fed-shell-coord">COMMAND // GF-00</span>
+    <button class="fed-shell-voss" data-fed-voss-trigger type="button">VOSS</button>
+    <button class="fed-shell-status" data-fed-status-trigger data-state="unknown" type="button">
+      <span class="fed-shell-status__dot" aria-hidden="true"></span>
+      <span data-fed-status-label>SYSTEM STATUS</span>
+    </button>
+  </div>
+</header>
+
+<main class="cmd-main">
+
+<!-- Continuity layer — decorative, hidden from AT -->
+<div class="cmd-flow" aria-hidden="true">
+  <span class="cmd-flow__arc cmd-flow__arc--fcc"></span>
+  <span class="cmd-flow__arc cmd-flow__arc--voss"></span>
+  <span class="cmd-flow__path"></span>
+  <span class="cmd-flow__node cmd-flow__node--a"></span>
+  <span class="cmd-flow__node cmd-flow__node--b"></span>
+  <span class="cmd-flow__node cmd-flow__node--gold"></span>
+  <span class="cmd-flow__coord cmd-flow__coord--a">RELAY // GF-00</span>
+  <span class="cmd-flow__coord cmd-flow__coord--b">APPROACH // COMMAND</span>
+</div>
+
+<!-- ═══ HERO — ARRIVAL ═══ -->
+<section class="fed-container">
+  <div class="cmd-hero">
+    <div>
+      <span class="cmd-hero__access">FEDERATION OS // PUBLIC ACCESS</span>
+      <h1 class="cmd-hero__title">Galactic<br>Federation</h1>
+      <p class="cmd-hero__thesis">The financial system is moving on-chain.</p>
+      <p class="cmd-hero__arch">Intelligence<b>·</b>Accountability<b>·</b>Governance<b>·</b>Capital<b>·</b>One On-Chain Federation</p>
+      <p class="cmd-hero__position">Research-first DeFi on Solana. Public design specifications before code. A permanent corrections log for every commitment. Live on-chain transparency, read from the chain in your own browser.</p>
+      <div class="cmd-hero__actions">
+        <a class="fed-btn fed-btn--command" href="#network">Enter Command</a>
+        <a class="fed-btn fed-btn--secondary" href="/record">Read the Record</a>
+      </div>
+      <div class="cmd-hero__meta" aria-label="Interface identifiers (lore)">
+        <span>COMMAND NODE // GF-00</span>
+        <span>ACCESS CLASS // PUBLIC</span>
+      </div>
+    </div>
+    <div class="cmd-seal">
+      <span class="cmd-seal__orbit" aria-hidden="true"></span>
+      <span class="cmd-seal__orbit cmd-seal__orbit--mid" aria-hidden="true"></span>
+      <span class="cmd-seal__orbit--tick cmd-seal__orbit" aria-hidden="true"></span>
+      <span class="cmd-seal__mark cmd-seal__mark--tl" aria-hidden="true">GF // 00</span>
+      <span class="cmd-seal__mark cmd-seal__mark--br" aria-hidden="true">FEDERATION OS</span>
+      <img class="cmd-seal__img" src="logo-circle.png" alt="Galactic Federation seal — canonical circular mark">
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMMAND STATUS RAIL ═══ -->
+<section class="fed-container cmd-section--tight cmd-reveal" aria-label="Federation system state">
+  <div class="fed-rail" role="list">
+    <span class="fed-rail__item" role="listitem">$GFOF <span class="fed-status fed-status--provisional">Pre-bond</span></span>
+    <span class="fed-rail__item" role="listitem">NETWORK <span class="fed-status fed-status--operational">Solana</span></span>
+    <span class="fed-rail__item" role="listitem">DOSSIER <span class="fed-status fed-status--impaired">Measurement review</span></span>
+    <span class="fed-rail__item" role="listitem">ARCHIVE <span class="fed-status fed-status--operational">Public</span></span>
+    <span class="fed-rail__item" role="listitem">COUNCIL <span class="fed-status fed-status--provisional">Advisory</span></span>
+    <span class="fed-rail__item" role="listitem">FCC <span class="fed-status fed-status--provisional">Design phase</span></span>
+  </div>
+</section>
+
+<!-- ═══ FEDERATION NETWORK ═══ -->
+<section class="cmd-network cmd-section" id="network">
+  <div class="fed-container">
+    <div class="cmd-reveal">
+      <span class="cmd-ident">FEDERATION <b>//</b> NETWORK</span>
+      <h2 class="cmd-div-title" style="font-size: var(--heading-lg)">Federation Network</h2>
+      <p class="cmd-div-line" style="color: var(--fed-text); font-size: var(--text-lg)">One ecosystem. Specialized systems. Shared record.</p>
+    </div>
+    <div class="cmd-network__layout">
+      <div class="cmd-net cmd-reveal">
+        <svg class="cmd-net__lines" viewBox="0 0 560 560" aria-hidden="true" focusable="false">
+          <circle class="orbit" cx="280" cy="280" r="215"/>
+          <circle class="orbit" cx="280" cy="280" r="150" opacity="0.6"/>
+          <line data-link="dossier"  x1="280" y1="280" x2="280" y2="70"/>
+          <line data-link="research" x1="280" y1="280" x2="465" y2="205"/>
+          <line data-link="council"  x1="280" y1="280" x2="405" y2="455"/>
+          <line data-link="archive"  x1="280" y1="280" x2="155" y2="455"/>
+          <line data-link="fcc"      x1="280" y1="280" x2="95"  y2="205"/>
+          <circle class="anchor" data-link="dossier"  cx="280" cy="70"  r="3"/>
+          <circle class="anchor" data-link="research" cx="465" cy="205" r="3"/>
+          <circle class="anchor" data-link="council"  cx="405" cy="455" r="3"/>
+          <circle class="anchor" data-link="archive"  cx="155" cy="455" r="3"/>
+          <circle class="anchor" data-link="fcc"      cx="95"  cy="205" r="3"/>
+        </svg>
+        <div class="cmd-net__core">
+          <span class="cmd-net__core-ring" aria-hidden="true"></span>
+          <img src="logo-circle.png" alt="Galactic Federation — Command core">
+          <span class="cmd-net__core-label">COMMAND · $GFOF<br><span style="color:var(--fed-muted)">economic &amp; participation layer</span></span>
+        </div>
+        <button class="cmd-net__node cmd-net__node--n1" data-system="dossier" type="button" aria-pressed="false">
+          <span class="cmd-net__label">Dossier</span><small>GF-I01</small><span class="cmd-net__state">Measurement review</span>
+          <span class="cmd-net__desc">Federation Intelligence. Built to detect when curated Solana wallets converge on the same token. Detection is currently halted while the Federation measures whether convergence means what was claimed — publishing the measurements either way.</span>
+        </button>
+        <button class="cmd-net__node cmd-net__node--n2" data-system="research" type="button" aria-pressed="false">
+          <span class="cmd-net__label">Research</span><small>GF-R01</small><span class="cmd-net__state cmd-net__state--op">Published</span>
+          <span class="cmd-net__desc">The Federation Research Log and public design specifications — analysis published openly, specs published before code, misses documented in the record.</span>
+        </button>
+        <button class="cmd-net__node cmd-net__node--n3" data-system="council" type="button" aria-pressed="false">
+          <span class="cmd-net__desc">Federation governance. An advisory DAO is live on Realms, gated to the $GFOF mint. Advisory only — no treasury funds or authorities are routed through it yet. Binding governance is tracked to post-bond.</span>
+          <span class="cmd-net__label">Council</span><small>GF-G01</small><span class="cmd-net__state">Advisory</span>
+        </button>
+        <button class="cmd-net__node cmd-net__node--n4" data-system="archive" type="button" aria-pressed="false">
+          <span class="cmd-net__desc">The Public Record. Every commitment tracked on a permanent corrections log — appended, never deleted — with timestamped forecasts anchored to the Bitcoin blockchain via OpenTimestamps.</span>
+          <span class="cmd-net__label">Archive</span><small>GF-A01</small><span class="cmd-net__state cmd-net__state--op">Public</span>
+        </button>
+        <button class="cmd-net__node cmd-net__node--n5" data-system="fcc" type="button" aria-pressed="false">
+          <span class="cmd-net__label">FCC</span><small>GF-C01</small><span class="cmd-net__state">Design phase</span>
+          <span class="cmd-net__desc">Federation Capital Command. The planned capital division of the Federation. Status: design phase — not operational. Nothing exists to show yet, and nothing is simulated here.</span>
+        </button>
+      </div>
+      <div class="cmd-net__panel cmd-reveal" aria-live="polite">
+        <span class="cmd-net__panel-coord" data-net-coord>GF-00</span>
+        <h3 class="cmd-net__panel-title" data-net-title>Command</h3>
+        <p class="cmd-net__panel-body" data-net-body>The Federation operates as one ecosystem with a shared record. $GFOF is the economic and participation layer within Command — not a separate division. Select a system to see how it connects.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CURRENT MISSION ═══ -->
+<section class="fed-container cmd-section cmd-reveal" aria-labelledby="mission-h">
+  <span class="cmd-ident">COMMAND <b>//</b> CURRENT MISSION</span>
+  <div class="cmd-mission">
+    <div class="cmd-mission__objective">
+      <h2 class="fed-heading" id="mission-h">The Bond Objective</h2>
+      <p class="fed-body-text">$GFOF is pre-bond on the Moonshot launchpad. The bond target is a $73K market cap, which triggers automatic migration to Raydium — and mint and freeze authorities are revoked as part of that migration. Progress is read live from the chain on the current site; this preview does not display live figures.</p>
+      <div class="cmd-hero__actions">
+        <a class="fed-btn fed-btn--text" href="/treasury">Live on-chain transparency</a>
+      </div>
+    </div>
+    <div class="fed-panel">
+      <div class="fed-panel__head"><span class="fed-system fed-system--bright">MISSION PARAMETERS</span></div>
+      <div class="fed-meta">
+        <div class="fed-meta__row"><span class="fed-meta__k">Launchpad</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Moonshot (pre-bond)</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">Bond target</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">$73K market cap</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">On bond</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Auto-migration to Raydium</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">Authorities</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Mint &amp; freeze revoked at migration</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">Locked supply</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">130,000,000 $GFOF · 13% · 4 Streamflow contracts</span></div>
+        <div class="fed-meta__row"><span class="fed-meta__k">Live progress</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 01 DOSSIER ═══ -->
+<section class="fed-container cmd-section cmd-reveal" aria-labelledby="dossier-h">
+  <div class="cmd-div-head">
+    <span class="cmd-ident">01 <b>//</b> INTELLIGENCE</span>
+    <h2 class="cmd-div-title" id="dossier-h">Dossier</h2>
+    <p class="cmd-div-line">See convergence before consensus.</p>
+    <p class="fed-body-text cmd-div-body">The intelligence arm of the Federation, built to detect when several curated Solana wallets independently move on the same token in a tight window. Convergence, not a feed — method public, roster private. Detection is <strong>currently halted</strong> while the Federation measures whether that convergence means what was originally claimed, and it is publishing the measurements either way. The original pitch stays on the record, struck through rather than deleted.</p>
+  </div>
+  <div class="cmd-two-col">
+    <div class="fed-signal">
+      <div class="fed-signal__bar">
+        <span class="fed-signal__id">SIGNAL // INTERFACE PREVIEW</span>
+        <span class="fed-status fed-status--unknown">Not live data</span>
+      </div>
+      <div class="fed-signal__body">
+        <div class="fed-signal__field"><span class="fed-signal__label">Asset</span><span class="fed-signal__value">—</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Independent wallets</span><span class="fed-signal__value">—</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Window</span><span class="fed-signal__value">—</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Detected</span><span class="fed-signal__value">—</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="fed-body-text">This is the interface language of a Dossier convergence signal — shown empty because no production signal can honestly populate a preview. When detection resumes, real signals render here from real data or not at all.</p>
+      <div class="cmd-hero__actions"><a class="fed-btn fed-btn--command" href="https://dossiertrack.co">Open Dossier</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 02 ARCHIVE ═══ -->
+<section class="fed-container cmd-section cmd-reveal" aria-labelledby="archive-h">
+  <div class="cmd-div-head">
+    <span class="cmd-ident">02 <b>//</b> ACCOUNTABILITY</span>
+    <h2 class="cmd-div-title" id="archive-h">The Record<br>Remains.</h2>
+    <p class="fed-body-text cmd-div-body">Every commitment the Federation makes publicly is tracked on a corrections log — status-labeled, appended, never deleted. Forecasts are filed as byte-exact text and anchored to the Bitcoin blockchain via OpenTimestamps, so anyone can verify when a claim existed without trusting the Federation. Misses are documented with the same prominence as keeps.</p>
+  </div>
+
+  <ol class="fed-chain" aria-label="How a Federation claim becomes verifiable">
+    <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Claim</span><span class="fed-chain__detail">a public commitment</span></span></li>
+    <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Source</span><span class="fed-chain__detail">where it was stated</span></span></li>
+    <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Evidence</span><span class="fed-chain__detail">on-chain reads &amp; signatures</span></span></li>
+    <li class="fed-chain__step"><span class="fed-chain__node"><span class="fed-chain__label">Record</span><span class="fed-chain__detail">corrections log entry</span></span></li>
+    <li class="fed-chain__step fed-chain__step--proof"><span class="fed-chain__node"><span class="fed-chain__label">Proof</span><span class="fed-chain__detail">OpenTimestamps anchor</span></span></li>
+  </ol>
+
+  <div class="cmd-archive-links">
+    <a class="fed-record-card fed-record-card--current" href="/corrections" style="text-decoration:none">
+      <span class="fed-record-card__class">Corrections Log</span>
+      <span class="fed-record-card__title">Public commitments</span>
+      <p class="fed-record-card__summary">Every promise, status-labeled. Appended, never deleted.</p>
+    </a>
+    <a class="fed-record-card fed-record-card--current" href="/record" style="text-decoration:none">
+      <span class="fed-record-card__class">The Federation Record</span>
+      <span class="fed-record-card__title">Scored forecasts</span>
+      <p class="fed-record-card__summary">Falsifiable claims, timestamped and anchored. No price predictions.</p>
+    </a>
+    <a class="fed-record-card fed-record-card--current" href="/treasury" style="text-decoration:none">
+      <span class="fed-record-card__class">Treasury</span>
+      <span class="fed-record-card__title">Live transparency</span>
+      <p class="fed-record-card__summary">Streamflow locks read from Solana RPC in your own browser.</p>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ 03 FCC ═══ -->
+<section class="cmd-fcc cmd-section cmd-section--arc" aria-labelledby="fcc-h">
+  <div class="fed-container cmd-reveal">
+    <div class="cmd-div-head">
+      <span class="cmd-ident">03 <b>//</b> CAPITAL</span>
+      <h2 class="cmd-div-title" id="fcc-h">Federation<br>Capital Command</h2>
+      <p class="cmd-div-line">The Capital Command of the On-Chain Economy.</p>
+      <p style="margin-top: var(--space-4)"><span class="fed-status fed-status--provisional">Status // Design phase</span></p>
+      <p class="fed-body-text cmd-div-body">FCC is the planned capital division of the Federation. It is not operational: there is no capital under management, no mandates, no strategies, and no counterparties. What exists is design work — and consistent with the Federation's discipline, the design is being shown before anything is built. Everything below is a concept interface.</p>
+    </div>
+    <div class="fed-mandate" style="max-width: 720px">
+      <div class="fed-mandate__head">
+        <span class="fed-mandate__brand">FCC // MANDATE</span>
+        <span class="fed-mandate__phase">Concept Interface · Design Phase</span>
+      </div>
+      <div class="fed-mandate__body">
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Intent</span><p class="fed-mandate__section-text">What a mandate would set out to do — stated before action.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Decision</span><p class="fed-mandate__section-text">The committed course, on the record.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Evidence</span><p class="fed-mandate__section-text">On-chain proof attached as it occurs.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Outcome</span><p class="fed-mandate__section-text">What actually happened — kept or missed.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Final record</span><p class="fed-mandate__section-text">Permanent classification in the Archive.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RESEARCH + COUNCIL ═══ -->
+<section class="fed-container cmd-section cmd-reveal" aria-label="Research and Council">
+  <div class="cmd-two-col">
+    <div>
+      <span class="cmd-ident">RESEARCH <b>//</b> GF-R01</span>
+      <h2 class="fed-heading">Federation Research</h2>
+      <p class="fed-body-text cmd-div-body">A weekly analytical publication and public design specifications: the Research Log (canonical posts on Paragraph), the borrower-protective Liquidation Specification v0.2, and the Governance Specification v0.1 — all published for criticism before code. Missed weeks are documented in the corrections log like everything else.</p>
+      <a class="fed-btn fed-btn--text" href="/research">Open the Research Log</a>
+    </div>
+    <div>
+      <span class="cmd-ident">COUNCIL <b>//</b> GF-G01</span>
+      <h2 class="fed-heading">The Council</h2>
+      <p class="cmd-div-line" style="font-size: var(--text-base)">Federation Governance</p>
+      <p class="fed-body-text cmd-div-body">An advisory DAO is live on Realms, gated to the $GFOF mint. It is advisory only — no treasury funds or authorities are routed through it yet, and binding governance is tracked to post-bond. The 13% locked allocation cannot vote. No claim of decentralization is made beyond that.</p>
+      <a class="fed-btn fed-btn--text" href="/governance-spec">Read the Governance Spec</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VOSS ═══ -->
+<section class="fed-container cmd-section cmd-reveal" aria-labelledby="voss-h">
+  <div class="cmd-voss">
+    <span class="cmd-voss__link" aria-hidden="true"></span>
+    <div class="cmd-voss__station">
+      <div class="cmd-voss__channel"><span>Federation Communications</span><i aria-hidden="true"></i></div>
+      <div class="cmd-voss__frame">
+        <span class="cmd-voss__bracket" aria-hidden="true"></span>
+        <img src="voss-full.jpg" alt="Admiral Zoran Voss — Federation Command portrait" width="1024" height="1024">
+      </div>
+      <div class="cmd-voss__meta">CHANNEL // COMMAND &nbsp;·&nbsp; SOURCE // GF-00</div>
+    </div>
+    <div class="cmd-voss__panel">
+      <span class="cmd-ident">FEDERATION <b>//</b> COMMUNICATIONS <span class="fed-shell-nav__flag" style="margin-left:var(--space-2)">FEDERATION LORE</span></span>
+      <h2 class="cmd-div-title" id="voss-h" style="font-size: var(--heading-lg)">Admiral Voss</h2>
+      <p class="cmd-div-line">Command Intelligence Liaison</p>
+      <p class="fed-body-text cmd-div-body">The Federation's communications persona and the interface between visitor and Command. When you open a channel, it is Voss who answers for the Federation — measured, on the record, and pointed at what can be verified.</p>
+      <div class="cmd-hero__actions">
+        <button class="fed-btn fed-btn--command" data-fed-voss-trigger-2 type="button">Open Communications</button>
+      </div>
+      <div class="cmd-voss__discipline">
+        <div class="fed-meta">
+          <div class="fed-meta__row"><span class="fed-meta__k">Comms discipline</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">No price predictions</span></div>
+          <div class="fed-meta__row"><span class="fed-meta__k">Claims</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Documented commitments only</span></div>
+          <div class="fed-meta__row"><span class="fed-meta__k">Verification</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Redirects to the live record</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL ═══ -->
+<section class="fed-container cmd-final cmd-reveal">
+  <img src="logo-circle.png" alt="Galactic Federation — canonical mark">
+  <h2 class="cmd-final__title">The Federation<br>Is Being Built.</h2>
+  <p class="cmd-final__sub">Follow the record. Examine the intelligence. Participate in what comes next.</p>
+  <div class="cmd-final__actions">
+    <a class="fed-btn fed-btn--command" href="https://dossiertrack.co">Explore Dossier</a>
+    <a class="fed-btn fed-btn--secondary" href="/record">Read the Archive</a>
+    <a class="fed-btn fed-btn--secondary" href="https://t.me/GFOF_SOL" rel="noopener">Join the Federation</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ SHELL: FOOTER ═══ -->
+<footer class="fed-shell-footer">
+  <div class="fed-container">
+    <div class="fed-shell-footer__grid">
+      <div>
+        <div class="fed-shell-footer__brand">
+          <img src="logo-circle.png" alt="Galactic Federation — canonical mark">
+          <div>
+            <span class="fed-shell-brand__primary">GALACTIC FEDERATION</span>
+            <p class="fed-shell-footer__desc">Research-first DeFi on Solana. Design specifications before code. A permanent public corrections log.</p>
+          </div>
+        </div>
+      </div>
+      <div class="fed-shell-footer__col">
+        <h3>Systems</h3>
+        <a href="/command-preview.html">Command</a>
+        <a href="https://dossiertrack.co">Dossier</a>
+        <a href="/research">Research</a>
+        <a href="/governance-spec">Council</a>
+      </div>
+      <div class="fed-shell-footer__col">
+        <h3>Record</h3>
+        <a href="/record">Public Record</a>
+        <a href="/corrections">Corrections</a>
+        <a href="/treasury">Treasury</a>
+        <a href="/security">Security</a>
+      </div>
+      <div class="fed-shell-footer__col">
+        <h3>Community</h3>
+        <a href="https://x.com/GFOF_Offcial" rel="noopener">X / Twitter</a>
+        <a href="https://t.me/GFOF_SOL" rel="noopener">Telegram</a>
+        <a href="/faq">Knowledge Base</a>
+      </div>
+    </div>
+    <div class="fed-shell-footer__legal">
+      <span>© <span data-fed-year>2026</span> Galactic Federation of Finance. Not financial advice. Always DYOR.</span>
+      <span>DEVELOPMENT PREVIEW — COMMAND v1 · DESIGN FROZEN (BUILD 07)</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SHELL: MOBILE BOTTOM NAV ═══ -->
+<nav class="fed-shell-bottom" aria-label="Federation systems (mobile)">
+  <a class="fed-shell-bottom__item" data-fed-system="command" href="/command-preview.html">Command</a>
+  <a class="fed-shell-bottom__item" data-fed-system="dossier" href="https://dossiertrack.co">Dossier</a>
+  <a class="fed-shell-bottom__item" data-fed-system="archive" href="/record">Archive</a>
+  <button class="fed-shell-bottom__item" data-fed-more-trigger type="button">More</button>
+</nav>
+
+<!-- ═══ SHELL: DRAWERS ═══ -->
+<div class="fed-drawer__scrim" data-fed-scrim="status"></div>
+<aside class="fed-drawer" data-fed-drawer="status" role="dialog" aria-modal="true" aria-labelledby="status-drawer-title">
+  <div class="fed-drawer__head">
+    <span class="fed-drawer__title" id="status-drawer-title">Federation Network</span>
+    <button class="fed-drawer__close" data-drawer-close data-drawer-initial type="button" aria-label="Close system status">×</button>
+  </div>
+  <div class="fed-drawer__body">
+    <p class="fed-system fed-system--wide" style="margin-bottom: var(--space-4)">SYSTEM STATE — SOURCED FROM CURRENT PROJECT CONTENT</p>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Command · $GFOF</span><span class="fed-sysrow__coord">GF-00</span></div><span class="fed-status fed-status--provisional">Pre-bond</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Dossier</span><span class="fed-sysrow__coord">GF-I01</span></div><span class="fed-status fed-status--impaired">Measurement review</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Archive</span><span class="fed-sysrow__coord">GF-A01</span></div><span class="fed-status fed-status--operational">Public</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Research</span><span class="fed-sysrow__coord">GF-R01</span></div><span class="fed-status fed-status--operational">Published</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Council</span><span class="fed-sysrow__coord">GF-G01</span></div><span class="fed-status fed-status--provisional">Advisory</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">FCC</span><span class="fed-sysrow__coord">GF-C01</span></div><span class="fed-status fed-status--provisional">Design phase</span></div>
+    <p class="fed-drawer__verified">LAST VERIFIED // — (live verification arrives with production data wiring)</p>
+  </div>
+</aside>
+
+<div class="fed-drawer__scrim" data-fed-scrim="voss"></div>
+<aside class="fed-drawer" data-fed-drawer="voss" role="dialog" aria-modal="true" aria-labelledby="voss-drawer-title">
+  <div class="fed-drawer__head">
+    <span class="fed-drawer__title" id="voss-drawer-title">Federation Communications</span>
+    <button class="fed-drawer__close" data-drawer-close data-drawer-initial type="button" aria-label="Close communications">×</button>
+  </div>
+  <div class="fed-drawer__body">
+    <div class="fed-voss-id">
+      <img src="voss-avatar.png" alt="Admiral Zoran Voss">
+      <div>
+        <span class="fed-shell-brand__primary">ADMIRAL VOSS</span>
+        <span class="fed-sysrow__coord">COMMAND INTELLIGENCE LIAISON</span>
+      </div>
+    </div>
+    <p class="fed-system fed-system--wide">COMMUNICATIONS INTERFACE — BUILD 12</p>
+    <p class="fed-body-text" style="font-size: var(--text-sm); margin-top: var(--space-3)">The Voss communications interface arrives in a later build. The existing production chatbot is unchanged.</p>
+    <div class="fed-voss-modes" aria-label="Future communication modes (disabled)">
+      <button type="button" disabled>Command</button>
+      <button type="button" disabled>Intelligence</button>
+      <button type="button" disabled>Transmission</button>
+    </div>
+    <p class="fed-sysrow__coord" style="margin-top: var(--space-2)">TRANSMISSION will be labeled FEDERATION LORE.</p>
+  </div>
+</aside>
+
+<div class="fed-drawer__scrim" data-fed-scrim="more"></div>
+<aside class="fed-drawer" data-fed-drawer="more" role="dialog" aria-modal="true" aria-labelledby="more-drawer-title">
+  <div class="fed-drawer__head">
+    <span class="fed-drawer__title" id="more-drawer-title">More Systems</span>
+    <button class="fed-drawer__close" data-drawer-close data-drawer-initial type="button" aria-label="Close menu">×</button>
+  </div>
+  <div class="fed-drawer__body">
+    <div class="fed-more-list">
+      <span class="fed-more-disabled">FCC <span class="fed-shell-nav__flag">DESIGN PHASE — NO DESTINATION</span></span>
+      <a href="/research">Research</a>
+      <a href="/governance-spec">Council</a>
+      <button class="fed-more-disabled" style="text-align:left;background:none;border:none;cursor:not-allowed" type="button">Voss <span class="fed-shell-nav__flag">BUILD 12</span></button>
+      <a href="https://t.me/GFOF_SOL" rel="noopener">Community</a>
+      <a href="/faq">Knowledge Base</a>
+    </div>
+  </div>
+</aside>
+
+<script>
+window.FED_SHELL_CONFIG = {
+  active: "command",
+  systems: [
+    { id: "command",  label: "Command",  coord: "GF-00",  url: "/command-preview.html", available: true  },
+    { id: "dossier",  label: "Dossier",  coord: "GF-I01", url: "https://dossiertrack.co", available: true },
+    { id: "fcc",      label: "FCC",      coord: "GF-C01", url: null, available: false },
+    { id: "research", label: "Research", coord: "GF-R01", url: "/research", available: true },
+    { id: "archive",  label: "Archive",  coord: "GF-A01", url: "/record", available: true },
+    { id: "council",  label: "Council",  coord: "GF-G01", url: "/governance-spec", available: true }
+  ],
+  status: { label: "SYSTEM STATUS", state: "unknown" }
+};
+</script>
+<script src="assets/federation/fed-shell.js"></script>
+<script src="assets/federation/fed-command.js"></script>
+<script>
+/* Second Voss trigger (page section) shares the shell drawer */
+(function(){
+  var t = document.querySelector('[data-fed-voss-trigger-2]');
+  var d = document.querySelector('[data-fed-drawer="voss"]');
+  var s = document.querySelector('[data-fed-scrim="voss"]');
+  if (t && d && window.fedShell) {
+    var drawer = window.fedShell.createDrawer(d, s);
+    t.setAttribute('aria-haspopup','dialog');
+    t.addEventListener('click', function(){ drawer.open(t); });
+  }
+})();
+</script>
+</body>
+</html>
