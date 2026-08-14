@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Token Access &amp; Payment Spec v0.2 — $GFOF Galactic Federation of Finance</title>
-<meta name="description" content="Design specification for $GFOF as an optional payment method for the Dossier intelligence product. Optional payment, never a gate. Fiat always available. No discount, no yield, no holding requirement. Spec published before code.">
+<meta name="description" content="Design specification for $GFOF as an optional payment method for Dossier access, if paid access ever operates. Optional payment, never a gate. Fiat always available. No discount, no yield, no holding requirement. Spec published before code.">
 <link rel="canonical" href="https://galacticfederation.co/access-spec">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://galacticfederation.co/access-spec">
 <meta property="og:title" content="Token Access &amp; Payment Spec v0.2 — $GFOF">
-<meta property="og:description" content="$GFOF as an optional way to pay for Dossier. A payment option, not a gate. Spec before code.">
+<meta property="og:description" content="$GFOF as an optional way to pay for Dossier if paid access operates. A payment option, not a gate. Spec before code.">
 <meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
 <meta name="twitter:title" content="Token Access &amp; Payment Spec v0.2 — $GFOF">
-<meta name="twitter:description" content="$GFOF as an optional way to pay for Dossier. A payment option, not a gate.">
+<meta name="twitter:description" content="$GFOF as an optional way to pay for Dossier if paid access operates. A payment option, not a gate.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -297,13 +297,13 @@ p{font-size:16.5px; line-height:1.64;}
   <header class="doc-header">
     <div class="doc-tag">FEDERATION DESIGN SPEC · ACCESS &amp; PAYMENT</div>
     <h1 class="doc-title">Token Access &amp; <span class="grad">Payment Specification</span></h1>
-    <p class="doc-sub">How $GFOF works as an <strong>optional</strong> way to pay for <strong><a class="in" href="https://dossiertrack.co" target="_blank" rel="noopener">Dossier</a></strong> (Operation 02). A payment option, never a gate. Published before the payment flow is built — spec before code. Verify everything against the <a class="in" href="/corrections">corrections log</a>.</p>
+    <p class="doc-sub">How $GFOF would work as an <strong>optional</strong> way to pay for <strong><a class="in" href="https://dossiertrack.co" target="_blank" rel="noopener">Dossier</a></strong> (Federation Intelligence) if paid access ever operates. Dossier&rsquo;s pricing surface is currently withdrawn (Dossier corrections #024) while Program 01 is in Measurement Review. A payment option, never a gate. Published before the payment flow is built — spec before code. Verify everything against the <a class="in" href="/corrections">corrections log</a>.</p>
     <div class="doc-meta">VERSION v0.2 · STATUS draft, ready to publish · UPDATED 2026-06-17</div>
   </header>
 
   <div class="callout amber">
     <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> READ FIRST — WHAT THIS IS AND ISN'T</div>
-    <p>$GFOF is an <strong>optional</strong> way to pay for a Dossier subscription. It is <strong>not</strong> a gate: fiat is always available, nothing is locked behind the token, and you never have to hold or buy $GFOF to use any tier. It is not an investment, pays no yield, and carries no promise of price appreciation. This is a design specification — the payment flow it describes is published <em>before</em> it is built.</p>
+    <p>$GFOF is specified as an <strong>optional</strong> way to pay for Dossier access, if paid access ever operates &mdash; no pricing tiers are currently offered; the pricing surface was withdrawn under Dossier corrections #024 while Program 01 (convergence) is in Measurement Review. The principle is standing either way: <strong>not</strong> a gate &mdash; fiat always available, nothing locked behind the token, holding or buying $GFOF never required for any access level. It is not an investment, pays no yield, and carries no promise of price appreciation. This is a design specification — the payment flow it describes is published <em>before</em> it is built.</p>
   </div>
 
   <div class="toc">
@@ -324,8 +324,8 @@ p{font-size:16.5px; line-height:1.64;}
   </div>
 
   <h2 id="purpose"><span class="num">SECTION 01</span>Purpose &amp; scope</h2>
-  <p>This specification defines how the $GFOF token functions as an <strong>optional payment method</strong> for the Dossier intelligence product — a concrete, non-speculative reason to hold and use the token: paying for the product.</p>
-  <p><strong>In scope:</strong> paying for Dossier with $GFOF; how received $GFOF is handled; the framing rules that keep this utility rather than investment. <strong>Out of scope:</strong> yield, lending, staking-for-return, hold-to-access gating (Section 04), and any claim that $GFOF will appreciate (Section 08).</p>
+  <p>This specification defines how the $GFOF token would function as an <strong>optional payment method</strong> for Dossier — the Federation Intelligence system — if paid access ever operates. No paid access currently operates.</p>
+  <p><strong>In scope:</strong> paying for Dossier with $GFOF when paid access operates; how received $GFOF is handled; the framing rules that keep this utility rather than investment. <strong>Out of scope:</strong> yield, lending, staking-for-return, hold-to-access gating (Section 04), and any claim that $GFOF will appreciate (Section 08).</p>
 
   <h2 id="principle"><span class="num">SECTION 02</span>Design principle</h2>
   <p><strong>Value through use, not through promised returns.</strong> Spending a token for a service is consumptive utility. Paying a holder a return for holding is the category currently unsettled in US law — the Digital Asset Market Clarity Act was not enacted as of June 2026, and yield was its most contested provision. This specification stays on the utility side of that line by design. Nothing here is legal advice.</p>
@@ -333,8 +333,8 @@ p{font-size:16.5px; line-height:1.64;}
   <h2 id="mechanism"><span class="num">SECTION 03</span>Mechanism — pay with $GFOF</h2>
   <p>The single mechanism in this spec: the token is <strong>spent</strong> to buy the product.</p>
   <ul>
-    <li>Dossier subscriptions are payable in $GFOF as an <strong>optional</strong> payment method. Fiat / card remains available; <strong>$GFOF is never required</strong> for any tier.</li>
-    <li>Live prices the $GFOF path uses (same prices, no discount): <strong>Operative — $29 / mo</strong>; <strong>Handler — $99 / mo</strong>. (Operative · Beta locks in $19 / mo after its six-month free term.)</li>
+    <li>If paid access operates, Dossier subscriptions are payable in $GFOF as an <strong>optional</strong> payment method, with fiat / card always available; <strong>$GFOF is never required</strong> for any access level.</li>
+    <li>No prices are currently published &mdash; the pricing surface was withdrawn under Dossier corrections #024. Whenever paid access operates, the $GFOF path uses the same published prices as fiat, with no discount.</li>
     <li>The $GFOF amount due at checkout is the USD price divided by the $GFOF spot rate, within a short quote-validity window plus a small slippage buffer.</li>
     <li>Payment is sent to a dedicated receiving wallet (Section 06). Access begins on confirmed on-chain payment and runs the subscription term.</li>
     <li><strong>No discount</strong> on the $GFOF path — same price as card. This keeps it a payment option, not a token-promotion nudge.</li>
@@ -343,7 +343,7 @@ p{font-size:16.5px; line-height:1.64;}
   <h2 id="no-gate"><span class="num">SECTION 04</span>Hold-to-access — explicitly excluded</h2>
   <div class="callout cyan">
     <div class="k">NO TOKEN-GATE</div>
-    <p>Gating a tier behind <em>holding</em> $GFOF is <strong>not</strong> part of this spec and will not be built. Dossier is pay-for-what-you-need with no token-gate. Accepting $GFOF as a payment method gates nothing — fiat is always available and no tier requires the token. Any future reconsideration of holding-based access would require its own specification and a corrections-log entry.</p>
+    <p>Gating a tier behind <em>holding</em> $GFOF is <strong>not</strong> part of this spec and will not be built. The ruling is a standing access principle, not tied to any pricing era: no token-gate. If paid access ever operates, accepting $GFOF as a payment method gates nothing &mdash; fiat is always available and no access level requires the token. Any future reconsideration of holding-based access would require its own specification and a corrections-log entry.</p>
   </div>
 
   <h2 id="pricing"><span class="num">SECTION 05</span>Pricing &amp; volatility handling</h2>
@@ -355,8 +355,8 @@ p{font-size:16.5px; line-height:1.64;}
   <h2 id="parameters"><span class="num">SECTION 07</span>Parameters</h2>
   <p>Set as of this version. Publication is the act that makes them live.</p>
   <ul>
-    <li><strong>Tier mapping:</strong> all paid tiers (Operative, Handler) accept $GFOF as optional payment. No tier is gated.</li>
-    <li><strong>Prices (USD):</strong> Operative $29/mo; Handler $99/mo; Operative · Beta &rarr; $19/mo post-beta. The $GFOF path uses these same prices.</li>
+    <li><strong>Tier mapping:</strong> if paid access operates, every paid access level accepts $GFOF as optional payment; nothing is gated. No tiers are currently offered (Dossier corrections #024).</li>
+    <li><strong>Prices (USD):</strong> none currently published &mdash; pricing surface withdrawn (Dossier corrections #024). The $GFOF path always uses the same published prices as fiat.</li>
     <li><strong>$GFOF-path discount:</strong> none — same price as fiat.</li>
     <li><strong>Hold-to-access:</strong> not enabled (excluded — Section 04).</li>
     <li><strong>Routing of received $GFOF:</strong> through the #011 policy (25% &rarr; 50% to liquidity), remainder to treasury; counted inside the #011 base; no burn.</li>
