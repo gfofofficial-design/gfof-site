@@ -527,19 +527,19 @@ p{font-family:var(--font-read); letter-spacing:0;}
     </div>
   </div>
 
-  <div class="entry status-on-track" id="c002">
+  <div class="entry status-kept" id="c002">
     <div class="entry-head">
       <span class="entry-id">#002 · COMMITMENT</span>
-      <span class="entry-status">ON TRACK</span>
+      <span class="entry-status">KEPT</span>
     </div>
     <h3>Unlocked Federation tokens do not go to the open market</h3>
     <div class="meta">
       <span>Made 2026-04</span>
-      <span>First test: first unlock event</span>
+      <span>First test resolved: 2026-08-28</span>
     </div>
     <div class="body">
       <p>When the first Streamflow unlock event occurs, the released tokens will not be sold into the market. They will either be re-locked, rotated into operational treasury (visible on-chain), or used per a specific, pre-announced purpose. This will be verifiable on-chain both before and after the event.</p>
-      <p><strong>Status:</strong> Commitment standing. Will be tested at the next unlock — see countdown on /treasury. If we break this, it will appear as <strong>MISSED</strong> on this page before any other coverage.</p>
+      <p><strong>Status update &mdash; KEPT 2026-08-28:</strong> the first 40M lock matured on 2026-08-18 and the full scheduled allocation was re-locked through 2028-08-18. The predecessor, new contract, auto-claim transaction, and re-lock transaction are preserved in <a href="#c033" style="color:var(--cyan);text-decoration:underline">entry #033</a>.</p>
     </div>
   </div>
 
@@ -884,6 +884,25 @@ p{font-family:var(--font-read); letter-spacing:0;}
       <p><strong>Why the rate is 93%, not 100%.</strong> The keep-rate is counted strictly: of <strong>15 resolved commitments</strong>, 14 are KEPT and one &mdash; entry <a href="#c018" style="color:var(--cyan);text-decoration:underline">#018</a>, the immutable on-chain name disclosure &mdash; sits in the denominator as a DISCLOSURE / CANCELLED rather than being excluded to flatter the number. We chose the stricter count on purpose. The 17 ON TRACK entries are forward-looking and excluded from the rate until they resolve.</p>
       <p>A search box and status filters were also added to make the log navigable. No entry content was altered.</p>
       <p><strong>Status:</strong> Acknowledged and permanent. The page now corrects its own arithmetic; a stale published stat has been replaced with the true figure. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+<div class="entry status-kept" id="c033">
+    <div class="entry-head">
+      <span class="entry-id">#033 &middot; KEPT</span>
+      <span class="entry-status">KEPT</span>
+    </div>
+    <h3>The first 40M Streamflow lock matured on August 18. The full scheduled allocation is re-locked for two additional years, with both contracts and both transactions preserved.</h3>
+    <div class="meta">
+      <span>Matured 2026-08-18 &middot; re-locked 2026-08-28</span>
+      <span>Affected: /treasury &middot; commitment #002</span>
+    </div>
+    <div class="body">
+      <p><strong>What matured.</strong> The original Lock 3 held <strong>40,000,000 $GFOF</strong> under Streamflow metadata account <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k</a>. Its full cliff was 2026-08-18 05:00 UTC. Streamflow auto-claimed the 40M to the disclosed recipient wallet in <a href="https://solscan.io/tx/54jUeZMPsa3gsMgocppv8iLhv89gsUrRTgeFAFLjpQ2ioEiatvoXiTyxesie3sLr1fkEHSB2uZoWezoEaRsKBiNG" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">transaction 54jUeZMP&hellip;KBiNG</a> at 2026-08-18 05:00:15 UTC.</p>
+      <p><strong>What was done.</strong> On 2026-08-28, the same recipient wallet created a new Streamflow contract and placed the full <strong>40,000,000 $GFOF scheduled allocation</strong> under a new full cliff of <strong>2028-08-18 05:00 UTC</strong>. Active metadata account: <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS</a>. Creation transaction: <a href="https://solscan.io/tx/5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">5zr6i6at&hellip;KwjqXD</a>.</p>
+      <p><strong>Why the new escrow can show 40.2M.</strong> The creation transaction transferred 40,200,000 $GFOF into the Streamflow escrow because the transaction logs include a 200,000-token Streamflow fee. The contract metadata records <strong>40,000,000 $GFOF as the net scheduled deposit</strong>. The treasury page therefore counts the scheduled 40M allocation, not the platform fee, when computing the locked-supply total.</p>
+      <p><strong>What this means for the total.</strong> The active scheduled lock set remains <strong>130,000,000 $GFOF &mdash; 13% of total supply &mdash; across four active Streamflow contracts</strong>: 30M, 30M, the re-locked 40M, and 30M. The expired predecessor is retained as lineage rather than erased or presented as active.</p>
+      <p><strong>Status:</strong> <a href="#c002" style="color:var(--cyan);text-decoration:underline">Commitment #002</a> is marked KEPT. The full first-maturity allocation was re-locked; no amount from that 40M scheduled allocation was removed from the re-lock. This entry records the ten-day interval between maturity and the new contract rather than implying the extension happened automatically on August 18.</p>
     </div>
   </div>
 
@@ -1451,7 +1470,7 @@ p{font-family:var(--font-read); letter-spacing:0;}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.14 · corrections · deployed 2026-05-26</span>
+  <span class="version" id="footer-version">v17.15 · corrections · updated 2026-08-28</span>
 </div>
 
 <script>
@@ -1461,7 +1480,7 @@ try {
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.14 · corrections · deployed 2026-05-26'; }
+  if(el){ el.textContent = 'v17.15 · corrections · updated 2026-08-28'; }
 })();
 </script>
 
