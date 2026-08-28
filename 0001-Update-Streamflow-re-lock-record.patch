@@ -1,0 +1,575 @@
+From 2d535bcef8d1b819505741a31c1159e0795166dc Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Fri, 28 Aug 2026 10:31:55 -0700
+Subject: [PATCH] Update Streamflow re-lock record
+
+---
+ command-preview.html      |  3 ++-
+ corrections-feed.xml      | 12 +++++++++--
+ corrections.html          | 31 +++++++++++++++++++++------
+ faq.html                  | 19 +++++++++--------
+ humans.txt                |  3 ++-
+ index.html                | 25 +++++++++++-----------
+ llms.txt                  | 10 +++++----
+ netlify/functions/chat.js |  2 +-
+ security.html             |  6 +++---
+ sitemap.xml               | 10 ++++-----
+ treasury.html             | 45 ++++++++++++++++++++++++++++-----------
+ 11 files changed, 109 insertions(+), 57 deletions(-)
+
+diff --git a/command-preview.html b/command-preview.html
+index 3fa75bb..8477028 100644
+--- a/command-preview.html
++++ b/command-preview.html
+@@ -187,7 +187,8 @@
+         <div class="fed-meta__row"><span class="fed-meta__k">Bond target</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">$73K market cap</span></div>
+         <div class="fed-meta__row"><span class="fed-meta__k">On bond</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Auto-migration to Raydium</span></div>
+         <div class="fed-meta__row"><span class="fed-meta__k">Authorities</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Mint &amp; freeze revoked at migration</span></div>
+-        <div class="fed-meta__row"><span class="fed-meta__k">Locked supply</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">130,000,000 $GFOF · 13% · 4 Streamflow contracts</span></div>
++        <div class="fed-meta__row"><span class="fed-meta__k">Locked supply</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">130,000,000 $GFOF · 13% · 4 active Streamflow contracts</span></div>
++        <div class="fed-meta__row"><span class="fed-meta__k">First maturity</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">40M re-locked · 2026-08-18 → 2028-08-18</span></div>
+         <div class="fed-meta__row"><span class="fed-meta__k">Live progress</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">—</span></div>
+       </div>
+     </div>
+diff --git a/corrections-feed.xml b/corrections-feed.xml
+index 55174f7..5b114e7 100644
+--- a/corrections-feed.xml
++++ b/corrections-feed.xml
+@@ -7,8 +7,8 @@
+     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
+     <language>en-us</language>
+     <copyright>Galactic Federation of Finance</copyright>
+-    <lastBuildDate>Tue, 11 Aug 2026 19:30:00 +0000</lastBuildDate>
+-    <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
++    <lastBuildDate>Fri, 28 Aug 2026 18:00:00 +0000</lastBuildDate>
++    <pubDate>Fri, 28 Aug 2026 18:00:00 +0000</pubDate>
+     <ttl>1440</ttl>
+     <image>
+       <url>https://galacticfederation.co/logo.png</url>
+@@ -17,6 +17,14 @@
+     </image>
+     <generator>Galactic Federation of Finance — static RSS</generator>
+ 
++    <item>
++      <title>#033 · KEPT — The first 40M Streamflow lock matured on August 18 and the full scheduled allocation is re-locked through August 18, 2028.</title>
++      <link>https://galacticfederation.co/corrections#c033</link>
++      <guid isPermaLink="false">gfof-kept-033-first-lock-relocked-two-years</guid>
++      <pubDate>Fri, 28 Aug 2026 18:00:00 +0000</pubDate>
++      <description>The original 40,000,000 $GFOF Lock 3 reached its full cliff on 2026-08-18 05:00 UTC and Streamflow auto-claimed the allocation to the disclosed recipient wallet. On 2026-08-28 the same wallet created a new Streamflow contract with a 40,000,000 $GFOF net scheduled deposit and a new full cliff of 2028-08-18 05:00 UTC. Active contract: 6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS. Expired predecessor: 7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k. Re-lock transaction: 5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD. The active scheduled total remains 130,000,000 $GFOF (13%) across four active contracts. Commitment #002 is marked KEPT; the ten-day interval between maturity and re-lock is stated rather than hidden.</description>
++    </item>
++
+     <item>
+       <title>#032 · CORRECTION — The selection rule failed twice more on first contact with the venues, before any entry was filed. Both amendments logged same-day.</title>
+       <link>https://galacticfederation.co/corrections#c032</link>
+diff --git a/corrections.html b/corrections.html
+index 812f440..21b9003 100644
+--- a/corrections.html
++++ b/corrections.html
+@@ -527,19 +527,19 @@ p{font-family:var(--font-read); letter-spacing:0;}
+     </div>
+   </div>
+ 
+-  <div class="entry status-on-track" id="c002">
++  <div class="entry status-kept" id="c002">
+     <div class="entry-head">
+       <span class="entry-id">#002 · COMMITMENT</span>
+-      <span class="entry-status">ON TRACK</span>
++      <span class="entry-status">KEPT</span>
+     </div>
+     <h3>Unlocked Federation tokens do not go to the open market</h3>
+     <div class="meta">
+       <span>Made 2026-04</span>
+-      <span>First test: first unlock event</span>
++      <span>First test resolved: 2026-08-28</span>
+     </div>
+     <div class="body">
+       <p>When the first Streamflow unlock event occurs, the released tokens will not be sold into the market. They will either be re-locked, rotated into operational treasury (visible on-chain), or used per a specific, pre-announced purpose. This will be verifiable on-chain both before and after the event.</p>
+-      <p><strong>Status:</strong> Commitment standing. Will be tested at the next unlock — see countdown on /treasury. If we break this, it will appear as <strong>MISSED</strong> on this page before any other coverage.</p>
++      <p><strong>Status update &mdash; KEPT 2026-08-28:</strong> the first 40M lock matured on 2026-08-18 and the full scheduled allocation was re-locked through 2028-08-18. The predecessor, new contract, auto-claim transaction, and re-lock transaction are preserved in <a href="#c033" style="color:var(--cyan);text-decoration:underline">entry #033</a>.</p>
+     </div>
+   </div>
+ 
+@@ -887,6 +887,25 @@ p{font-family:var(--font-read); letter-spacing:0;}
+     </div>
+   </div>
+ 
++<div class="entry status-kept" id="c033">
++    <div class="entry-head">
++      <span class="entry-id">#033 &middot; KEPT</span>
++      <span class="entry-status">KEPT</span>
++    </div>
++    <h3>The first 40M Streamflow lock matured on August 18. The full scheduled allocation is re-locked for two additional years, with both contracts and both transactions preserved.</h3>
++    <div class="meta">
++      <span>Matured 2026-08-18 &middot; re-locked 2026-08-28</span>
++      <span>Affected: /treasury &middot; commitment #002</span>
++    </div>
++    <div class="body">
++      <p><strong>What matured.</strong> The original Lock 3 held <strong>40,000,000 $GFOF</strong> under Streamflow metadata account <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k</a>. Its full cliff was 2026-08-18 05:00 UTC. Streamflow auto-claimed the 40M to the disclosed recipient wallet in <a href="https://solscan.io/tx/54jUeZMPsa3gsMgocppv8iLhv89gsUrRTgeFAFLjpQ2ioEiatvoXiTyxesie3sLr1fkEHSB2uZoWezoEaRsKBiNG" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">transaction 54jUeZMP&hellip;KBiNG</a> at 2026-08-18 05:00:15 UTC.</p>
++      <p><strong>What was done.</strong> On 2026-08-28, the same recipient wallet created a new Streamflow contract and placed the full <strong>40,000,000 $GFOF scheduled allocation</strong> under a new full cliff of <strong>2028-08-18 05:00 UTC</strong>. Active metadata account: <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS</a>. Creation transaction: <a href="https://solscan.io/tx/5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">5zr6i6at&hellip;KwjqXD</a>.</p>
++      <p><strong>Why the new escrow can show 40.2M.</strong> The creation transaction transferred 40,200,000 $GFOF into the Streamflow escrow because the transaction logs include a 200,000-token Streamflow fee. The contract metadata records <strong>40,000,000 $GFOF as the net scheduled deposit</strong>. The treasury page therefore counts the scheduled 40M allocation, not the platform fee, when computing the locked-supply total.</p>
++      <p><strong>What this means for the total.</strong> The active scheduled lock set remains <strong>130,000,000 $GFOF &mdash; 13% of total supply &mdash; across four active Streamflow contracts</strong>: 30M, 30M, the re-locked 40M, and 30M. The expired predecessor is retained as lineage rather than erased or presented as active.</p>
++      <p><strong>Status:</strong> <a href="#c002" style="color:var(--cyan);text-decoration:underline">Commitment #002</a> is marked KEPT. The full first-maturity allocation was re-locked; no amount from that 40M scheduled allocation was removed from the re-lock. This entry records the ten-day interval between maturity and the new contract rather than implying the extension happened automatically on August 18.</p>
++    </div>
++  </div>
++
+ <div class="entry status-cancelled" id="c032">
+     <div class="entry-head">
+       <span class="entry-id">#032 &middot; CORRECTION</span>
+@@ -1451,7 +1470,7 @@ p{font-family:var(--font-read); letter-spacing:0;}
+   <br>
+   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+   <br>
+-  <span class="version" id="footer-version">v17.14 · corrections · deployed 2026-05-26</span>
++  <span class="version" id="footer-version">v17.15 · corrections · updated 2026-08-28</span>
+ </div>
+ 
+ <script>
+@@ -1461,7 +1480,7 @@ try {
+ } catch(e) {}
+ (function(){
+   var el = document.getElementById('footer-version');
+-  if(el){ el.textContent = 'v17.14 · corrections · deployed 2026-05-26'; }
++  if(el){ el.textContent = 'v17.15 · corrections · updated 2026-08-28'; }
+ })();
+ </script>
+ 
+diff --git a/faq.html b/faq.html
+index c566c7b..ab1595d 100644
+--- a/faq.html
++++ b/faq.html
+@@ -33,7 +33,7 @@
+       "name": "What is GFOF (Galactic Federation of Finance)?",
+       "acceptedAnswer": {
+         "@type": "Answer",
+-        "text": "Galactic Federation of Finance ($GFOF) is a research-first DeFi project on Solana. The Federation publishes design specifications publicly before any code ships, maintains a permanent corrections log of every commitment, and operates with live on-chain transparency. 13% of total token supply is locked on Streamflow across four separate contracts, verifiable on-chain. Community-led, with governance planned via Realms DAO post-bond."
++        "text": "Galactic Federation of Finance ($GFOF) is a research-first DeFi project on Solana. The Federation publishes design specifications publicly before any code ships, maintains a permanent corrections log of every commitment, and operates with live on-chain transparency. 13% of total token supply is locked on Streamflow across four active contracts, verifiable on-chain. The first matured 40M allocation was re-locked through August 18, 2028. Community-led, with governance planned via Realms DAO post-bond."
+       }
+     },
+     {
+@@ -49,7 +49,7 @@
+       "name": "Is GFOF safe? Is the contract verified?",
+       "acceptedAnswer": {
+         "@type": "Answer",
+-        "text": "$GFOF launched on Moonshot, which handles standard launchpad security automatically: mint and freeze authorities are held by Moonshot's program during pre-bond and revoked at the Raydium migration. 13% of total supply is locked on Streamflow across four separate contracts, fully verifiable on-chain. The Federation maintains a permanent corrections log and operates an active red-team bounty program. Always do your own research and verify the contract address from galacticfederation.co — never from DMs."
++        "text": "$GFOF launched on Moonshot, which handles standard launchpad security automatically: mint and freeze authorities are held by Moonshot's program during pre-bond and revoked at the Raydium migration. 13% of total supply is locked on Streamflow across four active contracts, fully verifiable on-chain. The first matured 40M allocation was re-locked through August 18, 2028. The Federation maintains a permanent corrections log and operates an active red-team bounty program. Always do your own research and verify the contract address from galacticfederation.co — never from DMs."
+       }
+     },
+     {
+@@ -81,7 +81,7 @@
+       "name": "How much of the $GFOF supply is locked?",
+       "acceptedAnswer": {
+         "@type": "Answer",
+-        "text": "13% of the total 1 billion supply (130M $GFOF) is locked on Streamflow across four separate contracts. All locks are publicly verifiable on-chain at app.streamflow.finance. Distribution: 77% community and liquidity, 10% rewards and reserve allocated by governance post-bond, 13% dev locked. The breakdown was updated 2026-05-19 with the addition of the 4th lock — see corrections #013."
++        "text": "13% of the total 1 billion supply (130M $GFOF) is locked on Streamflow across four active contracts. The original 40M Lock 3 matured on August 18, 2026 and the full scheduled allocation was re-locked through August 18, 2028 under a new contract. All active locks and the expired predecessor are publicly verifiable on-chain. Distribution: 77% community and liquidity, 10% rewards and reserve allocated by governance post-bond, 13% dev locked. See corrections #013 and #033."
+       }
+     },
+     {
+@@ -471,7 +471,7 @@ p{font-size:16.5px; line-height:1.64;}
+   <!-- Q1 -->
+   <h2 id="what-is-gfof"><span class="num">QUESTION 01</span>What is GFOF (Galactic Federation of Finance)?</h2>
+   <p>Galactic Federation of Finance (<strong>$GFOF</strong>) is a research-first DeFi project on Solana. The Federation publishes design specifications publicly <strong>before</strong> any code ships, maintains a permanent <a class="in" href="/corrections">corrections log</a> of every commitment, and operates with <a class="in" href="/treasury">live on-chain transparency</a>.</p>
+-  <p>13% of total token supply is locked on Streamflow across four separate contracts — verifiable on-chain. The project is community-led, with governance planned via Realms DAO post-bond.</p>
++  <p>13% of total token supply is locked on Streamflow across four active contracts — verifiable on-chain. The first matured 40M allocation was re-locked through August 18, 2028. The project is community-led, with governance planned via Realms DAO post-bond.</p>
+ 
+   <!-- Q2 -->
+   <h2 id="how-to-buy"><span class="num">QUESTION 02</span>How do I buy $GFOF on Solana?</h2>
+@@ -487,7 +487,7 @@ p{font-size:16.5px; line-height:1.64;}
+   <!-- Q3 -->
+   <h2 id="is-it-safe"><span class="num">QUESTION 03</span>Is GFOF safe? Is the contract verified?</h2>
+   <p>$GFOF launched on Moonshot, which handles standard launchpad security automatically: <strong>mint and freeze authorities</strong> are held by Moonshot's program during pre-bond and revoked at the Raydium migration as part of the same flow.</p>
+-  <p>13% of total supply is locked on Streamflow across four separate contracts — fully verifiable on-chain. The Federation maintains a permanent <a class="in" href="/corrections">corrections log</a> and operates an active <a class="in" href="/security">red-team bounty program</a> ($50–$500 in $GFOF for verified findings).</p>
++  <p>13% of total supply is locked on Streamflow across four active contracts — fully verifiable on-chain. The first matured 40M allocation was re-locked for two additional years rather than released to the market. The Federation maintains a permanent <a class="in" href="/corrections">corrections log</a> and operates an active <a class="in" href="/security">red-team bounty program</a> ($50–$500 in $GFOF for verified findings).</p>
+   <p>Always do your own research and verify the contract address from this site — never from DMs or replies.</p>
+ 
+   <!-- Q4 -->
+@@ -508,14 +508,15 @@ p{font-size:16.5px; line-height:1.64;}
+ 
+   <!-- Q7 -->
+   <h2 id="supply-locked"><span class="num">QUESTION 07</span>How much of the $GFOF supply is locked?</h2>
+-  <p>13% of the total <strong>1 billion supply (130M $GFOF)</strong> is locked on Streamflow across four separate contracts. All locks are publicly verifiable on-chain at <a class="in" href="https://app.streamflow.finance" target="_blank" rel="noopener">app.streamflow.finance</a>.</p>
++  <p>13% of the total <strong>1 billion supply (130M $GFOF)</strong> is locked on Streamflow across four active contracts. The original 40M Lock 3 matured on <strong>August 18, 2026</strong>; the full scheduled allocation was placed into a <a class="in" href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener">new Streamflow contract</a> on August 28, 2026 with a full cliff on <strong>August 18, 2028</strong>. The <a class="in" href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener">expired predecessor</a> remains linked for independent verification.</p>
+   <p>Distribution:</p>
+   <ul>
+     <li><strong>77%</strong> — Community and liquidity (open market, circulating)</li>
+     <li><strong>10%</strong> — Rewards and reserve (allocated by governance post-bond)</li>
+-    <li><strong>13%</strong> — Dev (locked, immutable on Streamflow across 4 contracts)</li>
++    <li><strong>13%</strong> — Dev (locked on Streamflow across 4 active contracts)</li>
+   </ul>
+   <p class="callout" style="font-size:13px;margin-top:14px"><strong>Note:</strong> the breakdown was updated 2026-05-19 with the addition of the 4th lock. The previous 80/10/10 figure rounded team-held treasury tokens into the community/liquidity bucket; the new lock moves 30M of those tokens explicitly into the locked-dev column. See <a class="in" href="/corrections#c013">corrections #013</a> for the full record.</p>
++  <p class="callout" style="font-size:13px;margin-top:14px"><strong>First maturity:</strong> the 40M allocation that matured 2026-08-18 was re-locked through 2028-08-18. See <a class="in" href="/corrections#c033">corrections #033</a> for the contract lineage and transaction proof.</p>
+   <p>The treasury page reads these contracts directly from Solana RPC in your browser — see <a class="in" href="/treasury">/treasury</a>.</p>
+ 
+   <!-- Q8 -->
+@@ -589,7 +590,7 @@ p{font-size:16.5px; line-height:1.64;}
+   <br>
+   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+   <br>
+-  <span class="version" id="footer-version">v17.10 · faq · deployed 2026-05-19</span>
++  <span class="version" id="footer-version">v17.11 · faq · updated 2026-08-28</span>
+ </div>
+ 
+ <script>
+@@ -599,7 +600,7 @@ try {
+ } catch(e) {}
+ (function(){
+   var el = document.getElementById('footer-version');
+-  if(el){ el.textContent = 'v17.10 · faq · deployed 2026-05-19'; }
++  if(el){ el.textContent = 'v17.11 · faq · updated 2026-08-28'; }
+ })();
+ </script>
+ </body>
+diff --git a/humans.txt b/humans.txt
+index 07bd4b4..eb96869 100644
+--- a/humans.txt
++++ b/humans.txt
+@@ -26,7 +26,8 @@
+   Stack: Static HTML/CSS/JS, Netlify hosting, Solana RPC reads in-browser
+   Standards: RFC 9116 security.txt, llmstxt.org for AI research tools
+   Token: Solana SPL · CA 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon
+-  Locks: Streamflow · 4 contracts · 13% of supply
++  Locks: Streamflow · 4 active contracts · 13% of supply
++  Re-lock: 40M matured 2026-08-18 · re-locked through 2028-08-18
+ 
+ /* NOTE */
+   The Federation does not predict prices.
+diff --git a/index.html b/index.html
+index 71f70b6..60672de 100644
+--- a/index.html
++++ b/index.html
+@@ -4,7 +4,7 @@
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>$GFOF — Galactic Federation of Finance</title>
+-<meta name="description" content="Research-first DeFi on Solana. Public design specs before code. A permanent corrections log for every commitment. Live on-chain transparency. 13% of supply locked on Streamflow.">
++<meta name="description" content="Research-first DeFi on Solana. Public design specs before code. Permanent corrections log. Live on-chain transparency. 13% of supply locked on Streamflow; first matured allocation re-locked through August 18, 2028.">
+ <meta property="og:title" content="$GFOF — Galactic Federation of Finance">
+ <meta property="og:description" content="Research-first DeFi on Solana. Public design specs before code. Permanent corrections log. Live on-chain transparency.">
+ <meta property="og:url" content="https://galacticfederation.co">
+@@ -30,7 +30,7 @@
+   "alternateName": "$GFOF",
+   "url": "https://galacticfederation.co",
+   "logo": "https://galacticfederation.co/logo.png",
+-  "description": "Research-first DeFi on Solana. Publishes design specifications for protocol work before any code is written, maintains a permanent public corrections log, and provides live on-chain transparency. 13% of total supply locked across four Streamflow contracts.",
++  "description": "Research-first DeFi on Solana. Publishes design specifications for protocol work before any code is written, maintains a permanent public corrections log, and provides live on-chain transparency. 13% of total supply locked across four active Streamflow contracts; the first matured allocation was re-locked through August 18, 2028.",
+   "foundingDate": "2026",
+   "knowsAbout": [
+     "Solana DeFi",
+@@ -69,7 +69,7 @@
+   "@type": "FinancialProduct",
+   "name": "$GFOF Token",
+   "alternateName": "GFOF",
+-  "description": "$GFOF is the native SPL token of the Galactic Federation of Finance, a research-first DeFi project on Solana. 13% of total supply locked across four Streamflow contracts with public on-chain verification. Community-governed via Realms DAO post-bond.",
++  "description": "$GFOF is the native SPL token of the Galactic Federation of Finance, a research-first DeFi project on Solana. 13% of total supply locked across four active Streamflow contracts with public on-chain verification. The first matured allocation was re-locked through August 18, 2028. Community-governed via Realms DAO post-bond.",
+   "category": "Cryptocurrency",
+   "url": "https://galacticfederation.co",
+   "provider": {
+@@ -1808,7 +1808,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+ 
+   <!-- HERO TRUST STRIP (v9) -->
+   <div class="hero-trust reveal">
+-    <div class="hero-trust-item" title="13% of total supply locked in 4 Streamflow contracts"><span class="htc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="htc-t">13% LOCKED</span></div>
++    <div class="hero-trust-item" title="13% of total supply locked in 4 active Streamflow contracts; first matured allocation re-locked through August 18, 2028"><span class="htc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="htc-t">13% LOCKED</span></div>
+     <div class="hero-trust-sep"></div>
+     <div class="hero-trust-item" title="Contract address verifiable on Solscan"><span class="htc-ico">✓</span><span class="htc-t">CA VERIFIED</span></div>
+     <div class="hero-trust-sep"></div>
+@@ -2299,7 +2299,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+             <div style="font-family:var(--orb);font-size:22px;font-weight:900;color:#F0C040;line-height:1;min-width:50px">13%</div>
+             <div>
+               <div style="font-family:var(--orb);font-size:12px;color:#fff;letter-spacing:1px;margin-bottom:3px">DEV — LOCKED <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+-              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">4 Streamflow contracts · verifiable on-chain · immutable</div>
++              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">4 active Streamflow contracts · first maturity re-locked 2 years · verifiable on-chain</div>
+             </div>
+           </div>
+         </div>
+@@ -2311,8 +2311,8 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+         <span style="font-size:20px;filter:drop-shadow(0 0 8px var(--green))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+         <div>
+-          <div style="font-family:var(--orb);font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:3px">13% OF TOTAL SUPPLY LOCKED — 4 WALLETS</div>
+-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">All team tokens locked on-chain via Streamflow. Verified, transparent, immutable. No rug — provably.</div>
++          <div style="font-family:var(--orb);font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:3px">13% OF TOTAL SUPPLY LOCKED — 4 ACTIVE CONTRACTS</div>
++          <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">The 40M allocation that matured August 18, 2026 was re-locked through August 18, 2028. New contract and predecessor remain public.</div>
+         </div>
+       </div>
+ 
+@@ -2340,9 +2340,10 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+         <a href="https://app.streamflow.finance/contract/solana/mainnet/2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--green);border:1px solid rgba(61,255,160,0.3);padding:6px 14px;border-radius:2px;letter-spacing:1px;white-space:nowrap;transition:all .2s;background:rgba(61,255,160,0.04)" onmouseover="this.style.background='rgba(61,255,160,0.1)'" onmouseout="this.style.background='rgba(61,255,160,0.04)'">LOCK 1 ↗</a>
+         <a href="https://app.streamflow.finance/contract/solana/mainnet/DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--green);border:1px solid rgba(61,255,160,0.3);padding:6px 14px;border-radius:2px;letter-spacing:1px;white-space:nowrap;transition:all .2s;background:rgba(61,255,160,0.04)" onmouseover="this.style.background='rgba(61,255,160,0.1)'" onmouseout="this.style.background='rgba(61,255,160,0.04)'">LOCK 2 ↗</a>
+-        <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--green);border:1px solid rgba(61,255,160,0.3);padding:6px 14px;border-radius:2px;letter-spacing:1px;white-space:nowrap;transition:all .2s;background:rgba(61,255,160,0.04)" onmouseover="this.style.background='rgba(61,255,160,0.1)'" onmouseout="this.style.background='rgba(61,255,160,0.04)'">LOCK 3 ↗</a>
++        <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;color:var(--green);border:1px solid rgba(61,255,160,0.3);padding:6px 14px;border-radius:2px;letter-spacing:1px;white-space:nowrap;transition:all .2s;background:rgba(61,255,160,0.04)" onmouseover="this.style.background='rgba(61,255,160,0.1)'" onmouseout="this.style.background='rgba(61,255,160,0.04)'">LOCK 3 · RE-LOCKED ↗</a>
+         <a href="https://app.streamflow.finance/contract/solana/mainnet/Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--green);border:1px solid rgba(61,255,160,0.3);padding:6px 14px;border-radius:2px;letter-spacing:1px;white-space:nowrap;transition:all .2s;background:rgba(61,255,160,0.04)" onmouseover="this.style.background='rgba(61,255,160,0.1)'" onmouseout="this.style.background='rgba(61,255,160,0.04)'">LOCK 4 ↗</a>
+       </div>
++      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.6;margin-top:10px">Lineage: original Lock 3 matured 2026-08-18 and remains verifiable in the <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">preserved predecessor contract ↗</a>. The full 40M scheduled allocation was re-locked through 2028-08-18.</div>
+     </div>
+ 
+     <!-- MOONSHOT AUTHORITIES TRANSPARENCY NOTE -->
+@@ -2357,7 +2358,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+             <br><br>
+             At the <strong style="color:var(--gold)">$73K bond milestone</strong>, the token migrates to Raydium and Moonshot revokes both authorities automatically as part of the migration.
+             <br><br>
+-            <strong style="color:var(--green)">What IS under our control right now:</strong> 13% of total supply locked on Streamflow across 4 separate contracts — fully verifiable on-chain. That's the trust guarantee we can give you today. The rest happens at bond.
++            <strong style="color:var(--green)">What IS under our control right now:</strong> 13% of total supply locked on Streamflow across 4 active contracts — fully verifiable on-chain. The first matured 40M allocation was re-locked for two more years, through August 18, 2028, with both contracts preserved publicly. That's the trust guarantee we can give you today. The rest happens at bond.
+           </div>
+         </div>
+       </div>
+@@ -2809,7 +2810,7 @@ NFA. DYOR. $SOL</div>
+     <span style="color:var(--gold);font-weight:700"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> VERIFY OFFICIAL CHANNELS.</span> The real federation is <span style="color:var(--gold)">@GFOF_Offcial</span> on X — note the typo is intentional, a copycat owns @GFOF_Official. Always verify at galacticfederation.co.
+   </div>
+ 
+-  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.26 · deployed 2026-05-28</span></div>
++  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.27 · updated 2026-08-28</span></div>
+ </footer>
+ 
+ <script>
+@@ -3253,8 +3254,8 @@ function sendChat(){
+ 
+ /* Runtime version stamp — proves which build is actually serving */
+ (function(){
+-  var VERSION = '17.26';
+-  var built = 'deployed 2026-05-28'; /* Hardcoded at deploy time — bump with version edits */
++  var VERSION = '17.27';
++  var built = 'updated 2026-08-28'; /* Hardcoded at deploy time — bump with version edits */
+   var el = document.getElementById('footer-version');
+   if (el) el.textContent = 'v' + VERSION + ' · ' + built;
+   /* Console banner so devtools can confirm */
+diff --git a/llms.txt b/llms.txt
+index c0f0ee2..1705f38 100644
+--- a/llms.txt
++++ b/llms.txt
+@@ -1,6 +1,6 @@
+ # Galactic Federation of Finance (GFOF)
+ 
+-> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. The project is currently pre-bond on the Moonshot launchpad, with 13% of total supply locked across four immutable Streamflow contracts. The site publishes design specifications for future protocol work before any smart contract code is written, maintains a permanent public corrections log, and documents every commitment it makes publicly.
++> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. The project is currently pre-bond on the Moonshot launchpad, with 13% of total supply locked across four active Streamflow contracts. The first matured 40M allocation was re-locked through 2028-08-18, with both the active contract and expired predecessor preserved publicly. The site publishes design specifications for future protocol work before any smart contract code is written, maintains a permanent public corrections log, and documents every commitment it makes publicly.
+ 
+ The Federation's three stated pillars are transparency (on-chain, not rhetorical), research (publish the design before building the product), and innovation (build primitives that don't yet exist rather than fork what does). Admiral Zoran Voss is the communication persona used across publications; the legal and operational entity is the Galactic Federation of Finance.
+ 
+@@ -24,7 +24,7 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
+ 
+ ## Live on-chain transparency
+ 
+-- [Treasury](https://galacticfederation.co/treasury): Real-time Solana RPC reads of the four Streamflow lock contracts, unlock schedule, and operational wallet state. Numbers are computed in the visitor's browser directly against Solana RPC — not served from a project-controlled endpoint. The page also provides direct links to canonical third-party verification tools: Solscan, DexScreener, Birdeye, and Solana Explorer.
++- [Treasury](https://galacticfederation.co/treasury): Real-time Solana RPC reads of the four active Streamflow lock contracts, unlock schedule, and operational wallet state. The expired predecessor to the re-locked 40M allocation is preserved as lineage. Numbers are computed in the visitor's browser directly against Solana RPC — not served from a project-controlled endpoint. The page also provides direct links to canonical third-party verification tools: Solscan, DexScreener, Birdeye, and Solana Explorer.
+ 
+ ## Project pages
+ 
+@@ -42,9 +42,11 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
+ - Contract address (Solana SPL): `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`
+ - Streamflow lock contract 1: `2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y`
+ - Streamflow lock contract 2: `DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv`
+-- Streamflow lock contract 3: `7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k`
++- Streamflow active lock contract 3 (40M; created 2026-08-28; full cliff 2028-08-18): `6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS`
+ - Streamflow lock contract 4: `Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x`
+-- Total locked supply: 13% (split across the four contracts above; previously 10% across three — see corrections #013 for the breakdown reframe filed 2026-05-19)
++- Expired predecessor to active lock 3 (40M; matured 2026-08-18): `7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k`
++- Re-lock transaction: `5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD`
++- Total locked supply: 13% (130M scheduled across the four active contracts above; previously 10% across three — see corrections #013 for the breakdown reframe filed 2026-05-19 and #033 for the 2026-08-28 re-lock)
+ - Launchpad: Moonshot (pre-bond). Target: $73K market cap triggers auto-migration to Raydium.
+ 
+ ## Social and contact
+diff --git a/netlify/functions/chat.js b/netlify/functions/chat.js
+index a8b1be3..3378760 100644
+--- a/netlify/functions/chat.js
++++ b/netlify/functions/chat.js
+@@ -16,7 +16,7 @@ PROJECT FACTS (the only facts you may state as fact):
+ - Contract: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon — this is the only canonical address.
+ - On-chain metadata name reads "Galatic Federation of Finance" — missing the second "c". This is a real typo, it was set at mint, it is immutable, and the Federation is NOT re-minting to fix it. Treat it as a verification signal: a token spelled correctly as "Galactic" is not this one. Documented at /corrections (#018).
+ - Launchpad: Moonshot (pre-bond). Bond target is $73K market cap, which triggers automatic migration to Raydium. Mint and freeze authorities are revoked as part of that migration.
+-- Locked supply: 130,000,000 $GFOF (13% of total supply) across FOUR immutable Streamflow contracts. Verifiable on-chain — see /treasury for live reads.
++- Locked supply: 130,000,000 $GFOF (13% of total supply) across FOUR active Streamflow contracts. The original 40M Lock 3 (7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k) matured 2026-08-18 and the full scheduled allocation was re-locked on 2026-08-28 through 2028-08-18 under active contract 6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS. Both contracts are preserved at /treasury; correction #033 records the event.
+ - Tokenomics: 77% community/liquidity, 10% rewards/reserve, 13% dev locked. (An earlier public figure of 80/10/10 was superseded; the correction is logged at /corrections #013.)
+ - Governance: an advisory DAO is live on Realms, gated to the $GFOF mint. Advisory only — no treasury funds or authorities are routed through it yet. Binding governance is tracked to post-bond. The 13% locked dev allocation cannot vote.
+ - Staking: NO staking specification exists. No APY, no rates, no tier structure, no multipliers. The Founding Member NFT carries no boost, yield, or utility. A spec will be published for public comment before any contract exists.
+diff --git a/security.html b/security.html
+index 89d2f4b..8b8dac1 100644
+--- a/security.html
++++ b/security.html
+@@ -397,7 +397,7 @@ p, .section-head p, .panel p{font-family:var(--font-read); letter-spacing:0;}
+   <div class="panel">
+     <div class="scope-row">
+       <div class="cat">✓ IN SCOPE</div>
+-      <div class="body">galacticfederation.co · all subdomains · the /app widget · the /treasury page · Netlify functions at /api/* · @GFOF_Offcial on X · t.me/GFOF_SOL · the four Streamflow lock contracts · any operational wallet published on /treasury · any federation-owned service disclosed publicly.</div>
++      <div class="body">galacticfederation.co · all subdomains · the /app widget · the /treasury page · Netlify functions at /api/* · @GFOF_Offcial on X · t.me/GFOF_SOL · the four active Streamflow lock contracts and preserved predecessor contract · any operational wallet published on /treasury · any federation-owned service disclosed publicly.</div>
+     </div>
+     <div class="scope-row out">
+       <div class="cat">✗ OUT OF SCOPE</div>
+@@ -482,7 +482,7 @@ p, .section-head p, .panel p{font-family:var(--font-read); letter-spacing:0;}
+   <br>
+   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+   <br>
+-  <span class="version" id="footer-version">v17.0 · security · deployed 2026-04-21</span>
++  <span class="version" id="footer-version">v17.1 · security · updated 2026-08-28</span>
+ </div>
+ 
+ <script>
+@@ -492,7 +492,7 @@ try {
+ } catch(e) {}
+ (function(){
+   var el = document.getElementById('footer-version');
+-  if(el){ el.textContent = 'v17.0 · security · deployed 2026-04-21'; }
++  if(el){ el.textContent = 'v17.1 · security · updated 2026-08-28'; }
+ })();
+ </script>
+ </body>
+diff --git a/sitemap.xml b/sitemap.xml
+index 742cbec..488e9c1 100644
+--- a/sitemap.xml
++++ b/sitemap.xml
+@@ -2,13 +2,13 @@
+ <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <url>
+     <loc>https://galacticfederation.co/</loc>
+-    <lastmod>2026-05-26</lastmod>
++    <lastmod>2026-08-28</lastmod>
+     <changefreq>daily</changefreq>
+     <priority>1.0</priority>
+   </url>
+   <url>
+     <loc>https://galacticfederation.co/faq</loc>
+-    <lastmod>2026-05-19</lastmod>
++    <lastmod>2026-08-28</lastmod>
+     <changefreq>weekly</changefreq>
+     <priority>0.9</priority>
+   </url>
+@@ -43,7 +43,7 @@
+   </url>
+   <url>
+     <loc>https://galacticfederation.co/treasury</loc>
+-    <lastmod>2026-05-19</lastmod>
++    <lastmod>2026-08-28</lastmod>
+     <changefreq>daily</changefreq>
+     <priority>0.9</priority>
+   </url>
+@@ -61,13 +61,13 @@
+   </url>
+   <url>
+     <loc>https://galacticfederation.co/security</loc>
+-    <lastmod>2026-04-21</lastmod>
++    <lastmod>2026-08-28</lastmod>
+     <changefreq>monthly</changefreq>
+     <priority>0.8</priority>
+   </url>
+   <url>
+     <loc>https://galacticfederation.co/corrections</loc>
+-    <lastmod>2026-05-26</lastmod>
++    <lastmod>2026-08-28</lastmod>
+     <changefreq>weekly</changefreq>
+     <priority>0.85</priority>
+   </url>
+diff --git a/treasury.html b/treasury.html
+index bed0049..92939de 100644
+--- a/treasury.html
++++ b/treasury.html
+@@ -659,9 +659,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
+       <div class="s">of 1,000,000,000 total</div>
+     </div>
+     <div class="summary-cell">
+-      <div class="k">CONTRACTS</div>
++      <div class="k">ACTIVE CONTRACTS</div>
+       <div class="v" id="sum-contracts">4 / 4</div>
+-      <div class="s">separate wallets</div>
++      <div class="s">plus 1 preserved predecessor</div>
+     </div>
+     <div class="summary-cell">
+       <div class="k">NETWORK</div>
+@@ -673,11 +673,18 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
+   <!-- LOCK CONTRACTS -->
+   <div class="section-head">
+     <div class="tag">ON-CHAIN LOCK CONTRACTS</div>
+-    <h2>The Four Locks</h2>
+-    <p>Each lock is an independent Streamflow vesting contract holding a portion of the 13% dev allocation. Click through to view the full unlock schedule on Streamflow, or verify the escrow balance directly on Solscan.</p>
++    <h2>The Four Active Locks</h2>
++    <p>Each active lock is an independent Streamflow vesting contract holding a portion of the 13% dev allocation. The 40M third lock matured on August 18, 2026 and was re-locked through August 18, 2028. Its expired predecessor remains linked as part of the public lineage.</p>
+   </div>
+   <div class="lock-list" id="lock-list"></div>
+ 
++  <div class="unlock-commitment">
++    <div class="title">✓ FIRST UNLOCK COMMITMENT — KEPT</div>
++    <div class="body">
++      The original 40,000,000 $GFOF Lock 3 reached its scheduled cliff on <strong>August 18, 2026</strong>. The full scheduled allocation was placed into a new Streamflow contract on <strong>August 28, 2026</strong>, with a new full-cliff date of <strong>August 18, 2028</strong>. Verify the <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="color:var(--cyan)">active re-lock</a>, the <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan)">expired predecessor</a>, and the <a href="https://solscan.io/tx/5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD" target="_blank" rel="noopener" style="color:var(--cyan)">re-lock transaction</a> independently.
++    </div>
++  </div>
++
+   <!-- VERIFY YOURSELF -->
+   <div class="verify-card">
+     <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M9 3l4 4-5 5-4-4 5-5z"/><path d="M11 9l5 5"/><path d="M6 20h12M9 20l4-4"/></svg></span>VERIFY THIS YOURSELF — THREE WAYS</h3>
+@@ -806,7 +813,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
+   <br>
+   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+   <br>
+-  <span class="version" id="footer-version">v17.6 · treasury · deployed 2026-05-19</span>
++  <span class="version" id="footer-version">v17.7 · treasury · updated 2026-08-28</span>
+ </div>
+ 
+ <script>
+@@ -841,9 +848,10 @@ var LOCKS = [
+   },
+   {
+     id: 'LOCK 3',
+-    name: 'Federation Lock — Tertiary',
+-    metadata: '7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k',
+-    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k'
++    name: 'Federation Lock — Tertiary · Re-locked 2026-08-28',
++    metadata: '6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS',
++    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS',
++    predecessorUrl: 'https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k'
+   },
+   {
+     id: 'LOCK 4',
+@@ -1054,6 +1062,7 @@ function renderLockSkeletons(){
+       '<div class="lc-actions">' +
+         '<a class="primary" href="' + lk.streamflowUrl + '" target="_blank" rel="noopener">VIEW ON STREAMFLOW ↗</a>' +
+         '<a href="https://solscan.io/account/' + lk.metadata + '" target="_blank" rel="noopener">METADATA ON SOLSCAN ↗</a>' +
++        (lk.predecessorUrl ? '<a href="' + lk.predecessorUrl + '" target="_blank" rel="noopener">EXPIRED PREDECESSOR ↗</a>' : '') +
+         '<a href="#" id="lc-escrow-link-' + idx + '" target="_blank" rel="noopener" style="display:none">ESCROW ON SOLSCAN ↗</a>' +
+       '</div>';
+     list.appendChild(card);
+@@ -1080,7 +1089,17 @@ function fetchLock(idx){
+           } else if(b && b.value && b.value.amount){
+             amt = Number(b.value.amount) / Math.pow(10, b.value.decimals || TOKEN_DECIMALS);
+           }
+-          return { escrow: escrow, amount: amt, schedule: schedule };
++          var decimals = (b && b.value && b.value.decimals != null) ? b.value.decimals : TOKEN_DECIMALS;
++          /* Streamflow may temporarily hold its token-denominated platform fee in
++             the escrow alongside the scheduled deposit (40.2M transferred for
++             this 40M re-lock). Cap the displayed locked amount at netDeposited,
++             but keep following the live escrow balance once it falls below the
++             schedule after a withdrawal. */
++          var scheduledCap = schedule && schedule.netDeposited > 0
++            ? schedule.netDeposited / Math.pow(10, decimals)
++            : null;
++          var lockedAmount = scheduledCap != null ? Math.min(amt, scheduledCap) : amt;
++          return { escrow: escrow, amount: lockedAmount, escrowBalance: amt, schedule: schedule };
+         });
+     })
+     .then(function(result){
+@@ -1129,7 +1148,7 @@ function clearError(){
+ 
+ /* Main refresh */
+ var isRefreshing = false;
+-var cachedSchedules = [null, null, null]; /* keep across refreshes for countdown ticker */
++var cachedSchedules = [null, null, null, null]; /* keep across refreshes for countdown ticker */
+ 
+ function refreshAll(){
+   if(isRefreshing) return;
+@@ -1150,8 +1169,8 @@ function refreshAll(){
+   document.getElementById('sum-locked').classList.add('loading');
+   document.getElementById('sum-pct').classList.add('loading');
+ 
+-  var amounts = [0,0,0];
+-  var schedules = [null, null, null];
++  var amounts = [0,0,0,0];
++  var schedules = [null, null, null, null];
+   var promises = LOCKS.map(function(_, idx){
+     return fetchLock(idx).then(function(res){
+       amounts[idx] = res.amount;
+@@ -1430,7 +1449,7 @@ try {
+ /* Version stamp */
+ (function(){
+   var el = document.getElementById('footer-version');
+-  if(el){ el.textContent = 'v17.6 · treasury · deployed 2026-05-19'; }
++  if(el){ el.textContent = 'v17.7 · treasury · updated 2026-08-28'; }
+ })();
+ 
+ /* Initial render + fetch */
