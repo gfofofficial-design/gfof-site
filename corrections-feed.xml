@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Tue, 11 Aug 2026 19:30:00 +0000</lastBuildDate>
-    <pubDate>Wed, 24 Jun 2026 16:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 28 Aug 2026 18:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 28 Aug 2026 18:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#033 · KEPT — The first 40M Streamflow lock matured on August 18 and the full scheduled allocation is re-locked through August 18, 2028.</title>
+      <link>https://galacticfederation.co/corrections#c033</link>
+      <guid isPermaLink="false">gfof-kept-033-first-lock-relocked-two-years</guid>
+      <pubDate>Fri, 28 Aug 2026 18:00:00 +0000</pubDate>
+      <description>The original 40,000,000 $GFOF Lock 3 reached its full cliff on 2026-08-18 05:00 UTC and Streamflow auto-claimed the allocation to the disclosed recipient wallet. On 2026-08-28 the same wallet created a new Streamflow contract with a 40,000,000 $GFOF net scheduled deposit and a new full cliff of 2028-08-18 05:00 UTC. Active contract: 6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS. Expired predecessor: 7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k. Re-lock transaction: 5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD. The active scheduled total remains 130,000,000 $GFOF (13%) across four active contracts. Commitment #002 is marked KEPT; the ten-day interval between maturity and re-lock is stated rather than hidden.</description>
+    </item>
 
     <item>
       <title>#032 · CORRECTION — The selection rule failed twice more on first contact with the venues, before any entry was filed. Both amendments logged same-day.</title>

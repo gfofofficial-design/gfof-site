@@ -659,9 +659,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <div class="s">of 1,000,000,000 total</div>
     </div>
     <div class="summary-cell">
-      <div class="k">CONTRACTS</div>
+      <div class="k">ACTIVE CONTRACTS</div>
       <div class="v" id="sum-contracts">4 / 4</div>
-      <div class="s">separate wallets</div>
+      <div class="s">plus 1 preserved predecessor</div>
     </div>
     <div class="summary-cell">
       <div class="k">NETWORK</div>
@@ -673,10 +673,17 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <!-- LOCK CONTRACTS -->
   <div class="section-head">
     <div class="tag">ON-CHAIN LOCK CONTRACTS</div>
-    <h2>The Four Locks</h2>
-    <p>Each lock is an independent Streamflow vesting contract holding a portion of the 13% dev allocation. Click through to view the full unlock schedule on Streamflow, or verify the escrow balance directly on Solscan.</p>
+    <h2>The Four Active Locks</h2>
+    <p>Each active lock is an independent Streamflow vesting contract holding a portion of the 13% dev allocation. The 40M third lock matured on August 18, 2026 and was re-locked through August 18, 2028. Its expired predecessor remains linked as part of the public lineage.</p>
   </div>
   <div class="lock-list" id="lock-list"></div>
+
+  <div class="unlock-commitment">
+    <div class="title">✓ FIRST UNLOCK COMMITMENT — KEPT</div>
+    <div class="body">
+      The original 40,000,000 $GFOF Lock 3 reached its scheduled cliff on <strong>August 18, 2026</strong>. The full scheduled allocation was placed into a new Streamflow contract on <strong>August 28, 2026</strong>, with a new full-cliff date of <strong>August 18, 2028</strong>. Verify the <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="color:var(--cyan)">active re-lock</a>, the <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan)">expired predecessor</a>, and the <a href="https://solscan.io/tx/5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD" target="_blank" rel="noopener" style="color:var(--cyan)">re-lock transaction</a> independently.
+    </div>
+  </div>
 
   <!-- VERIFY YOURSELF -->
   <div class="verify-card">
@@ -806,7 +813,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.6 · treasury · deployed 2026-05-19</span>
+  <span class="version" id="footer-version">v17.7 · treasury · updated 2026-08-28</span>
 </div>
 
 <script>
@@ -841,9 +848,10 @@ var LOCKS = [
   },
   {
     id: 'LOCK 3',
-    name: 'Federation Lock — Tertiary',
-    metadata: '7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k',
-    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k'
+    name: 'Federation Lock — Tertiary · Re-locked 2026-08-28',
+    metadata: '6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS',
+    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS',
+    predecessorUrl: 'https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k'
   },
   {
     id: 'LOCK 4',
@@ -1054,6 +1062,7 @@ function renderLockSkeletons(){
       '<div class="lc-actions">' +
         '<a class="primary" href="' + lk.streamflowUrl + '" target="_blank" rel="noopener">VIEW ON STREAMFLOW ↗</a>' +
         '<a href="https://solscan.io/account/' + lk.metadata + '" target="_blank" rel="noopener">METADATA ON SOLSCAN ↗</a>' +
+        (lk.predecessorUrl ? '<a href="' + lk.predecessorUrl + '" target="_blank" rel="noopener">EXPIRED PREDECESSOR ↗</a>' : '') +
         '<a href="#" id="lc-escrow-link-' + idx + '" target="_blank" rel="noopener" style="display:none">ESCROW ON SOLSCAN ↗</a>' +
       '</div>';
     list.appendChild(card);
@@ -1080,7 +1089,17 @@ function fetchLock(idx){
           } else if(b && b.value && b.value.amount){
             amt = Number(b.value.amount) / Math.pow(10, b.value.decimals || TOKEN_DECIMALS);
           }
-          return { escrow: escrow, amount: amt, schedule: schedule };
+          var decimals = (b && b.value && b.value.decimals != null) ? b.value.decimals : TOKEN_DECIMALS;
+          /* Streamflow may temporarily hold its token-denominated platform fee in
+             the escrow alongside the scheduled deposit (40.2M transferred for
+             this 40M re-lock). Cap the displayed locked amount at netDeposited,
+             but keep following the live escrow balance once it falls below the
+             schedule after a withdrawal. */
+          var scheduledCap = schedule && schedule.netDeposited > 0
+            ? schedule.netDeposited / Math.pow(10, decimals)
+            : null;
+          var lockedAmount = scheduledCap != null ? Math.min(amt, scheduledCap) : amt;
+          return { escrow: escrow, amount: lockedAmount, escrowBalance: amt, schedule: schedule };
         });
     })
     .then(function(result){
@@ -1129,7 +1148,7 @@ function clearError(){
 
 /* Main refresh */
 var isRefreshing = false;
-var cachedSchedules = [null, null, null]; /* keep across refreshes for countdown ticker */
+var cachedSchedules = [null, null, null, null]; /* keep across refreshes for countdown ticker */
 
 function refreshAll(){
   if(isRefreshing) return;
@@ -1150,8 +1169,8 @@ function refreshAll(){
   document.getElementById('sum-locked').classList.add('loading');
   document.getElementById('sum-pct').classList.add('loading');
 
-  var amounts = [0,0,0];
-  var schedules = [null, null, null];
+  var amounts = [0,0,0,0];
+  var schedules = [null, null, null, null];
   var promises = LOCKS.map(function(_, idx){
     return fetchLock(idx).then(function(res){
       amounts[idx] = res.amount;
@@ -1430,7 +1449,7 @@ try {
 /* Version stamp */
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.6 · treasury · deployed 2026-05-19'; }
+  if(el){ el.textContent = 'v17.7 · treasury · updated 2026-08-28'; }
 })();
 
 /* Initial render + fetch */
