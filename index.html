@@ -415,38 +415,6 @@ section { position:relative; z-index:2; }
 }
 .hero-desc em { color:var(--green); font-style:normal; text-shadow:0 0 8px var(--green-glow); }
 
-.hero-token-card {
-  width:min(760px,100%); margin:0 auto 28px; padding:20px 22px;
-  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:20px;
-  text-align:left; position:relative; overflow:hidden;
-  background:linear-gradient(110deg,rgba(240,192,64,.12),rgba(4,10,28,.94) 42%,rgba(61,255,160,.07));
-  border:1px solid rgba(240,192,64,.42);
-  box-shadow:0 0 36px rgba(240,192,64,.09),inset 0 0 32px rgba(64,192,255,.03);
-  clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
-}
-.hero-token-card::before {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(240,192,64,.16),transparent);
-  transform:translateX(-100%); animation:token-scan 6s ease-in-out infinite;
-}
-@keyframes token-scan { 0%,55%{transform:translateX(-100%)} 85%,100%{transform:translateX(100%)} }
-.hero-token-mark { width:72px; height:72px; border-radius:50%; object-fit:contain; filter:drop-shadow(0 0 15px rgba(240,192,64,.32)); }
-.hero-token-kicker { font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--green);margin-bottom:4px; }
-.hero-token-name { font-family:var(--orb);font-size:clamp(19px,3vw,28px);font-weight:900;color:var(--gold2);letter-spacing:2px;line-height:1.1; }
-.hero-token-chain { font-family:var(--raj);font-size:13px;color:var(--text-dim);margin-top:5px; }
-.hero-token-ca { display:flex;align-items:center;gap:8px;margin-top:9px;min-width:0; }
-.hero-token-ca code { font-family:var(--mono);font-size:9px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-.hero-token-copy { font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--cyan);background:transparent;border:1px solid rgba(64,192,255,.28);padding:4px 8px;cursor:pointer;flex-shrink:0; }
-.hero-token-actions { display:flex;flex-direction:column;gap:8px;min-width:176px; }
-.hero-token-buy { text-align:center;background:linear-gradient(135deg,var(--gold),#d79518);color:#07101d;font-family:var(--orb);font-size:10px;font-weight:900;letter-spacing:1.5px;padding:13px 16px;box-shadow:0 0 24px rgba(240,192,64,.25); }
-.hero-token-verify { text-align:center;font-family:var(--mono);font-size:8px;letter-spacing:1.5px;color:var(--muted); }
-@media(max-width:640px) {
-  .hero-token-card { grid-template-columns:auto 1fr;gap:14px;padding:17px 16px; }
-  .hero-token-mark { width:58px;height:58px; }
-  .hero-token-actions { grid-column:1/-1;display:grid;grid-template-columns:1fr auto;align-items:center;min-width:0; }
-  .hero-token-buy { padding:12px 10px; }
-}
-
 .hero-btns { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-bottom:56px; }
 
 .btn-primary {
@@ -1832,22 +1800,6 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <h1 class="hero-h1" data-text="The Universe&#10;of DeFi,&#10;Reimagined">The Universe<br>of DeFi,<br>Reimagined</h1>
   <p class="hero-sub">[ $GFOF // SOLANA // LIVE ]</p>
   <p class="hero-desc">Research-first DeFi on Solana. Design specifications published <em>before</em> any code ships, a permanent <a href="/corrections" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">corrections log</a> for every commitment, and <a href="/treasury" style="color:var(--green);text-decoration:underline;text-underline-offset:2px">live on-chain transparency</a>. Led by Admiral Zoran Voss.</p>
-  <div class="hero-token-card" aria-label="$GFOF token information">
-    <img src="logo-circle.png" onerror="this.src='logo.png';this.onerror=null;" class="hero-token-mark" alt="" width="72" height="72">
-    <div>
-      <div class="hero-token-kicker">OFFICIAL FEDERATION TOKEN</div>
-      <div class="hero-token-name">$GFOF</div>
-      <div class="hero-token-chain">Live on Solana · Moonshot pre-bond</div>
-      <div class="hero-token-ca">
-        <code title="2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon">CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code>
-        <button class="hero-token-copy" type="button" onclick="copyCA()">COPY</button>
-      </div>
-    </div>
-    <div class="hero-token-actions">
-      <a class="hero-token-buy" href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">BUY $GFOF ↗</a>
-      <a class="hero-token-verify" href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">VERIFY ON SOLSCAN ↗</a>
-    </div>
-  </div>
   <div class="hero-btns">
     <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary">BUY $GFOF NOW</a>
     <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary">JOIN TELEGRAM</a>
