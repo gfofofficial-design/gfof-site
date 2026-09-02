@@ -52,6 +52,12 @@
 
 # ─── Clean URL rewrites ───
 [[redirects]]
+  from = "/"
+  to = "/command-preview.html"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/intel"
   to = "/intel.html"
   status = 200
