@@ -189,7 +189,10 @@
   margin-top: var(--space-5);
   padding: var(--space-4);
   display: grid;
-  grid-template-columns: minmax(128px, .7fr) minmax(210px, 1.25fr) auto;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  grid-template-areas:
+    "identity actions"
+    "contract contract";
   align-items: center;
   gap: var(--space-4);
   border: 1px solid color-mix(in srgb, var(--fed-authority) 42%, transparent);
@@ -199,7 +202,7 @@
     color-mix(in srgb, var(--fed-command) 7%, transparent));
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
-.cmd-token__identity { display: flex; flex-direction: column; gap: 3px; }
+.cmd-token__identity { grid-area: identity; display: flex; flex-direction: column; gap: 3px; }
 .cmd-token__label,
 .cmd-token__ca > span,
 .cmd-token__state {
@@ -217,7 +220,12 @@
   letter-spacing: .05em;
 }
 .cmd-token__state { color: var(--fed-text); }
-.cmd-token__ca { min-width: 0; }
+.cmd-token__ca {
+  grid-area: contract;
+  min-width: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid color-mix(in srgb, var(--fed-authority) 18%, transparent);
+}
 .cmd-token__ca > span { display: block; color: var(--fed-muted); margin-bottom: 5px; }
 .cmd-token__ca code {
   display: block;
@@ -228,7 +236,7 @@
   font-size: var(--text-xs);
   color: var(--fed-text-display);
 }
-.cmd-token__actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); min-width: 150px; }
+.cmd-token__actions { grid-area: actions; display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); min-width: 150px; }
 .cmd-token__actions .fed-btn { text-align: center; }
 .cmd-token__verify {
   text-align: center;
@@ -240,7 +248,10 @@
 }
 .cmd-token__verify:hover { color: var(--fed-command); }
 @media (max-width: 639px) {
-  .cmd-token { grid-template-columns: 1fr; }
+  .cmd-token {
+    grid-template-columns: 1fr;
+    grid-template-areas: "identity" "actions" "contract";
+  }
   .cmd-token__actions { display: grid; grid-template-columns: 1fr auto; align-items: center; }
 }
 .cmd-hero__actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-6); }
