@@ -646,6 +646,14 @@
 .cmd-final__actions { display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap; margin-top: var(--space-6); }
 
 /* ═══ RESPONSIVE HERO / TYPE ════════════════════════════════════════════ */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .cmd-hero {
+    grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+    gap: var(--space-5);
+  }
+  .cmd-hero__title { font-size: clamp(4rem, 7vw, 5.75rem); }
+  .cmd-seal { max-width: 500px; }
+}
 @media (max-width: 1023px) {
   .cmd-hero { grid-template-columns: 1fr; min-height: 0; gap: var(--space-6); }
   .cmd-seal { max-width: 380px; justify-self: center; order: -1; }
