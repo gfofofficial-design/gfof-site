@@ -289,8 +289,31 @@ body.fed-scroll-locked { overflow: hidden; }
   .fed-shell-voss { display: none; }
 }
 @media (max-width: 639px) {
-  .fed-shell-bar { padding-inline: var(--fed-gutter-mobile); }
+  .fed-shell-bar {
+    padding-inline: var(--fed-gutter-mobile);
+    min-width: 0;
+  }
+  .fed-shell-brand {
+    min-width: 0;
+    gap: var(--space-2);
+  }
+  .fed-shell-brand__names { min-width: 0; }
   .fed-shell-brand__primary { font-size: var(--text-xs); letter-spacing: 0.10em; }
+  .fed-shell-brand__system { display: none; }
+  .fed-shell-controls { flex-shrink: 0; }
+  .fed-shell-status {
+    width: var(--touch-target-min);
+    padding-inline: 0;
+    justify-content: center;
+  }
+  .fed-shell-status [data-fed-status-label] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 1023px) {

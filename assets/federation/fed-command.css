@@ -37,15 +37,6 @@
   border-color: color-mix(in srgb, var(--fed-command) 7%, transparent); }
 .cmd-atmos__arc--b { width: 110vmax; height: 110vmax; bottom: -80vmax; left: -50vmax;
   border-color: color-mix(in srgb, var(--fed-authority) 7%, transparent); }
-.cmd-atmos__coord {
-  position: absolute;
-  font-family: var(--font-fed-system);
-  font-size: var(--text-xs);
-  letter-spacing: var(--system-letter-spacing);
-  color: color-mix(in srgb, var(--fed-muted) 40%, transparent);
-}
-.cmd-atmos__coord--a { top: 22%; left: 3%; }
-.cmd-atmos__coord--b { bottom: 14%; right: 3%; }
 .cmd-atmos__cross {
   position: absolute; width: 14px; height: 14px;
   color: color-mix(in srgb, var(--fed-muted) 35%, transparent);
@@ -146,6 +137,7 @@
   gap: var(--space-7);
   padding-block: var(--space-8);
 }
+.cmd-hero > *, .cmd-network__layout > * { min-width: 0; }
 .cmd-hero__access {
   font-family: var(--font-fed-system);
   font-size: var(--text-xs);
@@ -427,7 +419,7 @@
     width: 1px;
     background: linear-gradient(var(--fed-authority-soft), var(--fed-border-default));
   }
-  .cmd-net__core { position: relative; }
+  .cmd-net__core { position: relative; left: auto; top: auto; }
   .cmd-net__core::before, .cmd-net__node::before {
     content: "";
     position: absolute; left: calc(-1 * var(--space-5) + 4px); top: 50%;
@@ -435,7 +427,7 @@
     background: var(--fed-border-strong);
   }
   .cmd-net__core::before { background: var(--fed-authority); }
-  .cmd-net__node { position: relative; transform: none; justify-items: start; text-align: left; width: 100%; padding: var(--space-4); }
+  .cmd-net__node { position: relative; left: auto; top: auto; transform: none; justify-items: start; text-align: left; width: 100%; padding: var(--space-4); }
   .cmd-net__node[aria-pressed="true"]::before { background: var(--fed-command); }
   .cmd-net__core-ring { display: none; }
   .cmd-net__node .cmd-net__desc {
@@ -660,9 +652,22 @@
   .cmd-section { padding-block: var(--space-8); }
 }
 @media (max-width: 639px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
   .cmd-hero__title { font-size: var(--display-sm); }   /* no desktop display type on phones */
   .cmd-div-title { font-size: var(--heading-lg); }
   .cmd-final__title { font-size: var(--heading-lg); }
-  .cmd-seal { max-width: 270px; }
+  .cmd-seal {
+    width: min(270px, 78vw);
+    max-width: 100%;
+    justify-self: center;
+    margin-inline: auto;
+  }
+  .cmd-network__layout, .cmd-net, .cmd-net__core, .cmd-net__node {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .cmd-net__core-label, .cmd-net__node, .cmd-net__desc {
+    overflow-wrap: anywhere;
+  }
   .cmd-section { padding-block: var(--space-7); }
 }
