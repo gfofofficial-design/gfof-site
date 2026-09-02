@@ -1,6 +1,7 @@
 # Galactic Federation of Finance — security.txt (RFC 9116)
 # Canonical URL: https://galacticfederation.co/.well-known/security.txt
 
+Contact: mailto:security@galacticfederation.co
 Contact: https://x.com/WelksCrypto
 Contact: https://t.me/GFOF_SOL
 Expires: 2027-04-20T00:00:00.000Z
