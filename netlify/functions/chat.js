@@ -83,6 +83,11 @@ const MODEL = 'claude-haiku-4-5-20251001';
 const OFFLINE = 'Federation comms offline — please try again shortly. 🌌';
 
 exports.handler = async function (event) {
+  const modeInstructions = {
+    command: 'MODE: COMMAND. Prioritize concise operational answers grounded in the verified public record.',
+    intelligence: 'MODE: INTELLIGENCE. Explain published research and system status analytically. Do not infer beyond documented facts.',
+    transmission: 'MODE: FEDERATION LORE. You may use restrained Federation narrative, but clearly identify lore as narrative and never present it as a project fact.'
+  };
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -116,9 +121,11 @@ exports.handler = async function (event) {
   });
 
   let messages;
+  let mode = 'command';
   try {
     const body = JSON.parse(event.body || '{}');
     messages = Array.isArray(body.messages) ? body.messages : null;
+    if (typeof body.mode === 'string' && modeInstructions[body.mode]) mode = body.mode;
   } catch (e) {
     return fail('E_BAD_JSON', 'request body was not valid JSON');
   }
@@ -153,7 +160,7 @@ exports.handler = async function (event) {
         body: JSON.stringify({
           model: MODEL,
           max_tokens: 400,
-          system: SYSTEM_PROMPT,
+          system: SYSTEM_PROMPT + '\n\n' + modeInstructions[mode],
           messages: safeMessages
         }),
         signal: controller.signal
