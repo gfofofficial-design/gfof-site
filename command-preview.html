@@ -445,14 +445,27 @@
         <span class="fed-sysrow__coord">COMMAND INTELLIGENCE LIAISON</span>
       </div>
     </div>
-    <p class="fed-system fed-system--wide">COMMUNICATIONS INTERFACE — BUILD 12</p>
-    <p class="fed-body-text" style="font-size: var(--text-sm); margin-top: var(--space-3)">The Voss communications interface arrives in a later build. The existing production chatbot is unchanged.</p>
-    <div class="fed-voss-modes" aria-label="Future communication modes (disabled)">
-      <button type="button" disabled>Command</button>
-      <button type="button" disabled>Intelligence</button>
-      <button type="button" disabled>Transmission</button>
+    <p class="fed-system fed-system--wide">SECURE COMMUNICATIONS // ACTIVE</p>
+    <div class="fed-voss-modes" role="group" aria-label="Communication mode">
+      <button type="button" data-voss-mode="command" aria-pressed="true">Command</button>
+      <button type="button" data-voss-mode="intelligence" aria-pressed="false">Intelligence</button>
+      <button type="button" data-voss-mode="transmission" aria-pressed="false">Lore</button>
     </div>
-    <p class="fed-sysrow__coord" style="margin-top: var(--space-2)">TRANSMISSION will be labeled FEDERATION LORE.</p>
+    <p class="fed-voss-mode-note" data-voss-mode-note>Direct answers from the Federation's verified public record.</p>
+    <div class="fed-voss-log" data-voss-log role="log" aria-live="polite" aria-label="Conversation with Admiral Voss">
+      <p class="fed-voss-message fed-voss-message--assistant">Communications online. Ask about $GFOF, the public record, treasury, governance, or Federation research.</p>
+    </div>
+    <div class="fed-voss-suggestions" aria-label="Suggested questions">
+      <button type="button" data-voss-suggestion="What is the verified $GFOF contract address?">Verify $GFOF</button>
+      <button type="button" data-voss-suggestion="Where can I review the Federation's public commitments?">Public record</button>
+      <button type="button" data-voss-suggestion="Explain the current Dossier measurement review.">Dossier status</button>
+    </div>
+    <form class="fed-voss-form" data-voss-form>
+      <label class="fed-visually-hidden" for="voss-message">Message Admiral Voss</label>
+      <input id="voss-message" data-voss-input type="text" maxlength="500" autocomplete="off" placeholder="Transmit a question…" required>
+      <button type="submit" data-voss-send>Send</button>
+    </form>
+    <p class="fed-voss-disclaimer">Informational only. Never share wallet keys, recovery phrases, or personal information.</p>
   </div>
 </aside>
 
@@ -469,7 +482,7 @@
       <a href="/governance-spec">Council</a>
       <a href="/roadmap">Roadmap</a>
       <a href="/whitepaper.pdf">Whitepaper</a>
-      <button class="fed-more-disabled" style="text-align:left;background:none;border:none;cursor:not-allowed" type="button">Voss <span class="fed-shell-nav__flag">BUILD 12</span></button>
+      <button class="fed-more-action" data-fed-voss-mobile-trigger type="button">Voss <span class="fed-shell-nav__flag">ONLINE</span></button>
       <a href="https://t.me/GFOF_SOL" rel="noopener">Community</a>
       <a href="/faq">Knowledge Base</a>
     </div>
@@ -493,16 +506,94 @@ window.FED_SHELL_CONFIG = {
 <script src="assets/federation/fed-shell.js"></script>
 <script src="assets/federation/fed-command.js"></script>
 <script>
-/* Second Voss trigger (page section) shares the shell drawer */
+/* Voss communications: all triggers share one drawer and one bounded history. */
 (function(){
-  var t = document.querySelector('[data-fed-voss-trigger-2]');
   var d = document.querySelector('[data-fed-drawer="voss"]');
   var s = document.querySelector('[data-fed-scrim="voss"]');
-  if (t && d && window.fedShell) {
-    var drawer = window.fedShell.createDrawer(d, s);
+  if (!d || !window.fedShell) return;
+
+  var drawer = window.fedShell.createDrawer(d, s);
+  document.querySelectorAll('[data-fed-voss-trigger-2], [data-fed-voss-mobile-trigger]').forEach(function(t){
     t.setAttribute('aria-haspopup','dialog');
-    t.addEventListener('click', function(){ drawer.open(t); });
+    t.addEventListener('click', function(){
+      var more = document.querySelector('[data-fed-drawer="more"]');
+      if (more) more.querySelector('[data-drawer-close]').click();
+      window.setTimeout(function(){ drawer.open(t); }, more ? 180 : 0);
+    });
+  });
+
+  var form = d.querySelector('[data-voss-form]');
+  var input = d.querySelector('[data-voss-input]');
+  var send = d.querySelector('[data-voss-send]');
+  var log = d.querySelector('[data-voss-log]');
+  var history = [];
+  var mode = 'command';
+  var loading = false;
+  var modeNotes = {
+    command: "Direct answers from the Federation's verified public record.",
+    intelligence: 'Analysis of published research and operating systems — without speculation.',
+    transmission: 'Federation lore and narrative, clearly separated from project facts.'
+  };
+
+  function addMessage(text, kind) {
+    var p = document.createElement('p');
+    p.className = 'fed-voss-message fed-voss-message--' + kind;
+    p.textContent = text;
+    log.appendChild(p);
+    log.scrollTop = log.scrollHeight;
+    return p;
   }
+
+  d.querySelectorAll('[data-voss-mode]').forEach(function(button){
+    button.addEventListener('click', function(){
+      mode = button.getAttribute('data-voss-mode');
+      d.querySelectorAll('[data-voss-mode]').forEach(function(other){
+        other.setAttribute('aria-pressed', String(other === button));
+      });
+      d.querySelector('[data-voss-mode-note]').textContent = modeNotes[mode];
+    });
+  });
+
+  d.querySelectorAll('[data-voss-suggestion]').forEach(function(button){
+    button.addEventListener('click', function(){
+      input.value = button.getAttribute('data-voss-suggestion');
+      input.focus();
+    });
+  });
+
+  form.addEventListener('submit', async function(event){
+    event.preventDefault();
+    var text = input.value.trim();
+    if (!text || loading) return;
+    loading = true;
+    input.value = '';
+    input.disabled = true;
+    send.disabled = true;
+    addMessage(text, 'user');
+    history.push({ role: 'user', content: text });
+    var pending = addMessage('Receiving transmission…', 'status');
+    try {
+      var response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: mode, messages: history.slice(-10) })
+      });
+      var data = await response.json();
+      pending.remove();
+      var reply = data && typeof data.reply === 'string' ? data.reply : 'Federation comms offline — please try again shortly.';
+      addMessage(reply, 'assistant');
+      history.push({ role: 'assistant', content: reply });
+      history = history.slice(-10);
+    } catch (error) {
+      pending.textContent = 'Federation comms offline — please try again shortly.';
+      pending.className = 'fed-voss-message fed-voss-message--assistant';
+    } finally {
+      loading = false;
+      input.disabled = false;
+      send.disabled = false;
+      input.focus();
+    }
+  });
 })();
 </script>
 </body>

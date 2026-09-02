@@ -237,7 +237,7 @@ body.fed-scroll-locked { overflow: hidden; }
   color: var(--fed-muted);
 }
 
-/* Voss placeholder */
+/* Voss communications */
 .fed-voss-id {
   display: flex;
   align-items: center;
@@ -262,8 +262,106 @@ body.fed-scroll-locked { overflow: hidden; }
   background: transparent;
   border: 1px solid var(--fed-border-soft);
   border-radius: var(--radius-xs);
-  color: color-mix(in srgb, var(--fed-muted) 60%, transparent);
-  cursor: not-allowed;
+  color: var(--fed-muted);
+  cursor: pointer;
+}
+.fed-voss-modes button[aria-pressed="true"] {
+  border-color: var(--fed-command);
+  color: var(--fed-command);
+  background: color-mix(in srgb, var(--fed-command) 10%, transparent);
+}
+.fed-voss-mode-note,
+.fed-voss-disclaimer {
+  margin-top: var(--space-2);
+  font-family: var(--font-fed-body);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--fed-muted);
+}
+.fed-voss-log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 180px;
+  max-height: min(38vh, 360px);
+  overflow-y: auto;
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border: 1px solid var(--fed-border-soft);
+  background: color-mix(in srgb, var(--fed-space) 74%, transparent);
+}
+.fed-voss-message {
+  max-width: 88%;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-fed-body);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--fed-text);
+  border: 1px solid var(--fed-border-soft);
+  border-radius: var(--radius-xs);
+  white-space: pre-wrap;
+}
+.fed-voss-message--assistant { align-self: flex-start; }
+.fed-voss-message--user {
+  align-self: flex-end;
+  border-color: color-mix(in srgb, var(--fed-command) 48%, var(--fed-border-soft));
+  background: color-mix(in srgb, var(--fed-command) 8%, transparent);
+}
+.fed-voss-message--status { color: var(--fed-muted); }
+.fed-voss-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.fed-voss-suggestions button {
+  min-height: 36px;
+  padding: var(--space-2);
+  border: 1px solid var(--fed-border-soft);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--fed-muted);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+.fed-voss-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.fed-voss-form input,
+.fed-voss-form button {
+  min-height: var(--touch-target-min);
+  border: 1px solid var(--fed-border-soft);
+  border-radius: var(--radius-xs);
+  background: var(--fed-space);
+  color: var(--fed-text);
+  font: inherit;
+}
+.fed-voss-form input { min-width: 0; padding-inline: var(--space-3); }
+.fed-voss-form button {
+  padding-inline: var(--space-3);
+  border-color: var(--fed-command);
+  color: var(--fed-command);
+  font-family: var(--font-fed-interface);
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.fed-voss-form button:disabled { opacity: 0.55; cursor: wait; }
+.fed-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ═══ MOBILE / TABLET ═══════════════════════════════════════════════════ */
@@ -359,7 +457,8 @@ body.fed-scroll-locked { overflow: hidden; }
 /* MORE sheet rows */
 .fed-more-list { display: grid; gap: var(--space-1); }
 .fed-more-list a,
-.fed-more-list .fed-more-disabled {
+.fed-more-list .fed-more-disabled,
+.fed-more-list .fed-more-action {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -375,6 +474,8 @@ body.fed-scroll-locked { overflow: hidden; }
   color: var(--fed-text);
   border-bottom: 1px solid var(--fed-border-soft);
 }
+.fed-more-action { background: none; border: 0; cursor: pointer; text-align: left; }
+.fed-more-action .fed-shell-nav__flag { color: var(--fed-verified); }
 .fed-more-disabled { color: color-mix(in srgb, var(--fed-muted) 60%, transparent); }
 .fed-more-disabled .fed-shell-nav__flag { color: var(--fed-warning); }
 
