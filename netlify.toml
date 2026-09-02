@@ -35,24 +35,10 @@
 
     # X-XSS-Protection is deprecated in modern browsers; omitted.
 
-# ─── API CORS (functions) ───
-[[headers]]
-  for = "/api/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "POST, GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-
 # ─── Function redirects ───
 [[redirects]]
   from = "/api/price"
   to = "/.netlify/functions/price"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/chat"
-  to = "/.netlify/functions/chat"
   status = 200
   force = true
 
