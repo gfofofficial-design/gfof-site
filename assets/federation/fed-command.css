@@ -419,7 +419,7 @@
     width: 1px;
     background: linear-gradient(var(--fed-authority-soft), var(--fed-border-default));
   }
-  .cmd-net__core { position: relative; }
+  .cmd-net__core { position: relative; left: auto; top: auto; }
   .cmd-net__core::before, .cmd-net__node::before {
     content: "";
     position: absolute; left: calc(-1 * var(--space-5) + 4px); top: 50%;
@@ -427,7 +427,7 @@
     background: var(--fed-border-strong);
   }
   .cmd-net__core::before { background: var(--fed-authority); }
-  .cmd-net__node { position: relative; transform: none; justify-items: start; text-align: left; width: 100%; padding: var(--space-4); }
+  .cmd-net__node { position: relative; left: auto; top: auto; transform: none; justify-items: start; text-align: left; width: 100%; padding: var(--space-4); }
   .cmd-net__node[aria-pressed="true"]::before { background: var(--fed-command); }
   .cmd-net__core-ring { display: none; }
   .cmd-net__node .cmd-net__desc {
