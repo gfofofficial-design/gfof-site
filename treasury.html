@@ -630,7 +630,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <div class="promise">
     <div class="promise-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> THE PROMISE</div>
     <div class="promise-body">
-      This page queries Solana RPC from your browser, via Helius's origin-restricted free tier. The numbers below are not served from our server — they are the chain's own answer to "what is locked." We <strong>cannot</strong> fake them. We <strong>cannot</strong> hide them. If the network is up, they are live. Refresh the page at any time to verify.
+      This page queries Solana's public mainnet RPC directly from your browser. The numbers below are not served from our server — they are the chain's own answer to "what is locked." We <strong>cannot</strong> fake them. We <strong>cannot</strong> hide them. If the network is up, they are live. Refresh the page at any time to verify.
     </div>
   </div>
 
@@ -820,14 +820,14 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 /* ═══════════════════════════════════════════════════════════
    $GFOF Transparency Report — live on-chain reader
    Reads: SPL Token Account balance of each Streamflow escrow
-   Source: Helius (mainnet.helius-rpc.com) — public key, domain-locked to galacticfederation.co
+   Source: Solana Foundation public mainnet RPC, called directly by the browser.
    Fallback: graceful degradation to known-good static value when RPC is unreachable
    ═══════════════════════════════════════════════════════════ */
 
 var CA = '2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
 var TOTAL_SUPPLY = 1_000_000_000;        /* 1B */
 var TOKEN_DECIMALS = 9;                  /* standard Moonshot SPL */
-var RPC = 'https://mainnet.helius-rpc.com/?api-key=2c3716b7-1814-4983-8b0e-7bf63243c053';
+var RPC = 'https://api.mainnet-beta.solana.com';
 
 /* The four Streamflow METADATA accounts (what the user put on the site).
    These are the public contract pages. For actual escrow balances we need the
