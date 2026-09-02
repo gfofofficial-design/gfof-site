@@ -37,15 +37,6 @@
   border-color: color-mix(in srgb, var(--fed-command) 7%, transparent); }
 .cmd-atmos__arc--b { width: 110vmax; height: 110vmax; bottom: -80vmax; left: -50vmax;
   border-color: color-mix(in srgb, var(--fed-authority) 7%, transparent); }
-.cmd-atmos__coord {
-  position: absolute;
-  font-family: var(--font-fed-system);
-  font-size: var(--text-xs);
-  letter-spacing: var(--system-letter-spacing);
-  color: color-mix(in srgb, var(--fed-muted) 40%, transparent);
-}
-.cmd-atmos__coord--a { top: 22%; left: 3%; }
-.cmd-atmos__coord--b { bottom: 14%; right: 3%; }
 .cmd-atmos__cross {
   position: absolute; width: 14px; height: 14px;
   color: color-mix(in srgb, var(--fed-muted) 35%, transparent);
@@ -663,6 +654,11 @@
   .cmd-hero__title { font-size: var(--display-sm); }   /* no desktop display type on phones */
   .cmd-div-title { font-size: var(--heading-lg); }
   .cmd-final__title { font-size: var(--heading-lg); }
-  .cmd-seal { max-width: 270px; }
+  .cmd-seal {
+    width: min(270px, 78vw);
+    max-width: 100%;
+    justify-self: center;
+    margin-inline: auto;
+  }
   .cmd-section { padding-block: var(--space-7); }
 }
