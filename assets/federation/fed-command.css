@@ -137,6 +137,7 @@
   gap: var(--space-7);
   padding-block: var(--space-8);
 }
+.cmd-hero > *, .cmd-network__layout > * { min-width: 0; }
 .cmd-hero__access {
   font-family: var(--font-fed-system);
   font-size: var(--text-xs);
@@ -651,6 +652,7 @@
   .cmd-section { padding-block: var(--space-8); }
 }
 @media (max-width: 639px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
   .cmd-hero__title { font-size: var(--display-sm); }   /* no desktop display type on phones */
   .cmd-div-title { font-size: var(--heading-lg); }
   .cmd-final__title { font-size: var(--heading-lg); }
@@ -659,6 +661,13 @@
     max-width: 100%;
     justify-self: center;
     margin-inline: auto;
+  }
+  .cmd-network__layout, .cmd-net, .cmd-net__core, .cmd-net__node {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .cmd-net__core-label, .cmd-net__node, .cmd-net__desc {
+    overflow-wrap: anywhere;
   }
   .cmd-section { padding-block: var(--space-7); }
 }
