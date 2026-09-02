@@ -217,7 +217,7 @@
   width: min(640px, 100%);
 }
 .cmd-seal__img {
-  width: 88%;                                   /* circular canonical asset —
+  width: 96%;                                   /* circular canonical asset —
                                                    no rectangular boundary */
   border-radius: 50%;
   position: relative;
@@ -255,16 +255,6 @@
   box-shadow: 0 0 10px var(--fed-authority-glow); }
 .cmd-seal__orbit--tick::after  { bottom: 10%; right: 4%; background: var(--fed-authority); }
 .cmd-seal__orbit--mid { border-color: color-mix(in srgb, var(--fed-authority) 22%, transparent); }
-.cmd-seal__mark {
-  position: absolute;
-  font-family: var(--font-fed-system);
-  font-size: var(--text-xs);
-  letter-spacing: var(--system-letter-spacing);
-  color: var(--fed-muted);
-}
-.cmd-seal__mark--tl { top: 2%; left: 0; color: var(--fed-authority); }
-.cmd-seal__mark--br { bottom: 2%; right: 0; }
-
 /* ═══ FEDERATION NETWORK ════════════════════════════════════════════════ */
 .cmd-network { background: var(--surface-system); border-block: 1px solid var(--fed-border-soft); }
 .cmd-network__layout {

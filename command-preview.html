@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<title>FEDERATION OS — Command Preview (development)</title>
-<!-- COMMAND v1 DEVELOPMENT PREVIEW (design frozen at BUILD 07) — not production, not in sitemap,
-     not linked from any production page. All factual statements are
-     sourced from existing repository content; nothing is invented. -->
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://galacticfederation.co/">
+<title>Galactic Federation of Finance — Federation OS Command</title>
+<!-- FEDERATION OS COMMAND · BUILD 08. All factual statements are sourced
+     from existing repository content; nothing is invented. -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/federation/fed-tokens.css">
 <link rel="stylesheet" href="assets/federation/fed-base.css">
@@ -38,9 +38,9 @@
     </span>
   </a>
   <nav class="fed-shell-nav" aria-label="Federation systems">
-    <a class="fed-shell-nav__item" data-fed-system="command" href="/command-preview.html">Command</a>
+    <a class="fed-shell-nav__item" data-fed-system="command" href="/">Command</a>
     <a class="fed-shell-nav__item" data-fed-system="dossier" href="https://dossiertrack.co">Dossier</a>
-    <span class="fed-shell-nav__item" data-fed-system="fcc" aria-disabled="true" role="link" tabindex="-1">FCC <span class="fed-shell-nav__flag">DESIGN PHASE</span></span>
+    <a class="fed-shell-nav__item" data-fed-system="fcc" href="https://fcc.galacticfederation.co/">FCC <span class="fed-shell-nav__flag">PUBLIC EXPERIMENT</span></a>
     <a class="fed-shell-nav__item" data-fed-system="research" href="/research">Research</a>
     <a class="fed-shell-nav__item" data-fed-system="archive" href="/record">Archive</a>
     <a class="fed-shell-nav__item" data-fed-system="council" href="/governance-spec">Council</a>
@@ -91,8 +91,6 @@
       <span class="cmd-seal__orbit" aria-hidden="true"></span>
       <span class="cmd-seal__orbit cmd-seal__orbit--mid" aria-hidden="true"></span>
       <span class="cmd-seal__orbit--tick cmd-seal__orbit" aria-hidden="true"></span>
-      <span class="cmd-seal__mark cmd-seal__mark--tl" aria-hidden="true">GF // 00</span>
-      <span class="cmd-seal__mark cmd-seal__mark--br" aria-hidden="true">FEDERATION OS</span>
       <img class="cmd-seal__img" src="logo-circle.png" alt="Galactic Federation seal — canonical circular mark">
     </div>
   </div>
@@ -106,7 +104,7 @@
     <span class="fed-rail__item" role="listitem">DOSSIER <span class="fed-status fed-status--impaired">Measurement review</span></span>
     <span class="fed-rail__item" role="listitem">ARCHIVE <span class="fed-status fed-status--operational">Public</span></span>
     <span class="fed-rail__item" role="listitem">COUNCIL <span class="fed-status fed-status--provisional">Advisory</span></span>
-    <span class="fed-rail__item" role="listitem">FCC <span class="fed-status fed-status--provisional">Design phase</span></span>
+    <span class="fed-rail__item" role="listitem">FCC <span class="fed-status fed-status--provisional">Epoch 2 · Blocked</span></span>
   </div>
 </section>
 
@@ -156,8 +154,8 @@
           <span class="cmd-net__label">Archive</span><small>GF-A01</small><span class="cmd-net__state cmd-net__state--op">Public</span>
         </button>
         <button class="cmd-net__node cmd-net__node--n5" data-system="fcc" type="button" aria-pressed="false">
-          <span class="cmd-net__label">FCC</span><small>GF-C01</small><span class="cmd-net__state">Design phase</span>
-          <span class="cmd-net__desc">Federation Capital Command. The planned capital division of the Federation. Status: design phase — not operational. Nothing exists to show yet, and nothing is simulated here.</span>
+          <span class="cmd-net__label">FCC</span><small>GF-C01</small><span class="cmd-net__state">Public experiment</span>
+          <span class="cmd-net__desc">Federation Capital Command. Its public accountability experiment is live at Epoch 2 and remains BLOCKED; intake is NOT AUTHORIZED. FCC has no capital under management, mandates, strategies, or counterparties.</span>
         </button>
       </div>
       <div class="cmd-net__panel cmd-reveal" aria-live="polite">
@@ -187,7 +185,6 @@
         <div class="fed-meta__row"><span class="fed-meta__k">Bond target</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">$73K market cap</span></div>
         <div class="fed-meta__row"><span class="fed-meta__k">On bond</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Auto-migration to Raydium</span></div>
         <div class="fed-meta__row"><span class="fed-meta__k">Authorities</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Mint &amp; freeze revoked at migration</span></div>
-        <div class="fed-meta__row"><span class="fed-meta__k">Locked supply</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">130,000,000 $GFOF · 13% · 4 active Streamflow contracts</span></div>
         <div class="fed-meta__row"><span class="fed-meta__k">First maturity</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">40M re-locked · 2026-08-18 → 2028-08-18</span></div>
         <div class="fed-meta__row"><span class="fed-meta__k">Live progress</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">—</span></div>
       </div>
@@ -265,20 +262,20 @@
       <span class="cmd-ident">03 <b>//</b> CAPITAL</span>
       <h2 class="cmd-div-title" id="fcc-h">Federation<br>Capital Command</h2>
       <p class="cmd-div-line">The Capital Command of the On-Chain Economy.</p>
-      <p style="margin-top: var(--space-4)"><span class="fed-status fed-status--provisional">Status // Design phase</span></p>
-      <p class="fed-body-text cmd-div-body">FCC is the planned capital division of the Federation. It is not operational: there is no capital under management, no mandates, no strategies, and no counterparties. What exists is design work — and consistent with the Federation's discipline, the design is being shown before anything is built. Everything below is a concept interface.</p>
+      <p style="margin-top: var(--space-4)"><span class="fed-status fed-status--provisional">Epoch 2 // BLOCKED</span></p>
+      <p class="fed-body-text cmd-div-body">FCC is the Federation's public capital-accountability experiment. Its methodology and record are public, but it is not an operating capital manager: there is no capital under management, no mandates, no strategies, and no counterparties. Epoch 2 remains blocked and intake is not authorized.</p>
     </div>
     <div class="fed-mandate" style="max-width: 720px">
       <div class="fed-mandate__head">
-        <span class="fed-mandate__brand">FCC // MANDATE</span>
-        <span class="fed-mandate__phase">Concept Interface · Design Phase</span>
+        <span class="fed-mandate__brand">FCC // PUBLIC RECORD</span>
+        <span class="fed-mandate__phase">Epoch 2 · Intake not authorized</span>
       </div>
       <div class="fed-mandate__body">
-        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Intent</span><p class="fed-mandate__section-text">What a mandate would set out to do — stated before action.</p></div>
-        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Decision</span><p class="fed-mandate__section-text">The committed course, on the record.</p></div>
-        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Evidence</span><p class="fed-mandate__section-text">On-chain proof attached as it occurs.</p></div>
-        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Outcome</span><p class="fed-mandate__section-text">What actually happened — kept or missed.</p></div>
-        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Final record</span><p class="fed-mandate__section-text">Permanent classification in the Archive.</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Methodology</span><p class="fed-mandate__section-text">v0.3 · RATIFIED_AWAITING_CUTOFF</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Freeze</span><p class="fed-mandate__section-text">BLOCKED</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Candidate slate</span><p class="fed-mandate__section-text">15 placeholder slots · not fully populated</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Intake</span><p class="fed-mandate__section-text">NOT AUTHORIZED</p></div>
+        <div class="fed-mandate__section"><span class="fed-mandate__section-label">Public surface</span><p class="fed-mandate__section-text"><a href="https://fcc.galacticfederation.co/">Open FCC and verify the record →</a></p></div>
       </div>
     </div>
   </div>
@@ -327,7 +324,6 @@
         <div class="fed-meta">
           <div class="fed-meta__row"><span class="fed-meta__k">Comms discipline</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">No price predictions</span></div>
           <div class="fed-meta__row"><span class="fed-meta__k">Claims</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Documented commitments only</span></div>
-          <div class="fed-meta__row"><span class="fed-meta__k">Verification</span><span class="fed-meta__sep">//</span><span class="fed-meta__v">Redirects to the live record</span></div>
         </div>
       </div>
     </div>
@@ -341,6 +337,7 @@
   <p class="cmd-final__sub">Follow the record. Examine the intelligence. Participate in what comes next.</p>
   <div class="cmd-final__actions">
     <a class="fed-btn fed-btn--command" href="https://dossiertrack.co">Explore Dossier</a>
+    <a class="fed-btn fed-btn--secondary" href="https://fcc.galacticfederation.co/">Open FCC</a>
     <a class="fed-btn fed-btn--secondary" href="/record">Read the Archive</a>
     <a class="fed-btn fed-btn--secondary" href="https://t.me/GFOF_SOL" rel="noopener">Join the Federation</a>
   </div>
@@ -363,8 +360,9 @@
       </div>
       <div class="fed-shell-footer__col">
         <h3>Systems</h3>
-        <a href="/command-preview.html">Command</a>
+        <a href="/">Command</a>
         <a href="https://dossiertrack.co">Dossier</a>
+        <a href="https://fcc.galacticfederation.co/">FCC</a>
         <a href="/research">Research</a>
         <a href="/governance-spec">Council</a>
       </div>
@@ -384,14 +382,14 @@
     </div>
     <div class="fed-shell-footer__legal">
       <span>© <span data-fed-year>2026</span> Galactic Federation of Finance. Not financial advice. Always DYOR.</span>
-      <span>DEVELOPMENT PREVIEW — COMMAND v1 · DESIGN FROZEN (BUILD 07)</span>
+      <span>FEDERATION OS — UNIFIED COMMAND · BUILD 08</span>
     </div>
   </div>
 </footer>
 
 <!-- ═══ SHELL: MOBILE BOTTOM NAV ═══ -->
 <nav class="fed-shell-bottom" aria-label="Federation systems (mobile)">
-  <a class="fed-shell-bottom__item" data-fed-system="command" href="/command-preview.html">Command</a>
+  <a class="fed-shell-bottom__item" data-fed-system="command" href="/">Command</a>
   <a class="fed-shell-bottom__item" data-fed-system="dossier" href="https://dossiertrack.co">Dossier</a>
   <a class="fed-shell-bottom__item" data-fed-system="archive" href="/record">Archive</a>
   <button class="fed-shell-bottom__item" data-fed-more-trigger type="button">More</button>
@@ -411,7 +409,7 @@
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Archive</span><span class="fed-sysrow__coord">GF-A01</span></div><span class="fed-status fed-status--operational">Public</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Research</span><span class="fed-sysrow__coord">GF-R01</span></div><span class="fed-status fed-status--operational">Published</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Council</span><span class="fed-sysrow__coord">GF-G01</span></div><span class="fed-status fed-status--provisional">Advisory</span></div>
-    <div class="fed-sysrow"><div><span class="fed-sysrow__name">FCC</span><span class="fed-sysrow__coord">GF-C01</span></div><span class="fed-status fed-status--provisional">Design phase</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">FCC</span><span class="fed-sysrow__coord">GF-C01</span></div><span class="fed-status fed-status--provisional">Epoch 2 · Blocked</span></div>
     <p class="fed-drawer__verified">LAST VERIFIED // — (live verification arrives with production data wiring)</p>
   </div>
 </aside>
@@ -449,7 +447,7 @@
   </div>
   <div class="fed-drawer__body">
     <div class="fed-more-list">
-      <span class="fed-more-disabled">FCC <span class="fed-shell-nav__flag">DESIGN PHASE — NO DESTINATION</span></span>
+      <a href="https://fcc.galacticfederation.co/">FCC <span class="fed-shell-nav__flag">PUBLIC EXPERIMENT</span></a>
       <a href="/research">Research</a>
       <a href="/governance-spec">Council</a>
       <button class="fed-more-disabled" style="text-align:left;background:none;border:none;cursor:not-allowed" type="button">Voss <span class="fed-shell-nav__flag">BUILD 12</span></button>
@@ -463,9 +461,9 @@
 window.FED_SHELL_CONFIG = {
   active: "command",
   systems: [
-    { id: "command",  label: "Command",  coord: "GF-00",  url: "/command-preview.html", available: true  },
+    { id: "command",  label: "Command",  coord: "GF-00",  url: "/", available: true  },
     { id: "dossier",  label: "Dossier",  coord: "GF-I01", url: "https://dossiertrack.co", available: true },
-    { id: "fcc",      label: "FCC",      coord: "GF-C01", url: null, available: false },
+    { id: "fcc",      label: "FCC",      coord: "GF-C01", url: "https://fcc.galacticfederation.co/", available: true },
     { id: "research", label: "Research", coord: "GF-R01", url: "/research", available: true },
     { id: "archive",  label: "Archive",  coord: "GF-A01", url: "/record", available: true },
     { id: "council",  label: "Council",  coord: "GF-G01", url: "/governance-spec", available: true }
