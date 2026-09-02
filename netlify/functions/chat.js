@@ -82,68 +82,94 @@ You: "No — and that is a committed position, not a courtesy. Hold-to-access to
 const MODEL = 'claude-haiku-4-5-20251001';
 const OFFLINE = 'Federation comms offline — please try again shortly. 🌌';
 
-exports.handler = async function (event) {
+const allowedOrigin = (origin) => {
+  if (origin === 'https://galacticfederation.co' || origin === 'https://www.galacticfederation.co') return true;
+  return /^https:\/\/(?:gfof|main--gfof|deploy-preview-\d+--gfof|[a-f0-9]{24}--gfof)\.netlify\.app$/.test(origin);
+};
+
+const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payload), {
+  status,
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+    'X-Content-Type-Options': 'nosniff'
+  }
+});
+
+export default async function (request, context) {
   const modeInstructions = {
     command: 'MODE: COMMAND. Prioritize concise operational answers grounded in the verified public record.',
     intelligence: 'MODE: INTELLIGENCE. Explain published research and system status analytically. Do not infer beyond documented facts.',
     transmission: 'MODE: FEDERATION LORE. You may use restrained Federation narrative, but clearly identify lore as narrative and never present it as a project fact.'
   };
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      },
-      body: ''
-    };
+  const requestId = context && context.requestId ? context.requestId : 'unavailable';
+  if (request.method !== 'POST') return jsonResponse({ reply: OFFLINE, code: 'E_METHOD' }, 405);
+
+  const origin = request.headers.get('origin') || '';
+  if (!allowedOrigin(origin)) {
+    console.error('[voss] FAIL E_ORIGIN request=' + requestId);
+    return jsonResponse({ reply: OFFLINE, code: 'E_ORIGIN' }, 403);
   }
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+
+  const contentType = request.headers.get('content-type') || '';
+  if (!contentType.toLowerCase().startsWith('application/json')) {
+    console.error('[voss] FAIL E_CONTENT_TYPE request=' + requestId);
+    return jsonResponse({ reply: OFFLINE, code: 'E_CONTENT_TYPE' }, 415);
+  }
+
+  const declaredBytes = Number(request.headers.get('content-length') || 0);
+  if (Number.isFinite(declaredBytes) && declaredBytes > 12000) {
+    console.error('[voss] FAIL E_BODY_TOO_LARGE request=' + requestId);
+    return jsonResponse({ reply: OFFLINE, code: 'E_BODY_TOO_LARGE' }, 413);
   }
 
   // `code` is for the operator (Netlify log + Network tab). The widget renders
   // only `reply`, so visitors never see it. Never put secrets in here.
-  const fail = (code, detail) => {
-    console.error('[voss] FAIL ' + code + (detail ? ' :: ' + detail : ''));
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ reply: OFFLINE, code: code })
-    };
+  const fail = (code, status = 200) => {
+    console.error('[voss] FAIL ' + code + ' request=' + requestId);
+    return jsonResponse({ reply: OFFLINE, code }, status);
   };
-
-  const ok = (reply) => ({
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-    body: JSON.stringify({ reply: reply, code: 'OK' })
-  });
 
   let messages;
   let mode = 'command';
   try {
-    const body = JSON.parse(event.body || '{}');
+    const rawBody = await request.text();
+    if (new TextEncoder().encode(rawBody).byteLength > 12000) return fail('E_BODY_TOO_LARGE', 413);
+    const body = JSON.parse(rawBody || '{}');
     messages = Array.isArray(body.messages) ? body.messages : null;
-    if (typeof body.mode === 'string' && modeInstructions[body.mode]) mode = body.mode;
+    if (body.mode !== undefined && (typeof body.mode !== 'string' || !modeInstructions[body.mode])) {
+      return fail('E_BAD_MODE', 400);
+    }
+    if (body.mode) mode = body.mode;
   } catch (e) {
-    return fail('E_BAD_JSON', 'request body was not valid JSON');
+    return fail('E_BAD_JSON', 400);
   }
-  if (!messages) return fail('E_NO_MESSAGES', 'body.messages missing or not an array');
+  if (!messages || messages.length < 1 || messages.length > 10) return fail('E_BAD_MESSAGES', 400);
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = Netlify.env.get('ANTHROPIC_API_KEY');
   if (!apiKey) {
     // Most common cause: the env var is unset, misspelled, or set on a different
     // Netlify context (deploy-preview / branch) than the one serving production.
-    return fail('E_NO_KEY', 'ANTHROPIC_API_KEY is not present in this function environment');
+    return fail('E_NO_KEY');
   }
 
-  const safeMessages = messages
-    .slice(-10)
-    .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim());
-
-  if (safeMessages.length === 0) {
-    return fail('E_EMPTY_TURNS', 'no valid user/assistant turns after filtering');
+  const safeMessages = [];
+  let totalCharacters = 0;
+  for (const message of messages) {
+    if (!message || (message.role !== 'user' && message.role !== 'assistant') || typeof message.content !== 'string') {
+      return fail('E_BAD_TURN', 400);
+    }
+    const content = message.content.trim();
+    if (!content || content.length > 500) return fail('E_BAD_TURN_LENGTH', 400);
+    if (safeMessages.length && safeMessages[safeMessages.length - 1].role === message.role) {
+      return fail('E_BAD_TURN_ORDER', 400);
+    }
+    totalCharacters += content.length;
+    if (totalCharacters > 4000) return fail('E_HISTORY_TOO_LARGE', 413);
+    safeMessages.push({ role: message.role, content });
+  }
+  if (safeMessages[0].role !== 'user' || safeMessages[safeMessages.length - 1].role !== 'user') {
+    return fail('E_BAD_TURN_ORDER', 400);
   }
 
   const callApi = async () => {
@@ -175,35 +201,39 @@ exports.handler = async function (event) {
     response = await callApi();
     // One retry on transient upstream conditions only.
     if (response.status === 429 || response.status === 500 || response.status === 529) {
-      console.error('[voss] transient ' + response.status + ' — retrying once');
+      console.error('[voss] transient=' + response.status + ' retry=1 request=' + requestId);
       await new Promise(r => setTimeout(r, 900));
       response = await callApi();
     }
   } catch (e) {
     const isAbort = e && (e.name === 'AbortError' || String(e).indexOf('abort') !== -1);
-    return fail(isAbort ? 'E_TIMEOUT' : 'E_NETWORK', String(e && e.message ? e.message : e));
+    return fail(isAbort ? 'E_TIMEOUT' : 'E_NETWORK');
   }
 
   if (!response.ok) {
-    // Read the upstream error for the LOG ONLY — it is never returned to the client.
-    let upstream = '';
-    try { upstream = (await response.text()).slice(0, 400); } catch (e) { upstream = '<unreadable>'; }
-    // 401 = bad or revoked key. 400 = malformed request or unknown model.
-    // 429 = rate limit. 402/403 = billing or permissions.
-    return fail('E_API_' + response.status, upstream);
+    return fail('E_API_' + response.status);
   }
 
   let data;
   try {
     data = await response.json();
   } catch (e) {
-    return fail('E_BAD_UPSTREAM_JSON', 'response was not valid JSON');
+    return fail('E_BAD_UPSTREAM_JSON');
   }
 
   const block = data && Array.isArray(data.content) ? data.content.find(b => b && b.type === 'text' && b.text) : null;
   if (!block) {
-    return fail('E_NO_TEXT', 'stop_reason=' + (data && data.stop_reason ? data.stop_reason : 'unknown'));
+    return fail('E_NO_TEXT');
   }
 
-  return ok(block.text);
+  return jsonResponse({ reply: block.text.slice(0, 2000), code: 'OK' });
+}
+
+export const config = {
+  path: '/api/chat',
+  rateLimit: {
+    windowLimit: 10,
+    windowSize: 60,
+    aggregateBy: ['ip', 'domain']
+  }
 };
