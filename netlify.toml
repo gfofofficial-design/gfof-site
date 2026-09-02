@@ -27,7 +27,7 @@
     # site's current first-party code and audited external runtime dependencies.
     # Inline script/style remain temporarily allowed for the legacy static pages;
     # all other resource categories are restricted to the smallest active set.
-    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://api.dexscreener.com https://public-api.solscan.io https://mainnet.helius-rpc.com; frame-src https://dexscreener.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://api.dexscreener.com https://public-api.solscan.io https://api.mainnet-beta.solana.com; frame-src https://dexscreener.com; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests"
 
     # COEP is intentionally NOT set. Enabling require-corp would break the
     # DexScreener iframe and Google Fonts. Revisit if the site self-hosts
