@@ -2,7 +2,7 @@
 // Cache name is version-stamped. Bump CACHE_VERSION on each site deploy
 // so installed PWAs rotate out old assets instead of serving stale ones.
 
-const CACHE_VERSION = 'v17.27-2026-07-22';
+const CACHE_VERSION = 'v18.0-2026-09-03';
 const CACHE = 'gfof-' + CACHE_VERSION;
 const ASSETS = ['/app', '/app/manifest.json'];
 
