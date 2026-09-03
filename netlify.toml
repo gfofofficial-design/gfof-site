@@ -125,7 +125,7 @@
   from = "/app/*"
   to = "/app/index.html"
   status = 200
-  force = true
+  force = false
 
 [[redirects]]
   from = "/governance-spec"
