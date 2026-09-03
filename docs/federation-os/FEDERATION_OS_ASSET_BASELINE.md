@@ -20,12 +20,12 @@ GFOF index nav currently renders a CSS gradient hexagon, not the logo image (fut
 | dossier-og-v2.png | ACTIVE — OG on all non-index Dossier pages |
 
 ## ORPHAN_ASSET_REPORT
-| File | References found | Likely status | Safe-to-delete confidence | Reason |
-|---|---|---|---|---|
-| dexscreener_logo.png | none in any HTML/JS/manifest/XML in repo | orphan | HIGH (repo-scope) — but retain in BUILD 00 | Could be hotlinked externally (Telegram posts, X cards); no in-repo consumer |
-| og-image.png | none in markup | orphan (superseded v1) | do NOT delete | Old share-link previews may still resolve it |
-| og-image-v2.png | none in markup | orphan (superseded v2) | do NOT delete | Same |
-| app-sw.js (root) | not registered anywhere (registration targets /app/sw.js) | stale/orphan — BUT carries NEWER cache version v18.0 than the registered v17.27 | do not delete yet | Evidence a version bump was authored but never shipped to the registered path; resolve intent in BUILD 01 |
-| app-manifest.json (root) | no page links it (pages link /app/manifest.json) | stale/orphan (content diverged) | do not delete yet | Same divergence question |
+| File | References found | Resolution | Reason |
+|---|---|---|---|
+| dexscreener_logo.png | none in any runtime HTML/JS/manifest/XML | REMOVED — 2026-09-03 hygiene reconciliation | No in-repo consumer; current token links do not use this asset |
+| og-image.png | none in markup | PRESERVE — do not re-reference | Old share-link previews may still resolve it |
+| og-image-v2.png | none in markup | PRESERVE — do not re-reference | Old share-link previews may still resolve it |
+| app-sw.js (root) | not registered anywhere | REMOVED — canonical worker is `/app/sw.js`; active cache rotated to `v18.0-2026-09-03` | Eliminates the stale duplicate while shipping the cache bump through the registered path |
+| app-manifest.json (root) | no page links it | REMOVED — canonical manifest is `/app/manifest.json` | Eliminates the divergent, unreachable duplicate |
 
 No other unreferenced media found.
