@@ -4,30 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Federation Governance Specification v0.2 — $GFOF</title>
-<meta name="description" content="A public specification for the $GFOF DAO governance system on Realms. Parameters proposed for comment before any governance infrastructure is deployed. Published before code.">
+<meta name="description" content="The $GFOF DAO is live on Realms in advisory mode. Current v0.2 deployment facts govern; the original v0.1 design text remains preserved for transparency.">
 <link rel="canonical" href="https://galacticfederation.co/governance-spec">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://galacticfederation.co/governance-spec">
-<meta property="og:title" content="Federation Governance Specification v0.1 — $GFOF">
-<meta property="og:description" content="A public spec for $GFOF DAO governance. Parameters proposed for comment. Before code. Open to challenge.">
+<meta property="og:title" content="Federation Governance Specification v0.2 — $GFOF">
+<meta property="og:description" content="Live advisory governance on Realms, with current deployment facts and the original v0.1 design record preserved.">
 <meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
-<meta name="twitter:title" content="Federation Governance Specification v0.1 — $GFOF">
-<meta name="twitter:description" content="A public spec for $GFOF DAO governance. Parameters proposed for comment. Before code. Open to challenge.">
+<meta name="twitter:title" content="Federation Governance Specification v0.2 — $GFOF">
+<meta name="twitter:description" content="Live advisory governance on Realms, with current deployment facts and the original v0.1 design record preserved.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Federation Governance Specification v0.1",
+  "headline": "Federation Governance Specification v0.2",
   "name": "Federation Governance Specification",
-  "description": "A public specification for the $GFOF DAO governance system built on Realms / spl-governance. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.",
-  "abstract": "Specifies genuine token-holder governance on Realms with proposed parameters (proposal threshold, quorum, two-tier approval, voting periods, execution timelock), the exclusion of locked dev tokens from voting, an explicit list of what governance cannot do, and a no-permanent-council position. All numbers are v0.1 draft-for-comment, not committed.",
+  "description": "The $GFOF DAO is deployed on Realms in advisory mode. The v0.2 deployment section governs; the original v0.1 design reasoning is retained as a historical record.",
+  "abstract": "Records the live advisory Realms deployment, its deployed parameters and bootstrap council disclosure, while preserving the superseded v0.1 design proposals for public accountability.",
   "inLanguage": "en",
   "articleSection": [
     "DAO governance",
@@ -41,9 +41,9 @@
     {"@type": "Thing", "name": "Token-holder governance on Solana"},
     {"@type": "Thing", "name": "Realms spl-governance"}
   ],
-  "version": "0.1",
+  "version": "0.2",
   "datePublished": "2026-05-26",
-  "dateModified": "2026-05-26",
+  "dateModified": "2026-09-06",
   "url": "https://galacticfederation.co/governance-spec",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -72,7 +72,7 @@
     }
   },
   "license": "https://galacticfederation.co/governance-spec",
-  "creativeWorkStatus": "Draft — open for comment",
+  "creativeWorkStatus": "Live advisory deployment — historical v0.1 design retained",
   "copyrightYear": 2026,
   "isAccessibleForFree": true,
   "hasPart": [
@@ -338,12 +338,12 @@ p{font-size:16.5px; line-height:1.64;}
   <header class="doc-header">
     <div class="doc-tag">GOVERNANCE SPECIFICATION · OPEN FOR COMMENT</div>
     <h1 class="doc-title">Federation <span class="grad">Governance</span> Specification</h1>
-    <p class="doc-sub">A public specification for the $GFOF DAO governance system, built on Realms. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.</p>
+    <p class="doc-sub">The $GFOF DAO is live on Realms in advisory mode. The v0.2 deployment record below governs; the original v0.1 design text remains preserved and explicitly labeled as historical.</p>
     <div class="doc-meta">
       <span><strong>Version:</strong> v0.2</span>
       <span><strong>Status:</strong> v0.2 · LIVE (ADVISORY)</span>
       <span><strong>Published:</strong> 2026-05-26</span>
-      <span><strong>Deploys:</strong> POST-BOND</span>
+      <span><strong>Authority:</strong> ADVISORY LIVE · BINDING POST-BOND</span>
     </div>
   </header>
 
@@ -352,7 +352,7 @@ p{font-size:16.5px; line-height:1.64;}
     <div class="toc-title">// CONTENTS</div>
     <ol>
       <li><a href="#deployed">Deployment status (v0.2)</a></li>
-      <li><a href="#status">Status of this document</a></li>
+      <li><a href="#status">Historical v0.1 status (superseded)</a></li>
       <li><a href="#principles">Design principles</a></li>
       <li><a href="#platform">Platform</a></li>
       <li><a href="#voting-power">Voting power</a></li>
@@ -361,7 +361,7 @@ p{font-size:16.5px; line-height:1.64;}
       <li><a href="#controls">What governance controls</a></li>
       <li><a href="#council">The council question</a></li>
       <li><a href="#first-proposal">The first proposal</a></li>
-      <li><a href="#rollout">Phased rollout</a></li>
+      <li><a href="#rollout">Historical v0.1 rollout (superseded)</a></li>
       <li><a href="#open-questions">Open questions for public comment</a></li>
     </ol>
   </div>
@@ -373,9 +373,12 @@ p{font-size:16.5px; line-height:1.64;}
   <p><strong>Council (disclosed):</strong> a single-member council (the founder wallet) holds a 60% veto quorum during the bootstrap phase &mdash; a safety valve against a malicious proposal, not a tool to pass things. It sunsets, by governance vote, once the project is post-bond and the holder base has materially broadened.</p>
   <p><strong>Changes from v0.1, reconciled openly:</strong> (1) the two-tier 51% / 66% approval structure is not expressible in a single SPL Governance config, so the DAO launched with one standard tier at 1% quorum; the constitutional-tier prohibitions remain binding via this spec and the corrections log until a second config is added. (2) Realms provisioned a 60% council veto not present in v0.1; retained as a disclosed bootstrap safety valve. (3) Deployment ran ahead of the post-bond sequence stated in <a href="/corrections#c016" style="color:var(--cyan)">corrections #016</a> &mdash; the DAO launched pre-bond in advisory mode; this deviation is logged at <a href="/corrections#c017" style="color:var(--cyan)">corrections #017</a>.</p>
   <p>The structurally-locked 13% dev allocation cannot vote: it is held in Streamflow escrow, not a wallet, so it cannot be deposited into the realm. Exclusion is enforced by architecture, not promise.</p>
-  <p><em>The sections below are the v0.1 design reasoning, retained for transparency. Where a deployed parameter differs from a v0.1 proposal, the deployed value in this section governs.</em></p>
+  <div class="callout amber">
+    <div class="k">HISTORICAL RECORD BEGINS BELOW · SUPERSEDED WHERE DIFFERENT</div>
+    <p>The remaining sections preserve the original v0.1 design reasoning and future-tense language. They do not describe current deployment status. Section 00 above is the controlling v0.2 record; where any historical proposal or sequence differs, the deployed facts in Section 00 govern.</p>
+  </div>
 
-  <h2 id="status"><span class="num">SECTION 01</span>Status of this document</h2>
+  <h2 id="status"><span class="num">SECTION 01 · HISTORICAL v0.1</span>Status of this document (superseded)</h2>
   <p>This is a <strong>draft specification, published before code, for public comment.</strong> It is version 0.1.</p>
   <p>Nothing in this document is a committed parameter. Per the Federation's standing discipline (<a href="/corrections#c003" style="color:var(--cyan)">corrections #003</a>), no governance number — proposal threshold, quorum, voting period, approval percentage — becomes a commitment until a specification defines it, the public has had the opportunity to comment, and the parameter is ratified. The figures below are <strong>proposed starting points</strong>, presented with their reasoning so that the reasoning can be challenged. They will change in response to comment. When they stabilize, a later version of this document will mark them as settled, and the first on-chain governance vote will ratify them.</p>
   <div class="callout amber">
@@ -486,7 +489,7 @@ p{font-size:16.5px; line-height:1.64;}
   <p>The framework itself will be drafted as its own specification (separate from this governance spec) and published for review before the proposal opens. The first proposal is therefore a test of the governance system on a real, bounded decision with a pre-published spec — exactly the conditions under which governance should be exercised.</p>
   <p>The first proposal will not be a trivial "ratify the team's choice" vote. The rewards/reserve framework spec will present genuine options with tradeoffs, and the proposal will let token holders choose or amend. If the first exercise of governance is theater, the whole system is theater.</p>
 
-  <h2 id="rollout"><span class="num">SECTION 10</span>Phased rollout</h2>
+  <h2 id="rollout"><span class="num">SECTION 10 · HISTORICAL v0.1</span>Phased rollout (superseded)</h2>
   <p>Governance does not arrive all at once. The proposed sequence:</p>
   <ol>
     <li><strong>Pre-bond (now):</strong> this specification published, public comment period open.</li>
