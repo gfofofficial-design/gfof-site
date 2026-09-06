@@ -255,8 +255,8 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <div class="doc-meta">
       <span>VERSION <strong>v0.1</strong></span>
       <span>OPENED <strong>2026-07-27</strong></span>
-      <span>ADMITTED <strong id="stat-admitted">0</strong></span>
-      <span>RESOLVED <strong id="stat-resolved">0</strong></span>
+      <span>ADMITTED <strong id="stat-admitted">1</strong></span>
+      <span>RESOLVED <strong id="stat-resolved">1</strong></span>
     </div>
   </header>
 
@@ -452,11 +452,6 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     </div>
   </div>
 
-  <div class="empty" id="record-empty">
-    <div class="et">NO FORECASTS ADMITTED YET</div>
-    <p>The Record opened on 2026-07-27. The first admitted forecast will appear here, with its timestamp and anchor. Nothing has been backfilled and nothing will be.</p>
-  </div>
-
   <table class="standings">
     <thead>
       <tr><th>HANDLE</th><th>RESOLVED</th><th>BRIER</th><th>CALIBRATION</th></tr>
@@ -501,9 +496,6 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   var r = document.getElementById('stat-resolved');
   if (a) a.textContent = cards.length;
   if (r) r.textContent = resolved.length;
-  var empty = document.getElementById('record-empty');
-  if (empty && cards.length > 0) empty.style.display = 'none';
-
   if (location.search.indexOf('submitted=1') !== -1) {
     var f = document.querySelector('.formwrap');
     if (f) {
