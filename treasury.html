@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Transparency Report — $GFOF Galactic Federation of Finance</title>
-<meta name="description" content="Live on-chain transparency report for $GFOF. Read directly from Solana in your browser. We cannot fake these numbers.">
+<meta name="description" content="On-chain transparency report for $GFOF: live Streamflow lock reads, designated wallet purposes, dated balance snapshots, and direct public verification links.">
 <link rel="canonical" href="https://galacticfederation.co/treasury">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://galacticfederation.co/treasury">
 <meta property="og:title" content="$GFOF Transparency Report — Live On-Chain">
-<meta property="og:description" content="Every number on this page is read directly from Solana. We cannot fake it. We cannot hide it.">
+<meta property="og:description" content="Verify Streamflow locks, designated wallet purposes, and dated balance snapshots through direct public links.">
 <meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="$GFOF Transparency Report — Live On-Chain">
-<meta name="twitter:description" content="Every number on this page is read directly from Solana. Verified, not claimed.">
+<meta name="twitter:description" content="Live lock reads and clearly labeled wallet disclosures with direct public verification links.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
 <link rel="apple-touch-icon" href="https://galacticfederation.co/logo.png">
@@ -25,7 +25,7 @@
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "Transparency Report — $GFOF",
-  "description": "Live on-chain transparency report for $GFOF. Streamflow lock balances, unlock countdowns, and operational wallet state are read directly from Solana RPC in the visitor's browser — not served from a project-controlled endpoint.",
+  "description": "Live on-chain transparency report for $GFOF. Streamflow lock balances, unlock countdowns, designated wallet purposes, and disclosure boundaries are presented with direct public verification links.",
   "url": "https://galacticfederation.co/treasury",
   "inLanguage": "en",
   "isAccessibleForFree": true,
@@ -355,6 +355,42 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lc-actions a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
 .lc-actions a.primary:hover{background:rgba(61,255,160,0.12)}
 
+/* ─── DESIGNATED WALLET DISCLOSURES ─── */
+.wallet-disclosure{
+  max-width:1040px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+}
+@media(max-width:760px){.wallet-disclosure{grid-template-columns:1fr}}
+.wallet-card{
+  padding:22px 24px;background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);position:relative;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.wallet-card.personal{border-color:rgba(240,192,64,0.22);background:rgba(240,192,64,0.025)}
+.wallet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px 16px;margin-bottom:14px;flex-wrap:wrap}
+.wallet-id{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--cyan);margin-bottom:5px}
+.wallet-title{font-family:var(--orb);font-size:16px;font-weight:750;line-height:1.3;color:var(--text)}
+.wallet-state{
+  flex-shrink:0;font-family:var(--mono);font-size:12px;letter-spacing:1.2px;
+  color:var(--green);border:1px solid rgba(61,255,160,0.3);padding:5px 9px;
+}
+.wallet-state.owner{color:var(--gold);border-color:rgba(240,192,64,0.35)}
+.wallet-address{
+  display:block;font-family:var(--mono);font-size:12px;line-height:1.55;
+  color:var(--muted);word-break:break-all;margin-bottom:14px;
+}
+.wallet-address:hover{color:var(--cyan)}
+.wallet-fact{padding-top:12px;border-top:1px solid var(--line);margin-top:12px}
+.wallet-fact .k{font-family:var(--mono);font-size:12px;letter-spacing:1.4px;color:var(--muted);margin-bottom:5px}
+.wallet-fact .v{font-size:14px;line-height:1.55;color:var(--text-dim)}
+.wallet-fact .v strong{color:var(--text)}
+.wallet-boundary{
+  max-width:1040px;margin:16px auto 0;padding:17px 20px;
+  border-left:2px solid var(--gold);background:rgba(240,192,64,0.035);
+  color:var(--text-dim);font-size:14px;line-height:1.65;
+}
+.wallet-boundary strong{color:var(--gold)}
+
 /* ─── VERIFY YOURSELF ─── */
 .verify-card{
   max-width:1040px;margin:50px auto 0;
@@ -623,14 +659,14 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <section class="hero">
     <div class="hero-tag"><span class="hero-tag-dot"></span>LIVE · READ FROM SOLANA</div>
     <h1>Transparency <span class="grad">Report</span></h1>
-    <p>Most projects <em>claim</em> transparency. We let you verify it yourself — every number on this page is read <strong>directly from the Solana blockchain</strong> in your browser, updated in real time.</p>
+    <p>Most projects <em>claim</em> transparency. We let you verify it yourself — Streamflow lock balances are read <strong>directly from the Solana blockchain</strong>, while designated-wallet snapshots are dated and linked to their public accounts.</p>
   </section>
 
   <!-- THE PROMISE -->
   <div class="promise">
     <div class="promise-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> THE PROMISE</div>
     <div class="promise-body">
-      This page queries Solana's public mainnet RPC directly from your browser. The numbers below are not served from our server — they are the chain's own answer to "what is locked." We <strong>cannot</strong> fake them. We <strong>cannot</strong> hide them. If the network is up, they are live. Refresh the page at any time to verify.
+      This page queries Solana's public mainnet RPC directly from your browser for the four Streamflow locks. Those live lock reads are the chain's answer to "what is locked." Designated-wallet purposes are owner-supplied and unlocked balances are dated snapshots with direct explorer links. Refresh the page to recheck the lock data; follow any wallet address to inspect its current activity.
     </div>
   </div>
 
@@ -684,6 +720,66 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       The original 40,000,000 $GFOF Lock 3 reached its scheduled cliff on <strong>August 18, 2026</strong>. The full scheduled allocation was placed into a new Streamflow contract on <strong>August 28, 2026</strong>, with a new full-cliff date of <strong>August 18, 2028</strong>. Verify the <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="color:var(--cyan)">active re-lock</a>, the <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan)">expired predecessor</a>, and the <a href="https://solscan.io/tx/5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD" target="_blank" rel="noopener" style="color:var(--cyan)">re-lock transaction</a> independently.
     </div>
   </div>
+
+  <!-- DESIGNATED WALLET DISCLOSURES -->
+  <div class="section-head">
+    <div class="tag">DESIGNATED WALLET DISCLOSURES</div>
+    <h2>Purpose, Status, and Boundaries</h2>
+    <p>These public addresses are disclosed so holders can verify material balances and intended uses. Purpose labels are owner-supplied. Balances for unlocked wallets are a dated snapshot; follow each address for current on-chain activity.</p>
+  </div>
+
+  <div class="wallet-disclosure">
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-001</div><div class="wallet-title">Moonshot Bonding Reserve</div></div><span class="wallet-state owner">OWNER-DESIGNATED</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/4RDWqoyKt6MhuKeaTq7JRQvrw9hsqyfedUPsRaa4yob9" target="_blank" rel="noopener">4RDWqoyKt6MhuKeaTq7JRQvrw9hsqyfedUPsRaa4yob9 ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-07</div><div class="v"><strong>16,594,141.713749 GFOF · 1.66%</strong></div></div>
+      <div class="wallet-fact"><div class="k">BOUNDARY</div><div class="v">Owner-designated for the Moonshot bonding process. This does not mean Moonshot controls the wallet; exact pool and custody relationship remains under verification.</div></div>
+    </article>
+
+    <article class="wallet-card personal">
+      <div class="wallet-head"><div><div class="wallet-id">W-002</div><div class="wallet-title">Owner Personal Wallet</div></div><span class="wallet-state owner">OUTSIDE TREASURY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/Fc1y1dXfen3k4sikLStvHvaprJyrTFN3QQdnJwbERMei" target="_blank" rel="noopener">Fc1y1dXfen3k4sikLStvHvaprJyrTFN3QQdnJwbERMei ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-07</div><div class="v"><strong>17,654,393.178052 GFOF · 1.77%</strong></div></div>
+      <div class="wallet-fact"><div class="k">BOUNDARY</div><div class="v">Disclosed because the balance is material. This personal holding is not Federation treasury, has no operational allocation, and carries no project spending commitment.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-003</div><div class="wallet-title">General Legal / Commercial Reserve</div></div><span class="wallet-state owner">OWNER-DESIGNATED</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/s2otmZTSatwLSx3yXPe7DJgucVWXEAsNtSrqaoZTjuX" target="_blank" rel="noopener">s2otmZTSatwLSx3yXPe7DJgucVWXEAsNtSrqaoZTjuX ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-07</div><div class="v"><strong>13,761,348.659137 GFOF · 1.38%</strong></div></div>
+      <div class="wallet-fact"><div class="k">PURPOSE</div><div class="v">Legal and anything directly associated, including counsel, filings, compliance, intellectual property, contracts, disputes, and related professional expenses.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-004</div><div class="wallet-title">Development-Linked Marketing</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y" target="_blank" rel="noopener">G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y ↗</a>
+      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>70,000,000 GFOF</strong> across Lock 3 and Lock 4; 0 unlocked when verified 2026-09-07.</div></div>
+      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Both contracts are immutable, non-cancelable, and non-transferable. Unlocks: 2028-08-18 and 2028-05-31.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-005</div><div class="wallet-title">Operations</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7" target="_blank" rel="noopener">8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7 ↗</a>
+      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>30,000,000 GFOF</strong> in Lock 1; 0 unlocked when verified 2026-09-07.</div></div>
+      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Immutable, non-cancelable, and non-transferable. Unlock: 2027-04-01.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-006</div><div class="wallet-title">Marketing / Promotion</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6" target="_blank" rel="noopener">DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6 ↗</a>
+      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>30,000,000 GFOF</strong> in Lock 2; 0 unlocked when verified 2026-09-07.</div></div>
+      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Immutable, non-cancelable, and non-transferable. Unlock: 2027-04-01.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-007</div><div class="wallet-title">Planned Holder-Benefits Reserve</div></div><span class="wallet-state owner">NOT ACTIVE</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/5U3uduBNhNtwTofNNdsS8bet4GuQmGXYnQoJ5t6cfM6u" target="_blank" rel="noopener">5U3uduBNhNtwTofNNdsS8bet4GuQmGXYnQoJ5t6cfM6u ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-07</div><div class="v"><strong>20,581,948.585345 GFOF · 2.06%</strong></div></div>
+      <div class="wallet-fact"><div class="k">BOUNDARY</div><div class="v">Reserved for a possible future holder-benefit mechanism. No staking, APY, eligibility rule, distribution, or active benefit program is authorized.</div></div>
+    </article>
+  </div>
+
+  <div class="wallet-boundary"><strong>Disclosure boundary:</strong> an owner-supplied purpose states intended use; it is not a promise of spending, proof of custody, or evidence of a deployed program. Control and approval policies for unlocked wallets remain pending.</div>
 
   <!-- VERIFY YOURSELF -->
   <div class="verify-card">
@@ -813,7 +909,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.7 · treasury · updated 2026-08-28</span>
+  <span class="version" id="footer-version">v18.0 · treasury · updated 2026-09-07</span>
 </div>
 
 <script>
@@ -1438,7 +1534,7 @@ setInterval(tickCountdown, 1000);
 
 /* Console banner */
 try {
-  console.log('%c⬡ GFOF Transparency Report · v11.0', 'color:#F0C040;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #F0C040;border-radius:2px;');
+  console.log('%c⬡ GFOF Transparency Report · v18.0', 'color:#F0C040;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #F0C040;border-radius:2px;');
   console.log('%c📡 Reading from ' + RPC + ' in your browser.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
   console.log('%c🔬 Lock addresses:', 'color:#A9B0CC;font-family:monospace;font-size:11px;');
   LOCKS.forEach(function(l,i){
@@ -1449,7 +1545,7 @@ try {
 /* Version stamp */
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.7 · treasury · updated 2026-08-28'; }
+  if(el){ el.textContent = 'v18.0 · treasury · updated 2026-09-07'; }
 })();
 
 /* Initial render + fetch */
