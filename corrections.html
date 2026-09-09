@@ -887,6 +887,27 @@ p{font-family:var(--font-read); letter-spacing:0;}
     </div>
   </div>
 
+<div class="entry status-cancelled" id="c034">
+    <div class="entry-head">
+      <span class="entry-id">#034 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>Three unlocked wallets were attributed to the owner or Federation without a verified control basis. Those designations are retired and the wallet register is corrected.</h3>
+    <div class="meta">
+      <span>Found &amp; corrected 2026-09-09</span>
+      <span>Affected: /treasury &middot; designated wallet register</span>
+    </div>
+    <div class="body">
+      <p><strong>What was wrong.</strong> The first designated-wallet register identified <code>Fc1y1dXfen3k4sikLStvHvaprJyrTFN3QQdnJwbERMei</code> as the owner&rsquo;s personal wallet, <code>s2otmZTSatwLSx3yXPe7DJgucVWXEAsNtSrqaoZTjuX</code> as a legal/commercial reserve, and <code>5U3uduBNhNtwTofNNdsS8bet4GuQmGXYnQoJ5t6cfM6u</code> as a planned holder-benefits reserve. During direct owner review, the owner confirmed that none of those three addresses is owner- or Federation-controlled and that their controllers are not known to the project. On-chain balances prove what an address holds; they do not prove who controls it or why. The earlier labels exceeded the available evidence.</p>
+      <p><strong>What changed.</strong> W-002, W-003, and W-007 are retired and removed from the active designated-wallet register. Their transactions remain public on-chain, but the Federation makes no ownership, custody, affiliation, or purpose claim about them. Wallet identifiers are not reused, so the correction remains legible in the register&rsquo;s history.</p>
+      <p><strong>What replaced them.</strong> Three owner-confirmed addresses are added with dated on-chain balance snapshots and explicit boundaries: W-008 is the unlocked creator wallet that signed the <a href="https://solscan.io/tx/DuUxP3N7qf9cpnyLSKm62yLPJCDNSMhg7mL67wsohgaN95a9X4uADijbNhYAL3fQtAdJW3itmvQRnU5P5Qj7psh" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">GFOF mint and Meteora Dynamic Bonding Curve initialization transaction</a>; W-009 is unlocked owner personal holdings outside Federation treasury with no project spending commitment; and W-010 is an unlocked community and holder-benefits reserve with no active or promised distribution program. W-010 requires a published specification and at least seven days&rsquo; notice before its first distribution or a material purpose change.</p>
+      <p><strong>W-001 clarified.</strong> W-001 remains the same address, but its purpose and control boundary are now precise: it is a personally funded, sole owner-controlled, unlocked reserve accumulating through open-market purchases toward a target of up to 20,000,000 GFOF for staged post-bond liquidity contributions. It is outside Federation treasury, is not itself a liquidity pool, is not held or controlled by Moonshot, and its target and intended use are not enforced by an on-chain lock.</p>
+      <p><strong>What did not change.</strong> The four active Streamflow contracts and the 130,000,000 GFOF scheduled locked total are unchanged. W-004, W-005, and W-006 remain the disclosed lock-beneficiary addresses. No token transfer, wallet permission, lock, or contract was changed by this correction.</p>
+      <p><strong>Control policy.</strong> W-001, W-008, W-009, and W-010 are sole owner-controlled and unlocked; owner approval is currently sufficient to move their assets. This statement discloses the approval boundary, not private access, authentication, recovery, or key-management details. Unknown holder wallets are not attributed to the Federation without direct owner confirmation or independent evidence.</p>
+      <p><strong>Status:</strong> Resolved. The unsupported attributions are withdrawn, the corrected active register is published at <a href="/treasury" style="color:var(--cyan);text-decoration:underline">/treasury</a>, and this entry preserves exactly what was wrong rather than silently replacing the record.</p>
+    </div>
+  </div>
+
 <div class="entry status-kept" id="c033">
     <div class="entry-head">
       <span class="entry-id">#033 &middot; KEPT</span>

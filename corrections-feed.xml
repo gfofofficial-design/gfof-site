@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Fri, 28 Aug 2026 18:00:00 +0000</lastBuildDate>
-    <pubDate>Fri, 28 Aug 2026 18:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 09 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 09 Sep 2026 00:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#034 · CORRECTION — Three unsupported wallet-control attributions are retired and the active designated-wallet register is corrected.</title>
+      <link>https://galacticfederation.co/corrections#c034</link>
+      <guid isPermaLink="false">gfof-correction-034-wallet-register-control-attributions</guid>
+      <pubDate>Wed, 09 Sep 2026 00:00:00 +0000</pubDate>
+      <description>The first designated-wallet register incorrectly attributed Fc1y1dXfen3k4sikLStvHvaprJyrTFN3QQdnJwbERMei, s2otmZTSatwLSx3yXPe7DJgucVWXEAsNtSrqaoZTjuX, and 5U3uduBNhNtwTofNNdsS8bet4GuQmGXYnQoJ5t6cfM6u to the owner or Federation. Direct owner review confirmed that none is owner- or Federation-controlled and their controllers are not known to the project. W-002, W-003, and W-007 are retired without reusing their identifiers. W-008 records the verified creator wallet, W-009 the owner personal wallet outside treasury, and W-010 the inactive community and holder-benefits reserve. W-001 is clarified as a personally funded, sole owner-controlled, unlocked post-bond liquidity reserve. The four active Streamflow contracts and 130,000,000 GFOF scheduled locked total are unchanged. No token transfer, permission, lock, or contract changed.</description>
+    </item>
 
     <item>
       <title>#033 · KEPT — The first 40M Streamflow lock matured on August 18 and the full scheduled allocation is re-locked through August 18, 2028.</title>
