@@ -61,7 +61,7 @@
     "MISSED",
     "CANCELLED"
   ],
-  "dateModified": "2026-05-19"
+  "dateModified": "2026-09-17"
 }
 </script>
 <script type="application/ld+json">
@@ -884,6 +884,27 @@ p{font-family:var(--font-read); letter-spacing:0;}
       <p><strong>Why the rate is 93%, not 100%.</strong> The keep-rate is counted strictly: of <strong>15 resolved commitments</strong>, 14 are KEPT and one &mdash; entry <a href="#c018" style="color:var(--cyan);text-decoration:underline">#018</a>, the immutable on-chain name disclosure &mdash; sits in the denominator as a DISCLOSURE / CANCELLED rather than being excluded to flatter the number. We chose the stricter count on purpose. The 17 ON TRACK entries are forward-looking and excluded from the rate until they resolve.</p>
       <p>A search box and status filters were also added to make the log navigable. No entry content was altered.</p>
       <p><strong>Status:</strong> Acknowledged and permanent. The page now corrects its own arithmetic; a stale published stat has been replaced with the true figure. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+<div class="entry status-cancelled" id="c035">
+    <div class="entry-head">
+      <span class="entry-id">#035 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>The public launch-path description was wrong: $GFOF uses Meteora DBC, migration is quote-reserve based, and $73K market cap does not trigger Raydium.</h3>
+    <div class="meta">
+      <span>Found in owner review &middot; published 2026-09-17</span>
+      <span>Affected: home &middot; FAQ &middot; roadmap &middot; app &middot; whitepaper &middot; AI policy &middot; venue-specific fee designs</span>
+    </div>
+    <div class="body">
+      <p><strong>What was wrong.</strong> Public pages repeated an obsolete Moonshot-to-Raydium narrative: a $73,000 market-cap &ldquo;bond,&rdquo; a Raydium destination, and a live progress percentage calculated from FDV or market cap. That was not the live pool&rsquo;s mechanism. Market data can describe valuation; it cannot prove progress toward a reserve-based migration condition.</p>
+      <p><strong>Verified mechanics.</strong> $GFOF trades through the Meteora Dynamic Bonding Curve at pair <a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;word-break:break-all">3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE</a>, quoted in USDC. Its configured migration threshold is <strong>66,040.882531 USDC of quote reserve</strong>; the configured destination is <strong>Meteora DAMM v2</strong>; and <strong>100% of creator migration liquidity is permanently locked</strong>. A September 2026 verification snapshot observed 4,887.133875 USDC of quote reserve. That snapshot is historical, not a live value.</p>
+      <p><strong>What changed.</strong> Current public surfaces now name Meteora DBC and DAMM v2, remove the $73K/Raydium claim, and stop deriving migration progress from market cap or FDV. The status display fails closed: live reserve and progress are shown as unavailable unless a canonical reserve source is present.</p>
+      <p><strong>No downstream activation.</strong> Migration does not activate staking, a Founding Member NFT, rewards, reserve distributions, binding governance, or any other utility. None is authorized by this correction.</p>
+      <p><strong>Creator fees and Dossier routing.</strong> Entry <a href="#c025" style="color:var(--cyan);text-decoration:underline">#025</a>, <a href="/creator-fee-spec" style="color:var(--cyan);text-decoration:underline">/creator-fee-spec</a>, and the Raydium-specific routing described by entry <a href="#c011" style="color:var(--cyan);text-decoration:underline">#011</a> cannot activate as written. They are superseded and on hold pending corrected venue mechanics, updated specifications, counsel review where applicable, and a new recorded authorization. Dossier paid tiers remain closed; no fee or revenue routing is active.</p>
+      <p><strong>Why the delay is recorded.</strong> The discrepancy was identified during owner review before this publication pass. The correction was not published immediately. That delay is acknowledged rather than backdated or hidden.</p>
+      <p><strong>Status:</strong> Resolved for the current public surfaces covered by this entry. Historical entries remain unchanged so the error and its correction are both inspectable. Any newly discovered surface repeating the superseded path must be corrected and appended here.</p>
     </div>
   </div>
 

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Federation Intel Report — briefings and analysis from the $GFOF research division. Solana DeFi, market structure, borrower-protective design.">
 <link rel="canonical" href="https://galacticfederation.co/intel">
 <meta property="og:type" content="website">
@@ -313,12 +314,12 @@ p{font-family:var(--font-read); letter-spacing:0; font-size:15.5px; line-height:
     <div class="field"><label>Market Cap</label><input id="f-mc" value="$21K"></div>
     <div class="field"><label>Holders</label><input id="f-holders" value="41+"></div>
     <div class="field"><label>24h Volume</label><input id="f-vol" value="$156"></div>
-    <div class="field"><label>Bond Progress %</label><input id="f-pct" type="number" min="0" max="100" value="28"></div>
-    <div class="field"><label>Remaining to Bond</label><input id="f-rem" value="$52K"></div>
-    <div class="field"><label>Next Milestone</label><input id="f-mile" value="Raydium Listing"></div>
-    <div class="field"><label>Status</label><input id="f-status" value="PRE-BOND · LIVE"></div>
+    <div class="field"><label>Live Quote Reserve</label><input id="f-pct" value="UNAVAILABLE" disabled></div>
+    <div class="field"><label>Configured Threshold</label><input id="f-rem" value="66,040.882531 USDC" disabled></div>
+    <div class="field"><label>Next Milestone</label><input id="f-mile" value="Meteora DAMM v2 migration" disabled></div>
+    <div class="field"><label>Status</label><input id="f-status" value="METEORA DBC · LIVE" disabled></div>
     <div class="field field-full"><label>Admiral Voss Decree</label>
-      <textarea id="f-decree">28% bonded. Founding Member NFT badges are now live — every wallet holding before $73K is eligible. Dev tokens locked on-chain. The federation is not waiting. Those who arrive before Raydium will be remembered as the founding generation.</textarea>
+      <textarea id="f-decree">$GFOF trades on Meteora DBC. Migration is quote-reserve based, not market-cap based, with Meteora DAMM v2 as the configured destination. No staking, NFT, rewards, or binding-governance activation is implied.</textarea>
     </div>
   </div>
   <button class="btn-update" onclick="update()">UPDATE INTEL REPORT ↗</button>
@@ -356,27 +357,27 @@ p{font-family:var(--font-read); letter-spacing:0; font-size:15.5px; line-height:
 
   <div class="bond-wrap z1">
     <div class="bond-hdr">
-      <span class="bond-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> BOND MISSION — RAYDIUM TARGET $73K</span>
-      <span class="bond-pct-disp" id="d-bpct">28%</span>
+      <span class="bond-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> METEORA DBC MIGRATION — QUOTE RESERVE TRIGGER</span>
+      <span class="bond-pct-disp" id="d-bpct">UNAVAILABLE</span>
     </div>
-    <div class="bond-track"><div class="bond-fill" id="d-bfill" style="width:28%"></div></div>
-    <div class="bond-marks"><span>$0</span><span>$18K</span><span>$36K</span><span>$55K</span><span>$73K <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></span></div>
+    <div class="bond-track"><div class="bond-fill" id="d-bfill" style="width:0%"></div></div>
+    <div class="bond-marks"><span>DBC</span><span>USDC QUOTE RESERVE</span><span>THRESHOLD</span><span>MIGRATION</span><span>DAMM V2</span></div>
     <div class="bond-row">
-      <div class="bstat"><div class="bsval" id="d-bmc">$21K</div><div class="bslbl">Current MC</div></div>
-      <div class="bstat"><div class="bsval" id="d-bpct2">28%</div><div class="bslbl">Progress</div></div>
-      <div class="bstat"><div class="bsval" id="d-brem">$52K</div><div class="bslbl">To Raydium</div></div>
+      <div class="bstat"><div class="bsval" id="d-bmc">UNAVAILABLE</div><div class="bslbl">Live Quote Reserve</div></div>
+      <div class="bstat"><div class="bsval" id="d-bpct2">NOT CALCULATED</div><div class="bslbl">Progress</div></div>
+      <div class="bstat"><div class="bsval" id="d-brem">66,040.882531 USDC</div><div class="bslbl">Configured Threshold</div></div>
     </div>
   </div>
 
   <div class="decree-wrap z1">
     <div class="dec-lbl">// Admiral Voss — Weekly Decree</div>
-    <div class="dec-txt" id="d-decree">28% bonded. Founding Member NFT badges are now live — every wallet holding before $73K is eligible. Dev tokens locked on-chain. The federation is not waiting. Those who arrive before Raydium will be remembered as the founding generation.</div>
+    <div class="dec-txt" id="d-decree">$GFOF trades on Meteora DBC. Migration is quote-reserve based, not market-cap based, with Meteora DAMM v2 as the configured destination. No staking, NFT, rewards, or binding-governance activation is implied.</div>
     <div class="dec-sig">— ADMIRAL ZORAN VOSS · GALACTIC FEDERATION OF FINANCE</div>
   </div>
 
   <div class="next-grid z1">
-    <div class="nbox"><span class="nicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 12c2-5 5-8 11-9 .5 5-3 9-8 11l-3-2z"/><circle cx="15" cy="9" r="1.4"/></svg></span><div><div class="nlbl">Next Milestone</div><div class="nval" id="d-mile">Raydium Listing</div></div></div>
-    <div class="nbox"><span class="nicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg></span><div><div class="nlbl">Status</div><div class="nval" id="d-status">PRE-BOND · LIVE</div></div></div>
+    <div class="nbox"><span class="nicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 12c2-5 5-8 11-9 .5 5-3 9-8 11l-3-2z"/><circle cx="15" cy="9" r="1.4"/></svg></span><div><div class="nlbl">Next Milestone</div><div class="nval" id="d-mile">Meteora DAMM v2 migration</div></div></div>
+    <div class="nbox"><span class="nicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg></span><div><div class="nlbl">Status</div><div class="nval" id="d-status">METEORA DBC · LIVE</div></div></div>
   </div>
 
   <div class="card-footer z1">
@@ -418,15 +419,15 @@ function update(){
   var mc=document.getElementById('f-mc').value||'—';
   var holders=document.getElementById('f-holders').value||'—';
   var vol=document.getElementById('f-vol').value||'—';
-  var pct=Math.min(100,Math.max(0,parseInt(document.getElementById('f-pct').value)||0));
+  var pct=0;
   var rem=document.getElementById('f-rem').value||'—';
   var mile=document.getElementById('f-mile').value||'—';
   var status=document.getElementById('f-status').value||'—';
   var decree=document.getElementById('f-decree').value||'—';
   s('d-week','WEEK #'+week); s('d-date',date);
   s('d-price',price); s('d-mc',mc); s('d-holders',holders); s('d-vol',vol);
-  s('d-bpct',pct+'%'); s('d-bpct2',pct+'%');
-  s('d-bmc',mc); s('d-brem',rem);
+  s('d-bpct','UNAVAILABLE'); s('d-bpct2','NOT CALCULATED');
+  s('d-bmc','UNAVAILABLE'); s('d-brem',rem);
   s('d-decree',decree); s('d-mile',mile); s('d-status',status);
   document.getElementById('d-bfill').style.width=pct+'%';
 }
