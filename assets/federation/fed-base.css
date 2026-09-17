@@ -12,7 +12,7 @@
 * { margin: 0; padding: 0; }
 
 /* ── Document defaults ─────────────────────────────────────────────────── */
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
 
 body.fed-body-root {
   background: var(--surface-space);
@@ -22,6 +22,7 @@ body.fed-body-root {
   line-height: var(--line-body);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* ── Typography role utilities ─────────────────────────────────────────── */

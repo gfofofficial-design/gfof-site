@@ -69,7 +69,7 @@
   "@type": "FinancialProduct",
   "name": "$GFOF Token",
   "alternateName": "GFOF",
-  "description": "$GFOF is the native SPL token of the Galactic Federation of Finance, a research-first DeFi project on Solana. 13% of total supply locked across four active Streamflow contracts with public on-chain verification. The first matured allocation was re-locked through August 18, 2028. Community-governed via Realms DAO post-bond.",
+  "description": "$GFOF is the native SPL token of the Galactic Federation of Finance, a research-first DeFi project on Solana. 13% of total supply is locked across four active Streamflow contracts with public on-chain verification. The first matured allocation was re-locked through August 18, 2028. The Realms deployment is advisory; no binding authority transfer is committed.",
   "category": "Cryptocurrency",
   "url": "https://galacticfederation.co",
   "provider": {
@@ -1692,14 +1692,14 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
 <canvas id="bg-canvas"></canvas>
 <div id="scroll-progress"></div>
 
-<!-- ══ BOND BAR ══ -->
+<!-- ══ MIGRATION STATUS BAR ══ -->
 <div id="bond-bar">
-  <span class="bond-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> BOND MISSION</span>
+  <span class="bond-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> METEORA DBC</span>
   <div id="bond-track"><div id="bond-fill"></div></div>
-  <span class="bond-frac"><b id="bb-mc"><span class="skel gold w-sm" style="height:0.85em" aria-label="Loading market cap"></span></b> / $73K</span>
-  <span id="bond-pct-badge"><span class="skel w-sm" style="height:0.8em" aria-label="Loading bond progress"></span></span>
-  <span class="bond-raydium">→ unlock <b>RAYDIUM</b></span>
-  <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="bond-cta">BUY $GFOF</a>
+  <span class="bond-frac"><b id="bb-mc">QUOTE RESERVE</b> / 66,040.882531 USDC</span>
+  <span id="bond-pct-badge">LIVE VALUE UNAVAILABLE</span>
+  <span class="bond-raydium">→ destination <b>DAMM V2</b></span>
+  <a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" class="bond-cta">VERIFY POOL</a>
 </div>
 
 <!-- ══ TICKER ══ -->
@@ -1891,11 +1891,11 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
       </a>
     </div>
 
-    <!-- Structural revenue loop preview — links to corrections #011 -->
+    <!-- Revenue-routing status — prior venue-specific design is on hold -->
     <div style="margin-top:18px;padding:14px 18px;border:1px solid rgba(240,192,64,0.18);background:rgba(240,192,64,0.03);font-family:var(--mono);font-size:11.5px;color:var(--text-dim);letter-spacing:0.05em;line-height:1.65;text-align:center">
-      <span style="color:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> STRUCTURAL REVENUE LOOP &mdash;</span>
-      When paid tiers operate: Dossier net revenue &rarr; $GFOF/SOL Raydium LP, quarterly, on-chain. <strong style="color:var(--text)">25% &rarr; 50%</strong> staged.
-      Full commitment: <a href="/corrections#c011" style="color:var(--cyan);text-decoration:underline">corrections #011 &nearr;</a>
+      <span style="color:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> ROUTING STATUS &mdash;</span>
+      Paid Dossier tiers remain closed. The prior Raydium-specific routing design is on hold pending a corrected venue, updated specification, and recorded authorization.
+      See <a href="/corrections#c035" style="color:var(--cyan);text-decoration:underline">correction #035 &nearr;</a>
     </div>
 
   </div>
@@ -1935,12 +1935,12 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
 <div class="divider-cyan"></div>
 <div class="sec-sep"><div class="sec-sep-line"></div><span class="sec-sep-icon">◆</span><div class="sec-sep-line r"></div></div>
 
-<!-- ══ BOND TRACKER ══ -->
+<!-- ══ DBC MIGRATION STATUS ══ -->
 <section id="bond-tracker" class="bond-section">
   <div class="bond-inner">
-    <div class="bond-mission-label reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> MISSION: REACH THE BOND</div>
-    <h2 class="bond-headline reveal delay-1">$73,000 Triggers Raydium Migration</h2>
-    <p class="bond-desc">When we hit the bond target, $GFOF migrates to Raydium — unlocking deep liquidity, front-page discovery on Moonshot, and binding DAO governance — advisory voting is already live. Every buy pushes us closer.</p>
+    <div class="bond-mission-label reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> METEORA DBC MIGRATION STATUS</div>
+    <h2 class="bond-headline reveal delay-1">Quote Reserve, Not Market Cap</h2>
+    <p class="bond-desc">$GFOF trades through a Meteora Dynamic Bonding Curve. Migration is controlled by the pool&rsquo;s configured USDC quote-reserve threshold, not FDV or market capitalization. The configured destination is Meteora DAMM v2. Migration does not activate staking, NFT utility, rewards, or binding governance.</p>
     <!-- MILESTONE JOURNEY VISUAL -->
     <div style="position:relative;max-width:620px;margin:20px auto 28px;padding:0 10px;">
       <!-- The journey line -->
@@ -1951,50 +1951,50 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;z-index:2;">
         <div style="text-align:center;">
           <div style="width:54px;height:54px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px;background:rgba(61,255,160,0.12);border:2px solid var(--green);box-shadow:0 0 18px rgba(61,255,160,0.4);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 12c2-5 5-8 11-9 .5 5-3 9-8 11l-3-2z"/><circle cx="15" cy="9" r="1.4"/></svg></div>
-          <div style="font-family:var(--orb);font-size:9px;color:var(--green);letter-spacing:1.5px;margin-bottom:3px;text-shadow:0 0 8px var(--green)">LAUNCH</div>
-          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">$0</div>
+          <div style="font-family:var(--orb);font-size:9px;color:var(--green);letter-spacing:1.5px;margin-bottom:3px;text-shadow:0 0 8px var(--green)">DBC</div>
+          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">LIVE</div>
         </div>
         <div style="text-align:center;">
           <div style="width:54px;height:54px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(240,192,64,0.08);border:2px solid rgba(240,192,64,0.5);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);" id="station-growth"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
-          <div style="font-family:var(--orb);font-size:9px;color:rgba(240,192,64,0.7);letter-spacing:1.5px;margin-bottom:3px">GROWTH</div>
-          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">$18K</div>
+          <div style="font-family:var(--orb);font-size:9px;color:rgba(240,192,64,0.7);letter-spacing:1.5px;margin-bottom:3px">RESERVE</div>
+          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">USDC</div>
         </div>
         <div style="text-align:center;">
           <div style="width:54px;height:54px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.15);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);" id="station-surge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 12a3 3 0 0 1 3-3 5 5 0 0 0-8 3 7 7 0 0 0 11 4"/></svg></div>
-          <div style="font-family:var(--orb);font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;margin-bottom:3px">SURGE</div>
-          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">$36K</div>
+          <div style="font-family:var(--orb);font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;margin-bottom:3px">THRESHOLD</div>
+          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">66,040.882531</div>
         </div>
         <div style="text-align:center;">
           <div style="width:54px;height:54px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.15);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);" id="station-apex"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z" fill="currentColor" stroke="none"/></svg></div>
-          <div style="font-family:var(--orb);font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;margin-bottom:3px">APEX</div>
-          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">$55K</div>
+          <div style="font-family:var(--orb);font-size:9px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;margin-bottom:3px">MIGRATION</div>
+          <div style="font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:1px">AUTOMATIC</div>
         </div>
         <div style="text-align:center;">
           <div style="width:58px;height:58px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(64,192,255,0.08);border:2px solid rgba(64,192,255,0.4);box-shadow:0 0 16px rgba(64,192,255,0.3);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);animation:target-pulse 2.5s ease-in-out infinite;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div>
-          <div style="font-family:var(--orb);font-size:10px;color:var(--cyan);letter-spacing:1.5px;margin-bottom:3px;font-weight:700;text-shadow:0 0 10px var(--cyan)">RAYDIUM</div>
-          <div style="font-family:var(--mono);font-size:8px;color:var(--gold);letter-spacing:1px;font-weight:700">$73K</div>
+          <div style="font-family:var(--orb);font-size:10px;color:var(--cyan);letter-spacing:1.5px;margin-bottom:3px;font-weight:700;text-shadow:0 0 10px var(--cyan)">DAMM V2</div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--gold);letter-spacing:1px;font-weight:700">DESTINATION</div>
         </div>
       </div>
     </div>
 
     
     <div class="bond-track-large"><div id="bond-fill-large"></div></div>
-    <div class="bond-markers"><span>$0</span><span>$18K</span><span>$36K</span><span>$55K</span><span><b>$73K <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></b></span></div>
+    <div class="bond-markers"><span>DBC</span><span>QUOTE RESERVE</span><span>THRESHOLD</span><span>MIGRATION</span><span><b>DAMM V2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></b></span></div>
     <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:20px;text-align:center">
-      Live data · updates every 30s · <span id="bond-last-update">fetching...</span>
+      Migration status fails closed when canonical reserve data is unavailable · <span id="bond-last-update">market cap is never used</span>
     </div>
     <div class="bond-stats">
-      <div class="bond-stat"><div class="bond-stat-val" id="bond-current-mc"><span class="skel gold w-md" aria-label="Loading current market cap"></span></div><div class="bond-stat-lbl">Current MC</div></div>
-      <div class="bond-stat"><div class="bond-stat-val" id="bond-pct-large">20%</div><div class="bond-stat-lbl">Progress</div></div>
-      <div class="bond-stat"><div class="bond-stat-val" id="bond-remaining"><span class="skel gold w-md" aria-label="Loading remaining"></span></div><div class="bond-stat-lbl">Remaining</div></div>
+      <div class="bond-stat"><div class="bond-stat-val" id="bond-current-mc">UNAVAILABLE</div><div class="bond-stat-lbl">Live Quote Reserve</div></div>
+      <div class="bond-stat"><div class="bond-stat-val" id="bond-pct-large">NOT CALCULATED</div><div class="bond-stat-lbl">Migration Progress</div></div>
+      <div class="bond-stat"><div class="bond-stat-val" id="bond-remaining">66,040.882531 USDC</div><div class="bond-stat-lbl">Configured Threshold</div></div>
     </div>
     <div class="bond-unlock-grid">
-      <div class="bond-unlock-item"><span class="bond-unlock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 12c2-5 5-8 11-9 .5 5-3 9-8 11l-3-2z"/><circle cx="15" cy="9" r="1.4"/></svg></span>Raydium migration — GFOF/SOL pair goes live</div>
-      <div class="bond-unlock-item"><span class="bond-unlock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 16v-4M12 16V9M16 16v-6"/></svg></span>Moonshot front page — mass discovery begins</div>
-      <div class="bond-unlock-item"><span class="bond-unlock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></span>Deep liquidity unlocked for the federation</div>
-      <div class="bond-unlock-item"><span class="bond-unlock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg></span>Binding governance activated — the DAO gains treasury authority</div>
+      <div class="bond-unlock-item"><span class="bond-unlock-icon">◆</span>Launch venue verified: Meteora Dynamic Bonding Curve</div>
+      <div class="bond-unlock-item"><span class="bond-unlock-icon">◆</span>Trigger verified: configured USDC quote-reserve threshold</div>
+      <div class="bond-unlock-item"><span class="bond-unlock-icon">◆</span>Destination verified: Meteora DAMM v2</div>
+      <div class="bond-unlock-item"><span class="bond-unlock-icon">◆</span>Creator migration liquidity: 100% permanently locked</div>
     </div>
-    <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary" style="display:inline-block">JOIN THE BOND PUSH ↗</a>
+    <a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" class="btn-primary" style="display:inline-block">VERIFY THE LIVE POOL ↗</a>
   </div>
 </section>
 
@@ -2129,7 +2129,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
         <div class="phase-num">Phase 01 // Now</div><div class="phase-title">Launch & Foundation</div>
         <div class="phase-desc">Token live on Solana. Community building. Website live.</div>
         <div class="phase-items">
-          <div class="phase-item">Token live on Moonshot</div><div class="phase-item">galacticfederation.co launched</div>
+          <div class="phase-item">Token live on Meteora DBC</div><div class="phase-item">galacticfederation.co launched</div>
           <div class="phase-item">Mobile app + Missions live</div><div class="phase-item">Buy bot operational</div>
           <div class="phase-item">CMC + CoinGecko submitted</div>
           <div class="phase-item">Advisory DAO live on Realms — holders vote now</div>
@@ -2139,9 +2139,9 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
         <div class="phase-num">Phase 02 // Coming</div><div class="phase-title">Community Growth</div>
         <div class="phase-desc">Federation expansion. Governance framework. Alliance partnerships.</div>
         <div class="phase-items">
-          <div class="phase-item">Bond at $73K — Raydium migration</div><div class="phase-item">Binding governance — treasury authority migrates to the DAO</div>
-          <div class="phase-item">Staking design spec published for public comment</div>
-          <div class="phase-item">Alliance partnerships</div><div class="phase-item">Founding Member NFT badges</div>
+          <div class="phase-item">DBC migration at the configured USDC quote threshold — destination DAMM v2</div><div class="phase-item">Governance remains advisory unless separately specified and authorized</div>
+          <div class="phase-item">Any staking proposal requires a new public specification and authorization</div>
+          <div class="phase-item">Alliance partnerships</div><div class="phase-item">No NFT utility is committed</div>
           <div class="phase-item">Ambassador program expansion</div>
         </div>
       </div>
@@ -2354,11 +2354,11 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
         <div>
           <div style="font-family:var(--orb);font-size:11px;color:var(--cyan);letter-spacing:2px;margin-bottom:8px;">MINT &amp; FREEZE AUTHORITIES — EXPLAINED</div>
           <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.75;">
-            $GFOF launched on <strong style="color:#fff">Moonshot</strong>. Per the launchpad's standard design, mint and freeze authorities are held by Moonshot's program during the pre-bond phase — this is the same for every token launched there.
+            $GFOF&rsquo;s current trading venue is a <strong style="color:#fff">Meteora Dynamic Bonding Curve</strong>. The prior public description of a Moonshot-to-Raydium path was incorrect and is superseded by <a href="/corrections#c035" style="color:var(--cyan)">correction #035</a>.
             <br><br>
-            At the <strong style="color:var(--gold)">$73K bond milestone</strong>, the token migrates to Raydium and Moonshot revokes both authorities automatically as part of the migration.
+            Migration is based on the configured <strong style="color:var(--gold)">USDC quote-reserve threshold</strong>, not market cap. The destination is Meteora DAMM v2. Mint and freeze authority status should be verified directly against the canonical token address, not inferred from an obsolete launchpad narrative.
             <br><br>
-            <strong style="color:var(--green)">What IS under our control right now:</strong> 13% of total supply locked on Streamflow across 4 active contracts — fully verifiable on-chain. The first matured 40M allocation was re-locked for two more years, through August 18, 2028, with both contracts preserved publicly. That's the trust guarantee we can give you today. The rest happens at bond.
+            <strong style="color:var(--green)">What is verified now:</strong> 13% of total supply is locked on Streamflow across four active contracts. The first matured 40M allocation was re-locked through August 18, 2028, with both contracts preserved publicly. Migration does not activate staking, NFT utility, rewards, or binding governance.
           </div>
         </div>
       </div>
@@ -2375,7 +2375,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <h2 class="section-title">Support the Mission.</h2>
     <p class="section-sub">Three things that help the federation grow without paid promotion. No point values committed, no rewards promised. If a rewards program is ever formally defined, it will appear on <a href="/corrections" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">/corrections</a> before it exists.</p>
     <div class="points-grid">
-      <div class="holo-card points-card" onclick="window.open('https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon','_blank')"><div class="points-val" style="font-size:26px">01</div><div class="points-action">BUY $GFOF</div><div class="points-desc">Pick up $GFOF on DexScreener. Every buy pushes us toward the $73K bond and the Raydium migration.</div></div>
+      <div class="holo-card points-card" onclick="window.open('https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE','_blank')"><div class="points-val" style="font-size:26px">01</div><div class="points-action">VERIFY $GFOF</div><div class="points-desc">Inspect the live Meteora DBC pool and verify the canonical token address. No purchase is required to participate in the public research.</div></div>
       <div class="holo-card points-card" onclick="window.open('https://t.me/GFOF_SOL','_blank')"><div class="points-val" style="font-size:26px">02</div><div class="points-action">JOIN TELEGRAM</div><div class="points-desc">The Federation's command center. Daily briefings, live discussion, and the first place news drops.</div></div>
       <div class="holo-card points-card" onclick="window.open('https://x.com/GFOF_Offcial','_blank')"><div class="points-val" style="font-size:26px">03</div><div class="points-action">POST ON X</div><div class="points-desc">Share the research — the liquidation spec, the corrections log, the treasury page. Tag @GFOF_Offcial.</div></div>
     </div>
@@ -2413,7 +2413,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <div class="community-grid">
       <div class="holo-card comm-card"><div class="comm-platform">X (Twitter)</div><div class="comm-handle">@GFOF_Offcial</div><div class="comm-note">Daily updates, price alerts, Admiral Voss transmissions, and community content. Follow and repost to grow the federation.</div><a href="https://x.com/GFOF_Offcial" target="_blank" class="btn-ghost" style="font-size:10px;padding:8px 18px;display:inline-block">FOLLOW ON X ↗</a></div>
       <div class="holo-card comm-card"><div class="comm-platform">Telegram</div><div class="comm-handle">t.me/GFOF_SOL</div><div class="comm-note">The federation command center. Live chat, buy alerts, governance discussions, and daily mission briefings from the Admiral.</div><a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary" style="font-size:10px;padding:8px 18px;display:inline-block">JOIN TELEGRAM ↗</a></div>
-      <div class="holo-card comm-card"><div class="comm-platform">Buy $GFOF</div><div class="comm-handle">DexScreener // Solana</div><div class="comm-note">Pick up $GFOF on DexScreener. Each buy pushes the federation toward the $73K bond and the Raydium migration.</div><a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary" style="font-size:10px;padding:8px 18px;display:inline-block">BUY $GFOF ↗</a></div>
+      <div class="holo-card comm-card"><div class="comm-platform">Verify $GFOF</div><div class="comm-handle">DexScreener // Meteora DBC</div><div class="comm-note">Inspect the live pool, venue, market data, and canonical token address independently.</div><a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" class="btn-primary" style="font-size:10px;padding:8px 18px;display:inline-block">VERIFY LIVE POOL ↗</a></div>
     </div>
 
     <!-- PINNED TWEET EMBED -->
@@ -2485,13 +2485,13 @@ NFA. DYOR. $SOL</div>
       <div id="chat-messages">
         <div class="chat-msg">
           <div class="chat-avatar bot" style="background:transparent;clip-path:none;overflow:hidden;border-radius:4px;border:1px solid rgba(240,192,64,0.3)"><img src="voss-avatar.png" alt="Admiral Zoran Voss" style="width:100%;height:100%;object-fit:cover;object-position:center top"></div>
-          <div class="chat-bubble bot">I have commanded operations across a thousand failing financial systems. Each one fell for the same reason — they were built to extract, not to create.<br><br>$GFOF is different. The federation was architected on the lessons of every system that came before it. We are at <strong style="color:var(--gold)" id="chat-bond-pct">—% of the bond</strong>. Raydium migration triggers at <strong style="color:var(--green)">$73,000 market cap</strong>.<br><br>What would you like to know, soldier? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg></div>
+          <div class="chat-bubble bot">I have commanded operations across a thousand failing financial systems. Each one fell for the same reason — they were built to extract, not to create.<br><br>$GFOF is different. Its live venue is a <strong style="color:var(--gold)">Meteora Dynamic Bonding Curve</strong>. Migration is controlled by a configured USDC quote-reserve threshold, not market cap, and the destination is <strong style="color:var(--green)">Meteora DAMM v2</strong>.<br><br>What would you like to verify, soldier? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg></div>
         </div>
       </div>
 
       <div class="chat-suggestions" id="chat-sugg">
         <button class="chat-sugg" onclick="askBot('What is your mission, Admiral?')">THE MISSION</button>
-        <button class="chat-sugg" onclick="askBot('What happens at $73K?')">THE BOND</button>
+        <button class="chat-sugg" onclick="askBot('How does the Meteora DBC migration work?')">DBC MIGRATION</button>
         <button class="chat-sugg" onclick="askBot('Tell me about the liquidation spec.')">LIQUIDATION SPEC</button>
         <button class="chat-sugg" onclick="askBot('How can I verify the on-chain transparency?')">TRANSPARENCY</button>
       </div>
@@ -2513,7 +2513,7 @@ NFA. DYOR. $SOL</div>
   <div class="container">
     <div class="section-tag reveal">$GFOF Staking</div>
     <h2 class="section-title reveal delay-1">Spec before code.</h2>
-    <p class="section-sub">Staking is on the roadmap for post-bond activation. The Federation will publish a versioned staking specification — open for public comment — before any contract is written. Same pattern as the <a href="/liquidation-spec" style="color:#A78BFA;text-decoration:underline;text-underline-offset:2px">liquidation spec</a>: design first, comment period, then code.</p>
+    <p class="section-sub">No staking system, schedule, APY, or activation trigger is authorized. Any future proposal would require a new versioned specification, public review, risk analysis, and an explicit recorded authorization before code or launch claims.</p>
 
     <div style="margin-top:18px;background:rgba(240,192,64,0.05);border:1px solid rgba(240,192,64,0.28);padding:14px 18px;font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:1.5px;line-height:1.7;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> NO APY · NO MULTIPLIERS · NO RATES COMMITTED — The staking specification has not been written. No tier structure, lock period, reward formula, or NFT-boost value has been decided. Anyone presenting specific numbers as "what GFOF staking will pay" is not speaking for the Federation.
@@ -2546,7 +2546,7 @@ NFA. DYOR. $SOL</div>
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)"></div>
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:14px">// WHY NO NUMBERS YET</div>
       <div style="font-family:var(--raj);font-size:14px;color:var(--text);line-height:1.7;margin-bottom:14px">
-        Staking parameters depend on variables the Federation does not yet have certainty about: post-bond treasury size, circulating supply dynamics, holder concentration, governance participation rates, and the economics of the lending product the spec exists to support. Publishing speculative APYs before those variables are known would be marketing, not design.
+        Staking parameters depend on variables the Federation does not yet have certainty about: treasury resources, circulating-supply dynamics, holder concentration, governance participation, regulatory treatment, and sustainable funding. Publishing speculative APYs before those variables are known would be marketing, not design.
       </div>
       <div style="font-family:var(--raj);font-size:14px;color:var(--text-dim);line-height:1.7">
         The spec will be published when the inputs justify it. Until then, no tier numbers, no calculator, no rate. The corrections log records every commitment publicly — see <a href="/corrections" style="color:var(--cyan)">galacticfederation.co/corrections</a>.
@@ -2557,7 +2557,7 @@ NFA. DYOR. $SOL</div>
     <div style="margin-top:24px;background:rgba(2,6,18,0.9);border:1px solid rgba(61,255,160,0.15);border-radius:8px;padding:22px 24px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))">
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--green);margin-bottom:10px">// SPEC TIMELINE</div>
       <div style="font-family:var(--raj);font-size:14px;color:var(--muted);line-height:1.8">
-        Spec drafting begins post-bond. Public-comment window will be announced when the draft is ready. Launch timing is not committed and will not be committed until the spec is final. Join Telegram for draft-spec notifications when they happen.
+        No drafting date or launch timing is committed. If a draft is authorized, its public-comment window will be announced before implementation. Migration alone does not authorize staking.
       </div>
       <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
         <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary" style="font-size:11px;padding:9px 20px;display:inline-block">SPEC NOTIFICATIONS ↗</a>
@@ -2575,7 +2575,7 @@ NFA. DYOR. $SOL</div>
   <div class="container">
     <div class="section-tag reveal">Founding Member NFTs</div>
     <h2 class="section-title reveal delay-1">Prove You Were Here First.</h2>
-    <p class="section-sub">When $GFOF reaches the $73K bond, a snapshot is taken and every wallet holding any amount of $GFOF at that moment can claim a free Founding Member NFT badge. It is soulbound (non-transferable) and carries no price, yield, governance weight, or utility — on purpose. It is a permanent on-chain record that you were here before the bond, and nothing more.</p>
+    <p class="section-sub">No Founding Member NFT snapshot, claim, or launch is currently authorized. If a commemorative badge is proposed later, it will require a separate public specification and recorded approval. No NFT utility, yield, governance weight, staking multiplier, eligibility advantage, or economic benefit is promised.</p>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:36px">
 
@@ -2658,7 +2658,7 @@ NFA. DYOR. $SOL</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px">
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">01 →</span>Hold any amount of $GFOF at the bond snapshot ($73K MC)</div>
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">02 →</span>Hold in your wallet at the snapshot date</div>
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">03 →</span>Claim your free Founding Member NFT at bond milestone</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">03 →</span>No claim process exists; verify any future authorization in the corrections log</div>
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">04 →</span>Hold forever — badges are non-transferable, soulbound</div>
       </div>
       <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px">Eligibility window closes at the $73K bond — a mechanical trigger, not a marketing one. Details of the snapshot and claim process will be posted on <a href="/corrections" style="color:var(--cyan)">/corrections</a> before the bond is reached.</div>
@@ -2676,7 +2676,7 @@ NFA. DYOR. $SOL</div>
   <div class="container">
     <div class="section-tag reveal">Federation Governance</div>
     <h2 class="section-title reveal delay-1">Your Vote. Your Protocol.</h2>
-    <p class="section-sub">Governance is live. The federation's DAO is deployed on-chain via Solana's SPL Governance program, hosted on Realms. At launch it is <strong>advisory</strong> — holders vote on direction now, while treasury and protocol authority migrate to the DAO deliberately, post-bond. <a href="https://app.realms.today/dao/6tFtnnjDu97nmJeiegZDqhDASdfKpToiNWcuL8t5UsGp" target="_blank" style="color:var(--cyan)">View the realm ↗</a></p>
+    <p class="section-sub">The federation&rsquo;s Realms deployment is live at <strong>advisory scope only</strong>. Votes can document community views, but they do not control treasury or protocol authority. No automatic authority transfer is tied to migration. Any future change requires a new specification, security review, and recorded authorization. <a href="https://app.realms.today/dao/6tFtnnjDu97nmJeiegZDqhDASdfKpToiNWcuL8t5UsGp" target="_blank" rel="noopener" style="color:var(--cyan)">View the realm ↗</a></p>
 
     <!-- Platform callout -->
     <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:32px;margin-bottom:28px">
@@ -2723,7 +2723,7 @@ NFA. DYOR. $SOL</div>
     <!-- What you vote on -->
     <div style="background:rgba(2,6,18,0.9);border:1px solid rgba(61,255,160,0.15);border-radius:8px;padding:22px 24px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))">
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--green);margin-bottom:10px">// WHAT THE FEDERATION VOTES ON — PROPOSED SCOPE</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;line-height:1.6">The DAO is live at <strong>advisory scope</strong>: holders vote on direction now; authority over the items below migrates to the DAO deliberately, post-bond. A single-member council (disclosed) holds a 60% veto during the bootstrap phase, with a published sunset. The 13% dev allocation is escrowed and structurally cannot vote. Deployment and parameters are documented on <a href="/corrections#c017" style="color:var(--cyan)">/corrections #017</a> and in the <a href="/governance-spec" style="color:var(--cyan)">governance spec v0.2</a>.</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;line-height:1.6">The DAO is live at <strong>advisory scope</strong>: holders can record preferences, but no treasury or protocol authority has migrated and no migration event changes that boundary. The 13% developer allocation is escrowed and structurally cannot vote. Deployment and parameters are documented on <a href="/corrections#c017" style="color:var(--cyan)">/corrections #017</a> and in the <a href="/governance-spec" style="color:var(--cyan)">governance spec v0.2</a>.</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px">
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px"><span style="color:var(--green)">◆</span>Treasury allocation — where funds go</div>
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px"><span style="color:var(--green)">◆</span>Staking parameters (if and when a staking spec ships)</div>
@@ -2815,21 +2815,21 @@ NFA. DYOR. $SOL</div>
 
 <script>
 var CA='2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
-var BOND_TARGET=73000;
+var MIGRATION_QUOTE_THRESHOLD=66040.882531;
 
 /* Show loading state immediately while API loads */
 (function(){
-  document.getElementById('bond-fill').style.width='20%';
-  document.getElementById('bond-fill-large').style.width='20%';
+  document.getElementById('bond-fill').style.width='0%';
+  document.getElementById('bond-fill-large').style.width='0%';
   var badge=document.getElementById('bond-pct-badge');
   var bbmc=document.getElementById('bb-mc');
-  if(badge){badge.innerHTML='<span class="skel w-sm" style="height:0.8em" aria-label="Loading bond progress"></span>';}
-  if(bbmc){bbmc.innerHTML='<span class="skel gold w-sm" style="height:0.85em" aria-label="Loading market cap"></span>';}
+  if(badge){badge.textContent='LIVE VALUE UNAVAILABLE';}
+  if(bbmc){bbmc.textContent='QUOTE RESERVE';}
   var bcm=document.getElementById('bond-current-mc');
-  if(bcm){bcm.innerHTML='<span class="skel gold w-md" aria-label="Loading current market cap"></span>';}
-  set('bond-pct-large','...');
+  if(bcm){bcm.textContent='UNAVAILABLE';}
+  set('bond-pct-large','NOT CALCULATED');
   var brm=document.getElementById('bond-remaining');
-  if(brm){brm.innerHTML='<span class="skel gold w-md" aria-label="Loading remaining"></span>';}
+  if(brm){brm.textContent='66,040.882531 USDC';}
 })();
 
 /* ── STARFIELD ── */
@@ -2960,51 +2960,6 @@ function animCount(id,to){
   })();
 }
 
-function updateBond(mc){
-  var pct=Math.min(100,Math.round((mc/BOND_TARGET)*100));
-  var rem=Math.max(0,BOND_TARGET-mc);
-  document.getElementById('bond-fill').style.width=pct+'%';
-  document.getElementById('bond-fill-large').style.width=pct+'%';
-  var badge=document.getElementById('bond-pct-badge');
-  var bbmc=document.getElementById('bb-mc');
-  if(badge){badge.style.animation='none';}
-  if(bbmc){bbmc.style.animation='none';}
-  set('bond-pct-badge',pct+'%');
-  /* Update chatbot greeting with live bond % */
-  var cbp=document.getElementById('chat-bond-pct');
-  if(cbp){cbp.textContent=pct+'% of the bond';}
-  /* Update journey fill visual */
-  var jf=document.getElementById('journey-fill');
-  if(jf){
-    // Convert bond pct to position along journey (0-100% track width)
-    var journeyPct=Math.min(100,Math.max(0,pct));
-    jf.style.width=journeyPct+'%';
-  }
-  /* Light up journey stations based on progress */
-  var stations=[
-    {id:'station-growth', threshold:24,  color:'240,192,64'},  // $18K / $73K ≈ 24%
-    {id:'station-surge',  threshold:49,  color:'64,192,255'},  // $36K / $73K ≈ 49%
-    {id:'station-apex',   threshold:75,  color:'167,139,250'}  // $55K / $73K ≈ 75%
-  ];
-  stations.forEach(function(s){
-    var el=document.getElementById(s.id);
-    if(!el) return;
-    if(pct>=s.threshold){
-      el.style.background='rgba('+s.color+',0.15)';
-      el.style.borderColor='rgba('+s.color+',0.7)';
-      el.style.boxShadow='0 0 16px rgba('+s.color+',0.4)';
-    }
-  });
-  set('bb-mc',fmtMC(mc));
-  set('bond-current-mc',fmtMC(mc));
-  set('bond-pct-large',pct+'%');
-  set('bond-remaining',fmtMC(rem));
-  /* Update timestamp */
-  var now=new Date();
-  var ts=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  set('bond-last-update','last updated '+ts);
-}
-
 function fetchDex(){
   /* Primary — DexScreener pair endpoint (full txn + price change data) */
   fetch('https://api.dexscreener.com/latest/dex/pairs/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE')
@@ -3029,7 +2984,6 @@ function fetchDex(){
           ratioEl.textContent=sells===0?buys+' buys / 0 sells 🟢':buys+':'+sells+' buy/sell';
           ratioEl.style.color=buys>sells?'var(--green)':'#f87171';
         }
-        if(mc>0) updateBond(mc);
       }
     })
     .catch(function(){
@@ -3046,7 +3000,6 @@ function fetchDex(){
             var ch=parseFloat((p.priceChange&&p.priceChange.h24)||0);
             var chEl=document.getElementById('stat-change');
             if(chEl){chEl.textContent=(ch>=0?'+':'')+ch.toFixed(2)+'%';chEl.style.color=ch>=0?'var(--green)':'#f87171';}
-            if(mc>0) updateBond(mc);
           }
         }).catch(function(){});
     });

@@ -2,27 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://galacticfederation.co/</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://galacticfederation.co/faq</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://galacticfederation.co/app</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://galacticfederation.co/intel</loc>
-    <lastmod>2026-04-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://galacticfederation.co/record</loc>
@@ -55,7 +49,7 @@
   </url>
   <url>
     <loc>https://galacticfederation.co/governance-spec</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -67,23 +61,25 @@
   </url>
   <url>
     <loc>https://galacticfederation.co/corrections</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://galacticfederation.co/access-spec</loc>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://galacticfederation.co/creator-fee-spec</loc>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://galacticfederation.co/roadmap</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

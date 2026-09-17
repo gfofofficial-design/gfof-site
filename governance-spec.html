@@ -343,7 +343,7 @@ p{font-size:16.5px; line-height:1.64;}
       <span><strong>Version:</strong> v0.2</span>
       <span><strong>Status:</strong> v0.2 · LIVE (ADVISORY)</span>
       <span><strong>Published:</strong> 2026-05-26</span>
-      <span><strong>Authority:</strong> ADVISORY LIVE · BINDING POST-BOND</span>
+      <span><strong>Authority:</strong> ADVISORY ONLY · NO BINDING AUTHORITY COMMITTED</span>
     </div>
   </header>
 
@@ -369,8 +369,8 @@ p{font-size:16.5px; line-height:1.64;}
   <h2 id="deployed"><span class="num">SECTION 00</span>Deployment status (v0.2)</h2>
   <p><strong>Governance is live.</strong> The $GFOF DAO is deployed on-chain via SPL Governance, hosted on Realms, gated to the $GFOF mint. Realm: <a href="https://app.realms.today/dao/6tFtnnjDu97nmJeiegZDqhDASdfKpToiNWcuL8t5UsGp" style="color:var(--cyan)">app.realms.today/dao/6tFtnnj&hellip;t5UsGp</a>.</p>
   <p><strong>Deployed parameters:</strong> 1% community approval quorum &middot; 3-day voting period &middot; 24-hour cool-off &middot; 1,000,000 $GFOF proposal threshold &middot; vote-tipping disabled.</p>
-  <p><strong>Scope at launch is advisory.</strong> Holders vote on direction; no treasury funds or site/repo/token authorities are routed through the DAO yet. Authority migrates in deliberately, one proposal at a time, post-bond.</p>
-  <p><strong>Council (disclosed):</strong> a single-member council (the founder wallet) holds a 60% veto quorum during the bootstrap phase &mdash; a safety valve against a malicious proposal, not a tool to pass things. It sunsets, by governance vote, once the project is post-bond and the holder base has materially broadened.</p>
+  <p><strong>Scope at launch and currently is advisory.</strong> Holders can record preferences; no treasury, repository, site, or token authority is routed through the DAO. Migration does not change that boundary. Any authority change requires a new specification, security review, and recorded authorization.</p>
+  <p><strong>Council (disclosed):</strong> a single-member council (the founder wallet) holds a 60% veto quorum during the bootstrap phase &mdash; a safety valve against a malicious proposal, not a tool to pass things. The earlier post-bond sunset expectation is not an active commitment. Any council or authority change requires a new specification, security review, and recorded authorization.</p>
   <p><strong>Changes from v0.1, reconciled openly:</strong> (1) the two-tier 51% / 66% approval structure is not expressible in a single SPL Governance config, so the DAO launched with one standard tier at 1% quorum; the constitutional-tier prohibitions remain binding via this spec and the corrections log until a second config is added. (2) Realms provisioned a 60% council veto not present in v0.1; retained as a disclosed bootstrap safety valve. (3) Deployment ran ahead of the post-bond sequence stated in <a href="/corrections#c016" style="color:var(--cyan)">corrections #016</a> &mdash; the DAO launched pre-bond in advisory mode; this deviation is logged at <a href="/corrections#c017" style="color:var(--cyan)">corrections #017</a>.</p>
   <p>The structurally-locked 13% dev allocation cannot vote: it is held in Streamflow escrow, not a wallet, so it cannot be deposited into the realm. Exclusion is enforced by architecture, not promise.</p>
   <div class="callout amber">
@@ -383,7 +383,7 @@ p{font-size:16.5px; line-height:1.64;}
   <p>Nothing in this document is a committed parameter. Per the Federation's standing discipline (<a href="/corrections#c003" style="color:var(--cyan)">corrections #003</a>), no governance number — proposal threshold, quorum, voting period, approval percentage — becomes a commitment until a specification defines it, the public has had the opportunity to comment, and the parameter is ratified. The figures below are <strong>proposed starting points</strong>, presented with their reasoning so that the reasoning can be challenged. They will change in response to comment. When they stabilize, a later version of this document will mark them as settled, and the first on-chain governance vote will ratify them.</p>
   <div class="callout amber">
     <div class="k">SEQUENCE</div>
-    <p>The Federation DAO does not deploy until after the $73K bond completes. This specification exists now so the design is settled in the open before any of it goes live — the same spec-before-code discipline applied to the lending mechanism at <a href="/liquidation-spec" style="color:var(--gold)">/liquidation-spec</a>.</p>
+  <p><strong>Historical sequence note:</strong> v0.1 stated that deployment would wait for a $73K bond. The advisory DAO later deployed early and correction #017 recorded that deviation. Correction #035 supersedes the $73K/Raydium launch-path premise. Current scope remains advisory.</p>
   </div>
 
   <h2 id="principles"><span class="num">SECTION 02</span>Design principles</h2>
@@ -420,7 +420,7 @@ p{font-size:16.5px; line-height:1.64;}
     <p>The alternative — letting locked tokens vote — is the more common DAO default, but the Federation's positioning argues against it. If the community comments otherwise during the review period, the decision is revisited.</p>
   </div>
   <h3>The Founding Member NFT does not confer voting weight</h3>
-  <p>The Founding Member NFT (snapshot at the migration block) is <strong>recognition, not governance power.</strong> It does not grant additional votes, voting multipliers, or proposal privileges. This was stated when the NFT was first committed and is reaffirmed here: the NFT is a permanent role marker for the bond-era community, nothing more. Governance weight comes from tokens held, full stop.</p>
+  <p>No Founding Member NFT snapshot, claim, or launch is currently authorized. If a commemorative badge is ever proposed, it will not gain governance power through this specification; a separate specification and recorded authorization would be required.</p>
 
   <h2 id="parameters"><span class="num">SECTION 05</span>Proposed parameters (v0.1 — for comment)</h2>
   <p>Every figure in this section is a <strong>proposed starting point.</strong> The reasoning is given so it can be argued with. None is committed.</p>
@@ -454,7 +454,7 @@ p{font-size:16.5px; line-height:1.64;}
   <p><strong>Governance cannot introduce paid promotion.</strong> <a href="/corrections#c007" style="color:var(--cyan)">Correction #007</a> — no paid promotion — is a foundational discipline, outside governance scope. A DAO vote cannot authorize paying for coverage, shilling, or any form of the paid promotion the project has committed against.</p>
   <p><strong>Governance cannot publish a quantum-security claim.</strong> <a href="/corrections#c012" style="color:var(--cyan)">Correction #012</a> — no quantum-security claims — is outside governance scope. The constraint stands regardless of vote.</p>
   <p><strong>Governance cannot commit numbers without a spec.</strong> <a href="/corrections#c003" style="color:var(--cyan)">Correction #003</a> applies to governance itself. A proposal cannot commit an APY, a multiplier, an allocation size, or any mechanism parameter that lacks a published specification. The proposal can <em>direct that a spec be written</em>; it cannot skip the spec.</p>
-  <p><strong>Governance cannot reintroduce mint or freeze authority.</strong> These are revoked at the Raydium migration and cannot be restored. Supply is fixed at 1 billion permanently.</p>
+  <p><strong>Governance cannot introduce, restore, or claim control over mint or freeze authority.</strong> Authority status must be verified directly against the canonical token address rather than inferred from the superseded Raydium narrative. Supply is fixed at 1 billion permanently.</p>
   <p>These constraints are not anti-democratic. They are the terms under which token holders acquired the token in the first place — the disciplines that defined the project. Governance distributes control over everything those disciplines leave open. It does not distribute the power to abandon the disciplines, because the disciplines are what the token represents.</p>
   <p>If the community ever genuinely wishes to change one of these constraints, the honest mechanism is not a governance vote — it is a publicly argued, corrections-logged proposal to amend the constitution itself, with the change documented permanently as a departure from the original terms. That path exists. It is deliberately heavier than a normal vote, and any use of it is itself a permanent corrections-log event.</p>
 

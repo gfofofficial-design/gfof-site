@@ -1,13 +1,13 @@
 # Galactic Federation of Finance (GFOF)
 
-> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. The project is currently pre-bond on the Moonshot launchpad, with 13% of total supply locked across four active Streamflow contracts. The first matured 40M allocation was re-locked through 2028-08-18, with both the active contract and expired predecessor preserved publicly. The site publishes design specifications for future protocol work before any smart contract code is written, maintains a permanent public corrections log, and documents every commitment it makes publicly.
+> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. It trades through a Meteora Dynamic Bonding Curve; migration is based on a configured USDC quote-reserve threshold, not market capitalization, with Meteora DAMM v2 as the configured destination. 13% of total supply is locked across four active Streamflow contracts. The first matured 40M allocation was re-locked through 2028-08-18, with both the active contract and expired predecessor preserved publicly. The site publishes design specifications before implementation, maintains a permanent public corrections log, and documents public commitments.
 
 The Federation's three stated pillars are transparency (on-chain, not rhetorical), research (publish the design before building the product), and innovation (build primitives that don't yet exist rather than fork what does). Admiral Zoran Voss is the communication persona used across publications; the legal and operational entity is the Galactic Federation of Finance.
 
 ## Design specifications
 
 - [Liquidation, Redesigned for the Borrower — Spec v0.2](https://galacticfederation.co/liquidation-spec): A public design specification for the liquidation mechanism in the forthcoming $GFOF lending protocol. Introduces grace-window warnings, partial-only liquidations capped below 100%, batched keeper rewards, and a catastrophic-threshold fallback. Section 7 extends the design to non-standard and price-fragmented collateral types. Status: draft, open for comment. Published 2026-04-20; v0.2 (adding Section 7) published 2026-04-21.
-- [Federation Governance Specification v0.1](https://galacticfederation.co/governance-spec): A public specification for the $GFOF DAO governance system, built on Realms / spl-governance. All parameters (proposal threshold, quorum, two-tier approval, voting periods, execution timelock) are proposed for public comment, not committed. Documents the exclusion of the 13% locked dev allocation from voting, an explicit list of what governance cannot do (corrections log, #007, #012, #003, locked tokens, and mint/freeze authority are permanently outside governance scope), and a no-permanent-council position. Status: draft, open for comment. DAO deploys post-bond. Published 2026-05-26.
+- [Federation Governance Specification v0.1](https://galacticfederation.co/governance-spec): A historical public specification for the $GFOF Realms deployment. Current scope is advisory only; no treasury, repository, site, or token authority is routed through it. Any future authority change requires a new specification, security review, and recorded authorization.
 
 ## Public record and accountability
 
@@ -47,7 +47,7 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 - Expired predecessor to active lock 3 (40M; matured 2026-08-18): `7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k`
 - Re-lock transaction: `5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD`
 - Total locked supply: 13% (130M scheduled across the four active contracts above; previously 10% across three — see corrections #013 for the breakdown reframe filed 2026-05-19 and #033 for the 2026-08-28 re-lock)
-- Launchpad: Moonshot (pre-bond). Target: $73K market cap triggers auto-migration to Raydium.
+- Trading venue: Meteora Dynamic Bonding Curve, pair `3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE`. Migration trigger: configured quote reserve of 66,040.882531 USDC, not market capitalization. Configured destination: Meteora DAMM v2. Creator migration liquidity: 100% permanently locked. Live reserve progress is not published without a canonical reserve source.
 
 ## Social and contact
 

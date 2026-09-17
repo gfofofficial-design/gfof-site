@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Wed, 09 Sep 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 09 Sep 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Thu, 17 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#035 · CORRECTION — The public launch path was wrong: GFOF uses Meteora DBC, migration is quote-reserve based, and $73K market cap does not trigger Raydium.</title>
+      <link>https://galacticfederation.co/corrections#c035</link>
+      <guid isPermaLink="false">gfof-correction-035-meteora-dbc-migration-path</guid>
+      <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
+      <description>Public pages repeated an obsolete Moonshot-to-Raydium narrative and calculated migration progress from FDV or market capitalization. The live venue is Meteora Dynamic Bonding Curve pair 3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE, quoted in USDC. Migration is controlled by a configured 66,040.882531 USDC quote-reserve threshold, not market cap; the configured destination is Meteora DAMM v2; and 100% of creator migration liquidity is permanently locked. Current public surfaces remove the $73K/Raydium claim and fail closed when canonical reserve data is unavailable. Migration does not activate staking, NFT utility, rewards, reserve distributions, or binding governance. The prior venue-specific creator-fee and Dossier routing designs are superseded and inactive pending corrected specifications, review, and recorded authorization. The correction was delayed after owner review; that delay is acknowledged rather than hidden.</description>
+    </item>
 
     <item>
       <title>#034 · CORRECTION — Three unsupported wallet-control attributions are retired and the active designated-wallet register is corrected.</title>
