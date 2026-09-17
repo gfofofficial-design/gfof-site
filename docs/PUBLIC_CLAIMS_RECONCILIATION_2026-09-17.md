@@ -45,6 +45,12 @@ Reconcile public GFOF surfaces with the verified launch mechanics and current au
 | RSS / machine-readable text | Added #035 and updated current facts |
 | Sitemap | Updated dates and removed the internal Intel updater from indexing |
 
+## Live preview QA follow-up
+
+The first Netlify deploy preview exposed four issues that static validation did not: the current Command home still named Moonshot, retained a buy-pressure CTA, used pre-bond status labels, and allowed decorative/off-canvas elements to create horizontal page overflow. The same pass also found a stale Raydium question label in FAQ structured data, a stale post-bond governance metadata promise, and the retired legacy homepage still reachable at `/index.html`.
+
+The review branch now names Meteora DBC and pre-migration status on Command, links the verified Meteora pool as a verification action, clips off-canvas decoration at the document boundary, removes the stale FAQ and governance metadata claims, and redirects `/index.html` to the current Command home. The historical file remains in the repository for review, but it is no longer a separately reachable Netlify surface.
+
 ## Historical material preserved
 
 Older corrections entries and dated research posts are intentionally not rewritten. They are evidence of what was stated at the time. Correction #035 supplies the superseding record.
@@ -56,4 +62,3 @@ Older corrections entries and dated research posts are intentionally not rewritt
 3. Reconcile Dossier correction #006 on the Dossier property before paid access is reconsidered.
 4. Review reserve and wallet terminology for any remaining implication that a designation authorizes distribution.
 5. Resume FCC staging only after the AWS Lambda concurrency quota is actually raised and re-verified.
-

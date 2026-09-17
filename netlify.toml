@@ -44,6 +44,12 @@
 
 # ─── Clean URL rewrites ───
 [[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/"
   to = "/command-preview.html"
   status = 200
