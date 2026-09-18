@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Thu, 17 Sep 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 18 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 18 Sep 2026 00:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,13 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#036 · DRAFT — NOT PUBLISHED — Residual launch-path, bounty, NFT, and staking claims contradicted the current public record.</title>
+      <link>https://galacticfederation.co/corrections#c036</link>
+      <guid isPermaLink="false">gfof-correction-036-residual-bounty-nft-staking-claims</guid>
+      <description>UNPUBLISHED REVIEW PROPOSAL. No effective withdrawal or production remediation is claimed. Root serves command-preview.html; index.html is legacy source. After correction #035 stated that migration is quote-reserve based and does not activate staking, an NFT, rewards, or binding governance, the legacy index.html still carried a $73,000 target, a Bond at 21% purchase button, pre-bond labels, and post-bond program language. Active pages also advertised a Founding Member NFT, snapshot, role, soulbound badge, staking-based governance weight, and a paid Red-Team Bounty with fixed GFOF rewards and deadlines. W-001 retains the owner's conditional intention for possible staged liquidity contributions after Meteora migration, subject to a separate assessment and explicit authorization. No amount, venue, schedule, or transfer is currently authorized; the intention is not cancelled. This branch proposes corrections to those source claims. No NFT or staking program is authorized. The proposed policy would withdraw the paid bounty; responsible disclosure remains open, but no compensation or deadline is promised. A stale repository identity draft is retained with an adjacent superseded notice. Historical language remains in version history and this correction. No replacement program is promised.</description>
+    </item>
 
     <item>
       <title>#035 · CORRECTION — The public launch path was wrong: GFOF uses Meteora DBC, migration is quote-reserve based, and $73K market cap does not trigger Raydium.</title>
