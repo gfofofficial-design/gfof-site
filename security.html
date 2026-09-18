@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Security — $GFOF Galactic Federation of Finance</title>
-<meta name="description" content="Security posture, responsible disclosure policy, and the Federation Red-Team Bounty Program for $GFOF.">
+<meta name="description" content="Security posture and responsible disclosure policy for $GFOF. No paid bounty or compensation program is currently authorized.">
 <link rel="canonical" href="https://galacticfederation.co/security">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://galacticfederation.co/security">
-<meta property="og:title" content="$GFOF Security — Red-Team Bounty Program">
-<meta property="og:description" content="Operational security bounty — help break what we're building before someone else does.">
+<meta property="og:title" content="$GFOF Security — Responsible Disclosure">
+<meta property="og:description" content="How to report a security issue to the Federation. No paid bounty is currently authorized.">
 <meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
-<meta name="twitter:title" content="$GFOF Security — Red-Team Bounty Program">
-<meta name="twitter:description" content="Operational security bounty — help break what we're building before someone else does.">
+<meta name="twitter:title" content="$GFOF Security — Responsible Disclosure">
+<meta name="twitter:description" content="How to report a security issue to the Federation. No paid bounty is currently authorized.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
 <script type="application/ld+json">
@@ -26,10 +26,10 @@
   "@type": "TechArticle",
   "headline": "$GFOF Security Posture and Responsible Disclosure Policy",
   "name": "Security — Galactic Federation of Finance",
-  "description": "The Federation's operational security posture: responsible disclosure policy, bug bounty program for the pre-launch site and social infrastructure, RFC 9116 security.txt, and hall-of-honor for disclosed findings.",
+  "description": "The Federation's operational security posture: responsible disclosure policy, RFC 9116 security.txt, and public recognition for disclosed findings. No paid bounty or compensation program is currently authorized.",
   "url": "https://galacticfederation.co/security",
   "datePublished": "2026-04-20",
-  "dateModified": "2026-04-21",
+  "dateModified": "2026-09-18",
   "inLanguage": "en",
   "author": {
     "@type": "Organization",
@@ -45,11 +45,10 @@
       "url": "https://galacticfederation.co/logo.png"
     }
   },
-  "keywords": "security, responsible disclosure, bug bounty, security.txt, rfc 9116, solana defi, galactic federation of finance, gfof",
+  "keywords": "security, responsible disclosure, security.txt, rfc 9116, solana defi, galactic federation of finance, gfof",
   "about": [
     "Solana DeFi security",
     "Responsible disclosure",
-    "Bug bounty programs",
     "Operational security"
   ]
 }
@@ -349,43 +348,24 @@ p, .section-head p, .panel p{font-family:var(--font-read); letter-spacing:0;}
 <div class="container">
 
   <section class="hero">
-    <div class="hero-tag"><span class="hero-tag-dot"></span>RESPONSIBLE DISCLOSURE · ACTIVE BOUNTY</div>
-    <h1>Help Us <span class="grad">Break</span> It First</h1>
-    <p>The Federation's security posture is a matter of public record. Our smart contracts will be audited before they ship. Our operational surface — Telegram admins, DNS, website, API, social accounts — is where the real attacks happen. That's why we pay researchers to find the gaps.</p>
+    <div class="hero-tag"><span class="hero-tag-dot"></span>RESPONSIBLE DISCLOSURE · NO PAID BOUNTY</div>
+    <h1>Report Security <span class="grad">Issues</span></h1>
+    <p>The Federation's security posture is a matter of public record. Reports about the website, API, public accounts, published wallets, or other Federation-controlled surfaces are welcome. No paid bounty, token reward, compensation tier, or payment deadline is currently authorized.</p>
   </section>
 
   <!-- THE PROGRAM -->
   <div class="section-head">
-    <div class="tag">RED-TEAM BOUNTY</div>
-    <h2>The Federation Red-Team Program</h2>
-    <p>Most DeFi bug bounties cover smart contract vulnerabilities. Ours starts earlier — with the operational attack surface that accounts for the majority of crypto losses in 2026. Paid in $GFOF.</p>
+    <div class="tag">DISCLOSURE STATUS</div>
+    <h2>Responsible Disclosure Only</h2>
+    <p>The earlier Red-Team Bounty language is withdrawn. Reports remain welcome, but submitting a report does not create a promise of payment, tokens, reimbursement, or other compensation. See <a href="/corrections#c036" style="color:var(--cyan);text-decoration:underline">correction #036</a>.</p>
   </div>
 
   <div class="panel panel-accent-red">
-    <p><strong>Why this program exists.</strong> Most crypto losses in 2026 do not come from exploited smart contracts. They come from phishing Telegram admins, DNS hijacks, cloned landing pages, social engineering, and X impersonation. Our smart contracts are not live yet — but these attack vectors are active right now. We treat operational security with the same rigor we intend to apply to our on-chain code.</p>
+    <p><strong>Why disclosure remains open.</strong> Phishing, DNS abuse, cloned pages, social engineering, impersonation, credential exposure, and web vulnerabilities can harm users even when no protocol contract is live. Clear reporting channels help the operator investigate and correct verified issues.</p>
   </div>
 
-  <div class="bounty-grid">
-    <div class="bounty-cell critical">
-      <div class="sev">CRITICAL</div>
-      <div class="reward">$500 in $GFOF</div>
-      <div class="desc">DNS hijack attempts successfully caught, active phishing sites using our branding, successful social engineering of a team admin, verified private key exposure, or any vulnerability that could enable direct theft of user funds once lending is live.</div>
-    </div>
-    <div class="bounty-cell high">
-      <div class="sev">HIGH</div>
-      <div class="reward">$250 in $GFOF</div>
-      <div class="desc">Cloned landing pages, verified Telegram/Discord admin impersonation attempts, X account takeovers of affiliated accounts, working XSS on galacticfederation.co, or leaked credentials tied to any federation-owned service.</div>
-    </div>
-    <div class="bounty-cell medium">
-      <div class="sev">MEDIUM</div>
-      <div class="reward">$100 in $GFOF</div>
-      <div class="desc">Identified copycat tokens, typosquat domains, impersonation accounts not already known to us, open redirect vulnerabilities on our web surface, or CSP bypasses allowing phishing payload injection.</div>
-    </div>
-    <div class="bounty-cell low">
-      <div class="sev">LOW</div>
-      <div class="reward">$50 in $GFOF</div>
-      <div class="desc">Minor information disclosure, subdomain takeover opportunities, misconfigured headers with demonstrable risk, or well-documented OSINT findings that reveal accidental exposure of federation infrastructure.</div>
-    </div>
+  <div class="panel panel-accent-red">
+    <p><strong>No compensation promise.</strong> There are no active severity-based reward tiers. The Federation does not promise payment in $GFOF or any other asset, does not lock a USD value when a report is received, and does not promise reimbursement or a donation. Any future paid program would require a separate written policy and recorded authorization before it is announced.</p>
   </div>
 
   <!-- IN SCOPE / OUT OF SCOPE -->
@@ -405,10 +385,10 @@ p, .section-head p, .panel p{font-family:var(--font-read); letter-spacing:0;}
     </div>
     <div class="scope-row">
       <div class="cat">✓ RULES OF ENGAGEMENT</div>
-      <div class="body">Do not exploit the finding beyond what is necessary to prove it. Do not publish the finding until we have confirmed and remediated it. Do not access, modify, or destroy data belonging to any user. Do not use findings to extort, blackmail, or otherwise harm the federation or its community. Violations void the bounty and may result in legal action.</div>
+      <div class="body">Do not exploit a finding beyond what is necessary to document it safely. Do not access, modify, or destroy data belonging to another person. Do not use a finding to extort, blackmail, or harm the Federation or its community. This page does not authorize access, testing, or conduct that would otherwise be unlawful.</div>
     </div>
     <div class="scope-row out">
-      <div class="cat">✗ NOT ELIGIBLE</div>
+      <div class="cat">✗ NOT ACTIONABLE</div>
       <div class="body">Theoretical findings without proof of exploitability. Duplicates of already-reported issues. Self-XSS. Missing security headers without demonstrated impact. Reports generated solely by automated scanners with no validation. Any report from a researcher under 18 or from a jurisdiction sanctioned by the US, UK, or EU.</div>
     </div>
   </div>
@@ -417,18 +397,18 @@ p, .section-head p, .panel p{font-family:var(--font-read); letter-spacing:0;}
   <div class="section-head">
     <div class="tag">REPORT A FINDING</div>
     <h2>Responsible Disclosure</h2>
-    <p>We commit to acknowledging every valid report within 72 hours, providing a triage decision within 7 days, and paying out verified bounties within 14 days of remediation.</p>
+    <p>Send enough detail to reproduce and assess the issue. No response, remediation, publication, or payment deadline is promised; the sole operator will prioritize reports by apparent user risk.</p>
   </div>
 
   <div class="panel">
-    <p><strong>Step 1.</strong> Draft a clear writeup. Include: (a) the vulnerability class, (b) reproduction steps, (c) proof of exploitability, (d) your suggested severity and requested bounty tier, (e) whether you want public credit.</p>
-    <p><strong>Step 2.</strong> Send it via DM to <strong>@WelksCrypto</strong> on X or to the Telegram admin of t.me/GFOF_SOL. If the finding is sensitive enough that it cannot pass through an unencrypted channel, request a PGP key and we will provide one.</p>
+    <p><strong>Step 1.</strong> Draft a clear writeup. Include: (a) the vulnerability class, (b) safe reproduction steps, (c) evidence of impact, (d) your suggested severity, and (e) whether you want public credit.</p>
+    <p><strong>Step 2.</strong> Send it via DM to <strong>@WelksCrypto</strong> on X or to the Telegram admin of t.me/GFOF_SOL. Do not send private keys, seed phrases, credentials, personal data, or live exploit material through an unencrypted channel; first request coordination for a safer transfer method.</p>
     <p><strong>Step 3.</strong> Do not publicly disclose the finding until we confirm remediation. If we do not respond within 7 days, you are free to escalate by publishing a non-exploitable summary and requesting public response.</p>
-    <p><strong>Step 4.</strong> Once remediated, payout is made in $GFOF to a Solana wallet of your choice. USD equivalent locked at the moment the finding is confirmed. If you prefer alternative compensation (anonymous credit, donation to a charity of your choice), we will accommodate.</p>
+    <p><strong>Step 4.</strong> If the issue is verified and remediated, public credit may be offered with your permission. No compensation is promised or authorized.</p>
 
     <div class="contact-block">
       <div><span class="k">Primary contact</span>@WelksCrypto on X · admins in t.me/GFOF_SOL</div>
-      <div style="margin-top:8px"><span class="k">Response SLA</span>72 hours to acknowledge · 7 days to triage · 14 days to pay</div>
+      <div style="margin-top:8px"><span class="k">Response timing</span>Best effort · no contractual or promised SLA</div>
     </div>
   </div>
 
@@ -482,17 +462,17 @@ p, .section-head p, .panel p{font-family:var(--font-read); letter-spacing:0;}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v17.1 · security · updated 2026-08-28</span>
+  <span class="version" id="footer-version">v17.2 · security · updated 2026-09-18</span>
 </div>
 
 <script>
 try {
   console.log('%c⬡ GFOF Security · v11.0', 'color:#FF5E7B;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #FF5E7B;border-radius:2px;');
-  console.log('%c📣 Responsible disclosure program active. See /security for scope + rewards.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+  console.log('%c📣 Responsible disclosure channel open. No paid bounty is authorized.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v17.1 · security · updated 2026-08-28'; }
+  if(el){ el.textContent = 'v17.2 · security · updated 2026-09-18'; }
 })();
 </script>
 </body>

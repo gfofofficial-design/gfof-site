@@ -2,6 +2,10 @@
 # $GFOF CORE IDENTITY DOCUMENT
 ## Galactic Federation of Finance — Brand Foundation
 
+> **SUPERSEDED — HISTORICAL WORKING DOCUMENT (2026-09-18)**
+>
+> This file preserves earlier brand drafts and social-copy concepts. It is not a current fact sheet or authorization source. References below to Stake2Earn, a $73K bond, Raydium migration, post-bond governance, NFTs, rewards, or future launches are historical and inactive. Current facts are controlled by the live site and corrections #035–#036. No staking, NFT, reward, holder-benefit, or binding-governance program is authorized, and no replacement program is promised.
+
 ---
 
 ## THE THREE PILLARS
@@ -356,4 +360,3 @@ $GFOF · galacticfederation.co
 CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon
 
 ⬡ End transmission.
-

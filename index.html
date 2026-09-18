@@ -1653,10 +1653,10 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <span class="fed-hud-title"><span class="live-dot-hud"></span>FEDERATION · LIVE</span>
     <button class="fed-hud-close" onclick="dismissHUD()" aria-label="Dismiss">×</button>
   </div>
-  <div class="fed-hud-row"><span class="k">BOND</span><span class="v gold" id="hud-bond">…</span></div>
+  <div class="fed-hud-row"><span class="k">MIGRATION</span><span class="v gold" id="hud-bond">…</span></div>
   <div class="fed-hud-row"><span class="k">HOLDERS</span><span class="v green" id="hud-holders">…</span></div>
   <div class="fed-hud-row"><span class="k">NEXT UNLOCK</span><span class="v" id="hud-unlock">—</span></div>
-  <div class="fed-hud-row"><span class="k">STATUS</span><span class="v green" id="hud-status">pre-bond</span></div>
+  <div class="fed-hud-row"><span class="k">STATUS</span><span class="v green" id="hud-status">DBC active</span></div>
 </div>
 
 <!-- V12: Keyboard shortcut hints (toggles with ?) -->
@@ -1675,16 +1675,16 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <div class="kb-row"><span class="kb-label">Toggle this</span><span class="kb-key">?</span></div>
 </div>
 
-<!-- STICKY MINI BOND BAR (v9) — appears on scroll past hero -->
+<!-- STICKY MINI MIGRATION BAR (v9) — appears on scroll past hero -->
 <div id="sticky-bond" class="sticky-bond" aria-hidden="true">
   <div class="sticky-bond-inner">
-    <span class="sb-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> BOND</span>
+    <span class="sb-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> DBC</span>
     <div class="sb-bar"><div class="sb-fill" id="sb-fill"></div></div>
     <span class="sb-pct" id="sb-pct">…%</span>
     <span class="sb-sep"></span>
     <span class="sb-mc" id="sb-mc">—</span>
-    <span class="sb-target">/ $73K</span>
-    <a class="sb-cta" href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">BUY ↗</a>
+    <span class="sb-target">/ 66,040.882531 USDC</span>
+    <a class="sb-cta" href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener">VERIFY ↗</a>
     <button class="sb-close" id="sb-close" aria-label="Hide bond bar">×</button>
   </div>
 </div>
@@ -1711,7 +1711,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <span>NETWORK: SOLANA</span><span class="sep">◆</span>
     <span>WEBSITE: GALACTICFEDERATION.CO</span><span class="sep">◆</span>
     <span>TELEGRAM: T.ME/GFOF_SOL</span><span class="sep">◆</span>
-    <span class="gr">STATUS: LIVE — PRE-BOND</span><span class="sep">◆</span>
+    <span class="gr">STATUS: METEORA DBC LIVE</span><span class="sep">◆</span>
     <span>LED BY ADMIRAL ZORAN VOSS</span><span class="sep">◆</span>
     <span>RESEARCH-FIRST DEFI · DESIGNED IN PUBLIC</span><span class="sep">◆</span>
     <span class="hi">$GFOF</span><span class="sep">◆</span>
@@ -1720,7 +1720,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <span>NETWORK: SOLANA</span><span class="sep">◆</span>
     <span>WEBSITE: GALACTICFEDERATION.CO</span><span class="sep">◆</span>
     <span>TELEGRAM: T.ME/GFOF_SOL</span><span class="sep">◆</span>
-    <span class="gr">STATUS: LIVE — PRE-BOND</span><span class="sep">◆</span>
+    <span class="gr">STATUS: METEORA DBC LIVE</span><span class="sep">◆</span>
     <span>LED BY ADMIRAL ZORAN VOSS</span><span class="sep">◆</span>
     <span>RESEARCH-FIRST DEFI · DESIGNED IN PUBLIC</span><span class="sep">◆</span>
   </div>
@@ -1817,25 +1817,6 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <div class="hero-trust-item" title="Built on Solana"><span class="htc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z"/></svg></span><span class="htc-t">SOLANA</span></div>
   </div>
 
-  <!-- NFT founding member teaser -->
-  <a href="#nft-badges" style="display:inline-flex;align-items:center;gap:12px;margin-top:22px;padding:10px 22px 10px 14px;background:rgba(240,192,64,0.06);border:1px solid rgba(240,192,64,0.3);text-decoration:none;transition:all .2s;position:relative;overflow:hidden;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);" onmouseover="this.style.background='rgba(240,192,64,0.12)';this.style.borderColor='rgba(240,192,64,0.6)';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(240,192,64,0.06)';this.style.borderColor='rgba(240,192,64,0.3)';this.style.transform='translateY(0)';">
-    <!-- Mini spinning badge -->
-    <div style="width:32px;height:32px;flex-shrink:0;position:relative;animation:badge-spin 8s linear infinite;">
-      <svg viewBox="0 0 40 40" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="miniGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFE880"/><stop offset="50%" stop-color="#F0C040"/><stop offset="100%" stop-color="#C08020"/></linearGradient>
-        </defs>
-        <circle cx="20" cy="20" r="18" fill="#020408"/>
-        <circle cx="20" cy="20" r="18" fill="none" stroke="url(#miniGold)" stroke-width="2.2"/>
-        <circle cx="20" cy="20" r="14" fill="none" stroke="rgba(0,229,255,0.4)" stroke-width="0.8" stroke-dasharray="2,2"/>
-        <text x="20" y="24" text-anchor="middle" font-family="Orbitron,sans-serif" font-weight="900" font-size="13" fill="url(#miniGold)">GF</text>
-      </svg>
-    </div>
-    <div style="text-align:left;">
-      <div style="font-family:var(--orb);font-size:10px;color:var(--gold);letter-spacing:2px;font-weight:700;line-height:1.2;">FOUNDING MEMBER NFT</div>
-      <div style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:1.5px;margin-top:3px;">FREE TO HOLDERS AT BOND →</div>
-    </div>
-  </a>
     <div class="stats-row">
     <div class="stat-card"><div class="stat-lbl">Price USD</div><div class="stat-val" id="stat-price" style="font-size:1rem;letter-spacing:.5px"><span class="skel w-md" aria-label="Loading price"></span></div></div>
     <div class="stat-card green-card"><div class="stat-lbl">Holders</div><div class="stat-val gold" id="stat-holders" style="font-size:1.2rem"><span class="skel w-sm" aria-label="Loading holders"></span></div><div class="stat-live"><span class="live-dot"></span>LIVE</div></div>
@@ -1870,9 +1851,9 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
       </a>
       <a href="/security" class="shipped-card" data-color="red">
         <div class="sc-badge">03</div>
-        <div class="sc-label">BOUNTY</div>
-        <div class="sc-title">Red-Team Program</div>
-        <div class="sc-desc">Paid disclosure program. $50–$500 in $GFOF for verified findings. Help us break it first.</div>
+        <div class="sc-label">SECURITY</div>
+        <div class="sc-title">Responsible Disclosure</div>
+        <div class="sc-desc">Report verified security issues through the published channel. No paid bounty or compensation program is currently authorized.</div>
         <div class="sc-cta">↗ REPORT A FINDING</div>
       </a>
       <a href="/corrections" class="shipped-card" data-color="cyan">
@@ -2010,7 +1991,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <div class="mission-grid">
       <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M6 3h12l3 5-9 13L3 8l3-5z"/><path d="M3 8h18M9 3l3 18 3-18"/></svg></span><div class="mission-title">Store of Value</div><div class="mission-desc">13% of supply locked on-chain via Streamflow. Verifiable live — <a href="/treasury" style="color:var(--green);text-decoration:underline;text-underline-offset:2px">read from Solana in your browser ↗</a></div></div>
       <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg></span><div class="mission-title">DeFi Lending — Designed in Public</div><div class="mission-desc">Borrower-protective liquidation spec published before any code ships. Open for criticism — <a href="/liquidation-spec" style="color:#A78BFA;text-decoration:underline;text-underline-offset:2px">read v0.2 ↗</a></div></div>
-      <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z" fill="currentColor" stroke="none"/></svg></span><div class="mission-title">Accountable by Structure</div><div class="mission-desc">Every promise and every miss documented on a <a href="/corrections" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">public corrections log ↗</a>. Never deleted. Active <a href="/security" style="color:#FF5E7B;text-decoration:underline;text-underline-offset:2px">red-team bounty program ↗</a>.</div></div>
+      <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z" fill="currentColor" stroke="none"/></svg></span><div class="mission-title">Accountable by Structure</div><div class="mission-desc">Every promise and every miss documented on a <a href="/corrections" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">public corrections log ↗</a>. Never deleted. A <a href="/security" style="color:#FF5E7B;text-decoration:underline;text-underline-offset:2px">responsible-disclosure channel ↗</a> remains open; no paid bounty is authorized.</div></div>
       <div class="holo-card mission-card"><span class="mission-icon">⊕</span><div class="mission-title">Expanding Universe</div><div class="mission-desc">New features as the federation grows. The roadmap is just the beginning.</div></div>
     </div>
     <div class="btn-row" style="margin-top:2.5rem">
@@ -2191,7 +2172,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     </div>
     <div class="btn-row" style="margin-top:2.5rem">
       <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary">Join the Federation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M21 4L3 11l5 2 2 6 3-4 5 4 3-15z"/></svg>️</a>
-      <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary">Buy $GFOF — Bond at 21% ↗</a>
+      <a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" class="btn-primary">Verify $GFOF Pool ↗</a>
     </div>
   </div>
 </section>
@@ -2292,7 +2273,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
             <div style="font-family:var(--orb);font-size:22px;font-weight:900;color:#3DFFA0;line-height:1;min-width:50px">10%</div>
             <div>
               <div style="font-family:var(--orb);font-size:12px;color:#fff;letter-spacing:1px;margin-bottom:3px">REWARDS &amp; RESERVE</div>
-              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">Post-bond community programs · allocation defined by governance before deployment</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">Reserve designation · no active distribution, reward, or holder-benefit program</div>
             </div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:14px;padding:12px 14px;background:rgba(240,192,64,0.04);border-left:3px solid #F0C040;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)">
@@ -2523,18 +2504,18 @@ NFA. DYOR. $SOL</div>
     <div style="margin-top:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
       <div style="background:rgba(2,6,18,0.6);border:1px solid rgba(61,255,160,0.18);padding:22px 22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--green);margin-bottom:10px">// 01 · MECHANISM</div>
-        <div style="font-family:var(--orb);font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px">Non-custodial lock contract</div>
-        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">Smart contract holds tokens on-chain with defined release windows. No custodian. Audited before deployment per commitment <a href="/corrections#c003" style="color:var(--cyan)">#003</a>.</div>
+        <div style="font-family:var(--orb);font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px">No mechanism selected</div>
+        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">No staking contract, custody model, release window, or deployment design is authorized. Any future proposal must be specified and reviewed before implementation.</div>
       </div>
       <div style="background:rgba(2,6,18,0.6);border:1px solid rgba(61,255,160,0.18);padding:22px 22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--green);margin-bottom:10px">// 02 · GOVERNANCE WEIGHT</div>
-        <div style="font-family:var(--orb);font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px">Locked supply earns voice</div>
-        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">Staked $GFOF will carry weight in Federation governance proposals. Weighting formula will be defined in the spec, not retrofitted.</div>
+        <div style="font-family:var(--orb);font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px">No weighting authorized</div>
+        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">No staking-based governance weight or formula is promised. The live Realms deployment remains advisory and does not control treasury or protocol authority.</div>
       </div>
       <div style="background:rgba(2,6,18,0.6);border:1px solid rgba(61,255,160,0.18);padding:22px 22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--green);margin-bottom:10px">// 03 · NFT INTERACTION</div>
         <div style="font-family:var(--orb);font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px">None — the badge is commemorative</div>
-        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">The Founding Member NFT carries no staking boost or multiplier. It is soulbound and purely commemorative — no price, yield, or utility. Any staking rewards will come only from the published spec, never from holding the badge.</div>
+        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">No Founding Member NFT snapshot, claim, or launch is authorized. No badge, NFT boost, multiplier, eligibility advantage, or reward is promised.</div>
       </div>
     </div>
 
@@ -2574,7 +2555,7 @@ NFA. DYOR. $SOL</div>
   
   <div class="container">
     <div class="section-tag reveal">Founding Member NFTs</div>
-    <h2 class="section-title reveal delay-1">Prove You Were Here First.</h2>
+    <h2 class="section-title reveal delay-1">No Program Is Authorized.</h2>
     <p class="section-sub">No Founding Member NFT snapshot, claim, or launch is currently authorized. If a commemorative badge is proposed later, it will require a separate public specification and recorded approval. No NFT utility, yield, governance weight, staking multiplier, eligibility advantage, or economic benefit is promised.</p>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:36px">
@@ -2627,44 +2608,41 @@ NFA. DYOR. $SOL</div>
             <text x="140" y="192" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="6.5" fill="rgba(255,255,255,.18)" letter-spacing="2.5">SOL · GENESIS · 2025</text>
           </svg>
         </div>
-        <div style="font-family:var(--orb);font-size:13px;color:var(--gold);margin:12px 0 4px;letter-spacing:1px">FOUNDING MEMBER</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px">#GFOF — PRE-BOND</div>
+        <div style="font-family:var(--orb);font-size:13px;color:var(--gold);margin:12px 0 4px;letter-spacing:1px">CONCEPT ART ONLY</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px">NOT MINTED · NOT AUTHORIZED</div>
       </div>
 
       <!-- Badge perks -->
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="holo-card" style="padding:16px 18px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
-          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">Worth Nothing — On Purpose</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">No price, no yield, no staking multiplier, no governance weight. The badge confers no financial benefit of any kind. That is a deliberate design choice, not a placeholder for future utility.</div>
+          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">No NFT Exists</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">The artwork shown is a historical design concept. It is not a minted asset, claim ticket, entitlement, or evidence of eligibility.</div>
         </div>
         <div class="holo-card" style="padding:16px 18px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
-          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">Free to Every Holder</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">No purchase advantage. Every wallet holding $GFOF at the bond snapshot is equally eligible — one badge per holder. There is nothing to buy, win, or qualify for beyond simply holding.</div>
+          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">No Snapshot</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">No holder snapshot, eligibility date, wallet qualification rule, claim process, or distribution event is authorized.</div>
         </div>
         <div class="holo-card" style="padding:16px 18px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
-          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">Federation Role</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">Founding Members get a verified role in the Federation Telegram. Active today for pre-bond participants.</div>
+          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">No Holder Benefit</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">Holding $GFOF does not create an NFT entitlement, Telegram role, governance weight, reward, discount, or other benefit under this concept.</div>
         </div>
         <div class="holo-card" style="padding:16px 18px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
-          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">Permanent On-Chain Record</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">The badge itself is the deliverable — a soulbound NFT proving you held $GFOF before the bond. Everything else is designed around that fact.</div>
+          <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">No Future Promise</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">A future badge is not promised. Any later proposal would require a separate specification, risk review, and recorded authorization before public launch claims.</div>
         </div>
       </div>
     </div>
 
-    <!-- Eligibility + countdown -->
+    <!-- Authorization boundary -->
     <div style="margin-top:28px;background:rgba(240,192,64,0.04);border:1px solid rgba(240,192,64,0.2);border-radius:8px;padding:22px 24px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))">
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:10px">// HOW IT WORKS</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:10px">// CURRENT STATUS</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px">
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">01 →</span>Hold any amount of $GFOF at the bond snapshot ($73K MC)</div>
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">02 →</span>Hold in your wallet at the snapshot date</div>
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">03 →</span>No claim process exists; verify any future authorization in the corrections log</div>
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">04 →</span>Hold forever — badges are non-transferable, soulbound</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">01 →</span>No snapshot has been authorized or taken for this purpose</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">02 →</span>No wallet is currently eligible to claim a badge</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">03 →</span>No claim, mint, distribution, or alert process exists</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">04 →</span>No replacement NFT or holder-benefit program is promised</div>
       </div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px">Eligibility window closes at the $73K bond — a mechanical trigger, not a marketing one. Details of the snapshot and claim process will be posted on <a href="/corrections" style="color:var(--cyan)">/corrections</a> before the bond is reached.</div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary" style="font-size:11px;padding:9px 20px;display:inline-block">JOIN FOR SNAPSHOT ALERT ↗</a>
-      </div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px">Correction <a href="/corrections#c036" style="color:var(--cyan)">#036</a> controls. Historical concept language does not create a current entitlement or future obligation.</div>
     </div>
   </div>
 </section>
@@ -2810,7 +2788,7 @@ NFA. DYOR. $SOL</div>
     <span style="color:var(--gold);font-weight:700"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> VERIFY OFFICIAL CHANNELS.</span> The real federation is <span style="color:var(--gold)">@GFOF_Offcial</span> on X — note the typo is intentional, a copycat owns @GFOF_Official. Always verify at galacticfederation.co.
   </div>
 
-  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.27 · updated 2026-08-28</span></div>
+  <div class="footer-disc">Galactic Federation of Finance — $GFOF on Solana — galacticfederation.co<br>Not financial advice. Always do your own research before investing in any cryptocurrency.<br><span class="footer-version" id="footer-version">v17.28 · updated 2026-09-18</span></div>
 </footer>
 
 <script>
@@ -3207,8 +3185,8 @@ function sendChat(){
 
 /* Runtime version stamp — proves which build is actually serving */
 (function(){
-  var VERSION = '17.27';
-  var built = 'updated 2026-08-28'; /* Hardcoded at deploy time — bump with version edits */
+  var VERSION = '17.28';
+  var built = 'updated 2026-09-18'; /* Hardcoded at deploy time — bump with version edits */
   var el = document.getElementById('footer-version');
   if (el) el.textContent = 'v' + VERSION + ' · ' + built;
   /* Console banner so devtools can confirm */
