@@ -2514,7 +2514,7 @@ NFA. DYOR. $SOL</div>
       </div>
       <div style="background:rgba(2,6,18,0.6);border:1px solid rgba(61,255,160,0.18);padding:22px 22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--green);margin-bottom:10px">// 03 · NFT INTERACTION</div>
-        <div style="font-family:var(--orb);font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px">None — the badge is commemorative</div>
+        <div style="font-family:var(--orb);font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:0.5px">No NFT interaction authorized</div>
         <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">No Founding Member NFT snapshot, claim, or launch is authorized. No badge, NFT boost, multiplier, eligibility advantage, or reward is promised.</div>
       </div>
     </div>
@@ -2530,7 +2530,7 @@ NFA. DYOR. $SOL</div>
         Staking parameters depend on variables the Federation does not yet have certainty about: treasury resources, circulating-supply dynamics, holder concentration, governance participation, regulatory treatment, and sustainable funding. Publishing speculative APYs before those variables are known would be marketing, not design.
       </div>
       <div style="font-family:var(--raj);font-size:14px;color:var(--text-dim);line-height:1.7">
-        The spec will be published when the inputs justify it. Until then, no tier numbers, no calculator, no rate. The corrections log records every commitment publicly — see <a href="/corrections" style="color:var(--cyan)">galacticfederation.co/corrections</a>.
+        No specification or publication date is promised. Any future draft requires separate authorization. Until then, no tier numbers, no calculator, no rate. The corrections log records every commitment publicly — see <a href="/corrections" style="color:var(--cyan)">galacticfederation.co/corrections</a>.
       </div>
     </div>
 
@@ -2642,7 +2642,7 @@ NFA. DYOR. $SOL</div>
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">03 →</span>No claim, mint, distribution, or alert process exists</div>
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">04 →</span>No replacement NFT or holder-benefit program is promised</div>
       </div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px">Correction <a href="/corrections#c036" style="color:var(--cyan)">#036</a> controls. Historical concept language does not create a current entitlement or future obligation.</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px">Proposed correction <a href="/corrections#c036" style="color:var(--cyan)">#036</a> is under review. No new NFT entitlement or program is authorized; historical statements remain subject to review.</div>
     </div>
   </div>
 </section>
@@ -2693,8 +2693,8 @@ NFA. DYOR. $SOL</div>
       </div>
       <div class="holo-card" style="padding:22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:3px;margin-bottom:10px">STEP 04</div>
-        <div style="font-family:var(--orb);font-size:13px;color:var(--gold);margin-bottom:8px">Results Executed</div>
-        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.7">Passed proposals are executed by the core team and published publicly. Every decision traceable on Solana explorer.</div>
+        <div style="font-family:var(--orb);font-size:13px;color:var(--gold);margin-bottom:8px">Advisory Results Recorded</div>
+        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.7">Votes record advisory preferences only. They do not authorize execution or control treasury, repository, site, or token authority.</div>
       </div>
     </div>
 
@@ -3512,7 +3512,8 @@ function dismissKbHints(){
       fillEl.style.width = mainFill.style.width;
     }
     if (mainPct && mainPct.textContent && mainPct.textContent !== '...') {
-      pctEl.textContent = mainPct.textContent + '%';
+      var progressText = mainPct.textContent.trim();
+      pctEl.textContent = /^\d+(?:\.\d+)?$/.test(progressText) ? progressText + '%' : progressText;
     }
     if (mainMC && mainMC.textContent && mainMC.textContent !== 'Loading...' && mainMC.textContent !== '...') {
       mcEl.textContent = mainMC.textContent;
