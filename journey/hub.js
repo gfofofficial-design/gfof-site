@@ -14,6 +14,15 @@ $('count').textContent=available?completed.length+' of 5 missions completed':'Pr
 $('begin').onclick=()=>{location.href=missions[0][3]+'.html'};$('browse').onclick=()=>{$('guidesTitle').focus();$('guidesTitle').scrollIntoView({block:'start'})};
 window.addEventListener('pageshow',event=>{if(event.persisted)location.reload()});
 
-try{if(sessionStorage.getItem("gf-journey-long-way-home-v1")==="complete")$("long-way-status").textContent="Chapter explored in this tab · Play again to find another ending."}catch{}
-
-try{if(sessionStorage.getItem("gf-journey-borrowed-voice-v1")==="complete")$("borrowed-voice-status").textContent="Chapter explored in this tab · Replay to follow another decision."}catch{}
+const deeperMissions=['long-way-home','borrowed-voice','after-the-crowd','changing-course','keys-to-the-gate'];
+let deeperCompleted=0;
+try{
+ for(const slug of deeperMissions){
+  if(sessionStorage.getItem('gf-journey-'+slug+'-v1')==='complete'){
+   deeperCompleted++;$(slug+'-status').textContent='Explored in this tab · Replay any time';
+  }
+ }
+ $('chapter-count').textContent=deeperCompleted+' of 5 deeper missions explored';
+ $('chapter-fill').style.width=deeperCompleted*20+'%';
+ $('chapter-done').hidden=deeperCompleted!==5;
+}catch{$('chapter-count').textContent='Chapter progress saving is unavailable in this browser';}
