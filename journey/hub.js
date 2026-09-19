@@ -13,3 +13,5 @@ missions.forEach((m,i)=>{const card=document.createElement('article');card.class
 $('count').textContent=available?completed.length+' of 5 missions completed':'Progress saving is unavailable in this browser';$('fill').style.width=completed.length*20+'%';$('allDone').hidden=completed.length!==5;
 $('begin').onclick=()=>{location.href=missions[0][3]+'.html'};$('browse').onclick=()=>{$('guidesTitle').focus();$('guidesTitle').scrollIntoView({block:'start'})};
 window.addEventListener('pageshow',event=>{if(event.persisted)location.reload()});
+
+try{if(sessionStorage.getItem("gf-journey-long-way-home-v1")==="complete")$("long-way-status").textContent="Chapter explored in this tab · Play again to find another ending."}catch{}
