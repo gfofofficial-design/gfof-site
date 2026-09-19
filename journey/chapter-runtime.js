@@ -7,8 +7,8 @@ export function startChapter(config){
  function render(focus=true){
   $('scene').innerHTML=config.content(state);
   if(state.step==='reflect'){
-   const next={ 'after-the-crowd':['changing-course.html','Continue with Aela →'], 'changing-course':['keys-to-the-gate.html','Continue with Eno →'], 'keys-to-the-gate':['./#nextChapterTitle','Finish Chapter Two →'] }[config.id];
-   const link=config.id==='keys-to-the-gate'?$('scene').querySelector('.end-actions a'):document.createElement('a');link.href=next[0];link.textContent=next[1];if(config.id!=='keys-to-the-gate')$('scene').querySelector('.end-actions').prepend(link);
+   const next={ 'after-the-crowd':['changing-course.html','Continue with Aela →'], 'changing-course':['keys-to-the-gate.html','Continue with Eno →'], 'keys-to-the-gate':['meridian-relay.html','Bring the crew together →'] }[config.id];
+   const link=document.createElement('a');link.href=next[0];link.textContent=next[1];$('scene').querySelector('.end-actions').prepend(link);
   }
   $('meters').replaceChildren();for(const [label,value] of config.metrics(state)){const div=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;div.append(dt,dd);$('meters').append(div);}
   $('position').textContent=config.status(state);
