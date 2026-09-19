@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Liquidation, Redesigned — $GFOF Lending Protocol Spec v0.2.1</title>
+<title>Liquidation, Redesigned — $GFOF Lending Protocol Spec v0.2.2</title>
 <meta name="description" content="A public design specification for borrower-protective liquidation in the $GFOF lending protocol. Published before any code ships.">
 <link rel="canonical" href="https://galacticfederation.co/liquidation-spec">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://galacticfederation.co/liquidation-spec">
-<meta property="og:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.1">
+<meta property="og:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.2">
 <meta property="og:description" content="A public design spec for borrower-protective liquidation. Before code. Open to criticism.">
 <meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <meta property="og:image:width" content="1200">
@@ -16,7 +16,7 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
-<meta name="twitter:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.1">
+<meta name="twitter:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.2">
 <meta name="twitter:description" content="A public design spec for borrower-protective liquidation. Before code. Open to criticism.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
@@ -24,7 +24,7 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Liquidation, Redesigned for the Borrower — $GFOF Lending Protocol Spec v0.2.1",
+  "headline": "Liquidation, Redesigned for the Borrower — $GFOF Lending Protocol Spec v0.2.2",
   "name": "Liquidation, Redesigned for the Borrower",
   "description": "A public design specification for borrower-protective liquidation in the $GFOF lending protocol. A design proposal supported by synthetic accounting research. Open to criticism, revision, and public challenge.",
   "abstract": "Introduces a liquidation mechanism combining a grace window, escalating on-chain warnings, partial-only liquidations capped below 100%, batched keeper rewards, and a catastrophic-threshold fallback. Section 7 sets out research questions for event-dependent, illiquid and credit-based collateral; support is not established.",
@@ -41,7 +41,7 @@
     {"@type": "Thing", "name": "Borrower-protective lending protocol design"},
     {"@type": "Thing", "name": "Non-standard collateral in decentralized finance"}
   ],
-  "version": "0.2.1",
+  "version": "0.2.2",
   "datePublished": "2026-04-20",
   "dateModified": "2026-09-19",
   "url": "https://galacticfederation.co/liquidation-spec",
@@ -405,16 +405,16 @@ p{font-size:16.5px; line-height:1.64;}
     <h1 class="doc-title">Liquidation, <span class="grad">Redesigned</span> for the Borrower</h1>
     <p class="doc-sub">A public design specification for the liquidation mechanism in the forthcoming $GFOF lending protocol. A design proposal supported by synthetic accounting research. Open to criticism, revision, and public challenge.</p>
     <div class="doc-meta">
-      <span><strong>Version:</strong> v0.2.1 · claims review</span>
+      <span><strong>Version:</strong> v0.2.2</span>
       <span><strong>Status:</strong> DRAFT · OPEN FOR COMMENT</span>
       <span><strong>Published:</strong> 2026-04-21</span>
-      <span><strong>Correction review:</strong> 2026-09-19</span>
+      <span><strong>Revised:</strong> 2026-09-19</span>
     </div>
   </header>
 
   <div class="callout amber">
-    <div class="k">CLAIMS CLARIFICATION PREVIEW</div>
-    <p>This preview distinguishes design objectives from demonstrated capabilities and retains the published arithmetic correction. The ordinary liquidation trigger remains unresolved; <a href="#eligibility-review"><u>read the eligibility notice in Section 5</u></a>. No production lending rule is adopted by these corrections.</p>
+    <div class="k">CLAIMS CLARIFICATION · 19 SEPTEMBER 2026</div>
+    <p>This revision distinguishes design objectives from demonstrated capabilities and retains the published arithmetic correction. The ordinary liquidation trigger remains unresolved; <a href="#eligibility-review"><u>read the eligibility notice in Section 5</u></a>. No production lending rule is adopted by these corrections.</p>
   </div>
 
   <!-- TOC -->
@@ -593,7 +593,7 @@ p{font-size:16.5px; line-height:1.64;}
 
   <div class="versions">
     <h3>REVISION LOG</h3>
-    <div class="v-row"><span class="ver">Review</span><span class="dt">2026-09-19</span><span class="ch">Proposed claims clarification: borrower protection, execution incentives and broader collateral are research objectives, not demonstrated capabilities. Removes unsupported comparative and market-size assertions. No lending rules adopted.</span></div>
+    <div class="v-row"><span class="ver">v0.2.2</span><span class="dt">2026-09-19</span><span class="ch">Claims clarification: borrower protection, execution incentives and broader collateral are research objectives, not demonstrated capabilities. Removes unsupported comparative and market-size assertions. No lending rules adopted.</span></div>
     <div class="v-row">
       <span class="ver">v0.2.1</span>
       <span class="dt">2026-09-19</span>
@@ -648,17 +648,17 @@ p{font-size:16.5px; line-height:1.64;}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v0.2.1 · liquidation-spec · revised 2026-09-19</span>
+  <span class="version" id="footer-version">v0.2.2 · liquidation-spec · revised 2026-09-19</span>
 </div>
 
 <script>
 try {
-  console.log('%c⬡ GFOF Liquidation Spec v0.2.1 · Design Doc', 'color:#A78BFA;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #A78BFA;border-radius:2px;');
+  console.log('%c⬡ GFOF Liquidation Spec v0.2.2 · Design Doc', 'color:#A78BFA;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #A78BFA;border-radius:2px;');
   console.log('%c📖 Open for public criticism. See section 7.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v0.2.1 · liquidation-spec · revised 2026-09-19'; }
+  if(el){ el.textContent = 'v0.2.2 · liquidation-spec · revised 2026-09-19'; }
 })();
 </script>
 </body>
