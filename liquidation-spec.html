@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Liquidation, Redesigned — $GFOF Lending Protocol Spec v0.2</title>
+<title>Liquidation, Redesigned — $GFOF Lending Protocol Spec v0.2.1</title>
 <meta name="description" content="A public design specification for borrower-protective liquidation in the $GFOF lending protocol. Published before any code ships.">
 <link rel="canonical" href="https://galacticfederation.co/liquidation-spec">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://galacticfederation.co/liquidation-spec">
-<meta property="og:title" content="Liquidation, Redesigned — $GFOF Spec v0.2">
+<meta property="og:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.1">
 <meta property="og:description" content="A public design spec for borrower-protective liquidation. Before code. Open to criticism.">
 <meta property="og:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <meta property="og:image:width" content="1200">
@@ -16,7 +16,7 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
-<meta name="twitter:title" content="Liquidation, Redesigned — $GFOF Spec v0.2">
+<meta name="twitter:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.1">
 <meta name="twitter:description" content="A public design spec for borrower-protective liquidation. Before code. Open to criticism.">
 <meta name="twitter:image" content="https://galacticfederation.co/og-image-v3.jpg">
 <link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
@@ -24,7 +24,7 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Liquidation, Redesigned for the Borrower — $GFOF Lending Protocol Spec v0.2",
+  "headline": "Liquidation, Redesigned for the Borrower — $GFOF Lending Protocol Spec v0.2.1",
   "name": "Liquidation, Redesigned for the Borrower",
   "description": "A public design specification for borrower-protective liquidation in the $GFOF lending protocol. Published before any smart contract code is written. Open to criticism, revision, and public challenge.",
   "abstract": "Introduces a liquidation mechanism combining a grace window, escalating on-chain warnings, partial-only liquidations capped below 100%, batched keeper rewards, and a catastrophic-threshold fallback. Section 7 extends the design to non-standard and price-fragmented collateral types.",
@@ -41,9 +41,9 @@
     {"@type": "Thing", "name": "Borrower-protective lending protocol design"},
     {"@type": "Thing", "name": "Non-standard collateral in decentralized finance"}
   ],
-  "version": "0.2",
+  "version": "0.2.1",
   "datePublished": "2026-04-20",
-  "dateModified": "2026-04-21",
+  "dateModified": "2026-09-19",
   "url": "https://galacticfederation.co/liquidation-spec",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -111,6 +111,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+[id]{scroll-margin-top:100px}
 body{
   background:var(--bg);color:var(--text);font-family:var(--raj);
   font-weight:400;font-size:16.5px;line-height:1.7;min-height:100vh;
@@ -370,6 +371,15 @@ p, .callout p{font-family:var(--font-read); letter-spacing:0;}
 p{font-size:16.5px; line-height:1.64;}
 .callout p{font-size:15.5px;}
 @media(max-width:520px){p{font-size:15.5px}.callout p{font-size:15px}}
+@media screen and (max-width:600px){
+  .top-nav{position:relative;flex-direction:column;align-items:flex-start}
+  .top-nav-links{gap:6px}
+  .top-nav-links a{letter-spacing:.5px}
+  .container{overflow-wrap:anywhere}
+  .v-row{flex-wrap:wrap}
+  .v-row .ch{flex-basis:100%;min-width:0}
+  [id]{scroll-margin-top:16px}
+}
 </style>
 </head>
 <body>
@@ -395,12 +405,17 @@ p{font-size:16.5px; line-height:1.64;}
     <h1 class="doc-title">Liquidation, <span class="grad">Redesigned</span> for the Borrower</h1>
     <p class="doc-sub">A public design specification for the liquidation mechanism in the forthcoming $GFOF lending protocol. Published before any smart contract code is written. Open to criticism, revision, and public challenge.</p>
     <div class="doc-meta">
-      <span><strong>Version:</strong> v0.2</span>
+      <span><strong>Version:</strong> v0.2.1</span>
       <span><strong>Status:</strong> DRAFT · OPEN FOR COMMENT</span>
       <span><strong>Published:</strong> 2026-04-21</span>
-      <span><strong>Next review:</strong> 2026-07</span>
+      <span><strong>Correction review:</strong> 2026-09-19</span>
     </div>
   </header>
+
+  <div class="callout amber">
+    <div class="k">ARITHMETIC CORRECTION · 19 SEPTEMBER 2026</div>
+    <p>This revision corrects the worked example and the bonus-cost denominator. The ordinary liquidation trigger remains unresolved; <a href="#eligibility-review"><u>read the eligibility notice in Section 5</u></a>. No production lending rule is adopted by these corrections.</p>
+  </div>
 
   <!-- TOC -->
   <div class="toc">
@@ -505,6 +520,8 @@ p{font-size:16.5px; line-height:1.64;}
 
   <p>If the position exits grace LTV during the window, the timer resets. If the position stays in grace and the window closes, the position becomes liquidatable — but only up to a partial amount (4.3).</p>
 
+  <p><strong>Unresolved conflict:</strong> the preceding eligibility description differs from Section 4.1, which also requires reaching liquidation LTV. <a href="#eligibility-review"><u>See the worked-example notice</u></a>. Neither interpretation is selected by this correction.</p>
+
   <div class="callout red">
     <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> CATASTROPHIC DROP EXCEPTION</div>
     <p>If the collateral price drops below a <strong>catastrophic threshold</strong> (proposed: more than 30% below the liquidation LTV, in a single block), the grace period is bypassed and immediate partial liquidation is permitted. This prevents the mechanism from becoming a protocol-level risk during genuine market ruptures. This exception must never be used as a workaround to liquidate positions the protocol could otherwise protect — its use is logged on-chain and reviewed publicly after every event.</p>
@@ -534,7 +551,12 @@ p{font-size:16.5px; line-height:1.64;}
   <!-- 5 -->
   <h2 id="worked-example"><span class="num">SECTION 05</span>A worked example</h2>
 
-  <p>Let's walk through a concrete scenario to show how the mechanism behaves in practice. Numbers are illustrative, not committed parameters.</p>
+  <p>This example illustrates position accounting at a fixed valuation. Numbers are illustrative, not committed parameters.</p>
+
+  <div class="callout amber" id="eligibility-review">
+    <div class="k">ELIGIBILITY RULE UNDER REVIEW</div>
+    <p>Sections 4.1 and 4.2 describe different ordinary liquidation conditions. Section 4.1 requires expired grace and reaching the liquidation threshold; Section 4.2 permits liquidation above the grace threshold after grace expires. The example below does not resolve that conflict. Its hypothetical fill demonstrates accounting, not an adopted eligibility rule. This specification remains a research proposal.</p>
+  </div>
 
   <p><strong>Setup.</strong> A borrower deposits $10,000 worth of SOL as collateral and borrows $5,000 of USDC. The market has an advisory LTV of 65%, grace LTV of 72%, and liquidation LTV of 78%. Initial LTV: 50%.</p>
 
@@ -542,16 +564,16 @@ p{font-size:16.5px; line-height:1.64;}
 
   <p><strong>Event 2.</strong> SOL drops another 8%. Collateral now $7,360. LTV = 5000 / 7360 = 67.9%. Advisory flag set. Borrower's wallet shows a yellow badge on the position. No penalty. No action permitted against the position.</p>
 
-  <p><strong>Event 3.</strong> SOL drops another 7%. Collateral now $6,845. LTV = 5000 / 6845 = 73.0%. Grace LTV crossed. <strong>Grace period begins.</strong> Borrower receives push notification. 10-minute countdown begins (SOL is volatile collateral). Position is flagged grace-active but not yet liquidatable.</p>
+  <p><strong>Event 3.</strong> SOL drops another 7%. Collateral is now $6,844.80. LTV = 5000 / 6844.80 ≈ 73.0482%, above the 72% grace threshold but below the 78% liquidation threshold. Under the proposed notification flow, the position enters grace and a 10-minute countdown begins. Notification delivery is not established by this example.</p>
 
   <p><strong>Event 4 — two paths.</strong></p>
 
   <ul>
-    <li><strong>Path A (borrower responds):</strong> Borrower sees the notification, adds $1,000 USDC as additional collateral. LTV drops to roughly 63.6%. Position exits grace, timer resets. No fees charged.</li>
-    <li><strong>Path B (borrower doesn't respond):</strong> 10 minutes elapse with the position still in grace. SOL has not recovered. The position is now liquidatable — <strong>up to 25% of debt, or $1,250</strong>. In the next block, a batched liquidation fills: $1,250 of debt repaid, collateral equivalent to $1,312 (5% liquidation bonus) is released to liquidators pro-rata. Borrower's remaining debt: $3,750. Remaining collateral: ~$5,533. New LTV: 67.8%. Position exits grace LTV after the partial liquidation.</li>
+    <li><strong>Path A (borrower responds):</strong> Assuming the market accepts the additional collateral at its stated value, the borrower adds $1,000 of USDC. Collateral becomes $7,844.80 and LTV falls to approximately 63.7365%. Under the proposed recovery rule, the position exits grace and the timer resets. No liquidation bonus is charged.</li>
+    <li><strong>Path B (borrower does not respond):</strong> Ten minutes elapse with collateral still worth $6,844.80. Expired grace alone does not settle eligibility: the position remains below the 78% threshold required by Section 4.1. <strong>If a $1,250 repayment were eligible under the eventual rules</strong>, a 5% bonus would be $62.50. Collateral valued at $1,312.50 would be transferred, leaving $5,532.30 of collateral and $3,750 of debt. At the same valuation, LTV would be approximately 67.7837%. This calculation excludes execution price changes and other fees.</li>
   </ul>
 
-  <p><strong>Outcome of Path B.</strong> Borrower lost $62 to the liquidation bonus — not $625 as they would have in a standard 50%-seizure hard-liquidation protocol. They still hold most of their position. They have time to decide whether to close it voluntarily, repay more, or ride out the volatility. <strong>The protocol has done its job — preserving solvency — without taking 10x more from the borrower than necessary to do so.</strong></p>
+  <p><strong>Controlled bonus comparison.</strong> At the same 5% bonus rate, repaying 50% of the initial $5,000 debt would produce a $125 bonus, compared with $62.50 for a 25% repayment. That is twice the bonus for twice the debt repaid. It is not a comparison of total losses or a claim about a particular protocol. This fixed-price example does not establish solvency through subsequent price shocks.</p>
 
   <!-- 6 -->
   <h2 id="open-questions"><span class="num">SECTION 06</span>Open questions and trade-offs we haven't resolved</h2>
@@ -572,7 +594,7 @@ p{font-size:16.5px; line-height:1.64;}
 
   <h3>Question 4 — What's the worst-case borrower loss per liquidation event?</h3>
 
-  <p>With the 25% cap and a 5% liquidation bonus, the maximum loss per liquidation event is roughly 1.25% of the original position. That's the number we've committed to beating or explaining if we can't. (For comparison: at Aave's 50% close factor with a 7.5% liquidation bonus, the equivalent worst-case is roughly 3.75% per event.)</p>
+  <p>For one fill repaying 25% of pre-fill debt at a 5% bonus, the bonus equals <strong>1.25% of that pre-fill debt</strong>. This is not a limit on loss relative to original collateral or borrower equity, and it does not bound cumulative costs across repeated fills. Price movement and other execution costs can affect outcomes separately. A total worst-case borrower-loss bound remains unresolved.</p>
 
   <h3>Question 5 — What's the impact on liquidator economics?</h3>
 
@@ -639,6 +661,11 @@ p{font-size:16.5px; line-height:1.64;}
   <div class="versions">
     <h3>REVISION LOG</h3>
     <div class="v-row">
+      <span class="ver">v0.2.1</span>
+      <span class="dt">2026-09-19</span>
+      <span class="ch">Arithmetic correction: exact worked-example accounting, matched 5% bonus comparison, pre-fill-debt denominator and explicit eligibility conflict. No mechanism change adopted. Earlier published versions remain in source history.</span>
+    </div>
+    <div class="v-row">
       <span class="ver">v0.1</span>
       <span class="dt">2026-04-20</span>
       <span class="ch">Initial public draft. Sections 1–6 as published. Open for public comment.</span>
@@ -687,17 +714,17 @@ p{font-size:16.5px; line-height:1.64;}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v14.0 · liquidation-spec · deployed 2026-04-21</span>
+  <span class="version" id="footer-version">v0.2.1 · liquidation-spec · revised 2026-09-19</span>
 </div>
 
 <script>
 try {
-  console.log('%c⬡ GFOF Liquidation Spec v0.2 · Design Doc', 'color:#A78BFA;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #A78BFA;border-radius:2px;');
+  console.log('%c⬡ GFOF Liquidation Spec v0.2.1 · Design Doc', 'color:#A78BFA;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #A78BFA;border-radius:2px;');
   console.log('%c📖 Open for public criticism. See section 7.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
 } catch(e) {}
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v14.0 · liquidation-spec · deployed 2026-04-21'; }
+  if(el){ el.textContent = 'v0.2.1 · liquidation-spec · revised 2026-09-19'; }
 })();
 </script>
 </body>
