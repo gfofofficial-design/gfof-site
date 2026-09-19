@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/federation/fed-tokens.css">
 <link rel="stylesheet" href="assets/federation/fed-building.css">
+<link rel="stylesheet" href="assets/federation/fed-participation.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the overview</a>
@@ -22,7 +23,8 @@
     <h1 id="title">A foundation for<br><em>finance on-chain.</em></h1>
     <p class="lead">Bringing finance on-chain takes intelligence, accountable decisions, clear governance, and financial mechanisms people can examine.</p>
     <p>These are the foundations of the Federation's work on Solana. Explore the systems, their current stage, and the evidence behind them as the project develops.</p>
-    <div class="actions"><a class="button primary" href="#systems">Explore the work <span aria-hidden="true">↓</span></a><a class="button" href="/roadmap">See the roadmap <span aria-hidden="true">↗</span></a></div></div>
+    <div class="actions"><a class="button primary" href="#systems">Explore the work <span aria-hidden="true">↓</span></a><a class="button" href="/roadmap">See the roadmap <span aria-hidden="true">↗</span></a></div>
+    <p class="builder-shortcut"><a href="#participate">For builders &amp; businesses: find your starting point →</a></p></div>
     <aside class="vision" aria-label="The Federation vision">
       <img src="logo-circle.png" alt="" width="112" height="112">
       <p class="eyebrow">ONE FINANCIAL VISION</p>
@@ -41,7 +43,31 @@
     </div>
     <p class="scope">This overview describes the shared vision and published stages. It does not represent an integrated financial service or a commitment to launch dates.</p>
   </section>
-  <section class="engage" aria-labelledby="engage-title"><p class="eyebrow">BUILDERS · BUSINESSES · THE ON-CHAIN COMMUNITY</p><h2 id="engage-title">Get to know the Federation<br>as we build.</h2><p>Bring a concrete question, a use case, or a critique. Start with the specifications, follow the roadmap, and join the conversation about what finance on-chain should become.</p><div class="actions"><a class="button primary" href="https://t.me/GFOF_SOL">Join the discussion ↗</a><a class="button" href="https://x.com/GFOF_Offcial">Follow Federation updates ↗</a></div><p class="small">New to the ideas? <a href="/journey/">Explore First Contact</a>, our interactive introduction to money, choices, and trust.</p></section>
+  <section class="participate" id="participate" aria-labelledby="participate-title">
+    <div class="section-head"><div><p class="eyebrow">BUILDERS · BUSINESSES · RESEARCHERS</p><h2 id="participate-title" tabindex="-1">Bring your expertise.<br>Help shape what comes next.</h2></div><p class="participate-intro">Get to know the Federation as we build. Choose a starting point, examine the work, and bring a specific question to the conversation.</p></div>
+    <div class="participation-paths">
+      <article class="participation-path" aria-labelledby="builders-title">
+        <p class="eyebrow">01 / BUILDERS</p><h3 id="builders-title">Review a mechanism</h3>
+        <p>Examine a design assumption, model a failure scenario, or propose a test that could improve the specification.</p>
+        <p class="starting-point"><strong>Start here</strong><a href="/liquidation-spec#open-questions">Borrower-protective liquidation →</a><span>Open questions include oracle outages, grace periods, and liquidator incentives.</span></p>
+        <details><summary>Prepare a technical review</summary><div class="review-prompt"><p>Use these headings to frame your contribution:</p><ol><li><strong>Reference:</strong> specification version and section.</li><li><strong>Scenario:</strong> the conditions or assumptions you are testing.</li><li><strong>Finding:</strong> expected behavior, failure mode, and supporting calculation or evidence.</li><li><strong>Next step:</strong> a proposed change or test, including its trade-offs.</li></ol></div></details>
+      </article>
+      <article class="participation-path" aria-labelledby="business-title">
+        <p class="eyebrow">02 / BUSINESSES</p><h3 id="business-title">Bring a real use case</h3>
+        <p>Describe a financial workflow that is difficult today and what moving it on-chain would need to improve.</p>
+        <p class="starting-point"><strong>Start here</strong><a href="/roadmap">Current scope and development gates →</a><span>Use the published stages to frame an exploratory conversation.</span></p>
+        <details><summary>Prepare a use-case brief</summary><div class="review-prompt"><p>A useful brief can be just four points:</p><ol><li><strong>Workflow:</strong> who needs to do what, and where the process breaks down.</li><li><strong>Outcome:</strong> what a better result would look like and how you would measure it.</li><li><strong>Constraints:</strong> privacy, permissions, settlement, reporting, or integration needs.</li><li><strong>Question:</strong> which Federation project relates to the problem and what you want to explore.</li></ol></div></details>
+      </article>
+      <article class="participation-path" aria-labelledby="researchers-title">
+        <p class="eyebrow">03 / RESEARCHERS</p><h3 id="researchers-title">Challenge the evidence</h3>
+        <p>Test whether a public claim is supported. Bring a reproducible observation, a counterexample, or a better way to measure it.</p>
+        <p class="starting-point"><strong>Start here</strong><a href="/record">The Federation's public record →</a><span>Read the original claim alongside its sources and <a href="/corrections">recorded corrections</a>.</span></p>
+        <details><summary>Prepare an evidence review</summary><div class="review-prompt"><p>Make the observation easy for someone else to check:</p><ol><li><strong>Claim:</strong> quote the relevant passage and link to its source.</li><li><strong>Evidence:</strong> identify the data, date, method, and limitations.</li><li><strong>Result:</strong> explain what supports or contradicts the claim.</li><li><strong>Reproduction:</strong> provide the steps or public references needed to check it.</li></ol></div></details>
+      </article>
+    </div>
+    <div class="discussion"><div><h3>Start the conversation</h3><p>Introduce your question in the Federation's public Telegram community. Include the relevant source and a short summary so others can follow your reasoning.</p><p class="small">Share only information suitable for a public discussion. These are discussion guides; formal proposals and protocol challenges follow their published procedures.</p></div><a class="button primary" href="https://t.me/GFOF_SOL">Open Telegram community ↗</a></div>
+  </section>
+  <section class="engage" aria-labelledby="engage-title"><p class="eyebrow">STAY CONNECTED</p><h2 id="engage-title">Follow the work as it develops.</h2><p>Explore the research, follow the public record, and get to know the thinking behind the Federation.</p><div class="actions"><a class="button primary" href="/research">Read the research →</a><a class="button" href="https://x.com/GFOF_Offcial">Follow Federation updates ↗</a></div><p class="small">New to the ideas? <a href="/journey/">Explore First Contact</a>, our interactive introduction to money, choices, and trust.</p></section>
 </main>
 <footer class="wrap"><p>GALACTIC FEDERATION <span>/ BUILDING FOR ON-CHAIN FINANCE</span></p><nav aria-label="Footer"><a href="/">Federation home</a><a href="/roadmap">Roadmap</a><a href="/corrections">Corrections</a></nav></footer>
 </body>
