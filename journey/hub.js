@@ -15,3 +15,5 @@ $('begin').onclick=()=>{location.href=missions[0][3]+'.html'};$('browse').onclic
 window.addEventListener('pageshow',event=>{if(event.persisted)location.reload()});
 
 try{if(sessionStorage.getItem("gf-journey-long-way-home-v1")==="complete")$("long-way-status").textContent="Chapter explored in this tab · Play again to find another ending."}catch{}
+
+try{if(sessionStorage.getItem("gf-journey-borrowed-voice-v1")==="complete")$("borrowed-voice-status").textContent="Chapter explored in this tab · Replay to follow another decision."}catch{}
