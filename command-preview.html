@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://galacticfederation.co/">
-<title>Galactic Federation of Finance — Federation OS Command</title>
+<title>Galactic Federation — Explore, Learn, Follow the Record</title>
+<meta name="description" content="Explore the Galactic Federation through free interactive stories, public research and an open record of commitments. Find your place to begin.">
 <!-- FEDERATION OS COMMAND · BUILD 08. All factual statements are sourced
      from existing repository content; nothing is invented. -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -14,8 +15,10 @@
 <link rel="stylesheet" href="assets/federation/fed-components.css">
 <link rel="stylesheet" href="assets/federation/fed-shell.css">
 <link rel="stylesheet" href="assets/federation/fed-command.css">
+<link rel="stylesheet" href="assets/federation/fed-home.css">
 </head>
 <body class="fed-body-root fed-scope">
+<a class="home-skip" href="#home-title">Skip to the welcome</a>
 
 <!-- Atmosphere — decorative deep-space layer, hidden from AT -->
 <div class="cmd-atmos" aria-hidden="true">
@@ -74,10 +77,70 @@
   <div class="cmd-hero">
     <div>
       <span class="cmd-hero__access">FEDERATION OS // PUBLIC ACCESS</span>
-      <h1 class="cmd-hero__title">Galactic<br>Federation</h1>
-      <p class="cmd-hero__thesis">The financial system is moving on-chain.</p>
-      <p class="cmd-hero__arch">Intelligence<b>·</b>Accountability<b>·</b>Governance<b>·</b>Capital<b>·</b>One On-Chain Federation</p>
-      <p class="cmd-hero__position">Research-first DeFi on Solana. Public design specifications before code. A permanent corrections log for every commitment. Live on-chain transparency, read from the chain in your own browser.</p>
+      <h1 class="cmd-hero__title" id="home-title" tabindex="-1">Galactic<br>Federation</h1>
+      <p class="cmd-hero__thesis">Curiosity is a good place to start.</p>
+      <p class="cmd-hero__arch">Stories to explore · Research to examine · A record to follow</p>
+      <p class="cmd-hero__position">The Galactic Federation brings together interactive learning, research-first DeFi on Solana, and a public record of its work. Meet the guides, examine the ideas, and decide what you want to explore.</p>
+      <div class="cmd-hero__actions">
+        <a class="fed-btn fed-btn--command" href="/journey/">Start Your Journey</a>
+        <a class="fed-btn fed-btn--secondary" href="#start-title">Find Your Starting Point</a>
+        <a class="fed-btn fed-btn--secondary" href="/record">Read the Record</a>
+      </div>
+      <p class="home-reassurance">The Journey is free. No wallet, account, or purchase needed.</p>
+      <div class="cmd-hero__meta" aria-label="Interface identifiers (lore)">
+        <span>COMMAND NODE // GF-00</span>
+        <span>ACCESS CLASS // PUBLIC</span>
+      </div>
+    </div>
+    <div class="cmd-seal">
+      <span class="cmd-seal__orbit" aria-hidden="true"></span>
+      <span class="cmd-seal__orbit cmd-seal__orbit--mid" aria-hidden="true"></span>
+      <span class="cmd-seal__orbit--tick cmd-seal__orbit" aria-hidden="true"></span>
+      <img class="cmd-seal__img" src="logo-circle.png" alt="Galactic Federation seal — canonical circular mark">
+    </div>
+  </div>
+</section>
+
+<section class="fed-container home-start" id="start-here" aria-labelledby="start-title">
+  <div class="home-section-head">
+    <span class="cmd-ident">YOUR FIRST VISIT</span>
+    <h2 id="start-title" tabindex="-1">Choose your way in.</h2>
+    <p>A short story, a closer look at the work, or a conversation with the community.</p>
+  </div>
+  <div class="home-paths">
+    <article class="home-journey" aria-labelledby="home-journey-title">
+      <img src="journey/assets/first-contact.png" alt="The five Federation guides together in gold and cyan against space." loading="lazy">
+      <div class="home-path-body">
+        <span class="home-kicker">01 / PLAY &amp; LEARN</span>
+        <h3 id="home-journey-title">Your first choice.<br>A whole new journey.</h3>
+        <p>Meet five guides across 11 interactive missions about money, choices, and trust. Start with a three-minute introduction or bring the crew together in The Meridian Relay.</p>
+        <a class="fed-btn fed-btn--command" href="/journey/repair-the-shuttle.html">Play your first mission →</a>
+        <a class="home-text-link" href="/journey/">Browse all 11 missions →</a>
+        <p class="home-note">Fictional credits. No wallet or account. Play at your own pace.</p>
+      </div>
+    </article>
+    <div class="home-path-stack">
+      <article class="home-path" aria-labelledby="home-record-title">
+        <span class="home-kicker">02 / READ &amp; EXAMINE</span>
+        <h3 id="home-record-title">Follow the work.</h3>
+        <p>Explore published research, design specifications, forecasts, and the corrections log. Use the sources to form your own view.</p>
+        <a class="home-text-link" href="/research">Explore the research →</a>
+        <a class="home-text-link" href="/record">Read the public record →</a>
+      </article>
+      <article class="home-path" aria-labelledby="home-community-title">
+        <span class="home-kicker">03 / MEET &amp; DISCUSS</span>
+        <h3 id="home-community-title">Join the conversation.</h3>
+        <p>Ask a question, share a first impression, or follow the Federation’s updates.</p>
+        <a class="home-text-link" href="https://t.me/GFOF_SOL" rel="noopener">Find us on Telegram ↗</a>
+        <a class="home-text-link" href="https://x.com/GFOF_Offcial" rel="noopener">Follow on X ↗</a>
+      </article>
+    </div>
+  </div>
+  <a class="home-text-link home-systems-link" href="#network">Explore the Federation’s systems ↓</a>
+</section>
+
+<!-- Existing token details remain together above the system overview. -->
+<section class="fed-container home-token-section" aria-label="Federation token details">
       <div class="cmd-token" aria-label="Official $GFOF token">
         <div class="cmd-token__identity">
           <span class="cmd-token__label">OFFICIAL FEDERATION TOKEN // SOLANA</span>
@@ -93,23 +156,6 @@
           <a class="cmd-token__verify" href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">Verify on Solscan ↗</a>
         </div>
       </div>
-      <div class="cmd-hero__actions">
-        <a class="fed-btn fed-btn--command" href="/journey/">Start Your Journey</a>
-        <a class="fed-btn fed-btn--secondary" href="#network">Enter Command</a>
-        <a class="fed-btn fed-btn--secondary" href="/record">Read the Record</a>
-      </div>
-      <div class="cmd-hero__meta" aria-label="Interface identifiers (lore)">
-        <span>COMMAND NODE // GF-00</span>
-        <span>ACCESS CLASS // PUBLIC</span>
-      </div>
-    </div>
-    <div class="cmd-seal">
-      <span class="cmd-seal__orbit" aria-hidden="true"></span>
-      <span class="cmd-seal__orbit cmd-seal__orbit--mid" aria-hidden="true"></span>
-      <span class="cmd-seal__orbit--tick cmd-seal__orbit" aria-hidden="true"></span>
-      <img class="cmd-seal__img" src="logo-circle.png" alt="Galactic Federation seal — canonical circular mark">
-    </div>
-  </div>
 </section>
 
 <!-- ═══ COMMAND STATUS RAIL ═══ -->
@@ -377,6 +423,7 @@
       <div class="fed-shell-footer__col">
         <h3>Systems</h3>
         <a href="/">Command</a>
+        <a href="/journey/">First Contact Journey</a>
         <a href="https://dossiertrack.co">Dossier</a>
         <a href="https://fcc.galacticfederation.co/">FCC</a>
         <a href="/research">Research</a>

@@ -57,11 +57,6 @@
       node.addEventListener("click", function () {
         activate(node.getAttribute("aria-pressed") === "true" ? null : node);
       });
-      node.addEventListener("focus", function () { activate(node); });
-      node.addEventListener("mouseenter", function () { activate(node); });
-    });
-    net.addEventListener("mouseleave", function () {
-      if (!net.querySelector('[aria-pressed="true"]:focus')) activate(null);
     });
   }
 
