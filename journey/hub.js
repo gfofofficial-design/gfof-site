@@ -24,3 +24,5 @@ try{
  $('chapter-fill').style.width=deeperCompleted*20+'%';
  $('chapter-done').hidden=deeperCompleted!==5;
 }catch{$('chapter-count').textContent='Chapter progress saving is unavailable in this browser';}
+
+try{if(sessionStorage.getItem("gf-journey-meridian-relay-v1")==="complete")$("crew-status").textContent="Crew mission explored in this tab · Replay any time";}catch{$("crew-status").textContent="Progress saving is unavailable; you can still play."}
