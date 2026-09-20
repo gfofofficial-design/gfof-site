@@ -30,7 +30,7 @@ $('scene').addEventListener('click',event=>{
  if(action==='quiz-sender'){$('feedback').textContent='That asks the sender to verify itself. Try a channel obtained independently of this message.';return;}
  if(action==='quiz-independent'){
   $('feedback').textContent='Yes. An independently obtained contact route separates the organization from the sender’s claims.';
-  let saved=false;try{sessionStorage.setItem('gf-journey-borrowed-voice-v1','complete');saved=true;}catch{}
+  let saved=false;try{globalThis.FederationPassport?.mark('borrowed-voice');sessionStorage.setItem('gf-journey-borrowed-voice-v1','complete');saved=true;}catch{}
   $('completed').hidden=false;$('saved').textContent=saved?'Your chapter marker is saved in this tab. No reward or rank is attached.':'You completed the reflection. This browser could not save a marker, but you can replay freely.';return;
  }
  state=action==='restart'?initialState():transition(state,action);render();

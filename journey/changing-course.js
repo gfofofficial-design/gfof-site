@@ -1,5 +1,5 @@
 import {savings,savingsProjection} from './chapters-model.mjs';
-import {startChapter,option,voice,heading,reflection} from './chapter-runtime.js';
+import {startChapter,option,voice,heading,reflection} from './chapter-runtime.js?v=passport1';
 startChapter({id:'changing-course',model:savings,
  metrics:s=>[['Saved now',s.saved],['Goal cost',s.target||'—'],['Weeks elapsed',s.elapsed]],
  status:s=>s.step==='reflect'?'Revised plan / future savings are a projection':'A plan in progress',

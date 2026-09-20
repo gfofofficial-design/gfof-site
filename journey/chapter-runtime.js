@@ -19,7 +19,7 @@ export function startChapter(config){
   const button=event.target.closest('button[data-action]');if(!button||button.disabled)return;const action=button.dataset.action;
   if(action==='quiz-wrong'){$('feedback').textContent=config.wrong;return;}
   if(action==='quiz-right'){
-   $('feedback').textContent=config.right;let saved=false;try{sessionStorage.setItem(`gf-journey-${config.id}-v1`,'complete');saved=true;}catch{}
+   $('feedback').textContent=config.right;let saved=false;try{globalThis.FederationPassport?.mark(config.id);sessionStorage.setItem(`gf-journey-${config.id}-v1`,'complete');saved=true;}catch{}
    $('completed').hidden=false;$('saved').textContent=saved?'Your chapter marker is saved in this tab. It carries no reward or rank.':'Reflection completed. This browser could not save a marker; you can still continue.';return;
   }
   state=action==='restart'?config.model.initial():config.model.step(state,action);render(action);

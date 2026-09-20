@@ -37,7 +37,7 @@ $('scene').addEventListener('click',event=>{
   if(action.startsWith('quiz-')) {
     if(action==='quiz-cash') {$('feedback').textContent='Cash alone can hide a bill or an unresolved repair. Check the whole position, then choose again.';return;}
     $('feedback').textContent='Yes. A useful plan shows what is available and what still needs attention.';
-    let saved=false;try{sessionStorage.setItem('gf-journey-long-way-home-v1','complete');saved=true;}catch{}
+    let saved=false;try{globalThis.FederationPassport?.mark('long-way-home');sessionStorage.setItem('gf-journey-long-way-home-v1','complete');saved=true;}catch{}
     $('completed').hidden=false;$('saved').textContent=saved?'Your chapter marker is saved in this tab. It carries no reward or rank.':'You completed the reflection. This browser could not save a marker; no progress is required to replay.';
     return;
   }

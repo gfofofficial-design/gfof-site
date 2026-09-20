@@ -1,5 +1,5 @@
 import {initial,step,forecast,inventory,comparison,demand} from './meridian-relay-model.mjs';
-import {option,heading,voice} from './chapter-runtime.js';
+import {option,heading,voice} from './chapter-runtime.js?v=passport1';
 const $=id=>document.getElementById(id);
 let state=initial();
 const choices=(...items)=>`<div class="choices">${items.join('')}</div>`;
@@ -38,7 +38,7 @@ $('scene').addEventListener('click',event=>{
  if(action==='quiz-wrong'){$('feedback').textContent='Those items can matter, but they are not available cash. Read the current balance separately from hoped-for receipts.';$('completed').hidden=true;return;}
  if(action==='quiz-right'){
   $('feedback').textContent='Yes. The ledger records what actually happened; stock and forecasts remain separate.';let saved=false;
-  try{sessionStorage.setItem('gf-journey-meridian-relay-v1','complete');saved=true;}catch{}
+  try{globalThis.FederationPassport?.mark('meridian-relay');sessionStorage.setItem('gf-journey-meridian-relay-v1','complete');saved=true;}catch{}
   $('completed').hidden=false;$('saved').textContent=saved?'Your completion marker is saved in this tab. No reward or rank is attached.':'Reflection completed. This browser could not save a marker; you can still continue.';return;
  }
  state=action.startsWith('replay-')?initial(action.slice(7)):step(state,action);render(action);

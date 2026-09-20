@@ -15,7 +15,7 @@ function show(){
   $("avatarTitle").textContent=`Welcome aboard, ${avatar.callsign}.`;
   $("avatar-link").textContent="Edit your avatar →";
   $("saved-avatar-description").textContent="Your next story is waiting. Choose any mission and explore at your own pace.";
-  $("saved-avatar-note").textContent="Avatar saved in this browser. Mission badges are separate and stay in this tab.";
+  $("saved-avatar-note").textContent="Avatar saved in this browser. Your explorer passport can remember mission badges separately.";
   if(avatar.mode!=="character"){
    if(!avatar.photo){$("saved-avatar-note").textContent="Your saved image is unavailable. Edit your avatar to choose another; every mission is still open.";return;}
    const img=document.createElement("img");img.alt="Your saved Journey portrait";img.addEventListener("error",()=>{portrait.hidden=true;$("saved-avatar-note").textContent="Your saved image could not be displayed. Edit your avatar to choose another.";});img.src=avatar.photo;portrait.append(img);

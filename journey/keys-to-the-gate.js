@@ -1,5 +1,5 @@
 import {gate} from './chapters-model.mjs';
-import {startChapter,option,voice,heading,reflection} from './chapter-runtime.js';
+import {startChapter,option,voice,heading,reflection} from './chapter-runtime.js?v=passport1';
 startChapter({id:'keys-to-the-gate',model:gate,
  metrics:s=>[['Current credits',s.known?s.cash:'Unknown'],['Allowance left',s.allowance],['Site session',s.connected?'Connected':'Closed']],
  status:s=>s.secret?'Recovery secret exposed / control compromised':s.allowance?'Spending permission remains active':s.outcome==='revoked'?'Allowance revoked / prior loss remains':'No active spending allowance',
