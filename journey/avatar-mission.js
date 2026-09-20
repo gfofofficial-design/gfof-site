@@ -9,7 +9,7 @@ function refresh(){
   const raw=localStorage.getItem(key);if(!raw)return;
   const stored=JSON.parse(raw);if(!stored||typeof stored!=="object"||Array.isArray(stored))return;
   const avatar=clean(stored);$("mission-avatar-name").textContent=avatar.callsign;
-  if(avatar.mode==="photo"){
+  if(avatar.mode!=="character"){
    if(avatar.photo){const img=document.createElement("img");img.alt="";img.addEventListener("error",()=>{portrait.hidden=true;});img.src=avatar.photo;portrait.append(img);portrait.hidden=false;}
   }else{portrait.innerHTML=svg(avatar);portrait.hidden=false;}
   card.hidden=false;
