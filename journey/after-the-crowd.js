@@ -1,5 +1,5 @@
 import {market,marketResult,booths} from './chapters-model.mjs';
-import {startChapter,option,voice,heading,reflection} from './chapter-runtime.js';
+import {startChapter,option,voice,heading,reflection} from './chapter-runtime.js?v=passport1';
 const introArt='<div class="panorama"><img src="assets/first-contact.png" alt="Kael and the four other Federation guides."></div>';
 startChapter({id:'after-the-crowd',model:market,
  metrics:s=>[['Available credits',s.cash],['Stock purchased',s.stock],['Charms held',s.result?s.result.held:s.stock]],
