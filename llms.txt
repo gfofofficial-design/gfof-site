@@ -13,7 +13,7 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 
 - [Corrections Log](https://galacticfederation.co/corrections): Every commitment the Federation has made publicly, with status (ON TRACK / DELAYED / MISSED / KEPT / CANCELLED). Entries are appended, never deleted. Includes commitments about token economics, governance, publishing cadence, and design iteration. Cadence rule revised 2026-05-05 (#H007) to permit bounded engagement activity (daily replies, weekly cross-posts, monthly Office Hours) alongside the unchanged 2–4 originated posts per week discipline; see #008, #009, #010. Same-day correction filed as #H008: commitment #008 originally named "Medium and Mirror" but was revised to "Medium" only because Mirror.xyz consolidated into Paragraph in late 2025 and no longer exists as a separate platform.
 - [Corrections RSS feed](https://galacticfederation.co/corrections-feed.xml): Machine-readable feed of the corrections log.
-- [Security Policy](https://galacticfederation.co/security): Responsible disclosure policy, bug-bounty framework, and hall of honor. RFC 9116 `security.txt` served at [/.well-known/security.txt](https://galacticfederation.co/.well-known/security.txt).
+- [Security Policy](https://galacticfederation.co/security): Responsible disclosure policy and hall of honor. The proposed policy withdraws the paid bounty; this review branch is not evidence of a published policy change. RFC 9116 `security.txt` served at [/.well-known/security.txt](https://galacticfederation.co/.well-known/security.txt).
 
 ## Longform research
 
