@@ -252,9 +252,9 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <h1 class="doc-title">The Adjudication <span class="grad">Record</span></h1>
     <p class="doc-sub">A prediction market price is read as a probability about an event. It pays out on whatever the resolution mechanism certifies. Those are two different things. This is a public, timestamped log of how often they disagree &mdash; filed before resolution, scored both ways, and never edited.</p>
     <div class="doc-meta">
-      <span>VERSION <strong>v0.4</strong></span>
+      <span>VERSION <strong>v0.5</strong></span>
       <span>PUBLISHED <strong>2026-08-10</strong></span>
-      <span>AMENDED <strong>2026-08-11</strong></span>
+      <span>AMENDED <strong>2026-09-24</strong></span>
       <span>ENTRIES FILED <strong>0</strong></span>
       <span>STATUS <strong>METHOD ONLY</strong></span>
     </div>
@@ -321,11 +321,11 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <div class="rule-grid">
     <div class="rule">
       <div class="rk">01 &middot; COVERED VENUE</div>
-      <div class="rv">Listed on a venue named in this document. At v0.4: Polymarket and Kalshi.</div>
+      <div class="rv">An individually resolving contract on Polymarket or Kalshi that the venue marks open for trading and unresolved at the filing capture. A multi-leg, parlay or composite contract whose payout depends on two or more separately listed markets is excluded; separate yes/no contracts grouped on one event page remain individual contracts.</div>
     </div>
     <div class="rule">
       <div class="rk">02 &middot; FORWARD WINDOW</div>
-      <div class="rv">A stated resolution date falling within 45 days of the filing date.</div>
+      <div class="rv">The venue's contract-level end or expected-expiration timestamp falls within 45 days after the filing capture. Use Polymarket's market <code>endDate</code> and Kalshi's market <code>expected_expiration_time</code>, preserving the value and its source. This is a selection horizon, not a promise that certification occurs within 45 days. An entry must state any later outcome or fallback deadline in the written rule.</div>
     </div>
     <div class="rule">
       <div class="rk">03 &middot; NOT AN ASSET-PRICE CONTRACT</div>
@@ -333,7 +333,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     </div>
     <div class="rule">
       <div class="rk">04 &middot; TOP FIVE BY VOLUME</div>
-      <div class="rv">Of the markets meeting 01, 02 and 03, the five largest by reported volume at the moment of filing. All five are filed. Every week. A <em>market</em> is the individually-resolving contract &mdash; the unit carrying its own rule text and settling on its own terms &mdash; not a grouping of contracts a venue displays together. <em>Volume</em> is the USD figure the venue itself displays for that contract, evidenced by a dated capture at filing; a figure displayed only for a grouping ranks no single contract.</div>
+      <div class="rv">Of the contracts meeting 01, 02 and 03 across both venues, the five largest by the USD volume the venue displays for each individual contract at the filing capture. All five are filed. Every week. Event or group volume ranks no contract. Equal displayed volumes are ordered by venue name, then stable contract ID, both ascending. Preserve the venue queries, all pages needed to prove that no omitted contract outranks fifth place, the capture times, and dated evidence of each selected contract's displayed USD volume. If the universe or fifth-place boundary cannot be verified, publish a dated selection failure rather than substitute five contracts.</div>
     </div>
   </div>
 
@@ -365,6 +365,13 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <p><strong>What changed.</strong> A third selection criterion was added, excluding contracts that resolve on the traded price, level, or yield of a financial instrument or index. The remaining criteria are unchanged and were renumbered.</p>
     <p><strong>Why.</strong> Capturing the venues for the first filing showed that the highest-volume contracts inside the 45-day window are hourly and daily asset-price brackets &mdash; a cryptocurrency&rsquo;s price at 11am, an index level at the close, a Treasury yield today. Under v0.3 the mechanical top-five would have been dominated by them every week. But an entry&rsquo;s rule-implied reading carries a mandatory probability on the observable the rule names, and when that observable is an asset price, the number is an asset-price forecast &mdash; which Section 06 of this document forbids, and has forbidden since v0.1. Section 03 as written selected what Section 06 prohibits. The exclusion was always implied by the hard exclusions; the selection rule simply failed to encode it, and the failure only became visible on contact with the venue. This is the third amendment this section has needed in two days, each found the same way. That is stated here rather than smoothed over, because a selection rule that survives its author&rsquo;s imagination and fails at the venue is the expected order of events, and the record of the repairs is part of the record.</p>
     <p><strong>The judgement-call check.</strong> A criterion is only admissible in this section if applying it requires no discretion. The test for this one: does the contract&rsquo;s written rule name, as its deciding observable, the traded price, level, or yield of a financial instrument or index? A Fed rate decision resolves on a policy announcement, not a traded price &mdash; included. CPI resolves on a published statistic &mdash; included. &ldquo;Bitcoin above $65,000&rdquo; resolves on a traded price &mdash; excluded. If a contract ever genuinely straddles this line, it will be filed rather than skipped, with the ambiguity stated in the entry, since filing is the non-discretionary default.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-09-24 &middot; v0.4 &rarr; v0.5 &middot; BEFORE FIRST ENTRY</div>
+    <p><strong>The changed v0.4 criteria read:</strong> 01: &ldquo;Listed on a venue named in this document. At v0.4: Polymarket and Kalshi.&rdquo; 02: &ldquo;A stated resolution date falling within 45 days of the filing date.&rdquo; 04: &ldquo;Of the markets meeting 01, 02 and 03, the five largest by reported volume at the moment of filing. All five are filed. Every week. A <em>market</em> is the individually-resolving contract &mdash; the unit carrying its own rule text and settling on its own terms &mdash; not a grouping of contracts a venue displays together. <em>Volume</em> is the USD figure the venue itself displays for that contract, evidenced by a dated capture at filing; a figure displayed only for a grouping ranks no single contract.&rdquo;</p>
+    <p><strong>Why it changed.</strong> A first-filing dry run found that an election contract carried an October venue end date while its written rule allowed a result as late as June of the following year. The phrase &ldquo;stated resolution date&rdquo; did not say which date controlled. The same dry run found a very large class of multi-leg contracts, and v0.4 did not say whether those or listed-but-closed contracts belonged in the selection universe. This amendment makes the status, date field, composite exclusion and tie rule explicit before the first five are chosen. The composite exclusion is a new limit on the sample, not a claim that those contracts do not resolve.</p>
+    <p><strong>Consequence.</strong> The 45-day test now measures the venue's expected timing, while the written rule and actual certification may run longer. Several contracts from one event may occupy all five places if their individual volumes warrant it. We do not swap them for a more varied or interesting sample. If a complete ranking cannot be evidenced, the failure is reported rather than hidden.</p>
   </div>
 
   <p>Amendments to this section are versioned, dated, and published here with the old text retained. Any entry filed under a previous version keeps that version stamped on it.</p>
@@ -462,7 +469,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version">v17.32 · adjudication-method · v0.4 amended 2026-08-11</span>
+  <span class="version">v17.32 · adjudication-method · v0.5 amended 2026-09-24</span>
 </div>
 
 </body>
