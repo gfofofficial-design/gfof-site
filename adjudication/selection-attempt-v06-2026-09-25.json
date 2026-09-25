@@ -1,0 +1,36 @@
+{
+  "record_type": "adjudication_selection_attempt",
+  "method_version": "v0.6",
+  "result": "cross_venue_fifth_place_unverifiable_no_entries_filed",
+  "capture_started_utc": "2026-09-25T15:05:27Z",
+  "capture_finished_utc": "2026-09-25T15:06:56Z",
+  "window_end_utc": "2026-11-09T15:05:27Z",
+  "source_manifest_sha256": "8AB96E1C216800B226EDE287FCE82F09998BD51F6BBE653E4F64A10379638F28",
+  "polymarket": {
+    "source": "https://gamma-api.polymarket.com/markets/keyset",
+    "first_page_markets": 100,
+    "next_cursor_present": true,
+    "first_page_response_sha256": "80e187c0f4f801701a3f992c40bcd727149b759baaf62e3c892447b8d3be28b3",
+    "lowest_individual_volume_usd_on_first_page": "1091151.142218",
+    "provisional_fifth_non_person_non_asset_price_market": {
+      "id": "2589812",
+      "title": "Will there be no change in Fed interest rates after the October 2026 meeting?",
+      "volume_usd": "3582669.7572869994"
+    }
+  },
+  "kalshi": {
+    "source": "https://external-api.kalshi.com/trade-api/v2/markets?status=open&limit=1000&mve_filter=exclude",
+    "pages_preserved": 134,
+    "open_noncomposite_contracts_seen": 133629,
+    "in_window_expected_expiration_count": 64512,
+    "final_cursor_present": false,
+    "contenders_by_contract_count_times_face_value_usd_upper_bound": [
+      {"ticker": "KXMLB-26-LAD", "upper_bound_usd": "5778659.910000"},
+      {"ticker": "KXMLB-26-MIL", "upper_bound_usd": "4696771.870000"},
+      {"ticker": "KXMLB-26-BOS", "upper_bound_usd": "4297916.110000"},
+      {"ticker": "KXMLB-26-NYY", "upper_bound_usd": "4245989.460000"}
+    ],
+    "ui_observation": "The Pro Baseball Champion event page displayed an event-level dollar volume, including when a single outcome market was selected; it did not display a separate USD trading-volume figure for that individual market. The API volume_fp field is contract quantity, not observed dollar turnover."
+  },
+  "interpretation": "These upper bounds are not ranked USD trading volumes. Because multiple eligible Kalshi contracts could cross the provisional Polymarket fifth and the published rule requires venue-displayed per-contract USD volume, the cross-venue top five was not proven. No probabilities, entries, scores or substitute contracts were filed from this capture. Archived API responses remain in the Federation private evidence store and are not included here."
+}
