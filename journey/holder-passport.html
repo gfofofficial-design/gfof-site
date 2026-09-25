@@ -7,7 +7,7 @@
   <meta name="description" content="An optional, read-only GFOF wallet check and a practical tester route through the Federation Journey. No deposit, lock, reward or purchase needed.">
   <title>Explorer Passport · Federation Journey</title>
   <link rel="stylesheet" href="hub.css?v=passport1">
-  <link rel="stylesheet" href="holder-passport.css?v=1">
+  <link rel="stylesheet" href="holder-passport.css?v=2">
 </head>
 <body>
 <a class="skip" href="#passport-title">Skip to Explorer Passport</a>
@@ -35,8 +35,8 @@
     <p id="wallet-status" role="status" aria-live="polite">No wallet connected. All tester steps below are available without one.</p>
     <div id="wallet-result" class="wallet-result" hidden>
       <strong id="wallet-marker"></strong>
-      <p><span class="muted">Connected wallet</span> <code id="wallet-address"></code></p>
-      <p><span class="muted">GFOF in this wallet</span> <strong id="wallet-balance"></strong></p>
+      <p class="wallet-detail"><span class="muted">Connected wallet</span><code id="wallet-address"></code></p>
+      <p class="wallet-detail"><span class="muted">GFOF in this wallet</span><strong id="wallet-balance"></strong></p>
       <p class="note" id="wallet-slot"></p>
     </div>
     <p class="note">This page sends your public wallet address to the Federation site's read-only balance endpoint, which queries a Solana mainnet RPC. The page does not save your address or balance; the site host and RPC provider process the lookup. “Clear wallet view” clears this page only; use your wallet settings to revoke a site connection. This display is not a secure access credential or a snapshot of all your holdings. Never share a seed phrase. A balance does not grant a reward, yield, beta place or financial right.</p>
