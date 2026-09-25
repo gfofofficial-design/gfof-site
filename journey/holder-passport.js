@@ -1,6 +1,6 @@
-import {GFOF_MINT, parseHolderBalance, formatTokenAmount} from "./holder-passport-model.mjs";
+import {parseHolderBalance, formatTokenAmount} from "./holder-passport-model.mjs";
 
-const RPC = "https://api.mainnet-beta.solana.com";
+const BALANCE_ENDPOINT = "/api/holder-balance";
 const $ = id => document.getElementById(id);
 let wallet = "";
 let provider = null;
@@ -56,10 +56,10 @@ async function readBalance(address) {
   $("wallet-result").hidden = true;
   $("wallet-status").textContent = "Reading GFOF token accounts from Solana mainnet…";
   try {
-    const response = await fetch(RPC, {
+    const response = await fetch(BALANCE_ENDPOINT, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({jsonrpc:"2.0",id:1,method:"getTokenAccountsByOwner",params:[address,{mint:GFOF_MINT},{commitment:"confirmed",encoding:"jsonParsed"}]}),
+      body: JSON.stringify({address}),
       signal: abortController.signal,
       cache: "no-store"
     });
@@ -78,7 +78,7 @@ async function readBalance(address) {
     $("wallet-status").textContent = balance.holder ? "Read-only holder check complete." : "Balance check complete. Every tester step remains open.";
   } catch {
     if (thisRequest === requestId && wallet === address) {
-      $("wallet-status").textContent = "The mainnet balance could not be verified right now. Please try again later; no balance or holder status is claimed.";
+      $("wallet-status").textContent = "The mainnet balance could not be verified right now. Refresh to try again; no balance or holder status is claimed.";
     }
   } finally {
     clearTimeout(timeout);
