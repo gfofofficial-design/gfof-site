@@ -39,7 +39,7 @@
       <p><span class="muted">GFOF in this wallet</span> <strong id="wallet-balance"></strong></p>
       <p class="note" id="wallet-slot"></p>
     </div>
-    <p class="note">Your wallet address goes directly from this browser to a public Solana RPC for the balance lookup; the Federation does not receive or store it through this page. “Clear wallet view” clears this page only; use your wallet settings to revoke a site connection. This on-device display is not a secure access credential or a snapshot of all your holdings. Never share a seed phrase. A balance does not grant a reward, yield, beta place or financial right.</p>
+    <p class="note">This page sends your public wallet address to the Federation site's read-only balance endpoint, which queries a Solana mainnet RPC. The page does not save your address or balance; the site host and RPC provider process the lookup. “Clear wallet view” clears this page only; use your wallet settings to revoke a site connection. This display is not a secure access credential or a snapshot of all your holdings. Never share a seed phrase. A balance does not grant a reward, yield, beta place or financial right.</p>
   </section>
 
   <section class="passport-card" aria-labelledby="tester-title">
@@ -57,6 +57,6 @@
   <footer>Explorer Passport · Optional wallet read, open learning path, no purchase or account needed. The Federation does not use a wallet connection here to custody assets or authorize transactions. <a href="/roadmap">Current product status</a> · <a href="/corrections">Public corrections</a></footer>
 </main>
 <script src="passport.js?v=1"></script>
-<script type="module" src="holder-passport.js?v=1"></script>
+<script type="module" src="holder-passport.js?v=2"></script>
 </body>
 </html>
