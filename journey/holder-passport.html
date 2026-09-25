@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="An optional, read-only GFOF wallet check and a practical tester route through the Federation Journey. No deposit, lock, reward or purchase needed.">
+  <title>Explorer Passport · Federation Journey</title>
+  <link rel="stylesheet" href="hub.css?v=passport1">
+  <link rel="stylesheet" href="holder-passport.css?v=1">
+</head>
+<body>
+<a class="skip" href="#passport-title">Skip to Explorer Passport</a>
+<main>
+  <nav aria-label="Journey navigation"><a href="./#passport-title">← Back to the Journey</a></nav>
+  <header><img src="assets/gf-seal.png" alt="Galactic Federation seal"><strong>GALACTIC FEDERATION · JOURNEY</strong></header>
+  <div class="eyebrow">Explorer Passport · Participation preview</div>
+  <h1 id="passport-title">Your place in<br>the build.</h1>
+  <p class="intro">Follow the real finance build, practice in the Journey, and send the team one useful observation. If you hold GFOF, you can optionally check the balance of a connected wallet here. The path is open to everyone.</p>
+
+  <section class="passport-card" aria-labelledby="progress-title">
+    <div class="eyebrow">Your Journey record</div>
+    <h2 id="progress-title">Keep exploring.</h2>
+    <p id="mission-progress" role="status">Loading your mission progress…</p>
+    <p class="note">Mission badges are saved only if you chose “Remember my progress” on the Journey hub. They are learning markers, not token rewards.</p>
+    <div class="actions"><a class="button" href="./#passport-title">Open mission collection →</a><a class="button" href="avatar.html">Create an avatar →</a></div>
+  </section>
+
+  <section class="passport-card wallet-card" aria-labelledby="wallet-title">
+    <div class="eyebrow">Optional · Read-only mainnet check</div>
+    <h2 id="wallet-title">See your GFOF balance.</h2>
+    <p>Connect a Solana wallet to read its current GFOF token accounts on Solana mainnet. This page never asks you to sign a message or transaction, and it cannot move or lock tokens.</p>
+    <div class="actions"><button id="wallet-connect" class="button primary" type="button">Connect and check balance</button><button id="wallet-refresh" class="button" type="button" hidden>Refresh balance</button><button id="wallet-clear" class="button" type="button" hidden>Clear wallet view</button></div>
+    <p id="wallet-status" role="status" aria-live="polite">No wallet connected. All tester steps below are available without one.</p>
+    <div id="wallet-result" class="wallet-result" hidden>
+      <strong id="wallet-marker"></strong>
+      <p><span class="muted">Connected wallet</span> <code id="wallet-address"></code></p>
+      <p><span class="muted">GFOF in this wallet</span> <strong id="wallet-balance"></strong></p>
+      <p class="note" id="wallet-slot"></p>
+    </div>
+    <p class="note">Your wallet address goes directly from this browser to a public Solana RPC for the balance lookup; the Federation does not receive or store it through this page. “Clear wallet view” clears this page only; use your wallet settings to revoke a site connection. This on-device display is not a secure access credential or a snapshot of all your holdings. Never share a seed phrase. A balance does not grant a reward, yield, beta place or financial right.</p>
+  </section>
+
+  <section class="passport-card" aria-labelledby="tester-title">
+    <div class="eyebrow">A useful next move</div>
+    <h2 id="tester-title">Help test what is real.</h2>
+    <ol class="tester-steps">
+      <li><strong>Run the Lending Lab.</strong> Try both collateral-price paths and note where an explanation is confusing. <a href="lending-lab.html">Play the fictional lab →</a></li>
+      <li><strong>Check the actual build stage.</strong> The lending program is a private prototype; loss handling, liquidation, independent review and real-fund approval remain open. <a href="/building#lending-progress">Read build progress →</a></li>
+      <li><strong>Send one specific observation.</strong> Tell us what worked, where you got stuck, and what you expected instead. You do not need to disclose a wallet address or token balance. <a href="https://t.me/GFOF_SOL" target="_blank" rel="noopener noreferrer">Join the public discussion ↗</a></li>
+    </ol>
+    <div class="actions"><button id="copy-tester-note" class="button" type="button">Copy a feedback template</button></div>
+    <p id="copy-status" role="status" aria-live="polite"></p>
+    <p class="note">This is an invitation to learn and give feedback. It is not a financial-product beta signup, a reservation, an allocation, or a promise of future access.</p>
+  </section>
+  <footer>Explorer Passport · Optional wallet read, open learning path, no purchase or account needed. The Federation does not use a wallet connection here to custody assets or authorize transactions. <a href="/roadmap">Current product status</a> · <a href="/corrections">Public corrections</a></footer>
+</main>
+<script src="passport.js?v=1"></script>
+<script type="module" src="holder-passport.js?v=1"></script>
+</body>
+</html>
