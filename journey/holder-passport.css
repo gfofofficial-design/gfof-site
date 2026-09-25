@@ -1,0 +1,6 @@
+.passport-card{margin:28px 0;padding:28px;border:1px solid #42677a;border-radius:20px;background:linear-gradient(135deg,#102838,#101b2c)}
+.passport-card h2{margin:10px 0 16px}.passport-card p{max-width:780px}
+.wallet-card{border-color:#b2965b}.wallet-result{margin:20px 0;padding:18px;border:1px solid #648899;border-radius:14px;background:#0a1b2b}.wallet-result strong{color:var(--gold)}.wallet-result p{margin:8px 0;overflow-wrap:anywhere}.wallet-result code{font-size:14px;overflow-wrap:anywhere}
+.tester-steps{display:grid;gap:16px;padding-left:24px}.tester-steps li{padding-left:8px}.tester-steps strong{color:var(--gold)}.tester-steps a{display:inline-block;margin-left:4px}
+#wallet-status,#copy-status{min-height:1.5em}.wallet-card button[disabled]{opacity:.7;cursor:wait}
+@media(max-width:640px){.passport-card{padding:19px}.tester-steps{padding-left:20px}}
