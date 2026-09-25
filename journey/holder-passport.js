@@ -93,7 +93,7 @@ async function readBalance(address) {
 $("wallet-connect").addEventListener("click", async () => {
   const candidate = walletProvider();
   if (!candidate) {
-    $("wallet-status").textContent = "No supported Solana wallet was found in this browser. The Journey and tester path remain open without one.";
+    $("wallet-status").textContent = "No Solana wallet is available in this browser. On a phone, open this page inside your wallet app’s browser; on desktop, use a browser with an unlocked wallet extension. The tester path remains open here.";
     return;
   }
   $("wallet-connect").disabled = true;
@@ -116,8 +116,10 @@ $("wallet-connect").addEventListener("click", async () => {
       candidate.on("accountChanged", onAccountChanged);
     }
     await readBalance(address);
-  } catch {
-    clearView("Wallet connection was declined or unavailable. Nothing was changed; the tester path remains open.");
+  } catch (error) {
+    clearView(error?.code === 4001
+      ? "Wallet connection was declined. Nothing was changed; the tester path remains open."
+      : "Wallet connection could not finish. Open this page in your wallet app’s browser or unlock your desktop extension, then try again. Nothing was changed.");
   } finally {
     $("wallet-connect").disabled = false;
   }
