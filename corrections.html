@@ -887,6 +887,24 @@ p{font-family:var(--font-read); letter-spacing:0;}
     </div>
   </div>
 
+<div class="entry status-missed" id="c036">
+    <div class="entry-head">
+      <span class="entry-id">#036 &middot; MISSED FILING</span>
+      <span class="entry-status">MISSED</span>
+    </div>
+    <h3>The first Adjudication Record selection found five named-person outcome contracts that conflict with the published no-identified-person boundary.</h3>
+    <div class="meta">
+      <span>Found &amp; published 2026-09-25</span>
+      <span>Affected: <a href="/adjudication-method" style="color:var(--cyan);text-decoration:underline">/adjudication-method</a> v0.5 &middot; first entry filing</span>
+    </div>
+    <div class="body">
+      <p><strong>What we committed to.</strong> The <a href="/adjudication-method#selection" style="color:var(--cyan);text-decoration:underline">selection rule</a> says to file all five highest-volume eligible contracts, without substitutions. The same method's hard exclusions say entries and analysis make no claims about identified people.</p>
+      <p><strong>What happened.</strong> After v0.5 was published, a read-only selection capture began at 2026-09-25 04:57:15 UTC. The rolling 45-day window ended 2026-11-09 04:57:15 UTC. The first 100 volume-ranked Polymarket markets and all 133 pages of Kalshi's open non-composite list were preserved. Kalshi had no in-window contract whose maximum possible dollar turnover exceeded the Polymarket fifth. The five selected individual contracts all concerned named candidates winning the same presidential election. Filing the method's mandatory probabilities would make claims about identified people. Quietly substituting other markets would also break the selection rule.</p>
+      <p><strong>Outcome.</strong> No Adjudication Record probability, entry or score was filed from that capture; nothing will be backdated to it. This is our method failure, not a finding that either venue resolved a contract incorrectly. The original v0.5 method and dated selection evidence are retained; a <a href="/adjudication/selection-attempt-2026-09-25.json" style="color:var(--cyan);text-decoration:underline">public capture summary</a> gives the timestamp, contract IDs, volumes and archive digest. We count this attempt as missed rather than as five valid entries.</p>
+      <p><strong>Repair.</strong> We retained the older no-person boundary and prospectively added a criterion excluding person-outcome contracts from selection. The sample change is explicit in the <a href="/adjudication-method#selection" style="color:var(--cyan);text-decoration:underline">v0.6 amendment</a>. A fresh capture must precede any first entry. This correction does not authorize substitute entries from the old capture.</p>
+    </div>
+  </div>
+
 <div class="entry status-cancelled" id="c035">
     <div class="entry-head">
       <span class="entry-id">#035 &middot; CORRECTION</span>

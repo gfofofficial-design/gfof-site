@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Thu, 17 Sep 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 25 Sep 2026 15:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 25 Sep 2026 15:00:00 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,14 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#036 · MISSED FILING — The first Adjudication Record selection conflicted with the no-identified-person boundary.</title>
+      <link>https://galacticfederation.co/corrections#c036</link>
+      <guid isPermaLink="false">gfof-missed-036-adjudication-person-outcome-selection</guid>
+      <pubDate>Fri, 25 Sep 2026 15:00:00 +0000</pubDate>
+      <description>After method v0.5 was published, a dated Polymarket and Kalshi capture selected five individual contracts about named election candidates. Mandatory probabilities on those outcomes would conflict with the method's original prohibition on claims about identified people. No probability or entry was filed or backdated; no other markets were substituted. The attempt is counted as missed. Method v0.6 preserves the older prohibition and prospectively excludes person-outcome contracts before a fresh selection.</description>
+    </item>
 
     <item>
       <title>#035 · CORRECTION — The public launch path was wrong: GFOF uses Meteora DBC, migration is quote-reserve based, and $73K market cap does not trigger Raydium.</title>
