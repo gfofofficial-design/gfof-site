@@ -61,7 +61,7 @@
     "MISSED",
     "CANCELLED"
   ],
-  "dateModified": "2026-09-17"
+  "dateModified": "2026-09-25"
 }
 </script>
 <script type="application/ld+json">
@@ -884,6 +884,24 @@ p{font-family:var(--font-read); letter-spacing:0;}
       <p><strong>Why the rate is 93%, not 100%.</strong> The keep-rate is counted strictly: of <strong>15 resolved commitments</strong>, 14 are KEPT and one &mdash; entry <a href="#c018" style="color:var(--cyan);text-decoration:underline">#018</a>, the immutable on-chain name disclosure &mdash; sits in the denominator as a DISCLOSURE / CANCELLED rather than being excluded to flatter the number. We chose the stricter count on purpose. The 17 ON TRACK entries are forward-looking and excluded from the rate until they resolve.</p>
       <p>A search box and status filters were also added to make the log navigable. No entry content was altered.</p>
       <p><strong>Status:</strong> Acknowledged and permanent. The page now corrects its own arithmetic; a stale published stat has been replaced with the true figure. This entry is appended, never edited retroactively.</p>
+    </div>
+  </div>
+
+<div class="entry status-missed" id="c037">
+    <div class="entry-head">
+      <span class="entry-id">#037 &middot; MISSED FILING</span>
+      <span class="entry-status">MISSED</span>
+    </div>
+    <h3>The revised Adjudication Record selection still could not prove a cross-venue top five.</h3>
+    <div class="meta">
+      <span>Found &amp; published 2026-09-25</span>
+      <span>Affected: <a href="/adjudication-method" style="color:var(--cyan);text-decoration:underline">/adjudication-method</a> v0.6 &middot; first entry filing</span>
+    </div>
+    <div class="body">
+      <p><strong>What we committed to.</strong> Method v0.6 requires the five largest eligible individual contracts across Polymarket and Kalshi by each venue's displayed USD volume, with evidence that no omitted contract outranks fifth place. If that boundary cannot be verified, it requires a dated selection failure rather than substituted entries.</p>
+      <p><strong>What happened.</strong> A fresh capture began after v0.6 was published, at 2026-09-25 15:05:27 UTC. We archived Polymarket's first 100 individual markets in descending reported USD volume and all 134 pages of Kalshi's open non-composite list. Kalshi's page showed a dollar volume for the <em>event</em>, while its individual-market API exposed contract count and face value, not a displayed individual USD trading-volume figure. Several eligible Kalshi contracts had face-value upper bounds above the provisional Polymarket fifth-place volume. We therefore could not prove whether they crossed the boundary or which five the published rule selected.</p>
+      <p><strong>Outcome.</strong> No probability, Adjudication Record entry or score was filed from this capture, and none will be backdated. We did not substitute five Polymarket contracts or treat Kalshi's event volume as an individual figure. The archived API responses remain preserved; a <a href="/adjudication/selection-attempt-v06-2026-09-25.json" style="color:var(--cyan);text-decoration:underline">public capture summary</a> gives the timing, page counts, competing market figures and archive digest. This is our method's measurement failure, not a finding that either venue settled incorrectly.</p>
+      <p><strong>Next.</strong> The first filing remains open. Any change to venue coverage or volume measurement must be published prospectively before a new capture; it cannot rescue this attempt after seeing the results. Until then, we will put the external-validation effort into conversations with builders rather than report an unsupported track record.</p>
     </div>
   </div>
 
