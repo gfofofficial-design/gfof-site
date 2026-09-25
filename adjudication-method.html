@@ -252,9 +252,9 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <h1 class="doc-title">The Adjudication <span class="grad">Record</span></h1>
     <p class="doc-sub">A prediction market price is read as a probability about an event. It pays out on whatever the resolution mechanism certifies. Those are two different things. This is a public, timestamped log of how often they disagree &mdash; filed before resolution, scored both ways, and never edited.</p>
     <div class="doc-meta">
-      <span>VERSION <strong>v0.5</strong></span>
+      <span>VERSION <strong>v0.6 DRAFT</strong></span>
       <span>PUBLISHED <strong>2026-08-10</strong></span>
-      <span>AMENDED <strong>2026-09-24</strong></span>
+      <span>AMENDMENT <strong>PROPOSED 2026-09-25</strong></span>
       <span>ENTRIES FILED <strong>0</strong></span>
       <span>STATUS <strong>METHOD ONLY</strong></span>
     </div>
@@ -263,6 +263,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <div class="callout amber">
     <div class="k">READ THIS FIRST</div>
     <p>No entries exist yet. This document is published before the first one deliberately, so that the rules governing what gets filed were fixed in public before anybody knew what the results would look like. If the selection rule were written afterwards, none of the numbers this record eventually produces would be worth reading.</p>
+    <p><strong>Draft notice for owner review:</strong> the first v0.5 capture selected five election-winner contracts about identified people. Section 06 forbids claims about identified people, so no entry or probability was filed. The proposed v0.6 repair below would preserve that older boundary, record the selection failure, and apply only to a new capture. This paragraph is not yet published on the production site.</p>
   </div>
 
   <div class="toc">
@@ -332,8 +333,12 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
       <div class="rv">Excluded: any contract whose written rule resolves on the traded price, level, or yield of a financial instrument or index &mdash; a cryptocurrency price, an equity or index level, a Treasury yield, a commodity price. An economic statistic (CPI, payrolls) or a policy decision (a Fed rate decision) is not an asset price and is not excluded.</div>
     </div>
     <div class="rule">
-      <div class="rk">04 &middot; TOP FIVE BY VOLUME</div>
-      <div class="rv">Of the contracts meeting 01, 02 and 03 across both venues, the five largest by the USD volume the venue displays for each individual contract at the filing capture. All five are filed. Every week. Event or group volume ranks no contract. Equal displayed volumes are ordered by venue name, then stable contract ID, both ascending. Preserve the venue queries, all pages needed to prove that no omitted contract outranks fifth place, the capture times, and dated evidence of each selected contract's displayed USD volume. If the universe or fifth-place boundary cannot be verified, publish a dated selection failure rather than substitute five contracts.</div>
+      <div class="rk">04 &middot; NOT A PERSON-OUTCOME CONTRACT</div>
+      <div class="rv">Excluded: a contract whose written YES/NO condition turns on an outcome for a named or uniquely identified natural person, including election, appointment, officeholding, conduct or personal status. A team, organization or institution is not excluded solely because people belong to it. If the condition cannot be classified without discretion, log a selection failure rather than silently skip or file it. This makes Section 06's existing no-identified-person boundary explicit in selection.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">05 &middot; TOP FIVE BY VOLUME</div>
+      <div class="rv">Of the contracts meeting 01 through 04 across both venues, the five largest by the USD volume the venue displays for each individual contract at the filing capture. All five are filed. Every week. Event or group volume ranks no contract. Equal displayed volumes are ordered by venue name, then stable contract ID, both ascending. Preserve the venue queries, all pages needed to prove that no omitted contract outranks fifth place, the capture times, and dated evidence of each selected contract's displayed USD volume. If the universe or fifth-place boundary cannot be verified, publish a dated selection failure rather than substitute five contracts.</div>
     </div>
   </div>
 
@@ -372,6 +377,13 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     <p><strong>The changed v0.4 criteria read:</strong> 01: &ldquo;Listed on a venue named in this document. At v0.4: Polymarket and Kalshi.&rdquo; 02: &ldquo;A stated resolution date falling within 45 days of the filing date.&rdquo; 04: &ldquo;Of the markets meeting 01, 02 and 03, the five largest by reported volume at the moment of filing. All five are filed. Every week. A <em>market</em> is the individually-resolving contract &mdash; the unit carrying its own rule text and settling on its own terms &mdash; not a grouping of contracts a venue displays together. <em>Volume</em> is the USD figure the venue itself displays for that contract, evidenced by a dated capture at filing; a figure displayed only for a grouping ranks no single contract.&rdquo;</p>
     <p><strong>Why it changed.</strong> A first-filing dry run found that an election contract carried an October venue end date while its written rule allowed a result as late as June of the following year. The phrase &ldquo;stated resolution date&rdquo; did not say which date controlled. The same dry run found a very large class of multi-leg contracts, and v0.4 did not say whether those or listed-but-closed contracts belonged in the selection universe. This amendment makes the status, date field, composite exclusion and tie rule explicit before the first five are chosen. The composite exclusion is a new limit on the sample, not a claim that those contracts do not resolve.</p>
     <p><strong>Consequence.</strong> The 45-day test now measures the venue's expected timing, while the written rule and actual certification may run longer. Several contracts from one event may occupy all five places if their individual volumes warrant it. We do not swap them for a more varied or interesting sample. If a complete ranking cannot be evidenced, the failure is reported rather than hidden.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">PROPOSED 2026-09-25 &middot; v0.5 &rarr; v0.6 &middot; NOT YET PUBLISHED</div>
+    <p><strong>The v0.5 top-five rule read:</strong> &ldquo;Of the contracts meeting 01, 02 and 03 across both venues, the five largest by the USD volume the venue displays for each individual contract at the filing capture. All five are filed. Every week.&rdquo; The rest of its volume, tie and evidence requirements is retained in criterion 05 above.</p>
+    <p><strong>What the first capture exposed.</strong> A v0.5 capture with a complete top-five ranking boundary selected five contracts about named election candidates. Section 06 has prohibited claims about identified people since the original method, yet v0.5 selection did not encode that boundary. No probability or entry was filed from that capture, and none will be backdated. This is a selection-method failure, not a market-resolution finding. The dated failure is prepared for the <a href="/corrections#c036">corrections log</a>.</p>
+    <p><strong>Proposed change.</strong> Criterion 04 would exclude person-outcome contracts prospectively. The previous volume criterion becomes 05 and applies to 01 through 04. This changes the sample and is not a claim that person-outcome contracts cannot resolve. Section 06 would remain unchanged. A fresh venue capture is required after publication before any first entry.</p>
   </div>
 
   <p>Amendments to this section are versioned, dated, and published here with the old text retained. Any entry filed under a previous version keeps that version stamped on it.</p>
@@ -469,7 +481,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version">v17.32 · adjudication-method · v0.5 amended 2026-09-24</span>
+  <span class="version">v17.33 draft · adjudication-method · proposed v0.6</span>
 </div>
 
 </body>
