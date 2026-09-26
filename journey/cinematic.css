@@ -1,0 +1,227 @@
+.arrival {
+  position: relative;
+  isolation: isolate;
+  min-height: 565px;
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid #426272;
+  border-radius: 20px;
+  background: #071b2b;
+}
+
+.arrival-art,
+.arrival-grade,
+.arrival-vignette,
+.arrival-stars,
+.arrival-beam,
+.arrival-mist,
+.arrival-water {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arrival-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  animation: arrival-camera 26s ease-in-out infinite alternate;
+}
+
+.arrival-grade {
+  background: linear-gradient(90deg, rgba(3, 15, 25, .84), rgba(4, 21, 31, .7) 26%, rgba(6, 20, 28, .15) 63%, rgba(3, 15, 23, .04));
+}
+
+.arrival-vignette {
+  background: linear-gradient(0deg, rgba(3, 14, 22, .79), transparent 28%, transparent 74%, rgba(2, 14, 24, .34));
+}
+
+.arrival-stars {
+  background-image: radial-gradient(circle, rgba(245, 240, 216, .75) 0 1px, transparent 1.5px), radial-gradient(circle, rgba(155, 226, 219, .58) 0 1px, transparent 1.5px);
+  background-size: 187px 143px, 251px 183px;
+  background-position: 43px 26px, 111px 82px;
+  opacity: .3;
+  animation: arrival-twinkle 5s ease-in-out infinite alternate;
+}
+
+.arrival-beam {
+  left: 26%;
+  top: 19%;
+  right: auto;
+  bottom: auto;
+  width: 35%;
+  height: 16%;
+  transform-origin: 99% 49%;
+  clip-path: polygon(100% 44%, 0 0, 0 100%);
+  background: linear-gradient(90deg, transparent, rgba(250, 207, 122, .1) 45%, rgba(255, 216, 139, .27));
+  filter: blur(7px);
+  mix-blend-mode: screen;
+  animation: arrival-beacon 9s ease-in-out infinite alternate;
+}
+
+.arrival-mist {
+  inset: auto -20% -21%;
+  height: 48%;
+  background: radial-gradient(ellipse, rgba(128, 198, 203, .22), rgba(54, 111, 128, .09) 43%, transparent 69%);
+  filter: blur(17px);
+  animation: arrival-drift 18s ease-in-out infinite alternate;
+}
+
+.arrival-water {
+  inset: auto auto 4% 35%;
+  width: 45%;
+  height: 29%;
+  background: linear-gradient(110deg, transparent 8%, rgba(255, 215, 144, .08) 38%, transparent 47%, rgba(137, 224, 215, .08) 60%, transparent 68%);
+  transform: skewX(-10deg);
+  animation: arrival-glimmer 7s ease-in-out infinite alternate;
+}
+
+.arrival-copy {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 490px);
+  padding: 75px 0 100px 6%;
+}
+
+.arrival-kicker {
+  margin: 0 0 20px;
+  color: #9ed8ca;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.arrival h1 {
+  margin: 0;
+  font: 400 clamp(46px, 6.4vw, 76px)/.97 Georgia, "Times New Roman", serif;
+  letter-spacing: -.045em;
+  text-shadow: 0 2px 28px rgba(2, 13, 22, .4);
+}
+
+.arrival h1 em { color: #f1c773; font-weight: 400; }
+
+.arrival-description {
+  max-width: 340px;
+  margin: 23px 0;
+  color: #e0eae7;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.arrival-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; }
+
+.arrival .arrival-primary {
+  border-color: #f1c773;
+  background: #f1c773;
+  color: #102131;
+  font-weight: 700;
+}
+
+.arrival .arrival-primary:hover { background: #ffe0a0; border-color: #ffe0a0; }
+
+.arrival-secondary { color: #eaf2ed; font-size: 15px; text-underline-offset: 4px; }
+.arrival-secondary:hover { color: #f1c773; }
+
+.arrival-label {
+  position: absolute;
+  z-index: 1;
+  top: 23px;
+  right: 25px;
+  color: #d8e6e2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.arrival-pause {
+  position: absolute;
+  z-index: 2;
+  right: 18px;
+  bottom: 18px;
+  min-height: 44px;
+  padding: 9px 16px;
+  border-radius: 24px;
+  border-color: rgba(238, 246, 240, .35);
+  background: rgba(5, 20, 29, .78);
+  color: #e5eee9;
+  font-size: 13px;
+}
+
+.arrival-pause:hover { border-color: #f1c773; }
+
+.arrival-stations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid #365568;
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+  background: #0c2231;
+}
+
+.arrival-stations a {
+  min-height: 93px;
+  padding: 17px 20px;
+  border-right: 1px solid #365568;
+  color: #eef4f8;
+  text-decoration: none;
+}
+
+.arrival-stations a:last-child { border-right: 0; }
+.arrival-stations a:hover, .arrival-stations a:focus-visible { background: #173544; }
+.arrival-stations small { display: block; margin-bottom: 5px; color: #9ed8ca; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.arrival-stations strong { display: block; font: 400 20px/1.2 Georgia, "Times New Roman", serif; }
+
+.arrival-intro { margin: 38px 0 24px; }
+.arrival-intro h2 { margin: 9px 0 10px; }
+.arrival-intro p { max-width: 740px; margin: 0; }
+.arrival-crew-art { margin-top: 18px; }
+
+.arrival.is-paused .arrival-art,
+.arrival.is-paused .arrival-stars,
+.arrival.is-paused .arrival-beam,
+.arrival.is-paused .arrival-mist,
+.arrival.is-paused .arrival-water,
+.arrival.is-background .arrival-art,
+.arrival.is-background .arrival-stars,
+.arrival.is-background .arrival-beam,
+.arrival.is-background .arrival-mist,
+.arrival.is-background .arrival-water { animation-play-state: paused; }
+
+@keyframes arrival-camera { from { transform: scale(1.02); } to { transform: scale(1.08) translate(-1.1%, -.6%); } }
+@keyframes arrival-twinkle { from { opacity: .17; } to { opacity: .43; } }
+@keyframes arrival-beacon { from { transform: rotate(-2deg); opacity: .35; } to { transform: rotate(3deg); opacity: .9; } }
+@keyframes arrival-drift { from { transform: translateX(-3%); opacity: .7; } to { transform: translateX(4%); opacity: 1; } }
+@keyframes arrival-glimmer { from { opacity: .3; transform: translateX(-2%) skewX(-10deg); } to { opacity: .85; transform: translateX(3%) skewX(-10deg); } }
+
+@media (max-width: 700px) {
+  .arrival { min-height: 610px; margin-top: 20px; }
+  .arrival-art { object-position: 66% 50%; }
+  .arrival-grade { background: linear-gradient(180deg, rgba(3, 15, 25, .81), rgba(4, 21, 31, .59) 39%, rgba(6, 20, 28, .05) 75%); }
+  .arrival-copy { width: min(100%, 440px); padding: 46px 6% 80px; }
+  .arrival h1 { font-size: clamp(43px, 10vw, 62px); }
+  .arrival-description { max-width: 320px; font-size: 16px; }
+  .arrival-label { display: none; }
+  .arrival-stations { grid-template-columns: 1fr; }
+  .arrival-stations a { min-height: 72px; padding: 13px 18px; border-right: 0; border-bottom: 1px solid #365568; }
+  .arrival-stations a:last-child { border-bottom: 0; }
+  .arrival-stations strong { font-size: 18px; }
+}
+
+@media (max-width: 390px) {
+  .arrival { min-height: 635px; }
+  .arrival-copy { padding-top: 40px; }
+  .arrival h1 { font-size: 42px; }
+  .arrival-actions { align-items: flex-start; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrival:not(.motion-opt-in) .arrival-art,
+  .arrival:not(.motion-opt-in) .arrival-stars,
+  .arrival:not(.motion-opt-in) .arrival-beam,
+  .arrival:not(.motion-opt-in) .arrival-mist,
+  .arrival:not(.motion-opt-in) .arrival-water { animation: none; }
+}
