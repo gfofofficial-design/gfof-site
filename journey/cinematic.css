@@ -124,6 +124,44 @@
 .arrival-secondary { color: #eaf2ed; font-size: 15px; text-underline-offset: 4px; }
 .arrival-secondary:hover { color: #f1c773; }
 
+.arrival-film-open {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 17px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: #e6f0e9;
+  font: 600 14px/1.3 system-ui, sans-serif;
+  text-decoration: underline;
+  text-decoration-color: #f1c773;
+  text-underline-offset: 5px;
+  cursor: pointer;
+}
+
+.arrival-film-open:hover, .arrival-film-open:focus-visible { color: #f1c773; }
+
+.arrival-film {
+  width: min(940px, calc(100vw - 28px));
+  max-height: calc(100vh - 28px);
+  padding: 20px;
+  border: 1px solid #6a918d;
+  border-radius: 18px;
+  background: #081d2c;
+  color: #eaf2ed;
+  box-shadow: 0 24px 90px rgba(0, 0, 0, .65);
+}
+
+.arrival-film::backdrop { background: rgba(1, 10, 16, .83); }
+.arrival-film-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.arrival-film-heading .arrival-kicker { margin: 0 0 7px; }
+.arrival-film h2 { margin: 0 0 15px; font: 400 clamp(26px, 3vw, 38px)/1.1 Georgia, "Times New Roman", serif; }
+.arrival-film-heading button { flex: 0 0 auto; min-height: 44px; padding: 8px 13px; border: 1px solid #6a918d; border-radius: 10px; background: #123342; color: #eaf2ed; cursor: pointer; }
+.arrival-film-heading button:hover { border-color: #f1c773; }
+.arrival-film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #071b2b; }
+.arrival-film p:last-child { margin: 14px 0 0; color: #d0e0da; font-size: 14px; line-height: 1.5; }
+
 .arrival-label {
   position: absolute;
   z-index: 1;
@@ -216,6 +254,12 @@
   .arrival-copy { padding-top: 40px; }
   .arrival h1 { font-size: 42px; }
   .arrival-actions { align-items: flex-start; flex-direction: column; }
+}
+
+@media (max-width: 550px) {
+  .arrival-film { padding: 13px; }
+  .arrival-film-heading { gap: 9px; }
+  .arrival-film-heading button { padding: 7px 9px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
