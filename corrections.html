@@ -887,6 +887,24 @@ p{font-family:var(--font-read); letter-spacing:0;}
     </div>
   </div>
 
+<div class="entry status-cancelled" id="c038">
+    <div class="entry-head">
+      <span class="entry-id">#038 &middot; CORRECTION</span>
+      <span class="entry-status">RESOLVED</span>
+    </div>
+    <h3>Correction #023 said the app's staking claims were fixed in July. Production deploys show they remained until September.</h3>
+    <div class="meta">
+      <span>Verified 2026-09-25 &middot; proposed public correction</span>
+      <span>Affected: <a href="/app" style="color:var(--cyan);text-decoration:underline">/app</a> &middot; entry <a href="#c023" style="color:var(--cyan);text-decoration:underline">#023</a></span>
+    </div>
+    <div class="body">
+      <p><strong>What we previously said.</strong> Entry <a href="#c023" style="color:var(--cyan);text-decoration:underline">#023</a> is dated &ldquo;Found &amp; fixed 2026-07-03.&rdquo; It says the app's false staking tiers, NFT multiplier and purchase prompts were corrected and deployed, with the service-worker cache rotated. That deployed-fix claim was wrong.</p>
+      <p><strong>What the deploys show.</strong> The <a href="https://6a6124c138bb14000874dfa2--gfof.netlify.app/corrections#c023" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">July 22 production deploy carrying #023</a> still served <a href="https://6a6124c138bb14000874dfa2--gfof.netlify.app/app/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">the old app</a>: 30/90/180-day locks, 1.5x/2x/3x multipliers, a permanent +0.5x NFT boost and &ldquo;Buy now to qualify&rdquo; language. Sampled <a href="https://6a91dc9dfba2440008dafbb3--gfof.netlify.app/app/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">August 28</a> and <a href="https://6a987458799bcb0008b16187--gfof.netlify.app/app/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">September 2 at 19:09:23 UTC</a> production responses retained the same old app bytes. A <a href="https://6a987463119fa300084fd704--gfof.netlify.app/app/" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">September 2 deploy at 19:09:37 UTC</a> served corrected copy. A later <a href="https://6a98bcc97b78f20009aa6eb2--gfof.netlify.app/app/sw.js" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">September 3 deploy</a> carried the v18 app-cache rotation.</p>
+      <p><strong>What this means.</strong> The tiers were never an authorized staking program, but the untrue promotional screen remained in verified production snapshots after we said it was fixed. These samples do not establish every day's exposure, how many people saw the screen, whether anyone relied on it, or when every installed app refreshed. We are correcting the timing claim, not inventing usage or a reward obligation.</p>
+      <p><strong>Current state.</strong> The <a href="/app" style="color:var(--cyan);text-decoration:underline">live app</a> no longer contains those tiers or multipliers; the <a href="/faq" style="color:var(--cyan);text-decoration:underline">FAQ</a> says no staking system or APY is authorized. Entry #023 remains unchanged so both the original claim and this correction stay visible. Future &ldquo;fixed and deployed&rdquo; entries require a checked production response, not a local file or intended upload.</p>
+    </div>
+  </div>
+
 <div class="entry status-missed" id="c037">
     <div class="entry-head">
       <span class="entry-id">#037 &middot; MISSED FILING</span>
