@@ -216,6 +216,27 @@
 .arrival-intro { margin: 38px 0 24px; }
 .arrival-intro h2 { margin: 9px 0 10px; }
 .arrival-intro p { max-width: 740px; margin: 0; }
+.voss-arrival {
+  display: grid;
+  grid-template-columns: minmax(250px, .83fr) minmax(0, 1.17fr);
+  min-height: 485px;
+  margin: 28px 0 38px;
+  overflow: hidden;
+  border: 1px solid #497280;
+  border-radius: 18px;
+  background: radial-gradient(circle at 75% 12%, #1d4651, #0b2433 58%, #071925);
+}
+.voss-arrival > img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 27%; }
+.voss-arrival-copy { align-self: center; padding: clamp(26px, 4vw, 62px); }
+.voss-arrival h2 { max-width: 570px; margin: 0 0 18px; font: italic 400 clamp(35px, 4vw, 54px)/1.08 Georgia, "Times New Roman", serif; color: #fff1d0; }
+.voss-arrival-copy > p:not(.eyebrow) { max-width: 560px; line-height: 1.6; }
+.voss-arrival-copy .actions { margin: 25px 0 17px; }
+.voss-arrival-copy .note { font-size: 13px; }
+.voss-arrival-copy .note a { color: #f1c773; }
+.voss-film { width: min(560px, calc(100vw - 28px)); overflow: auto; }
+.voss-film video { width: min(100%, 320px); height: min(60vh, 568px); margin: 0 auto; aspect-ratio: 9 / 16; object-fit: contain; }
+.voss-film details { margin-top: 12px; color: #d0e0da; font-size: 14px; line-height: 1.5; }
+.voss-film summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .crew-arrival {
   position: relative;
   isolation: isolate;
@@ -268,6 +289,10 @@
 @keyframes arrival-glimmer { from { opacity: .3; transform: translateX(-2%) skewX(-10deg); } to { opacity: .85; transform: translateX(3%) skewX(-10deg); } }
 
 @media (max-width: 700px) {
+  .voss-arrival { display: block; }
+  .voss-arrival > img { height: auto; max-height: 500px; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 20%; }
+  .voss-arrival-copy { padding: 25px; }
+  .voss-arrival h2 { font-size: clamp(34px, 8vw, 46px); }
   .crew-arrival { aspect-ratio: 4 / 5; }
   .crew-arrival img { object-position: center 25%; }
   .crew-arrival::after { background: linear-gradient(180deg, rgba(3, 16, 25, .9), rgba(3, 16, 25, .53) 34%, transparent 65%); }
