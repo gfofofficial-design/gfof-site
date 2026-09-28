@@ -165,7 +165,7 @@
   <div class="fed-rail" role="list">
     <span class="fed-rail__item" role="listitem">$GFOF <span class="fed-status fed-status--provisional">DBC · Pre-migration</span></span>
     <span class="fed-rail__item" role="listitem">NETWORK <span class="fed-status fed-status--operational">Solana</span></span>
-    <span class="fed-rail__item" role="listitem">DOSSIER <span class="fed-status fed-status--impaired">Measurement review</span></span>
+    <span class="fed-rail__item" role="listitem">DOSSIER <span class="fed-status fed-status--impaired">Alerts halted</span></span>
     <span class="fed-rail__item" role="listitem">ARCHIVE <span class="fed-status fed-status--operational">Public</span></span>
     <span class="fed-rail__item" role="listitem">COUNCIL <span class="fed-status fed-status--provisional">Advisory</span></span>
     <span class="fed-rail__item" role="listitem">FCC <span class="fed-status fed-status--provisional">Epoch 2 · Shortage event</span></span>
@@ -202,8 +202,8 @@
           <span class="cmd-net__core-label">COMMAND · $GFOF<br><span style="color:var(--fed-muted)">economic &amp; participation layer</span></span>
         </div>
         <button class="cmd-net__node cmd-net__node--n1" data-system="dossier" type="button" aria-pressed="false">
-          <span class="cmd-net__label">Dossier</span><small>GF-I01</small><span class="cmd-net__state">Measurement review</span>
-          <span class="cmd-net__desc">Federation Intelligence. Built to detect when curated Solana wallets converge on the same token. Detection is currently halted while the Federation measures whether convergence means what was claimed — publishing the measurements either way.</span>
+          <span class="cmd-net__label">Dossier</span><small>GF-I01</small><span class="cmd-net__state">Lens beta · alerts halted</span>
+          <span class="cmd-net__desc">The Token Structure Lens is in public Solana beta. Separate convergence detection is halted while the Federation measures whether it means what was originally claimed.</span>
         </button>
         <button class="cmd-net__node cmd-net__node--n2" data-system="research" type="button" aria-pressed="false">
           <span class="cmd-net__label">Research</span><small>GF-R01</small><span class="cmd-net__state cmd-net__state--op">Published</span>
@@ -262,24 +262,24 @@
     <span class="cmd-ident">01 <b>//</b> INTELLIGENCE</span>
     <h2 class="cmd-div-title" id="dossier-h">Dossier</h2>
     <p class="cmd-div-line">Read the structure behind the ticker.</p>
-    <p class="fed-body-text cmd-div-body">Dossier's Token Structure Lens now presents a dated, source-linked GFOF report: mint controls, the top 20 token accounts and what remains unknown. It is a research preview, not a live scanner for other tokens or a safety rating. Dossier's separate convergence-alert program remains <strong>halted</strong> in Measurement Review, with its original pitch and findings preserved on the public record.</p>
+    <p class="fed-body-text cmd-div-body">Dossier's Token Structure Lens is in public beta. Enter a Solana token mint to read its mint controls and up to 20 largest token accounts, with source slots and explicit unknowns. The read-only lookup can time out and cannot establish who controls an account, whether a launch was bundled, or where tokens were sold. Dossier's separate convergence-alert program remains <strong>halted</strong> in Measurement Review.</p>
   </div>
   <div class="cmd-two-col">
     <div class="fed-signal">
       <div class="fed-signal__bar">
-        <span class="fed-signal__id">STRUCTURE LENS // GFOF SNAPSHOT</span>
-        <span class="fed-status fed-status--unknown">Dated research preview</span>
+        <span class="fed-signal__id">STRUCTURE LENS // SOLANA</span>
+        <span class="fed-status fed-status--unknown">Public beta</span>
       </div>
       <div class="fed-signal__body">
-        <div class="fed-signal__field"><span class="fed-signal__label">Asset</span><span class="fed-signal__value">GFOF</span></div>
-        <div class="fed-signal__field"><span class="fed-signal__label">Accounts</span><span class="fed-signal__value">Top 20 shown</span></div>
-        <div class="fed-signal__field"><span class="fed-signal__label">Evidence</span><span class="fed-signal__value">Source-linked</span></div>
-        <div class="fed-signal__field"><span class="fed-signal__label">Other mints</span><span class="fed-signal__value">Not analyzed yet</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Input</span><span class="fed-signal__value">Solana mint</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Accounts</span><span class="fed-signal__value">Up to 20</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Evidence</span><span class="fed-signal__value">Source slots</span></div>
+        <div class="fed-signal__field"><span class="fed-signal__label">Limits</span><span class="fed-signal__value">No bundle or sale verdict</span></div>
       </div>
     </div>
     <div>
-      <p class="fed-body-text">The GFOF example distinguishes token accounts from people and labels a Meteora DBC pool-authority account instead of treating it as one holder. It does not claim to detect launch bundles or trace sales.</p>
-      <div class="cmd-hero__actions"><a class="fed-btn fed-btn--command" href="https://dossiertrack.co/token-structure#gfofReport">Inspect the dated report</a></div>
+      <p class="fed-body-text">Start with any valid Solana token mint. A dated GFOF report remains available as an example; its known Meteora pool authority is labeled separately from individual token accounts.</p>
+      <div class="cmd-hero__actions"><a class="fed-btn fed-btn--command" href="https://dossiertrack.co/token-structure">Inspect a Solana mint</a></div>
     </div>
   </div>
 </section>
@@ -472,7 +472,7 @@
   <div class="fed-drawer__body">
     <p class="fed-system fed-system--wide" style="margin-bottom: var(--space-4)">SYSTEM STATE — SOURCED FROM CURRENT PROJECT CONTENT</p>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Command · $GFOF</span><span class="fed-sysrow__coord">GF-00</span></div><span class="fed-status fed-status--provisional">DBC · Pre-migration</span></div>
-    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Dossier</span><span class="fed-sysrow__coord">GF-I01</span></div><span class="fed-status fed-status--impaired">Measurement review</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Dossier</span><span class="fed-sysrow__coord">GF-I01</span></div><span class="fed-status fed-status--impaired">Lens beta · alerts halted</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Archive</span><span class="fed-sysrow__coord">GF-A01</span></div><span class="fed-status fed-status--operational">Public</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Research</span><span class="fed-sysrow__coord">GF-R01</span></div><span class="fed-status fed-status--operational">Published</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Council</span><span class="fed-sysrow__coord">GF-G01</span></div><span class="fed-status fed-status--provisional">Advisory</span></div>
