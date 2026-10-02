@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Fri, 02 Oct 2026 15:29:29 +0000</lastBuildDate>
-    <pubDate>Fri, 02 Oct 2026 15:29:29 +0000</pubDate>
+    <lastBuildDate>Fri, 02 Oct 2026 17:26:28 +0000</lastBuildDate>
+    <pubDate>Fri, 02 Oct 2026 17:26:28 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,15 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#040 · DESIGN DISCLOSURE — Proposed GFOF staking term reward targets remain closed.</title>
+      <link>https://galacticfederation.co/corrections#c040</link>
+      <guid isPermaLink="false">gfof-design-040-staking-term-targets</guid>
+      <pubDate>Fri, 02 Oct 2026 17:26:28 +0000</pubDate>
+      <category>DISCLOSURE</category>
+      <description>The owner selected working gross GFOF reward targets of 1% total for a completed one-month term, 6% for six months and 12% for twelve months. These are provisional design figures, not APY settings or funded offers. No pool, vault, provider configuration, cap, counsel disposition, deposit action or opening date is approved. Funding and final public specification will be verified separately. This design entry does not start the W-010 distribution-notice clock.</description>
+    </item>
 
     <item>
       <title>#039 · POLICY CHANGE — Optional GFOF staking preparation approved after verified Meteora migration.</title>
