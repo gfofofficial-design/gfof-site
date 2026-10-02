@@ -26,7 +26,7 @@ Streamflow's published fund-once guide says the pool cap, expiration, duration, 
 | Reward budget `R` | Exact amount per term/vault and total, integer precision and percent of current total supply |
 | Stake cap `C` | Maximum GFOF accepted per proposed term and in aggregate; never describe it as circulating supply removed |
 | Entry window and term `D` | UTC open/close times and exact definition of the proposed one-month, six-month and twelve-month terms; settlement and withdrawal rules per term |
-| Rate | Derived from actual funding and pool configuration; no rate or APY marketing until the signed pool proves it |
+| Rate | Derived from actual funding and pool configuration; proposed total-term targets are publicly labeled as provisional; no payable rate, APY representation or deposit invitation until counsel and the signed pool prove it |
 | Fees | Provider subscription and creation cost, network fees, participant stake/claim/exit fees and who pays |
 | Residual policy | Who may recover unallocated rewards and when, with verified authority and public receipts |
 | Emergency case | Provider pause, depleted vault, upgrade, exploit, pool delisting, lost receipt token, failed automatic distribution |
@@ -36,7 +36,7 @@ At full cap, a simple fixed annual-rate illustration would require at least `C �
 
 ## Owner-selected rate model — for review, not an offer
 
-On 2026-10-02 the owner selected a **working total reward target** of **1% for one month, 6% for six months and 12% for twelve months**, each calculated on the GFOF principal staked for a completed term. This is an internal planning decision. It does **not** approve a public rate, APY claim, funded allocation, provider configuration or pool opening. Keep reward numbers off the public staking page until G0–G5 in the activation runbook are met, including counsel's review of the actual issuer-funded arrangement.
+On 2026-10-02 the owner selected a **working total reward target** of **1% for one month, 6% for six months and 12% for twelve months**, each calculated on the GFOF principal staked for a completed term. This is an internal planning decision. It does **not** approve a public rate, APY claim, funded allocation, provider configuration or pool opening. The owner has now authorized public disclosure of these **proposed targets** on the preparation page, recorded in correction #040. That disclosure is not a final offer or seven-day distribution notice. Do not show them as payable terms or open a participation path until G0–G5 in the activation runbook are met, including counsel's review of the actual issuer-funded arrangement.
 
 | GFOF principal | One month at 1% | Six months at 6% | Twelve months at 12% |
 | ---: | ---: | ---: | ---: |
@@ -68,6 +68,6 @@ The owner confirmed that the contemplated provider charges by pool and wants the
 
 ## Public wording prepared for review
 
-> We are preparing an optional GFOF token reward pool for after the token's Meteora bonding curve completes and the migrated pool is verified. The program is not open. No APY, reward amount, lock term, launch date, or provider is final. Before anyone is invited to participate, we will publish the funded reward vault, pool address, fees, withdrawal rules, risks and independent transaction links. GFOF pool rewards would come from a defined allocation; they would not be Solana validator staking rewards. We will update the corrections record as the design is approved.
+> We are preparing an optional GFOF token reward pool for after the token's Meteora bonding curve completes and the migrated pool is verified. The program is not open. Working gross GFOF total-term targets of 1%, 6%, and 12% have been disclosed for design review, but no payable rate, lock rule, launch date or provider is final. Before anyone is invited to participate, we will publish the funded reward vault, pool address, fees, withdrawal rules, risks and independent transaction links. GFOF pool rewards would come from a defined allocation; they would not be Solana validator staking rewards. We will update the corrections record as the design is approved.
 
-This text describes preparation, not an offer of a specific return. Public correction #039 records the new preparation status. The actual reward terms, provider and funded pool remain subject to separate review and approval. Use the [activation runbook](staking-activation-runbook.md) to assemble the exact launch evidence before requesting any treasury transaction or wallet invitation.
+This text describes preparation, not an offer of a specific return. Public correction #039 records the new preparation status, and #040 records the owner's proposed targets. The actual reward terms, provider and funded pool remain subject to separate review and approval. Use the [activation runbook](staking-activation-runbook.md) to assemble the exact launch evidence before requesting any treasury transaction or wallet invitation.
