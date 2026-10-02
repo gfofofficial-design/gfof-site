@@ -94,6 +94,7 @@ h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{displ
     <label class="calc-label" for="stake-amount">Example GFOF amount</label>
     <div class="calc-entry"><input id="stake-amount" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="100000" maxlength="25" aria-describedby="calc-error calc-disclaimer"><span>GFOF</span></div>
     <p id="calc-error" class="calc-error" role="status"></p>
+    <noscript><p class="calc-disclaimer">JavaScript is required to update this illustration. The figures below show only the starting example of 100,000 GFOF; changing the input will not recalculate them.</p></noscript>
     <div class="calc-results" id="calc-results" aria-live="polite" aria-atomic="true">
       <article class="calc-result" data-percent="1"><h3>1 month · 1% total</h3><dl><dt>Gross token reward</dt><dd data-reward>1,000 GFOF</dd><dt>Principal + gross reward</dt><dd class="total" data-total>101,000 GFOF</dd></dl></article>
       <article class="calc-result" data-percent="6"><h3>6 months · 6% total</h3><dl><dt>Gross token reward</dt><dd data-reward>6,000 GFOF</dd><dt>Principal + gross reward</dt><dd class="total" data-total>106,000 GFOF</dd></dl></article>
@@ -141,6 +142,7 @@ h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{displ
     const raw = input.value.trim();
     const value = raw.replace(/,/g, '');
     if ((!/^\d+(?:\.\d{0,6})?$/.test(raw) && !/^\d{1,3}(?:,\d{3})+(?:\.\d{0,6})?$/.test(raw)) || !/[1-9]/.test(value)) {
+      input.setAttribute('aria-invalid', 'true');
       error.textContent = 'Enter a positive GFOF amount with up to six decimal places.';
       cards.forEach(card => {
         card.querySelector('[data-reward]').textContent = '—';
@@ -154,6 +156,7 @@ h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{displ
       error.textContent = 'Enter an amount greater than zero.';
       return;
     }
+    input.removeAttribute('aria-invalid');
     error.textContent = '';
     cards.forEach(card => {
       const reward = principal * BigInt(card.dataset.percent) / 100n;

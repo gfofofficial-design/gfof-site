@@ -186,7 +186,7 @@
   <div class="fed-rail" role="list">
     <span class="fed-rail__item" role="listitem">$GFOF <span class="fed-status fed-status--provisional">DBC · Pre-migration</span></span>
     <span class="fed-rail__item" role="listitem">NETWORK <span class="fed-status fed-status--operational">Solana</span></span>
-    <span class="fed-rail__item" role="listitem">DOSSIER <span class="fed-status fed-status--impaired">Alerts halted</span></span>
+    <span class="fed-rail__item" role="listitem">DOSSIER <span class="fed-status fed-status--impaired">Alerts retired</span></span>
     <span class="fed-rail__item" role="listitem">ARCHIVE <span class="fed-status fed-status--operational">Public</span></span>
     <span class="fed-rail__item" role="listitem">COUNCIL <span class="fed-status fed-status--provisional">Advisory</span></span>
     <span class="fed-rail__item" role="listitem">FCC <span class="fed-status fed-status--provisional">Epoch 2 · Shortage event</span></span>
@@ -223,8 +223,8 @@
           <span class="cmd-net__core-label">COMMAND · $GFOF<br><span style="color:var(--fed-muted)">economic &amp; participation layer</span></span>
         </div>
         <button class="cmd-net__node cmd-net__node--n1" data-system="dossier" type="button" aria-pressed="false">
-          <span class="cmd-net__label">Dossier</span><small>GF-I01</small><span class="cmd-net__state">Lens beta · alerts halted</span>
-          <span class="cmd-net__desc">The Token Structure Lens is in public Solana beta. Separate convergence detection is halted while the Federation measures whether it means what was originally claimed.</span>
+          <span class="cmd-net__label">Dossier</span><small>GF-I01</small><span class="cmd-net__state">Lens beta · alerts retired</span>
+          <span class="cmd-net__desc">The Token Structure Lens is in public Solana beta. Program 01 convergence alerts were measured and retired; the verdict and original method remain public.</span>
         </button>
         <button class="cmd-net__node cmd-net__node--n2" data-system="research" type="button" aria-pressed="false">
           <span class="cmd-net__label">Research</span><small>GF-R01</small><span class="cmd-net__state cmd-net__state--op">Published</span>
@@ -283,7 +283,7 @@
     <span class="cmd-ident">01 <b>//</b> INTELLIGENCE</span>
     <h2 class="cmd-div-title" id="dossier-h">Dossier</h2>
     <p class="cmd-div-line">Read the structure behind the ticker.</p>
-    <p class="fed-body-text cmd-div-body">Dossier's Token Structure Lens is in public beta. Enter a Solana token mint to read its mint controls and up to 20 largest token accounts, with source slots and explicit unknowns. The read-only lookup can time out and cannot establish who controls an account, whether a launch was bundled, or where tokens were sold. Dossier's separate convergence-alert program remains <strong>halted</strong> in Measurement Review.</p>
+    <p class="fed-body-text cmd-div-body">Dossier's Token Structure Lens is in public beta. Enter a Solana token mint to read its mint controls and up to 20 largest token accounts, with source slots and explicit unknowns. The read-only lookup can time out and cannot establish who controls an account, whether a launch was bundled, or where tokens were sold. Dossier's separate Program 01 convergence alerts are <strong>retired</strong>. <a href="https://dossiertrack.co/program-01-verdict">Read the measured verdict.</a></p>
   </div>
   <div class="cmd-two-col">
     <div class="fed-signal">
@@ -494,7 +494,7 @@
   <div class="fed-drawer__body">
     <p class="fed-system fed-system--wide" style="margin-bottom: var(--space-4)">SYSTEM STATE — SOURCED FROM CURRENT PROJECT CONTENT</p>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Command · $GFOF</span><span class="fed-sysrow__coord">GF-00</span></div><span class="fed-status fed-status--provisional">DBC · Pre-migration</span></div>
-    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Dossier</span><span class="fed-sysrow__coord">GF-I01</span></div><span class="fed-status fed-status--impaired">Lens beta · alerts halted</span></div>
+    <div class="fed-sysrow"><div><span class="fed-sysrow__name">Dossier</span><span class="fed-sysrow__coord">GF-I01</span></div><span class="fed-status fed-status--impaired">Lens beta · alerts retired</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Archive</span><span class="fed-sysrow__coord">GF-A01</span></div><span class="fed-status fed-status--operational">Public</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Research</span><span class="fed-sysrow__coord">GF-R01</span></div><span class="fed-status fed-status--operational">Published</span></div>
     <div class="fed-sysrow"><div><span class="fed-sysrow__name">Council</span><span class="fed-sysrow__coord">GF-G01</span></div><span class="fed-status fed-status--provisional">Advisory</span></div>
@@ -530,7 +530,7 @@
     <div class="fed-voss-suggestions" aria-label="Suggested questions">
       <button type="button" data-voss-suggestion="What is the verified $GFOF contract address?">Verify $GFOF</button>
       <button type="button" data-voss-suggestion="Where can I review the Federation's public commitments?">Public record</button>
-      <button type="button" data-voss-suggestion="Explain the current Dossier measurement review.">Dossier status</button>
+      <button type="button" data-voss-suggestion="Explain Dossier's current Lens beta and retired Program 01.">Dossier status</button>
     </div>
     <form class="fed-voss-form" data-voss-form>
       <label class="fed-visually-hidden" for="voss-message">Message Admiral Voss</label>
@@ -553,6 +553,7 @@
       <a href="/research">Research</a>
       <a href="/governance-spec">Council</a>
       <a href="/roadmap">Roadmap</a>
+      <a href="/staking">Staking preparation <span class="fed-shell-nav__flag">IN DESIGN</span></a>
       <a href="/whitepaper.pdf">Whitepaper</a>
       <button class="fed-more-action" data-fed-voss-mobile-trigger type="button">Voss <span class="fed-shell-nav__flag">ONLINE</span></button>
       <a href="https://t.me/GFOF_SOL" rel="noopener">Community</a>
