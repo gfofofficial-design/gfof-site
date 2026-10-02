@@ -27,6 +27,24 @@ main{max-width:1060px;margin:auto;padding:70px clamp(18px,4vw,48px) 90px}
 h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0 55px}.card{background:linear-gradient(145deg,#0b1730,var(--panel));border:1px solid var(--line);padding:24px}.card h3{font:700 16px Orbitron,sans-serif;margin:10px 0}.card p{color:var(--muted);margin:0}.index{color:var(--green)}.plain{color:var(--muted);max-width:790px}.pending{display:grid;gap:12px;list-style:none;margin:26px 0 0;padding:0}.pending li{padding:14px 16px;background:#09152b;border:1px solid var(--line)}.pending b{color:var(--gold)}
 .terms-intro{max-width:850px;color:var(--muted);margin:0 0 24px}.terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0 0 26px}.term-card{position:relative;overflow:hidden;min-width:0;padding:23px;background:linear-gradient(155deg,#0e2140,#071126 65%);border:1px solid var(--line);border-top:3px solid var(--cyan);display:flex;flex-direction:column}.term-card:nth-child(2){border-top-color:var(--gold)}.term-card:nth-child(3){border-top-color:var(--green)}.term-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 10px 'JetBrains Mono',monospace;letter-spacing:1px;color:var(--muted)}.term-state{color:var(--gold);white-space:nowrap}.term-card h3{font:800 clamp(38px,5vw,60px)/1 Orbitron,sans-serif;letter-spacing:-2px;margin:25px 0 15px}.term-card h3 small{display:block;font:600 13px 'JetBrains Mono',monospace;letter-spacing:3px;color:var(--cyan);margin-top:8px}.term-card:nth-child(2) h3 small{color:var(--gold)}.term-card:nth-child(3) h3 small{color:var(--green)}.term-card p{color:#d3dcf1;margin:0 0 25px}.term-target{display:flex;align-items:baseline;gap:12px;margin:-3px 0 18px}.term-target strong{font:800 32px Orbitron,sans-serif;color:var(--gold)}.term-target span{font:600 11px/1.4 'JetBrains Mono',monospace;color:var(--muted)}.term-rule{margin-top:auto;border-top:1px solid var(--line);padding-top:15px;color:var(--muted);font:600 12px/1.5 'JetBrains Mono',monospace}.term-rule strong{display:block;color:#fff;margin-bottom:5px}.terms-note{margin:0 0 55px;padding:17px 20px;background:#09152b;border:1px solid var(--line);color:var(--muted)}.terms-note strong{color:#fff}
 .footer{border-top:1px solid var(--line);padding:25px clamp(18px,4vw,56px);display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:15px}
+
+/* Local, read-only term illustration; no wallet integration. */
+.calculator{margin:4px 0 58px;padding:clamp(22px,4vw,36px);border:1px solid var(--line);border-top:3px solid var(--gold);background:linear-gradient(145deg,#0c1c38,var(--panel))}
+.calculator .eyebrow{color:var(--cyan)}.calculator-intro{max-width:750px;color:var(--muted);margin:0 0 24px}
+.calc-label{display:block;font:600 13px 'JetBrains Mono',monospace;color:var(--text);margin-bottom:10px}
+.calc-entry{display:flex;align-items:center;max-width:390px;border:1px solid #5e7197;background:var(--bg)}
+.calc-entry:focus-within{outline:2px solid var(--gold);outline-offset:3px}
+.calc-entry input{width:100%;min-width:0;padding:15px;background:transparent;border:0;outline:0;color:var(--text);font:700 22px Rajdhani,sans-serif;font-variant-numeric:tabular-nums}
+.calc-entry span{padding-right:15px;color:var(--gold);font:600 13px 'JetBrains Mono',monospace}
+.calc-error{min-height:1.6em;color:#ffb6a7;margin:8px 0 0;font-size:15px}
+.calc-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0}
+.calc-result{min-width:0;padding:19px;background:#081329;border:1px solid var(--line)}
+.calc-result h3{margin:0 0 14px;font:700 17px Orbitron,sans-serif;color:var(--text)}
+.calc-result dl{margin:0}.calc-result dt{font:600 12px 'JetBrains Mono',monospace;color:var(--muted);margin-top:12px}
+.calc-result dd{margin:2px 0 0;color:var(--gold);font:700 clamp(20px,2.8vw,28px) Rajdhani,sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.calc-result dd.total{color:var(--text)}
+.calc-disclaimer{border-top:1px solid var(--line);padding-top:17px;margin:0;color:var(--muted);font-size:15px}
+@media(max-width:800px){.calc-results{grid-template-columns:1fr}}
 @media(max-width:800px){.terms{grid-template-columns:1fr}.term-card h3{font-size:48px}}@media(max-width:700px){.grid{grid-template-columns:1fr}nav .links{flex-wrap:wrap}main{padding-top:45px}}
 </style>
 </head>
@@ -66,7 +84,22 @@ h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{displ
         <div class="term-rule"><strong>Before opening</strong>Funded rewards, fees, entry and exit terms, and pool proof.</div>
       </article>
     </div>
-    <p class="terms-note"><strong>Example only:</strong> at the proposed targets, a completed 100,000 GFOF position would receive 1,000, 6,000 or 12,000 GFOF gross for the respective term, if that term is eventually approved and funded. The actual provider formula, rounding, fees, eligibility, lock and withdrawal rules are unresolved. These figures are not promised or available today. No deposits or wallet connection are available on this page.</p>
+
+  </section>
+
+  <section class="calculator" id="calculator" aria-labelledby="calculator-title">
+    <div class="eyebrow">EXPLORE THE PROPOSED TERMS</div>
+    <h2 id="calculator-title">GFOF reward calculator</h2>
+    <p class="calculator-intro">Enter an amount to compare the proposed gross GFOF reward at the end of each full term. The calculation stays in your browser and asks for no wallet connection.</p>
+    <label class="calc-label" for="stake-amount">Example GFOF amount</label>
+    <div class="calc-entry"><input id="stake-amount" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="100000" maxlength="25" aria-describedby="calc-error calc-disclaimer"><span>GFOF</span></div>
+    <p id="calc-error" class="calc-error" role="status"></p>
+    <div class="calc-results" id="calc-results" aria-live="polite" aria-atomic="true">
+      <article class="calc-result" data-percent="1"><h3>1 month · 1% total</h3><dl><dt>Gross token reward</dt><dd data-reward>1,000 GFOF</dd><dt>Principal + gross reward</dt><dd class="total" data-total>101,000 GFOF</dd></dl></article>
+      <article class="calc-result" data-percent="6"><h3>6 months · 6% total</h3><dl><dt>Gross token reward</dt><dd data-reward>6,000 GFOF</dd><dt>Principal + gross reward</dt><dd class="total" data-total>106,000 GFOF</dd></dl></article>
+      <article class="calc-result" data-percent="12"><h3>12 months · 12% total</h3><dl><dt>Gross token reward</dt><dd data-reward>12,000 GFOF</dd><dt>Principal + gross reward</dt><dd class="total" data-total>112,000 GFOF</dd></dl></article>
+    </div>
+    <p class="calc-disclaimer" id="calc-disclaimer">Illustration only, assuming one completed term and the proposed total-term percentages above. It does not compound or estimate a dollar value. Reward amounts are rounded down to six decimal places; actual provider rules, token fees, eligibility, funding, locks, and withdrawals are unresolved. No pool is open, and no rewards are promised.</p>
   </section>
 
   <section aria-labelledby="design-title">
@@ -93,5 +126,44 @@ h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{displ
   <p class="plain">For the current launch state, see the <a href="/roadmap">roadmap</a>. The <a href="/corrections">corrections record</a> controls if a previous statement differs from a new approved program.</p>
 </main>
 <footer class="footer"><span>GF // GFOF STAKING PREPARATION · 2026-10-02</span><span><a href="/roadmap">Roadmap</a> · <a href="/treasury">Treasury</a> · <a href="/corrections">Corrections</a></span></footer>
+<script>
+(() => {
+  const input = document.getElementById('stake-amount');
+  const error = document.getElementById('calc-error');
+  const cards = [...document.querySelectorAll('.calc-result')];
+  const unit = 1000000n;
+  function format(raw) {
+    const whole = (raw / unit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const fraction = (raw % unit).toString().padStart(6, '0').replace(/0+$/, '');
+    return whole + (fraction ? '.' + fraction : '') + ' GFOF';
+  }
+  function render() {
+    const raw = input.value.trim();
+    const value = raw.replace(/,/g, '');
+    if ((!/^\d+(?:\.\d{0,6})?$/.test(raw) && !/^\d{1,3}(?:,\d{3})+(?:\.\d{0,6})?$/.test(raw)) || !/[1-9]/.test(value)) {
+      error.textContent = 'Enter a positive GFOF amount with up to six decimal places.';
+      cards.forEach(card => {
+        card.querySelector('[data-reward]').textContent = '—';
+        card.querySelector('[data-total]').textContent = '—';
+      });
+      return;
+    }
+    const [whole, fraction = ''] = value.split('.');
+    const principal = BigInt(whole) * unit + BigInt(fraction.padEnd(6, '0'));
+    if (principal === 0n) {
+      error.textContent = 'Enter an amount greater than zero.';
+      return;
+    }
+    error.textContent = '';
+    cards.forEach(card => {
+      const reward = principal * BigInt(card.dataset.percent) / 100n;
+      card.querySelector('[data-reward]').textContent = format(reward);
+      card.querySelector('[data-total]').textContent = format(principal + reward);
+    });
+  }
+  input.addEventListener('input', render);
+  render();
+})();
+</script>
 </body>
 </html>
