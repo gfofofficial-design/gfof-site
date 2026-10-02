@@ -129,3 +129,5 @@ This closes the specific mobile menu/handoff/calculator visual check that was
 blocked on the work computer. It does not prove screen-reader behavior,
 JavaScript-disabled rendering in a browser, or every page at every viewport.
 PR82 remains a draft and no production publication occurred in this check.
+The build-page status-review date was also advanced from September 27 to
+October 2 to match the newly reviewed Program 01 wording in this draft.
