@@ -1,6 +1,6 @@
 # GFOF reward-pool activation runbook — preparation only
 
-Prepared 2026-10-02. Owner approval covers public preparation status and correction [#039](../corrections.html#c039), not a pool, token movement, offer, rate, or opening. This is an operator checklist for the first proposed GFOF/GFOF fixed-budget pool. The live [staking page](../staking.html) remains closed until every launch gate below has evidence. Do not connect a wallet or create a pool from this document alone.
+Prepared 2026-10-02. Owner approval covers public preparation status and correction [#039](../corrections.html#c039), not a pool, token movement, offer, rate, or opening. This is an operator checklist for the proposed GFOF/GFOF fixed-budget program with one-month, six-month and twelve-month concepts. Provider support may require one configurable pool or three separately funded pools; neither is approved. The live [staking page](../staking.html) remains closed until every launch gate below has evidence. Do not connect a wallet or create a pool from this document alone.
 
 ## Decision record to complete
 
@@ -9,7 +9,7 @@ Prepared 2026-10-02. Owner approval covers public preparation status and correct
 | Provider and exact product | Streamflow fund-once candidate; compare actual dated quote, deployed program ID, upgrade authority, contract version, audit and incident handling against a second option. No provider selected yet. |
 | Stake and reward mint | Verify both as `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon` on finalized chain data; record token program and decimals. |
 | Reward source | Candidate W-010 `Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC`. Verify current owner/control, spendable balance and any encumbrance. No amount is approved. |
-| Program design | Stake cap, entry opening and expiry in UTC, stake duration(s), reward period(s), actual calculation and withdrawal behavior, unused reward handling, participant eligibility, fees and who pays each one. |
+| Program design | Verify whether one product supports three discrete terms or separate pools are required. Record cap, budget, entry opening and expiry in UTC, exact month definition, reward period, calculation and withdrawal behavior, unused rewards, eligibility, fees and payer for **each** term; check aggregate obligations. |
 | Budget | Exact integer token allocation, reserve left after allocation, full-cap worst-case obligation, rounding and buffer. Verify the provider's own calculation rather than treating a simple APR illustration as its formula. |
 | Participants | Counsel-reviewed jurisdictions, disclosures, terms, help path, incident notice process and whether a small claim is uneconomic after user fees. |
 | Authority | Named transaction approver(s), treasury signing device and independent reviewer. Record approvals without publishing private keys, recovery phrases or credentials. |
@@ -32,7 +32,7 @@ A publishable configuration must be a single versioned record with an owner sign
 | G1 — legal and terms | Counsel review of the actual issuer-funded arrangement and final public copy; dated terms, eligible participants, reward and lock mechanics, fees, risks, tax treatment language and complaint route. | Stay closed; do not publish a rate. |
 | G2 — source and notice | Current W-010 spendable balance and authority, exact unencumbered allocation, signed treasury decision, public specification and at least seven days' notice before first distribution or material change of purpose if W-010 is used. As an operating rule, wait until notice expires before inviting deposits. The October 2 intent notice does not start that clock. | No treasury transfer or pool invitation. |
 | G3 — provider acceptance | Dated quote and exact contract/program/authority review, immutable parameter proof, maximum-liability calculation, small isolated stake through exit/claim, and actual user-fee observation. | Do not create the public pool. |
-| G4 — funding | Creation and full reward-vault funding finalized on chain; independently match pool, vault, mint, cap, expiration, duration, schedule, budget, authority and signatures to approved record. | Never show OPEN or link a deposit action. |
+| G4 — funding | Creation and full funding finalized for **each** offered term. Independently match every pool, vault, mint, cap, expiration, duration, schedule, budget, authority and signature to the approved record. A track stays closed if its own proof is missing. | Never show that track OPEN or link a deposit action. |
 | G5 — publication | Second reviewer signs the comparison; official page names pool/provider, links Explorer receipts, current status and terms hash/version, displays participant cost and failure conditions. | Leave preparation page closed. |
 
 The signer must compare the wallet prompt's mint, amount, destination, program and network to the approved record immediately before approving. Creating a pool is a funds-moving action, so obtain separate explicit authorization after the completed G0–G3 packet is reviewable.
