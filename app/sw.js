@@ -1,8 +1,8 @@
 // Galactic Federation of Finance — service worker
-// Cache name is version-stamped. Bump CACHE_VERSION on each site deploy
-// so installed PWAs rotate out old assets instead of serving stale ones.
+// Cache name is version-stamped for static assets; navigation uses network-first
+// so published app copy refreshes while retaining an offline fallback.
 
-const CACHE_VERSION = 'v19.0-2026-09-20';
+const CACHE_VERSION = 'v19.1-2026-10-02';
 const CACHE = 'gfof-' + CACHE_VERSION;
 const ASSETS = ['/app/', '/app/manifest.json'];
 
@@ -41,6 +41,24 @@ self.addEventListener('fetch', (e) => {
 
   if (e.request.method !== 'GET') {
     return; // let the browser handle non-GET requests untouched
+  }
+
+  // Navigation pages must refresh from the site when online; fall back to the
+  // last cached copy only when offline. This prevents old app claims lingering
+  // after a production deploy even when the asset cache remains available.
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request).then((res) => {
+        if (res && res.status === 200 && res.type === 'basic') {
+          const clone = res.clone();
+          e.waitUntil(caches.open(CACHE).then((cache) => cache.put(e.request, clone)).catch(() => {}));
+        }
+        return res;
+      }).catch(() => caches.match(e.request).then((cached) =>
+        cached || new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } })
+      ))
+    );
+    return;
   }
 
   e.respondWith(
