@@ -20,3 +20,15 @@ test('a fractional base-unit reward rounds up and excess input precision is reje
   assert.throws(() => parseTokens('1.0000001'));
   assert.throws(() => parseTokens('-1'));
 });
+
+test('explicit full-year repeated-cap sensitivity is separate from the default cohort', () => {
+  const caps = ['1250000', '1250000', '2500000'].map(parseTokens);
+  const single = calculate(caps);
+  const repeated = calculate(caps, parseTokens('600000'), [12n, 2n, 1n]);
+  assert.equal(formatTokens(single.totalReward), '387,500');
+  assert.deepEqual(repeated.rows.map(row => formatTokens(row.reward)), ['150,000', '150,000', '300,000']);
+  assert.equal(formatTokens(repeated.totalReward), '600,000');
+  assert.equal(repeated.shortfall, 0n);
+  assert.equal(calculate(caps, parseTokens('599999.999999'), [12n, 2n, 1n]).shortfall, 1n);
+  assert.throws(() => calculate(caps, undefined, [0n, 1n, 1n]));
+});
