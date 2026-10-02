@@ -13,6 +13,9 @@ test('three independently capped terms yield their summed full-cap liability', (
 
 test('a fractional base-unit reward rounds up and excess input precision is rejected', () => {
   assert.equal(obligation(parseTokens('0.000001'), 1n), 1n);
+  // Two separately rounded positions can cost more than one rounded aggregate.
+  assert.equal(obligation(parseTokens('0.000002'), 1n), 1n);
+  assert.equal(obligation(parseTokens('0.000001'), 1n) * 2n, 2n);
   assert.equal(formatTokens(1n), '0.000001');
   assert.throws(() => parseTokens('1.0000001'));
   assert.throws(() => parseTokens('-1'));
