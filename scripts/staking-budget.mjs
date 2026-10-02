@@ -78,7 +78,7 @@ function cli(argv) {
     console.log(`Proposed reward vault: ${formatTokens(result.vault)} GFOF`);
     console.log(result.shortfall > 0n
       ? `SHORTFALL against aggregate estimate: ${formatTokens(result.shortfall)} GFOF before rounding by position, fees and buffer`
-      : `Aggregate estimate covered; excess ${formatTokens(-result.shortfall)} GFOF before rounding by position, fees and buffer`);
+      : `Meets this aggregate scenario arithmetic only; excess ${formatTokens(-result.shortfall)} GFOF before rounding by position, fees and buffer`);
     if (result.shortfall > 0n) process.exitCode = 2;
   }
   console.log('Planning sensitivity only. Reuse of cap and cycle timing are unverified; this is not a sufficient-vault proof. Per-position rounding, provider formula, expiry, fees and actual funded vault require verification.');
