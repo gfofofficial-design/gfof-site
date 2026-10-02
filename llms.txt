@@ -29,6 +29,7 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 ## Project pages
 
 - [Home](https://galacticfederation.co/): Project overview, token data, Federation pillars, roadmap phases, and Admiral Voss briefing room.
+- [Staking preparation](https://galacticfederation.co/staking): Proposed gross total-term GFOF targets of 1% for one month, 6% for six months and 12% for twelve months. No pool or deposit is open; the numbers are not final payable terms or APY settings. Correction #040 records the owner's design decision.
 - [FAQ](https://galacticfederation.co/faq): Frequently asked questions about $GFOF — what the project is, how to buy on Solana, contract address verification, the bond mechanic, the Admiral Voss persona, governance, staking, Founding Member NFT, and roadmap phases.
 - [App](https://galacticfederation.co/app): Federation terminal — site application layer.
 - [Intel](https://galacticfederation.co/intel): Federation intelligence — analysis and research briefings.
