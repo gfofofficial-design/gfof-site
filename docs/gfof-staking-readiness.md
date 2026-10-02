@@ -34,6 +34,22 @@ Streamflow's published fund-once guide says the pool cap, expiration, duration, 
 
 At full cap, a simple fixed annual-rate illustration would require at least `C × rate × D / 365` reward tokens for a single term, before rounding, provider-specific calculations and a buffer. This is **a planning equation, not a quoted reward or the provider's formula**. Run its actual calculator against 100% of the stake cap, latest possible entry and all permitted terms. Reject any configuration that can promise more rewards than the vault has. Publish the actual cap, funded budget, term, fee schedule and scenario assumptions as a versioned record.
 
+## Owner-selected rate model — for review, not an offer
+
+On 2026-10-02 the owner selected a **working total reward target** of **1% for one month, 6% for six months and 12% for twelve months**, each calculated on the GFOF principal staked for a completed term. This is an internal planning decision. It does **not** approve a public rate, APY claim, funded allocation, provider configuration or pool opening. Keep reward numbers off the public staking page until G0–G5 in the activation runbook are met, including counsel's review of the actual issuer-funded arrangement.
+
+| GFOF principal | One month at 1% | Six months at 6% | Twelve months at 12% |
+| ---: | ---: | ---: | ---: |
+| 100,000 | 1,000 | 6,000 | 12,000 |
+| 1,000,000 | 10,000 | 60,000 | 120,000 |
+| 20,000,000 | 200,000 | 1,200,000 | 2,400,000 |
+
+These are gross GFOF token amounts, before participant fees, rounding, price changes or any provider-specific calculation. The exact meaning of a month (calendar month or fixed number of days), start/end timestamps, early exit behavior, claim path and rounding need specification. A 1% one-month target corresponds to 12% over twelve consecutive months without reinvesting if twelve separate entries are available at unchanged terms; reinvesting each payout would produce about 12.68% over twelve rounds, but no renewal or reinvestment is promised. The six-month and twelve-month targets likewise imply a 12% simple annual pace; two six-month rounds with reinvestment would produce 12.36% if repeated unchanged.
+
+**Illustrative capacity, not an approved cap or allocation:** If 20 million GFOF is accepted in aggregate, with 50% in one month, 30% in six months and 20% in twelve months, the gross initial obligations would be 100,000 + 360,000 + 480,000 = **940,000 GFOF**. At full cap entirely in the twelve-month term, the gross obligation would be **2,400,000 GFOF**. If the illustrative 50/30/20 mix were renewed for a full year with no reinvestment and unchanged terms, annual gross rewards would total **2,400,000 GFOF**, before fees. Repeating an entry creates a new obligation; no initial funding example proves that future renewals are funded. Per-term caps must sum to the approved aggregate cap, and a separately bounded vault (or proved shared liability guard) must cover every accepted position at its maximum promised amount.
+
+Do not use W-010's historic snapshot as a current spendable amount. Before any approval, verify an unencumbered allocation and leave sufficient treasury balance for other commitments. Reconcile the provider's actual APY input and payout formula to the target *total* term reward with full-cap, latest-entry and repeat-entry cases; do not type 1/6/12 into an APY field on the assumption it produces these term totals. Preserve a versioned calculation sheet, sign-off and isolated receipt tests for each offered term.
+
 ## Activation sequence
 
 1. **Reconcile public commitments.** Publish a dated correction/new specification explaining the change from “no staking for yield” and “not committed.” Obtain counsel's review of the exact program and copy for the jurisdictions served. The SEC's March 2026 interpretation discusses **protocol staking**; it is not an automatic classification of an issuer-funded GFOF reward pool. Do not infer legality from the word “staking.” [SEC release](https://www.sec.gov/newsroom/press-releases/2026-30-sec-clarifies-application-federal-securities-laws-crypto-assets).
