@@ -111,3 +111,21 @@ mobile overflow result, real-browser calculator result or screen-reader pass
 is claimed. The prepared preview harness was not executed successfully and is
 not part of the production patch. No live site/provider request was made by
 that harness. Visual/mobile QA remains outstanding.
+
+## Dev-computer mobile follow-up — 2026-10-02
+
+The hosted PR82 preview was opened in a real Chromium browser at 390 × 844 and
+320 × 700 CSS-pixel viewports. On the homepage, the mobile More drawer opened,
+displayed **Staking preparation · IN DESIGN**, and its link navigated to
+`/staking`. The staking page and calculator rendered without document-level
+horizontal overflow at either width (reported document scroll width 375 at
+390 viewport, 305 at 320 viewport). The narrow-width calculator remained
+readable. At 390 px, `1,00` showed the input error and withheld rewards with
+`aria-invalid=true`; replacing it with `25,000` cleared the error and
+`aria-invalid`, then displayed 250, 1,500 and 3,000 GFOF gross rewards for
+the proposed 1-, 6- and 12-month terms. Browser viewport was reset afterward.
+
+This closes the specific mobile menu/handoff/calculator visual check that was
+blocked on the work computer. It does not prove screen-reader behavior,
+JavaScript-disabled rendering in a browser, or every page at every viewport.
+PR82 remains a draft and no production publication occurred in this check.
