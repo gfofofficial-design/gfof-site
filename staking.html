@@ -25,8 +25,9 @@ main{max-width:1060px;margin:auto;padding:70px clamp(18px,4vw,48px) 90px}
 .lead{max-width:770px;color:#d3dcf1;font-size:22px}.status{display:inline-block;margin:20px 0 6px;padding:9px 12px;color:var(--gold);border:1px solid var(--gold);background:#f0c04012}
 .proof{margin:38px 0;padding:20px 24px;border-left:3px solid var(--cyan);background:#40c0ff0e}.proof strong{color:#fff}.proof p{margin:8px 0 0;color:var(--muted)}
 h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0 55px}.card{background:linear-gradient(145deg,#0b1730,var(--panel));border:1px solid var(--line);padding:24px}.card h3{font:700 16px Orbitron,sans-serif;margin:10px 0}.card p{color:var(--muted);margin:0}.index{color:var(--green)}.plain{color:var(--muted);max-width:790px}.pending{display:grid;gap:12px;list-style:none;margin:26px 0 0;padding:0}.pending li{padding:14px 16px;background:#09152b;border:1px solid var(--line)}.pending b{color:var(--gold)}
+.terms-intro{max-width:850px;color:var(--muted);margin:0 0 24px}.terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0 0 26px}.term-card{position:relative;overflow:hidden;min-width:0;padding:23px;background:linear-gradient(155deg,#0e2140,#071126 65%);border:1px solid var(--line);border-top:3px solid var(--cyan);display:flex;flex-direction:column}.term-card:nth-child(2){border-top-color:var(--gold)}.term-card:nth-child(3){border-top-color:var(--green)}.term-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font:600 10px 'JetBrains Mono',monospace;letter-spacing:1px;color:var(--muted)}.term-state{color:var(--gold);white-space:nowrap}.term-card h3{font:800 clamp(38px,5vw,60px)/1 Orbitron,sans-serif;letter-spacing:-2px;margin:25px 0 15px}.term-card h3 small{display:block;font:600 13px 'JetBrains Mono',monospace;letter-spacing:3px;color:var(--cyan);margin-top:8px}.term-card:nth-child(2) h3 small{color:var(--gold)}.term-card:nth-child(3) h3 small{color:var(--green)}.term-card p{color:#d3dcf1;margin:0 0 25px}.term-rule{margin-top:auto;border-top:1px solid var(--line);padding-top:15px;color:var(--muted);font:600 12px/1.5 'JetBrains Mono',monospace}.term-rule strong{display:block;color:#fff;margin-bottom:5px}.terms-note{margin:0 0 55px;padding:17px 20px;background:#09152b;border:1px solid var(--line);color:var(--muted)}.terms-note strong{color:#fff}
 .footer{border-top:1px solid var(--line);padding:25px clamp(18px,4vw,56px);display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:15px}
-@media(max-width:700px){.grid{grid-template-columns:1fr}nav .links{flex-wrap:wrap}main{padding-top:45px}}
+@media(max-width:800px){.terms{grid-template-columns:1fr}.term-card h3{font-size:48px}}@media(max-width:700px){.grid{grid-template-columns:1fr}nav .links{flex-wrap:wrap}main{padding-top:45px}}
 </style>
 </head>
 <body>
@@ -35,22 +36,49 @@ h2{font:700 clamp(22px,4vw,30px) Orbitron,sans-serif;margin:0 0 18px}.grid{displ
   <div class="eyebrow">GFOF / PROPOSED HOLDER PROGRAM</div>
   <h1>STAKING <em>PREPARATION.</em></h1>
   <div class="tag status">DESIGN REVIEW · NO POOL OPEN</div>
-  <p class="lead">The Federation plans to offer an optional, funded GFOF token reward pool after the token's Meteora bonding curve completes and migration is verified. The program has no published rate, lock term, reward budget, provider, or opening date.</p>
+  <p class="lead">The Federation plans to offer an optional, funded GFOF token reward pool after the token's Meteora bonding curve completes and migration is verified. The one-month, six-month, and twelve-month choices below are proposed designs. No rate, reward budget, provider, final lock rule, or opening date is approved.</p>
   <div class="proof"><strong>No wallet action is requested here.</strong><p>This page never connects to a wallet or takes a deposit. Any future pool link will appear here only after its address, funding transaction, withdrawal rules, participant fees, and risks are published and checked. This status is a preparation record, not an active offer.</p></div>
+
+  <section aria-labelledby="terms-title">
+    <div class="eyebrow">THREE PROPOSED HORIZONS</div>
+    <h2 id="terms-title">A term that fits your horizon.</h2>
+    <p class="terms-intro">We are designing three optional commitment lengths. These are concepts for review, not open pools or finalized lock terms. Each requires its own funded reward rules and a clear exit path before anyone participates.</p>
+    <div class="terms">
+      <article class="term-card">
+        <div class="term-head"><span>SHORT HORIZON</span><span class="term-state">IN DESIGN</span></div>
+        <h3>1 <small>MONTH</small></h3>
+        <p>A shorter commitment concept for holders who want to reassess sooner. Its exact calendar rule and withdrawal process remain to be specified.</p>
+        <div class="term-rule"><strong>Before opening</strong>Funded rewards, fees, entry and exit terms, and pool proof.</div>
+      </article>
+      <article class="term-card">
+        <div class="term-head"><span>MIDDLE HORIZON</span><span class="term-state">IN DESIGN</span></div>
+        <h3>6 <small>MONTHS</small></h3>
+        <p>A longer commitment concept for holders comfortable with a defined lock. Principal may be inaccessible for the full term under the final pool rules.</p>
+        <div class="term-rule"><strong>Before opening</strong>Funded rewards, fees, entry and exit terms, and pool proof.</div>
+      </article>
+      <article class="term-card">
+        <div class="term-head"><span>LONG HORIZON</span><span class="term-state">IN DESIGN</span></div>
+        <h3>12 <small>MONTHS</small></h3>
+        <p>A full-year commitment concept. Longer exposure to token price changes and provider risk must be understood before choosing it.</p>
+        <div class="term-rule"><strong>Before opening</strong>Funded rewards, fees, entry and exit terms, and pool proof.</div>
+      </article>
+    </div>
+    <p class="terms-note"><strong>Duration alone promises no extra reward.</strong> We will publish each available term's actual funded budget, participant costs, calculation, and withdrawal rules before showing any participation link. No deposits or wallet connection are available on this page.</p>
+  </section>
 
   <section aria-labelledby="design-title">
     <h2 id="design-title">What is being designed</h2>
     <div class="grid">
       <article class="card"><span class="index">01 / Funding</span><h3>A bounded reward vault</h3><p>Rewards would come from a defined GFOF allocation placed in a public pool. Holding GFOF outside that pool would earn nothing from it. No new tokens or future revenue stream are presumed available for this plan.</p></article>
       <article class="card"><span class="index">02 / Trigger</span><h3>Verified migration</h3><p>The current GFOF launch uses Meteora DBC. Its configured quote-reserve threshold and the resulting DAMM v2 migration must be verified on chain. A market cap figure or calendar date does not trigger this program.</p></article>
-      <article class="card"><span class="index">03 / Participation</span><h3>Clear terms first</h3><p>Before launch, the Federation will specify the cap, entry period, actual lock and exit rules, fees, reward budget, pool authority and provider. Token pool rewards are distinct from Solana validator staking.</p></article>
+      <article class="card"><span class="index">03 / Participation</span><h3>Clear terms first</h3><p>Before launch, the Federation will specify each available term's cap, entry period, actual lock and exit rules, fees, reward budget, pool authority and provider. Token pool rewards are distinct from Solana validator staking.</p></article>
       <article class="card"><span class="index">04 / Evidence</span><h3>Receipts anyone can check</h3><p>Pool, program and reward vault addresses, funding signatures, current status and any corrections will be linked from the official Federation site. A pool is open only when the evidence card says it is.</p></article>
     </div>
   </section>
 
   <section aria-labelledby="gates-title">
     <h2 id="gates-title">What must happen before opening</h2>
-    <p class="plain">This is a change from the earlier public “staking not committed” posture. A separate specification, legal review of the actual terms and public correction must precede promotion of any reward terms. The disclosed community reserve W-010 is a candidate funding source, not an approved allocation; its published policy requires a public specification and at least seven days’ notice before the first distribution. No Dossier beta feature or paid access depends on staking.</p>
+    <p class="plain">Correction <a href="/corrections#c039">#039</a> records the change from the earlier “staking not committed” posture. A final specification and legal review of the actual terms must precede promotion of any rewards. The disclosed community reserve W-010 is a candidate funding source, not an approved allocation; its published policy requires a public specification and at least seven days’ notice before the first distribution. No Dossier beta feature or paid access depends on staking.</p>
     <ol class="pending">
       <li><b>01</b> Verify Meteora DBC completion and DAMM v2 pool from finalized receipts.</li>
       <li><b>02</b> Verify the candidate W-010 reserve, approve an exact unencumbered funding allocation, publish final terms and give at least seven days' notice before the first distribution.</li>
