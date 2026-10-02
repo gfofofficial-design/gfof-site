@@ -22,7 +22,7 @@ export function formatTokens(raw) {
 }
 
 export function obligation(cap, ratePercent) {
-  // Round *up* to the nearest GFOF base unit so the worksheet never understates a liability.
+  // Round the aggregate target up. Individual-position rounding can cost more.
   return (cap * ratePercent + 99n) / 100n;
 }
 
@@ -55,15 +55,15 @@ function cli(argv) {
     console.log(`${row.name}: cap ${formatTokens(row.cap)} GFOF; ${row.rate}% total term target; gross obligation ${formatTokens(row.reward)} GFOF`);
   }
   console.log(`Aggregate cap: ${formatTokens(result.totalCap)} GFOF`);
-  console.log(`Gross initial obligation: ${formatTokens(result.totalReward)} GFOF`);
+  console.log(`Aggregate gross target estimate: ${formatTokens(result.totalReward)} GFOF`);
   if (result.vault !== undefined) {
     console.log(`Proposed reward vault: ${formatTokens(result.vault)} GFOF`);
     console.log(result.shortfall > 0n
-      ? `SHORTFALL: ${formatTokens(result.shortfall)} GFOF before fees and buffer`
-      : `Worksheet covered; excess ${formatTokens(-result.shortfall)} GFOF before fees and buffer`);
+      ? `SHORTFALL against aggregate estimate: ${formatTokens(result.shortfall)} GFOF before rounding by position, fees and buffer`
+      : `Aggregate estimate covered; excess ${formatTokens(-result.shortfall)} GFOF before rounding by position, fees and buffer`);
     if (result.shortfall > 0n) process.exitCode = 2;
   }
-  console.log('Planning arithmetic only. Confirm provider formula, terms, token decimals, fees and actual funded vault before approval.');
+  console.log('Planning estimate only. Per-position rounding, provider formula, terms, token decimals, fees and actual funded vault require verification.');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
