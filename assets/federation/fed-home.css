@@ -45,3 +45,19 @@
   .cmd-hero__title{font-size:clamp(28px,8.8vw,40px)}
   .cmd-hero__actions .fed-btn{white-space:normal;text-align:center;max-width:100%}
 }
+
+/* Public staking preparation on the routed Command homepage. */
+.home-staking{padding-block:18px 52px;scroll-margin-top:100px}
+.home-staking__panel{border:1px solid var(--fed-border-default);border-top:3px solid var(--fed-authority);border-radius:16px;padding:clamp(24px,4vw,44px);background:var(--fed-space-panel)}
+.home-staking__intro{max-width:780px}
+.home-staking h2{font:700 clamp(28px,4vw,44px)/1.2 var(--font-fed-interface);color:var(--fed-text-display);margin:14px 0}
+.home-staking p{font:16px/1.75 var(--font-fed-body);color:var(--fed-text)}
+.home-staking__terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+.home-staking__terms>div{display:flex;flex-direction:column;gap:6px;padding:18px 20px;border:1px solid var(--fed-border-default);border-radius:10px;background:var(--fed-space)}
+.home-staking__terms strong{font:700 clamp(19px,2.5vw,27px)/1.25 var(--font-fed-interface);color:var(--fed-text-display)}
+.home-staking__terms span{font:600 14px/1.5 var(--font-fed-body);color:var(--fed-authority)}
+.home-staking__bottom{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.home-staking__bottom p{max-width:660px;margin:0}
+.home-staking__bottom .fed-btn{flex-shrink:0;white-space:normal;text-align:center}
+.home-staking a:focus-visible{outline:3px solid var(--fed-command);outline-offset:5px}
+@media(max-width:767px){.home-staking__terms{grid-template-columns:1fr}.home-staking__bottom{align-items:flex-start;flex-direction:column}}
