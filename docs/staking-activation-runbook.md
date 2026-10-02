@@ -24,11 +24,19 @@ A publishable configuration must be a single versioned record with an owner sign
 4. Compare a fixed-vault StakePoint candidate on actual participant cost, contract and audit scope, upgrade authority and exit test. Its one-time 1 SOL creation and flexible/locked options are provider claims, not a security conclusion. A lower creation price is insufficient if ongoing percentage fees consume modest rewards. [StakePoint pools](https://stakepoint.app/pools), [provider information](https://stakepoint.app/about).
 5. If neither provider meets these checks, keep the preparation status; do not create a custom contract solely to meet a bond date.
 
+## Before bonding: make the packet ready
+
+The owner-selected working targets are 1% total for one month, 6% total for six months, and 12% total for twelve months. They are planning inputs only, not published offers or provider APY settings. Prepare separate cap, gross reward obligation, fee, term definition, latest-entry, renewal and funding sheets for each choice. Compare the sum against an independently verified unencumbered treasury allocation and retain a budget buffer. No reward rate goes on the live page before G1–G5 are complete.
+
+Obtain a dated quote for three separately configured pools, including any plan subscription, per-pool charge, transaction and participant charges; the Streamflow fund-once guide lists 1.3 SOL per pool at creation, while its plan table has included quotas and usage pricing. The exact account quote controls. Complete provider diligence, counsel review of the actual issuer-funded terms, isolated receipt tests and a versioned parameter packet while the token is still on the bonding curve. Prepare the public specification and W-010 notice for publication only after source authority and allocation are approved.
+
+The published fund-once guide has an expiration control, but no documented delayed deposit-opening control or automatic migration gate. A created pool may be discoverable and usable even if this site omits its link. **Do not create or fund the live pools before migration on the assumption that they are closed.** Early creation requires separate explicit approval of the exact funds-moving transaction, counsel disposition and demonstrated provider controls that prevent deposits until post-migration activation. If those controls cannot be proved, retain the ready packet and create/fund after G0 and the notice interval. No on-chain signing or provider fee is authorized by this runbook.
+
 ## Gated sequence
 
 | Gate | Required evidence | Result if missing |
 | --- | --- | --- |
-| G0 — migration | Finalized Meteora DBC migration state and destination DAMM v2 pool IDs, not a market-cap screenshot or bonding prediction. | Stay closed. |
+| G0 — migration | Finalized Meteora DBC migration state and destination DAMM v2 pool IDs, not a market-cap screenshot or bonding prediction. Pre-bond paperwork, counsel and isolated tests may proceed. | Stay closed. |
 | G1 — legal and terms | Counsel review of the actual issuer-funded arrangement and final public copy; dated terms, eligible participants, reward and lock mechanics, fees, risks, tax treatment language and complaint route. | Stay closed; do not publish a rate. |
 | G2 — source and notice | Current W-010 spendable balance and authority, exact unencumbered allocation, signed treasury decision, public specification and at least seven days' notice before first distribution or material change of purpose if W-010 is used. As an operating rule, wait until notice expires before inviting deposits. The October 2 intent notice does not start that clock. | No treasury transfer or pool invitation. |
 | G3 — provider acceptance | Dated quote and exact contract/program/authority review, immutable parameter proof, maximum-liability calculation, small isolated stake through exit/claim, and actual user-fee observation. | Do not create the public pool. |
