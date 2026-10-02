@@ -1,6 +1,6 @@
 # GFOF staking readiness — proposed program v0.1
 
-Status: **design for owner and counsel review; no pool, rewards, or signup live**. Prepared 2026-10-02. This document is a proposed replacement posture for the earlier “staking not committed” roadmap entry. A public status change requires a dated corrections entry identifying the old wording and the approved new one. The [access design](../access-spec.html) expressly excluded staking for yield within its own scope; it does not authorize this separate program. Its no-yield statements must be reconciled in public before the Federation announces a rewards commitment.
+Status: **design for owner and counsel review; no pool, rewards, or signup live**. Prepared 2026-10-02. The owner approved public preparation status on 2026-10-02. Corrections entry #039 identifies the earlier “staking not committed” wording and the new status. This document remains a proposed program design; provider, budget, terms, and pool are pending. The [access design](../access-spec.html) expressly excluded staking for yield within its own scope; it does not authorize this separate program. The separate program must preserve the access design’s narrower scope and obtain review of actual reward terms before opening.
 
 ## Purpose and boundary
 
