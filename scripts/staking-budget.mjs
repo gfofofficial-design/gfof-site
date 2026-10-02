@@ -44,7 +44,7 @@ export function calculate(caps, vault, cycles = [1n, 1n, 1n]) {
 }
 
 function parseCycles(value) {
-  if (typeof value !== 'string' || !/^[1-9]\\d*$/.test(value)) {
+  if (typeof value !== 'string' || !/^[1-9][0-9]*$/.test(value)) {
     throw new Error('Cycle counts must be positive whole numbers.');
   }
   return BigInt(value);
