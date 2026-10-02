@@ -29,7 +29,7 @@
       <title>#037 · MISSED FILING — The revised Adjudication Record could not prove a cross-venue top five.</title>
       <link>https://galacticfederation.co/corrections#c037</link>
       <guid isPermaLink="false">gfof-missed-037-adjudication-cross-venue-volume</guid>
-      <pubDate>Fri, 02 Oct 2026 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 25 Sep 2026 15:15:00 +0000</pubDate>
       <description>After method v0.6 was published, a fresh Polymarket and Kalshi capture could not verify the required top-five boundary. Kalshi displayed an event-level dollar volume while its individual-market API gave contract counts and face values; several eligible individual markets could exceed the provisional Polymarket fifth. No probabilities, entries or scores were filed or backdated, and no Polymarket-only substitute sample was used. Any method change must be prospective.</description>
     </item>
 
