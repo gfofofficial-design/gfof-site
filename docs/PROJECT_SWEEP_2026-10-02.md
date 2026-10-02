@@ -90,3 +90,24 @@ hosted migration, provider/RPC call, email send, fund movement, staking pool,
 automation or alert gate activation was performed. Existing PR25, PR15, PR45,
 PR48 and staking readiness holds remain independent. Browser visual/mobile
 verification of this patch and publication are still pending.
+
+## Follow-up review — 2026-10-02
+
+PR82 code source 79d1cfaa4c63c94bb5e0b2b0df403081c03ed388 remained draft,
+unmerged and mergeable when inspected. The six Journey generated heading
+targets were checked in their actual scripts/shared chapter runtime; this
+supports the source explanation above without claiming keyboard/browser proof.
+
+The five changed HTML pages passed duplicate static ID, trailing-whitespace
+and applicable JSON-LD parsing checks. The mobile More drawer contains a plain
+/staking link marked IN DESIGN, and the changed Voss module passes syntax
+checking. These are source checks, not rendered accessibility acceptance.
+
+A local-only preview was assembled with first-party CSS and shell scripts.
+Real-browser layout checks could not execute: the installed Playwright package
+had no Chromium binary, and a browser install attempt failed with an incomplete
+archive (End of central directory record signature not found). No screenshot,
+mobile overflow result, real-browser calculator result or screen-reader pass
+is claimed. The prepared preview harness was not executed successfully and is
+not part of the production patch. No live site/provider request was made by
+that harness. Visual/mobile QA remains outstanding.
