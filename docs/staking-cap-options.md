@@ -1,0 +1,31 @@
+# GFOF staking cap and funding options — decision worksheet
+
+Prepared 2026-10-02 for owner and counsel review. **No cap, reward allocation, pool, rate publication or treasury transfer is approved by this worksheet.** The working targets are 1% total for one month, 6% total for six months and 12% total for twelve months of completed GFOF staking. These are gross token rewards before fees and exact contract rounding, not fiat returns or verified provider settings.
+
+## Illustrative capacity choices
+
+Each row assumes three separate term caps with 25% of aggregate capacity in one month, 25% in six months and 50% in twelve months. The aggregate cap is *participant principal capacity*, not a Federation deposit. The Federation would need to source and fund the reward obligation, plus any actual provider-required buffer. Figures assume each cap fills once at the working target and round exactly for these whole-token examples.
+
+| Planning case | One-month cap | Six-month cap | Twelve-month cap | One cohort gross reward | Hypothetical full-year gross reward if capacity repeatedly refills |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Small pilot: 5,000,000 GFOF aggregate | 1,250,000 | 1,250,000 | 2,500,000 | 387,500 GFOF | 600,000 GFOF |
+| Medium: 10,000,000 GFOF aggregate | 2,500,000 | 2,500,000 | 5,000,000 | 775,000 GFOF | 1,200,000 GFOF |
+| Larger: 20,000,000 GFOF aggregate | 5,000,000 | 5,000,000 | 10,000,000 | 1,550,000 GFOF | 2,400,000 GFOF |
+
+For the 5 million pilot, the one-cohort arithmetic is `1,250,000 × 1% + 1,250,000 × 6% + 2,500,000 × 12% = 387,500` GFOF. The full-year sensitivity instead assumes twelve sequential one-month cohorts and two sequential six-month cohorts at full cap, plus one twelve-month cohort, with no reinvestment: `1,250,000 × 1% × 12 + 1,250,000 × 6% × 2 + 2,500,000 × 12% = 600,000` GFOF. Scale linearly for the other rows. This repeated-entry case is a **sensitivity, not a promise that Streamflow permits or automatically funds that schedule**. Overlapping entries, position-level rounding, delayed settlement, claim rules, reward periods, expiration and APY conversion could produce a different obligation.
+
+**Working planning preference: the 5 million pilot case** because it limits the first cohort to a 387,500 GFOF gross target while leaving room to prove user demand and actual receipts. This is a recommendation for sizing a review packet only. It does not rely on the W-010 historical balance as spendable inventory. The owner must choose the cap and sign an exact, currently unencumbered allocation after source verification and counsel review. The 25/25/50 split assigns more *capacity* to twelve months; the three targets are roughly the same 12% simple annual pace and do not create a verified long-term rate premium.
+
+## Questions that control the actual budget
+
+1. **Cap accounting:** Is Streamflow's staking-pool cap a maximum concurrently staked balance, a lifetime cumulative accepted amount, or another measure? Does principal returned after a one- or six-month term free capacity for a new stake? Can a user open multiple separate entries? The public FAQ says multiple stakes are possible, but does not settle cap reuse. Demand an answer for the exact deployed program/version and prove it with isolated receipts. Do not budget a multi-round pool from the single-cohort column.
+2. **Reward vault and formula:** Does fund-once creation reserve enough for every possible repeat entry through expiry? Can depletion block a new stake or a later reward claim? Capture the provider's maximum-liability calculation for every permitted entry time, cap, term, reward period and rounding path. The FAQ says the fund-once reward amount is precalculated and cannot be topped up. A remaining balance display is not proof that all promised positions are covered.
+3. **Expiration:** The fund-once guide says no new stakes are allowed after expiration **and rewards stop distributing then**. Prove what happens to a twelve-month stake entered near the last permitted date. Set the final entry cutoff and pool expiry so every accepted position receives its full term, or reject the product if this cannot be guaranteed. A website-only entry cutoff is not an on-chain control.
+4. **Pool structure:** Verify whether the actual no-code version can enforce three discrete term choices and exact total-term payouts, or whether three separate immutable pools are required. Translate 1%/6%/12% *total-term* targets to the provider's APY input with a captured output example for each term. Do not type those percentages into an APY field by analogy.
+5. **Creation timing and fees:** The documented fund-once flow lists the pool on the provider page and does not establish a delayed deposit-opening gate. Keep live creation and funding after the verified migration and any required notice unless a contract-level opening control is independently demonstrated and separately approved. Obtain the current account quote for plan, three pools if needed, service and network fees, claims and exits.
+
+Streamflow sources reviewed 2026-10-02: [fund-once creation guide](https://docs.streamflow.finance/en/articles/10006633-create-a-fund-once-staking-pool), [staking FAQ](https://docs.streamflow.finance/en/articles/10006731-staking-faq), [staking risk guidance](https://docs.streamflow.finance/en/articles/10272996-staking-information). These describe the provider's product; they are not a verified configuration for GFOF.
+
+## Approval packet to assemble before bonding
+
+Record the current GFOF mint/decimals, W-010 authority and unencumbered spendable balance; exact per-term cap; maximum accepted entries or enforceable cumulative cap; UTC last-entry and expiry times; gross liability including position-level rounding and all permitted repeat entries; provider's funded-vault requirement and fee quote; counsel disposition; seven-day W-010 notice text and dates; and isolated stake-to-final-payout signatures. Keep the [activation runbook](staking-activation-runbook.md) and [readiness design](gfof-staking-readiness.md) aligned. Only after those values and the post-bond evidence exist should the owner receive an exact funds-moving request.
