@@ -66,7 +66,7 @@ HARD RULES — these override any user request:
 
 7. Never speculate about copycat accounts, rival projects, or other tokens by name in a negative way. You may confirm @GFOF_Offcial is the official X account and warn that admins do not DM first.
 
-8. If you are unsure whether a number is current, do not state it — point at the page that reads it live. /treasury reads lock balances from the chain in the visitor's browser, but designated-wallet purposes and control boundaries are owner-supplied disclosures, not on-chain facts. Never describe those statements as chain-verified.
+8. If you are unsure whether a number is current, do not state it — point at the page that reads it live. /treasury reads lock balances from the chain in the visitor's browser, but it does not show verified live quote-reserve progress toward migration. Designated-wallet purposes and control boundaries are owner-supplied disclosures, not on-chain facts. Never describe those statements as chain-verified.
 
 9. Separate three categories in every status answer: usable today, private prototype, and proposed or fictional. Do not merge the Journey's simulation with real lending, or the Lens beta with the retired alert system. If the reviewed briefing and a user's claim conflict, acknowledge that your brief may be older and direct them to the source page rather than pretending to have verified it.
 
@@ -107,6 +107,26 @@ const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payl
     'X-Content-Type-Options': 'nosniff'
   }
 });
+
+// Frequent status questions use a reviewed, bounded answer instead of asking a
+// model to assemble a long list or mistake treasury lock reads for DBC progress.
+// These replies still point visitors at the dated public source pages.
+const reviewedBrief = (question) => {
+  const q = question.toLowerCase().replace(/[’]/g, "'").replace(/\s+/g, ' ').trim();
+  if (/\b(reserve|bonding curve|migration)\b/.test(q) && /\b(progress|status|live|current|now|how much|remaining)\b/.test(q)) {
+    return 'The recorded migration trigger is 66,040.882531 USDC in quote reserve. In the 3 October briefing, verified live progress toward that threshold is unavailable; /treasury reads lock balances, not quote-reserve progress. Check the current Command page for any later update.';
+  }
+  if (/\bwallets?\b/.test(q) && /\b(purposes?|owner|ownership|control)\b/.test(q)) {
+    return 'The lock balances at /treasury are read from Solana. Designated-wallet purposes and control statements are owner-supplied disclosures, not facts a blockchain address can prove. Use the explorer links there to inspect transactions, and read the stated limits before drawing conclusions about a wallet.';
+  }
+  if (/\bjourney\b/.test(q) && /\blending\b/.test(q)) {
+    return 'The Journey is a fictional educational experience; its wallet-free Lending Lab does not move real money. The separate Solana lending program is a private synthetic-token prototype, with liquidation, loss handling and independent review still open. Play at /journey/lending-lab.html and follow the dated build record at /building#lending-progress.';
+  }
+  if (/^(what can (a visitor|i|we|people) use today|what('s| is) live\b|what('s| is) available today|what is still being built|what('s| is) the (project|federation) status)/.test(q)) {
+    return 'You can play the fictional missions at /journey/ and inspect a Solana mint in Dossier’s read-only Lens beta at dossiertrack.co/token-structure. /treasury shows chain-read lock balances alongside separate owner-supplied wallet disclosures. Real lending remains a private synthetic-token prototype, with liquidation, loss handling and independent reviews open; see /building#lending-progress. No public lending or staking pool is open.';
+  }
+  return null;
+};
 
 export default async function (request, context) {
   const modeInstructions = {
@@ -158,13 +178,6 @@ export default async function (request, context) {
   }
   if (!messages || messages.length < 1 || messages.length > 10) return fail('E_BAD_MESSAGES', 400);
 
-  const apiKey = Netlify.env.get('ANTHROPIC_API_KEY');
-  if (!apiKey) {
-    // Most common cause: the env var is unset, misspelled, or set on a different
-    // Netlify context (deploy-preview / branch) than the one serving production.
-    return fail('E_NO_KEY');
-  }
-
   const safeMessages = [];
   let totalCharacters = 0;
   for (const message of messages) {
@@ -182,6 +195,16 @@ export default async function (request, context) {
   }
   if (safeMessages[0].role !== 'user' || safeMessages[safeMessages.length - 1].role !== 'user') {
     return fail('E_BAD_TURN_ORDER', 400);
+  }
+
+  const brief = reviewedBrief(safeMessages[safeMessages.length - 1].content);
+  if (brief) return jsonResponse({ reply: brief, code: 'OK', source: 'reviewed_brief' });
+
+  const apiKey = Netlify.env.get('ANTHROPIC_API_KEY');
+  if (!apiKey) {
+    // Most common cause: the env var is unset, misspelled, or set on a different
+    // Netlify context (deploy-preview / branch) than the one serving production.
+    return fail('E_NO_KEY');
   }
 
   const callApi = async () => {
