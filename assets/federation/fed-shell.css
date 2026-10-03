@@ -247,6 +247,30 @@ body.fed-scroll-locked { overflow: hidden; }
   margin-bottom: var(--space-4);
 }
 .fed-voss-id img { width: 52px; height: 52px; border-radius: var(--radius-xs); }
+.fed-voss-paths { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
+.fed-voss-paths__label {
+  margin: 0;
+  color: var(--fed-muted);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.fed-voss-paths a {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--fed-border-soft);
+  border-radius: var(--radius-xs);
+  color: var(--fed-text);
+  text-decoration: none;
+}
+.fed-voss-paths a:hover, .fed-voss-paths a:focus-visible {
+  border-color: var(--fed-command);
+  background: color-mix(in srgb, var(--fed-command) 8%, transparent);
+}
+.fed-voss-paths strong { font-family: var(--font-fed-interface); font-size: var(--text-sm); }
+.fed-voss-paths span { color: var(--fed-muted); font-family: var(--font-fed-body); font-size: var(--text-xs); }
 .fed-voss-modes {
   display: flex;
   gap: var(--space-2);
