@@ -532,27 +532,33 @@
         <span class="fed-sysrow__coord">COMMAND INTELLIGENCE LIAISON</span>
       </div>
     </div>
-    <p class="fed-system fed-system--wide">SECURE COMMUNICATIONS // ACTIVE</p>
+    <p class="fed-system fed-system--wide">FEDERATION GUIDE // AI CHAT + DIRECT PATHS</p>
+    <nav class="fed-voss-paths" aria-label="Explore with Voss without using AI chat">
+      <p class="fed-voss-paths__label">Choose a path · no AI request needed</p>
+      <a href="/journey/"><strong>Enter the Journey</strong><span>Play the fictional missions and meet the crew →</span></a>
+      <a href="https://dossiertrack.co/token-structure"><strong>Inspect a token</strong><span>Try Dossier's read-only Solana Lens beta →</span></a>
+      <a href="/building#lending-progress"><strong>Follow the real build</strong><span>See the private lending prototype and open gates →</span></a>
+    </nav>
     <div class="fed-voss-modes" role="group" aria-label="Communication mode">
       <button type="button" data-voss-mode="command" aria-pressed="true">Command</button>
       <button type="button" data-voss-mode="intelligence" aria-pressed="false">Intelligence</button>
       <button type="button" data-voss-mode="transmission" aria-pressed="false">Lore</button>
     </div>
-    <p class="fed-voss-mode-note" data-voss-mode-note>Direct answers from the Federation's verified public record.</p>
+    <p class="fed-voss-mode-note" data-voss-mode-note>AI answers from a reviewed project brief. Open the linked pages for the latest status.</p>
     <div class="fed-voss-log" data-voss-log role="log" aria-live="polite" aria-label="Conversation with Admiral Voss">
-      <p class="fed-voss-message fed-voss-message--assistant">Communications online. Ask about $GFOF, the public record, treasury, governance, or Federation research.</p>
+      <p class="fed-voss-message fed-voss-message--assistant">Welcome aboard. Choose a path above, or ask me what is playable, usable, and still under construction.</p>
     </div>
     <div class="fed-voss-suggestions" aria-label="Suggested questions">
       <button type="button" data-voss-suggestion="What is the verified $GFOF contract address?">Verify $GFOF</button>
-      <button type="button" data-voss-suggestion="Where can I review the Federation's public commitments?">Public record</button>
-      <button type="button" data-voss-suggestion="Explain Dossier's current Lens beta and retired Program 01.">Dossier status</button>
+      <button type="button" data-voss-suggestion="What can a visitor use today, and what is still being built?">What is live?</button>
+      <button type="button" data-voss-suggestion="How does the Journey relate to the real lending build?">Journey and lending</button>
     </div>
     <form class="fed-voss-form" data-voss-form>
       <label class="fed-visually-hidden" for="voss-message">Message Admiral Voss</label>
       <input id="voss-message" data-voss-input type="text" maxlength="500" autocomplete="off" placeholder="Transmit a question…" required>
       <button type="submit" data-voss-send>Send</button>
     </form>
-    <p class="fed-voss-disclaimer">Informational only. Never share wallet keys, recovery phrases, or personal information.</p>
+    <p class="fed-voss-disclaimer">AI chat sends your message to an external AI provider. The briefing was reviewed 3 October 2026 and is not a live site read. Never share wallet keys, recovery phrases, or personal information.</p>
   </div>
 </aside>
 
@@ -618,7 +624,7 @@ window.FED_SHELL_CONFIG = {
   var mode = 'command';
   var loading = false;
   var modeNotes = {
-    command: "Direct answers from the Federation's verified public record.",
+    command: 'AI answers from a reviewed project brief. Open the linked pages for the latest status.',
     intelligence: 'Analysis of published research and operating systems — without speculation.',
     transmission: 'Federation lore and narrative, clearly separated from project facts.'
   };
