@@ -544,7 +544,7 @@
       <button type="button" data-voss-mode="intelligence" aria-pressed="false">Intelligence</button>
       <button type="button" data-voss-mode="transmission" aria-pressed="false">Lore</button>
     </div>
-    <p class="fed-voss-mode-note" data-voss-mode-note>AI answers from a reviewed project brief. Open the linked pages for the latest status.</p>
+    <p class="fed-voss-mode-note" data-voss-mode-note>Common answers use reviewed copy; other questions may use AI. Open the linked pages for the latest status.</p>
     <div class="fed-voss-log" data-voss-log role="log" aria-live="polite" aria-label="Conversation with Admiral Voss">
       <p class="fed-voss-message fed-voss-message--assistant">Welcome aboard. Choose a path above, or ask me what is playable, usable, and still under construction.</p>
     </div>
@@ -558,7 +558,7 @@
       <input id="voss-message" data-voss-input type="text" maxlength="500" autocomplete="off" placeholder="Transmit a question…" required>
       <button type="submit" data-voss-send>Send</button>
     </form>
-    <p class="fed-voss-disclaimer">AI chat sends your message to an external AI provider. The briefing was reviewed 3 October 2026 and is not a live site read. Never share wallet keys, recovery phrases, or personal information.</p>
+    <p class="fed-voss-disclaimer">Some questions receive a prewritten answer. Others may be sent to an external AI provider. The briefing was reviewed 3 October 2026 and is not a live site read. Never share wallet keys, recovery phrases, or personal information.</p>
   </div>
 </aside>
 
@@ -624,7 +624,7 @@ window.FED_SHELL_CONFIG = {
   var mode = 'command';
   var loading = false;
   var modeNotes = {
-    command: 'AI answers from a reviewed project brief. Open the linked pages for the latest status.',
+    command: 'Common answers use reviewed copy; other questions may use AI. Open the linked pages for the latest status.',
     intelligence: 'Analysis of published research and operating systems — without speculation.',
     transmission: 'Federation lore and narrative, clearly separated from project facts.'
   };
@@ -675,7 +675,13 @@ window.FED_SHELL_CONFIG = {
       var data = await response.json();
       pending.remove();
       var reply = data && typeof data.reply === 'string' ? data.reply : 'Federation comms offline — please try again shortly.';
-      addMessage(reply, 'assistant');
+      var answer = addMessage(reply, 'assistant');
+      if (data && (data.source === 'reviewed_brief' || data.source === 'ai')) {
+        var source = document.createElement('small');
+        source.className = 'fed-voss-message__source';
+        source.textContent = data.source === 'reviewed_brief' ? 'Reviewed briefing · 3 Oct 2026' : 'AI answer · check source pages';
+        answer.prepend(source);
+      }
       history.push({ role: 'assistant', content: reply });
       history = history.slice(-10);
     } catch (error) {

@@ -261,7 +261,7 @@ export default async function (request, context) {
     return fail('E_NO_TEXT');
   }
 
-  return jsonResponse({ reply: block.text.slice(0, 2000), code: 'OK' });
+  return jsonResponse({ reply: block.text.slice(0, 2000), code: 'OK', source: 'ai' });
 }
 
 export const config = {

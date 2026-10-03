@@ -332,6 +332,15 @@ body.fed-scroll-locked { overflow: hidden; }
   background: color-mix(in srgb, var(--fed-command) 8%, transparent);
 }
 .fed-voss-message--status { color: var(--fed-muted); }
+.fed-voss-message__source {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-fed-system);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fed-command);
+}
 .fed-voss-suggestions {
   display: flex;
   flex-wrap: wrap;
