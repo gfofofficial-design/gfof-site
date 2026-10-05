@@ -211,7 +211,7 @@ export default async function (request, context) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 8000);
     try {
-      return await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -226,35 +226,39 @@ export default async function (request, context) {
         }),
         signal: controller.signal
       });
+      if (!response.ok) {
+        // Release an unused error body before a possible retry.
+        await response.body?.cancel();
+        return { response };
+      }
+      try {
+        return { response, data: await response.json() };
+      } catch (error) {
+        if (controller.signal.aborted) throw error;
+        return { response, badJson: true };
+      }
     } finally {
       clearTimeout(timer);
     }
   };
 
-  let response;
+  let result;
   try {
-    response = await callApi();
+    result = await callApi();
     // One retry on transient upstream conditions only.
-    if (response.status === 429 || response.status === 500 || response.status === 529) {
-      console.error('[voss] transient=' + response.status + ' retry=1 request=' + requestId);
+    if (result.response.status === 429 || result.response.status === 500 || result.response.status === 529) {
+      console.error('[voss] transient=' + result.response.status + ' retry=1 request=' + requestId);
       await new Promise(r => setTimeout(r, 900));
-      response = await callApi();
+      result = await callApi();
     }
   } catch (e) {
     const isAbort = e && (e.name === 'AbortError' || String(e).indexOf('abort') !== -1);
     return fail(isAbort ? 'E_TIMEOUT' : 'E_NETWORK');
   }
 
-  if (!response.ok) {
-    return fail('E_API_' + response.status);
-  }
-
-  let data;
-  try {
-    data = await response.json();
-  } catch (e) {
-    return fail('E_BAD_UPSTREAM_JSON');
-  }
+  if (!result.response.ok) return fail('E_API_' + result.response.status);
+  if (result.badJson) return fail('E_BAD_UPSTREAM_JSON');
+  const data = result.data;
 
   const block = data && Array.isArray(data.content) ? data.content.find(b => b && b.type === 'text' && b.text) : null;
   if (!block) {
