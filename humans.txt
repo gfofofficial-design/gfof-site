@@ -25,8 +25,8 @@
 /* TECH */
   Stack: Static HTML/CSS/JS, Netlify hosting, Solana RPC reads in-browser
   Standards: RFC 9116 security.txt, llmstxt.org for AI research tools
-  Token: Solana SPL · CA 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon
-  Locks: Streamflow · 4 active contracts · 13% of supply
+  Token: Solana SPL · CA Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV
+  Legacy locks: Streamflow · 4 former-mint contracts · not new-mint lock proof
   Re-lock: 40M matured 2026-08-18 · re-locked through 2028-08-18
 
 /* NOTE */

@@ -32,7 +32,7 @@ test("balance endpoint fixes the RPC method and mint and does not cache", async 
     assert.equal(outbound.url, "https://api.mainnet-beta.solana.com");
     assert.equal(outbound.body.method, "getTokenAccountsByOwner");
     assert.equal(outbound.body.params[0], address);
-    assert.deepEqual(outbound.body.params[1], {mint: "2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon"});
+    assert.deepEqual(outbound.body.params[1], {mint: "Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV"});
     assert.equal(outbound.headers.Origin, undefined);
   } finally {
     globalThis.fetch = originalFetch;

@@ -36,8 +36,9 @@ test('treasury answer distinguishes owner disclosures from on-chain balances', a
 test('reserve answer does not promise a live migration progress gauge', async () => {
   const { body } = await ask('Is live migration reserve progress available now?');
   assert.equal(body.source, 'reviewed_brief');
-  assert.match(body.reply, /verified live progress.*unavailable/);
-  assert.match(body.reply, /not quote-reserve progress/);
+  assert.match(body.reply, /old mint.*quote-reserve/i);
+  assert.match(body.reply, /old quote-reserve gauge does not describe current-token progress/i);
+  assert.match(body.reply, /\/migration/);
 });
 
 test('Journey and lending answer separates the simulation from the private program', async () => {

@@ -2,6 +2,8 @@
 # $GFOF CORE IDENTITY DOCUMENT
 ## Galactic Federation of Finance — Brand Foundation
 
+> Historical brand draft. Address examples below identify the former GFOF mint `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`; the announced current mint is `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`. Use the live [/migration](migration.html) page and correction #041 for the current holder process. Do not reuse the old address in new posts.
+
 ---
 
 ## THE THREE PILLARS

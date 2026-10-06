@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$GFOF — Galactic Federation of Finance</title>
-<meta name="description" content="Research-first DeFi on Solana. Public design specs before code. Permanent corrections log. Live on-chain transparency. 13% of supply locked on Streamflow; first matured allocation re-locked through August 18, 2028.">
+<meta name="description" content="GFOF on Solana: current mint Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV. Explore Federation research, the public corrections log and the separate old-token migration record.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://galacticfederation.co/">
 <meta property="og:title" content="$GFOF — Galactic Federation of Finance">
@@ -32,7 +32,7 @@
   "alternateName": "$GFOF",
   "url": "https://galacticfederation.co",
   "logo": "https://galacticfederation.co/logo.png",
-  "description": "Research-first DeFi on Solana. Publishes design specifications for protocol work before any code is written, maintains a permanent public corrections log, and provides live on-chain transparency. 13% of total supply locked across four active Streamflow contracts; the first matured allocation was re-locked through August 18, 2028.",
+  "description": "Research-first DeFi on Solana. The current GFOF mint is Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV; old-mint migration and historical locks are documented separately.",
   "foundingDate": "2026",
   "knowsAbout": [
     "Solana DeFi",
@@ -44,9 +44,9 @@
   "sameAs": [
     "https://x.com/GFOF_Offcial",
     "https://t.me/GFOF_SOL",
-    "https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon",
-    "https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon",
-    "https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon"
+    "https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV",
+    "https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV",
+    "https://birdeye.so/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV"
   ]
 }
 </script>
@@ -71,7 +71,7 @@
   "@type": "FinancialProduct",
   "name": "$GFOF Token",
   "alternateName": "GFOF",
-  "description": "$GFOF is the native SPL token of the Galactic Federation of Finance, a research-first DeFi project on Solana. 13% of total supply is locked across four active Streamflow contracts with public on-chain verification. The first matured allocation was re-locked through August 18, 2028. The Realms deployment is advisory; no binding authority transfer is committed.",
+  "description": "The current $GFOF mint is Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV. Historical Streamflow locks and the old-mint holder exchange are documented separately. The Realms deployment is advisory.",
   "category": "Cryptocurrency",
   "url": "https://galacticfederation.co",
   "provider": {
@@ -82,7 +82,7 @@
   "identifier": {
     "@type": "PropertyValue",
     "propertyID": "Solana SPL Contract Address",
-    "value": "2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon"
+    "value": "Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV"
   },
   "areaServed": {
     "@type": "Place",
@@ -1640,6 +1640,8 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
 @media(prefers-reduced-motion:reduce){
   .stat-card,.holo-card{transition:none;}
 }
+/* The old DBC gauges and HUD describe the legacy mint, not the current token. */
+#bond-bar,#sticky-bond,#bond-tracker,#fed-hud{display:none!important}
 </style>
 </head>
 <body>
@@ -1658,7 +1660,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <div class="fed-hud-row"><span class="k">BOND</span><span class="v gold" id="hud-bond">…</span></div>
   <div class="fed-hud-row"><span class="k">HOLDERS</span><span class="v green" id="hud-holders">…</span></div>
   <div class="fed-hud-row"><span class="k">NEXT UNLOCK</span><span class="v" id="hud-unlock">—</span></div>
-  <div class="fed-hud-row"><span class="k">STATUS</span><span class="v green" id="hud-status">pre-bond</span></div>
+  <div class="fed-hud-row"><span class="k">STATUS</span><span class="v green" id="hud-status">new mint live</span></div>
 </div>
 
 <!-- V12: Keyboard shortcut hints (toggles with ?) -->
@@ -1686,7 +1688,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <span class="sb-sep"></span>
     <span class="sb-mc" id="sb-mc">—</span>
     <span class="sb-target">/ $73K</span>
-    <a class="sb-cta" href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" rel="noopener">BUY ↗</a>
+    <a class="sb-cta" href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">BUY ↗</a>
     <button class="sb-close" id="sb-close" aria-label="Hide bond bar">×</button>
   </div>
 </div>
@@ -1701,7 +1703,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <span class="bond-frac"><b id="bb-mc">QUOTE RESERVE</b> / 66,040.882531 USDC</span>
   <span id="bond-pct-badge">LIVE VALUE UNAVAILABLE</span>
   <span class="bond-raydium">→ destination <b>DAMM V2</b></span>
-  <a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" class="bond-cta">VERIFY POOL</a>
+  <a href="/migration" class="bond-cta">OLD-MINT HISTORY</a>
 </div>
 
 <!-- ══ TICKER ══ -->
@@ -1709,20 +1711,20 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <div id="ticker-inner">
     <span class="hi">$GFOF</span><span class="sep">◆</span>
     <span>GALACTIC FEDERATION OF FINANCE</span><span class="sep">◆</span>
-    <span class="gr">CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</span><span class="sep">◆</span>
+    <span class="gr">CA: Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</span><span class="sep">◆</span>
     <span>NETWORK: SOLANA</span><span class="sep">◆</span>
     <span>WEBSITE: GALACTICFEDERATION.CO</span><span class="sep">◆</span>
     <span>TELEGRAM: T.ME/GFOF_SOL</span><span class="sep">◆</span>
-    <span class="gr">STATUS: LIVE — PRE-BOND</span><span class="sep">◆</span>
+    <span class="gr">STATUS: NEW MINT LIVE · OLD-HOLDER EXCHANGE SEPARATE</span><span class="sep">◆</span>
     <span>LED BY ADMIRAL ZORAN VOSS</span><span class="sep">◆</span>
     <span>RESEARCH-FIRST DEFI · DESIGNED IN PUBLIC</span><span class="sep">◆</span>
     <span class="hi">$GFOF</span><span class="sep">◆</span>
     <span>GALACTIC FEDERATION OF FINANCE</span><span class="sep">◆</span>
-    <span class="gr">CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</span><span class="sep">◆</span>
+    <span class="gr">CA: Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</span><span class="sep">◆</span>
     <span>NETWORK: SOLANA</span><span class="sep">◆</span>
     <span>WEBSITE: GALACTICFEDERATION.CO</span><span class="sep">◆</span>
     <span>TELEGRAM: T.ME/GFOF_SOL</span><span class="sep">◆</span>
-    <span class="gr">STATUS: LIVE — PRE-BOND</span><span class="sep">◆</span>
+    <span class="gr">STATUS: NEW MINT LIVE · OLD-HOLDER EXCHANGE SEPARATE</span><span class="sep">◆</span>
     <span>LED BY ADMIRAL ZORAN VOSS</span><span class="sep">◆</span>
     <span>RESEARCH-FIRST DEFI · DESIGNED IN PUBLIC</span><span class="sep">◆</span>
   </div>
@@ -1764,7 +1766,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <button class="nav-ca-copy" id="nav-ca-copy" onclick="copyCAFromNav()" title="Copy contract address">
     <span class="ncc-icon">⎘</span><span class="ncc-txt">COPY CA</span>
   </button>
-  <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="nav-buy">BUY $GFOF ↗</a>
+  <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="nav-buy">BUY $GFOF ↗</a>
   <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
 </nav>
 
@@ -1788,7 +1790,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <a href="#governance" onclick="closeMobileNav()">Governance</a>
   <a href="#community" onclick="closeMobileNav()">Community</a>
   <a href="#chatbot" onclick="closeMobileNav()">VOSS</a>
-  <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" style="color:var(--gold);border:1px solid rgba(240,192,64,0.4);padding:10px 32px;font-family:var(--orb);letter-spacing:2px">BUY $GFOF ↗</a>
+  <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" style="color:var(--gold);border:1px solid rgba(240,192,64,0.4);padding:10px 32px;font-family:var(--orb);letter-spacing:2px">BUY $GFOF ↗</a>
 </div>
 
 <!-- ══ HERO ══ -->
@@ -1800,17 +1802,18 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <img src="logo-circle.png" onerror="this.src='logo.png';this.onerror=null;" class="hero-logo" alt="$GFOF" fetchpriority="high" decoding="async" width="512" height="512">
   </div>
   <h1 class="hero-h1" data-text="The Universe&#10;of DeFi,&#10;Reimagined">The Universe<br>of DeFi,<br>Reimagined</h1>
-  <p class="hero-sub">[ $GFOF // SOLANA // LIVE ]</p>
+  <p class="hero-sub">[ $GFOF // SOLANA // NEW MINT LIVE ]</p>
   <p class="hero-desc">Research-first DeFi on Solana. Design specifications published <em>before</em> any code ships, a permanent <a href="/corrections" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">corrections log</a> for every commitment, and <a href="/treasury" style="color:var(--green);text-decoration:underline;text-underline-offset:2px">live on-chain transparency</a>. Led by Admiral Zoran Voss.</p>
+  <p class="hero-desc"><strong>Current GFOF mint:</strong> <code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code>. Trading is on <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">TebFun</a>. The old mint and its holder exchange are documented at <a href="/migration">/migration</a>; old Streamflow locks are not new-token locks.</p>
   <div class="hero-btns">
-    <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary">BUY $GFOF NOW</a>
+    <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="btn-primary">BUY $GFOF NOW</a>
     <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary">JOIN TELEGRAM</a>
     <a href="#vision" class="btn-ghost">VISION 2027</a>
   </div>
 
   <!-- HERO TRUST STRIP (v9) -->
   <div class="hero-trust reveal">
-    <div class="hero-trust-item" title="13% of total supply locked in 4 active Streamflow contracts; first matured allocation re-locked through August 18, 2028"><span class="htc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="htc-t">13% LOCKED</span></div>
+    <div class="hero-trust-item" title="Historical Streamflow locks contain the old mint; see the migration record for their treatment"><span class="htc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="htc-t">LEGACY LOCKS</span></div>
     <div class="hero-trust-sep"></div>
     <div class="hero-trust-item" title="Contract address verifiable on Solscan"><span class="htc-ico">✓</span><span class="htc-t">CA VERIFIED</span></div>
     <div class="hero-trust-sep"></div>
@@ -1911,22 +1914,22 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
 <section id="chart" class="chart-section">
   <div class="chart-wrap">
     <div class="chart-header">
-      <span class="chart-title">$GFOF / SOL — LIVE CHART</span>
+      <span class="chart-title">CURRENT $GFOF — MARKET PAGE</span>
       <div class="chart-links">
-        <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="chart-link">DexScreener ↗</a>
-        <a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="chart-link">Birdeye ↗</a>
+    <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener" class="chart-link">TebFun ↗</a>
+        <a href="https://birdeye.so/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="chart-link">Birdeye ↗</a>
       </div>
     </div>
     <div class="chart-frame">
       <div class="chart-overlay" id="chart-overlay" onclick="loadChart()">
         <div class="chart-overlay-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 16v-4M12 16V9M16 16v-6"/></svg></div>
-        <div class="chart-overlay-text">CLICK TO LOAD LIVE CHART</div>
+        <div class="chart-overlay-text">OPEN CURRENT GFOF ON TEBFUN ↗</div>
       </div>
       <div class="chart-loading" id="chart-loading">
         <div class="chart-loading-bar"></div>
         <div class="chart-loading-text">LOADING CHART DATA...</div>
       </div>
-      <iframe id="dex-iframe" data-src="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon?embed=1&theme=dark&trades=0&info=0" src="about:blank" style="width:100%;height:480px;border:none;display:block"></iframe>
+      <iframe id="dex-iframe" data-src="about:blank" src="about:blank" title="Market chart pending independent index" style="width:100%;height:480px;border:none;display:none"></iframe>
     </div>
     <div style="text-align:center;margin-top:16px">
       <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary" style="display:inline-flex;align-items:center;gap:8px;font-size:11px;padding:10px 24px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M21 4L3 11l5 2 2 6 3-4 5 4 3-15z"/></svg>️ JOIN THE FEDERATION ON TELEGRAM</a>
@@ -1942,7 +1945,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <div class="bond-inner">
     <div class="bond-mission-label reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> METEORA DBC MIGRATION STATUS</div>
     <h2 class="bond-headline reveal delay-1">Quote Reserve, Not Market Cap</h2>
-    <p class="bond-desc">$GFOF trades through a Meteora Dynamic Bonding Curve. Migration is controlled by the pool&rsquo;s configured USDC quote-reserve threshold, not FDV or market capitalization. The configured destination is Meteora DAMM v2. Migration does not activate staking, NFT utility, rewards, or binding governance.</p>
+    <p class="bond-desc">This hidden historical gauge described the former GFOF mint's Meteora DBC plan. The current mint trades on TebFun. See /migration for the separate old-holder exchange.</p>
     <!-- MILESTONE JOURNEY VISUAL -->
     <div style="position:relative;max-width:620px;margin:20px auto 28px;padding:0 10px;">
       <!-- The journey line -->
@@ -1996,7 +1999,16 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
       <div class="bond-unlock-item"><span class="bond-unlock-icon">◆</span>Destination verified: Meteora DAMM v2</div>
       <div class="bond-unlock-item"><span class="bond-unlock-icon">◆</span>Creator migration liquidity: 100% permanently locked</div>
     </div>
-    <a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" class="btn-primary" style="display:inline-block">VERIFY THE LIVE POOL ↗</a>
+    <a href="/migration" class="btn-primary" style="display:inline-block">READ OLD-MINT HISTORY ↗</a>
+  </div>
+</section>
+
+<section class="bond-section" aria-labelledby="holder-migration-heading">
+  <div class="bond-inner">
+    <div class="bond-mission-label">Holder migration</div>
+    <h2 class="bond-headline" id="holder-migration-heading">A new mint, with a separate old-holder exchange</h2>
+    <p class="bond-desc">The current GFOF mint is <code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code>. Existing holders can read the documented 1:1-by-token-count migration process, old deposit mint, designated wallet and deadlines before transferring anything. Trading on TebFun does not complete that exchange.</p>
+    <a href="/migration" class="btn-primary" style="display:inline-block">READ THE MIGRATION RECORD ↗</a>
   </div>
 </section>
 
@@ -2010,13 +2022,13 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <h2 class="section-title reveal delay-1">Built Different. From the Ground Up.</h2>
     <p class="section-sub">Most DeFi protocols extract value. $GFOF creates it — for every member of the federation.</p>
     <div class="mission-grid">
-      <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M6 3h12l3 5-9 13L3 8l3-5z"/><path d="M3 8h18M9 3l3 18 3-18"/></svg></span><div class="mission-title">Store of Value</div><div class="mission-desc">13% of supply locked on-chain via Streamflow. Verifiable live — <a href="/treasury" style="color:var(--green);text-decoration:underline;text-underline-offset:2px">read from Solana in your browser ↗</a></div></div>
+      <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M6 3h12l3 5-9 13L3 8l3-5z"/><path d="M3 8h18M9 3l3 18 3-18"/></svg></span><div class="mission-title">Verifiable History</div><div class="mission-desc">Old-mint Streamflow locks remain available for inspection. They are historical evidence, not proof of new-mint locks. <a href="/treasury" style="color:var(--green);text-decoration:underline;text-underline-offset:2px">Inspect the record ↗</a></div></div>
       <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg></span><div class="mission-title">DeFi Lending — Designed in Public</div><div class="mission-desc">Borrower-protective liquidation spec published before any code ships. Open for criticism — <a href="/liquidation-spec" style="color:#A78BFA;text-decoration:underline;text-underline-offset:2px">read v0.2 ↗</a></div></div>
       <div class="holo-card mission-card"><span class="mission-icon"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z" fill="currentColor" stroke="none"/></svg></span><div class="mission-title">Accountable by Structure</div><div class="mission-desc">Every promise and every miss documented on a <a href="/corrections" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">public corrections log ↗</a>. Never deleted. Active <a href="/security" style="color:#FF5E7B;text-decoration:underline;text-underline-offset:2px">red-team bounty program ↗</a>.</div></div>
       <div class="holo-card mission-card"><span class="mission-icon">⊕</span><div class="mission-title">Expanding Universe</div><div class="mission-desc">New features as the federation grows. The roadmap is just the beginning.</div></div>
     </div>
     <div class="btn-row" style="margin-top:2.5rem">
-      <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary">Buy $GFOF — Founding Window Open ↗</a>
+      <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="btn-primary">Explore current $GFOF ↗</a>
       <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary">Join Telegram <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M21 4L3 11l5 2 2 6 3-4 5 4 3-15z"/></svg>️</a>
     </div>
   </div>
@@ -2030,14 +2042,14 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <div class="container">
     <div class="section-tag reveal">Our Foundation</div>
     <h2 class="section-title reveal delay-1" style="max-width:700px;margin:0 auto 1rem">Why We Build</h2>
-    <p class="section-sub reveal delay-2" style="text-align:center;margin:0 auto 3rem">Most projects launch with a promise and disappear with your money. We launched with our tokens locked on-chain — before we asked you for anything.</p>
+    <p class="section-sub reveal delay-2" style="text-align:center;margin:0 auto 3rem">Our former mint's Streamflow locks and the current mint's status are documented separately. Check the record before trusting any token claim.</p>
 
     <div class="reveal delay-3" style="max-width:760px;margin:0 auto 3.5rem;border-left:2px solid var(--green);padding:2rem 2.5rem;background:rgba(61,255,160,0.03);border-radius:0 8px 8px 0">
       <p style="font-family:var(--orb);font-size:clamp(18px,2.6vw,24px);font-weight:700;color:var(--gold);line-height:1.5;margin-bottom:1.4rem;letter-spacing:0.5px;text-shadow:0 0 14px var(--gold-glow)">We don't bank the unbanked. We teach them they don't need one.</p>
       <p style="font-family:var(--raj);font-size:16px;color:rgba(200,220,255,0.85);line-height:2;margin-bottom:1.2rem">The old systems were built to extract from you, not to serve you — so we're not building you a better one. Every research log, every spec, every correction exists for a single purpose: so the average person can hold their own keys, read their own risk, and answer to no institution. That's what being your own bank actually means — not a promise we sell you, but a capability you understand.</p>
       <p style="font-family:var(--raj);font-size:16px;color:rgba(200,220,255,0.85);line-height:2;margin-bottom:1.2rem">The DeFi space is full of noise. Forks of forks. Hype without substance. Roadmaps nobody intends to follow.</p>
       <p style="font-family:var(--raj);font-size:16px;color:rgba(200,220,255,0.85);line-height:2;margin-bottom:1.2rem">The Galactic Federation of Finance was built on a different premise: that the best DeFi product hasn't been created yet. That it won't come from copying what already exists. That it will come from rigorous research, honest communication, and the willingness to build something genuinely new.</p>
-      <p style="font-family:var(--raj);font-size:16px;color:rgba(200,220,255,0.85);line-height:2;margin-bottom:0">What we've shipped so far is proof of how we'll keep building. Locks before asking for buys. A <a href="/treasury" style="color:var(--green);text-decoration:underline">live transparency page</a> before a lending promise. A <a href="/liquidation-spec" style="color:#A78BFA;text-decoration:underline">public liquidation design spec</a> before any code. A <a href="/corrections" style="color:var(--cyan);text-decoration:underline">permanent log</a> of every promise we make. The Federation doesn't follow the market. We study it. We understand it. Then we advance.</p>
+      <p style="font-family:var(--raj);font-size:16px;color:rgba(200,220,255,0.85);line-height:2;margin-bottom:0">What we've shipped so far is evidence of how we'll keep building: a <a href="/treasury" style="color:var(--green);text-decoration:underline">historical lock and treasury record</a>, a <a href="/liquidation-spec" style="color:#A78BFA;text-decoration:underline">public liquidation design spec</a>, and a <a href="/corrections" style="color:var(--cyan);text-decoration:underline">corrections log</a>. The former token's locks do not establish locks for the current mint.</p>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;max-width:900px;margin:0 auto 3rem">
@@ -2059,7 +2071,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     </div>
 
     <div class="btn-row reveal delay-2">
-      <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary">Join the Federation ↗</a>
+      <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="btn-primary">Join the Federation ↗</a>
       <a href="#roadmap" class="btn-secondary">See the Roadmap</a>
     </div>
   </div>
@@ -2111,7 +2123,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
         </div>
         <div style="margin-top:1.8rem;display:flex;gap:1rem;flex-wrap:wrap">
           <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary">Join the Mission <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M21 4L3 11l5 2 2 6 3-4 5 4 3-15z"/></svg>️</a>
-          <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary">Buy $GFOF ↗</a>
+          <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="btn-primary">Buy $GFOF ↗</a>
         </div>
       </div>
     </div>
@@ -2131,7 +2143,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
         <div class="phase-num">Phase 01 // Now</div><div class="phase-title">Launch & Foundation</div>
         <div class="phase-desc">Token live on Solana. Community building. Website live.</div>
         <div class="phase-items">
-          <div class="phase-item">Token live on Meteora DBC</div><div class="phase-item">galacticfederation.co launched</div>
+          <div class="phase-item">Current token live on TebFun</div><div class="phase-item">galacticfederation.co launched</div>
           <div class="phase-item">Mobile app + Missions live</div><div class="phase-item">Buy bot operational</div>
           <div class="phase-item">CMC + CoinGecko submitted</div>
           <div class="phase-item">Advisory DAO live on Realms — holders vote now</div>
@@ -2172,7 +2184,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
       <p style="font-family:var(--raj);font-size:15px;color:var(--muted);line-height:1.9;font-style:italic;margin-bottom:10px">"The founding generation always shapes everything that follows. You are not just holding a token. You are building an institution that will give ordinary people access to financial tools they have never had."</p>
       <p style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--green);text-shadow:0 0 8px var(--green)">ADMIRAL ZORAN VOSS — 2027</p>
     </div>
-    <div style="text-align:center;margin-top:36px"><a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary" style="display:inline-block">JOIN THE FEDERATION NOW ↗</a></div>
+    <div style="text-align:center;margin-top:36px"><a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="btn-primary" style="display:inline-block">JOIN THE FEDERATION NOW ↗</a></div>
   </div>
 </section>
 
@@ -2193,7 +2205,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     </div>
     <div class="btn-row" style="margin-top:2.5rem">
       <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary">Join the Federation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M21 4L3 11l5 2 2 6 3-4 5 4 3-15z"/></svg>️</a>
-      <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="btn-primary">Buy $GFOF — Bond at 21% ↗</a>
+      <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="btn-primary">Explore current $GFOF ↗</a>
     </div>
   </div>
 </section>
@@ -2206,13 +2218,13 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
   <div class="container" style="text-align:center">
     <div class="section-tag reveal" style="justify-content:center">Official Documentation</div>
     <h2 class="section-title reveal delay-1">Federation Whitepaper</h2>
-    <p class="section-sub" style="margin:0 auto">Mission, tokenomics, roadmap, governance, and lending vision. Everything transparent. Everything public.</p>
+    <p class="section-sub" style="margin:0 auto">Historical pre-relaunch document. Its contract address and old-mint tokenomics are superseded by the <a href="/migration">current mint and migration record</a>; read it as a dated design archive.</p>
     <div class="holo-card wp-card">
       <div class="wp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg></div>
       <div class="wp-info">
         <div class="wp-title">GFOF_WHITEPAPER_v1.0</div>
         <div class="wp-sub">Galactic Federation of Finance — 2026<br>Mission · Tokenomics · Roadmap · Governance · Lending Vision</div>
-        <a href="https://galacticfederation.co/whitepaper.pdf" target="_blank" class="btn-primary" style="font-size:11px;padding:10px 24px;display:inline-block">DOWNLOAD PDF ↗</a>
+        <a href="https://galacticfederation.co/whitepaper.pdf" target="_blank" class="btn-primary" style="font-size:11px;padding:10px 24px;display:inline-block">READ ARCHIVED PDF ↗</a>
       </div>
     </div>
   </div>
@@ -2223,9 +2235,9 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
 <!-- ══ TOKENOMICS ══ -->
 <section id="tokenomics" class="pad" style="background:rgba(61,255,160,0.01)">
   <div class="container">
-    <div class="section-tag">Token Details</div>
+    <div class="section-tag">Current mint and legacy allocation record</div>
     <h2 class="section-title">$GFOF Tokenomics</h2>
-    <p class="section-sub">Built for long-term value. Transparent by design.</p>
+    <p class="section-sub">The current mint is shown below. The 77/10/13 allocation illustration and four Streamflow contracts further down document the <strong>old mint</strong>; they do not prove that any new-mint supply is locked or distributed in the same way. See <a href="/migration">the migration record</a>.</p>
     <div class="token-grid">
       <div class="holo-card token-item"><div class="token-val">$GFOF</div><div class="token-lbl">Ticker</div></div>
       <div class="holo-card token-item"><div class="token-val">Solana</div><div class="token-lbl">Network</div></div>
@@ -2236,13 +2248,13 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     </div>
     <div class="ca-box">
       <span class="ca-label">Contract Address</span>
-      <span class="ca-addr">2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</span>
+      <span class="ca-addr">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</span>
       <button class="ca-copy" onclick="copyCA()">COPY</button>
     </div>
     <div class="scan-links">
-      <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="scan-link">DexScreener ↗</a>
-      <a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="scan-link">Solscan ↗</a>
-      <a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" class="scan-link">Birdeye ↗</a>
+      <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener" class="scan-link">TebFun ↗</a>
+      <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="scan-link">Solscan ↗</a>
+      <a href="https://birdeye.so/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" class="scan-link">Birdeye ↗</a>
     </div>
 
     <!-- TOKEN DISTRIBUTION DONUT CHART -->
@@ -2250,7 +2262,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <div style="margin-top:28px;background:rgba(2,6,18,0.9);border:1px solid rgba(240,192,64,0.15);padding:28px 24px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));position:relative;">
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);"></div>
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:22px;display:flex;align-items:center;gap:10px;">
-        <span style="color:var(--green)">//</span> TOKEN DISTRIBUTION
+        <span style="color:var(--green)">//</span> HISTORICAL OLD-MINT ALLOCATION · NOT A VERIFIED NEW-MINT DISTRIBUTION
       </div>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;flex-wrap:wrap;" class="tokenomics-layout">
         <!-- SVG donut -->
@@ -2287,21 +2299,21 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
             <div style="font-family:var(--orb);font-size:22px;font-weight:900;color:#00E5FF;line-height:1;min-width:50px">77%</div>
             <div>
               <div style="font-family:var(--orb);font-size:12px;color:#fff;letter-spacing:1px;margin-bottom:3px">COMMUNITY &amp; LIQUIDITY</div>
-              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">Open market supply · circulating via DexScreener</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">Old-mint published allocation; not a current circulating-supply measurement</div>
             </div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:14px;padding:12px 14px;background:rgba(61,255,160,0.04);border-left:3px solid #3DFFA0;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)">
             <div style="font-family:var(--orb);font-size:22px;font-weight:900;color:#3DFFA0;line-height:1;min-width:50px">10%</div>
             <div>
               <div style="font-family:var(--orb);font-size:12px;color:#fff;letter-spacing:1px;margin-bottom:3px">REWARDS &amp; RESERVE</div>
-              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">Post-bond community programs · allocation defined by governance before deployment</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">Old-mint published reserve allocation; new-mint use remains unverified here</div>
             </div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:14px;padding:12px 14px;background:rgba(240,192,64,0.04);border-left:3px solid #F0C040;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)">
             <div style="font-family:var(--orb);font-size:22px;font-weight:900;color:#F0C040;line-height:1;min-width:50px">13%</div>
             <div>
               <div style="font-family:var(--orb);font-size:12px;color:#fff;letter-spacing:1px;margin-bottom:3px">DEV — LOCKED <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">4 active Streamflow contracts · first maturity re-locked 2 years · verifiable on-chain</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5">Four historical old-mint Streamflow contracts; not new-mint locks</div>
             </div>
           </div>
         </div>
@@ -2313,7 +2325,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
         <span style="font-size:20px;filter:drop-shadow(0 0 8px var(--green))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
         <div>
-          <div style="font-family:var(--orb);font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:3px">13% OF TOTAL SUPPLY LOCKED — 4 ACTIVE CONTRACTS</div>
+          <div style="font-family:var(--orb);font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:3px">OLD MINT: 130M LOCKED — 4 STREAMFLOW CONTRACTS</div>
           <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.6">The 40M allocation that matured August 18, 2026 was re-locked through August 18, 2028. New contract and predecessor remain public.</div>
         </div>
       </div>
@@ -2323,7 +2335,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
         <div class="lock-counter-cell">
           <div class="lock-counter-k">TOTAL LOCKED</div>
           <div class="lock-counter-v" id="lock-total">0</div>
-          <div class="lock-counter-s">$GFOF · 13% of supply</div>
+          <div class="lock-counter-s">Old GFOF mint only</div>
         </div>
         <div class="lock-counter-cell">
           <div class="lock-counter-k">CONTRACTS</div>
@@ -2356,11 +2368,11 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
         <div>
           <div style="font-family:var(--orb);font-size:11px;color:var(--cyan);letter-spacing:2px;margin-bottom:8px;">MINT &amp; FREEZE AUTHORITIES — EXPLAINED</div>
           <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.75;">
-            $GFOF&rsquo;s current trading venue is a <strong style="color:#fff">Meteora Dynamic Bonding Curve</strong>. The prior public description of a Moonshot-to-Raydium path was incorrect and is superseded by <a href="/corrections#c035" style="color:var(--cyan)">correction #035</a>.
+            The current GFOF mint trades on <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener" style="color:var(--cyan)">TebFun</a>. The earlier Meteora DBC and Moonshot/Raydium accounts describe the former mint; see <a href="/corrections#c041" style="color:var(--cyan)">correction #041</a>.
             <br><br>
-            Migration is based on the configured <strong style="color:var(--gold)">USDC quote-reserve threshold</strong>, not market cap. The destination is Meteora DAMM v2. Mint and freeze authority status should be verified directly against the canonical token address, not inferred from an obsolete launchpad narrative.
+            The former mint's quote-reserve threshold is not a condition for the current token. The current mint's mint and freeze authorities are absent in a finalized Solana read; inspect the address directly rather than inferring controls from a trading venue.
             <br><br>
-            <strong style="color:var(--green)">What is verified now:</strong> 13% of total supply is locked on Streamflow across four active contracts. The first matured 40M allocation was re-locked through August 18, 2028, with both contracts preserved publicly. Migration does not activate staking, NFT utility, rewards, or binding governance.
+            <strong style="color:var(--green)">What is verified now:</strong> four Streamflow contracts hold former-mint tokens. Those locks do not prove new-mint allocation or locks. The 1:1-by-count holder exchange is separate and does not activate staking, NFT utility, rewards or binding governance.
           </div>
         </div>
       </div>
@@ -2377,7 +2389,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <h2 class="section-title">Support the Mission.</h2>
     <p class="section-sub">Three things that help the federation grow without paid promotion. No point values committed, no rewards promised. If a rewards program is ever formally defined, it will appear on <a href="/corrections" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">/corrections</a> before it exists.</p>
     <div class="points-grid">
-      <div class="holo-card points-card" onclick="window.open('https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE','_blank')"><div class="points-val" style="font-size:26px">01</div><div class="points-action">VERIFY $GFOF</div><div class="points-desc">Inspect the live Meteora DBC pool and verify the canonical token address. No purchase is required to participate in the public research.</div></div>
+      <div class="holo-card points-card" onclick="window.open('https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV','_blank')"><div class="points-val" style="font-size:26px">01</div><div class="points-action">VERIFY $GFOF</div><div class="points-desc">Check the current Solana mint before using a trading link. No purchase is required to participate in the public research.</div></div>
       <div class="holo-card points-card" onclick="window.open('https://t.me/GFOF_SOL','_blank')"><div class="points-val" style="font-size:26px">02</div><div class="points-action">JOIN TELEGRAM</div><div class="points-desc">The Federation's command center. Daily briefings, live discussion, and the first place news drops.</div></div>
       <div class="holo-card points-card" onclick="window.open('https://x.com/GFOF_Offcial','_blank')"><div class="points-val" style="font-size:26px">03</div><div class="points-action">POST ON X</div><div class="points-desc">Share the research — the liquidation spec, the corrections log, the treasury page. Tag @GFOF_Offcial.</div></div>
     </div>
@@ -2415,7 +2427,7 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     <div class="community-grid">
       <div class="holo-card comm-card"><div class="comm-platform">X (Twitter)</div><div class="comm-handle">@GFOF_Offcial</div><div class="comm-note">Daily updates, price alerts, Admiral Voss transmissions, and community content. Follow and repost to grow the federation.</div><a href="https://x.com/GFOF_Offcial" target="_blank" class="btn-ghost" style="font-size:10px;padding:8px 18px;display:inline-block">FOLLOW ON X ↗</a></div>
       <div class="holo-card comm-card"><div class="comm-platform">Telegram</div><div class="comm-handle">t.me/GFOF_SOL</div><div class="comm-note">The federation command center. Live chat, buy alerts, governance discussions, and daily mission briefings from the Admiral.</div><a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary" style="font-size:10px;padding:8px 18px;display:inline-block">JOIN TELEGRAM ↗</a></div>
-      <div class="holo-card comm-card"><div class="comm-platform">Verify $GFOF</div><div class="comm-handle">DexScreener // Meteora DBC</div><div class="comm-note">Inspect the live pool, venue, market data, and canonical token address independently.</div><a href="https://dexscreener.com/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE" target="_blank" rel="noopener" class="btn-primary" style="font-size:10px;padding:8px 18px;display:inline-block">VERIFY LIVE POOL ↗</a></div>
+      <div class="holo-card comm-card"><div class="comm-platform">Verify $GFOF</div><div class="comm-handle">Solana mint // TebFun</div><div class="comm-note">Inspect the current mint on a block explorer and confirm it matches the address on the trading page.</div><a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener" class="btn-primary" style="font-size:10px;padding:8px 18px;display:inline-block">VERIFY CURRENT MINT ↗</a></div>
     </div>
 
     <!-- PINNED TWEET EMBED -->
@@ -2439,7 +2451,7 @@ Everything you need to know about <strong>$GFOF</strong>:
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z"/></svg> Website: <span class="hl">galacticfederation.co</span>
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M21 4L3 11l5 2 2 6 3-4 5 4 3-15z"/></svg>️ Telegram: <span class="hl">t.me/GFOF_SOL</span>
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M22 5c-.8.4-1.6.6-2.5.8A4 4 0 0 0 21 3.5c-.9.5-1.8.9-2.8 1A4 4 0 0 0 11 8c0 .3 0 .6.1.9A11 11 0 0 1 3 4.5a4 4 0 0 0 1.2 5.3c-.6 0-1.2-.2-1.7-.5A4 4 0 0 0 6 13.2c-.5.1-1 .2-1.6.1a4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 17.7 11 11 0 0 0 8 19.5c7.2 0 11.2-6 11.2-11.2v-.5C20 7.2 21.2 6.2 22 5z"/></svg> X: <span class="hl">@GFOF_Offcial</span>
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/></svg> CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/></svg> CA: Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 16v-4M12 16V9M16 16v-6"/></svg> Chart: <span class="hl">dexscreener.com/solana/3y4NN...</span>
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Dev Lock: <span class="hl">streamflow.finance</span>
 
@@ -2456,7 +2468,7 @@ NFA. DYOR. $SOL</div>
 
     <div class="verify-banner">
       <span class="verify-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg></span>
-      <div class="verify-text"><b>Verify official channels.</b> There is a copycat account with a similar handle. The <b>real</b> federation is <b>@GFOF_Offcial</b> on X — verify us at <a href="https://galacticfederation.co">galacticfederation.co</a>. Contract: <b>2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</b></div>
+      <div class="verify-text"><b>Verify official channels.</b> There is a copycat account with a similar handle. The <b>real</b> federation is <b>@GFOF_Offcial</b> on X — verify us at <a href="https://galacticfederation.co">galacticfederation.co</a>. Contract: <b>Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</b></div>
     </div>
   </div>
 </section>
@@ -2487,13 +2499,13 @@ NFA. DYOR. $SOL</div>
       <div id="chat-messages">
         <div class="chat-msg">
           <div class="chat-avatar bot" style="background:transparent;clip-path:none;overflow:hidden;border-radius:4px;border:1px solid rgba(240,192,64,0.3)"><img src="assets/voss/voss-starborn-avatar-2026-09-27.webp" alt="Admiral Zoran Voss" style="width:100%;height:100%;object-fit:cover"></div>
-          <div class="chat-bubble bot">I have commanded operations across a thousand failing financial systems. Each one fell for the same reason — they were built to extract, not to create.<br><br>$GFOF is different. Its live venue is a <strong style="color:var(--gold)">Meteora Dynamic Bonding Curve</strong>. Migration is controlled by a configured USDC quote-reserve threshold, not market cap, and the destination is <strong style="color:var(--green)">Meteora DAMM v2</strong>.<br><br>What would you like to verify, soldier? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg></div>
+          <div class="chat-bubble bot">Welcome to the Federation. The current GFOF mint is <strong style="color:var(--gold)">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</strong> and its announced trading page is on TebFun. The former mint, historical locks and holder exchange are documented separately at <strong style="color:var(--green)">/migration</strong> and /treasury.<br><br>What would you like to verify? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><circle cx="12" cy="12" r="2"/><path d="M12 5a7 7 0 0 1 0 14M12 19a7 7 0 0 1 0-14" opacity=".7"/><circle cx="5" cy="8" r=".8" fill="currentColor" stroke="none"/><circle cx="19" cy="16" r=".8" fill="currentColor" stroke="none"/></svg></div>
         </div>
       </div>
 
       <div class="chat-suggestions" id="chat-sugg">
         <button class="chat-sugg" onclick="askBot('What is your mission, Admiral?')">THE MISSION</button>
-        <button class="chat-sugg" onclick="askBot('How does the Meteora DBC migration work?')">DBC MIGRATION</button>
+        <button class="chat-sugg" onclick="askBot('How does the old-holder GFOF exchange work?')">HOLDER MIGRATION</button>
         <button class="chat-sugg" onclick="askBot('Tell me about the liquidation spec.')">LIQUIDATION SPEC</button>
         <button class="chat-sugg" onclick="askBot('How can I verify the on-chain transparency?')">TRANSPARENCY</button>
       </div>
@@ -2515,7 +2527,7 @@ NFA. DYOR. $SOL</div>
   <div class="container">
     <div class="section-tag reveal">$GFOF / PROPOSED HOLDER PROGRAM</div>
     <h2 class="section-title reveal delay-1">Staking is in preparation.</h2>
-    <p class="section-sub">The Federation is preparing an optional GFOF token reward pool for after verified Meteora DBC migration. The owner selected these <strong>working gross GFOF targets for a completed term</strong>; they are not live APYs, funded offers or dollar returns.</p>
+    <p class="section-sub">The Federation is preparing an optional GFOF token reward pool. The current mint requires fresh funding, provider and counsel review. The <strong>working gross GFOF targets for a completed term</strong> are not live APYs, funded offers or dollar returns.</p>
 
     <div style="margin-top:22px;background:rgba(240,192,64,0.05);border:1px solid rgba(240,192,64,0.28);padding:17px 20px;color:var(--gold);font-family:var(--mono);font-size:11px;letter-spacing:1px;line-height:1.8">
       PREPARING · NO POOL OPEN · NO WALLET CONNECTION OR DEPOSITS
@@ -2622,15 +2634,15 @@ NFA. DYOR. $SOL</div>
         </div>
         <div class="holo-card" style="padding:16px 18px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
           <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">Free to Every Holder</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">No purchase advantage. Every wallet holding $GFOF at the bond snapshot is equally eligible — one badge per holder. There is nothing to buy, win, or qualify for beyond simply holding.</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">No snapshot or badge claim is open. Any future commemorative proposal needs a new, dated specification and approval.</div>
         </div>
         <div class="holo-card" style="padding:16px 18px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
           <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">Federation Role</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">Founding Members get a verified role in the Federation Telegram. Active today for pre-bond participants.</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">No token-based Federation role is being offered here. Community participation remains open through the public channels.</div>
         </div>
         <div class="holo-card" style="padding:16px 18px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))">
           <div style="font-family:var(--orb);font-size:11px;color:var(--green);margin-bottom:5px;letter-spacing:1px">Permanent On-Chain Record</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">The badge itself is the deliverable — a soulbound NFT proving you held $GFOF before the bond. Everything else is designed around that fact.</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">This artwork is a concept only. No NFT has been issued and no future mint or eligibility rule is promised.</div>
         </div>
       </div>
     </div>
@@ -2639,14 +2651,14 @@ NFA. DYOR. $SOL</div>
     <div style="margin-top:28px;background:rgba(240,192,64,0.04);border:1px solid rgba(240,192,64,0.2);border-radius:8px;padding:22px 24px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))">
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:10px">// HOW IT WORKS</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px">
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">01 →</span>Hold any amount of $GFOF at the bond snapshot ($73K MC)</div>
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">02 →</span>Hold in your wallet at the snapshot date</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">01 →</span>No holder snapshot has been authorized</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">02 →</span>No wallet action is required for this concept</div>
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">03 →</span>No claim process exists; verify any future authorization in the corrections log</div>
-        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">04 →</span>Hold forever — badges are non-transferable, soulbound</div>
+        <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green)">04 →</span>Artwork does not confer a token or financial right</div>
       </div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px">Eligibility window closes at the $73K bond — a mechanical trigger, not a marketing one. Details of the snapshot and claim process will be posted on <a href="/corrections" style="color:var(--cyan)">/corrections</a> before the bond is reached.</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px">The former mint's bond trigger does not apply to the current token. Any future badge decision will appear in the <a href="/corrections" style="color:var(--cyan)">public record</a> before a claim is offered.</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary" style="font-size:11px;padding:9px 20px;display:inline-block">JOIN FOR SNAPSHOT ALERT ↗</a>
+        <a href="https://t.me/GFOF_SOL" target="_blank" class="btn-secondary" style="font-size:11px;padding:9px 20px;display:inline-block">VISIT FEDERATION TELEGRAM ↗</a>
       </div>
     </div>
   </div>
@@ -2674,7 +2686,7 @@ NFA. DYOR. $SOL</div>
         <div style="width:42px;height:42px;background:linear-gradient(135deg,rgba(240,192,64,0.2),rgba(61,255,160,0.2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z" fill="currentColor" stroke="none"/></svg></div>
         <div>
           <div style="font-family:var(--orb);font-size:12px;color:var(--gold);margin-bottom:3px;letter-spacing:1px">SPL Governance</div>
-          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">Voting power is weighted by $GFOF holdings — 1 token = 1 vote. The Founding Member NFT is commemorative and carries no governance weight.</div>
+          <div style="font-family:var(--raj);font-size:13px;color:var(--muted)">The existing advisory Realms deployment is gated to the former mint. Current-mint voting has not been established; a Founding Member NFT is only a concept.</div>
         </div>
       </div>
     </div>
@@ -2684,12 +2696,12 @@ NFA. DYOR. $SOL</div>
       <div class="holo-card" style="padding:22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:3px;margin-bottom:10px">STEP 01</div>
         <div style="font-family:var(--orb);font-size:13px;color:var(--gold);margin-bottom:8px">Hold $GFOF</div>
-        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.7">Your voting weight comes from the $GFOF you deposit into the DAO (next step) — 1 token, 1 vote. You can withdraw any time.</div>
+        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.7">The existing advisory realm uses the former GFOF mint. The replacement mint is not yet a voting token there.</div>
       </div>
       <div class="holo-card" style="padding:22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:3px;margin-bottom:10px">STEP 02</div>
         <div style="font-family:var(--orb);font-size:13px;color:var(--gold);margin-bottom:8px">Go to Realms</div>
-        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.7">Open the GFOF realm on Realms, connect your Phantom or Solflare wallet, and deposit your $GFOF to register your voting weight.</div>
+        <div style="font-family:var(--raj);font-size:13px;color:var(--muted);line-height:1.7">Review the realm and its former-mint eligibility before any wallet action. No replacement-mint deposit route is announced.</div>
       </div>
       <div class="holo-card" style="padding:22px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))">
         <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:3px;margin-bottom:10px">STEP 03</div>
@@ -2706,7 +2718,7 @@ NFA. DYOR. $SOL</div>
     <!-- What you vote on -->
     <div style="background:rgba(2,6,18,0.9);border:1px solid rgba(61,255,160,0.15);border-radius:8px;padding:22px 24px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))">
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--green);margin-bottom:10px">// WHAT THE FEDERATION VOTES ON — PROPOSED SCOPE</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;line-height:1.6">The DAO is live at <strong>advisory scope</strong>: holders can record preferences, but no treasury or protocol authority has migrated and no migration event changes that boundary. The 13% developer allocation is escrowed and structurally cannot vote. Deployment and parameters are documented on <a href="/corrections#c017" style="color:var(--cyan)">/corrections #017</a> and in the <a href="/governance-spec" style="color:var(--cyan)">governance spec v0.2</a>.</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:14px;line-height:1.6">The DAO is live at <strong>advisory scope for the former mint</strong>: voters can record preferences, but no treasury or protocol authority has migrated. Old-mint escrow cannot vote under the existing configuration. New-mint voting is not established. Deployment and parameters are documented on <a href="/corrections#c017" style="color:var(--cyan)">/corrections #017</a> and in the <a href="/governance-spec" style="color:var(--cyan)">governance spec v0.2</a>.</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px">
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px"><span style="color:var(--green)">◆</span>Treasury allocation — where funds go</div>
         <div style="font-family:var(--raj);font-size:14px;color:var(--muted);display:flex;gap:8px"><span style="color:var(--green)">◆</span>Staking parameters (if and when a staking spec ships)</div>
@@ -2764,7 +2776,7 @@ NFA. DYOR. $SOL</div>
     <a href="https://t.me/GFOF_SOL" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--cyan);border:1px solid rgba(0,229,255,0.25);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(0,229,255,0.04)" onmouseover="this.style.background='rgba(0,229,255,0.1)'" onmouseout="this.style.background='rgba(0,229,255,0.04)'">TELEGRAM ↗</a>
     <a href="https://galacticfederation.co/research" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.3);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.12)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">RESEARCH LOG ↗</a>
     <a href="https://dossiertrack.co" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.3);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.12)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">DOSSIER — FEDERATION INTELLIGENCE ↗</a>
-    <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.3);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.1)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">BUY $GFOF ↗</a>
+    <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.3);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.1)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">BUY $GFOF ↗</a>
     <a href="https://galacticfederation.co/intel" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid rgba(255,255,255,0.1);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(255,255,255,0.02)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'">INTEL REPORT ↗</a>
     <a href="https://galacticfederation.co/faq" style="font-family:var(--mono);font-size:10px;color:var(--gold);border:1px solid rgba(240,192,64,0.25);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(240,192,64,0.04)" onmouseover="this.style.background='rgba(240,192,64,0.12)'" onmouseout="this.style.background='rgba(240,192,64,0.04)'">FAQ ↗</a>
     <a href="https://galacticfederation.co/treasury" target="_blank" style="font-family:var(--mono);font-size:10px;color:var(--green);border:1px solid rgba(61,255,160,0.25);padding:7px 18px;letter-spacing:2px;text-decoration:none;transition:all .2s;background:rgba(61,255,160,0.04)" onmouseover="this.style.background='rgba(61,255,160,0.12)'" onmouseout="this.style.background='rgba(61,255,160,0.04)'">TRANSPARENCY ↗</a>
@@ -2779,12 +2791,12 @@ NFA. DYOR. $SOL</div>
     <a href="#staking">Staking</a><a href="#nft-badges">NFT Badges</a>
     <a href="#governance">Governance</a><a href="#chatbot">VOSS</a>
     <a href="#alliances">Alliances</a>
-    <a href="https://galacticfederation.co/whitepaper.pdf" target="_blank">Whitepaper</a>
+    <a href="https://galacticfederation.co/whitepaper.pdf" target="_blank">Whitepaper (archive)</a>
   </div>
 
   <!-- CA with copy button -->
   <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-    <div class="footer-ca" style="margin:0">CA: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</div>
+    <div class="footer-ca" style="margin:0">CA: Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</div>
     <button onclick="copyCA()" style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--green);background:rgba(61,255,160,0.06);border:1px solid rgba(61,255,160,0.25);padding:4px 12px;cursor:pointer;transition:all .2s" class="ca-copy" onmouseover="this.style.background='rgba(61,255,160,0.15)'" onmouseout="this.style.background='rgba(61,255,160,0.06)'">COPY</button>
   </div>
 
@@ -2797,7 +2809,7 @@ NFA. DYOR. $SOL</div>
 </footer>
 
 <script>
-var CA='2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
+var CA='Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';
 var MIGRATION_QUOTE_THRESHOLD=66040.882531;
 
 /* Show loading state immediately while API loads */
@@ -2890,14 +2902,7 @@ function togglePhase(el){
 
 /* ── CHART LOAD ── */
 function loadChart(){
-  var o=document.getElementById('chart-overlay'),f=document.getElementById('dex-iframe'),l=document.getElementById('chart-loading');
-  if(o){o.style.opacity='0';setTimeout(function(){o.style.display='none';},300);}
-  if(l){l.classList.add('active');}
-  if(f){
-    f.src=f.getAttribute('data-src');
-    f.onload=function(){ if(l)l.classList.remove('active'); };
-    setTimeout(function(){ if(l)l.classList.remove('active'); },8000);
-  }
+  window.open('https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV','_blank','noopener');
 }
 
 /* ── COPY CA ── */
@@ -2944,11 +2949,11 @@ function animCount(id,to){
 }
 
 function fetchDex(){
-  /* Primary — DexScreener pair endpoint (full txn + price change data) */
-  fetch('https://api.dexscreener.com/latest/dex/pairs/solana/3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE')
+  /* A new-mint quote may not yet be indexed. Never fall back to the old pool. */
+  fetch('https://api.dexscreener.com/latest/dex/tokens/'+CA)
     .then(function(r){return r.json();})
     .then(function(d){
-      var p=d.pair||d.pairs?.[0];
+      var p=(d.pairs||[]).find(function(x){return x.baseToken&&x.baseToken.address===CA || x.quoteToken&&x.quoteToken.address===CA;});
       if(!p||!p.priceUsd) throw new Error('no pair data');
       var mc=parseInt(p.fdv||0), price=parseFloat(p.priceUsd||0);
       if(price>0){
@@ -2970,21 +2975,7 @@ function fetchDex(){
       }
     })
     .catch(function(){
-      /* Fallback — DexScreener token endpoint */
-      fetch('https://api.dexscreener.com/latest/dex/tokens/'+CA)
-        .then(function(r){return r.json();})
-        .then(function(d){
-          var p=(d.pairs||[])[0]; if(!p) return;
-          var mc=parseInt(p.fdv||0),price=parseFloat(p.priceUsd||0);
-          if(price>0){
-            set('stat-price',fmtPrice(price));
-            set('stat-vol',fmtMC(p.volume&&p.volume.h24));
-            set('stat-mc',fmtMC(mc));
-            var ch=parseFloat((p.priceChange&&p.priceChange.h24)||0);
-            var chEl=document.getElementById('stat-change');
-            if(chEl){chEl.textContent=(ch>=0?'+':'')+ch.toFixed(2)+'%';chEl.style.color=ch>=0?'var(--green)':'#f87171';}
-          }
-        }).catch(function(){});
+      ['stat-price','stat-vol','stat-mc','stat-change','stat-ratio'].forEach(function(id){set(id,'UNAVAILABLE');});
     });
 }
 
@@ -3396,14 +3387,14 @@ function dismissHUD(){
       case 'l': window.location.href = '/liquidation-spec'; break;
       case 's': window.location.href = '/security'; break;
       case 'c': window.location.href = '/corrections'; break;
-      case 'b': window.open('https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon', '_blank'); break;
+      case 'b': window.open('https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV', '_blank'); break;
       case 'x':
         /* Copy CA */
         if (typeof copyCAFromNav === 'function') {
           copyCAFromNav();
         } else {
           try {
-            navigator.clipboard.writeText('2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon');
+            navigator.clipboard.writeText('Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV');
           } catch(err){}
         }
         break;

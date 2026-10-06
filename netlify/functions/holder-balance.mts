@@ -1,5 +1,5 @@
 const RPC = "https://api.mainnet-beta.solana.com";
-const MINT = "2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon";
+const MINT = "Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV";
 const ADDRESS = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 
 function json(body: unknown, status = 200): Response {

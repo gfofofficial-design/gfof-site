@@ -4,7 +4,9 @@ Status: **design for owner and counsel review; no pool, rewards, or signup live*
 
 ## Purpose and boundary
 
-An optional, externally funded GFOF token reward pool after the live Meteora DBC curve reaches its **configured quote-reserve threshold** and migration to DAMM v2 is verified. The trigger is the actual on-chain migration state, not a market-cap number or a calendar date. GFOF is an SPL token; depositing it into a reward pool does not stake SOL to a validator or produce Solana protocol inflation rewards. A reward can be paid only from tokens specifically placed into the pool. A holder who does not participate receives no pool reward.
+**2026-10-06 superseding status:** The current mint is `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`. The Meteora DBC threshold below belongs to the former mint and is no longer a launch trigger. Any current-mint pool needs fresh specifications, verified unencumbered new-token funding, provider and counsel review, and a recorded authorization. No pool is open.
+
+The original proposal was an optional, externally funded GFOF token reward pool after the former mint's Meteora DBC curve reached its configured quote-reserve threshold and DAMM v2 migration was verified. That is now historical design context, not a current requirement or proof of readiness. GFOF is an SPL token; depositing it into a reward pool does not stake SOL to a validator or produce Solana protocol inflation rewards. A reward can be paid only from tokens specifically placed into the pool. A holder who does not participate receives no pool reward.
 
 The program does not confer Dossier access, governance authority, a buyback, a price floor, or a claim on Federation revenue. Dossier's read-only Structure Lens and Capital Path have separate release gates. Neither can be represented as part of the reward.
 
@@ -20,7 +22,7 @@ Streamflow's published fund-once guide says the pool cap, expiration, duration, 
 
 | Field | Required evidence |
 | --- | --- |
-| GFOF mint | `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`; independently verify mint and token program |
+| GFOF mint | Current `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`; independently verify mint and token program. The former mint is historical and is not a staking input. |
 | Funding authority | Candidate: disclosed W-010 community and holder-benefits reserve, `Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC`. Its 2026-09-09 snapshot was 26,854,995.530832 GFOF, **not** a current available balance or an approved staking allocation. Recheck ownership, balance and encumbrances, then record the owner's signed allocation and source transfer. [Treasury register](https://galacticfederation.co/treasury). |
 | Reward source | Unencumbered GFOF already controlled by the Federation; no assumption that locked allocations, DBC pool inventory, migration proceeds or future trading fees are available |
 | Reward budget `R` | Exact amount per term/vault and total, integer precision and percent of current total supply |
@@ -37,7 +39,7 @@ At full cap, a simple fixed annual-rate illustration would require at least `C �
 ## Activation sequence
 
 1. **Reconcile public commitments.** Publish a dated correction/new specification explaining the change from “no staking for yield” and “not committed.” Obtain counsel's review of the exact program and copy for the jurisdictions served. The SEC's March 2026 interpretation discusses **protocol staking**; it is not an automatic classification of an issuer-funded GFOF reward pool. Do not infer legality from the word “staking.” [SEC release](https://www.sec.gov/newsroom/press-releases/2026-30-sec-clarifies-application-federal-securities-laws-crypto-assets).
-2. **Verify bond and ownership.** Confirm the configured Meteora DBC quote-reserve threshold is reached, migration state is finalized, and the actual DAMM v2 pool and custody are identified from chain receipts. The prior Moonshot/Raydium creator-fee specification is superseded and cannot supply funding. [Meteora migration documentation](https://docs.meteora.ag/core-products/dbc/migration-and-liquidity).
+2. **Verify current mint and ownership.** Confirm the current GFOF mint on finalized Solana data, and verify actual reward inventory, custody and authority for this mint. The former Meteora DBC path and prior Moonshot/Raydium creator-fee design are historical and cannot supply current-mint funding.
 3. **Approve a bounded budget and give notice.** W-010 is a candidate source, not an automatic funding authorization. Recheck its current balance and control, sign the exact allocation with the treasury owner, and establish that tokens are liquid and unencumbered. Its published register requires a public specification and **at least seven days' notice before the first distribution or material change of purpose**. Publish the final amount, terms, intended source and first-distribution window with a dated notice; the clock starts on that publication, not on this draft. Ensure provider fees leave an acceptable operating reserve. Never unlock a documented allocation early to fill the pool.
 4. **Validate the provider.** Capture dated pricing, contract version, program ID, audit and upgrade authority, withdrawal behavior, participant fees and incident process. Use a separate small test with consenting wallets, then inspect stake and completion receipts. A test is not the public pool.
 5. **Create and fund once.** Use the official provider interface and treasury signing controls. Independently verify GFOF mint, pool, vault, amount, cap and term on Solana Explorer before any public “open” label. Avoid a custom custody or wallet connection on the Federation site.

@@ -2,12 +2,14 @@
 
 Prepared 2026-10-02. Owner approval covers public preparation status and correction [#039](../corrections.html#c039), not a pool, token movement, offer, rate, or opening. This is an operator checklist for the proposed GFOF/GFOF fixed-budget program with one-month, six-month and twelve-month concepts. Provider support may require one configurable pool or three separately funded pools; neither is approved. The live [staking page](../staking.html) remains closed until every launch gate below has evidence. Do not connect a wallet or create a pool from this document alone.
 
+**2026-10-06 superseding mint gate:** The owner announced current mint `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`. The former mint `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`, its Meteora DBC condition and its old-token Streamflow locks cannot satisfy any current-mint staking or funding gate. Treat the October 2 venue-trigger text below as historical. Reconfirm the current mint, reward inventory, provider support, budget, notice and counsel disposition before any launch decision; no pool is authorized by the new mint's creation or trading.
+
 ## Decision record to complete
 
 | Input | Record before approval |
 | --- | --- |
 | Provider and exact product | Streamflow fund-once candidate; compare actual dated quote, deployed program ID, upgrade authority, contract version, audit and incident handling against a second option. No provider selected yet. |
-| Stake and reward mint | Verify both as `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon` on finalized chain data; record token program and decimals. |
+| Stake and reward mint | Verify both as current mint `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV` on finalized chain data; record token program and decimals. |
 | Reward source | Candidate W-010 `Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC`. Verify current owner/control, spendable balance and any encumbrance. No amount is approved. |
 | Program design | Verify whether one product supports three discrete terms or separate pools are required. Record cap, budget, entry opening and expiry in UTC, exact month definition, reward period, calculation and withdrawal behavior, unused rewards, eligibility, fees and payer for **each** term; check aggregate obligations. |
 | Budget | Exact integer token allocation, reserve left after allocation, full-cap worst-case obligation, rounding and buffer. Verify the provider's own calculation rather than treating a simple APR illustration as its formula. |
@@ -28,7 +30,7 @@ A publishable configuration must be a single versioned record with an owner sign
 
 | Gate | Required evidence | Result if missing |
 | --- | --- | --- |
-| G0 — migration | Finalized Meteora DBC migration state and destination DAMM v2 pool IDs, not a market-cap screenshot or bonding prediction. | Stay closed. |
+| G0 — current mint and funding | Finalized verification of current mint `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`, actual reward inventory and control. The former Meteora DBC migration state cannot satisfy this gate. | Stay closed. |
 | G1 — legal and terms | Counsel review of the actual issuer-funded arrangement and final public copy; dated terms, eligible participants, reward and lock mechanics, fees, risks, tax treatment language and complaint route. | Stay closed; do not publish a rate. |
 | G2 — source and notice | Current W-010 spendable balance and authority, exact unencumbered allocation, signed treasury decision, public specification and at least seven days' notice before first distribution or material change of purpose if W-010 is used. As an operating rule, wait until notice expires before inviting deposits. The October 2 intent notice does not start that clock. | No treasury transfer or pool invitation. |
 | G3 — provider acceptance | Dated quote and exact contract/program/authority review, immutable parameter proof, maximum-liability calculation, small isolated stake through exit/claim, and actual user-fee observation. | Do not create the public pool. |

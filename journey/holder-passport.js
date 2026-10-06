@@ -54,7 +54,7 @@ async function readBalance(address) {
   $("wallet-connect").disabled = true;
   $("wallet-refresh").disabled = true;
   $("wallet-result").hidden = true;
-  $("wallet-status").textContent = "Reading GFOF token accounts from Solana mainnet…";
+  $("wallet-status").textContent = "Reading the new GFOF mint from Solana mainnet…";
   try {
     const response = await fetch(BALANCE_ENDPOINT, {
       method: "POST",
@@ -72,7 +72,7 @@ async function readBalance(address) {
     }
     $("wallet-address").textContent = `${address.slice(0,6)}…${address.slice(-6)}`;
     $("wallet-balance").textContent = `${formatTokenAmount(balance.raw, balance.decimals)} GFOF`;
-    $("wallet-marker").textContent = balance.holder ? "GFOF visible in this connected wallet" : "No GFOF found in this connected wallet";
+    $("wallet-marker").textContent = balance.holder ? "New-mint GFOF visible in this connected wallet" : "No new-mint GFOF found here; old-mint holdings are not checked";
     $("wallet-slot").textContent = `Read at mainnet slot ${balance.slot.toLocaleString("en-US")}. ${balance.accountCount} token account${balance.accountCount === 1 ? "" : "s"} found. Refresh for a new reading.`;
     $("wallet-result").hidden = false;
     $("wallet-status").textContent = balance.holder ? "Read-only holder check complete." : "Balance check complete. Every tester step remains open.";

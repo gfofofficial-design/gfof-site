@@ -652,7 +652,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <div class="top-nav-links">
     <a href="/" class="primary">← BACK TO SITE</a>
     <a href="/intel">INTEL ↗</a>
-    <a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">DEX ↗</a>
+    <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">CURRENT TOKEN ↗</a>
   </div>
 </nav>
 
@@ -662,14 +662,15 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <section class="hero">
     <div class="hero-tag"><span class="hero-tag-dot"></span>LIVE · READ FROM SOLANA</div>
     <h1>Transparency <span class="grad">Report</span></h1>
-    <p>Most projects <em>claim</em> transparency. We let you verify it yourself — Streamflow lock balances are read <strong>directly from the Solana blockchain</strong>, while designated-wallet snapshots are dated and linked to their public accounts.</p>
+    <p>Most projects <em>claim</em> transparency. We let you verify the historical record yourself: Streamflow lock balances for the <strong>former GFOF mint</strong> are read from Solana, while designated-wallet snapshots are dated and linked to their public accounts.</p>
+    <p><strong>Current mint:</strong> <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code></a>. <strong>Former mint in the locks below:</strong> <code style="overflow-wrap:anywhere">2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code>. These old-mint locks do not prove new-token locks. See <a href="/migration">the holder migration process</a>.</p>
   </section>
 
   <!-- THE PROMISE -->
   <div class="promise">
     <div class="promise-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> THE PROMISE</div>
     <div class="promise-body">
-      This page queries Solana's public mainnet RPC directly from your browser for the four Streamflow locks. Those live lock reads are the chain's answer to "what is locked." Designated-wallet purposes are owner-supplied and unlocked balances are dated snapshots with direct explorer links. Refresh the page to recheck the lock data; follow any wallet address to inspect its current activity.
+      This page queries Solana's public mainnet RPC directly from your browser for four <strong>old-mint</strong> Streamflow locks. Those live reads answer what remains in those historical contracts, not what is locked from the replacement mint. Designated-wallet purposes are owner-supplied and unlocked balances are dated snapshots with direct explorer links. Refresh the page to recheck the old lock data.
     </div>
   </div>
 
@@ -765,7 +766,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <div class="wallet-head"><div><div class="wallet-id">W-008</div><div class="wallet-title">GFOF Creator Wallet</div></div><span class="wallet-state owner">OWNER-CONTROLLED</span></div>
       <a class="wallet-address" href="https://solscan.io/account/Fv6J7pxzz3bmEDC7BjkXchNme64SaLRY5ztQVowF3z8d" target="_blank" rel="noopener">Fv6J7pxzz3bmEDC7BjkXchNme64SaLRY5ztQVowF3z8d ↗</a>
       <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>1,093,521.409153 GFOF · 0.11%</strong></div></div>
-      <div class="wallet-fact"><div class="k">ROLE</div><div class="v">This wallet signed the <a href="https://solscan.io/tx/DuUxP3N7qf9cpnyLSKm62yLPJCDNSMhg7mL67wsohgaN95a9X4uADijbNhYAL3fQtAdJW3itmvQRnU5P5Qj7psh" target="_blank" rel="noopener" style="color:var(--cyan)">on-chain creation transaction</a> that created the GFOF mint and initialized its Meteora Dynamic Bonding Curve virtual pool.</div></div>
+      <div class="wallet-fact"><div class="k">ROLE</div><div class="v">This wallet signed the <a href="https://solscan.io/tx/DuUxP3N7qf9cpnyLSKm62yLPJCDNSMhg7mL67wsohgaN95a9X4uADijbNhYAL3fQtAdJW3itmvQRnU5P5Qj7psh" target="_blank" rel="noopener" style="color:var(--cyan)">on-chain creation transaction</a> for the <strong>former</strong> GFOF mint and its Meteora Dynamic Bonding Curve virtual pool. It is not evidence of new-mint custody.</div></div>
       <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled and currently unlocked. Remaining assets are intended for a potential future liquidity contribution, but they are not currently deposited, locked, or held in Moonshot custody.</div></div>
     </article>
 
@@ -809,23 +810,23 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <!-- THIRD-PARTY TOOLS (v17.2) -->
   <div class="verify-card">
     <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1.5 1.5M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1.5-1.5"/></svg></span>VERIFY ON THIRD-PARTY TOOLS</h3>
-    <p style="font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 18px;">Canonical on-chain data sources, all free, all public. No account required. Third-party indexers like Dune and Bubblemaps will auto-populate once DEX volume crosses their indexing thresholds; until then, these are the direct sources.</p>
+    <p style="font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 18px;">The links below inspect the <strong>former mint</strong> whose Streamflow locks this page reads. For the replacement mint, use <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">Solscan</a> and the announced <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">TebFun market</a>.</p>
     <div class="verify-steps">
       <div class="verify-step">
         <div class="vs-num">SOLSCAN</div>
-        <div class="vs-body"><strong>Token page, holder list, all transfers.</strong> The canonical Solana block explorer — used by Jupiter Verified, CoinGecko, and most researchers.<br><a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">solscan.io/token/2oQmH…2iZCmoon ↗</a></div>
+        <div class="vs-body"><strong>Former-mint token page, holders and transfers.</strong> Use it to inspect the old token underlying these locks.<br><a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">solscan.io/token/2oQmH…2iZCmoon ↗</a></div>
       </div>
       <div class="verify-step">
         <div class="vs-num">DEXSCREENER</div>
-        <div class="vs-body"><strong>Live price, volume, buys/sells, liquidity.</strong> Real-time DEX activity across Raydium, Orca, Jupiter and every Solana venue.<br><a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">dexscreener.com/solana/2oQmH…2iZCmoon ↗</a></div>
+        <div class="vs-body"><strong>Former-mint market history.</strong> This chart is not the replacement token's trading page.<br><a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">dexscreener.com/solana/2oQmH…2iZCmoon ↗</a></div>
       </div>
       <div class="verify-step">
         <div class="vs-num">BIRDEYE</div>
-        <div class="vs-body"><strong>Alternative market view with depth charts.</strong> Independent of DexScreener, useful as a cross-check.<br><a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon?chain=solana" target="_blank">birdeye.so/token/2oQmH…2iZCmoon ↗</a></div>
+        <div class="vs-body"><strong>Alternative former-mint market view.</strong> Do not confuse this with the replacement mint.<br><a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon?chain=solana" target="_blank">birdeye.so/token/2oQmH…2iZCmoon ↗</a></div>
       </div>
       <div class="verify-step">
         <div class="vs-num">SOLANA EXPLORER</div>
-        <div class="vs-body"><strong>The chain's own explorer.</strong> Useful for inspecting raw token accounts and transactions at the protocol level.<br><a href="https://explorer.solana.com/address/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">explorer.solana.com/address/2oQmH…2iZCmoon ↗</a></div>
+        <div class="vs-body"><strong>The former mint on Solana Explorer.</strong> Useful for inspecting old token accounts and transactions at the protocol level.<br><a href="https://explorer.solana.com/address/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">explorer.solana.com/address/2oQmH…2iZCmoon ↗</a></div>
       </div>
     </div>
   </div>
@@ -834,7 +835,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <div class="unlock-commitment">
     <div class="title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> UNLOCK COMMITMENT</div>
     <div class="body">
-      Every Streamflow unlock event is published here before it happens. <strong>Unlocked Federation tokens do not go to the open market</strong> — they are rotated into operational treasury, transparent on-chain. Scroll down for countdowns to every unlock event and the full schedule. If we ever break this commitment, it will appear on our <a href="/corrections" style="color:var(--cyan)">public corrections log</a>.
+      This schedule and commitment concern the <strong>former GFOF mint only</strong>. Every old-mint Streamflow unlock event is published here before it happens. The stated plan is to rotate released tokens into operational treasury rather than sell them on the open market. Follow the linked contracts for current balances and the <a href="/corrections" style="color:var(--cyan)">public corrections log</a> for changes.
     </div>
   </div>
 
@@ -926,6 +927,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
    Fallback: graceful degradation to known-good static value when RPC is unreachable
    ═══════════════════════════════════════════════════════════ */
 
+// Intentionally the former mint: these Streamflow contracts hold old GFOF.
 var CA = '2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
 var TOTAL_SUPPLY = 1_000_000_000;        /* 1B */
 var TOKEN_DECIMALS = 9;                  /* standard Moonshot SPL */
