@@ -1,6 +1,6 @@
 # GFOF reward-pool activation runbook — preparation only
 
-Prepared 2026-10-02. Owner approval covers public preparation status and correction [#039](../corrections.html#c039), not a pool, token movement, offer, rate, or opening. This is an operator checklist for the proposed GFOF/GFOF fixed-budget program with one-month, six-month and twelve-month concepts. Provider support may require one configurable pool or three separately funded pools; neither is approved. The live [staking page](../staking.html) remains closed until every launch gate below has evidence. Do not connect a wallet or create a pool from this document alone.
+Prepared 2026-10-02. Owner approval covers public preparation status and correction [#039](../corrections.html#c039), not a pool, token movement, offer, rate, or opening. This is an operator checklist for the proposed GFOF/GFOF fixed-budget program with one-month, three-month, six-month and twelve-month concepts. Provider support may require one configurable pool or four separately funded pools; neither is approved. The live [staking page](../staking.html) remains closed until every launch gate below has evidence. Do not connect a wallet or create a pool from this document alone.
 
 **2026-10-06 superseding mint gate:** The owner announced current mint `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`. The former mint `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`, its Meteora DBC condition and its old-token Streamflow locks cannot satisfy any current-mint staking or funding gate. Treat the October 2 venue-trigger text below as historical. Reconfirm the current mint, reward inventory, provider support, budget, notice and counsel disposition before any launch decision; no pool is authorized by the new mint's creation or trading.
 
@@ -11,7 +11,7 @@ Prepared 2026-10-02. Owner approval covers public preparation status and correct
 | Provider and exact product | Streamflow fund-once candidate; compare actual dated quote, deployed program ID, upgrade authority, contract version, audit and incident handling against a second option. No provider selected yet. |
 | Stake and reward mint | Verify both as current mint `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV` on finalized chain data; record token program and decimals. |
 | Reward source | Candidate W-010 `Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC`. Verify current owner/control, spendable balance and any encumbrance. No amount is approved. |
-| Program design | Verify whether one product supports three discrete terms or separate pools are required. Record cap, budget, entry opening and expiry in UTC, exact month definition, reward period, calculation and withdrawal behavior, unused rewards, eligibility, fees and payer for **each** term; check aggregate obligations. |
+| Program design | Verify whether one product supports four discrete terms or separate pools are required. Record cap, budget, entry opening and expiry in UTC, exact month definition, reward period, calculation and withdrawal behavior, unused rewards, eligibility, fees and payer for **each** term; check aggregate obligations. |
 | Budget | Exact integer token allocation, reserve left after allocation, full-cap worst-case obligation, rounding and buffer. Verify the provider's own calculation rather than treating a simple APR illustration as its formula. |
 | Participants | Counsel-reviewed jurisdictions, disclosures, terms, help path, incident notice process and whether a small claim is uneconomic after user fees. |
 | Authority | Named transaction approver(s), treasury signing device and independent reviewer. Record approvals without publishing private keys, recovery phrases or credentials. |
@@ -57,3 +57,7 @@ Do not mix the Dossier Capital Path beta, FCC, NFT, governance, price support or
 ## Remaining owner decision packet
 
 When the gates are evidenced, present one comparison showing the chosen provider, total launch/participant costs, exact reward budget and cap, expected best/worst-case funding obligation, source balance after allocation, duration/exit, counsel disposition, notice dates, test receipts and full on-chain destination. Ask for one specific approval to create and fund that exact pool. No transaction is authorized by approval of this runbook.
+
+## 2026-10-06 term update
+
+Owner requested proposed total-term gross rewards of 1% for one month, 3% for three months, 6% for six months and 12% for twelve months. These are not APY settings or funded offers. Verify support and funding for all four terms before opening; no pool or funds movement is authorized by this update.
