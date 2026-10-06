@@ -52,7 +52,7 @@
 .home-staking__intro{max-width:780px}
 .home-staking h2{font:700 clamp(28px,4vw,44px)/1.2 var(--font-fed-interface);color:var(--fed-text-display);margin:14px 0}
 .home-staking p{font:16px/1.75 var(--font-fed-body);color:var(--fed-text)}
-.home-staking__terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+.home-staking__terms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:26px 0}
 .home-staking__terms>div{display:flex;flex-direction:column;gap:6px;padding:18px 20px;border:1px solid var(--fed-border-default);border-radius:10px;background:var(--fed-space)}
 .home-staking__terms strong{font:700 clamp(19px,2.5vw,27px)/1.25 var(--font-fed-interface);color:var(--fed-text-display)}
 .home-staking__terms span{font:600 14px/1.5 var(--font-fed-body);color:var(--fed-authority)}
