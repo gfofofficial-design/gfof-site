@@ -57,3 +57,23 @@ This text describes preparation, not an offer of a specific return. Public corre
 Owner requested proposed total-term gross rewards of 1% for one month, 3% for three months, 8% for six months and 12% for twelve months. These are not APY settings or funded offers. Verify support and funding for all four terms before opening; no pool or funds movement is authorized by this update.
 
 The six-month working target was raised from 6% to 8% on 2026-10-06. Budget and maximum-liability estimates must use 8%; earlier three-term worksheets remain historical until reconciled to the four-term design. This numerical change does not satisfy any activation gate.
+
+## Provider comparison follow-up — 2026-10-06
+
+The owner is requesting details from the TBB owner about the staking product
+reportedly used there and its claimed zero project cost. Streamflow remains a
+candidate only; no provider has been selected. The Jupiter/TBB lead is pending
+verification and does not establish support for GFOF or the four proposed terms.
+
+Collect the exact official product and pool URL, deployed program ID and version,
+audit scope and upgrade authority; confirm support for current GFOF mint
+`Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV` and each discrete term.
+Obtain a dated breakdown of project setup/subscription costs, participant
+transaction/claim/exit fees, and who funds and holds the token reward inventory.
+Verify principal return, early-exit restrictions, full-cap reward liabilities,
+repeat entry and emergency controls against the actual product.
+
+A zero platform charge does not establish a funded reward budget or cost-free
+participation. Keep the public page in preparation, with no wallet connection,
+until provider verification and the existing funding, legal and launch gates
+are satisfied. Do not infer a launch from bonding or from another token's pool.
