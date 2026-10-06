@@ -7,8 +7,8 @@
     <description>Every promise the Galactic Federation of Finance has made publicly — what we committed to, what we kept, what we missed, and what we learned. Entries are appended, never deleted.</description>
     <language>en-us</language>
     <copyright>Galactic Federation of Finance</copyright>
-    <lastBuildDate>Fri, 02 Oct 2026 17:26:28 +0000</lastBuildDate>
-    <pubDate>Fri, 02 Oct 2026 17:26:28 +0000</pubDate>
+    <lastBuildDate>Tue, 06 Oct 2026 03:22:35 +0000</lastBuildDate>
+    <pubDate>Tue, 06 Oct 2026 03:22:35 +0000</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>https://galacticfederation.co/logo.png</url>
@@ -16,6 +16,15 @@
       <link>https://galacticfederation.co/corrections</link>
     </image>
     <generator>Galactic Federation of Finance — static RSS</generator>
+
+    <item>
+      <title>#041 · POLICY CHANGE — New GFOF mint announced; old contract remains in migration history.</title>
+      <link>https://galacticfederation.co/corrections#c041</link>
+      <guid isPermaLink="false">gfof-policy-041-replacement-mint</guid>
+      <pubDate>Tue, 06 Oct 2026 03:22:35 +0000</pubDate>
+      <category>DISCLOSURE</category>
+      <description>The owner announced current GFOF mint Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV and TebFun trading. The old mint 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon remains only in the separate holder-migration process and historical on-chain record. Correction #018's old-mint-only verification rule is superseded, not erased. The new mint's creation and trading do not establish completed 1:1 distribution, new-token locks, governance migration or staking. Read /migration before transferring anything.</description>
+    </item>
 
     <item>
       <title>#040 · DESIGN DISCLOSURE — Proposed GFOF staking term reward targets remain closed.</title>

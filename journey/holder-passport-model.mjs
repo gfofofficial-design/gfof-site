@@ -1,4 +1,4 @@
-export const GFOF_MINT = "2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon";
+export const GFOF_MINT = "Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV";
 
 export function parseHolderBalance(payload, owner, mint = GFOF_MINT) {
   if (payload?.error || !Array.isArray(payload?.result?.value)) {

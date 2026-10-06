@@ -1,6 +1,6 @@
 # Galactic Federation of Finance (GFOF)
 
-> $GFOF is a Solana SPL token (CA: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`) operating as a research-first, transparency-first DeFi experiment. It trades through a Meteora Dynamic Bonding Curve; migration is based on a configured USDC quote-reserve threshold, not market capitalization, with Meteora DAMM v2 as the configured destination. 13% of total supply is locked across four active Streamflow contracts. The first matured 40M allocation was re-locked through 2028-08-18, with both the active contract and expired predecessor preserved publicly. The site publishes design specifications before implementation, maintains a permanent public corrections log, and documents public commitments.
+> The current $GFOF Solana SPL mint is `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`, announced for trading on [TebFun](https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV). The former mint `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon` remains relevant to the separate [holder migration](https://galacticfederation.co/migration) and historical on-chain records. Four Streamflow contracts hold old-mint tokens; they do not establish new-mint locks. The site publishes specifications, corrections and dated evidence.
 
 The Federation's three stated pillars are transparency (on-chain, not rhetorical), research (publish the design before building the product), and innovation (build primitives that don't yet exist rather than fork what does). Admiral Zoran Voss is the communication persona used across publications; the legal and operational entity is the Galactic Federation of Finance.
 
@@ -24,7 +24,7 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 
 ## Live on-chain transparency
 
-- [Treasury](https://galacticfederation.co/treasury): Real-time Solana RPC reads of the four active Streamflow lock contracts, unlock schedule, and operational wallet state. The expired predecessor to the re-locked 40M allocation is preserved as lineage. Numbers are computed in the visitor's browser directly against Solana RPC — not served from a project-controlled endpoint. The page also provides direct links to canonical third-party verification tools: Solscan, DexScreener, Birdeye, and Solana Explorer.
+- [Treasury](https://galacticfederation.co/treasury): Solana RPC reads of four historical old-mint Streamflow lock contracts and dated wallet disclosures. These are not replacement-mint locks. The expired predecessor to the re-locked 40M old-token allocation is preserved as lineage.
 
 ## Project pages
 
@@ -40,15 +40,16 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 
 ## Token and on-chain references
 
-- Contract address (Solana SPL): `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`
+- Current contract address (Solana SPL): `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`
+- Former contract address, old-holder migration and historical evidence: `2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon`
 - Streamflow lock contract 1: `2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y`
 - Streamflow lock contract 2: `DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv`
 - Streamflow active lock contract 3 (40M; created 2026-08-28; full cliff 2028-08-18): `6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS`
 - Streamflow lock contract 4: `Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x`
 - Expired predecessor to active lock 3 (40M; matured 2026-08-18): `7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k`
 - Re-lock transaction: `5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD`
-- Total locked supply: 13% (130M scheduled across the four active contracts above; previously 10% across three — see corrections #013 for the breakdown reframe filed 2026-05-19 and #033 for the 2026-08-28 re-lock)
-- Trading venue: Meteora Dynamic Bonding Curve, pair `3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE`. Migration trigger: configured quote reserve of 66,040.882531 USDC, not market capitalization. Configured destination: Meteora DAMM v2. Creator migration liquidity: 100% permanently locked. Live reserve progress is not published without a canonical reserve source.
+- Historical old-mint locked supply: 130M scheduled across four Streamflow contracts. No new-mint lock inference follows from this.
+- Current trading page: [TebFun](https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV). Former mint's Meteora DBC pair `3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE` and quote-reserve target are historical, not current-token conditions.
 
 ## Social and contact
 

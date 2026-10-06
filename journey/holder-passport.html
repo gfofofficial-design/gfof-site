@@ -31,7 +31,7 @@
   <header><img src="assets/gf-seal.png" alt="Galactic Federation seal"><strong>GALACTIC FEDERATION · JOURNEY</strong></header>
   <div class="eyebrow">Explorer Passport · Participation preview</div>
   <h1 id="passport-title">Your place in<br>the build.</h1>
-  <p class="intro">Follow the real finance build, practice in the Journey, and send the team one useful observation. If you hold GFOF, you can optionally check the balance of a connected wallet here. The path is open to everyone.</p>
+  <p class="intro">Follow the real finance build, practice in the Journey, and send the team one useful observation. You can optionally check the <strong>new GFOF mint</strong> in a connected wallet. Old GFOF holdings have a separate <a href="/migration">migration process</a>. The path is open to everyone.</p>
 
   <section class="passport-card" aria-labelledby="progress-title">
     <div class="eyebrow">Your Journey record</div>
@@ -43,15 +43,15 @@
 
   <section class="passport-card wallet-card" aria-labelledby="wallet-title">
     <div class="eyebrow">Optional · Read-only mainnet check</div>
-    <h2 id="wallet-title">See your GFOF balance.</h2>
-    <p>Connect a Solana wallet to read its current GFOF token accounts on Solana mainnet. This page never asks you to sign a message or transaction, and it cannot move or lock tokens.</p>
+    <h2 id="wallet-title">See your new-mint GFOF balance.</h2>
+    <p>Connect a Solana wallet to read only mint <code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code> on Solana mainnet. A zero here says nothing about old GFOF at <a href="/migration">/migration</a>. This page never asks you to sign a message or transaction, and it cannot move or lock tokens.</p>
     <p class="note">Using Phantom on your phone? Open this page from Phantom’s search/Explore browser. Phantom cannot connect from a browser outside its app.</p>
     <div class="actions"><button id="wallet-connect" class="button primary" type="button">Connect and check balance</button><button id="wallet-refresh" class="button" type="button" hidden>Refresh balance</button><button id="wallet-clear" class="button" type="button" hidden>Clear wallet view</button></div>
     <p id="wallet-status" role="status" aria-live="polite">No wallet connected. All tester steps below are available without one.</p>
     <div id="wallet-result" class="wallet-result" hidden>
       <strong id="wallet-marker"></strong>
       <p class="wallet-detail"><span class="muted">Connected wallet</span><code id="wallet-address"></code></p>
-      <p class="wallet-detail"><span class="muted">GFOF in this wallet</span><strong id="wallet-balance"></strong></p>
+      <p class="wallet-detail"><span class="muted">New-mint GFOF in this wallet</span><strong id="wallet-balance"></strong></p>
       <p class="note" id="wallet-slot"></p>
     </div>
     <p class="note">This page sends your public wallet address to the Federation site's read-only balance endpoint, which queries a Solana mainnet RPC. The page does not save your address or balance; the site host and RPC provider process the lookup. “Clear wallet view” clears this page only; use your wallet settings to revoke a site connection. This display is not a secure access credential or a snapshot of all your holdings. Never share a seed phrase. A balance does not grant a reward, yield, beta place or financial right.</p>

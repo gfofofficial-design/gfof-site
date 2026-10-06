@@ -1,7 +1,7 @@
 {
   "name": "Galactic Federation of Finance",
   "short_name": "$GFOF",
-  "description": "The $GFOF Federation App — live price, bond tracker, AI, staking & governance on Solana",
+  "description": "The $GFOF Federation App — current Solana mint, migration record and Federation research",
   "start_url": "/app",
   "scope": "/app",
   "display": "standalone",
@@ -26,9 +26,9 @@
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "Buy $GFOF",
-      "url": "https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon",
-      "description": "Buy $GFOF on DexScreener"
+      "name": "Current GFOF",
+      "url": "https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV",
+      "description": "View current $GFOF on TebFun"
     },
     {
       "name": "Join Telegram",
