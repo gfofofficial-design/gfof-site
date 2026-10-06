@@ -26,30 +26,29 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Federation Governance Specification v0.1",
-  "name": "Federation Governance Specification",
-  "description": "A public specification for the $GFOF DAO governance system built on Realms / spl-governance. Parameters are proposed for public comment before any governance infrastructure is deployed. The DAO does not deploy until after the $73K bond completes.",
-  "abstract": "Specifies genuine token-holder governance on Realms with proposed parameters (proposal threshold, quorum, two-tier approval, voting periods, execution timelock), the exclusion of locked dev tokens from voting, an explicit list of what governance cannot do, and a no-permanent-council position. All numbers are v0.1 draft-for-comment, not committed.",
+  "headline": "Creator-Fee Liquidity Loop — Historical Specification v1.0",
+  "name": "Creator-Fee Liquidity Loop Specification",
+  "description": "Historical creator-fee routing specification for the former GFOF mint. Superseded and not active; the current mint trades separately on TebFun. See corrections #035 and #041.",
+  "abstract": "Preserves the former Moonshot/Raydium creator-fee design for accountability. No creator-fee routing is authorized; activation requires a corrected specification and new recorded authorization.",
   "inLanguage": "en",
   "articleSection": [
-    "DAO governance",
-    "Solana governance design",
-    "Token-holder governance",
-    "Realms spl-governance"
+    "Historical creator-fee design",
+    "Liquidity routing",
+    "Public accountability"
   ],
-  "keywords": "DAO, governance, Realms, spl-governance, Solana, token-holder voting, quorum, proposal threshold, timelock, GFOF",
+  "keywords": "GFOF, creator fees, historical specification, liquidity routing, superseded",
   "about": [
-    {"@type": "Thing", "name": "DAO governance design"},
-    {"@type": "Thing", "name": "Token-holder governance on Solana"},
-    {"@type": "Thing", "name": "Realms spl-governance"}
+    {
+      "@type": "Thing",
+      "name": "Historical GFOF creator-fee routing design"
+    }
   ],
-  "version": "0.1",
-  "datePublished": "2026-05-26",
-  "dateModified": "2026-05-26",
-  "url": "https://galacticfederation.co/governance-spec",
+  "version": "1.0",
+  "dateModified": "2026-10-06",
+  "url": "https://galacticfederation.co/creator-fee-spec",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://galacticfederation.co/governance-spec"
+    "@id": "https://galacticfederation.co/creator-fee-spec"
   },
   "image": {
     "@type": "ImageObject",
@@ -73,24 +72,9 @@
       "url": "https://galacticfederation.co/logo.png"
     }
   },
-  "license": "https://galacticfederation.co/governance-spec",
-  "creativeWorkStatus": "Draft — open for comment",
+  "creativeWorkStatus": "Superseded — not active",
   "copyrightYear": 2026,
-  "isAccessibleForFree": true,
-  "hasPart": [
-    {"@type": "WebPageElement", "name": "Status of this document", "url": "https://galacticfederation.co/governance-spec#status"},
-    {"@type": "WebPageElement", "name": "Design principles", "url": "https://galacticfederation.co/governance-spec#principles"},
-    {"@type": "WebPageElement", "name": "Platform", "url": "https://galacticfederation.co/governance-spec#platform"},
-    {"@type": "WebPageElement", "name": "Voting power", "url": "https://galacticfederation.co/governance-spec#voting-power"},
-    {"@type": "WebPageElement", "name": "Proposed parameters", "url": "https://galacticfederation.co/governance-spec#parameters"},
-    {"@type": "WebPageElement", "name": "What governance cannot do", "url": "https://galacticfederation.co/governance-spec#cannot"},
-    {"@type": "WebPageElement", "name": "What governance controls", "url": "https://galacticfederation.co/governance-spec#controls"},
-    {"@type": "WebPageElement", "name": "The council question", "url": "https://galacticfederation.co/governance-spec#council"},
-    {"@type": "WebPageElement", "name": "The first proposal", "url": "https://galacticfederation.co/governance-spec#first-proposal"},
-    {"@type": "WebPageElement", "name": "Phased rollout", "url": "https://galacticfederation.co/governance-spec#rollout"},
-    {"@type": "WebPageElement", "name": "Open questions for public comment", "url": "https://galacticfederation.co/governance-spec#open-questions"},
-    {"@type": "WebPageElement", "name": "Revision history", "url": "https://galacticfederation.co/governance-spec#versions"}
-  ]
+  "isAccessibleForFree": true
 }
 </script>
 <script type="application/ld+json">
@@ -98,8 +82,18 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co/"},
-    {"@type": "ListItem", "position": 2, "name": "Governance Specification", "item": "https://galacticfederation.co/governance-spec"}
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://galacticfederation.co/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Creator-Fee Specification",
+      "item": "https://galacticfederation.co/creator-fee-spec"
+    }
   ]
 }
 </script>
