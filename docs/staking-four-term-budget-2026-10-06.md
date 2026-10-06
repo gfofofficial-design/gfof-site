@@ -93,3 +93,19 @@ principal even if the reward vault is exhausted.
 This proposal is ready for a funding discussion once the inventory and provider
 facts are supplied. It does not select a provider, create a pool, authorize a
 wallet signature, promise rewards or open participation.
+
+## Owner planning approval — 2026-10-06
+
+The owner approved using the bounded pilot scenario for preparation: 1,000,000
+GFOF aggregate lifetime accepted principal, with 250,000 GFOF capacity for each
+of the four proposed terms; 60,000 GFOF calculated gross reward liability and
+an illustrative 6,000 GFOF contingency, for a 66,000 GFOF planning reserve.
+Earlier references to these figures as an unapproved scenario describe the
+worksheet before this planning approval.
+
+This records approval of the planning baseline. Available funding, migration
+obligations, enforceable lifetime caps, exact provider formulas and separate
+fees remain unverified. It does not authorize a token transfer, pool creation,
+wallet signature, opening participation or announcing funded rewards. Complete
+the inventory and provider record above before proposing the exact funding
+transaction and launch terms for approval.
