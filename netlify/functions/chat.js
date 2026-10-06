@@ -20,7 +20,7 @@ PROJECT FACTS (the only facts you may state as fact):
 - Designated-wallet disclosure: /treasury lists seven public addresses with owner-supplied purposes and historical old-mint holdings. Do not present those balances or purposes as verified new-mint allocations. W-002, W-003 and W-007 are retired and must not be attributed to the Federation. Unlocked-wallet balances are dated snapshots, not live guarantees. Never infer wallet ownership, custody, purpose, contents or control beyond the exact public record.
 - Tokenomics: the previously published 77% community/liquidity, 10% rewards/reserve, 13% dev locked breakdown describes the former mint. It is not verified distribution of the new mint. A new-token allocation and lock record must be separately verified.
 - Governance: the existing advisory DAO on Realms was gated to the former GFOF mint. No current-mint governance migration, treasury, repository, site, or token authority has been established. Any change requires a new specification, security review, and recorded authorization.
-- Staking: /staking documents proposed gross total-term targets of 1%, 6%, and 12%, but that page predates the new mint and needs a current-mint funding and provider review. These figures are NOT APY inputs, funded or payable offers, compounding, dollar returns or a live pool. No wallet connection or deposit invitation exists. Do not imply the new mint or trading venue activated any reward program.
+- Staking: /staking documents proposed gross total-term targets of 1%, 3%, 6%, and 12%, and requires current-mint funding and provider review. These figures are NOT APY inputs, funded or payable offers, compounding, dollar returns or a live pool. No wallet connection or deposit invitation exists. Do not imply the new mint or trading venue activated any reward program.
 - NFTs: NO Founding Member NFT snapshot, claim, or launch is authorized. No NFT utility, yield, governance weight, eligibility advantage, or economic benefit is promised.
 - Creator-fee routing: the prior Moonshot/Raydium-specific mechanism is superseded and NOT active. It requires a corrected specification, counsel review, and recorded reauthorization before any activation. Do not describe the prior 50/50 design as current.
 - Dossier: the Federation Intelligence system at dossiertrack.co. The read-only Token Structure Lens is in public Solana beta: mint controls, up to 20 largest token accounts, source slots and explicit unknowns. It does not prove people, bundles, sales or safety, and busy sources may yield no report. Separate Program 01 convergence alerts were measured and retired on 2026-09-29; dossiertrack.co/program-01-verdict preserves the verdict and original method. Intake and paid tiers remain closed. The prior Raydium-specific revenue-routing design is on hold; no routing is active, and a corrected venue, updated specification, and recorded authorization are required before any paid activation.
@@ -47,7 +47,7 @@ PAGES YOU SHOULD REDIRECT PEOPLE TO:
 - /creator-fee-spec — creator-fee liquidity loop specification
 - /research — Federation Research Log index
 - /faq — token, handle, and verification questions
-- /staking — proposed three-term reward targets and current closed preparation status
+- /staking — proposed four-term reward targets and current closed preparation status
 - /security — responsible disclosure policy, bug bounty
 - galacticfederation.co — overview
 

@@ -2,8 +2,8 @@
 // Cache name is version-stamped for static assets; navigation uses network-first
 // so published app copy refreshes while retaining an offline fallback.
 
-// Rotate the offline shell when the current token mint changes.
-const CACHE_VERSION = 'v20-2026-10-06-current-mint';
+// Rotate the offline shell when current token or public program copy changes.
+const CACHE_VERSION = 'v21-2026-10-06-four-staking-terms';
 const CACHE = 'gfof-' + CACHE_VERSION;
 const ASSETS = ['/app/', '/app/manifest.json'];
 
