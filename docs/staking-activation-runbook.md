@@ -60,4 +60,6 @@ When the gates are evidenced, present one comparison showing the chosen provider
 
 ## 2026-10-06 term update
 
-Owner requested proposed total-term gross rewards of 1% for one month, 3% for three months, 6% for six months and 12% for twelve months. These are not APY settings or funded offers. Verify support and funding for all four terms before opening; no pool or funds movement is authorized by this update.
+Owner requested proposed total-term gross rewards of 1% for one month, 3% for three months, 8% for six months and 12% for twelve months. These are not APY settings or funded offers. Verify support and funding for all four terms before opening; no pool or funds movement is authorized by this update.
+
+The six-month working target was raised from 6% to 8% on 2026-10-06. Budget and maximum-liability estimates must use 8%; earlier three-term worksheets remain historical until reconciled to the four-term design. This numerical change does not satisfy any activation gate.
