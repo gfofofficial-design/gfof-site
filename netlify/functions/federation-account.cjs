@@ -15,9 +15,14 @@ function cookies(event) {
 }
 function config(env) {
   if(env.FEDERATION_ACCOUNT_ENABLED!=='true')return null;
-  const origin=new URL(env.FEDERATION_ACCOUNT_ORIGIN||'https://galacticfederation.co');
+  const origin=new URL(env.FEDERATION_ACCOUNT_ORIGIN||'');
   const url=new URL(env.FEDERATION_AUTH_URL||'');
   if(origin.protocol!=='https:'||origin.pathname!=='/'||origin.search||origin.hash||origin.username||origin.password)throw Error('config');
+  if(['deploy-preview','branch-deploy'].includes(env.CONTEXT)){
+    const preview=new URL(env.DEPLOY_PRIME_URL||'');
+    if(preview.protocol!=='https:'||origin.origin!==preview.origin)throw Error('preview-origin');
+  }
+  if(env.CONTEXT==='production'&&origin.origin!=='https://galacticfederation.co')throw Error('production-origin');
   if(url.protocol!=='https:'||!/^[-a-z0-9]+\.supabase\.co$/.test(url.hostname)||url.pathname!=='/'||url.port||url.username||url.password||url.search||url.hash)throw Error('config');
   const key=env.FEDERATION_AUTH_PUBLISHABLE_KEY||'';
   if(!/^sb_publishable_[a-zA-Z0-9_-]+$/.test(key))throw Error('config');

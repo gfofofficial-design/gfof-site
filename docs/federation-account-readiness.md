@@ -30,14 +30,25 @@ Server environment only:
 | FEDERATION_AUTH_GOOGLE_ENABLED | true only after Google OAuth configuration and testing |
 | FEDERATION_AUTH_APPLE_ENABLED | true only after Apple configuration and testing |
 
-Configure exact provider redirect/allowed callback rules for
-`https://galacticfederation.co/api/federation-account/callback` with its generated
-state query. Do not use broad production redirect wildcards. Prove successful
+Configure the provider's allowed application redirect pattern as
+`https://galacticfederation.co/api/federation-account/callback?state=*`.
+The only wildcard is the generated state value; the scheme, host and callback
+path remain exact. The callback independently validates the state against the
+HttpOnly browser cookie. The separate Google/Apple registered redirect points
+to the dedicated Supabase project's `/auth/v1/callback`, not the Federation
+application callback. Do not use broad production redirect wildcards. Prove successful
 Google and Apple flows, cancellation, expired callbacks and replay rejection
 on a configured isolated preview before production. Apple requires its own
 developer setup, Services ID, verified web domain, signing-key/client-secret
 maintenance; never paste those credentials into GitHub or chat. A native app
 configuration does not establish web sign-in support.
+
+Use an isolated identity project and exact preview origin for acceptance.
+An enabled Netlify deploy-preview or branch-deploy must have
+FEDERATION_ACCOUNT_ORIGIN equal to DEPLOY_PRIME_URL's origin; inherited
+production settings fail closed. Production accepts only the canonical
+Federation origin. An explicit origin is required whenever accounts are
+enabled. Never enable preview signups against the production identity project.
 
 Configure provider rate limits and abuse controls, minimal scopes, user support,
 privacy/retention/deletion policy, backup/recovery and cost ceilings before
