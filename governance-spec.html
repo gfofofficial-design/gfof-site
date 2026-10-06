@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Federation Governance Specification v0.2 — $GFOF</title>
-<meta name="description" content="The $GFOF DAO is live on Realms in advisory mode. Current v0.2 deployment facts govern; the original v0.1 design text remains preserved for transparency.">
+<meta name="description" content="The existing Realms DAO is advisory and gated to the former GFOF mint. Current-mint voting is not established. Deployment facts and historical design are preserved.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://galacticfederation.co/governance-spec">
 <meta property="og:title" content="Federation Governance Specification v0.2 — $GFOF">
-<meta property="og:description" content="Live advisory governance on Realms, with current deployment facts and the original v0.1 design record preserved.">
+<meta property="og:description" content="The existing Realms DAO is advisory and gated to the former GFOF mint. Current-mint voting is not established. Deployment facts and historical design are preserved.">
 <meta property="og:image" content="https://galacticfederation.co/assets/social/social-research-v1.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
 <meta name="twitter:title" content="Federation Governance Specification v0.2 — $GFOF">
-<meta name="twitter:description" content="Live advisory governance on Realms, with current deployment facts and the original v0.1 design record preserved.">
+<meta name="twitter:description" content="The existing Realms DAO is advisory and gated to the former GFOF mint. Current-mint voting is not established. Deployment facts and historical design are preserved.">
 <meta name="twitter:image" content="https://galacticfederation.co/assets/social/social-research-v1.png">
 <meta name="twitter:image:alt" content="Federation research: design and specifications before code.">
 <link rel="canonical" href="https://galacticfederation.co/governance-spec">
@@ -28,8 +28,8 @@
   "@type": "TechArticle",
   "headline": "Federation Governance Specification v0.2",
   "name": "Federation Governance Specification",
-  "description": "The $GFOF DAO is deployed on Realms in advisory mode. The v0.2 deployment section governs; the original v0.1 design reasoning is retained as a historical record.",
-  "abstract": "Records the live advisory Realms deployment, its deployed parameters and bootstrap council disclosure, while preserving the superseded v0.1 design proposals for public accountability.",
+  "description": "The existing Realms DAO is advisory and gated to the former GFOF mint. Current-mint voting is not established. Deployment facts and historical design are preserved.",
+  "abstract": "Records the former-mint advisory Realms deployment and bootstrap council disclosure. No current-mint voting or decentralized treasury, repository, site or token authority is established. Superseded design proposals remain historical.",
   "inLanguage": "en",
   "articleSection": [
     "DAO governance",
@@ -39,13 +39,22 @@
   ],
   "keywords": "DAO, governance, Realms, spl-governance, Solana, token-holder voting, quorum, proposal threshold, timelock, GFOF",
   "about": [
-    {"@type": "Thing", "name": "DAO governance design"},
-    {"@type": "Thing", "name": "Token-holder governance on Solana"},
-    {"@type": "Thing", "name": "Realms spl-governance"}
+    {
+      "@type": "Thing",
+      "name": "DAO governance design"
+    },
+    {
+      "@type": "Thing",
+      "name": "Token-holder governance on Solana"
+    },
+    {
+      "@type": "Thing",
+      "name": "Realms spl-governance"
+    }
   ],
   "version": "0.2",
   "datePublished": "2026-05-26",
-  "dateModified": "2026-09-06",
+  "dateModified": "2026-10-06",
   "url": "https://galacticfederation.co/governance-spec",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -78,18 +87,66 @@
   "copyrightYear": 2026,
   "isAccessibleForFree": true,
   "hasPart": [
-    {"@type": "WebPageElement", "name": "Status of this document", "url": "https://galacticfederation.co/governance-spec#status"},
-    {"@type": "WebPageElement", "name": "Design principles", "url": "https://galacticfederation.co/governance-spec#principles"},
-    {"@type": "WebPageElement", "name": "Platform", "url": "https://galacticfederation.co/governance-spec#platform"},
-    {"@type": "WebPageElement", "name": "Voting power", "url": "https://galacticfederation.co/governance-spec#voting-power"},
-    {"@type": "WebPageElement", "name": "Proposed parameters", "url": "https://galacticfederation.co/governance-spec#parameters"},
-    {"@type": "WebPageElement", "name": "What governance cannot do", "url": "https://galacticfederation.co/governance-spec#cannot"},
-    {"@type": "WebPageElement", "name": "What governance controls", "url": "https://galacticfederation.co/governance-spec#controls"},
-    {"@type": "WebPageElement", "name": "The council question", "url": "https://galacticfederation.co/governance-spec#council"},
-    {"@type": "WebPageElement", "name": "The first proposal", "url": "https://galacticfederation.co/governance-spec#first-proposal"},
-    {"@type": "WebPageElement", "name": "Phased rollout", "url": "https://galacticfederation.co/governance-spec#rollout"},
-    {"@type": "WebPageElement", "name": "Open questions for public comment", "url": "https://galacticfederation.co/governance-spec#open-questions"},
-    {"@type": "WebPageElement", "name": "Revision history", "url": "https://galacticfederation.co/governance-spec#versions"}
+    {
+      "@type": "WebPageElement",
+      "name": "Status of this document",
+      "url": "https://galacticfederation.co/governance-spec#status"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "Design principles",
+      "url": "https://galacticfederation.co/governance-spec#principles"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "Platform",
+      "url": "https://galacticfederation.co/governance-spec#platform"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "Voting power",
+      "url": "https://galacticfederation.co/governance-spec#voting-power"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "Proposed parameters",
+      "url": "https://galacticfederation.co/governance-spec#parameters"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "What governance cannot do",
+      "url": "https://galacticfederation.co/governance-spec#cannot"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "What governance controls",
+      "url": "https://galacticfederation.co/governance-spec#controls"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "The council question",
+      "url": "https://galacticfederation.co/governance-spec#council"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "The first proposal",
+      "url": "https://galacticfederation.co/governance-spec#first-proposal"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "Phased rollout",
+      "url": "https://galacticfederation.co/governance-spec#rollout"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "Open questions for public comment",
+      "url": "https://galacticfederation.co/governance-spec#open-questions"
+    },
+    {
+      "@type": "WebPageElement",
+      "name": "Revision history",
+      "url": "https://galacticfederation.co/governance-spec#versions"
+    }
   ]
 }
 </script>
