@@ -2,14 +2,20 @@
 // Cache name is version-stamped for static assets; navigation uses network-first
 // so published app copy refreshes while retaining an offline fallback.
 
-const CACHE_VERSION = 'v19.1-2026-10-02';
+// Rotate the offline shell when the current token mint changes.
+const CACHE_VERSION = 'v20-2026-10-06-current-mint';
 const CACHE = 'gfof-' + CACHE_VERSION;
 const ASSETS = ['/app/', '/app/manifest.json'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE)
-      .then((c) => c.addAll(ASSETS))
+      .then((c) => Promise.all(ASSETS.map((path) =>
+        fetch(path, { cache: 'no-store' }).then((response) => {
+          if (!response.ok) throw new Error('app asset unavailable');
+          return c.put(path, response);
+        })
+      )))
       .then(() => self.skipWaiting())
   );
 });
@@ -48,7 +54,7 @@ self.addEventListener('fetch', (e) => {
   // after a production deploy even when the asset cache remains available.
   if (e.request.mode === 'navigate') {
     e.respondWith(
-      fetch(e.request).then((res) => {
+      fetch(e.request, { cache: 'no-store' }).then((res) => {
         if (res && res.status === 200 && res.type === 'basic') {
           const clone = res.clone();
           caches.open(CACHE).then((cache) => cache.put(e.request, clone)).catch(() => {});

@@ -775,7 +775,7 @@ function dismissInstall(){
 
 /* ── SERVICE WORKER ── */
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/app/sw.js').catch(()=>{});
+  navigator.serviceWorker.register('/app/sw.js',{updateViaCache:'none'}).catch(()=>{});
 }
 </script>
 </body>
