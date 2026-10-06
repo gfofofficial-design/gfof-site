@@ -2452,7 +2452,7 @@ Everything you need to know about <strong>$GFOF</strong>:
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M21 4L3 11l5 2 2 6 3-4 5 4 3-15z"/></svg>️ Telegram: <span class="hl">t.me/GFOF_SOL</span>
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M22 5c-.8.4-1.6.6-2.5.8A4 4 0 0 0 21 3.5c-.9.5-1.8.9-2.8 1A4 4 0 0 0 11 8c0 .3 0 .6.1.9A11 11 0 0 1 3 4.5a4 4 0 0 0 1.2 5.3c-.6 0-1.2-.2-1.7-.5A4 4 0 0 0 6 13.2c-.5.1-1 .2-1.6.1a4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 17.7 11 11 0 0 0 8 19.5c7.2 0 11.2-6 11.2-11.2v-.5C20 7.2 21.2 6.2 22 5z"/></svg> X: <span class="hl">@GFOF_Offcial</span>
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/></svg> CA: Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 16v-4M12 16V9M16 16v-6"/></svg> Chart: <span class="hl">dexscreener.com/solana/3y4NN...</span>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 16v-4M12 16V9M16 16v-6"/></svg> Trading: <span class="hl">tebfun.xyz · verify CA</span>
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Dev Lock: <span class="hl">streamflow.finance</span>
 
 <span class="warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg>️ Admins will NEVER DM you first.
@@ -2953,7 +2953,7 @@ function fetchDex(){
   fetch('https://api.dexscreener.com/latest/dex/tokens/'+CA)
     .then(function(r){return r.json();})
     .then(function(d){
-      var p=(d.pairs||[]).find(function(x){return x.baseToken&&x.baseToken.address===CA || x.quoteToken&&x.quoteToken.address===CA;});
+      var p=(d.pairs||[]).find(function(x){return x.chainId==='solana' && ((x.baseToken&&x.baseToken.address===CA) || (x.quoteToken&&x.quoteToken.address===CA)) && Number(x.priceUsd)>0;});
       if(!p||!p.priceUsd) throw new Error('no pair data');
       var mc=parseInt(p.fdv||0), price=parseFloat(p.priceUsd||0);
       if(price>0){
