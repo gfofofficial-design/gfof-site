@@ -1,0 +1,21 @@
+name: Federation account boundary checks
+on:
+  pull_request:
+    paths:
+      - 'netlify/functions/federation-account.cjs'
+      - 'assets/federation/fed-account.js'
+      - 'tests/federation-account.test.mjs'
+      - '.github/workflows/federation-account.yml'
+permissions:
+  contents: read
+jobs:
+  boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check assets/federation/fed-account.js
+      - run: node --test tests/federation-account.test.mjs

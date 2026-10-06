@@ -181,6 +181,28 @@
   status = 200
   force = true
 
+
+# Shared Federation account foundation (closed until provider setup).
+[[headers]]
+  for = "/account*"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
+[[redirects]]
+  from = "/api/federation-account/*"
+  to = "/.netlify/functions/federation-account/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/account"
+  to = "/account.html"
+  status = 200
+  force = true
+
 # Catch-all — serve custom 404 page with proper 404 status
 [[redirects]]
   from = "/*"
