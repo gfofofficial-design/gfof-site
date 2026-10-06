@@ -29,6 +29,6 @@ test('policy is parsed before active content and blocks unused capabilities', ()
 
 test('current mint and all four proposed options remain present', () => {
   assert.ok(html.includes('Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV'));
-  assert.deepEqual([...html.matchAll(/data-percent="(\d+)"/g)].map(m => Number(m[1])), [1, 3, 6, 12]);
+  assert.deepEqual([...html.matchAll(/data-percent="(\d+)"/g)].map(m => Number(m[1])), [1, 3, 8, 12]);
   assert.ok(html.includes('DESIGN REVIEW · NO POOL OPEN'));
 });
