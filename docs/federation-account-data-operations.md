@@ -43,6 +43,15 @@ Run the entire procedure first with a disposable account created for this
 purpose. Preserve the owner's only pilot user. If any step cannot be verified,
 keep public registration closed and state the failure precisely.
 
+The isolated technical test on October 7 used a disposable user and proved
+that the Federation preview returned 200 for its session before deletion and
+401 for that same session afterward. Supabase returned `refresh_token_not_found`
+for the old refresh token. The draft's refresh route now maps that provider
+response to 401 and clears cookies; the hosted mapping was checked with a
+synthetic invalid token. The owner pilot user remained present. This does not
+test an actual requester's identity verification, vendor backup/log retention,
+or whether unrelated consumers of an already-issued JWT reject it immediately.
+
 ## Recovery and release gates
 
 - Supabase Free can pause during low activity and does not supply the same

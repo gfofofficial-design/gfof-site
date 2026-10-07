@@ -73,8 +73,9 @@ set a separate operational budget before public registration.
 The draft account page now states what sign-in records and offers an owner-managed
 deletion request route. That short explanation is not a complete privacy policy
 or an automated deletion workflow. Before public registration, confirm vendor
-log/backup retention, verify the deletion procedure against a disposable account,
-and review the notice with counsel as appropriate.
+log/backup retention, complete the owner-request verification and deletion
+procedure beyond the technical disposable-user test, and review the notice
+with counsel as appropriate.
 
 The October 7 read-only pilot check found one Auth user with two linked
 identities and no tables in the application's `public` schema. This is an
@@ -89,11 +90,14 @@ the owner test user before changing its password login. Do not rely on hiding
 an email button in the Federation interface.
 
 The [account-data operations plan](federation-account-data-operations.md)
-records the current data inventory, a proposed manual deletion check and the
+records the current data inventory, a manual deletion procedure and the
 Free-plan backup/recovery gap. A deletion request is not complete merely
-because the account page has an email link. A disposable-user deletion and
-post-deletion session check remain untested; never use the only owner pilot
-account as the test fixture.
+because the account page has an email link. A disposable user was deleted
+after its preview session returned 200; that same session returned 401 after
+deletion, and Supabase rejected its old refresh token. The draft now treats
+that rejected refresh as 401 and clears cookies. This tests the technical
+session path, not an incoming owner request, vendor backup erasure or every
+way an issued token could be used. The only owner pilot account was preserved.
 
 ## Boundaries and follow-up
 
@@ -124,10 +128,11 @@ proof of readiness for a lending service.
 only. It tests default closure, configuration constraints, CSRF rejection,
 provider selection, PKCE/state binding, expiry, user verification, safe session
 output, refresh, cookie ambiguity, upstream failures and local logout.
-The private preview also exercised one Google provider round trip and browser
-logout. On the hosted preview, synthetic callbacks with missing, mismatched or
+The private preview also exercised one Google provider round trip, browser
+logout and an exact disposable-user deletion. On the hosted preview, synthetic callbacks with missing, mismatched or
 expired flow state and an invalid authorization code returned to the failed
-sign-in page without issuing an account session. These checks did not test a
+sign-in page without issuing an account session. A synthetic invalid refresh
+returned 401 and cleared cookies after the deletion fix. These checks did not test a
 real Google cancellation, successful-code replay, Apple, public registration,
 provider downtime, multi-tab refresh or production cookies.
 
