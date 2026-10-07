@@ -76,6 +76,25 @@ or an automated deletion workflow. Before public registration, confirm vendor
 log/backup retention, verify the deletion procedure against a disposable account,
 and review the notice with counsel as appropriate.
 
+The October 7 read-only pilot check found one Auth user with two linked
+identities and no tables in the application's `public` schema. This is an
+observation of the isolated pilot, not proof that Supabase or Google retains no
+other data. Supabase's security advisor also reported that leaked-password
+protection is disabled. The pilot has an enabled Email provider and its owner
+test user has a password, although the Federation page offers only Google.
+Before allowing public **Google-only** registration, confirm the Email
+provider cannot be used to create an account outside this page; disable that
+route or document a separately reviewed control. Preserve a recovery path for
+the owner test user before changing its password login. Do not rely on hiding
+an email button in the Federation interface.
+
+The [account-data operations plan](federation-account-data-operations.md)
+records the current data inventory, a proposed manual deletion check and the
+Free-plan backup/recovery gap. A deletion request is not complete merely
+because the account page has an email link. A disposable-user deletion and
+post-deletion session check remain untested; never use the only owner pilot
+account as the test fixture.
+
 ## Boundaries and follow-up
 
 This is a central account on GalacticFederation.co. Cookies do not provide SSO
@@ -106,8 +125,11 @@ only. It tests default closure, configuration constraints, CSRF rejection,
 provider selection, PKCE/state binding, expiry, user verification, safe session
 output, refresh, cookie ambiguity, upstream failures and local logout.
 The private preview also exercised one Google provider round trip and browser
-logout. It did not test Apple, public registration, provider downtime, multi-tab
-refresh or production cookies.
+logout. On the hosted preview, synthetic callbacks with missing, mismatched or
+expired flow state and an invalid authorization code returned to the failed
+sign-in page without issuing an account session. These checks did not test a
+real Google cancellation, successful-code replay, Apple, public registration,
+provider downtime, multi-tab refresh or production cookies.
 
 Primary implementation references:
 - https://supabase.com/docs/guides/auth/sessions/pkce-flow
