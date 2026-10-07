@@ -15,6 +15,8 @@ function cookies(event) {
 }
 function config(env) {
   if(env.FEDERATION_ACCOUNT_ENABLED!=='true')return null;
+  // This disposable recovery build must never accept inherited pilot settings.
+  if(env.CONTEXT!=='deploy-preview'||String(env.REVIEW_ID)!=='100'||env.FEDERATION_AUTH_URL!=='https://jjogapyxroeiscmqfxjc.supabase.co')throw Error('recovery-isolation');
   const origin=new URL(env.FEDERATION_ACCOUNT_ORIGIN||'');
   const url=new URL(env.FEDERATION_AUTH_URL||'');
   if(origin.protocol!=='https:'||origin.pathname!=='/'||origin.search||origin.hash||origin.username||origin.password)throw Error('config');
