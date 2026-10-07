@@ -42,9 +42,9 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
     const action=path.split('/').at(-1);
     const method=event.httpMethod;
     let cfg;try{cfg=config(env);}catch{return result(503,{error:'Account configuration is unavailable.'});}
-    if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[]});
-    if(!cfg)return result(503,{error:'Federation accounts are being prepared.'});
     const jar=cookies(event);
+    if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[],hasSessionCookie:!!cfg&&!!(jar[COOKIE.access]||jar[COOKIE.refresh])});
+    if(!cfg)return result(503,{error:'Federation accounts are being prepared.'});
     const origin=event.headers?.origin||event.headers?.Origin;
     const site=event.headers?.['sec-fetch-site'];
     if(method==='POST'&&(origin!==cfg.origin||(site&&site!=='same-origin')))return result(403,{error:'Request origin rejected.'});
