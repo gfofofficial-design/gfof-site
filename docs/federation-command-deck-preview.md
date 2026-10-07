@@ -4,7 +4,7 @@ PR99 only. No production merge or financial activation.
 
 The wallet form sends an explicitly entered public address through a bounded, same-origin POST to Solana mainnet public RPC. It accepts only a decoded 32-byte base58 address, fixed RPC methods and endpoint, and aggregates exact integer token quantities across the Token Program and Token-2022. No account cookies, wallet signatures, transactions, metadata logos or account-wallet association are used. UI output uses textContent. The address is not placed in a query URL or stored by application code; hosting/RPC operational logs may still exist.
 
-The handler accepts only the exact PR99 origin and API route, rejects direct function paths, caps request/response sizes, times out after 8 seconds, and returns no partial balance on errors. Netlify permits six requests per minute per IP/domain. This is abuse friction, not a spending cap; the public RPC can rate-limit or deny traffic and is unsuitable as a production availability guarantee. No paid provider has been configured.
+The handler accepts only the exact PR99 origin and API route, rejects direct function paths, caps request/response sizes, applies an eight-second RPC-stage deadline (reference pricing has a separate four-second deadline), and returns no partial balance on errors. Netlify permits six requests per minute per IP/domain. This is abuse friction, not a spending cap; the public RPC can rate-limit or deny traffic and is unsuitable as a production availability guarantee. No paid provider has been configured.
 
 Native SOL is separate from token mints. Unknown tokens are labelled unverified with their mint, zero-balance token accounts omitted, unsupported prices unavailable. These reads are not one atomic slot; locked/provider-held positions and spendability are not established. The previous sample allocation has been replaced with a neutral token count ring. The priced allocation chart now derives from fetched quantities and available Jupiter reference prices. Historical performance is unavailable; the leaderboard remains explicitly illustrative.
 
@@ -76,3 +76,26 @@ All 27 existing focused tests passed after the changes. On the hosted desktop pr
 ## Required security release review
 
 The owner agreed on October 7 to the [Federation security release gates](federation-security-release-gates.md). The 27 focused checks are existing evidence; real wallet/device behavior, administrator MFA, account restrictions, complete recovery, monitoring and independent financial-integration review remain outstanding. This preview does not constitute a security audit or financial-release approval.
+
+## October 7 focused wallet security review
+
+Six new synthetic regressions failed before the changes and passed afterward:
+
+- A late `accountChanged` event could restore the public address after disconnect.
+- An account event could populate an address while permission was still pending.
+- A failed disconnect cleared the display but retained an active address source, allowing later events to change its state/message.
+- A late connection rejection could overwrite the message after Clear.
+- Numeric token amounts could be coerced and silently rounded instead of rejected.
+- Missing, negative or unsafe balance context slots could be accepted.
+
+Account events now require an active accepted address source and an idle connection flow. Disconnect clears that source immediately, including on failure, while allowing a retry and preserving manually entered watch addresses. Stale connection rejections are ignored. The balance handler requires string integer token amounts and safe nonnegative context slots for every RPC result. Invalid reads fail closed without partial quantities.
+
+These are reproduced application-level edge cases with mock providers/RPC data; they do not demonstrate an exploit against an actual Phantom wallet or a funds-moving function. All 33 focused dashboard/wallet/price/calculator/Phantom tests passed together.
+
+A separate hosted check found that the clean `/command-deck` URL had inherited the broader legacy response-header policy while `/command-deck.html` had the strict policy. The HTML's restrictive meta policy still existed; the response-header difference was nevertheless unintended. The Netlify header rule now covers both. Both deployed URLs returned 200 with `X-Frame-Options: DENY`, private/no-store caching and a CSP without inline allowances and with `frame-ancestors 'none'`. The deployed Phantom script matched its expected Git blob.
+
+Hosted API validation after the code change: a public mint-address lookup returned 200 with quantities and reference pricing; an incorrect Origin returned 403; the direct function URL returned 404. Netlify boundary/header/redirect checks passed. No real wallet was connected and no financial action occurred.
+
+This was a focused review of the read-only wallet preview, not a full website/account/provider audit. The existing security release gates remain partial or pending, including actual wallet/device tests, administrator MFA, recovery, monitoring and independent review.
+
+Primary references: https://docs.phantom.com/solana/establishing-a-connection ; https://solana.com/docs/rpc/http/gettokenaccountsbyowner ; https://docs.netlify.com/manage/routing/headers/ .
