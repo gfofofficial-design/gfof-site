@@ -39,3 +39,7 @@ Hosted history check: two manual reads of the public GFOF mint address at 15:16:
 ## Proposed-term calculator
 
 The Staking Bay now compares the same 1-month/1%, 3-month/3%, 6-month/8% and 12-month/12% gross total-term planning targets as the staking page. It uses integer arithmetic with rewards rounded down to six decimal places. The example principal is user-entered, unrelated to the wallet, and no account, provider, signature or transaction request occurs. It presents no APY, dollar forecast, compounding, eligibility, lock proof or reward guarantee. Invalid input clears the results and hides the proportion meter. Three calculator tests pass covering term comparison, invalid-input clearing and exact downward rounding.
+
+## Request cancellation hardening
+
+A regression test reproduced old results returning after Clear during asynchronous JSON decoding. The UI now rechecks its request generation after decoding, not only after response headers. Address input changes abort the current request, clear balances/valuation/history and release the button immediately. A separate 20-second client deadline aborts stuck fetch/decoding and displays a timeout. Twenty-one focused dashboard/wallet/price/calculator tests passed after the fix; the additional injected-timer deadline regression passed separately, bringing the covered total to 22. These are usability/privacy correctness checks, not a full security audit or production launch approval.
