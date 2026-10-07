@@ -33,6 +33,9 @@ says paid projects do not auto-pause. No upgrade or manual database export has
 been performed. Before inviting external account holders, choose and verify
 an actual recovery path and acceptable availability/cost; do not describe the
 Free pilot as a production account service.
+The manual recovery proof must include Auth users and identities; a generic
+schema/data dump may exclude Supabase-managed Auth tables. Verify an isolated
+restore and test login rather than counting the presence of a dump file.
 
 Server environment only:
 

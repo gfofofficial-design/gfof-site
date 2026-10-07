@@ -62,6 +62,18 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   connection; the CLI, Docker and `psql` were not available on this dev
   computer's PATH. A local Git checkout is not an identity-data backup. Do not put
   a connection URL, password, raw dump or user export in Git or chat.
+- A generic `supabase db dump` file is not yet evidence that Federation users
+  can be recovered. The [CLI command reference](https://supabase.com/docs/reference/cli/supabase-db-dump)
+  says its default filtering excludes managed schemas including `auth`, while
+  [Supabase's Auth migration guide](https://supabase.com/docs/guides/troubleshooting/migrating-auth-users-between-projects)
+  says an Auth migration needs its own verified procedure. Before treating any
+  manual export as a backup, confirm the encrypted artifact includes the
+  expected `auth.users` and `auth.identities` records without printing them in
+  logs, and restore it into a disposable isolated target. Compare only counts
+  and a private test login; do not overwrite this pilot or send live mail from
+  the restore. Record the tool version, exact commands, artifact hash, target,
+  and result in the restricted operations area. Provider settings, redirect
+  allowlists, and secrets need a separate recovery checklist.
 - Confirm which vendor records are kept, where the data notice links, who
   handles deletion requests, and what realistic response time can be offered.
 - Supabase's Email provider remains enabled in the pilot even though the site
