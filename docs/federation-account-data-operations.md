@@ -205,3 +205,40 @@ isolated.
 
 This is a proposed recovery safeguard; no ledger, deletion, provider change,
 restore, mail delivery or production activation was performed by this review.
+
+
+## October 7 isolated recovery preview — owner acceptance
+
+PR #100 is a disposable recovery preview branched from PR #99. It must not be
+merged or published as production. Its branch-specific Netlify settings point
+only to Federation Account Restore Drill; Google uses a separate restore client,
+Apple remains off, and public signup remains closed. The recovery handler checks
+the exact PR #100 request origin and the restore project before allowing account
+operations. Netlify's build-only CONTEXT, REVIEW_ID and DEPLOY_PRIME_URL values
+are not assumed to exist in the hosted Functions runtime.
+
+On October 7, the owner supplied a screenshot showing a signed-in account on
+preview #100, then confirmed the clean-page reload and browser sign-out checks.
+Restricted aggregate Auth logs for that test window showed one successful token
+exchange (200), three verified user requests (200), and a provider logout (204).
+An aggregate query found one user, two identities and one recent sign-in; no
+additional account was observed. These logs support the provider round trip and
+logout without publishing identity details or sign-in values. They do not prove
+the provenance of the restored records or that no earlier session was copied.
+
+A hosted callback with synthetic code/state and no flow cookie returned 303 to
+the fixed failed-sign-in page, expired its flow cookie, and sent no-store and
+no-referrer headers. The owner screenshot also exposed leftover provider return
+query parameters on the dashboard. The recovery branch now removes such query
+parameters without consuming codes, exchanging tokens in browser JavaScript,
+or treating URL parameters as a session. A cookie-present browser still performs
+a verified server session lookup. Thirty focused handler/page tests passed,
+including hosted-runtime origin isolation and signed-out return-query rejection.
+
+**Still unresolved:** identify the restricted encrypted backup artifact, source,
+recovery point, artifact hash, client tool versions, exact export/restore procedure
+and result. Confirm session exclusion and post-backup deletion reconciliation.
+Matching counts and a working sign-in are not enough to mark the complete recovery
+gate passed. No backup was overwritten, no account was deleted, and no public
+registration, production account release, wallet, staking or lending activation
+was authorized by this acceptance test.
