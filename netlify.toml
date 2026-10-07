@@ -229,7 +229,7 @@
     aggregate_by = ["ip", "domain"]
 
 [[headers]]
-  for = "/command-deck.html"
+  for = "/command-deck*"
   [headers.values]
     Cache-Control = "private, no-store"
     Referrer-Policy = "no-referrer"
