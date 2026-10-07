@@ -291,3 +291,34 @@ Reviewed against the current October 7 changelog and official
 and [Auth hook security/error handling](https://supabase.com/docs/guides/auth/auth-hooks)
 documentation. No relevant new Auth-hook breaking change was identified. The
 provider control remains a candidate until the hosted acceptance matrix passes.
+
+
+### October 7 rollback-only database probe
+
+The owner authorized continuing the isolated test. The current execution
+workspace did not have local PostgreSQL client/server tools. Instead,
+[the reproducible probe](../tests/federation-google-signup-probe.sql) ran inside
+an explicit transaction on Federation Account Restore Drill's PostgreSQL 17.11
+and rolled back its dedicated schema, function and grants. The hook was never
+attached and signup was never opened. It used synthetic JSON payloads, read no
+user identifiers or password material, and wrote no Auth users or identities.
+
+All 21 rule assertions passed: one exact non-anonymous Google payload allowed,
+and 20 other/missing/malformed/spoofed payloads rejected. Effective schema and
+function privilege assertions passed: supabase_auth_admin had the intended
+USAGE/EXECUTE, while anon, authenticated and service_role had no function
+EXECUTE. The function was SECURITY INVOKER. The final query reported the probe
+schema absent, with the existing one user and two identities unchanged.
+
+An attempted SET ROLE supabase_auth_admin was denied by the database connection.
+The initial transaction did not persist; the probe was then rerun without role
+impersonation and completed with rollback. No role membership or broader access
+was granted to bypass this restriction. Effective ACL inspection and execution
+as the creating database role do **not** prove actual Auth-role invocation.
+
+The hosted acceptance matrix above therefore remains unresolved: actual hook
+execution, new Google creation, direct Email/OTP denial before insertion/mail,
+existing owner password/Google login and identity-link behavior, and real
+hook-failure closure must be tested in a separately approved disposable target.
+This probe is not an executable migration, a deployed signup control, or evidence
+that public Google-only registration is ready.
