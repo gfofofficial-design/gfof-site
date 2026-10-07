@@ -16,7 +16,7 @@ function cookies(event) {
 function config(env) {
   if(env.FEDERATION_ACCOUNT_ENABLED!=='true')return null;
   // This disposable recovery build must never accept inherited pilot settings.
-  if(env.CONTEXT!=='deploy-preview'||String(env.REVIEW_ID)!=='100'||env.FEDERATION_AUTH_URL!=='https://jjogapyxroeiscmqfxjc.supabase.co')throw Error('recovery-isolation');
+  if(env.FEDERATION_ACCOUNT_ORIGIN!=='https://deploy-preview-100--gfof.netlify.app'||env.FEDERATION_AUTH_URL!=='https://jjogapyxroeiscmqfxjc.supabase.co'||(env.CONTEXT&&env.CONTEXT!=='deploy-preview')||(env.REVIEW_ID&&String(env.REVIEW_ID)!=='100'))throw Error('recovery-isolation');
   const origin=new URL(env.FEDERATION_ACCOUNT_ORIGIN||'');
   const url=new URL(env.FEDERATION_AUTH_URL||'');
   if(origin.protocol!=='https:'||origin.pathname!=='/'||origin.search||origin.hash||origin.username||origin.password)throw Error('config');
@@ -43,6 +43,12 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
     if(!/^\/api\/federation-account\/(?:config|oauth|callback|session|refresh|logout)$/.test(path))return result(404,{error:'Account route unavailable.'});
     const action=path.split('/').at(-1);
     const method=event.httpMethod;
+    // Build-only Netlify variables are absent in hosted Functions. Check the
+    // platform request URL so this temporary build cannot run on another host.
+    if(env.FEDERATION_ACCOUNT_ENABLED==='true'){
+      try{if(new URL(event.rawUrl).origin!=='https://deploy-preview-100--gfof.netlify.app')throw Error('recovery-host');}
+      catch{return result(503,{error:'Account configuration is unavailable.'});}
+    }
     let cfg;try{cfg=config(env);}catch{return result(503,{error:'Account configuration is unavailable.'});}
     const jar=cookies(event);
     if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[],hasSessionCookie:!!cfg&&!!(jar[COOKIE.access]||jar[COOKIE.refresh])});
