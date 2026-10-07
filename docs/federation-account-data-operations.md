@@ -78,7 +78,12 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   handles deletion requests, and what realistic response time can be offered.
 - Supabase's Email provider remains enabled in the pilot even though the site
   presents only Google. With signup disabled this does not open public
-  registration. Before turning signup on, verify and close any direct Email
+  registration. On October 7, 2026, one direct Email/password signup request
+  and one direct Email OTP request with user creation requested each returned
+  HTTP 422 `signup_disabled`; a read-only Auth count stayed at one and neither
+  synthetic address appeared. This proves the current closed configuration for
+  those two routes, not the future behavior after global signup is enabled.
+  Before turning signup on, verify and close any direct Email
   signup route or review it as a separately supported option. The October 7
   provider page shows one `Enable email provider` control covering both email
   sign-up and login; disabling it would remove the owner's password fallback.

@@ -98,6 +98,13 @@ observation of the isolated pilot, not proof that Supabase or Google retains no
 other data. Supabase's security advisor also reported that leaked-password
 protection is disabled. The pilot has an enabled Email provider and its owner
 test user has a password, although the Federation page offers only Google.
+With global signup disabled, direct hosted requests to the isolated pilot's
+Email/password `/auth/v1/signup` and Email OTP `/auth/v1/otp` with
+`create_user: true` both returned HTTP 422 `signup_disabled` on October 7, 2026.
+A read-only Auth count was one before and after, with neither synthetic test
+address present. This verifies these two routes only in the current closed
+configuration; it does not show what they would do after enabling global
+signup or whether every alternative route is covered.
 Before allowing public **Google-only** registration, confirm the Email
 provider cannot be used to create an account outside this page; disable that
 route or document a separately reviewed control. Preserve a recovery path for
