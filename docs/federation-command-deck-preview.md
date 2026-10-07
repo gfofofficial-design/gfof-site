@@ -43,3 +43,11 @@ The Staking Bay now compares the same 1-month/1%, 3-month/3%, 6-month/8% and 12-
 ## Request cancellation hardening
 
 A regression test reproduced old results returning after Clear during asynchronous JSON decoding. The UI now rechecks its request generation after decoding, not only after response headers. Address input changes abort the current request, clear balances/valuation/history and release the button immediately. A separate 20-second client deadline aborts stuck fetch/decoding and displays a timeout. Twenty-one focused dashboard/wallet/price/calculator tests passed after the fix; the additional injected-timer deadline regression passed separately, bringing the covered total to 22. These are usability/privacy correctness checks, not a full security audit or production launch approval.
+
+## Optional Phantom address import
+
+The page adds a user-triggered `window.phantom.solana.connect()` flow to read the provider's public key and submit the existing read-only balance form. There is no eager reconnect, message signing, transaction request, seed/private-key handling, cross-account association or ownership proof. Missing-provider and rejection paths preserve manual entry. Account changes clear previous displayed data through the existing input event and require a manual read of the newly selected account. Clear during an unresolved permission request suppresses its eventual result and attempts disconnect. Disconnect preserves manually entered watch addresses. Disconnecting is distinct from revoking Phantom trusted-app permission; the UI directs users to manage that inside Phantom.
+
+Five provider-mock tests passed: explicit-only connection; unavailable/rejected fallback; late-result cancellation; account switching without automatic lookup; and disconnect/watch-address behavior. These do not verify actual Phantom approval UI, extension behavior, mobile injection, or provider domain reputation. A real dev-computer Phantom approval, rejection, account switch and disconnect check remains required before this feature is considered validated for public launch. No wallet was connected by the agent and no financial action occurred.
+
+Official docs consulted 2026-10-07: https://docs.phantom.com/solana/establishing-a-connection and https://docs.phantom.com/solana/detecting-the-provider .
