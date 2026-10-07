@@ -66,6 +66,9 @@ IP/domain and other account API paths to 60 requests per minute per IP/domain.
 Check Netlify's deploy post-processing log before counting those rules as active.
 These are traffic throttles, not a site-wide hard cap or spending limit; a
 distributed client can still make requests, and enforcement is not instant.
+The handler rejects Netlify's built-in direct-function address before provider
+calls, but that rejected request still invokes the function. Monitor usage and
+set a separate operational budget before public registration.
 
 The draft account page now states what sign-in records and offers an owner-managed
 deletion request route. That short explanation is not a complete privacy policy
