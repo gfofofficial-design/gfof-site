@@ -111,6 +111,18 @@ route or document a separately reviewed control. Preserve a recovery path for
 the owner test user before changing its password login. Supabase's direct
 passwordless Email method can create users by default, so do not rely on hiding
 an email button in the Federation interface.
+The hosted pilot's Email-provider switch controls both Email signup and login;
+turning it off would remove the owner's existing password fallback. The pilot
+has no Auth hook configured. Supabase documents a **Before User Created** hook
+that can reject new users by `user.app_metadata.provider`. A proposed
+Google-only allowlist would reject Email, OTP, and every other provider at user
+creation while leaving existing-user password login intact. It is a candidate,
+not a deployed control: first review its SQL privileges and failure behavior,
+test allow/deny payloads and the owner's two existing login paths, then run
+bounded direct Email and Google new-user checks with signup enabled in an
+isolated test. Do not turn on global signup based on the current 422 results or
+on a function unit test alone. See the official
+[hook input and provider example](https://supabase.com/docs/guides/auth/auth-hooks/before-user-created-hook).
 
 The [account-data operations plan](federation-account-data-operations.md)
 records the current data inventory, a manual deletion procedure and the
