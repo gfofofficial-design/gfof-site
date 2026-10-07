@@ -61,6 +61,12 @@ privacy/retention/deletion policy, backup/recovery and cost ceilings before
 registration opens. No email sign-in is implemented in this first build; it
 needs separately configured delivery and abuse controls.
 
+The draft Netlify redirects limit OAuth starts to 10 requests per minute per
+IP/domain and other account API paths to 60 requests per minute per IP/domain.
+Check Netlify's deploy post-processing log before counting those rules as active.
+These are traffic throttles, not a site-wide hard cap or spending limit; a
+distributed client can still make requests, and enforcement is not instant.
+
 The draft account page now states what sign-in records and offers an owner-managed
 deletion request route. That short explanation is not a complete privacy policy
 or an automated deletion workflow. Before public registration, confirm vendor
