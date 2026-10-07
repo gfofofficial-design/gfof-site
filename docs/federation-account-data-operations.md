@@ -205,3 +205,89 @@ isolated.
 
 This is a proposed recovery safeguard; no ledger, deletion, provider change,
 restore, mail delivery or production activation was performed by this review.
+
+
+## Google-only new-account control — reviewed design, not deployed
+
+The owner's requested Google-only account entry must be enforced at the identity
+provider as well as on the Federation page. The proposed control is Supabase's
+Before User Created Postgres hook. It runs only before a new user is inserted;
+it is not a password-verification hook and is not intended to disable existing
+owner password login. Its actual interaction with existing-user login and OAuth
+identity linking still needs hosted tests.
+
+### Decision and privilege contract
+
+- Allow a new user only when the hook's server-supplied
+  `user.app_metadata.provider` is exactly `google` and
+  `user.is_anonymous` is explicitly false. Reject missing, malformed or unknown
+  values, Email/password, Email OTP, phone, Apple and every other provider.
+- Never read `user_metadata` to authorize signup. A client-supplied claim of
+  `provider: google` must not bypass the hook. Do not trust a provider label in
+  an HTTP request or a browser form.
+- Use a dedicated schema excluded from the Data API's exposed schemas and a
+  JSONB-in/JSONB-out function with `SECURITY INVOKER` and an empty search path.
+  The function needs no table access, Auth-table grants, network calls or writes.
+  Do not introduce `SECURITY DEFINER` to fix a permission error.
+- In one transaction, revoke schema/function access from PUBLIC, anon and
+  authenticated, and grant only schema USAGE and exact-function EXECUTE to
+  supabase_auth_admin. Verify effective privileges, including inherited roles
+  and existing default privileges; do not assume a schema name makes it private.
+  Confirm the dashboard-selected hook still has these effective privileges.
+- Return a generic documented error object for rejection, without including
+  email, identifiers, request metadata or payload values. Do not log payloads.
+  An empty JSON object permits the signup. Treat a runtime error or timeout as
+  an acceptance-test failure until hosted behavior proves no user was inserted.
+
+No SQL function, schema, grant or hook setting was created by this review. A
+versioned migration must be generated with the actual Supabase CLI when the
+isolated implementation is authorized; this prose is not an executable migration.
+
+### Isolated acceptance matrix
+
+Use a separately approved disposable identity target, exact test preview,
+owner-designated test identities and a bounded test window. Do not temporarily
+open either existing owner project to public signup. Record only aggregate
+outcomes in public Git; keep exact test-user references in restricted operations.
+
+| Case | Required result |
+| --- | --- |
+| New Google test identity through the real provider round trip | Exactly one user created, verified server session, reload and logout work |
+| Direct Email/password signup | Rejected by the hook, zero user/identity insertion |
+| Direct Email OTP with user creation requested | Rejected, zero insertion, no signup mail delivered |
+| Email request with spoofed user_metadata provider=google | Rejected, zero insertion |
+| Missing provider, wrong types, anonymous user or unknown provider payload | Function denies without revealing payload |
+| Existing owner Google login | Works, existing exact user retained |
+| Existing owner password login | Works, existing exact user retained; no password shared with reviewer |
+| Existing-user Google identity linking | Intended link behavior verified; no duplicate user or unintended identity link |
+| Hook execute privilege revoked or hook made unavailable in disposable target | New-user creation fails closed; actual response and counts recorded |
+| anon/authenticated direct function invocation | Denied; hook cannot be used as a public RPC |
+| Corrected hook restored after failure test | Expected signup decision returns and existing login remains usable |
+
+A payload unit test or current `signup_disabled` response does not prove these
+hosted controls. New-user route tests require signup enabled only in the approved
+disposable target with the hook already attached. Use a controlled mail sink or
+reviewed delivery isolation before the OTP test; global mail suppression must not
+be mistaken for hook enforcement. Preserve evidence of rejection before delivery.
+
+### Rollout and rollback order
+
+First verify the migration's privileges, attach the hook while signup is still
+closed, and confirm the existing owner's two login paths. Then run the isolated
+acceptance matrix and security advisor review. Only after the remaining recovery,
+privacy/deletion, availability and cost gates are satisfied may a separate release
+approve public signup. This hook controls account creation, not wallet ownership,
+financial eligibility, post-creation identity linking or every Auth endpoint.
+
+On any failed rollout, **disable new-user signup first** and verify direct Email
+and Google creation are closed. Keep the reviewed hook attached while closing
+signup. Only after closure is confirmed may a separately approved rollback detach
+or replace the hook. Never remove it while signup remains open; that would reopen
+alternative signup routes. Preserve the existing owner account, login paths and
+restricted evidence. Do not delete users as an automatic rollback step.
+
+Reviewed against the current October 7 changelog and official
+[Before User Created hook](https://supabase.com/docs/guides/auth/auth-hooks/before-user-created-hook)
+and [Auth hook security/error handling](https://supabase.com/docs/guides/auth/auth-hooks)
+documentation. No relevant new Auth-hook breaking change was identified. The
+provider control remains a candidate until the hosted acceptance matrix passes.
