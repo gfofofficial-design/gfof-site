@@ -20,5 +20,21 @@
  });
  clear.addEventListener('click',()=>{sequence++;controller?.abort();input.value='';button.disabled=false;reset();status.textContent='Cleared from this page. No wallet address is saved to your account or this device.';});
  const passport=globalThis.FederationPassport;
- if(passport){try{const p=passport.read();if(p.available&&p.enabled){document.getElementById('explorer-rank').textContent=p.done.length+' / '+passport.missions.length;document.getElementById('explorer-note').textContent='Mission badges on this device';}else{document.getElementById('explorer-rank').textContent='Start exploring';document.getElementById('explorer-note').textContent='No saved passport on this device';}}catch{document.getElementById('explorer-rank').textContent='Progress unavailable';}}
+ const missionIDs=['repair-the-shuttle','the-signal','starport-market','observatory-journey','docking-request','long-way-home','borrowed-voice','after-the-crowd','changing-course','keys-to-the-gate','meridian-relay'];
+ function renderPassport(){
+  const collection=document.getElementById('mission-collection');collection.replaceChildren();
+  if(!passport){document.getElementById('mission-message').textContent='Passport progress is unavailable. You can still open the journey.';return;}
+  try{
+   const p=passport.read();const missions=passport.missions.filter(m=>missionIDs.includes(m[0]));const done=new Set(p.enabled&&p.available&&Array.isArray(p.done)?p.done.filter(id=>missionIDs.includes(id)):[]);
+   document.getElementById('mission-progress').max=missions.length;document.getElementById('mission-progress').value=done.size;
+   document.getElementById('explorer-rank').textContent=p.available&&p.enabled?done.size+' / '+missions.length:p.available?'Start exploring':'Progress unavailable';
+   document.getElementById('explorer-note').textContent=p.available&&p.enabled?'Mission badges on this device':p.available?'No saved passport on this device':'Browser storage cannot be read';
+   document.getElementById('mission-message').textContent=!p.available?'Browser storage is unavailable. Saved completion cannot be checked.':!p.enabled?'Passport saving is off. Open Explorer Passport to choose whether to remember badges on this device.':done.size+' of '+missions.length+' badges remembered on this device. These are personal progress, not verified leaderboard scores.';
+   const next=missions.find(m=>!done.has(m[0]))||missions[0];const link=document.getElementById('next-mission');link.href='/journey/'+next[0]+'.html';link.textContent=(done.size===missions.length?'Replay: ':'Next mission: ')+next[1]+' →';
+   for(const m of missions){const card=document.createElement('article');card.className='badge-card'+(done.has(m[0])?' earned':'');const state=document.createElement('span');state.className='status';state.textContent=!p.available?'STATUS UNAVAILABLE':done.has(m[0])?'BADGE REMEMBERED':'EXPLORE';const title=document.createElement('h3');title.textContent=m[3];const guide=document.createElement('p');guide.textContent=m[1]+' · Guide: '+m[2];const action=document.createElement('a');action.href='/journey/'+m[0]+'.html';action.textContent=done.has(m[0])?'Replay mission →':'Open mission →';card.append(state);card.append(title);card.append(guide);card.append(action);collection.append(card);}
+  }catch{document.getElementById('mission-message').textContent='Passport progress could not be read. Open Explorer Passport to check it.';document.getElementById('explorer-rank').textContent='Progress unavailable';}
+ }
+ document.getElementById('mission-refresh').addEventListener('click',renderPassport);
+ globalThis.addEventListener?.('pageshow',renderPassport);
+ renderPassport();
 })();
