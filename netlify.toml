@@ -217,6 +217,25 @@
   status = 200
   force = true
 
+# Read-only wallet viewer, isolated to PR99 by the handler.
+[[redirects]]
+  from = "/api/federation-wallet"
+  to = "/.netlify/functions/federation-wallet"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    window_limit = 6
+    window_size = 60
+    aggregate_by = ["ip", "domain"]
+
+[[headers]]
+  for = "/command-deck.html"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
 # Catch-all — serve custom 404 page with proper 404 status
 [[redirects]]
   from = "/*"
