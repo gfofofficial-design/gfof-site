@@ -1,4 +1,5 @@
 'use strict';
+const {readPrices}=require('./wallet-prices.cjs');
 const ORIGIN='https://deploy-preview-99--gfof.netlify.app';
 const RPC='https://api.mainnet-beta.solana.com';
 const PROGRAMS=['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA','TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'];
@@ -24,7 +25,8 @@ exports.handler=async event=>{
   for(const group of groups){if(!Array.isArray(group.value)||group.value.length>5000)throw Error('accounts');for(const a of group.value){tokenAccounts++;const info=a.account?.data?.parsed?.info;const t=info?.tokenAmount;if(!info||info.owner!==address||!addressOK(info.mint)||!t||!/^\d{1,20}$/.test(t.amount)||!Number.isInteger(t.decimals)||t.decimals<0||t.decimals>255)throw Error('data');const previous=aggregate.get(info.mint);if(previous&&previous.decimals!==t.decimals)throw Error('decimals');aggregate.set(info.mint,{mint:info.mint,decimals:t.decimals,raw:(previous?.raw||0n)+BigInt(t.amount)});}}
   const tokens=[...aggregate.values()].filter(t=>t.raw>0n).sort((a,b)=>a.mint.localeCompare(b.mint));
   if(tokens.length>1000)throw Error('too-many');
-  return reply(200,{address,network:'solana-mainnet',source:'Solana public RPC',observedAt:new Date().toISOString(),slots:[sol,...groups].map(r=>r.context?.slot),sol:quantity(BigInt(sol.value),9),tokenAccounts,tokens:tokens.map(t=>({mint:t.mint,symbol:t.mint===GFOF?'GFOF':t.mint===USDC?'USDC':null,quantity:quantity(t.raw,t.decimals)})),pricesAvailable:false});
+  const pricing=await readPrices(tokens,sol.context?.slot);
+  return reply(200,{address,network:'solana-mainnet',source:'Solana public RPC',observedAt:new Date().toISOString(),slots:[sol,...groups].map(r=>r.context?.slot),sol:quantity(BigInt(sol.value),9),tokenAccounts,tokens:tokens.map(t=>({mint:t.mint,symbol:t.mint===GFOF?'GFOF':t.mint===USDC?'USDC':null,quantity:quantity(t.raw,t.decimals)})),pricesAvailable:Object.keys(pricing.prices).length>0,pricing});
  }catch{return reply(503,{error:'Solana balance service is busy or unavailable. No balance was confirmed. Please try again later.'});}finally{clearTimeout(timer);}
 };
 exports.addressOK=addressOK;
