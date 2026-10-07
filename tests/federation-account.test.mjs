@@ -4,7 +4,7 @@ import {createRequire} from 'node:module';
 const {createHandler}=createRequire(import.meta.url)('../netlify/functions/federation-account.cjs');
 const origin='https://deploy-preview-100--gfof.netlify.app';
 const env={CONTEXT:'deploy-preview',REVIEW_ID:'100',DEPLOY_PRIME_URL:origin,FEDERATION_ACCOUNT_ENABLED:'true',FEDERATION_ACCOUNT_ORIGIN:origin,FEDERATION_AUTH_URL:'https://jjogapyxroeiscmqfxjc.supabase.co',FEDERATION_AUTH_PUBLISHABLE_KEY:'sb_publishable_syntheticfixture',FEDERATION_AUTH_GOOGLE_ENABLED:'true',FEDERATION_AUTH_APPLE_ENABLED:'true'};
-const event=(action,method='GET',body,jar)=>({path:'/api/federation-account/'+action,httpMethod:method,headers:{origin,'sec-fetch-site':'same-origin',...(jar?{cookie:jar}:{})},...(body?{body:JSON.stringify(body)}:{})});
+const event=(action,method='GET',body,jar)=>({rawUrl:origin+'/api/federation-account/'+action,path:'/api/federation-account/'+action,httpMethod:method,headers:{origin,'sec-fetch-site':'same-origin',...(jar?{cookie:jar}:{})},...(body?{body:JSON.stringify(body)}:{})});
 const parse=r=>JSON.parse(r.body);
 const jar=r=>r.multiValueHeaders['Set-Cookie'].map(x=>x.split(';')[0]).join('; ');
 const session={access_token:'synthetic-access',refresh_token:'synthetic-refresh',expires_in:3600};
@@ -35,3 +35,5 @@ test('duplicate auth cookies are rejected',async()=>{let calls=0;const h=createH
 test('logout clears all browser cookies even if upstream fails',async()=>{const h=createHandler({env,fetchImpl:async()=>response({},500)});const r=await h(event('logout','POST',{},'__Host-gf-access=synthetic'));assert.deepEqual(parse(r),{signedOut:true,remoteRevoked:false});assert.equal(r.multiValueHeaders['Set-Cookie'].length,3);assert.ok(r.multiValueHeaders['Set-Cookie'].every(c=>c.includes('Max-Age=0')));});
 
 test('recovery preview rejects pilot project, wrong review and other contexts before network',async()=>{for(const changes of [{FEDERATION_AUTH_URL:'https://syntheticpilot.supabase.co'},{REVIEW_ID:'99'},{CONTEXT:'production'},{CONTEXT:'branch-deploy'}]){let calls=0;const h=createHandler({env:{...env,...changes},fetchImpl:async()=>calls++});assert.equal((await h(event('oauth','POST',{provider:'google'}))).statusCode,503);assert.equal(calls,0);}});
+
+test('hosted runtime without build variables accepts only exact recovery host',async()=>{const runtimeEnv={...env};for(const key of ['CONTEXT','REVIEW_ID','DEPLOY_PRIME_URL'])delete runtimeEnv[key];let calls=0;const h=createHandler({env:runtimeEnv,fetchImpl:async()=>calls++});assert.equal((await h(event('config'))).statusCode,200);for(const rawUrl of [undefined,'invalid','https://galacticfederation.co/api/federation-account/oauth','https://deploy-preview-99--gfof.netlify.app/api/federation-account/oauth','https://review-federation-account-restore-drill--gfof.netlify.app/api/federation-account/oauth'])assert.equal((await h({...event('oauth','POST',{provider:'google'}),rawUrl})).statusCode,503);assert.equal(calls,0);});
