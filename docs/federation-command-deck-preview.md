@@ -33,3 +33,5 @@ The dashboard now renders the existing eleven Passport missions as badge cards w
 ## Visit-only SOL history
 
 Manual successful reads of the same address now add up to twelve distinct timestamped native SOL quantities to a table and SVG line. The x-axis reflects observation timestamps and the y-axis the observed SOL range; a flat balance remains a flat line. A single reading does not fabricate a line. These are balance observations, not return calculations: transfers and fees can alter the balance. No automatic polling, browser persistence or cloud record is introduced. Reload, Clear, address change or lookup failure resets the series. History excludes token balances and provider-held positions. Sixteen focused tests pass, including actual repeat reads, Clear, address separation and failure resets.
+
+Hosted history check: two manual reads of the public GFOF mint address at 15:16:08 and 15:16:27 CDT both returned 0.0010668 SOL. The page showed both exact observations and a flat line, explicitly labelled balance change rather than investment profit. The first reading alone showed no fabricated line.
