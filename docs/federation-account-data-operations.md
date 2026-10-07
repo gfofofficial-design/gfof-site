@@ -138,3 +138,70 @@ References: [Supabase user management](https://supabase.com/docs/guides/auth/man
 [Free project pausing](https://supabase.com/docs/guides/platform/free-project-pausing),
 [pricing](https://supabase.com/pricing), and
 [production checklist](https://supabase.com/docs/guides/deployment/going-into-prod).
+
+## October 7 daytime review — evidence and remaining work
+
+A read-only aggregate check on October 7, 2026 found the following. No emails,
+user identifiers, password hashes, tokens or identity payloads were retrieved.
+
+| Project | Auth users | Linked identities | Orphan identities | Public application tables |
+| --- | ---: | ---: | ---: | ---: |
+| Federation Account Pilot | 1 | 2 | 0 | 0 |
+| Federation Account Restore Drill | 1 | 2 | 0 | 0 |
+
+Matching counts are a useful preflight, not proof of an export, matching record
+contents, recoverable credentials, or successful restored sign-in. The earlier
+statement that no export/restore had occurred describes the previous preflight;
+this review cannot establish what transfer populated the restore target. Keep
+the recovery gate unresolved until restricted evidence identifies the encrypted
+artifact, source and target, tool versions, restore result and an actual restored
+login. Do not repeat a restore over either existing project just to obtain proof.
+
+### Request verification and deletion acceptance
+
+Before public registration, rehearse these cases using a disposable account:
+
+- A request from a different address or an unverified sender causes no deletion.
+  Ask for verification without confirming whether an account exists.
+- An authenticated deletion confirmation must identify the exact provider user,
+  require a fresh sign-in and bind consent to that deletion request. The current
+  account page has no such confirmation feature; an email address displayed in
+  a screenshot or supplied in a message is not sufficient proof.
+- If using a manual mailbox challenge instead, document and test a short-lived,
+  single-use challenge sent only to the provider-verified account address. Do
+  not accept forwarded screenshots as proof or ask for passwords, OAuth codes,
+  wallet signatures or tokens. This challenge is a proposed procedure, not an
+  implemented feature.
+- A duplicate request is handled idempotently. A changed or ambiguous identity,
+  failed verification, or unavailable provider pauses the deletion rather than
+  selecting a user by an approximate email match.
+- Record the exact user privately before revocation/deletion; verify both its
+  Auth user and linked identities are absent afterward. Check linked Storage
+  ownership and application records before declaring completion.
+- Repeat the session and refresh rejection checks for that disposable user.
+  Record the result privately and send completion only to the verified request
+  channel. Preserve the owner pilot account.
+
+The pilot already proved the technical disposable-user deletion path. These
+request-verification cases remain untested and must not be described as a
+completed support workflow.
+
+### Prevent deletion reversal during recovery
+
+A backup can contain an account deleted after the backup was taken. Maintain a
+restricted deletion ledger outside the database being restored, containing the
+minimum exact user reference, deletion time, case reference and outcome needed
+to reconcile recovery. Decide its access controls and retention before launch;
+do not put identifiers or request correspondence in this public repository.
+
+Before connecting a restored project to any public application, keep signup and
+outbound email closed, reconcile deletions newer than the recovery point,
+remove the affected restored identities/users through the reviewed provider
+workflow, and check the result. Do not restore old sessions or refresh tokens
+as a way of keeping browsers signed in. Require fresh authentication following
+recovery and prove that a previously deleted disposable account stays absent
+and cannot resume its old session. Any failure keeps the restored service
+isolated.
+
+This is a proposed recovery safeguard; no ledger, deletion, provider change,
+restore, mail delivery or production activation was performed by this review.
