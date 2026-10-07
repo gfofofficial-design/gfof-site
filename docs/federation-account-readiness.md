@@ -191,6 +191,13 @@ parameters are removed without exchanging codes in browser JavaScript; the
 server-verified cookie session remains the only sign-in signal. No registration
 or financial access was activated by this change.
 
+October 7 refresh correction: an expired or absent access cookie now clears
+only that access cookie on a session check. The valid refresh cookie remains
+available for the browser's next refresh request. Synthetic handler and page
+tests cover that recovery path; an invalid or deleted-user refresh still
+clears all auth cookies. Hosted multi-tab and real provider expiry remain
+separate acceptance checks.
+
 ## October 7 security release requirement
 
 The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The earlier missing-recovery description above predates the separate isolated restore pilot: Google sign-in was subsequently tested there, but recovery provenance and full session/deletion reconciliation are still incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.

@@ -91,6 +91,8 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
     }catch(error){
       if(action==='callback')return result(303,{},[cookie(COOKIE.flow,'',0)],{Location:cfg.origin+'/account?signin=failed'});
       if(error instanceof SyntaxError)return result(400,{error:'Invalid request.'});
+      // A stale access token must not discard a still-usable refresh token.
+      if(action==='session'&&(error.status===401||error.status===403))return result(401,{error:'Sign in again.'},[cookie(COOKIE.access,'',0)]);
       // Supabase returns 400 when a deleted user's refresh token no longer exists.
       if(error.status===401||error.status===403||(action==='refresh'&&error.status===400))return result(401,{error:'Sign in again.'},clear());
       return result(502,{error:'Account service is temporarily unavailable.'});

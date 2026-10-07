@@ -5,12 +5,14 @@ import {runInNewContext} from 'node:vm';
 
 const source=readFileSync(new URL('../assets/federation/fed-account.js',import.meta.url),'utf8');
 
-async function render({search='',hash='',hasSessionCookie=false,passport}={}){
+async function render({search='',hash='',hasSessionCookie=false,expiredSession=false,passport}={}){
   const elements=Object.fromEntries(['account-message','google','apple','logout','identity','member-email','passport-summary'].map(id=>[id,{id,textContent:'',hidden:id==='logout'||id==='identity',disabled:false,addEventListener(){}}]));
   const requests=[];
   const replaced=[];
+  let sessionAttempts=0;
   const fetch=async url=>{
     requests.push(url);
+    if(url.endsWith('/session')&&expiredSession&&sessionAttempts++===0)return {status:401,ok:false,json:async()=>({error:'Sign in again.'})};
     const data=url.endsWith('/config')?{enabled:true,providers:['google'],hasSessionCookie}:{signedIn:true,user:{email:'member@example.invalid'}};
     return {status:200,ok:true,json:async()=>data};
   };
@@ -37,6 +39,12 @@ test('failed sign-in stays visible after config resolves and signed-out page mak
 test('a cookie-present browser still checks the session',async()=>{
   const {elements,requests}=await render({hasSessionCookie:true});
   assert.deepEqual(requests,['/api/federation-account/config','/api/federation-account/session']);
+  assert.equal(elements['member-email'].textContent,'member@example.invalid');
+});
+
+test('an expired access session refreshes before showing the member',async()=>{
+  const {elements,requests}=await render({hasSessionCookie:true,expiredSession:true});
+  assert.deepEqual(requests,['/api/federation-account/config','/api/federation-account/session','/api/federation-account/refresh','/api/federation-account/session']);
   assert.equal(elements['member-email'].textContent,'member@example.invalid');
 });
 
