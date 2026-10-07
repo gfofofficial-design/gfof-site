@@ -72,3 +72,7 @@ These checks are pending, not completed evidence. The leaderboard is illustrativ
 Added a first-stop skip link to the focusable main dashboard, enlarged panel links to at least 44 pixels, labelled each priced-holdings meter with its asset/share/value, and exposed the token-count text as a labelled group rather than hiding it inside an image role. Narrow-screen CSS now reduces the title seal, allows the title column to shrink, stacks calculator results and wraps long labels/buttons.
 
 All 27 existing focused tests passed after the changes. On the hosted desktop preview, Tab focused the new skip link first and DOM measurements found no dashboard links below 44 pixels. Token-count text appeared in the accessibility tree. Browser credential-protection restrictions prevented observing the final Enter activation of the skip link; that activation and an actual narrow phone viewport remain pending manual checks. Responsive CSS changes are implemented, not yet a completed phone visual check.
+
+## Required security release review
+
+The owner agreed on October 7 to the [Federation security release gates](federation-security-release-gates.md). The 27 focused checks are existing evidence; real wallet/device behavior, administrator MFA, account restrictions, complete recovery, monitoring and independent financial-integration review remain outstanding. This preview does not constitute a security audit or financial-release approval.
