@@ -2,6 +2,24 @@
 (()=>{
  const form=document.getElementById('wallet-form'),input=document.getElementById('wallet-address'),status=document.getElementById('wallet-message'),rows=document.getElementById('wallet-rows'),clear=document.getElementById('wallet-clear'),button=document.getElementById('wallet-load');
  let controller,sequence=0;
+ let historyAddress='',historySamples=[];
+ function clearHistory(){historyAddress='';historySamples=[];document.getElementById('balance-history-plot').replaceChildren();document.getElementById('balance-history-rows').replaceChildren();document.getElementById('balance-history-message').textContent='Read an address to start. Refresh it again to add another reading.';document.getElementById('balance-history-range').textContent='No readings yet';}
+ function recordHistory(data){
+  const time=Date.parse(data.observedAt),value=Number(data.sol);if(!Number.isFinite(time)||!Number.isFinite(value)||value<0)throw Error('Balance history response could not be verified.');
+  if(historyAddress!==data.address){clearHistory();historyAddress=data.address;}
+  if(!historySamples.some(s=>s.time===time))historySamples.push({time,value,quantity:data.sol});historySamples=historySamples.slice(-12);
+  const table=document.getElementById('balance-history-rows');table.replaceChildren();
+  for(const sample of historySamples){const tr=document.createElement('tr');for(const text of [new Date(sample.time).toLocaleString(),sample.quantity+' SOL']){const td=document.createElement('td');td.textContent=text;tr.append(td);}table.append(tr);}
+  document.getElementById('balance-history-message').textContent=historySamples.length+' actual readings for '+data.address.slice(0,6)+'…'+data.address.slice(-6)+' in this page visit. '+(historySamples.length<2?'Refresh the same address to draw a line.':'This is a balance change, not investment profit.');
+  const plot=document.getElementById('balance-history-plot');plot.replaceChildren();
+  const low=Math.min(...historySamples.map(s=>s.value)),high=Math.max(...historySamples.map(s=>s.value));
+  document.getElementById('balance-history-range').textContent='Range: '+low.toLocaleString('en-US',{maximumFractionDigits:9})+'–'+high.toLocaleString('en-US',{maximumFractionDigits:9})+' SOL';
+  if(historySamples.length<2)return;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 400 140');svg.setAttribute('role','img');svg.setAttribute('aria-label','Native SOL balance readings over this visit; exact observations are in the table below.');const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+  const start=historySamples[0].time,end=historySamples[historySamples.length-1].time;
+  line.setAttribute('points',historySamples.map(s=>((s.time-start)/(end-start)*380+10).toFixed(2)+','+(high===low?70:120-(s.value-low)/(high-low)*100).toFixed(2)).join(' '));svg.append(line);plot.append(svg);
+ }
+
  function reset(){rows.replaceChildren();document.getElementById('holdings-graph').replaceChildren();document.getElementById('priced-total').textContent='—';document.getElementById('price-coverage').textContent='Load an address to view priced holdings.';document.getElementById('wallet-count').textContent='—';document.getElementById('wallet-state').textContent='No address loaded';document.getElementById('wallet-scope').textContent='Read-only address viewer';document.getElementById('wallet-caption').textContent='No balances loaded';document.getElementById('wallet-data-status').textContent='READ ONLY';}
  const dollars=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2});
  function row(asset,amount,mint,value){const tr=document.createElement('tr');for(const text of [asset,amount,value===null?'Price unavailable':value>0&&value<0.01?'< $0.01':dollars.format(value)]){const td=document.createElement('td');td.textContent=text;tr.append(td);}if(mint){const detail=document.createElement('small');detail.className='mint-address';detail.textContent=mint;tr.firstChild.append(detail);}rows.append(tr);}
@@ -10,15 +28,15 @@
   const graph=document.getElementById('holdings-graph');if(total>0)for(const a of priced.sort((a,b)=>b.value-a.value)){const item=document.createElement('div');item.className='holding-bar';const label=document.createElement('span');label.textContent=(a.symbol||a.mint.slice(0,6)+'…'+a.mint.slice(-4))+' · '+(100*a.value/total).toFixed(1)+'% · '+dollars.format(a.value);const meter=document.createElement('meter');meter.min=0;meter.max=1;meter.value=a.value/total;meter.textContent=label.textContent;item.append(label);item.append(meter);graph.append(item);}else graph.textContent='No priced nonzero assets available. Unpriced quantities remain in Wallet radar.';
  }
  form.addEventListener('submit',async e=>{
-  e.preventDefault();const address=input.value.trim();controller?.abort();const request=++sequence;reset();
+  e.preventDefault();const address=input.value.trim();controller?.abort();const request=++sequence;reset();if(historyAddress&&historyAddress!==address)clearHistory();
   if(!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)){status.textContent='Enter a public Solana address. Never enter a seed phrase or private key.';return;}
   controller=new AbortController();button.disabled=true;status.textContent='Reading public Solana balances…';
   try{const res=await fetch('/api/federation-wallet',{method:'POST',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({address}),signal:controller.signal});if(request!==sequence)return;if(res.status===429)throw Error('Too many lookups. Please wait a minute.');let data;try{data=await res.json();}catch{throw Error('Wallet service is unavailable. Please try again later.');}if(!res.ok)throw Error(data.error||'Wallet service unavailable.');if(data.address!==address||!Array.isArray(data.tokens)||data.tokens.length>1000||typeof data.sol!=='string')throw Error('Balance response could not be verified.');
-   holdings(data);
+   holdings(data);recordHistory(data);
    document.getElementById('wallet-count').textContent=String(data.tokens.length);document.getElementById('wallet-state').textContent='Address loaded';document.getElementById('wallet-scope').textContent=address.slice(0,6)+'…'+address.slice(-6)+' · ownership unverified';document.getElementById('wallet-caption').textContent='On-chain quantities · available reference values';document.getElementById('wallet-data-status').textContent='BALANCES LOADED';status.textContent='Observed '+new Date(data.observedAt).toLocaleString()+'. Source: Solana public RPC. '+data.tokenAccounts+' token accounts read. Zero-balance token accounts are omitted. These reads may come from different slots.';
-  }catch(e){if(request!==sequence)return;reset();status.textContent=e.name==='AbortError'?'Lookup cancelled.':e.message;}finally{if(request===sequence)button.disabled=false;}
+  }catch(e){if(request!==sequence)return;reset();clearHistory();status.textContent=e.name==='AbortError'?'Lookup cancelled.':e.message;}finally{if(request===sequence)button.disabled=false;}
  });
- clear.addEventListener('click',()=>{sequence++;controller?.abort();input.value='';button.disabled=false;reset();status.textContent='Cleared from this page. No wallet address is saved to your account or this device.';});
+ clear.addEventListener('click',()=>{sequence++;controller?.abort();input.value='';button.disabled=false;reset();clearHistory();status.textContent='Cleared from this page. No wallet address is saved to your account or this device.';});
  const passport=globalThis.FederationPassport;
  const missionIDs=['repair-the-shuttle','the-signal','starport-market','observatory-journey','docking-request','long-way-home','borrowed-voice','after-the-crowd','changing-course','keys-to-the-gate','meridian-relay'];
  function renderPassport(){
