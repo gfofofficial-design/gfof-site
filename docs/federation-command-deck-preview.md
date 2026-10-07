@@ -66,3 +66,9 @@ All 27 focused dashboard, wallet, reference-price, staking-calculator and Phanto
 6. Complete the separate local account-registration test and recovery evidence already tracked in the account review. Public signup remains disabled; this dashboard does not associate wallet addresses with signed-in accounts.
 
 These checks are pending, not completed evidence. The leaderboard is illustrative, staking rates are proposed total-term targets, and lending remains a private prototype. Real-provider checks, account launch gates, availability/cost decisions and approved financial terms remain required before public activation.
+
+## Keyboard and responsive-layout improvements
+
+Added a first-stop skip link to the focusable main dashboard, enlarged panel links to at least 44 pixels, labelled each priced-holdings meter with its asset/share/value, and exposed the token-count text as a labelled group rather than hiding it inside an image role. Narrow-screen CSS now reduces the title seal, allows the title column to shrink, stacks calculator results and wraps long labels/buttons.
+
+All 27 existing focused tests passed after the changes. On the hosted desktop preview, Tab focused the new skip link first and DOM measurements found no dashboard links below 44 pixels. Token-count text appeared in the accessibility tree. Browser credential-protection restrictions prevented observing the final Enter activation of the skip link; that activation and an actual narrow phone viewport remain pending manual checks. Responsive CSS changes are implemented, not yet a completed phone visual check.
