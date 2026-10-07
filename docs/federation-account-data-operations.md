@@ -82,7 +82,11 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   signup route or review it as a separately supported option. The October 7
   provider page shows one `Enable email provider` control covering both email
   sign-up and login; disabling it would remove the owner's password fallback.
-  Preserve a tested Google and recovery path first.
+  Preserve a tested Google and recovery path first. This includes the direct
+  passwordless Email route: [Supabase documents](https://supabase.com/docs/guides/auth/auth-email-passwordless)
+  that an OTP/Magic Link request can create a new user by default unless its
+  caller explicitly opts out. Hiding Email controls on the Federation page is
+  not a substitute for testing the provider's own public endpoints.
 - The October 7 security advisor reported leaked-password protection disabled.
   Resolve or explicitly scope that warning before any password registration.
 - Keep Google production credentials separate from the preview OAuth client;

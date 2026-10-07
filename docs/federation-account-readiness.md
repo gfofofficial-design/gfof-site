@@ -101,7 +101,8 @@ test user has a password, although the Federation page offers only Google.
 Before allowing public **Google-only** registration, confirm the Email
 provider cannot be used to create an account outside this page; disable that
 route or document a separately reviewed control. Preserve a recovery path for
-the owner test user before changing its password login. Do not rely on hiding
+the owner test user before changing its password login. Supabase's direct
+passwordless Email method can create users by default, so do not rely on hiding
 an email button in the Federation interface.
 
 The [account-data operations plan](federation-account-data-operations.md)
