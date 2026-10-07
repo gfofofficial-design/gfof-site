@@ -84,7 +84,9 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   passed local integrity checks and restored into the isolated project on
   October 7; the current owner password then passed fresh source and target
   sign-ins and an authenticated target-user read. This is a one-owner recovery
-  drill, not scheduled or off-device backup or deletion reconciliation.
+  drill. A byte-identical copy of the encrypted archive was also verified on
+  an existing removable USB drive. That is a second physical copy, not a
+  scheduled, offline or off-site backup or deletion reconciliation.
   A local Git checkout is not an identity-data backup. Do not put a connection
   URL, password, raw dump or user export in Git or chat.
 - A generic `supabase db dump` file is not yet evidence that Federation users
@@ -163,9 +165,11 @@ after the owner approved removal of the stale copy from the isolated target.
 Source and target owner/identity/password-record fingerprints matched; the
 current password passed a fresh login to each project and an authenticated
 target-user read. The restricted record contains the archive hash and exact
-preflight. Do not repeat a restore over either existing project merely to
-obtain a matching count. A durable backup schedule, off-device custody,
-deleted-account reconciliation and broader recovery acceptance remain open.
+preflight. A byte-identical encrypted copy was verified on an existing
+removable USB drive without replacing prior files. Do not repeat a restore
+over either existing project merely to obtain a matching count. A durable
+backup schedule, offline/off-site custody, deleted-account reconciliation
+and broader recovery acceptance remain open.
 
 ### Request verification and deletion acceptance
 

@@ -38,9 +38,11 @@ account password changed afterward and made that old archive stale. On October
 7, a new encrypted Auth-only archive passed local integrity checks, was
 restored into the isolated project, and the current owner password completed
 fresh source and restored-target sign-ins with an authenticated target-user
-read. This proves a one-owner recovery drill, not a scheduled or off-device
-backup, recovery of later deletions, or general multi-user readiness. Before
-inviting external account holders, choose and verify a durable backup cadence
+read. A byte-identical copy of that encrypted archive was then verified on an
+existing removable USB drive. This proves a one-owner recovery drill and a
+second physical copy, not a scheduled, offline or off-site backup, recovery of
+later deletions, or general multi-user readiness. Before inviting external
+account holders, choose and verify a durable backup cadence
 and acceptable availability/cost; do not describe the Free pilot as a
 production account service.
 The manual recovery proof must include Auth users and identities; a generic
@@ -212,4 +214,4 @@ provider outage was induced and no operational alert is configured.
 
 ## October 7 security release requirement
 
-The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The isolated restore pilot now has one current-owner encrypted export, matching restored Auth rows, and a fresh password login. Off-device custody, repeatable backup cadence, deletion/session reconciliation and the operating plan remain incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.
+The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The isolated restore pilot now has one current-owner encrypted export, matching restored Auth rows, a fresh password login, and a hash-verified removable-drive copy. Offline/off-site custody, repeatable backup cadence, deletion/session reconciliation and the operating plan remain incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.
