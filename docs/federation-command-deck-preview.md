@@ -29,3 +29,7 @@ Validation: 12 focused tests pass, including price omission, freshness/decimal c
 ## Personal mission collection
 
 The dashboard now renders the existing eleven Passport missions as badge cards with remembered/unknown/explore text, an optional local progress meter, next incomplete mission and replay links. Read and Refresh never enable saving, write progress, associate badges with sign-in or call a backend. Unavailable storage is explicitly unknown. Saving preferences remain in Explorer Passport. Rank language is replaced with Passport progress; public leaderboard sample entries remain fictional. All mission links were matched to existing journey HTML files on the review branch. Fourteen focused wallet, price and dashboard tests pass, including local progress without writes/network and unavailable storage.
+
+## Visit-only SOL history
+
+Manual successful reads of the same address now add up to twelve distinct timestamped native SOL quantities to a table and SVG line. The x-axis reflects observation timestamps and the y-axis the observed SOL range; a flat balance remains a flat line. A single reading does not fabricate a line. These are balance observations, not return calculations: transfers and fees can alter the balance. No automatic polling, browser persistence or cloud record is introduced. Reload, Clear, address change or lookup failure resets the series. History excludes token balances and provider-held positions. Sixteen focused tests pass, including actual repeat reads, Clear, address separation and failure resets.
