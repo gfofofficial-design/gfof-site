@@ -1,5 +1,5 @@
 'use strict';
-const {readPrices}=require('./wallet-prices.cjs');
+const {readPrices}=require('../lib/wallet-prices.cjs');
 const ORIGIN='https://deploy-preview-99--gfof.netlify.app';
 const RPC='https://api.mainnet-beta.solana.com';
 const PROGRAMS=['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA','TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'];
