@@ -13,3 +13,7 @@ Explorer badges read the existing optional local Passport without writing or lin
 Validation: five focused wallet tests cover decoded address length, exact precision, host/origin/direct-route/payload rejection without upstream calls, both-program aggregation, and fail-closed upstream errors. Browser script syntax passed. Hosted validation results will be appended after actual lookup checks.
 
 Sources consulted 2026-10-07: https://solana.com/docs/rpc/http/getbalance ; https://solana.com/docs/rpc/http/gettokenaccountsbyowner ; https://solana.com/docs/references/clusters .
+
+## Hosted checks
+
+The deployed page loaded its read-only form and actual no-saved-Passport state. A lookup of the public GFOF mint address (not a holder wallet) returned SOL 0.0010668 and zero token accounts, with a displayed observation time and unverified ownership label. The System Program address lookup returned service unavailable; no old or partial balances were displayed. This verifies a hosted success and failure path, not production uptime or populated-holder coverage. Eight focused backend/frontend tests pass, including invalid inputs without requests and Clear suppressing a late response. Public RPC availability remains a launch concern.
