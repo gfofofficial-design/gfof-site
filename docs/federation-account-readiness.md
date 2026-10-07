@@ -72,7 +72,12 @@ An enabled Netlify deploy-preview or branch-deploy must have
 FEDERATION_ACCOUNT_ORIGIN equal to DEPLOY_PRIME_URL's origin; inherited
 production settings fail closed. Production accepts only the canonical
 Federation origin. An explicit origin is required whenever accounts are
-enabled. Never enable preview signups against the production identity project.
+enabled. The hosted function also requires the platform request URL's origin to
+match that exact configured origin before any provider operation, including GET
+callbacks and session lookups. Missing or malformed request URLs fail closed.
+Netlify's CONTEXT and DEPLOY_PRIME_URL build variables are supplemental checks
+when present; they are not assumed to exist in Functions at runtime.
+Never enable preview signups against the production identity project.
 
 Configure provider rate limits and abuse controls, minimal scopes, user support,
 privacy/retention/deletion policy, backup/recovery and cost ceilings before
@@ -178,3 +183,10 @@ Primary implementation references:
 - https://supabase.com/docs/guides/auth/sessions/pkce-flow
 - https://supabase.com/docs/guides/auth/social-login/auth-google
 - https://supabase.com/docs/guides/auth/social-login/auth-apple
+
+
+October 7 follow-up: 29 focused handler/page tests passed after adding runtime
+request-origin enforcement and dashboard query cleanup. Leftover OAuth return
+parameters are removed without exchanging codes in browser JavaScript; the
+server-verified cookie session remains the only sign-in signal. No registration
+or financial access was activated by this change.
