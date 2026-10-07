@@ -51,3 +51,18 @@ The page adds a user-triggered `window.phantom.solana.connect()` flow to read th
 Five provider-mock tests passed: explicit-only connection; unavailable/rejected fallback; late-result cancellation; account switching without automatic lookup; and disconnect/watch-address behavior. These do not verify actual Phantom approval UI, extension behavior, mobile injection, or provider domain reputation. A real dev-computer Phantom approval, rejection, account switch and disconnect check remains required before this feature is considered validated for public launch. No wallet was connected by the agent and no financial action occurred.
 
 Official docs consulted 2026-10-07: https://docs.phantom.com/solana/establishing-a-connection and https://docs.phantom.com/solana/detecting-the-provider .
+
+## Consolidated readiness check
+
+All 27 focused dashboard, wallet, reference-price, staking-calculator and Phantom-provider tests passed together after moving the pricing helper to `netlify/lib/wallet-prices.cjs`. Only the wallet handler is a function entry point; pricing remains an internal dependency.
+
+### Dev-computer checks remaining
+
+1. Open the PR99 preview with Phantom available. Confirm no wallet prompt on page load, then explicitly import a public address. Approve only address access; this feature should never request a signature or transaction.
+2. Reject an address-access request and confirm manual entry remains usable. Clear while approval is pending and confirm a later result cannot restore the cleared address.
+3. Switch Phantom accounts and confirm previous quantities and history disappear; manually read the new account. Disconnect and check the address source clears while a manually entered watch address is preserved.
+4. Compare SOL and populated Token Program / Token-2022 quantities with an independent explorer. Unknown mints must stay visibly unverified. Check empty, unpriced and unavailable states.
+5. Check a narrow phone viewport for readable chart labels, usable term buttons, address input and mission cards.
+6. Complete the separate local account-registration test and recovery evidence already tracked in the account review. Public signup remains disabled; this dashboard does not associate wallet addresses with signed-in accounts.
+
+These checks are pending, not completed evidence. The leaderboard is illustrative, staking rates are proposed total-term targets, and lending remains a private prototype. Real-provider checks, account launch gates, availability/cost decisions and approved financial terms remain required before public activation.
