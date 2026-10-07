@@ -11,7 +11,11 @@
   message.textContent='This account preview cannot finish that sign-in or recovery link. For your security, its temporary details were removed from the address bar. Contact the Federation for help; do not share the original link.';
   return;
  }
- const failedSignin=new URLSearchParams(location.search).get('signin')==='failed';
+ const search=new URLSearchParams(location.search);
+ const failedSignin=search.get('signin')==='failed';
+ // Dashboard URLs never establish a session or consume provider return values.
+ const authQuery=['code','state','access_token','refresh_token','token_hash','provider_token','provider_refresh_token','error','error_code','error_description'].some(key=>search.has(key));
+ if(authQuery)history.replaceState(null,'','/account');
  const passport=globalThis.FederationPassport;
  if(passport){const saved=passport.read();if(saved.available){document.getElementById('passport-summary').textContent=saved.enabled?`This device remembers ${saved.done.length} of ${passport.missions.length} mission badges. Sign-in does not sync them.`:'No Explorer Passport is remembered on this device. Every mission is still open.';}}
  async function api(action,body){const r=await fetch('/api/federation-account/'+action,{method:body?'POST':'GET',credentials:'same-origin',cache:'no-store',headers:body?{'Content-Type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});if(r.status===429)throw Object.assign(Error('Too many account requests. Please wait a minute and try again.'),{status:429});let data;try{data=await r.json();}catch{throw Object.assign(Error('Account service is temporarily unavailable.'),{status:r.status});}if(!r.ok)throw Object.assign(Error(data.error||'Account service unavailable.'),{status:r.status});return data;}
