@@ -36,7 +36,10 @@ function sessionCookies(data){
 }
 function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
   return async event=>{
-    const action=(event.path||'').split('/').filter(Boolean).at(-1);
+    // Netlify's direct function URL must not bypass the account redirect's edge limit.
+    const path=event.path||'';
+    if(!/^\/api\/federation-account\/(?:config|oauth|callback|session|refresh|logout)$/.test(path))return result(404,{error:'Account route unavailable.'});
+    const action=path.split('/').at(-1);
     const method=event.httpMethod;
     let cfg;try{cfg=config(env);}catch{return result(503,{error:'Account configuration is unavailable.'});}
     if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[]});
