@@ -60,8 +60,11 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   public access. The pilot dashboard confirmed no automatic Free backups on
   October 7. The official CLI dump path requires Docker and a database
   connection; the CLI, Docker and `psql` were not available on this dev
-  computer's PATH. A local Git checkout is not an identity-data backup. Do not put
-  a connection URL, password, raw dump or user export in Git or chat.
+  computer's PATH at the initial preflight. Official pgAdmin 4 later supplied
+  local PostgreSQL client tools, including `pg_dump` and `pg_restore`, but no
+  Auth export or restore has been performed. A local Git checkout is not an
+  identity-data backup. Do not put a connection URL, password, raw dump or
+  user export in Git or chat.
 - A generic `supabase db dump` file is not yet evidence that Federation users
   can be recovered. The [CLI command reference](https://supabase.com/docs/reference/cli/supabase-db-dump)
   says its default filtering excludes managed schemas including `auth`, while

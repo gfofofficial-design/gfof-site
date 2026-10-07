@@ -24,8 +24,11 @@ release or establish production availability.
 
 The isolated pilot remains on Free while signup is closed. On October 7 its
 Database Backups page explicitly said that Free has no project backups; the
-local dev computer did not expose the Supabase CLI, Docker or `psql` on PATH for
-the [documented manual dump/restore route](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore).
+local dev computer initially lacked the Supabase CLI, Docker and `psql` on PATH.
+Official pgAdmin 4 was subsequently installed and its bundled `pg_dump`,
+`pg_restore` and `psql` version 18.6 checked locally. This supplies client
+tools but does not constitute a backup or remove the need for an isolated
+restore under the [documented migration route](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore).
 [Supabase's current plan page](https://supabase.com/pricing) lists Pro from
 $25/month with seven days of daily backups, and its
 [pausing guide](https://supabase.com/docs/guides/platform/free-project-pausing)
