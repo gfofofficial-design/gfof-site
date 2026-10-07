@@ -57,14 +57,20 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
 - Supabase Free can pause during low activity and does not supply the same
   downloadable dashboard backups as paid plans. Design a restricted,
   encrypted logical backup and restore test before depending on accounts for
-  public access. A local Git checkout is not an identity-data backup.
+  public access. The pilot dashboard confirmed no automatic Free backups on
+  October 7. The official CLI dump path requires Docker and a database
+  connection; the CLI, Docker and `psql` were not available on this dev
+  computer's PATH. A local Git checkout is not an identity-data backup. Do not put
+  a connection URL, password, raw dump or user export in Git or chat.
 - Confirm which vendor records are kept, where the data notice links, who
   handles deletion requests, and what realistic response time can be offered.
 - Supabase's Email provider remains enabled in the pilot even though the site
   presents only Google. With signup disabled this does not open public
   registration. Before turning signup on, verify and close any direct Email
-  signup route or review it as a separately supported option. Changing it may
-  remove the owner's password fallback, so preserve recovery first.
+  signup route or review it as a separately supported option. The October 7
+  provider page shows one `Enable email provider` control covering both email
+  sign-up and login; disabling it would remove the owner's password fallback.
+  Preserve a tested Google and recovery path first.
 - The October 7 security advisor reported leaked-password protection disabled.
   Resolve or explicitly scope that warning before any password registration.
 - Keep Google production credentials separate from the preview OAuth client;
@@ -72,8 +78,19 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   off for a Google-only launch. Review real cancellation, replay, provider
   outage, multi-tab refresh, cost and a production rollback before publishing.
 
+**Cost choice at external beta:** keep the closed one-owner pilot on Free for
+now. Supabase currently lists Pro from $25/month with seven days of daily
+backups and no inactivity pause, while Free has neither automatic backups nor
+an availability promise against low-activity pausing. Pro is the simpler
+recovery/availability route for a public account service, but paying alone
+does not prove a restore or settle deletion and Email-provider policy. No
+subscription or paid feature was enabled in this review.
+
 References: [Supabase user management](https://supabase.com/docs/guides/auth/managing-user-data),
 [sessions](https://supabase.com/docs/guides/auth/sessions),
 [sign-out](https://supabase.com/docs/guides/auth/signout),
-[backups](https://supabase.com/docs/guides/platform/backups), and
+[backups](https://supabase.com/docs/guides/platform/backups),
+[backup/restore using CLI](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore),
+[Free project pausing](https://supabase.com/docs/guides/platform/free-project-pausing),
+[pricing](https://supabase.com/pricing), and
 [production checklist](https://supabase.com/docs/guides/deployment/going-into-prod).

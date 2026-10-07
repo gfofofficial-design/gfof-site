@@ -22,6 +22,18 @@ New-user signup remains disabled, Apple remains disabled, and production has
 no account environment settings. This result does not authorize a public
 release or establish production availability.
 
+The isolated pilot remains on Free while signup is closed. On October 7 its
+Database Backups page explicitly said that Free has no project backups; the
+local dev computer did not expose the Supabase CLI, Docker or `psql` on PATH for
+the [documented manual dump/restore route](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore).
+[Supabase's current plan page](https://supabase.com/pricing) lists Pro from
+$25/month with seven days of daily backups, and its
+[pausing guide](https://supabase.com/docs/guides/platform/free-project-pausing)
+says paid projects do not auto-pause. No upgrade or manual database export has
+been performed. Before inviting external account holders, choose and verify
+an actual recovery path and acceptable availability/cost; do not describe the
+Free pilot as a production account service.
+
 Server environment only:
 
 | Name | Purpose |
