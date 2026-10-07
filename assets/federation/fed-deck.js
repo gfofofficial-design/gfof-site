@@ -1,0 +1,19 @@
+'use strict';
+(()=>{
+ const form=document.getElementById('wallet-form'),input=document.getElementById('wallet-address'),status=document.getElementById('wallet-message'),rows=document.getElementById('wallet-rows'),clear=document.getElementById('wallet-clear'),button=document.getElementById('wallet-load');
+ let controller,sequence=0;
+ function reset(){rows.replaceChildren();document.getElementById('wallet-count').textContent='—';document.getElementById('wallet-state').textContent='No address loaded';document.getElementById('wallet-scope').textContent='Read-only address viewer';document.getElementById('wallet-caption').textContent='No balances loaded';document.getElementById('wallet-data-status').textContent='READ ONLY';}
+ function row(asset,amount,mint){const tr=document.createElement('tr');for(const value of [asset,amount,'Price unavailable']){const td=document.createElement('td');td.textContent=value;tr.append(td);}if(mint){const detail=document.createElement('small');detail.className='mint-address';detail.textContent=mint;tr.firstChild.append(detail);}rows.append(tr);}
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();const address=input.value.trim();controller?.abort();const request=++sequence;reset();
+  if(!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)){status.textContent='Enter a public Solana address. Never enter a seed phrase or private key.';return;}
+  controller=new AbortController();button.disabled=true;status.textContent='Reading public Solana balances…';
+  try{const res=await fetch('/api/federation-wallet',{method:'POST',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({address}),signal:controller.signal});if(request!==sequence)return;if(res.status===429)throw Error('Too many lookups. Please wait a minute.');let data;try{data=await res.json();}catch{throw Error('Wallet service is unavailable. Please try again later.');}if(!res.ok)throw Error(data.error||'Wallet service unavailable.');if(data.address!==address||!Array.isArray(data.tokens)||data.tokens.length>1000||typeof data.sol!=='string')throw Error('Balance response could not be verified.');
+   row('SOL',data.sol);for(const token of data.tokens)row(token.symbol||'Unverified token',token.quantity,token.mint);
+   document.getElementById('wallet-count').textContent=String(data.tokens.length);document.getElementById('wallet-state').textContent='Address loaded';document.getElementById('wallet-scope').textContent=address.slice(0,6)+'…'+address.slice(-6)+' · ownership unverified';document.getElementById('wallet-caption').textContent='On-chain quantities · no dollar valuations';document.getElementById('wallet-data-status').textContent='BALANCES LOADED';status.textContent='Observed '+new Date(data.observedAt).toLocaleString()+'. Source: Solana public RPC. '+data.tokenAccounts+' token accounts read. Zero-balance token accounts are omitted. These reads may come from different slots.';
+  }catch(e){if(request!==sequence)return;reset();status.textContent=e.name==='AbortError'?'Lookup cancelled.':e.message;}finally{if(request===sequence)button.disabled=false;}
+ });
+ clear.addEventListener('click',()=>{sequence++;controller?.abort();input.value='';button.disabled=false;reset();status.textContent='Cleared from this page. No wallet address is saved to your account or this device.';});
+ const passport=globalThis.FederationPassport;
+ if(passport){try{const p=passport.read();if(p.available&&p.enabled){document.getElementById('explorer-rank').textContent=p.done.length+' / '+passport.missions.length;document.getElementById('explorer-note').textContent='Mission badges on this device';}else{document.getElementById('explorer-rank').textContent='Start exploring';document.getElementById('explorer-note').textContent='No saved passport on this device';}}catch{document.getElementById('explorer-rank').textContent='Progress unavailable';}}
+})();
