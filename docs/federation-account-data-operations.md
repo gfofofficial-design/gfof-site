@@ -22,10 +22,11 @@ all data held by vendors.
 
 Supabase says Auth audit events can include sign-ins, refreshes, IP address and
 user agent; optional database storage is separate from external log storage.
-The pilot's actual Auth audit-storage setting has not been checked. Supabase's
-Free pricing describes one day of API/database log access, and Netlify describes
-Function logs covering up to seven days depending on plan. These are dashboard
-access windows, **not** proof that every underlying vendor copy is deleted by
+The isolated pilot's Auth dashboard showed database audit storage **off** on
+October 7, 2026; external Auth logs remain available through its log viewer.
+Supabase's Free pricing describes one day of API/database log access; Netlify
+describes Function logs covering up to seven days depending on plan. These are
+dashboard access windows, **not** proof that every underlying vendor copy is deleted by
 that date. Do not promise a fixed vendor-log or backup erasure deadline in the
 public notice until the relevant provider terms and pilot settings are checked.
 [Supabase Auth audit logs](https://supabase.com/docs/guides/auth/audit-logs),
