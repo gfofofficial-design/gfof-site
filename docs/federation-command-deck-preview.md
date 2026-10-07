@@ -62,16 +62,18 @@ All 27 focused dashboard, wallet, reference-price, staking-calculator and Phanto
 2. Reject an address-access request and confirm manual entry remains usable. Clear while approval is pending and confirm a later result cannot restore the cleared address.
 3. Switch Phantom accounts and confirm previous quantities and history disappear; manually read the new account. Disconnect and check the address source clears while a manually entered watch address is preserved.
 4. Compare SOL and populated Token Program / Token-2022 quantities with an independent explorer. Unknown mints must stay visibly unverified. Check empty, unpriced and unavailable states.
-5. Check a narrow phone viewport for readable chart labels, usable term buttons, address input and mission cards.
+5. Check the dashboard on a physical phone, including chart labels, term buttons, address input and mission cards. An emulated 390-pixel browser check passed the layout measurements below; physical-device behavior remains open.
 6. Complete the separate local account-registration test and recovery evidence already tracked in the account review. Public signup remains disabled; this dashboard does not associate wallet addresses with signed-in accounts.
 
-These checks are pending, not completed evidence. The leaderboard is illustrative, staking rates are proposed total-term targets, and lending remains a private prototype. Real-provider checks, account launch gates, availability/cost decisions and approved financial terms remain required before public activation.
+The remaining physical-device, real-provider and account checks are pending, not completed evidence. The leaderboard is illustrative, staking rates are proposed total-term targets, and lending remains a private prototype. Availability/cost decisions and approved financial terms remain required before public activation.
 
 ## Keyboard and responsive-layout improvements
 
 Added a first-stop skip link to the focusable main dashboard, enlarged panel links to at least 44 pixels, labelled each priced-holdings meter with its asset/share/value, and exposed the token-count text as a labelled group rather than hiding it inside an image role. Narrow-screen CSS now reduces the title seal, allows the title column to shrink, stacks calculator results and wraps long labels/buttons.
 
 All 27 existing focused tests passed after the changes. On the hosted desktop preview, Tab focused the new skip link first and DOM measurements found no dashboard links below 44 pixels. Token-count text appeared in the accessibility tree. Browser credential-protection restrictions prevented observing the final Enter activation of the skip link; that activation and an actual narrow phone viewport remain pending manual checks. Responsive CSS changes are implemented, not yet a completed phone visual check.
+
+On October 7 at approximately 22:20 UTC, the dev-computer Chrome preview was checked at an emulated 390 × 844 viewport. The top layout was readable, `documentElement.scrollWidth` was 375 pixels against the 390-pixel viewport, and the wallet input, action buttons, Phantom button, calculator input, all four term buttons and mission refresh button were 46–110 pixels high. No horizontal overflow was observed. On a fresh load, Tab focused “Skip to Command Deck” first; pressing Enter changed the URL fragment to `#command-main`, focused `MAIN#command-main`, and placed its top at the viewport top. This closes the earlier keyboard-activation observation gap and the emulated narrow-layout check. It does not substitute for a physical-phone or real-wallet check. The temporary viewport override was reset afterward.
 
 ## Required security release review
 
