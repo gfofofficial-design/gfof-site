@@ -48,3 +48,18 @@ test('opted-in local passport is shown without writing or attaching it to sign-i
   assert.deepEqual(requests,['/api/federation-account/config']);
   assert.equal(writes,0);
 });
+
+
+test('provider return query is scrubbed without exchanging browser codes',async()=>{
+  const {elements,requests,replaced}=await render({search:'?code=synthetic-code&state=synthetic-state',hasSessionCookie:true});
+  assert.deepEqual(replaced,[[null,'','/account']]);
+  assert.deepEqual(requests,['/api/federation-account/config','/api/federation-account/session']);
+  assert.equal(elements['member-email'].textContent,'member@example.invalid');
+});
+
+test('provider return query does not create a signed-in session without cookies',async()=>{
+  const {elements,requests,replaced}=await render({search:'?code=synthetic-code&state=synthetic-state'});
+  assert.deepEqual(replaced,[[null,'','/account']]);
+  assert.deepEqual(requests,['/api/federation-account/config']);
+  assert.equal(elements.identity.hidden,true);
+});
