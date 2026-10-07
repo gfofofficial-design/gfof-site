@@ -18,6 +18,21 @@ wallet address, token balance, entitlement, financial position, or account
 profile is stored by this application. Do not imply that this inventory covers
 all data held by vendors.
 
+### Vendor records still to verify
+
+Supabase says Auth audit events can include sign-ins, refreshes, IP address and
+user agent; optional database storage is separate from external log storage.
+The pilot's actual Auth audit-storage setting has not been checked. Supabase's
+Free pricing describes one day of API/database log access, and Netlify describes
+Function logs covering up to seven days depending on plan. These are dashboard
+access windows, **not** proof that every underlying vendor copy is deleted by
+that date. Do not promise a fixed vendor-log or backup erasure deadline in the
+public notice until the relevant provider terms and pilot settings are checked.
+[Supabase Auth audit logs](https://supabase.com/docs/guides/auth/audit-logs),
+[Supabase pricing](https://supabase.com/pricing), and
+[Netlify logs](https://docs.netlify.com/manage/monitoring/logs/) are the
+current public references.
+
 ## Manual account-deletion procedure to prove before public registration
 
 1. Accept a request at the Federation support address shown on the account
