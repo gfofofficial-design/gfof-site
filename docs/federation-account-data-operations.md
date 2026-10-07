@@ -87,7 +87,11 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   signup route or review it as a separately supported option. The October 7
   provider page shows one `Enable email provider` control covering both email
   sign-up and login; disabling it would remove the owner's password fallback.
-  Preserve a tested Google and recovery path first. This includes the direct
+  The pilot has no Auth hook configured. A documented Before User Created hook
+  could reject new users whose provider is not Google without removing an
+  existing password login, but it needs privilege review, a real hosted
+  enabled-signup test, and a fail-closed rollback before it can count as a
+  control. Preserve a tested Google and recovery path first. This includes the direct
   passwordless Email route: [Supabase documents](https://supabase.com/docs/guides/auth/auth-email-passwordless)
   that an OTP/Magic Link request can create a new user by default unless its
   caller explicitly opts out. Hiding Email controls on the Federation page is
