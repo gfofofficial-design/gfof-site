@@ -34,9 +34,13 @@ $25/month with seven days of daily backups, and its
 [pausing guide](https://supabase.com/docs/guides/platform/free-project-pausing)
 says paid projects do not auto-pause. No upgrade has been performed. A dated
 encrypted Auth export was restored into an isolated test project, but the
-account password changed afterward and the old archive is no longer a current
-recovery point. A fresh export and restored login remain unproved. Before
-inviting external account holders, choose and verify an actual recovery path
+account password changed afterward and made that old archive stale. On October
+7, a new encrypted Auth-only archive passed local integrity checks, was
+restored into the isolated project, and the current owner password completed
+fresh source and restored-target sign-ins with an authenticated target-user
+read. This proves a one-owner recovery drill, not a scheduled or off-device
+backup, recovery of later deletions, or general multi-user readiness. Before
+inviting external account holders, choose and verify a durable backup cadence
 and acceptable availability/cost; do not describe the Free pilot as a
 production account service.
 The manual recovery proof must include Auth users and identities; a generic
@@ -208,4 +212,4 @@ provider outage was induced and no operational alert is configured.
 
 ## October 7 security release requirement
 
-The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The isolated restore pilot established a data copy and a Google sign-in test, but the current recovery point, complete session/deletion reconciliation and operating plan are still incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.
+The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The isolated restore pilot now has one current-owner encrypted export, matching restored Auth rows, and a fresh password login. Off-device custody, repeatable backup cadence, deletion/session reconciliation and the operating plan remain incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.

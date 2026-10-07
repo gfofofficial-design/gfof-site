@@ -80,7 +80,11 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   local PostgreSQL client tools, including `pg_dump` and `pg_restore`. A dated
   encrypted Auth export and isolated row restore were later performed, but
   the original account password changed after that export. The old archive
-  is not a current recovery point, and a fresh restored login remains open.
+  is historical. A second encrypted Auth-only export after the password change
+  passed local integrity checks and restored into the isolated project on
+  October 7; the current owner password then passed fresh source and target
+  sign-ins and an authenticated target-user read. This is a one-owner recovery
+  drill, not scheduled or off-device backup or deletion reconciliation.
   A local Git checkout is not an identity-data backup. Do not put a connection
   URL, password, raw dump or user export in Git or chat.
 - A generic `supabase db dump` file is not yet evidence that Federation users
@@ -152,13 +156,16 @@ user identifiers, password hashes, tokens or identity payloads were retrieved.
 | Federation Account Restore Drill | 1 | 2 | 0 | 0 |
 
 Matching counts alone are not recovery proof. Restricted operations recorded
-the encrypted artifact, source and isolated target, tool versions and row
-fingerprint checks; a later Google sign-in was tested in the restored target.
-The original account password then changed, leaving that artifact stale.
-Keep the recovery gate unresolved until a new encrypted export, isolated
-restore and login are verified against the current account state, with deleted
-accounts and sessions reconciled. Do not repeat a restore over either existing
-project merely to obtain a matching count.
+the first encrypted artifact, source and isolated target, tool versions and row
+fingerprint checks. The original account password then changed, leaving that
+artifact stale. A fresh October 7 export was locally verified and restored
+after the owner approved removal of the stale copy from the isolated target.
+Source and target owner/identity/password-record fingerprints matched; the
+current password passed a fresh login to each project and an authenticated
+target-user read. The restricted record contains the archive hash and exact
+preflight. Do not repeat a restore over either existing project merely to
+obtain a matching count. A durable backup schedule, off-device custody,
+deleted-account reconciliation and broader recovery acceptance remain open.
 
 ### Request verification and deletion acceptance
 
@@ -206,8 +213,11 @@ recovery and prove that a previously deleted disposable account stays absent
 and cannot resume its old session. Any failure keeps the restored service
 isolated.
 
-This is a proposed recovery safeguard; no ledger, deletion, provider change,
-restore, mail delivery or production activation was performed by this review.
+The deletion ledger and broad recovery reconciliation remain proposed. A
+separate one-owner isolated restore drill was performed; it did not send mail
+or activate production accounts. The isolated project's Google provider was
+found enabled during preflight and was returned to off, with new-user signup
+and Apple still off. Why it had been enabled is unknown.
 
 
 ## Google-only new-account control — reviewed design, not deployed
