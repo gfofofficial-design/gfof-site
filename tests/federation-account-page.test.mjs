@@ -5,7 +5,7 @@ import {runInNewContext} from 'node:vm';
 
 const source=readFileSync(new URL('../assets/federation/fed-account.js',import.meta.url),'utf8');
 
-async function render({search='',hasSessionCookie=false,passport}={}){
+async function render({search='',hash='',hasSessionCookie=false,passport}={}){
   const elements=Object.fromEntries(['account-message','google','apple','logout','identity','member-email','passport-summary'].map(id=>[id,{id,textContent:'',hidden:id==='logout'||id==='identity',disabled:false,addEventListener(){}}]));
   const requests=[];
   const replaced=[];
@@ -14,10 +14,18 @@ async function render({search='',hasSessionCookie=false,passport}={}){
     const data=url.endsWith('/config')?{enabled:true,providers:['google'],hasSessionCookie}:{signedIn:true,user:{email:'member@example.invalid'}};
     return {status:200,ok:true,json:async()=>data};
   };
-  runInNewContext(source,{document:{getElementById:id=>elements[id]},fetch,location:{search},history:{replaceState:(...args)=>replaced.push(args)},URL,URLSearchParams,FederationPassport:passport});
+  runInNewContext(source,{document:{getElementById:id=>elements[id]},fetch,location:{search,hash},history:{replaceState:(...args)=>replaced.push(args)},URL,URLSearchParams,FederationPassport:passport});
   await new Promise(resolve=>setImmediate(resolve));
   return {elements,requests,replaced};
 }
+
+test('unexpected auth fragment is scrubbed before any account request',async()=>{
+  const {elements,requests,replaced}=await render({hash:'#access_token=synthetic-sensitive-value&refresh_token=synthetic-refresh&type=recovery'});
+  assert.deepEqual(requests,[]);
+  assert.deepEqual(replaced,[[null,'','/account']]);
+  assert.match(elements['account-message'].textContent,/cannot finish that sign-in or recovery link/);
+  assert.ok(!elements['account-message'].textContent.includes('synthetic-sensitive-value'));
+});
 
 test('failed sign-in stays visible after config resolves and signed-out page makes one request',async()=>{
   const {elements,requests,replaced}=await render({search:'?signin=failed'});

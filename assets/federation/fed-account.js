@@ -4,6 +4,13 @@
  const buttons=['google','apple'].map(p=>document.getElementById(p));
  const logout=document.getElementById('logout');
  let busy=false;
+ const sensitiveFragment=/(?:^#|&)(?:access_token|refresh_token|token_hash|provider_token|provider_refresh_token|error_code)=/i.test(location.hash||'');
+ if(sensitiveFragment){
+  // This page uses a server-side PKCE callback; it must not consume an implicit token.
+  history.replaceState(null,'','/account');
+  message.textContent='This account preview cannot finish that sign-in or recovery link. For your security, its temporary details were removed from the address bar. Contact the Federation for help; do not share the original link.';
+  return;
+ }
  const failedSignin=new URLSearchParams(location.search).get('signin')==='failed';
  const passport=globalThis.FederationPassport;
  if(passport){const saved=passport.read();if(saved.available){document.getElementById('passport-summary').textContent=saved.enabled?`This device remembers ${saved.done.length} of ${passport.missions.length} mission badges. Sign-in does not sync them.`:'No Explorer Passport is remembered on this device. Every mission is still open.';}}
