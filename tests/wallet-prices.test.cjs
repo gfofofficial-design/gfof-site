@@ -1,4 +1,4 @@
-const {test}=require('node:test');const assert=require('node:assert/strict');const {readPrices,SOL}=require('../netlify/functions/wallet-prices.cjs');
+const {test}=require('node:test');const assert=require('node:assert/strict');const {readPrices,SOL}=require('../netlify/lib/wallet-prices.cjs');
 const response=data=>async()=>new Response(JSON.stringify(data));
 test('missing prices remain missing and stale or mismatched decimal prices are excluded',async()=>{const t=[{mint:'a',decimals:6},{mint:'b',decimals:6},{mint:'c',decimals:6}];const p=await readPrices(t,10000,response({[SOL]:{usdPrice:100,decimals:9,blockId:9999},a:{usdPrice:20,decimals:6,blockId:1},b:{usdPrice:30,decimals:9,blockId:9999}}));assert.deepEqual(Object.keys(p.prices),[SOL]);assert.equal(p.prices.c,undefined);});
 test('price outage preserves a usable empty price result',async()=>{const p=await readPrices([],10000,async()=>new Response('error',{status:429}));assert.equal(p.status,'unavailable');assert.deepEqual(p.prices,{});});
