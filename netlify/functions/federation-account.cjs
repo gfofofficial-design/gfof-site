@@ -85,6 +85,14 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
       }
       if(action==='logout'&&method==='POST'){
         let revoked=false;if(jar[COOKIE.access]){try{await api('/auth/v1/logout?scope=local',{method:'POST',token:jar[COOKIE.access]});revoked=true;}catch{}}
+        // Browsers may have already expired the short-lived access cookie while
+        // retaining the refresh cookie. Exchange it once so local sign-out can
+        // revoke that session instead of silently leaving it live upstream.
+        if(!revoked&&jar[COOKIE.refresh]){try{
+          const data=await api('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:{refresh_token:jar[COOKIE.refresh]}});
+          if(typeof data?.access_token!=='string'||!data.access_token||data.access_token.length>8000)throw Error('session');
+          await api('/auth/v1/logout?scope=local',{method:'POST',token:data.access_token});revoked=true;
+        }catch{}}
         return result(200,{signedOut:true,remoteRevoked:revoked},clear());
       }
       return result(405,{error:'Method or route not available.'});

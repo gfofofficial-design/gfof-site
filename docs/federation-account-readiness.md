@@ -11,6 +11,7 @@ closed by default. It does not open those financial products or connect wallets.
 - Verified provider user lookup before issuing HttpOnly, Secure, SameSite=Lax, host-only session cookies. Tokens never returned to browser JavaScript or stored in localStorage.
 - Exact configured-origin validation on every POST; no return URL accepted from the client. Duplicate auth cookies fail closed.
 - Session inspection, bounded cookie lifetime, refresh rotation and browser logout; upstream errors are generic and responses cannot be cached.
+- Logout attempts local provider revocation with the access cookie, or exchanges the still-present refresh cookie once if the access cookie has expired or was rejected; the page reports when remote revocation cannot be confirmed. This fallback has synthetic coverage but still needs a real expired-session browser check.
 - Public browsing remains available. Dashboard links to missions and current staking/lending status.
 
 ## Configuration and release status
