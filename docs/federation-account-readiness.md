@@ -13,32 +13,38 @@ closed by default. It does not open those financial products or connect wallets.
 - Session inspection, bounded cookie lifetime, refresh rotation and browser logout; upstream errors are generic and responses cannot be cached.
 - Public browsing remains available. Dashboard links to missions and current staking/lending status.
 
-## Configuration still needed
+## Configuration and release status
 
-Use a dedicated Supabase project for Federation consumer identity. No project
-is created or billed by this change. Google and Apple are supported by the
-candidate provider, but neither is configured or end-to-end verified here.
+The owner created a dedicated Free Supabase project for this private pilot.
+On October 6–7, 2026, the exact PR #99 Deploy Preview completed an owner-only
+Google sign-in, existing-user identity link, session reload and browser logout.
+New-user signup remains disabled, Apple remains disabled, and production has
+no account environment settings. This result does not authorize a public
+release or establish production availability.
 
 Server environment only:
 
 | Name | Purpose |
 | --- | --- |
-| FEDERATION_ACCOUNT_ENABLED | Leave unset/false until acceptance is complete |
+| FEDERATION_ACCOUNT_ENABLED | True only on the exact pilot preview; leave production unset until acceptance is complete |
 | FEDERATION_ACCOUNT_ORIGIN | Exact HTTPS origin; production https://galacticfederation.co |
 | FEDERATION_AUTH_URL | Dedicated HTTPS project origin ending in .supabase.co |
 | FEDERATION_AUTH_PUBLISHABLE_KEY | Publishable key only; service/secret keys rejected |
 | FEDERATION_AUTH_GOOGLE_ENABLED | true only after Google OAuth configuration and testing |
 | FEDERATION_AUTH_APPLE_ENABLED | true only after Apple configuration and testing |
 
-Configure the provider's allowed application redirect pattern as
+The pilot's allowed application redirect pattern is
+`https://deploy-preview-99--gfof.netlify.app/api/federation-account/callback?state=*`.
+For a separately approved production release, use
 `https://galacticfederation.co/api/federation-account/callback?state=*`.
 The only wildcard is the generated state value; the scheme, host and callback
 path remain exact. The callback independently validates the state against the
 HttpOnly browser cookie. The separate Google/Apple registered redirect points
 to the dedicated Supabase project's `/auth/v1/callback`, not the Federation
-application callback. Do not use broad production redirect wildcards. Prove successful
-Google and Apple flows, cancellation, expired callbacks and replay rejection
-on a configured isolated preview before production. Apple requires its own
+application callback. Do not use broad production redirect wildcards. Prove
+successful sign-in, cancellation, expired callbacks and replay rejection for
+each provider actually enabled in production. Apple can remain off for a
+Google-only launch. Enabling Apple later requires its own
 developer setup, Services ID, verified web domain, signing-key/client-secret
 maintenance; never paste those credentials into GitHub or chat. A native app
 configuration does not establish web sign-in support.
@@ -54,6 +60,12 @@ Configure provider rate limits and abuse controls, minimal scopes, user support,
 privacy/retention/deletion policy, backup/recovery and cost ceilings before
 registration opens. No email sign-in is implemented in this first build; it
 needs separately configured delivery and abuse controls.
+
+The draft account page now states what sign-in records and offers an owner-managed
+deletion request route. That short explanation is not a complete privacy policy
+or an automated deletion workflow. Before public registration, confirm vendor
+log/backup retention, verify the deletion procedure against a disposable account,
+and review the notice with counsel as appropriate.
 
 ## Boundaries and follow-up
 
@@ -84,7 +96,9 @@ proof of readiness for a lending service.
 only. It tests default closure, configuration constraints, CSRF rejection,
 provider selection, PKCE/state binding, expiry, user verification, safe session
 output, refresh, cookie ambiguity, upstream failures and local logout.
-It does not exercise real providers or production cookies.
+The private preview also exercised one Google provider round trip and browser
+logout. It did not test Apple, public registration, provider downtime, multi-tab
+refresh or production cookies.
 
 Primary implementation references:
 - https://supabase.com/docs/guides/auth/sessions/pkce-flow
