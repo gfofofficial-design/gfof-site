@@ -21,8 +21,9 @@ exports.handler=async event=>{
  try{
   const [sol,...groups]=await Promise.all([rpc('getBalance',[address,{commitment:'confirmed'}]),...PROGRAMS.map(programId=>rpc('getTokenAccountsByOwner',[address,{programId},{encoding:'jsonParsed',commitment:'confirmed'}]))]);
   if(!Number.isSafeInteger(sol.value)||sol.value<0)throw Error('balance');
+  if([sol,...groups].some(r=>!Number.isSafeInteger(r.context?.slot)||r.context.slot<0))throw Error('slot');
   const aggregate=new Map();let tokenAccounts=0;
-  for(const group of groups){if(!Array.isArray(group.value)||group.value.length>5000)throw Error('accounts');for(const a of group.value){tokenAccounts++;const info=a.account?.data?.parsed?.info;const t=info?.tokenAmount;if(!info||info.owner!==address||!addressOK(info.mint)||!t||!/^\d{1,20}$/.test(t.amount)||!Number.isInteger(t.decimals)||t.decimals<0||t.decimals>255)throw Error('data');const previous=aggregate.get(info.mint);if(previous&&previous.decimals!==t.decimals)throw Error('decimals');aggregate.set(info.mint,{mint:info.mint,decimals:t.decimals,raw:(previous?.raw||0n)+BigInt(t.amount)});}}
+  for(const group of groups){if(!Array.isArray(group.value)||group.value.length>5000)throw Error('accounts');for(const a of group.value){tokenAccounts++;const info=a.account?.data?.parsed?.info;const t=info?.tokenAmount;if(!info||info.owner!==address||!addressOK(info.mint)||!t||typeof t.amount!=='string'||!/^\d{1,20}$/.test(t.amount)||!Number.isInteger(t.decimals)||t.decimals<0||t.decimals>255)throw Error('data');const previous=aggregate.get(info.mint);if(previous&&previous.decimals!==t.decimals)throw Error('decimals');aggregate.set(info.mint,{mint:info.mint,decimals:t.decimals,raw:(previous?.raw||0n)+BigInt(t.amount)});}}
   const tokens=[...aggregate.values()].filter(t=>t.raw>0n).sort((a,b)=>a.mint.localeCompare(b.mint));
   if(tokens.length>1000)throw Error('too-many');
   const pricing=await readPrices(tokens,sol.context?.slot);
