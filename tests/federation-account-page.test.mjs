@@ -5,8 +5,8 @@ import {runInNewContext} from 'node:vm';
 
 const source=readFileSync(new URL('../assets/federation/fed-account.js',import.meta.url),'utf8');
 
-async function render({search='',hasSessionCookie=false}={}){
-  const elements=Object.fromEntries(['account-message','google','apple','logout','identity','member-email'].map(id=>[id,{id,textContent:'',hidden:id==='logout'||id==='identity',disabled:false,addEventListener(){}}]));
+async function render({search='',hasSessionCookie=false,passport}={}){
+  const elements=Object.fromEntries(['account-message','google','apple','logout','identity','member-email','passport-summary'].map(id=>[id,{id,textContent:'',hidden:id==='logout'||id==='identity',disabled:false,addEventListener(){}}]));
   const requests=[];
   const replaced=[];
   const fetch=async url=>{
@@ -14,7 +14,7 @@ async function render({search='',hasSessionCookie=false}={}){
     const data=url.endsWith('/config')?{enabled:true,providers:['google'],hasSessionCookie}:{signedIn:true,user:{email:'member@example.invalid'}};
     return {status:200,ok:true,json:async()=>data};
   };
-  runInNewContext(source,{document:{getElementById:id=>elements[id]},fetch,location:{search},history:{replaceState:(...args)=>replaced.push(args)},URL,URLSearchParams});
+  runInNewContext(source,{document:{getElementById:id=>elements[id]},fetch,location:{search},history:{replaceState:(...args)=>replaced.push(args)},URL,URLSearchParams,FederationPassport:passport});
   await new Promise(resolve=>setImmediate(resolve));
   return {elements,requests,replaced};
 }
@@ -30,4 +30,13 @@ test('a cookie-present browser still checks the session',async()=>{
   const {elements,requests}=await render({hasSessionCookie:true});
   assert.deepEqual(requests,['/api/federation-account/config','/api/federation-account/session']);
   assert.equal(elements['member-email'].textContent,'member@example.invalid');
+});
+
+test('opted-in local passport is shown without writing or attaching it to sign-in',async()=>{
+  let writes=0;
+  const passport={missions:Array(11),read:()=>({enabled:true,available:true,done:['repair-the-shuttle','the-signal']}),sync:()=>{writes++;}};
+  const {elements,requests}=await render({passport});
+  assert.equal(elements['passport-summary'].textContent,'This device remembers 2 of 11 mission badges. Sign-in does not sync them.');
+  assert.deepEqual(requests,['/api/federation-account/config']);
+  assert.equal(writes,0);
 });
