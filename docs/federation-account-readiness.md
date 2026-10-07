@@ -198,6 +198,11 @@ tests cover that recovery path; an invalid or deleted-user refresh still
 clears all auth cookies. Hosted multi-tab and real provider expiry remain
 separate acceptance checks.
 
+A simulated provider outage returns a generic temporary-unavailable message,
+does not claim signed-in status, and leaves the refresh cookie available for a
+later retry. The 33 focused handler/page tests cover this behavior; no hosted
+provider outage was induced and no operational alert is configured.
+
 ## October 7 security release requirement
 
 The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The earlier missing-recovery description above predates the separate isolated restore pilot: Google sign-in was subsequently tested there, but recovery provenance and full session/deletion reconciliation are still incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.
