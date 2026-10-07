@@ -190,3 +190,7 @@ request-origin enforcement and dashboard query cleanup. Leftover OAuth return
 parameters are removed without exchanging codes in browser JavaScript; the
 server-verified cookie session remains the only sign-in signal. No registration
 or financial access was activated by this change.
+
+## October 7 security release requirement
+
+The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The earlier missing-recovery description above predates the separate isolated restore pilot: Google sign-in was subsequently tested there, but recovery provenance and full session/deletion reconciliation are still incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.
