@@ -32,10 +32,13 @@ restore under the [documented migration route](https://supabase.com/docs/guides/
 [Supabase's current plan page](https://supabase.com/pricing) lists Pro from
 $25/month with seven days of daily backups, and its
 [pausing guide](https://supabase.com/docs/guides/platform/free-project-pausing)
-says paid projects do not auto-pause. No upgrade or manual database export has
-been performed. Before inviting external account holders, choose and verify
-an actual recovery path and acceptable availability/cost; do not describe the
-Free pilot as a production account service.
+says paid projects do not auto-pause. No upgrade has been performed. A dated
+encrypted Auth export was restored into an isolated test project, but the
+account password changed afterward and the old archive is no longer a current
+recovery point. A fresh export and restored login remain unproved. Before
+inviting external account holders, choose and verify an actual recovery path
+and acceptable availability/cost; do not describe the Free pilot as a
+production account service.
 The manual recovery proof must include Auth users and identities; a generic
 schema/data dump may exclude Supabase-managed Auth tables. Verify an isolated
 restore and test login rather than counting the presence of a dump file.
@@ -205,4 +208,4 @@ provider outage was induced and no operational alert is configured.
 
 ## October 7 security release requirement
 
-The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The earlier missing-recovery description above predates the separate isolated restore pilot: Google sign-in was subsequently tested there, but recovery provenance and full session/deletion reconciliation are still incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.
+The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The isolated restore pilot established a data copy and a Google sign-in test, but the current recovery point, complete session/deletion reconciliation and operating plan are still incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.

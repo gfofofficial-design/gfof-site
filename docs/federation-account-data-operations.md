@@ -77,10 +77,12 @@ or whether unrelated consumers of an already-issued JWT reject it immediately.
   October 7. The official CLI dump path requires Docker and a database
   connection; the CLI, Docker and `psql` were not available on this dev
   computer's PATH at the initial preflight. Official pgAdmin 4 later supplied
-  local PostgreSQL client tools, including `pg_dump` and `pg_restore`, but no
-  Auth export or restore has been performed. A local Git checkout is not an
-  identity-data backup. Do not put a connection URL, password, raw dump or
-  user export in Git or chat.
+  local PostgreSQL client tools, including `pg_dump` and `pg_restore`. A dated
+  encrypted Auth export and isolated row restore were later performed, but
+  the original account password changed after that export. The old archive
+  is not a current recovery point, and a fresh restored login remains open.
+  A local Git checkout is not an identity-data backup. Do not put a connection
+  URL, password, raw dump or user export in Git or chat.
 - A generic `supabase db dump` file is not yet evidence that Federation users
   can be recovered. The [CLI command reference](https://supabase.com/docs/reference/cli/supabase-db-dump)
   says its default filtering excludes managed schemas including `auth`, while
@@ -149,13 +151,14 @@ user identifiers, password hashes, tokens or identity payloads were retrieved.
 | Federation Account Pilot | 1 | 2 | 0 | 0 |
 | Federation Account Restore Drill | 1 | 2 | 0 | 0 |
 
-Matching counts are a useful preflight, not proof of an export, matching record
-contents, recoverable credentials, or successful restored sign-in. The earlier
-statement that no export/restore had occurred describes the previous preflight;
-this review cannot establish what transfer populated the restore target. Keep
-the recovery gate unresolved until restricted evidence identifies the encrypted
-artifact, source and target, tool versions, restore result and an actual restored
-login. Do not repeat a restore over either existing project just to obtain proof.
+Matching counts alone are not recovery proof. Restricted operations recorded
+the encrypted artifact, source and isolated target, tool versions and row
+fingerprint checks; a later Google sign-in was tested in the restored target.
+The original account password then changed, leaving that artifact stale.
+Keep the recovery gate unresolved until a new encrypted export, isolated
+restore and login are verified against the current account state, with deleted
+accounts and sessions reconciled. Do not repeat a restore over either existing
+project merely to obtain a matching count.
 
 ### Request verification and deletion acceptance
 
