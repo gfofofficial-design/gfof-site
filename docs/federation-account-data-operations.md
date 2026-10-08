@@ -256,7 +256,8 @@ identity linking still needs hosted tests.
   An empty JSON object permits the signup. Treat a runtime error or timeout as
   an acceptance-test failure until hosted behavior proves no user was inserted.
 
-No SQL function, schema, grant or hook setting was created by this review. A
+No persistent SQL function, schema, grant or hook setting was created by this
+design review. The separate probes below use rolled-back test objects only. A
 versioned migration must be generated with the actual Supabase CLI when the
 isolated implementation is authorized; this prose is not an executable migration.
 
@@ -339,3 +340,42 @@ existing owner password/Google login and identity-link behavior, and real
 hook-failure closure must be tested in a separately approved disposable target.
 This probe is not an executable migration, a deployed signup control, or evidence
 that public Google-only registration is ready.
+
+
+### October 8 native restricted-role proof
+
+The [native Docker harness](../tests/federation-google-signup-native.mjs) reuses
+this exact candidate DDL and its 21 rule assertions rather than copying the
+allowlist. It ran in an empty PostgreSQL 17.11 CI service at review branch commit
+`54efa8e7a2b4fff6b4caa6994d826c768361cf0b`; [run 37764512561](https://github.com/gfofofficial-design/gfof-site/actions/runs/37764512561)
+completed successfully. The service had no hosted Auth connection, real users,
+identities, tokens, passwords or provider keys. Fixture roles and objects were
+created in a transaction and removed by rollback.
+
+Verified results:
+
+- All 21 existing rule assertions ran successfully after SET LOCAL ROLE to a
+  simulated supabase_auth_admin. The role had no login, superuser, BYPASSRLS,
+  role membership, schema CREATE or table SELECT. The candidate remained
+  SECURITY INVOKER with an empty search path.
+- Actual calls as anon, authenticated, service_role and an unrelated role with
+  only PUBLIC privileges were denied with SQLSTATE 42501.
+- Revoking Auth EXECUTE and, separately, schema USAGE denied actual invocation.
+  Restoring both grants restored the allowed Google decision.
+- The final assertion confirmed every fixture role and probe schema absent.
+  CI also passed all 36 account handler/page tests, including expired-access
+  logout's refresh/revocation fallback.
+
+The initial CI attempt stopped at an incorrect version-number check in the
+harness before creating roles or invoking the candidate. Correcting that test
+preflight produced the successful run above; it did not broaden any privilege
+or change the signup rule.
+
+This closes the **native simulated-role execution** gap. It does not prove
+Supabase's managed role, dashboard hook attachment, Auth service behavior,
+mail delivery or new Google registration. In particular, a denied SQL call is
+not evidence that hosted Auth fails closed when its hook is unavailable.
+The hosted acceptance matrix remains required in a separately approved
+isolated target; the existing owner projects remain unsuitable for a temporary
+signup-enabled experiment. No hosted hook, signup setting or project grant
+was changed, and public registration remains closed.

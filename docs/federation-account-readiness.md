@@ -216,3 +216,21 @@ provider outage was induced and no operational alert is configured.
 ## October 7 security release requirement
 
 The owner agreed to the [Federation security release gates](federation-security-release-gates.md). They apply before public registration or financial integration. The isolated restore pilot now has one current-owner encrypted export, matching restored Auth rows, a fresh password login, and a hash-verified removable-drive copy. Offline/off-site custody, repeatable backup cadence, deletion/session reconciliation and the operating plan remain incomplete. Keep signup closed until the required evidence packet and specific release approval are complete.
+
+
+## October 8 isolated signup-permission validation
+
+The [native PostgreSQL test](https://github.com/gfofofficial-design/gfof-site/actions/runs/37764512561) passed the existing 21 rule
+assertions while executing as a restricted simulated Auth role. Four API/public
+roles were denied actual invocation; missing EXECUTE and missing schema USAGE
+were each denied, restored grants worked, and rollback removed the fixture.
+The same run passed all 36 current handler/page tests. The workflow now includes
+the page tests and runs the isolated SQL check when its test files change.
+
+This is repeatable native SQL/ACL evidence, not a hosted signup integration
+result. No hosted hook was attached, public signup opened or existing owner
+login changed. The real new-Google, direct Email/password and OTP, existing-login
+and hook-failure acceptance matrix in the
+[operations plan](federation-account-data-operations.md#isolated-acceptance-matrix)
+remains a launch requirement, together with the other security gates. A real
+expired-session browser logout check also remains pending.
