@@ -5,6 +5,9 @@ on:
       - 'netlify/functions/federation-account.cjs'
       - 'assets/federation/fed-account.js'
       - 'tests/federation-account.test.mjs'
+      - 'tests/federation-account-page.test.mjs'
+      - 'tests/federation-google-signup-probe.sql'
+      - 'tests/federation-google-signup-native.*'
       - '.github/workflows/federation-account.yml'
 permissions:
   contents: read
@@ -13,9 +16,41 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
       - run: node --check assets/federation/fed-account.js
-      - run: node --test tests/federation-account.test.mjs
+      - run: node --test tests/federation-account.test.mjs tests/federation-account-page.test.mjs
+  signup-role:
+    # Disposable native SQL proof only; no secrets, hosted projects or deployment.
+    if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:17.11-bookworm
+        env:
+          POSTGRES_DB: federation_signup_native_test
+          POSTGRES_PASSWORD: federation_disposable_fixture_only
+        options: >-
+          --health-cmd "pg_isready -U postgres -d federation_signup_native_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Check out review source without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Check native Auth-role execution and public-role denial
+        run: node tests/federation-google-signup-native.mjs
+        env:
+          FEDERATION_SIGNUP_TEST_CONFIRM: disposable_native_fixture
+          FEDERATION_SIGNUP_TEST_CONTAINER: ${{ job.services.postgres.id }}
