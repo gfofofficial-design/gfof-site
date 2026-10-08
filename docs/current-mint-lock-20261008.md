@@ -1,4 +1,4 @@
-# Current-mint GFOF lock — October 8, 2026
+# Current-mint GFOF locks — October 8, 2026
 
 The owner supplied the Streamflow contract URL. A read-only finalized Solana
 `getMultipleAccounts` request retrieved its metadata, escrow and current mint
@@ -35,9 +35,9 @@ designation and any applicable recorded approvals.
 
 ## Publication behavior and limits
 
-The treasury review adds a dated new-mint card above the historical records,
-links the three-account RPC snapshot and shows the full-cliff date and permissions.
-It counts 30M, not the full 30.15M escrow balance. The existing four former-mint
+The treasury review adds two dated new-mint cards above the historical records,
+links the joint RPC snapshot and shows each full-cliff date and permissions.
+It counts 30M per contract, not each full 30.15M escrow balance. The existing four former-mint
 live reads and their total remain historical and are not combined with the new
 mint. OpenGraph/social descriptions reflect this distinction.
 
@@ -63,3 +63,36 @@ the legacy total is unchanged, verification links and fragment IDs resolve, and
 inline scripts are byte-identical to main. Re-read the contract before a future
 production release if its present status is being claimed. This review does not
 merge or deploy production.
+
+## Second contract and joint re-read
+
+A finalized five-account `getMultipleAccounts` read at slot **454549782**
+checked both metadata accounts, both escrows and the mint together. Both
+scheduled allocations remain 30,000,000 GFOF, with zero withdrawn amounts and
+zero cancellation timestamps. Their combined scheduled principal is
+**60,000,000 GFOF, 6% of the observed 1,000,000,000 minted supply**.
+The first contract’s schedule and permissions above were reconfirmed.
+The original three-account evidence is preserved; the public cards now link
+[the joint source snapshot](../record/current-mint-locks-joint-20261008.json).
+Response account order: first metadata, first escrow, second metadata, second
+escrow, shared mint.
+
+- [Second contract](https://app.streamflow.finance/contract/solana/mainnet/BW6ZUUT5NXxSGMKNAzoMYbqrXy5Dm1ev1ekEgYSXJWX8):
+  `BW6ZUUT5NXxSGMKNAzoMYbqrXy5Dm1ev1ekEgYSXJWX8`.
+- Program owner, metadata version and account length match the first contract.
+- Mint: `Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV`.
+- Sender and recipient: `8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7`.
+- Escrow: `9NeQZao9SNt7FztKbNMCwCmEYZTYkWnidZmW4chuupQq`.
+- Scheduled principal and full cliff: `30000000000000` base units.
+- Escrow balance: `30150000000000` base units; only 30M counted.
+- Created: October 8, 2026, 07:45:37 America/Chicago.
+- Start, cliff and end: August 18, 2027, midnight America/Chicago
+  (`1818565200`, 05:00 UTC).
+- Cancellation/transfer for both parties, top-ups, pause and rate updates disabled.
+- No current allocation purpose is assigned from a wallet address match.
+
+The two cards are dated observations, not a new live-fetch feature. Their total
+excludes escrow excess and the former mint’s historical contracts. Existing
+scripts remain byte-identical to the first review commit. Exact mint, escrow,
+principal, supply, schedule and permission assertions passed on the joint read.
+Visual preview and production release remain pending.
