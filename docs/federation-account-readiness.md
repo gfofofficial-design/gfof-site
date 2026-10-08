@@ -250,3 +250,16 @@ its hosted-build behavior remains a release check.
 This adds self-hosted integration evidence. It does not attach a managed hook,
 change either owner project's signup/login settings or complete real Google and
 browser acceptance. The PR remains draft and public registration remains closed.
+
+
+## October 8 browser-tab coordination
+
+The private page now serializes cooperating account requests with same-origin
+Web Locks, hides identity immediately on logout, sends identity-free logout
+status to other tabs, and rejects stale UI/navigation results. It rechecks when
+revisited or restored, bounds request/lock waits and requires sign-in after
+expiry when cross-tab locking is unavailable. All 49 focused handler/page/tab
+tests passed locally. These are synthetic VM tests, not actual-browser or
+provider-cookie acceptance. The [dated coordination packet](federation-account-tab-coordination-20261008.md)
+records behavior, compatibility, test scope and the remaining hosted checks.
+Public signup stays closed; S4 remains partial.

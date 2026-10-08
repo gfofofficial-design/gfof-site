@@ -6,6 +6,7 @@ on:
       - 'assets/federation/fed-account.js'
       - 'tests/federation-account.test.mjs'
       - 'tests/federation-account-page.test.mjs'
+      - 'tests/federation-account-tabs.test.mjs'
       - 'tests/federation-google-signup-probe.sql'
       - 'tests/federation-google-signup-native.*'
       - 'tests/federation-google-signup-auth.*'
@@ -24,7 +25,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --check assets/federation/fed-account.js
-      - run: node --test tests/federation-account.test.mjs tests/federation-account-page.test.mjs
+      - run: node --test tests/federation-account.test.mjs tests/federation-account-page.test.mjs tests/federation-account-tabs.test.mjs
   signup-role:
     # Disposable native SQL proof only; no secrets, hosted projects or deployment.
     if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository

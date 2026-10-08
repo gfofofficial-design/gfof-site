@@ -17,7 +17,7 @@ async function render({search='',hash='',hasSessionCookie=false,expiredSession=f
     const data=url.endsWith('/config')?{enabled:true,providers:['google'],hasSessionCookie}:{signedIn:true,user:{email:'member@example.invalid'}};
     return {status:200,ok:true,json:async()=>data};
   };
-  runInNewContext(source,{document:{getElementById:id=>elements[id]},fetch,location:{search,hash},history:{replaceState:(...args)=>replaced.push(args)},URL,URLSearchParams,FederationPassport:passport});
+  runInNewContext(source,{document:{getElementById:id=>elements[id]},fetch,location:{search,hash},history:{replaceState:(...args)=>replaced.push(args)},URL,URLSearchParams,FederationPassport:passport,AbortController,setTimeout,clearTimeout,navigator:{locks:{request:async(name,options,work)=>work()}}});
   await new Promise(resolve=>setImmediate(resolve));
   return {elements,requests,replaced};
 }
