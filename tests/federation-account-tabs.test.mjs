@@ -207,3 +207,22 @@ test('logout during initial configuration preserves available sign-in options wi
   assert.equal(t.elements.apple.disabled,true);
   assert.match(t.elements['account-message'].textContent,/Signed out/);
 });
+
+test('a successful provider navigation keeps duplicate sign-in clicks blocked',async()=>{
+  const b=browser();
+  const t=b.tab(async action=>action==='config'?response({enabled:true,providers:['google'],hasSessionCookie:false}):response({url:'https://syntheticfixture.supabase.co/auth/v1/authorize'}));
+  await tick();await t.click('google');await t.click('google');
+  assert.deepEqual(t.requests,['config','oauth']);
+  assert.equal(t.assigned.length,1);
+  assert.equal(t.elements.google.disabled,true);
+});
+
+test('returning through browser history restores controls after provider navigation',async()=>{
+  const b=browser();
+  const t=b.tab(async action=>action==='config'?response({enabled:true,providers:['google'],hasSessionCookie:false}):response({url:'https://syntheticfixture.supabase.co/auth/v1/authorize'}));
+  await tick();await t.click('google');assert.equal(t.elements.google.disabled,true);
+  t.pageshow();await tick();
+  assert.deepEqual(t.requests,['config','oauth','config']);
+  assert.equal(t.elements.google.disabled,false);
+  assert.equal(t.elements.identity.hidden,true);
+});

@@ -28,6 +28,8 @@ explicit confirmed/unconfirmed distinction.
 
 Visible-tab and restored-page checks clear stale identity before asking the server
 again. A generation guard rejects late identity, error and navigation results.
+Successful provider navigation keeps duplicate clicks blocked; a restored page
+resets the controls and rechecks its status.
 Sign-in options remain usable when a logout occurs during initial configuration.
 No account identity, coordination data or new progress is stored locally.
 
@@ -55,12 +57,13 @@ against the previous page. They included two refresh requests for shared expired
 cookies, post-logout session reinspection and stale displays across tabs. These
 are application behavior regressions, not demonstrations of wallet theft.
 
-After implementation, all **49 focused tests** passed together: 28 existing
-handler tests, eight existing page tests and 13 new tab/timeout tests. The added
+After implementation, all **51 focused tests** passed together: 28 existing
+handler tests, eight existing page tests and 15 new tab/timeout tests. The added
 tests cover shared refresh exclusion, logout notifications, late identity and
 OAuth results, unconfirmed revocation, missing-lock behavior, revisited pages,
 provider failures, ignored channel messages, body-read cancellation, an expired
-lock waiter and sign-in options during initial-config logout.
+lock waiter sign-in options during initial-config logout, duplicate provider-click exclusion
+and browser-history control recovery.
 
 Commands:
 

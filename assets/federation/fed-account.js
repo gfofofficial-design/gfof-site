@@ -90,13 +90,14 @@
  buttons.forEach(b=>b.addEventListener('click',async()=>{
   if(busy||!providers.includes(b.id))return;
   busy=true;signedOut=false;const turn=++generation;hideIdentity();message.textContent='Opening your sign-in provider…';
+  let navigating=false;
   try{await withSessionLock(async()=>{
    if(!current(turn))return;
    const r=await api('oauth',{provider:b.id});if(!current(turn))return;
    const u=new URL(r.url);if(u.protocol!=='https:'||!/^[-a-z0-9]+\.supabase\.co$/.test(u.hostname)||u.pathname!=='/auth/v1/authorize')throw Error('Invalid sign-in destination.');
-   location.assign(u.href);
+   location.assign(u.href);navigating=true;
   });}catch(e){if(current(turn))message.textContent=e.message;}
-  finally{busy=false;buttonState();}
+  finally{busy=navigating;buttonState();}
  }));
  logout.addEventListener('click',async()=>{
   if(busy)return;
@@ -112,7 +113,7 @@
  });
  document.addEventListener?.('visibilitychange',()=>{if(document.visibilityState==='visible')start();});
  globalThis.addEventListener?.('pagehide',()=>{try{channel?.close();}catch{}channel=null;generation++;hideIdentity();});
- globalThis.addEventListener?.('pageshow',event=>{connectChannel();if(event.persisted)start();});
+ globalThis.addEventListener?.('pageshow',event=>{connectChannel();if(event.persisted){busy=false;buttonState();start();}});
  if(failedSignin){message.textContent='Sign-in did not complete. Try again.';history.replaceState(null,'','/account');}
  start();
 })();

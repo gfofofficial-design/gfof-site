@@ -72,7 +72,7 @@ authority changed.
 [The coordination packet](federation-account-tab-coordination-20261008.md) records
 same-origin account-page request exclusion, logout display invalidation and
 identity-free tab notifications, compatibility fallbacks and bounded waits.
-All 49 focused tests passed locally, including 13 new synthetic tab/timeout
+All 51 focused tests passed locally, including 15 new synthetic tab/timeout
 checks. This does not establish real browser locking, provider cookie rotation,
 callback races or remote revocation. S4 remains partial; hosted browser and
 managed-provider acceptance are required before public registration.

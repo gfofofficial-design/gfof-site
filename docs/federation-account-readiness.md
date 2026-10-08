@@ -258,7 +258,7 @@ The private page now serializes cooperating account requests with same-origin
 Web Locks, hides identity immediately on logout, sends identity-free logout
 status to other tabs, and rejects stale UI/navigation results. It rechecks when
 revisited or restored, bounds request/lock waits and requires sign-in after
-expiry when cross-tab locking is unavailable. All 49 focused handler/page/tab
+expiry when cross-tab locking is unavailable. All 51 focused handler/page/tab
 tests passed locally. These are synthetic VM tests, not actual-browser or
 provider-cookie acceptance. The [dated coordination packet](federation-account-tab-coordination-20261008.md)
 records behavior, compatibility, test scope and the remaining hosted checks.
