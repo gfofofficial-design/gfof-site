@@ -35,9 +35,9 @@ designation and any applicable recorded approvals.
 
 ## Publication behavior and limits
 
-The treasury review adds two dated new-mint cards above the historical records,
+The treasury review adds three dated new-mint cards above the historical records,
 links the joint RPC snapshot and shows each full-cliff date and permissions.
-It counts 30M per contract, not each full 30.15M escrow balance. The existing four former-mint
+It counts scheduled principal (30M, 30M and 40M), excluding escrow excess. The existing four former-mint
 live reads and their total remain historical and are not combined with the new
 mint. OpenGraph/social descriptions reflect this distinction.
 
@@ -96,3 +96,30 @@ excludes escrow excess and the former mint’s historical contracts. Existing
 scripts remain byte-identical to the first review commit. Exact mint, escrow,
 principal, supply, schedule and permission assertions passed on the joint read.
 Visual preview and production release remain pending.
+
+## Third contract and latest joint re-read
+
+A finalized seven-account read at slot **454550404** rechecked all three metadata
+accounts, all three escrows and the shared mint together. The second-contract
+60M total above describes the earlier two-contract snapshot. The latest total is
+**100,000,000 GFOF scheduled, 10% of the observed one-billion minted supply**.
+The public cards now link [the three-lock snapshot](../record/current-mint-locks-three-20261008.json).
+Account order: lock 01 metadata, escrow; lock 02 metadata, escrow; lock 03 metadata,
+escrow; mint. Earlier source snapshots remain available.
+
+- [Third contract](https://app.streamflow.finance/contract/solana/mainnet/EPdpg7AYEzcwudN7TRdEkCGHQeHRrFhoK2yiYxDdGLnv):
+  `EPdpg7AYEzcwudN7TRdEkCGHQeHRrFhoK2yiYxDdGLnv`.
+- Same verified program owner, metadata version 4 and 1104-byte length.
+- Same current mint; six decimals; mint and freeze authorities remain null.
+- Sender and recipient: `5U3uduBNhNtwTofNNdsS8bet4GuQmGXYnQoJ5t6cfM6u`.
+- Escrow: `DkzEr7nsuhL4Ser6AyZQ71u2mBdGj86mXmHDAzpS1Pop`.
+- Scheduled principal and full cliff: `40000000000000` base units = **40M GFOF**.
+- Escrow balance: `40200000000000` base units = 40.2M; only 40M counted.
+- Created: October 8, 2026, 07:52:17 America/Chicago.
+- Start, cliff and end: **October 18, 2028, midnight America/Chicago** (05:00 UTC).
+- Withdrawn amount and cancellation timestamp zero. Both-party cancellation and
+  transfer, top-up, pause and rate-update flags all disabled.
+- No allocation purpose inferred. This lock is not evidence of staking funding.
+
+All three remain full-cliff locks at the joint read. Former-mint totals remain
+separate. Existing scripts are unchanged; visual preview remains pending.
