@@ -38,7 +38,7 @@ The fixed test sequence proves:
   token. Restoring the exact candidate restores the expected deny decision.
 - Signup is closed again before disposal. Auth/mail child containers and their
   internal network are removed in `finally`; GitHub disposes the Postgres
-  service and runner afterward. No container volume or Auth backup is retained.
+  service and runner afterward. No fixture data or Auth backup is exported.
 
 The harness uses a restricted LOGIN Auth role owning only its Auth schema. Its
 hook has a separate database owner, SECURITY INVOKER, an empty search path and

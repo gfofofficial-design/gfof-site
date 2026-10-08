@@ -379,3 +379,24 @@ The hosted acceptance matrix remains required in a separately approved
 isolated target; the existing owner projects remain unsuitable for a temporary
 signup-enabled experiment. No hosted hook, signup setting or project grant
 was changed, and public registration remains closed.
+
+
+### October 8 self-hosted Auth-route acceptance
+
+The [isolated service evidence](federation-signup-auth-acceptance-20261008.md)
+records a successful real Auth v2.197.0 / PostgreSQL 17.11 / Mailpit test. With
+signup and Email enabled only inside the disposable fixture, direct password
+and OTP creation and spoofed provider/metadata requests returned the candidate's
+403 with zero insertion or new sink mail. Two unhooked positive controls had
+already proved creation and delivery. Existing synthetic password login and
+user read worked; logout rejected the old refresh. Missing grants/function and
+runtime errors blocked creation, as did a separate explicit database deadline
+and the default ten-second API request limit. The exact rule was restored,
+signup closed and the fixture disposed.
+
+An earlier three-second delay did not trigger the assumed shorter hook timeout;
+that observed behavior matches an open upstream report and remains an explicit
+hosted-build/deadline check. The fixture-only role deadline was reset before
+testing the default API limit. Neither hosted owner project, hook setting,
+provider switch, role setting or signup state was changed. The remaining real
+Google, hosted-owner/linking and managed configuration checks above still apply.

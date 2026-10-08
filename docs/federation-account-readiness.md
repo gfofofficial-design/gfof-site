@@ -234,3 +234,19 @@ and hook-failure acceptance matrix in the
 [operations plan](federation-account-data-operations.md#isolated-acceptance-matrix)
 remains a launch requirement, together with the other security gates. A real
 expired-session browser logout check also remains pending.
+
+
+## October 8 self-hosted Auth acceptance
+
+[Real Auth-service tests](federation-signup-auth-acceptance-20261008.md) now verify
+candidate-specific Email/password and OTP rejection, spoof resistance, existing
+synthetic password login, logout/refresh rejection and hook-failure closure in
+a disposable CI environment. Positive controls confirmed account creation and
+mail delivery worked before attaching the rule. Explicit database cancellation
+and the default ten-second API request limit blocked the deliberate slow-hook
+cases. The assumed shorter hook deadline was not enforced in an earlier run;
+its hosted-build behavior remains a release check.
+
+This adds self-hosted integration evidence. It does not attach a managed hook,
+change either owner project's signup/login settings or complete real Google and
+browser acceptance. The PR remains draft and public registration remains closed.
