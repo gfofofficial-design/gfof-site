@@ -1,6 +1,6 @@
 const {test}=require('node:test');const assert=require('node:assert/strict');const {readFileSync}=require('node:fs');const {runInNewContext}=require('node:vm');
 const source=readFileSync(require('node:path').join(__dirname,'../assets/federation/fed-deck.js'),'utf8');
-function setup(fetch,passport,timers={setTimeout,clearTimeout}){const nodes=new Map();function node(){return {textContent:'',value:'',disabled:false,children:[],events:{},attributes:{},setAttribute(k,v){this.attributes[k]=v;},addEventListener(k,f){this.events[k]=f;},append(c){this.children.push(c);if(!this.firstChild)this.firstChild=c;},replaceChildren(){this.children=[];}};}const document={getElementById(id){if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);},createElement:node,createElementNS:node};runInNewContext(source,{document,fetch,AbortController,Date,setTimeout:timers.setTimeout,clearTimeout:timers.clearTimeout,globalThis:{FederationPassport:passport}});return {nodes,submit:()=>nodes.get('wallet-form').events.submit({preventDefault(){}}),clear:()=>nodes.get('wallet-clear').events.click()};}
+function setup(fetch,passport,timers={setTimeout,clearTimeout}){const nodes=new Map();function node(){return {textContent:'',value:'',disabled:false,children:[],events:{},attributes:{},focus(){document.activeElement=this;},setAttribute(k,v){this.attributes[k]=v;},addEventListener(k,f){this.events[k]=f;},append(c){this.children.push(c);if(!this.firstChild)this.firstChild=c;},replaceChildren(){this.children=[];}};}const document={getElementById(id){if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);},createElement:node,createElementNS:node};runInNewContext(source,{document,fetch,AbortController,Date,setTimeout:timers.setTimeout,clearTimeout:timers.clearTimeout,globalThis:{FederationPassport:passport}});return {nodes,document,submit:()=>nodes.get('wallet-form').events.submit({preventDefault(){}}),clear:()=>nodes.get('wallet-clear').events.click()};}
 test('invalid input never sends a lookup',async()=>{let calls=0;const app=setup(async()=>{calls++;});app.nodes.get('wallet-address').value='seed phrase is never a wallet address';await app.submit();assert.equal(calls,0);assert.equal(app.nodes.get('wallet-rows').children.length,0);});
 test('lookup omits credentials and clear prevents a late response restoring balances',async()=>{let resolve;const app=setup((url,options)=>{assert.equal(url,'/api/federation-wallet');assert.equal(options.credentials,'omit');return new Promise(r=>resolve=r);});app.nodes.get('wallet-address').value='11111111111111111111111111111111';const pending=app.submit();app.clear();resolve({ok:true,status:200,json:async()=>({address:'11111111111111111111111111111111',sol:'1',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()})});await pending;assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-address').value,'');assert.equal(app.nodes.get('wallet-state').textContent,'No address loaded');});
 test('upstream failures clear previous data and cannot masquerade as zero',async()=>{const app=setup(async()=>({ok:false,status:503,json:async()=>({error:'Service unavailable'})}));app.nodes.get('wallet-address').value='11111111111111111111111111111111';app.nodes.get('wallet-rows').children=[{}];await app.submit();assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-message').textContent,'Service unavailable');assert.equal(app.nodes.get('wallet-count').textContent,'—');});
@@ -63,4 +63,20 @@ test('asset filters cannot persist across edits, clear or a failed refresh',asyn
   assert.equal(filter.value,'');assert.equal(app.nodes.get('wallet-filter-panel').hidden,true);assert.equal(app.nodes.get('wallet-rows').children.length,0);
   assert.equal(app.nodes.get('wallet-filter-status').textContent,'Read balances to filter returned assets.');
  }
+});
+
+test('address validation is exposed and Clear returns keyboard focus without fetching',async()=>{
+ let calls=0;const app=setup(async()=>{calls++;});
+ const input=app.nodes.get('wallet-address');input.value='invalid address';
+ await app.submit();assert.equal(calls,0);assert.equal(input.attributes['aria-invalid'],'true');
+ assert.equal(app.document.activeElement,input);assert.match(app.nodes.get('wallet-message').textContent,/Enter a public Solana address/);
+ input.value='11111111111111111111111111111111';input.events.input();
+ assert.equal(input.attributes['aria-invalid'],'false');
+ app.document.activeElement=app.nodes.get('wallet-clear');app.clear();
+ assert.equal(app.document.activeElement,input);assert.equal(input.value,'');assert.equal(input.attributes['aria-invalid'],'false');assert.equal(calls,0);
+});
+test('Show all assets returns keyboard focus to the filter without a request',()=>{
+ const app=setup(()=>{throw Error('must not fetch');});const filter=app.nodes.get('wallet-asset-filter');
+ filter.value='missing';app.nodes.get('wallet-filter-clear').events.click();
+ assert.equal(filter.value,'');assert.equal(app.document.activeElement,filter);
 });

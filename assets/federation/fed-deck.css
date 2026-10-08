@@ -33,3 +33,6 @@
 
 /* Asset filtering leaves full-read totals and charts intact. */
 .wallet-filter{margin:20px 0}.wallet-filter[hidden]{display:none}.wallet-filter label{display:block;font-weight:600}.wallet-filter input{width:100%;min-height:48px;padding:12px;margin:8px 0 12px;background:var(--fed-space);color:var(--fed-text-display);border:1px solid var(--fed-border-strong);border-radius:8px;font:16px system-ui}#wallet-rows tr[hidden]{display:none}
+
+/* Keep keyboard focus visible across dashboard controls. */
+.deck :is(a,button,input,summary):focus-visible{outline:3px solid var(--fed-command);outline-offset:4px}
