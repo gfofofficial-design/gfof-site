@@ -710,7 +710,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     </div>
   </section>
 
-  <div class="promise"><div class="promise-title">LIVE CURRENT-MINT READS</div><div class="promise-body">Refresh to check the three current-mint contracts directly on Solana. The totals cap escrow balances at remaining scheduled principal and exclude escrow excess. A failed read is shown as unavailable; it does not silently substitute a historical total.</div></div>
+  <div class="promise"><div class="promise-title">LIVE CURRENT-MINT READS</div><div class="promise-body">Refresh to check the three current-mint contracts from a finalized Solana read, served through this site’s read-only endpoint (cached for up to 30 seconds). The totals cap escrow balances at remaining scheduled principal and exclude escrow excess. A failed read is shown as unavailable; it does not silently substitute a historical total.</div></div>
 
   <!-- STATUS BAR -->
   <div class="status-bar">
@@ -752,7 +752,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <div class="section-head">
     <div class="tag">ON-CHAIN LOCK CONTRACTS</div>
     <h2>The Three Current Locks</h2>
-    <p>Each is an independent current-mint Streamflow contract. Live reads verify the mint, schedule and escrow; the dated evidence above records the October 8 permission settings.</p>
+    <p>Each is an independent current-mint Streamflow contract. Live reads verify the mint, schedule and escrow from one shared finalized slot; the dated evidence above records the October 8 permission settings.</p>
   </div>
   <div class="lock-list" id="lock-list"></div>
 
@@ -762,7 +762,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     <div class="verify-steps">
       <div class="verify-step">
         <div class="vs-num">METHOD 01</div>
-        <div class="vs-body"><strong>Open your devtools console (F12).</strong> The Solana RPC call is logged on every refresh — same call you could run yourself. No backend, no middleware, no trust required.</div>
+        <div class="vs-body"><strong>Open your devtools console (F12).</strong> Inspect the read-only /api/treasury-locks response. It includes the finalized slot, observation time and seven public accounts. Cross-check the contract links independently.</div>
       </div>
       <div class="verify-step">
         <div class="vs-num">METHOD 02</div>
@@ -781,7 +781,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <div class="section-head">
     <div class="tag">UNLOCK EARLY-WARNING SYSTEM</div>
     <h2>Next Unlock Event</h2>
-    <p>Read from Streamflow metadata in your browser. Updates every 60 seconds. We publish these before they happen — not after.</p>
+    <p>Read from finalized Streamflow metadata through this site’s read-only endpoint. Updates every 60 seconds. We publish these before they happen — not after.</p>
   </div>
 
   <div class="next-unlock-card" id="next-unlock-card">
@@ -861,7 +861,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 /* ═══════════════════════════════════════════════════════════
    $GFOF Transparency Report — live on-chain reader
    Reads: SPL Token Account balance of each Streamflow escrow
-   Source: Solana Foundation public mainnet RPC, called directly by the browser.
+   Source: finalized Solana RPC via a fixed-account, read-only same-origin endpoint.
    Unavailable live reads never substitute the dated snapshot
    ═══════════════════════════════════════════════════════════ */
 
@@ -869,7 +869,10 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 var CA = 'Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';
 var TOTAL_SUPPLY = 1_000_000_000;        /* 1B */
 var TOKEN_DECIMALS = 6;                  /* verified current mint */
-var RPC = 'https://api.mainnet-beta.solana.com';
+var RPC = '/api/treasury-locks';
+var lockReadPromise = null;
+var lockReadObservedAt = null;
+var lockReadSlot = null;
 
 /* Current-mint contracts; allocation purposes are not inferred. */
 var LOCKS = [
@@ -895,17 +898,27 @@ var LOCKS = [
 
 /* JSON-RPC helper */
 function rpc(method, params){
-  var controller = new AbortController();
-  var timer = setTimeout(function(){controller.abort();},12000);
-  return fetch(RPC, {
-    method:'POST', signal:controller.signal,
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({jsonrpc:'2.0', id:1, method:method, params:params})
-  }).then(function(r){if(!r.ok) throw new Error('RPC unavailable');return r.json();})
-    .then(function(d){
-      if(d.error) throw new Error(d.error.message||'RPC error');
-      return d.result;
-    }).finally(function(){clearTimeout(timer);});
+  if(method !== 'getAccountInfo') return Promise.reject(new Error('unsupported read'));
+  if(!lockReadPromise){
+    var controller = new AbortController();
+    var timer = setTimeout(function(){controller.abort();},12000);
+    lockReadPromise = fetch(RPC, {signal:controller.signal})
+      .then(function(r){if(!r.ok) throw new Error('lock read unavailable');return r.json();})
+      .then(function(d){
+        if(d.mint !== CA || d.commitment !== 'finalized' || !Number.isSafeInteger(d.slot) ||
+           !Array.isArray(d.accounts) || d.accounts.length !== 7 ||
+           !Number.isFinite(Date.parse(d.observedAt)) ||
+           Math.abs(Date.now()-Date.parse(d.observedAt)) > 120000) throw new Error('unverified or stale lock read');
+        lockReadObservedAt = d.observedAt;
+        lockReadSlot = d.slot;
+        return d;
+      }).finally(function(){clearTimeout(timer);});
+  }
+  return lockReadPromise.then(function(d){
+    var entry = d.accounts.find(function(a){return a.address === params[0];});
+    if(!entry) throw new Error('account missing');
+    return {value:entry.account};
+  });
 }
 
 /* Streamflow v4: mint bytes 177..209; escrow bytes 209..241;
@@ -1118,11 +1131,11 @@ function updateSummary(totalAmount){
 
 /* Update last-read timestamp */
 function setTimestamp(){
-  var d = new Date();
+  var d = new Date(lockReadObservedAt || Date.now());
   var h = d.getHours().toString().padStart(2,'0');
   var m = d.getMinutes().toString().padStart(2,'0');
   var s = d.getSeconds().toString().padStart(2,'0');
-  document.getElementById('last-read').textContent = h+':'+m+':'+s+' LOCAL';
+  document.getElementById('last-read').textContent = h+':'+m+':'+s+' LOCAL' + (lockReadSlot ? ' · SLOT '+lockReadSlot : ' · ATTEMPT');
 }
 
 function showError(msg){
@@ -1148,6 +1161,7 @@ function refreshAll(){
   document.getElementById('status-word').textContent = 'reading…';
   document.getElementById('status-word').style.color = 'var(--cyan)';
   clearError();
+  lockReadPromise = null; lockReadObservedAt = null; lockReadSlot = null;
 
   /* Reset loading states */
   LOCKS.forEach(function(_, idx){
