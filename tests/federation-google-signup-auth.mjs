@@ -80,7 +80,7 @@ function localOrigin(container, port) {
 }
 async function http(origin, path, body, token, method = body === undefined ? 'GET' : 'POST') {
   assert(fixtureOrigins.has(origin), 'Only addresses derived from owned fixture containers are allowed');
-  const res = await fetch(origin + path, { method, redirect: 'error', signal: AbortSignal.timeout(10000),
+  const res = await fetch(origin + path, { method, redirect: 'error', signal: AbortSignal.timeout(15000),
     headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
   const raw = await res.text();
@@ -245,6 +245,16 @@ try {
   await startAuth(false, true); // New pool inherits the explicit fixture role deadline.
   query(`create or replace function ${FN}(event jsonb) returns jsonb language plpgsql security invoker set search_path='' as $$ begin perform pg_catalog.pg_sleep(3); return '{}'::jsonb; end; $$;`);
   await denied('Explicit database statement timeout', '/otp', { email: 'timeout-hook@example.invalid', create_user: true }, 500);
+  // Independently check the service's default outer request deadline, without
+  // retaining the fixture-only two-second database setting.
+  query("alter role supabase_auth_admin reset statement_timeout;");
+  await startAuth(false, true);
+  query(`create or replace function ${FN}(event jsonb) returns jsonb language plpgsql security invoker set search_path='' as $$ begin perform pg_catalog.pg_sleep(12); return '{}'::jsonb; end; $$;`);
+  const started = performance.now();
+  await denied('Default API request deadline', '/otp', { email: 'request-timeout@example.invalid', create_user: true }, 504);
+  const elapsed = performance.now() - started;
+  assert(elapsed >= 9000 && elapsed < 14000, 'Outer deadline did not match the default ten-second window');
+  console.log(`PASS default request cancellation observed in ${Math.round(elapsed)} ms with no fixture role timeout`);
   query(restoreFunction);
   await denied('Restored exact candidate', '/signup', { email: 'restored-rule@example.invalid', password });
   await login('Existing login after candidate restoration');

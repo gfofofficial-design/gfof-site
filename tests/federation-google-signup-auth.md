@@ -30,6 +30,9 @@ The fixed test sequence proves:
   to two seconds, restarts its connection pool, and requires a three-second
   sleeping hook to fail closed. This verifies an explicit database deadline,
   not the default Auth hook deadline. These are fixture-only expected errors.
+- After removing that role deadline and restarting the pool, a twelve-second
+  sleeping hook must be interrupted by the default ten-second API request limit:
+  HTTP 504 within the bounded window, zero insertion and zero new sink mail.
 - Existing synthetic password login and authenticated user read still work,
   including with missing hook EXECUTE. Local logout rejects the old refresh
   token. Restoring the exact candidate restores the expected deny decision.
@@ -54,10 +57,12 @@ existing owner's hosted access, dashboard hook attachment or the hosted Auth
 build's behavior. In an earlier isolated v2.197.0 run, the three-second sleeping
 hook returned its deliberately allowing result and OTP creation completed;
 the assumed default two-second hook deadline was not enforced in that fixture.
-That finding remains open. The explicit database deadline above is a separate
-test configuration, not a repair to or validation of the hosted service. Verify
-the actual hosted build and effective timeout before registration. No hosted
-role timeout or other project setting was changed.
+That finding matches the open upstream [Auth issue #2852](https://github.com/supabase/auth/issues/2852).
+The explicit database deadline above is a separate test configuration, not a
+repair to or validation of the hosted service. The outer request-limit check
+also does not establish that the shorter hook deadline works. Verify the actual
+hosted build and effective deadlines before registration. No hosted role timeout
+or other project setting was changed.
 
 Those checks, browser session acceptance and the remaining security/recovery/
 privacy/operating gates still precede public registration.
