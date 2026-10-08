@@ -101,3 +101,30 @@ Hosted API validation after the code change: a public mint-address lookup return
 This was a focused review of the read-only wallet preview, not a full website/account/provider audit. The existing security release gates remain partial or pending, including actual wallet/device tests, administrator MFA, recovery, monitoring and independent review.
 
 Primary references: https://docs.phantom.com/solana/establishing-a-connection ; https://solana.com/docs/rpc/http/gettokenaccountsbyowner ; https://docs.netlify.com/manage/routing/headers/ .
+
+
+## October 8 current-mint public lock panel
+
+The Command Deck now separates public Federation token locks from personal
+wallet balances and proposed staking. Its new panel reads the three metadata
+accounts, three escrows and current mint through the fixed finalized
+`/api/treasury-locks` endpoint, with no credentials or wallet connection.
+It verifies account owners, metadata version/length, mint, escrow relationship,
+six decimals, exact integer amounts, supply and full-cliff schedule. It rejects
+stale, duplicate or mismatched accounts. Scheduled escrow quantities exclude
+excess, cap at principal minus withdrawals, and show canceled/unlocked states.
+
+The three amount bars compare shares of these locks only; the total also shows
+its percentage of the one-billion minted supply. An accessible SVG places the
+three cliff markers by timestamp, with Chicago dates repeated in text cards.
+It links each contract and the full treasury evidence. No staking funding,
+reward accrual, wallet ownership or personal position is inferred. Refresh
+requests are bounded to 12 seconds and cannot overlap. Failed reads remove the
+previous total, cards and graph instead of retaining a current claim.
+
+Eight new synthetic tests pass for exact 30M/30M/40M principal, bar shares,
+dates/links, failed refresh clearing, stale/mismatched/duplicate data and pending
+request deduplication. All **105 combined tests passed locally**; the account
+workflow includes the new tests. Browser preview and CI follow this commit.
+The account/Command Deck PR stays draft, with real Google/session/device and
+financial-service release gates unchanged.

@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --check assets/federation/fed-account.js
-      - run: node --test tests/federation-account.test.mjs tests/federation-account-page.test.mjs tests/federation-account-tabs.test.mjs tests/federation-deck.test.cjs tests/federation-deck-phantom.test.cjs tests/federation-deck-staking.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/treasury-locks.test.mjs
+      - run: node --test tests/federation-account.test.mjs tests/federation-account-page.test.mjs tests/federation-account-tabs.test.mjs tests/federation-deck.test.cjs tests/federation-deck-locks.test.cjs tests/federation-deck-phantom.test.cjs tests/federation-deck-staking.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/treasury-locks.test.mjs
   signup-role:
     # Disposable native SQL proof only; no secrets, hosted projects or deployment.
     if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository
