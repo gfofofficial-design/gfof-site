@@ -263,3 +263,22 @@ tests passed locally. These are synthetic VM tests, not actual-browser or
 provider-cookie acceptance. The [dated coordination packet](federation-account-tab-coordination-20261008.md)
 records behavior, compatibility, test scope and the remaining hosted checks.
 Public signup stays closed; S4 remains partial.
+
+
+## October 8 production synchronization
+
+Merged production main `50be6258473374b46887da9605f177cc98d3c757` into
+this draft review branch. Today's current-mint lock records, fixed-account
+same-origin reader, former-mint archive and corrected Intel/staking disclosures
+are preserved. The homepage three-way merge retains its two account navigation
+links alongside the current 100M/10% snapshot and treasury links.
+
+All **97 local focused tests passed** on the combined tree: 51 account
+handler/page/tab tests, 33 dashboard/wallet/pricing tests and 13 treasury-reader
+tests. The account workflow now runs this combined set for relevant integration
+changes, while preserving disposable signup-role/Auth-service checks.
+No account or signup settings, cookies, provider integration or financial
+behavior changed. This sync stays in draft PR #99; no production account
+release, registration opening or wallet transaction occurs. Real Google,
+actual-browser session/cookie behavior and real-device wallet checks remain
+required as recorded above.
