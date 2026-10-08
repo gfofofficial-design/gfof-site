@@ -67,15 +67,20 @@
  }
  async function refresh(){
   if(pending)return;pending=true;button.disabled=true;message.textContent='Reading the three public contracts…';
-  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+  const controller=new AbortController();let onAbort;
+  const aborted=new Promise((_,reject)=>{onAbort=()=>reject(Error('Unavailable'));controller.signal.addEventListener('abort',onAbort,{once:true});});
+  const timer=setTimeout(()=>controller.abort(),12000);
   try{
-   const response=await fetch('/api/treasury-locks',{credentials:'omit',signal:controller.signal});
-   if(!response.ok)throw Error('Unavailable');
-   const data=await response.json();render(decode(data),data);
+   const data=await Promise.race([(async()=>{
+    const response=await fetch('/api/treasury-locks',{credentials:'omit',signal:controller.signal});
+    controller.signal.throwIfAborted();
+    if(!response.ok)throw Error('Unavailable');
+    return response.json();
+   })(),aborted]);render(decode(data),data);
   }catch{
    cards.replaceChildren();plot.replaceChildren();document.getElementById('deck-lock-total').textContent='Unavailable';document.getElementById('deck-lock-percent').textContent='Current read could not be verified';
    message.textContent='The current lock read is unavailable. Use the dated treasury evidence and contract links; no current total is inferred.';
-  }finally{clearTimeout(timer);pending=false;button.disabled=false;}
+  }finally{clearTimeout(timer);controller.signal.removeEventListener('abort',onAbort);controller.abort();pending=false;button.disabled=false;}
  }
  button.addEventListener('click',refresh);refresh();
 })();

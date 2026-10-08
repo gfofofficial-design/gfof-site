@@ -38,3 +38,16 @@ test('a pending read cannot be duplicated by repeated refresh clicks',async()=>{
  let resolve,calls=0;const app=setup(()=>{calls++;return new Promise(r=>resolve=r)});
  await app.refresh();assert.equal(calls,1);resolve({ok:true,json:async()=>payload()});await settled();assert.equal(app.get('deck-lock-refresh').disabled,false);
 });
+
+test('lock deadlines clear an old verified total and allow retry despite ignored abort',{timeout:1000},async()=>{
+ for(const phase of ['headers','body']){
+  let calls=0,expire,late;const app=setup(async()=>{calls++;if(calls!==2)return {ok:true,json:async()=>payload()};const delayed=new Promise(resolve=>late=resolve);return phase==='headers'?delayed:{ok:true,json:()=>delayed};},{setTimeout(callback,ms){assert.equal(ms,12000);expire=callback;return 1;},clearTimeout(){}});
+  await settled();assert.equal(app.get('deck-lock-total').textContent,'100,000,000 GFOF');
+  const pending=app.refresh();await settled();expire();await pending;
+  assert.equal(app.get('deck-lock-refresh').disabled,false);assert.equal(app.get('deck-lock-total').textContent,'Unavailable');
+  assert.equal(app.get('deck-lock-cards').children.length,0);assert.equal(app.get('deck-lock-timeline').children.length,0);
+  await app.refresh();assert.equal(app.get('deck-lock-total').textContent,'100,000,000 GFOF');
+  late(phase==='headers'?{ok:true,json:async()=>({})}:{});await settled();
+  assert.equal(app.get('deck-lock-total').textContent,'100,000,000 GFOF');assert.equal(calls,3);
+ }
+});

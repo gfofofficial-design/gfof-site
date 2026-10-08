@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'netlify/functions/federation-wallet.cjs'
+      - 'netlify/functions/treasury-locks.mjs'
+      - 'record/current-mint-locks-three-20261008.json'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'netlify/lib/wallet-prices.cjs'
       - 'assets/federation/fed-deck*.js'
@@ -17,6 +19,8 @@ on:
     branches: [main]
     paths:
       - 'netlify/functions/federation-wallet.cjs'
+      - 'netlify/functions/treasury-locks.mjs'
+      - 'record/current-mint-locks-three-20261008.json'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'netlify/lib/wallet-prices.cjs'
       - 'assets/federation/fed-deck*.js'

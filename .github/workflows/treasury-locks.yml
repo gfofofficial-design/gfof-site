@@ -1,18 +1,20 @@
 name: Treasury lock reader
 on:
   pull_request:
-    paths: ['treasury.html', 'netlify/functions/treasury-locks.mjs', 'tests/treasury-locks.test.mjs', 'record/current-mint-locks-three-20261008.json', '.github/workflows/treasury-locks.yml']
+    paths: ['treasury.html', 'netlify/functions/treasury-locks.mjs', 'netlify/lib/read-json-bounded.cjs', 'tests/read-json-bounded.test.cjs', 'tests/treasury-locks.test.mjs', 'record/current-mint-locks-three-20261008.json', '.github/workflows/treasury-locks.yml']
   push:
     branches: [main]
-    paths: ['treasury.html', 'netlify/functions/treasury-locks.mjs', 'tests/treasury-locks.test.mjs', 'record/current-mint-locks-three-20261008.json', '.github/workflows/treasury-locks.yml']
+    paths: ['treasury.html', 'netlify/functions/treasury-locks.mjs', 'netlify/lib/read-json-bounded.cjs', 'tests/read-json-bounded.test.cjs', 'tests/treasury-locks.test.mjs', 'record/current-mint-locks-three-20261008.json', '.github/workflows/treasury-locks.yml']
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          node-version: '22'
-      - run: node --test tests/treasury-locks.test.mjs
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - run: node --test tests/treasury-locks.test.mjs tests/read-json-bounded.test.cjs
