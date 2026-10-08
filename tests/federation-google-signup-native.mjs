@@ -37,7 +37,7 @@ do $preflight$
 begin
   if current_database() <> 'federation_signup_native_test'
      or session_user <> 'postgres'
-     or current_setting('server_version_num')::integer <> 171100 then
+     or current_setting('server_version_num')::integer <> 170011 then
     raise exception 'Only the disposable PostgreSQL 17.11 fixture is allowed';
   end if;
   if exists (select 1 from pg_roles where rolname in
