@@ -282,3 +282,30 @@ behavior changed. This sync stays in draft PR #99; no production account
 release, registration opening or wallet transaction occurs. Real Google,
 actual-browser session/cookie behavior and real-device wallet checks remain
 required as recorded above.
+
+
+## October 8 anonymous desktop-browser acceptance
+
+Checked the deployed draft in the cloud desktop browser without starting OAuth,
+entering credentials, connecting Phantom or submitting a wallet transaction.
+
+- Account availability settled to an enabled Google button and disabled Apple.
+  Identity and sign-out controls remained hidden in the signed-out state.
+  This verifies configured pilot UI availability, not new-user signup rules.
+- Dashboard keyboard Tab from the public-address input focused its Read button;
+  Enter submitted an invalid example and produced the explicit validation message.
+  No wallet balances or prices were fabricated.
+- Clear emptied the address field, table and visit-history display and retained
+  the separate public Federation lock panel.
+- Manual lock refresh disabled its button while reading, then returned a fresh
+  finalized slot **454588185**, 100M scheduled GFOF/10%, three correct amounts,
+  Chicago cliff dates and the proportional timeline. The button re-enabled.
+- Account-to-dashboard copy now distinguishes working public wallet/lock reads
+  and supported reference prices from fictional leaderboard entries and proposed
+  staking. Account scripts and provider/session behavior are unchanged.
+
+These checks add actual anonymous desktop UI evidence to the 105-test synthetic
+suite. They do not complete real Google sign-in/cancel/replay, actual signed-in
+cookie expiry or multi-tab logout, a populated Phantom wallet, real phone, or
+new-account signup acceptance. Those remain the existing release gates.
+Production is unchanged and PR #99 stays draft.
