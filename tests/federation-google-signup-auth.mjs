@@ -1,7 +1,7 @@
 // Disposable self-hosted Auth acceptance; no hosted URL or real credentials accepted.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createHmac, randomBytes } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 
@@ -55,6 +55,7 @@ const restoreFunction = probe.slice(functionStart, functionEnd).replace(/^create
 
 let network, mail, auth, authOrigin, mailOrigin;
 const ownedContainers = new Set();
+const fixtureOrigins = new Set();
 const baseURL = 'http://127.0.0.1:9999';
 const controlEmail = 'existing-owner@example.invalid';
 let controlID;
@@ -68,12 +69,17 @@ const jwt = (role) => {
 };
 const adminToken = jwt('service_role');
 function localOrigin(container, port) {
-  const binding = docker(['port', container, `${port}/tcp`]);
-  assert(/^127\.0\.0\.1:[0-9]+$/.test(binding), 'Only loopback HTTP bindings are allowed');
-  return `http://${binding}`;
+  const info = JSON.parse(docker(['inspect', '--format', '{{json .NetworkSettings}}', container]));
+  assert.deepEqual(Object.keys(info.Networks), [network], 'Only the owned internal network is allowed');
+  assert(Object.values(info.Ports || {}).every(value => value === null), 'No published ports are allowed');
+  const ip = info.Networks[network].IPAddress;
+  assert(/^(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.)[0-9.]+$/.test(ip), 'Expected a private fixture address');
+  const origin = `http://${ip}:${port}`;
+  fixtureOrigins.add(origin);
+  return origin;
 }
 async function http(origin, path, body, token, method = body === undefined ? 'GET' : 'POST') {
-  assert(/^http:\/\/127\.0\.0\.1:[0-9]+$/.test(origin), 'Only local fixture HTTP requests allowed');
+  assert(fixtureOrigins.has(origin), 'Only addresses derived from owned fixture containers are allowed');
   const res = await fetch(origin + path, { method, redirect: 'error', signal: AbortSignal.timeout(10000),
     headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
@@ -92,8 +98,9 @@ async function waitReady(origin, path) {
     await delay(500);
   }
   // Startup diagnostic only; never dump request/response bodies or Auth user rows.
-  const logs = docker(['logs', '--tail', '15', auth || mail]);
-  throw new Error(`Fixture startup failed: ${redact(logs).slice(-2000)}`);
+  const logs = spawnSync('docker', ['logs', '--tail', '15', auth || mail], {
+    encoding: 'utf8', timeout: 10000, maxBuffer: 1024 * 1024 });
+  throw new Error(`Fixture startup failed: ${redact(String(logs.stdout || '') + String(logs.stderr || '')).slice(-2000)}`);
 }
 async function mailCount() {
   const r = await http(mailOrigin, '/api/v1/messages?limit=1');
@@ -129,7 +136,7 @@ async function startAuth(disableSignup, enableHook) {
     GOTRUE_HOOK_BEFORE_USER_CREATED_ENABLED: String(enableHook),
     ...(enableHook ? { GOTRUE_HOOK_BEFORE_USER_CREATED_URI: `pg-functions://postgres/${SCHEMA}/google_only` } : {}),
   };
-  auth = docker(['run', '-d', '--network', network, '-p', '127.0.0.1::9999',
+  auth = docker(['run', '-d', '--network', network,
     ...Object.entries(env).flatMap(([key,value]) => ['-e', `${key}=${value}`]), AUTH_IMAGE]);
   ownedContainers.add(auth);
   authOrigin = localOrigin(auth, 9999);
@@ -183,7 +190,7 @@ try {
     alter role supabase_auth_admin set search_path = auth;
     commit;`);
   mail = docker(['run', '-d', '--network', network, '--network-alias', 'fixture-mail',
-    '-p', '127.0.0.1::8025', MAIL_IMAGE]); ownedContainers.add(mail);
+    MAIL_IMAGE]); ownedContainers.add(mail);
   mailOrigin = localOrigin(mail, 8025); await waitReady(mailOrigin, '/api/v1/messages?limit=1');
   assert.equal(await mailCount(), 0, 'Mail sink must start empty');
 

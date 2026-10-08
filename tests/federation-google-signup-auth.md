@@ -4,9 +4,10 @@
 v2.197.0 service against a fresh PostgreSQL 17.11 Docker fixture with Mailpit
 v1.31.4. This is a test harness, not a migration, hosted project or deployment.
 It accepts only the explicit disposable-fixture confirmation and matching local
-Postgres container ID/image/database. HTTP ports bind to 127.0.0.1. Auth and
-Mailpit join only a newly-created internal Docker network, without outbound
-internet or a configured mail relay. No real Google configuration is supplied.
+Postgres container ID/image/database. Auth and Mailpit publish no host ports and
+join only a newly-created internal Docker network, without outbound internet or
+a configured mail relay. The runner uses private addresses derived from those
+exact containers on that owned network. No real Google configuration is supplied.
 
 The harness generates temporary database/password/JWT credentials in memory.
 It never accepts hosted URLs, exports credentials, prints token/user/mail
