@@ -36,3 +36,31 @@ test('address edits remove the previous Explorer destination and source evidence
 test('deadline settles the wallet UI even when fetch never honors abort', {timeout:1000},async()=>{let expire,cleared=0;const app=setup(()=>new Promise(()=>{}),undefined,{setTimeout(callback,delay){assert.equal(delay,20000);expire=callback;return 1;},clearTimeout(){cleared++;}});app.nodes.get('wallet-address').value='11111111111111111111111111111111';const pending=app.submit();expire();await pending;assert.equal(app.nodes.get('wallet-load').disabled,false);assert.match(app.nodes.get('wallet-message').textContent,/timed out/);assert.equal(app.nodes.get('wallet-source-panel').hidden,true);assert.equal(cleared,1);});
 test('late response decoding after timeout cannot restore balances or overwrite a successful retry',{timeout:1000},async()=>{const address='11111111111111111111111111111111';let decode,expire,calls=0;const app=setup(async()=>({ok:true,status:200,json:++calls===1?()=>new Promise(resolve=>decode=resolve):async()=>({address,sol:'2',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString(),commitment:'confirmed',slots:[1,2,3]})}),undefined,{setTimeout(callback){expire=callback;return 1;},clearTimeout(){}});app.nodes.get('wallet-address').value=address;const pending=app.submit();await new Promise(setImmediate);expire();await pending;assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-load').disabled,false);await app.submit();decode({address,sol:'99',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()});await new Promise(setImmediate);assert.equal(app.nodes.get('wallet-rows').children[0].children[1].textContent,'2');assert.equal(app.nodes.get('balance-history-rows').children.length,1);assert.equal(app.nodes.get('wallet-source-slots').children.length,6);assert.equal(app.nodes.get('wallet-state').textContent,'Address loaded');});
 test('Clear settles an ignored-abort lookup immediately and preserves its cleared message',{timeout:1000},async()=>{let cleared=0;const app=setup(()=>new Promise(()=>{}),undefined,{setTimeout(){return 1;},clearTimeout(){cleared++;}});app.nodes.get('wallet-address').value='11111111111111111111111111111111';const pending=app.submit();app.clear();await pending;assert.equal(cleared,1);assert.equal(app.nodes.get('wallet-load').disabled,false);assert.match(app.nodes.get('wallet-message').textContent,/Cleared from this page/);assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-source-panel').hidden,true);});
+
+test('asset filtering matches symbols and mint fragments without changing totals or requesting data',async()=>{
+ const address='11111111111111111111111111111111',mint='Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';let calls=0;
+ const app=setup(async()=>{calls++;return {ok:true,status:200,json:async()=>({address,sol:'2',tokens:[{mint,symbol:'GFOF',quantity:'500'},{mint:'unknown-mint',symbol:null,quantity:'7'}],tokenAccounts:2,observedAt:new Date().toISOString(),pricing:{prices:{So11111111111111111111111111111111111111112:{usdPrice:100}}}})};});
+ app.nodes.get('wallet-address').value=address;await app.submit();
+ const filter=app.nodes.get('wallet-asset-filter'),rows=app.nodes.get('wallet-rows').children;
+ assert.equal(app.nodes.get('wallet-filter-panel').hidden,false);
+ for(const [query,expected] of [['  gFoF  ',[true,false,true]],['dC9Ceu',[true,false,true]],['SOL',[false,true,true]],['Unverified',[true,true,false]],['not present',[true,true,true]]]){
+  filter.value=query;filter.events.input();assert.deepEqual(rows.map(r=>r.hidden),expected);
+  assert.equal(app.nodes.get('priced-total').textContent,'$200.00');assert.equal(app.nodes.get('wallet-count').textContent,'2');assert.equal(app.nodes.get('holdings-graph').children.length,1);
+ }
+ assert.match(app.nodes.get('wallet-filter-status').textContent,/No matching assets/);
+ app.nodes.get('wallet-filter-clear').events.click();assert.equal(filter.value,'');assert.deepEqual(rows.map(r=>r.hidden),[false,false,false]);
+ assert.match(app.nodes.get('wallet-filter-status').textContent,/Showing 3 of 3 assets/);assert.equal(calls,1);
+});
+test('asset filters cannot persist across edits, clear or a failed refresh',async()=>{
+ const address='11111111111111111111111111111111';let fail=false;
+ const app=setup(async()=>({ok:!fail,status:fail?503:200,json:async()=>fail?{error:'Unavailable'}:{address,sol:'1',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()}}));
+ for(const action of ['edit','clear','failure']){
+  fail=false;app.nodes.get('wallet-address').value=address;await app.submit();
+  const filter=app.nodes.get('wallet-asset-filter');filter.value='missing';filter.events.input();
+  if(action==='edit')app.nodes.get('wallet-address').events.input();
+  if(action==='clear')app.clear();
+  if(action==='failure'){fail=true;await app.submit();}
+  assert.equal(filter.value,'');assert.equal(app.nodes.get('wallet-filter-panel').hidden,true);assert.equal(app.nodes.get('wallet-rows').children.length,0);
+  assert.equal(app.nodes.get('wallet-filter-status').textContent,'Read balances to filter returned assets.');
+ }
+});

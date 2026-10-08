@@ -30,3 +30,6 @@
 #wallet-rows .wallet-lens-link{display:flex;min-height:44px;padding:8px 0;font-size:13px;line-height:1.4;width:fit-content;max-width:100%;overflow-wrap:anywhere}
 
 .wallet-source-panel{margin:16px 0;padding:12px 0;border-top:1px solid var(--fed-border-default);border-bottom:1px solid var(--fed-border-default)}.wallet-source-panel[hidden]{display:none}.wallet-source-panel details{margin:8px 0}.wallet-source-slots{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px}.wallet-source-slots dd{margin:0;overflow-wrap:anywhere;color:var(--fed-command)}@media(max-width:560px){.wallet-source-slots{grid-template-columns:1fr}.wallet-source-slots dd{padding-bottom:8px}}
+
+/* Asset filtering leaves full-read totals and charts intact. */
+.wallet-filter{margin:20px 0}.wallet-filter[hidden]{display:none}.wallet-filter label{display:block;font-weight:600}.wallet-filter input{width:100%;min-height:48px;padding:12px;margin:8px 0 12px;background:var(--fed-space);color:var(--fed-text-display);border:1px solid var(--fed-border-strong);border-radius:8px;font:16px system-ui}#wallet-rows tr[hidden]{display:none}
