@@ -44,11 +44,20 @@
  form.addEventListener('submit',async e=>{
   e.preventDefault();const address=input.value.trim();controller?.abort();const request=++sequence;reset();if(historyAddress&&historyAddress!==address)clearHistory();
   if(!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)){status.textContent='Enter a public Solana address. Never enter a seed phrase or private key.';return;}
-  controller=new AbortController();const requestController=controller;let timedOut=false;const timeout=setTimeout(()=>{timedOut=true;requestController.abort();},20000);button.disabled=true;status.textContent='Reading public Solana balances…';
-  try{const res=await fetch('/api/federation-wallet',{method:'POST',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({address}),signal:controller.signal});if(request!==sequence)return;if(res.status===429)throw Error('Too many lookups. Please wait a minute.');let data;try{data=await res.json();}catch{throw Error('Wallet service is unavailable. Please try again later.');}if(request!==sequence)return;if(!res.ok)throw Error(data.error||'Wallet service unavailable.');if(data.address!==address||!Array.isArray(data.tokens)||data.tokens.length>1000||typeof data.sol!=='string')throw Error('Balance response could not be verified.');
+  controller=new AbortController();const requestController=controller;let timedOut=false,onAbort;
+  const aborted=new Promise((_,reject)=>{onAbort=()=>reject(Object.assign(Error('Lookup cancelled.'),{name:'AbortError'}));requestController.signal.addEventListener('abort',onAbort,{once:true});});
+  const timeout=setTimeout(()=>{timedOut=true;requestController.abort();},20000);button.disabled=true;status.textContent='Reading public Solana balances…';
+  try{
+   const payload=await Promise.race([(async()=>{
+    const res=await fetch('/api/federation-wallet',{method:'POST',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({address}),signal:requestController.signal});
+    if(res.status===429)throw Error('Too many lookups. Please wait a minute.');
+    let data;try{data=await res.json();}catch{throw Error('Wallet service is unavailable. Please try again later.');}
+    return {res,data};
+   })(),aborted]);
+   if(request!==sequence)return;const {res,data}=payload;if(!res.ok)throw Error(data.error||'Wallet service unavailable.');if(data.address!==address||!Array.isArray(data.tokens)||data.tokens.length>1000||typeof data.sol!=='string')throw Error('Balance response could not be verified.');
    holdings(data);recordHistory(data);renderSources(data);
    document.getElementById('wallet-count').textContent=String(data.tokens.length);document.getElementById('wallet-state').textContent='Address loaded';document.getElementById('wallet-scope').textContent=address.slice(0,6)+'…'+address.slice(-6)+' · ownership unverified';document.getElementById('wallet-caption').textContent='On-chain quantities · available reference values';document.getElementById('wallet-data-status').textContent='BALANCES LOADED';status.textContent='Observed '+new Date(data.observedAt).toLocaleString()+'. Source: Solana public RPC. '+data.tokenAccounts+' token accounts read. Zero-balance token accounts are omitted. These reads may come from different slots.';
-  }catch(e){if(request!==sequence)return;reset();clearHistory();status.textContent=e.name==='AbortError'?(timedOut?'Lookup timed out. Please try again later.':'Lookup cancelled.'):e.message;}finally{clearTimeout(timeout);if(request===sequence)button.disabled=false;}
+  }catch(e){if(request!==sequence)return;reset();clearHistory();status.textContent=e.name==='AbortError'?(timedOut?'Lookup timed out. Please try again later.':'Lookup cancelled.'):e.message;}finally{clearTimeout(timeout);requestController.signal.removeEventListener('abort',onAbort);if(request===sequence)button.disabled=false;}
  });
  input.addEventListener('input',()=>{sequence++;controller?.abort();button.disabled=false;reset();clearHistory();status.textContent='Address changed. Read balances to load the new address.';});
  clear.addEventListener('click',()=>{sequence++;controller?.abort();input.value='';button.disabled=false;reset();clearHistory();status.textContent='Cleared from this page. No wallet address is saved to your account or this device.';});
