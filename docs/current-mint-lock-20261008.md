@@ -123,3 +123,29 @@ escrow; mint. Earlier source snapshots remain available.
 
 All three remain full-cliff locks at the joint read. Former-mint totals remain
 separate. Existing scripts are unchanged; visual preview remains pending.
+
+## Production replacement requested October 8, 2026
+
+The owner authorized replacing the former-mint locks on the live website.
+The current page now uses only the three current-mint contracts for live
+balance reads, next-unlock countdown and timeline, with six token decimals.
+The previous treasury disclosure is preserved as a clearly marked, noindex
+[former-mint archive](../record/treasury-former-mint-20261008.html).
+Former wallet purpose labels are not reassigned to current allocations.
+
+Live metadata reads reject unexpected program owners, version/length and mints;
+escrow reads check SPL owner, mint, decimals and safe integer amounts.
+The displayed scheduled principal is capped at deposit minus withdrawals and
+escrow balance, excluding excess. Canceled contracts contribute zero. Cards
+report unlocked status after the end date; amounts in escrow do not imply
+continued vesting restrictions. Dates use America/Chicago. Reads time out after
+12 seconds. Full failures show unavailable rather than a fabricated 130M fallback;
+partial failures explicitly report a partial total.
+
+Eight local Node VM checks passed: successful three-lock read (100M/10%),
+next unlock Lock 2 on August 18, 2027 and full-cliff completion; partial outage;
+full outage; wrong metadata owner; wrong metadata mint; wrong escrow mint;
+empty escrows; and page boundaries (no former-mint addresses or 130M fallback).
+These exercise actual page script against saved RPC records and a stub DOM.
+Local browser visual checking was unavailable because the browser executable
+was absent. No auth, staking transactions or lending features change.

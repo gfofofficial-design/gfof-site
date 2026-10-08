@@ -660,13 +660,13 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-tag"><span class="hero-tag-dot"></span>CURRENT LOCK SNAPSHOT · HISTORICAL LIVE READS</div>
+    <div class="hero-tag"><span class="hero-tag-dot"></span>CURRENT GFOF · THREE ON-CHAIN LOCKS</div>
     <h1>Transparency <span class="grad">Report</span></h1>
-    <p>Verify the <a href="#current-mint-lock">new GFOF mint’s dated lock records</a> and the separate historical record. The four <strong>former-mint</strong> Streamflow locks are read from Solana; current-lock and designated-wallet snapshots are dated and linked to their public accounts.</p>
-    <p><strong>Current mint:</strong> <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code></a>. <strong>Former mint in the historical locks:</strong> <code style="overflow-wrap:anywhere">2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code>. These old-mint locks do not prove new-token locks. See <a href="/migration">the holder migration process</a>.</p>
+    <p>Three verified Streamflow contracts hold the <strong>current GFOF mint</strong>. Check their scheduled amounts, unlock dates and live reads below. The former-token records are preserved in the <a href="/record/treasury-former-mint-20261008.html">historical archive</a>.</p>
+    <p><strong>Current mint:</strong> <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code></a>. See <a href="/migration">the holder migration process</a>.</p>
   </section>
 
-  <div class="promise"><div class="promise-title">CURRENT MINT · THREE VERIFIED LOCKS</div><div class="promise-body"><strong>100,000,000 GFOF scheduled · 10% of minted supply.</strong> All three contracts and their escrows were checked together with the mint at finalized slot 454550404 on October 8, 2026. The scheduled allocations are 30M, 30M and 40M; their unlock dates differ. This dated total is separate from the former-mint live reads below.</div></div>
+  <div class="promise"><div class="promise-title">CURRENT MINT · THREE VERIFIED LOCKS</div><div class="promise-body"><strong>100,000,000 GFOF scheduled · 10% of minted supply.</strong> All three contracts and their escrows were checked together with the mint at finalized slot 454550404 on October 8, 2026. The scheduled allocations are 30M, 30M and 40M; their unlock dates differ. This is the October 8 verification snapshot; the live reader below checks the same three current-mint contracts.</div></div>
 
   <!-- CURRENT-MINT LOCK: DATED RPC EVIDENCE, NOT A LIVE READ -->
   <section class="promise" id="current-mint-lock" aria-labelledby="current-lock-title">
@@ -676,7 +676,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <p><strong>Full cliff:</strong> <time datetime="2027-10-01T05:00:00Z">October 1, 2027 at midnight America/Chicago</time>. The full scheduled amount unlocks then; none had been withdrawn and the contract was not canceled at the snapshot.</p>
       <p><strong>Permissions at the read:</strong> cancellation and transfer are disabled for both sender and recipient. Top-ups, pausing and rate changes are disabled. This is a token lock, not a staking or reward pool.</p>
       <p><strong>Recipient:</strong> <a href="https://solscan.io/account/DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6</code></a>.</p>
-      <p><strong>Read boundary:</strong> the escrow held 30,150,000 GFOF, but only the scheduled 30,000,000 is counted here. This dated snapshot is not part of the historical live total below. Follow the contract for current status; this record does not certify the provider or its upgrade authority.</p>
+      <p><strong>Read boundary:</strong> the escrow held 30,150,000 GFOF, but only the scheduled 30,000,000 is counted here. This dated snapshot is separate from the live read below. Follow the contract for current status; this record does not certify the provider or its upgrade authority.</p>
       <p><strong>Verified October 8, 2026 · finalized slot 454550404.</strong> The metadata and escrow both identify the current mint. <a href="/record/current-mint-locks-three-20261008.json">Read the source snapshot</a>.</p>
       <p><a href="https://app.streamflow.finance/contract/solana/mainnet/AiRhuw9iFyXiZYv2hqanBK12dckebF4vNMoAzj9Nj9nY" target="_blank" rel="noopener">VIEW THIS LOCK ON STREAMFLOW ↗</a> · <a href="https://solscan.io/account/AiRhuw9iFyXiZYv2hqanBK12dckebF4vNMoAzj9Nj9nY" target="_blank" rel="noopener">METADATA ↗</a> · <a href="https://solscan.io/account/F1iUer7wVsdv7uQ4if77Jy1ZAfTVDjSy4Pd7ZiXsVfS1" target="_blank" rel="noopener">ESCROW ↗</a></p>
     </div>
@@ -690,7 +690,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <p><strong>Full cliff:</strong> <time datetime="2027-08-18T05:00:00Z">August 18, 2027 at midnight America/Chicago</time>. The full scheduled amount unlocks then; none had been withdrawn and the contract was not canceled at the snapshot.</p>
       <p><strong>Permissions at the read:</strong> cancellation and transfer are disabled for both sender and recipient. Top-ups, pausing and rate changes are disabled. This is a token lock, not a staking or reward pool.</p>
       <p><strong>Recipient:</strong> <a href="https://solscan.io/account/8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7</code></a>.</p>
-      <p><strong>Read boundary:</strong> the escrow held 30,150,000 GFOF, but only the scheduled 30,000,000 is counted here. This dated snapshot is not part of the historical live total below. Follow the contract for current status; this record does not certify the provider or its upgrade authority.</p>
+      <p><strong>Read boundary:</strong> the escrow held 30,150,000 GFOF, but only the scheduled 30,000,000 is counted here. This dated snapshot is separate from the live read below. Follow the contract for current status; this record does not certify the provider or its upgrade authority.</p>
       <p><strong>Verified October 8, 2026 · finalized slot 454550404.</strong> The metadata and escrow both identify the current mint. <a href="/record/current-mint-locks-three-20261008.json">Read the source snapshot</a>.</p>
       <p><a href="https://app.streamflow.finance/contract/solana/mainnet/BW6ZUUT5NXxSGMKNAzoMYbqrXy5Dm1ev1ekEgYSXJWX8" target="_blank" rel="noopener">VIEW THIS LOCK ON STREAMFLOW ↗</a> · <a href="https://solscan.io/account/BW6ZUUT5NXxSGMKNAzoMYbqrXy5Dm1ev1ekEgYSXJWX8" target="_blank" rel="noopener">METADATA ↗</a> · <a href="https://solscan.io/account/9NeQZao9SNt7FztKbNMCwCmEYZTYkWnidZmW4chuupQq" target="_blank" rel="noopener">ESCROW ↗</a></p>
     </div>
@@ -704,19 +704,13 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <p><strong>Full cliff:</strong> <time datetime="2028-10-18T05:00:00Z">October 18, 2028 at midnight America/Chicago</time>. The full scheduled amount unlocks then; none had been withdrawn and the contract was not canceled at the snapshot.</p>
       <p><strong>Permissions at the read:</strong> cancellation and transfer are disabled for both sender and recipient. Top-ups, pausing and rate changes are disabled. This is a token lock, not a staking or reward pool.</p>
       <p><strong>Recipient:</strong> <a href="https://solscan.io/account/5U3uduBNhNtwTofNNdsS8bet4GuQmGXYnQoJ5t6cfM6u" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">5U3uduBNhNtwTofNNdsS8bet4GuQmGXYnQoJ5t6cfM6u</code></a>.</p>
-      <p><strong>Read boundary:</strong> the escrow held 40,200,000 GFOF, but only the scheduled 40,000,000 is counted here. This dated snapshot is not part of the historical live total below. Follow the contract for current status; this record does not certify the provider or its upgrade authority.</p>
+      <p><strong>Read boundary:</strong> the escrow held 40,200,000 GFOF, but only the scheduled 40,000,000 is counted here. This dated snapshot is separate from the live read below. Follow the contract for current status; this record does not certify the provider or its upgrade authority.</p>
       <p><strong>Verified October 8, 2026 · finalized slot 454550404.</strong> The metadata and escrow both identify the current mint. <a href="/record/current-mint-locks-three-20261008.json">Read the source snapshot</a>.</p>
       <p><a href="https://app.streamflow.finance/contract/solana/mainnet/EPdpg7AYEzcwudN7TRdEkCGHQeHRrFhoK2yiYxDdGLnv" target="_blank" rel="noopener">VIEW THIS LOCK ON STREAMFLOW ↗</a> · <a href="https://solscan.io/account/EPdpg7AYEzcwudN7TRdEkCGHQeHRrFhoK2yiYxDdGLnv" target="_blank" rel="noopener">METADATA ↗</a> · <a href="https://solscan.io/account/DkzEr7nsuhL4Ser6AyZQ71u2mBdGj86mXmHDAzpS1Pop" target="_blank" rel="noopener">ESCROW ↗</a></p>
     </div>
   </section>
 
-  <!-- HISTORICAL READS -->
-  <div class="promise">
-    <div class="promise-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> HISTORICAL LOCK READS</div>
-    <div class="promise-body">
-      This page queries Solana's public mainnet RPC directly from your browser for four <strong>old-mint</strong> Streamflow locks. Those live reads answer what remains in those historical contracts, not what is locked from the replacement mint. Designated-wallet purposes are owner-supplied and unlocked balances are dated snapshots with direct explorer links. Refresh the page to recheck the old lock data.
-    </div>
-  </div>
+  <div class="promise"><div class="promise-title">LIVE CURRENT-MINT READS</div><div class="promise-body">Refresh to check the three current-mint contracts directly on Solana. The totals cap escrow balances at remaining scheduled principal and exclude escrow excess. A failed read is shown as unavailable; it does not silently substitute a historical total.</div></div>
 
   <!-- STATUS BAR -->
   <div class="status-bar">
@@ -733,9 +727,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <!-- SUMMARY -->
   <div class="summary" id="summary">
     <div class="summary-cell">
-      <div class="k">TOTAL LOCKED</div>
+      <div class="k">SCHEDULED TOKENS IN ESCROW</div>
       <div class="v green loading" id="sum-locked">…</div>
-      <div class="s">$GFOF in Streamflow escrow</div>
+      <div class="s">excludes escrow excess</div>
     </div>
     <div class="summary-cell">
       <div class="k">% OF SUPPLY</div>
@@ -744,8 +738,8 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     </div>
     <div class="summary-cell">
       <div class="k">ACTIVE CONTRACTS</div>
-      <div class="v" id="sum-contracts">4 / 4</div>
-      <div class="s">plus 1 preserved predecessor</div>
+      <div class="v" id="sum-contracts">3</div>
+      <div class="s">current-mint contracts</div>
     </div>
     <div class="summary-cell">
       <div class="k">NETWORK</div>
@@ -757,80 +751,10 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <!-- LOCK CONTRACTS -->
   <div class="section-head">
     <div class="tag">ON-CHAIN LOCK CONTRACTS</div>
-    <h2>The Four Historical Locks</h2>
-    <p>Each historical lock is an independent Streamflow vesting contract holding a portion of the former mint’s 13% dev allocation. The 40M third lock matured on August 18, 2026 and was re-locked through August 18, 2028. Its expired predecessor remains linked as part of the public lineage.</p>
+    <h2>The Three Current Locks</h2>
+    <p>Each is an independent current-mint Streamflow contract. Live reads verify the mint, schedule and escrow; the dated evidence above records the October 8 permission settings.</p>
   </div>
   <div class="lock-list" id="lock-list"></div>
-
-  <div class="unlock-commitment">
-    <div class="title">✓ FIRST UNLOCK COMMITMENT — KEPT</div>
-    <div class="body">
-      The original 40,000,000 $GFOF Lock 3 reached its scheduled cliff on <strong>August 18, 2026</strong>. The full scheduled allocation was placed into a new Streamflow contract on <strong>August 28, 2026</strong>, with a new full-cliff date of <strong>August 18, 2028</strong>. Verify the <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="color:var(--cyan)">active re-lock</a>, the <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan)">expired predecessor</a>, and the <a href="https://solscan.io/tx/5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD" target="_blank" rel="noopener" style="color:var(--cyan)">re-lock transaction</a> independently.
-    </div>
-  </div>
-
-  <!-- DESIGNATED WALLET DISCLOSURES -->
-  <div class="section-head">
-    <div class="tag">DESIGNATED WALLET DISCLOSURES</div>
-    <h2>Purpose, Status, and Boundaries</h2>
-    <p>These public addresses are disclosed so holders can verify material balances, control boundaries, and intended uses. Purpose labels and control statements are owner-supplied; on-chain balances and lock restrictions are independently verifiable. Balances for unlocked wallets are a dated snapshot; follow each address for current activity.</p>
-  </div>
-
-  <div class="wallet-disclosure">
-    <article class="wallet-card">
-      <div class="wallet-head"><div><div class="wallet-id">W-001</div><div class="wallet-title">Post-Bond Liquidity Reserve</div></div><span class="wallet-state owner">OWNER-CONTROLLED</span></div>
-      <a class="wallet-address" href="https://solscan.io/account/4RDWqoyKt6MhuKeaTq7JRQvrw9hsqyfedUPsRaa4yob9" target="_blank" rel="noopener">4RDWqoyKt6MhuKeaTq7JRQvrw9hsqyfedUPsRaa4yob9 ↗</a>
-      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>16,594,141.713749 GFOF · 1.66%</strong></div></div>
-      <div class="wallet-fact"><div class="k">PURPOSE</div><div class="v">Personally funded reserve accumulating through open-market purchases toward a target of up to 20,000,000 GFOF, intended for staged liquidity contributions after bonding.</div></div>
-      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled and currently unlocked. It is outside Federation treasury, is not a liquidity pool, and is not held or controlled by Moonshot. The target and intended use are not enforced by an on-chain lock.</div></div>
-    </article>
-
-    <article class="wallet-card">
-      <div class="wallet-head"><div><div class="wallet-id">W-004</div><div class="wallet-title">Development-Linked Marketing</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
-      <a class="wallet-address" href="https://solscan.io/account/G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y" target="_blank" rel="noopener">G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y ↗</a>
-      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>70,000,000 GFOF</strong> across Lock 3 and Lock 4; 0 unlocked when verified 2026-09-07.</div></div>
-      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Both contracts are immutable, non-cancelable, and non-transferable. Unlocks: 2028-08-18 and 2028-05-31.</div></div>
-    </article>
-
-    <article class="wallet-card">
-      <div class="wallet-head"><div><div class="wallet-id">W-005</div><div class="wallet-title">Operations</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
-      <a class="wallet-address" href="https://solscan.io/account/8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7" target="_blank" rel="noopener">8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7 ↗</a>
-      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>30,000,000 GFOF</strong> in Lock 1; 0 unlocked when verified 2026-09-07.</div></div>
-      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Immutable, non-cancelable, and non-transferable. Unlock: 2027-04-01.</div></div>
-    </article>
-
-    <article class="wallet-card">
-      <div class="wallet-head"><div><div class="wallet-id">W-006</div><div class="wallet-title">Marketing / Promotion</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
-      <a class="wallet-address" href="https://solscan.io/account/DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6" target="_blank" rel="noopener">DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6 ↗</a>
-      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>30,000,000 GFOF</strong> in Lock 2; 0 unlocked when verified 2026-09-07.</div></div>
-      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Immutable, non-cancelable, and non-transferable. Unlock: 2027-04-01.</div></div>
-    </article>
-
-    <article class="wallet-card">
-      <div class="wallet-head"><div><div class="wallet-id">W-008</div><div class="wallet-title">GFOF Creator Wallet</div></div><span class="wallet-state owner">OWNER-CONTROLLED</span></div>
-      <a class="wallet-address" href="https://solscan.io/account/Fv6J7pxzz3bmEDC7BjkXchNme64SaLRY5ztQVowF3z8d" target="_blank" rel="noopener">Fv6J7pxzz3bmEDC7BjkXchNme64SaLRY5ztQVowF3z8d ↗</a>
-      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>1,093,521.409153 GFOF · 0.11%</strong></div></div>
-      <div class="wallet-fact"><div class="k">ROLE</div><div class="v">This wallet signed the <a href="https://solscan.io/tx/DuUxP3N7qf9cpnyLSKm62yLPJCDNSMhg7mL67wsohgaN95a9X4uADijbNhYAL3fQtAdJW3itmvQRnU5P5Qj7psh" target="_blank" rel="noopener" style="color:var(--cyan)">on-chain creation transaction</a> for the <strong>former</strong> GFOF mint and its Meteora Dynamic Bonding Curve virtual pool. It is not evidence of new-mint custody.</div></div>
-      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled and currently unlocked. Remaining assets are intended for a potential future liquidity contribution, but they are not currently deposited, locked, or held in Moonshot custody.</div></div>
-    </article>
-
-    <article class="wallet-card personal">
-      <div class="wallet-head"><div><div class="wallet-id">W-009</div><div class="wallet-title">Owner Personal Holdings</div></div><span class="wallet-state owner">OUTSIDE TREASURY</span></div>
-      <a class="wallet-address" href="https://solscan.io/account/1nSZULzNiMkmtNKWuNaasYToxBeaCoNceJfxSvcPM5F" target="_blank" rel="noopener">1nSZULzNiMkmtNKWuNaasYToxBeaCoNceJfxSvcPM5F ↗</a>
-      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>20,424,128.443982 GFOF · 2.04%</strong></div></div>
-      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled, unlocked personal holdings outside Federation treasury. This wallet has no operational allocation and carries no Federation spending commitment.</div></div>
-    </article>
-
-    <article class="wallet-card">
-      <div class="wallet-head"><div><div class="wallet-id">W-010</div><div class="wallet-title">Community and Holder-Benefits Reserve</div></div><span class="wallet-state owner">NOT ACTIVE</span></div>
-      <a class="wallet-address" href="https://solscan.io/account/Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC" target="_blank" rel="noopener">Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC ↗</a>
-      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>26,854,995.530832 GFOF · 2.69%</strong></div></div>
-      <div class="wallet-fact"><div class="k">PURPOSE</div><div class="v">Reserved for possible future community incentives, contributor recognition, holder benefits, or liquidity-participation rewards. No airdrop, reward amount, eligibility rule, distribution, staking, or APY is authorized.</div></div>
-      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled and currently unlocked. A public specification and at least seven days’ notice are required before the first distribution or a material change of purpose.</div></div>
-    </article>
-  </div>
-
-  <div class="wallet-boundary"><strong>Disclosure boundary:</strong> W-002, W-003, and W-007 were retired after the owner confirmed those addresses are not owner- or Federation-controlled; see <a href="/corrections#c034" style="color:var(--cyan)">correction #034</a>. Unknown holder wallets are not attributed to the Federation. For unlocked wallets, a stated purpose is an intention rather than an on-chain restriction; sole-owner approval is currently sufficient to move assets unless a published policy above adds notice requirements.</div>
 
   <!-- VERIFY YOURSELF -->
   <div class="verify-card">
@@ -842,7 +766,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       </div>
       <div class="verify-step">
         <div class="vs-num">METHOD 02</div>
-        <div class="vs-body"><strong>Use Solscan or Solana Explorer.</strong> Paste any of the four lock addresses below. The escrow balances are public. Compare them to what we show on this page.</div>
+        <div class="vs-body"><strong>Use Solscan or Solana Explorer.</strong> Paste any of the three current lock addresses above. The escrow balances are public. Compare them to what we show on this page.</div>
       </div>
       <div class="verify-step">
         <div class="vs-num">METHOD 03</div>
@@ -851,37 +775,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     </div>
   </div>
 
-  <!-- THIRD-PARTY TOOLS (v17.2) -->
-  <div class="verify-card">
-    <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1.5 1.5M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1.5-1.5"/></svg></span>VERIFY ON THIRD-PARTY TOOLS</h3>
-    <p style="font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 18px;">The links below inspect the <strong>former mint</strong> whose Streamflow locks this page reads. For the replacement mint, use <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">Solscan</a> and the announced <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">TebFun market</a>.</p>
-    <div class="verify-steps">
-      <div class="verify-step">
-        <div class="vs-num">SOLSCAN</div>
-        <div class="vs-body"><strong>Former-mint token page, holders and transfers.</strong> Use it to inspect the old token underlying these locks.<br><a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">solscan.io/token/2oQmH…2iZCmoon ↗</a></div>
-      </div>
-      <div class="verify-step">
-        <div class="vs-num">DEXSCREENER</div>
-        <div class="vs-body"><strong>Former-mint market history.</strong> This chart is not the replacement token's trading page.<br><a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">dexscreener.com/solana/2oQmH…2iZCmoon ↗</a></div>
-      </div>
-      <div class="verify-step">
-        <div class="vs-num">BIRDEYE</div>
-        <div class="vs-body"><strong>Alternative former-mint market view.</strong> Do not confuse this with the replacement mint.<br><a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon?chain=solana" target="_blank">birdeye.so/token/2oQmH…2iZCmoon ↗</a></div>
-      </div>
-      <div class="verify-step">
-        <div class="vs-num">SOLANA EXPLORER</div>
-        <div class="vs-body"><strong>The former mint on Solana Explorer.</strong> Useful for inspecting old token accounts and transactions at the protocol level.<br><a href="https://explorer.solana.com/address/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">explorer.solana.com/address/2oQmH…2iZCmoon ↗</a></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- UNLOCK COMMITMENT (v11) -->
-  <div class="unlock-commitment">
-    <div class="title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> UNLOCK COMMITMENT</div>
-    <div class="body">
-      This schedule and commitment concern the <strong>former GFOF mint only</strong>. Every old-mint Streamflow unlock event is published here before it happens. The stated plan is to rotate released tokens into operational treasury rather than sell them on the open market. Follow the linked contracts for current balances and the <a href="/corrections" style="color:var(--cyan)">public corrections log</a> for changes.
-    </div>
-  </div>
+  <section class="verify-section"><h3>VERIFY THE CURRENT MINT</h3><p><a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">Current token on Solscan ↗</a> · <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">TebFun market ↗</a></p><p><a href="/record/treasury-former-mint-20261008.html">Former-mint lock and wallet disclosure archive →</a></p></section>
 
   <!-- NEXT UNLOCK CARD -->
   <div class="section-head">
@@ -921,7 +815,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <!-- TIMELINE -->
   <div class="timeline">
     <div class="timeline-head">
-      <h3>Full Unlock Timeline — All 4 Contracts</h3>
+      <h3>Full Unlock Timeline — All 3 Contracts</h3>
       <div class="legend">
         <span><span class="dot d1"></span>ELAPSED</span>
         <span><span class="dot d2"></span>UNLOCK EVENT</span>
@@ -942,7 +836,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 
   <!-- COMMITMENT (existing below) -->
   <div class="commitment">
-    The federation's transparency is not a marketing claim. It is structural. Every decision that touches token supply is made on-chain, verifiable by anyone, at any time.
+    The federation's transparency is not a marketing claim. It is structural. The three lock accounts and their evidence are public. Allocation purposes and future plans require separate disclosure.
     <div class="commitment-by">— ADMIRAL ZORAN VOSS · FEDERATION DECREE #002</div>
   </div>
 
@@ -960,7 +854,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v18.0 · treasury · updated 2026-09-07</span>
+  <span class="version" id="footer-version">v19.0 · treasury · updated 2026-10-08</span>
 </div>
 
 <script>
@@ -968,100 +862,54 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
    $GFOF Transparency Report — live on-chain reader
    Reads: SPL Token Account balance of each Streamflow escrow
    Source: Solana Foundation public mainnet RPC, called directly by the browser.
-   Fallback: graceful degradation to known-good static value when RPC is unreachable
+   Unavailable live reads never substitute the dated snapshot
    ═══════════════════════════════════════════════════════════ */
 
-// Intentionally the former mint: these Streamflow contracts hold old GFOF.
-var CA = '2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon';
+// Only the current mint’s three verified Streamflow contracts.
+var CA = 'Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';
 var TOTAL_SUPPLY = 1_000_000_000;        /* 1B */
-var TOKEN_DECIMALS = 9;                  /* standard Moonshot SPL */
+var TOKEN_DECIMALS = 6;                  /* verified current mint */
 var RPC = 'https://api.mainnet-beta.solana.com';
 
-/* The four Streamflow METADATA accounts (what the user put on the site).
-   These are the public contract pages. For actual escrow balances we need the
-   escrow token account, which Streamflow derives deterministically.
-   We display what the user sees on Streamflow + verify on Solscan. */
+/* Current-mint contracts; allocation purposes are not inferred. */
 var LOCKS = [
   {
-    id: 'LOCK 1',
-    name: 'Federation Lock — Primary',
-    metadata: '2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y',
-    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y'
+    "id": "LOCK 1",
+    "name": "Current GFOF Lock 1",
+    "metadata": "AiRhuw9iFyXiZYv2hqanBK12dckebF4vNMoAzj9Nj9nY",
+    "streamflowUrl": "https://app.streamflow.finance/contract/solana/mainnet/AiRhuw9iFyXiZYv2hqanBK12dckebF4vNMoAzj9Nj9nY"
   },
   {
-    id: 'LOCK 2',
-    name: 'Federation Lock — Secondary',
-    metadata: 'DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv',
-    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv'
+    "id": "LOCK 2",
+    "name": "Current GFOF Lock 2",
+    "metadata": "BW6ZUUT5NXxSGMKNAzoMYbqrXy5Dm1ev1ekEgYSXJWX8",
+    "streamflowUrl": "https://app.streamflow.finance/contract/solana/mainnet/BW6ZUUT5NXxSGMKNAzoMYbqrXy5Dm1ev1ekEgYSXJWX8"
   },
   {
-    id: 'LOCK 3',
-    name: 'Federation Lock — Tertiary · Re-locked 2026-08-28',
-    metadata: '6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS',
-    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS',
-    predecessorUrl: 'https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k'
-  },
-  {
-    id: 'LOCK 4',
-    name: 'Federation Lock — Supplementary',
-    metadata: 'Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x',
-    streamflowUrl: 'https://app.streamflow.finance/contract/solana/mainnet/Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x'
+    "id": "LOCK 3",
+    "name": "Current GFOF Lock 3",
+    "metadata": "EPdpg7AYEzcwudN7TRdEkCGHQeHRrFhoK2yiYxDdGLnv",
+    "streamflowUrl": "https://app.streamflow.finance/contract/solana/mainnet/EPdpg7AYEzcwudN7TRdEkCGHQeHRrFhoK2yiYxDdGLnv"
   }
 ];
 
 /* JSON-RPC helper */
 function rpc(method, params){
+  var controller = new AbortController();
+  var timer = setTimeout(function(){controller.abort();},12000);
   return fetch(RPC, {
-    method:'POST',
+    method:'POST', signal:controller.signal,
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({jsonrpc:'2.0', id:1, method:method, params:params})
-  }).then(function(r){return r.json();})
+  }).then(function(r){if(!r.ok) throw new Error('RPC unavailable');return r.json();})
     .then(function(d){
       if(d.error) throw new Error(d.error.message||'RPC error');
       return d.result;
-    });
+    }).finally(function(){clearTimeout(timer);});
 }
 
-/* Read the Streamflow metadata account raw data.
-   From the on-chain layout (Rust):
-     magic: u64 (8)
-     version: u8 (1)
-     created_at: u64 (8)
-     withdrawn_amount: u64 (8)
-     canceled_at: u64 (8)
-     end_time: u64 (8)
-     last_withdrawn_at: u64 (8)
-     sender: Pubkey (32)
-     sender_tokens: Pubkey (32)
-     recipient: Pubkey (32)
-     recipient_tokens: Pubkey (32)
-     mint: Pubkey (32)
-     escrow_tokens: Pubkey (32)
-     streamflow_treasury: Pubkey (32)
-     streamflow_treasury_tokens: Pubkey (32)
-     streamflow_fee_total: u64 (8)
-     streamflow_fee_withdrawn: u64 (8)
-     streamflow_fee_percent: f32 (4)
-     partner: Pubkey (32)
-     partner_tokens: Pubkey (32)
-     partner_fee_total: u64 (8)
-     partner_fee_withdrawn: u64 (8)
-     partner_fee_percent: f32 (4)
-     --- ix (StreamInstruction) starts ~297 bytes in ---
-     start_time: u64 (8)
-     net_amount_deposited: u64 (8)
-     period: u64 (8)
-     amount_per_period: u64 (8)
-     cliff: u64 (8)
-     cliff_amount: u64 (8)
-     ...
-
-   We only need `escrow_tokens` (Pubkey at offset ~165) so we can fetch the
-   escrow's SPL token balance — the canonical "currently locked" amount.
-   And we fetch the full bytes so we can compute a display-safe subset even if
-   layout drifts across Streamflow versions (the escrow tokens pubkey position
-   has been stable across versions we care about).
-*/
+/* Streamflow v4: mint bytes 177..209; escrow bytes 209..241;
+   schedule u64 fields begin at 409. Reject other layouts and program owners. */
 
 /* base64 decode → Uint8Array */
 function b64ToBytes(b64){
@@ -1195,11 +1043,11 @@ function renderLockSkeletons(){
           '<div class="name">' + lk.name + '</div>' +
           '<div class="addr">' + lk.metadata + '</div>' +
         '</div>' +
-        '<div class="lc-status"><span class="dot"></span>LOCKED</div>' +
+        '<div class="lc-status" id="lc-status-' + idx + '">CHECKING</div>' +
       '</div>' +
       '<div class="lc-body">' +
         '<div class="lc-stat">' +
-          '<div class="k">AMOUNT LOCKED IN ESCROW</div>' +
+          '<div class="k">SCHEDULED TOKENS IN ESCROW</div>' +
           '<div class="v green loading" id="lc-amount-' + idx + '">reading…</div>' +
         '</div>' +
         '<div class="lc-stat">' +
@@ -1221,45 +1069,39 @@ function renderLockSkeletons(){
    → also parse schedule (v11) for unlock early-warning system */
 function fetchLock(idx){
   var lk = LOCKS[idx];
-  return rpc('getAccountInfo', [lk.metadata, {encoding:'base64', commitment:'confirmed'}])
+  return rpc('getAccountInfo', [lk.metadata, {encoding:'base64', commitment:'finalized'}])
     .then(function(r){
-      if(!r || !r.value || !r.value.data) throw new Error('metadata account not found');
+      if(!r || !r.value || r.value.owner !== 'strmRqUCoQUgGUan5YhzUZa6KqdzwX5L6FpUxfmKg5m') throw new Error('unrecognized metadata owner');
       var bytes = b64ToBytes(r.value.data[0]);
+      if(bytes.length !== 1104 || bytes[8] !== 4 || bytesToBase58(bytes.slice(177,209)) !== CA) throw new Error('metadata version or mint mismatch');
       var escrow = readEscrowFromMetadata(bytes);
-      if(!escrow) throw new Error('escrow address parse failed');
-      var schedule = readScheduleFromMetadata(bytes); /* may be null if offsets drift */
-      /* Now get the escrow token account's balance */
-      return rpc('getTokenAccountBalance', [escrow, {commitment:'confirmed'}])
+      var schedule = readScheduleFromMetadata(bytes);
+      if(!escrow || !schedule) throw new Error('schedule unavailable');
+      var withdrawn = readU64LE(bytes,17), canceled = readU64LE(bytes,25);
+      if(!Number.isSafeInteger(schedule.netDeposited) || !Number.isSafeInteger(withdrawn)) throw new Error('unsafe amount');
+      return rpc('getAccountInfo', [escrow, {encoding:'jsonParsed', commitment:'finalized'}])
         .then(function(b){
-          var amt = 0;
-          if(b && b.value && b.value.uiAmount != null){
-            amt = b.value.uiAmount;
-          } else if(b && b.value && b.value.amount){
-            amt = Number(b.value.amount) / Math.pow(10, b.value.decimals || TOKEN_DECIMALS);
-          }
-          var decimals = (b && b.value && b.value.decimals != null) ? b.value.decimals : TOKEN_DECIMALS;
-          /* Streamflow may temporarily hold its token-denominated platform fee in
-             the escrow alongside the scheduled deposit (40.2M transferred for
-             this 40M re-lock). Cap the displayed locked amount at netDeposited,
-             but keep following the live escrow balance once it falls below the
-             schedule after a withdrawal. */
-          var scheduledCap = schedule && schedule.netDeposited > 0
-            ? schedule.netDeposited / Math.pow(10, decimals)
-            : null;
-          var lockedAmount = scheduledCap != null ? Math.min(amt, scheduledCap) : amt;
-          return { escrow: escrow, amount: lockedAmount, escrowBalance: amt, schedule: schedule };
+          var info = b && b.value && b.value.data && b.value.data.parsed && b.value.data.parsed.info;
+          if(!info || b.value.owner !== 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' || info.mint !== CA || info.tokenAmount.decimals !== TOKEN_DECIMALS) throw new Error('escrow mint or decimals mismatch');
+          var raw = Number(info.tokenAmount.amount);
+          if(!Number.isSafeInteger(raw) || raw < 0 || withdrawn > schedule.netDeposited) throw new Error('invalid amount');
+          var remaining = Math.max(0,schedule.netDeposited-withdrawn);
+          var amount = canceled ? 0 : Math.min(raw,remaining)/Math.pow(10,TOKEN_DECIMALS);
+          var now = Math.floor(Date.now()/1000);
+          var status = canceled ? 'CANCELED' : now >= readU64LE(bytes,33) ? 'UNLOCKED' : amount > 0 ? 'LOCKED' : 'EMPTY';
+          return {escrow:escrow,amount:amount,schedule:canceled ? null : schedule,status:status};
         });
-    })
-    .then(function(result){
-      document.getElementById('lc-amount-'+idx).textContent = fmtAbbr(result.amount) + ' $GFOF';
-      document.getElementById('lc-amount-'+idx).classList.remove('loading');
+    }).then(function(result){
+      var amountEl = document.getElementById('lc-amount-'+idx);
+      amountEl.textContent = fmtAbbr(result.amount) + ' $GFOF';
+      amountEl.classList.remove('loading');
+      document.getElementById('lc-status-'+idx).textContent = result.status;
       document.getElementById('lc-escrow-'+idx).textContent = shortAddr(result.escrow);
       document.getElementById('lc-escrow-'+idx).classList.remove('loading');
       document.getElementById('lc-escrow-'+idx).title = result.escrow;
       var link = document.getElementById('lc-escrow-link-'+idx);
-      link.href = 'https://solscan.io/account/' + result.escrow;
-      link.style.display = 'inline-block';
-      return { amount: result.amount, schedule: result.schedule };
+      link.href = 'https://solscan.io/account/' + result.escrow; link.style.display = 'inline-block';
+      return {amount:result.amount,schedule:result.schedule};
     });
 }
 
@@ -1286,7 +1128,7 @@ function setTimestamp(){
 function showError(msg){
   document.getElementById('err-row').classList.add('show');
   document.getElementById('err-msg').textContent = msg;
-  document.getElementById('status-word').textContent = 'using fallback';
+  document.getElementById('status-word').textContent = 'read incomplete';
   document.getElementById('status-word').style.color = 'var(--gold)';
 }
 
@@ -1296,7 +1138,7 @@ function clearError(){
 
 /* Main refresh */
 var isRefreshing = false;
-var cachedSchedules = [null, null, null, null]; /* keep across refreshes for countdown ticker */
+var cachedSchedules = [null, null, null]; /* keep across refreshes for countdown ticker */
 
 function refreshAll(){
   if(isRefreshing) return;
@@ -1317,8 +1159,8 @@ function refreshAll(){
   document.getElementById('sum-locked').classList.add('loading');
   document.getElementById('sum-pct').classList.add('loading');
 
-  var amounts = [0,0,0,0];
-  var schedules = [null, null, null, null];
+  var amounts = [0,0,0];
+  var schedules = [null, null, null];
   var promises = LOCKS.map(function(_, idx){
     return fetchLock(idx).then(function(res){
       amounts[idx] = res.amount;
@@ -1330,6 +1172,7 @@ function refreshAll(){
         var e = document.getElementById('lc-escrow-'+idx);
         if(a){ a.textContent = 'see Streamflow'; a.classList.remove('loading','green'); a.style.color = 'var(--text-dim)'; }
         if(e){ e.textContent = 'verify on-chain'; e.classList.remove('loading'); e.style.color = 'var(--text-dim)'; }
+        document.getElementById('lc-status-'+idx).textContent = 'UNAVAILABLE';
         amounts[idx] = null; /* unknown */
         return null;
       });
@@ -1353,12 +1196,11 @@ function refreshAll(){
       document.getElementById('sum-pct').classList.remove('loading');
       showError('Read '+successful.length+' of '+LOCKS.length+' locks live. Verify the rest on Streamflow using the buttons below.');
     } else {
-      /* Full fallback: can't reach RPC. Show known values with honest note. */
-      document.getElementById('sum-locked').textContent = '130M $GFOF';
+      document.getElementById('sum-locked').textContent = 'Unavailable';
       document.getElementById('sum-locked').classList.remove('loading');
-      document.getElementById('sum-pct').textContent = '13.00%';
+      document.getElementById('sum-pct').textContent = '—';
       document.getElementById('sum-pct').classList.remove('loading');
-      showError('Live RPC unreachable right now. Showing the known locked total (130M = 13% of supply). Use the verify links below to confirm independently.');
+      showError('Live read unavailable. The 100M dated snapshot above is not a current read. Verify the contracts directly on Streamflow.');
     }
 
     /* v11: update unlock early-warning system */
@@ -1397,14 +1239,11 @@ function nextUnlockAfter(schedule, now){
 }
 
 function fmtDate(ts){
-  if(!ts) return '—';
-  var d = new Date(ts * 1000);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  return ts ? new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric',year:'numeric'}).format(new Date(ts*1000)) : '—';
 }
 
 function renderUnlockEarlyWarning(schedules){
-  /* Aggregate: find the soonest next unlock across all four */
+  /* Aggregate: find the soonest next unlock across all three */
   var now = Math.floor(Date.now() / 1000);
   var soonest = null;
   var soonestIdx = -1;
@@ -1555,7 +1394,7 @@ function renderUnlockGrid(schedules){
       (cliffAmt > 0
         ? '<div class="row"><span class="k">CLIFF AMOUNT</span><span class="v">' + fmtAbbr(cliffAmt) + '</span></div>'
         : '') +
-      '<div class="row"><span class="k">RELEASE</span><span class="v">' + fmtAbbr(perPeriod) + ' / ' + periodLabel + '</span></div>';
+      '<div class="row"><span class="k">RELEASE</span><span class="v">' + (s.cliffAmount === s.netDeposited ? 'Full cliff · Chicago time' : fmtAbbr(perPeriod) + ' / ' + periodLabel) + '</span></div>';
     grid.appendChild(cell);
   });
 }
@@ -1597,7 +1436,7 @@ try {
 /* Version stamp */
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v18.0 · treasury · updated 2026-09-07'; }
+  if(el){ el.textContent = 'v19.0 · treasury · updated 2026-10-08'; }
 })();
 
 /* Initial render + fetch */
