@@ -27,7 +27,7 @@ exports.handler=async event=>{
   const tokens=[...aggregate.values()].filter(t=>t.raw>0n).sort((a,b)=>a.mint.localeCompare(b.mint));
   if(tokens.length>1000)throw Error('too-many');
   const pricing=await readPrices(tokens,sol.context?.slot);
-  return reply(200,{address,network:'solana-mainnet',source:'Solana public RPC',observedAt:new Date().toISOString(),slots:[sol,...groups].map(r=>r.context?.slot),sol:quantity(BigInt(sol.value),9),tokenAccounts,tokens:tokens.map(t=>({mint:t.mint,symbol:t.mint===GFOF?'GFOF':t.mint===USDC?'USDC':null,quantity:quantity(t.raw,t.decimals)})),pricesAvailable:Object.keys(pricing.prices).length>0,pricing});
+  return reply(200,{address,network:'solana-mainnet',commitment:'confirmed',source:'Solana public RPC',observedAt:new Date().toISOString(),slots:[sol,...groups].map(r=>r.context?.slot),sol:quantity(BigInt(sol.value),9),tokenAccounts,tokens:tokens.map(t=>({mint:t.mint,symbol:t.mint===GFOF?'GFOF':t.mint===USDC?'USDC':null,quantity:quantity(t.raw,t.decimals)})),pricesAvailable:Object.keys(pricing.prices).length>0,pricing});
  }catch{return reply(503,{error:'Solana balance service is busy or unavailable. No balance was confirmed. Please try again later.'});}finally{clearTimeout(timer);}
 };
 exports.addressOK=addressOK;
