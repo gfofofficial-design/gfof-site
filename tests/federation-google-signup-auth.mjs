@@ -238,8 +238,13 @@ try {
   query(`alter function ${SCHEMA}.google_only_unavailable(jsonb) rename to google_only;`);
   query(`create or replace function ${FN}(event jsonb) returns jsonb language plpgsql security invoker set search_path='' as $$ begin raise exception 'Synthetic hook failure'; end; $$;`);
   await denied('Hook runtime error', '/signup', { email: 'runtime-error@example.invalid', password }, 500);
+  // The unconfigured v2.197.0 service did not cancel a 3-second hook in the
+  // earlier isolated run. This verifies explicit database cancellation only;
+  // it must not be reported as proof of Auth's advertised/default hook deadline.
+  query("alter role supabase_auth_admin set statement_timeout = '2s';");
+  await startAuth(false, true); // New pool inherits the explicit fixture role deadline.
   query(`create or replace function ${FN}(event jsonb) returns jsonb language plpgsql security invoker set search_path='' as $$ begin perform pg_catalog.pg_sleep(3); return '{}'::jsonb; end; $$;`);
-  await denied('Hook timeout', '/otp', { email: 'timeout-hook@example.invalid', create_user: true }, 500);
+  await denied('Explicit database statement timeout', '/otp', { email: 'timeout-hook@example.invalid', create_user: true }, 500);
   query(restoreFunction);
   await denied('Restored exact candidate', '/signup', { email: 'restored-rule@example.invalid', password });
   await login('Existing login after candidate restoration');
@@ -249,7 +254,7 @@ try {
   assert.equal(finalClosed.json.error_code, 'signup_disabled');
   await unchanged('Final closure');
   console.log('PASS final closure: signup disabled, two synthetic controls only, no additional sink mail');
-  console.log('PASS self-hosted Auth v2.197.0 acceptance; real Google, hosted configuration and browser acceptance still pending');
+  console.log('PASS self-hosted Auth v2.197.0 route acceptance; real Google, hosted configuration/default timeout and browser acceptance still pending');
 } finally {
   let cleanupFailed = false;
   for (const container of ownedContainers) {

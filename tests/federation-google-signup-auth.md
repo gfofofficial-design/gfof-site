@@ -25,8 +25,11 @@ The fixed test sequence proves:
   spoofed user metadata/provider/app-metadata fields receive the candidate's
   generic 403, with no new users, identities or sink mail.
 - Removing function EXECUTE, schema USAGE, or the selected function causes HTTP
-  500 and no creation/delivery. Synthetic runtime failure and timeout must also
-  fail closed. These are expected errors in this disposable fixture only.
+  500 and no creation/delivery. Synthetic runtime failure must also fail closed.
+  A separate cancellation case sets the disposable Auth role's statement_timeout
+  to two seconds, restarts its connection pool, and requires a three-second
+  sleeping hook to fail closed. This verifies an explicit database deadline,
+  not the default Auth hook deadline. These are fixture-only expected errors.
 - Existing synthetic password login and authenticated user read still work,
   including with missing hook EXECUTE. Local logout rejects the old refresh
   token. Restoring the exact candidate restores the expected deny decision.
@@ -48,6 +51,14 @@ node tests/federation-google-signup-auth.mjs
 
 This cannot establish a real new Google round trip, Google identity linking,
 existing owner's hosted access, dashboard hook attachment or the hosted Auth
-build's behavior. Those checks, browser session acceptance and the remaining
-security/recovery/privacy/operating gates still precede public registration.
+build's behavior. In an earlier isolated v2.197.0 run, the three-second sleeping
+hook returned its deliberately allowing result and OTP creation completed;
+the assumed default two-second hook deadline was not enforced in that fixture.
+That finding remains open. The explicit database deadline above is a separate
+test configuration, not a repair to or validation of the hosted service. Verify
+the actual hosted build and effective timeout before registration. No hosted
+role timeout or other project setting was changed.
+
+Those checks, browser session acceptance and the remaining security/recovery/
+privacy/operating gates still precede public registration.
 Read the full hosted acceptance matrix in the account data operations plan.
