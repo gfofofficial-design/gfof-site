@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "mode": "manual_until_alert_acceptance",
+  "timeoutMs": 10000,
+  "maxBytes": 65536,
+  "targets": [
+    {
+      "id": "federation",
+      "url": "https://galacticfederation.co/",
+      "titleIncludes": "Galactic Federation"
+    },
+    {
+      "id": "dossier",
+      "url": "https://dossiertrack.co/",
+      "titleIncludes": "Dossier"
+    },
+    {
+      "id": "fcc",
+      "url": "https://fcc.galacticfederation.co/",
+      "titleIncludes": "Federation Capital Command"
+    }
+  ]
+}
