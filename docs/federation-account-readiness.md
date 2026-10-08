@@ -309,3 +309,15 @@ suite. They do not complete real Google sign-in/cancel/replay, actual signed-in
 cookie expiry or multi-tab logout, a populated Phantom wallet, real phone, or
 new-account signup acceptance. Those remain the existing release gates.
 Production is unchanged and PR #99 stays draft.
+
+
+## October 8 current hosted boundary evidence and dev checklist
+
+The current 111-test dashboard revision passed all three CI jobs. Anonymous
+hosted HTTP checks verified strict account/dashboard headers, Google-only pilot
+availability, signed-out 401, rejected foreign-origin refresh and direct-function
+access, invalid wallet request handling and fixed-account treasury boundaries.
+Production's account route returned 404. The [dev-computer acceptance sequence](federation-dev-acceptance-20261008.md)
+records the exact request results, public wallet coverage browser evidence,
+remaining real-device steps and limits. No credentials, managed settings,
+public signup or financial integration changed. PR #99 remains draft.
