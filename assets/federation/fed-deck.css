@@ -36,3 +36,11 @@
 
 /* Keep keyboard focus visible across dashboard controls. */
 .deck :is(a,button,input,summary):focus-visible{outline:3px solid var(--fed-command);outline-offset:4px}
+
+/* Exact quantities remain intact inside the scrollable wallet table. */
+.wallet-layout{grid-template-columns:180px minmax(0,1fr)}
+#wallet-table-scroll{min-width:0;max-width:100%}
+#wallet-table-scroll table{min-width:440px}
+#wallet-rows td:nth-child(2),#wallet-table-scroll th:nth-child(2){white-space:nowrap;overflow-wrap:normal;font-variant-numeric:tabular-nums}
+.deck #wallet-table-scroll:focus-visible{outline:3px solid var(--fed-command);outline-offset:4px}
+@media(max-width:560px){.wallet-layout{grid-template-columns:minmax(0,1fr)}}
