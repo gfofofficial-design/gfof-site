@@ -1,19 +1,6 @@
 // Test-only Docker harness. Never connects to a hosted database or Auth service.
-import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-
-const source = readFileSync(new URL('./federation-google-signup-probe.sql', import.meta.url), 'utf8');
-const begin = source.indexOf('\nbegin;\n');
-const checks = source.indexOf('do $checks$');
-const checksEnd = source.indexOf('$checks$;', checks) + '$checks$;'.length;
-if (begin < 0 || checks <= begin || checksEnd <= checks ||
-    !source.slice(checksEnd).trimStart().startsWith('rollback;')) {
-  throw new Error('Probe layout changed: review the native harness before running it.');
-}
-
-// Reuse the exact candidate DDL and all 21 rule assertions; do not copy its rule.
-const candidate = source.slice(begin + '\nbegin;\n'.length, checks);
-const ruleChecks = source.slice(checks, checksEnd);
+import {candidateDDL as candidate,ruleChecks,SCHEMA} from './federation-google-signup-candidate.mjs';
 const google = `'{"user":{"app_metadata":{"provider":"google"},"is_anonymous":false}}'::jsonb`;
 const denyCall = (label) => `
 do $denied$
@@ -123,7 +110,7 @@ begin
 end;
 $cleanup$;
 select current_setting('server_version') as postgres_version;
-`;
+`.replaceAll('federation_signup_probe_20261007',SCHEMA);
 
 if (process.argv.length === 3 && process.argv[2] === '--print-sql') {
   process.stdout.write(sql);

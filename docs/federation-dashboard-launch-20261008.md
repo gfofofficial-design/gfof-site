@@ -65,6 +65,14 @@ subscription does not prove a restore, deletion reconciliation or monitoring.
 Before payment, the owner must approve the shown recurring amount and complete
 the private billing fields. This packet does not authorize a card charge.
 
+**Later verified state:** the owner reported that the upgrade was already
+completed. A fresh organization read and billing-page reload confirmed Pro,
+both existing projects healthy and the spend cap enabled, with $34.94 projected
+for the current cycle. The assistant submitted no payment. Do not repeat the
+purchase. The current project-cost tool quotes $10/month for an additional
+active project; [the isolated trial packet](federation-managed-signup-trial-20261008.md)
+requires separate creation/cost approval.
+
 References: [pricing](https://supabase.com/pricing),
 [compute billing](https://supabase.com/docs/guides/platform/manage-your-usage/compute),
 [Free pausing](https://supabase.com/docs/guides/platform/free-project-pausing),
@@ -76,7 +84,7 @@ References: [pricing](https://supabase.com/pricing),
    wallet host fix and privacy link. Record current checks and any findings.
 2. Complete physical-device Phantom acceptance and a separate phone Google
    round trip. No signatures or token transfers are needed.
-3. Approve the operating plan and billing amount. Verify administrator MFA for
+3. Finalize the operating plan and check current billing. Verify administrator MFA for
    GitHub, Netlify, Supabase and domain/DNS access without collecting recovery
    codes. Establish a backup cadence, custody and deleted-account reconciliation.
 4. In a **separately approved disposable managed Auth project**, prove the

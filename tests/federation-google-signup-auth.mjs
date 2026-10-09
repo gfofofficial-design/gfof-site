@@ -1,14 +1,13 @@
 // Disposable self-hosted Auth acceptance; no hosted URL or real credentials accepted.
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHmac, randomBytes } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
+import {candidateDDL,restoreFunction,SCHEMA} from './federation-google-signup-candidate.mjs';
 
 const DB = 'federation_signup_auth_test';
 const AUTH_IMAGE = 'supabase/gotrue:v2.197.0';
 const MAIL_IMAGE = 'axllent/mailpit:v1.31.4';
-const SCHEMA = 'federation_signup_probe_20261007';
 const FN = `${SCHEMA}.google_only`;
 if (process.env.FEDERATION_AUTH_TEST_CONFIRM !== 'disposable_auth_fixture') {
   throw new Error('Explicit disposable Auth fixture confirmation is required.');
@@ -42,16 +41,6 @@ assert(pgConfig.Env.includes(`POSTGRES_DB=${DB}`), 'Wrong fixture database');
 assert.equal(query("select current_setting('server_version_num');"), '170011');
 assert.equal(query(`select count(*) from pg_namespace where nspname in ('auth','${SCHEMA}');`), '0');
 assert.equal(query("select count(*) from pg_roles where rolname in ('supabase_auth_admin','anon','authenticated','service_role');"), '0');
-
-const probe = readFileSync(new URL('./federation-google-signup-probe.sql', import.meta.url), 'utf8');
-const begin = probe.indexOf('\nbegin;\n');
-const checks = probe.indexOf('do $checks$');
-const functionStart = probe.indexOf(`create function ${FN}(event jsonb)`);
-const functionEnd = probe.indexOf('$hook$;', functionStart) + '$hook$;'.length;
-assert(begin >= 0 && checks > begin && functionStart > begin && functionEnd < checks,
-  'Probe layout changed; review the Auth harness');
-const candidateDDL = probe.slice(begin + '\nbegin;\n'.length, checks);
-const restoreFunction = probe.slice(functionStart, functionEnd).replace(/^create function /, 'create or replace function ');
 
 let network, mail, auth, authOrigin, mailOrigin;
 const ownedContainers = new Set();

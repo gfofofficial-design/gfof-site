@@ -8,6 +8,8 @@ on:
       - 'tests/federation-account-page.test.mjs'
       - 'tests/federation-account-tabs.test.mjs'
       - 'tests/federation-google-signup-probe.sql'
+      - 'tests/federation-google-signup-candidate.mjs'
+      - 'supabase/migrations/**'
       - 'tests/federation-google-signup-native.*'
       - 'tests/federation-google-signup-auth.*'
       - '.github/workflows/federation-account.yml'
