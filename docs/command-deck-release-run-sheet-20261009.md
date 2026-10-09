@@ -3,7 +3,8 @@
 Status: **HOLD — review candidate, not production release approval.**
 
 Candidate: [PR #104](https://github.com/gfofofficial-design/gfof-site/pull/104).
-Reviewed application revision: `8bb6714c7d5c582f19182cece4e2b7c3e4758d84`.
+Latest reviewed application revision: `9b751c47b910a1c0e894cf69eaac2987d0f65afb`.
+The earlier 112-test application baseline was `8bb6714c7d5c582f19182cece4e2b7c3e4758d84`.
 Production baseline at review: `50be6258473374b46887da9605f177cc98d3c757`.
 A later documentation commit does not establish application changes or new production acceptance.
 
@@ -29,7 +30,7 @@ Preview: https://deploy-preview-104--gfof.netlify.app/command-deck
 | --- | --- | --- |
 | Application boundaries | 112 applicable local tests; wallet, lock and service-check CI passed at the application revision; preview deployed | Confirm the final release diff preserves this scope and all required checks pass on its exact head |
 | Hosted data reads | Finite preview wallet and lock checks passed; independent binary quantity comparison through the same RPC provider; origin rejection and clearing checked | Production-origin acceptance after separately approved release; no inference of independent provider agreement |
-| Physical device | Owner reported ordinary input/table/term use on the larger PR #99 preview | Check this exact PR #104 preview on a physical phone: input, table scrolling, filters, chart labels, Clear and mission navigation |
+| Physical device | Owner reviewed the PR #104 preview on a physical phone and confirmed wallet input, table scrolling, filters, Clear and mission navigation seemed to work on October 9 | Reported acceptance passed for those ordinary flows; this is owner-reported evidence, not an instrumented device test or account/wallet-permission acceptance |
 | Administration | Repository, identity and hosting MFA confirmations recorded | Domain/DNS administrator MFA, recovery custody and least-access review |
 | Monitoring | Three-minute homepage monitors active on the Free plan; ordinary email receipt confirmed; isolated failure dispatch, authorized UI acknowledgment and automatic resolution observed | Specific drill failure receipt and separate recovery-email dispatch/receipt; provider/API response coverage and operating limits |
 | Recovery | Hosting reports the current production deploy ready at the baseline commit; exact-head wallet, lock and service-check CI passed at `fe6a6dec9b4f87174ddb34ee58f0e4d76cf4b205` | Prepare and review a Git revert/redeploy recovery path; verify responder access and publishing method without publishing private details |
@@ -97,3 +98,33 @@ homepage remains Up. Keep the explicit unavailable display, distinguish provider
 failure from a deployment regression, and do not advertise a successful dashboard
 check based only on the homepage monitor.
 
+
+## October 9 acceptance update
+
+At 10:14 AM Chicago, after reviewing the PR #104 dashboard on a phone, the owner
+confirmed that the requested wallet input, table scrolling, filters, Clear and
+mission navigation seemed to work. Record these ordinary flows as **PASS —
+owner reported**. No device identifiers, private wallet address or screenshots
+are required in this public record. This report does not prove every chart label,
+error case, sign-in flow, wallet permission or financial action.
+
+All three PR workflows and the Netlify preview status passed at
+`9b751c47b910a1c0e894cf69eaac2987d0f65afb`. The fallback change passed 32 existing
+focused dashboard tests. At 9:49 AM Chicago, one finite hosted preview check
+returned healthy wallet/pricing and treasury-lock results. A separate HTML read
+confirmed the no-script notice and mission fallback, HTTP 200, no-referrer,
+nosniff, frame denial and a CSP header. It did not execute a JavaScript-disabled
+browser or establish production acceptance.
+
+Five synthetic storage checks of the unchanged passport code passed: disabled
+completion does not persist progress; explicit opt-in saves only valid session
+markers; removal disables future persistence while preserving disclosed tab
+badges; blocked storage does not claim success; malformed or unknown badge
+records are not trusted. The dashboard reads saved passport state without
+writing it. Passport removal does not delete avatars, current-tab badges,
+on-chain data or provider operational logs. Provider retention/deletion and
+administrative recovery remain separate requirements.
+
+The phone report closes the named ordinary-flow acceptance item. It does not
+close the remaining administration, monitoring, recovery or data-handling items
+in the table. No production release follows from this update.
