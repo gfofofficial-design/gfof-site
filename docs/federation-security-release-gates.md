@@ -14,7 +14,7 @@ Owner agreed to these release requirements on 2026-10-07. Scope: the new Command
 | S4 — Account and registration | Test real cancellation, successful-code replay rejection, expired state, provider outage, multi-tab refresh, logout/revocation and production-specific cookies/origin. Before Google-only signup, prove new Google creation succeeds and direct Email/password/OTP creation is denied in an isolated signup-enabled test; preserve existing owner access. | Partial: private Google round trip and 36 focused synthetic handler/page tests, including access-expiry recovery, logout revocation fallback and simulated provider outage; native simulated-role checks and self-hosted Auth Email/OTP rejection, synthetic existing login and error/cancellation checks passed. Real Google, hosted-owner/link behavior, exact managed configuration/deadlines and browser cases remain pending. |
 | S5 — Data access and privacy | For each new data feature, document access rules and prove cross-user reads/writes are denied, including table grants, RLS, privileged code and storage where applicable. Complete retention and verified-request deletion procedures. A gate may be marked not applicable only with evidence that the release has no such data path. | Private pilot observed with no application public tables; future cloud records and wallet association not implemented. Privacy/deletion procedures incomplete. |
 | S6 — Recovery | Retain a dated recovery point, export/tool provenance and integrity checks; restore in isolation, verify required Auth users/identities and login, exclude inappropriate session restoration and reconcile deletions since backup. Choose a sustainable backup/availability plan and demonstrate recovery without relying only on a dump file. | Partial: a fresh encrypted Auth archive passed one-owner isolated restore and password login, and a byte-identical removable-drive copy was verified. Backup cadence, offline/off-site custody and deleted-account reconciliation remain pending. |
-| S7 — Monitoring and response | Verify actionable alerts for provider/API failures, suspicious account activity and resource usage; avoid logging tokens, auth codes or request bodies. Record who responds, how new invitations are disabled, provider contact, evidence retention, public correction and recovery steps. Rehearse an outage and suspicious-activity response; approve operating limits and availability plan. | A private pilot response card is drafted and synthetic outage behavior is tested. Alerts, real response rehearsals, operating limits and availability plan remain pending. |
+| S7 — Monitoring and response | Verify actionable alerts for provider/API failures, suspicious account activity and resource usage; avoid logging tokens, auth codes or request bodies. Record who responds, how new invitations are disabled, provider contact, evidence retention, public correction and recovery steps. Rehearse an outage and suspicious-activity response; approve operating limits and availability plan. | Partial: three-minute homepage monitoring for Federation, Dossier and FCC was activated on October 9, 2026, and the owner confirmed email test receipt. An isolated failure, acknowledgment and automatic-recovery drill is drafted but not started. Provider/API, suspicious-activity and resource-usage alerts, response rehearsals, operating limits and the wider availability plan remain pending. |
 | S8 — Financial provider and authority | Match the exact product/program/version, upgrade/admin powers and audit scope; resolve material findings and test the actual permitted position through exit/claim. Verify current mint, full reward obligations, custody, destinations, fees and approvals under the existing staking runbook. Lending needs its own product-specific review, including liquidation/oracle/authorization risks if applicable. | Provider unselected; no pool or lending service open. No contracts, funding or transactions approved by this record. |
 
 ## Existing evidence and its limits
@@ -110,3 +110,17 @@ monitoring. S4 remains partial: managed fault/deadline behavior, existing-user
 and production-session requirements and the operating/release checks remain.
 The [trial record](federation-managed-signup-trial-20261008.md) preserves the
 earlier stopped state-guard run and its unknown cause. PR #99 remains draft.
+
+## October 9 homepage monitoring activation
+
+Three Better Stack homepage monitors were observed active and Up at three-minute
+intervals on the current Free plan. Email-only routing and the intended responder
+were checked, and the owner confirmed receipt of the ordinary test emails.
+
+This verifies homepage polling and an email delivery path. It does not establish
+failure-triggered delivery, acknowledgment, automatic recovery, provider/API
+health, suspicious-activity alerts, resource-usage limits or sustained uptime.
+The [monitor setup and drill procedure](federation-better-stack-setup-20261008.md)
+records the different saved settings and the isolated rehearsal still required.
+S7 remains partial. PR #99 and the read-only release candidate remain draft;
+this operational step grants no production release or financial authority.

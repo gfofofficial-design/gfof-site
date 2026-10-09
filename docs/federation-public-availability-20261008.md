@@ -2,7 +2,7 @@
 
 The configuration and script prepare the first monitoring phase in the
 [supporting-tools roadmap](federation-supporting-tools-roadmap-20261008.md).
-They are a manual check, not a configured alert service.
+The script is a manual check. Separately configured vendor monitoring is recorded below.
 
 Run from the repository with Node.js 24:
 
@@ -27,8 +27,8 @@ intervals, alert recipient, retention and cost before activation. Test both
 failure and recovery notifications and record a responder rehearsal before
 counting monitoring as operational.
 
-The repository currently contains no recurring schedule, vendor credentials,
-alert destination or configured delivery for this check.
+The repository contains no recurring schedule, vendor credentials or alert
+destination for this script. The vendor service operates separately.
 
 Fixture verification:
 
@@ -48,5 +48,16 @@ expected title. This is one observation, not continuous uptime evidence.
 
 Six fixture tests pass locally. A large response chunk with an expected title
 inside the bounded prefix is accepted; content beyond that prefix is not
-needed to verify the homepage. Alert delivery and recurring monitoring remain
-unconfigured.
+needed to verify the homepage. At this October 8 observation, alert delivery
+and recurring monitoring had not yet been configured.
+
+## October 9 vendor activation
+
+Three Better Stack homepage monitors were observed active and Up at three-minute
+intervals on the current Free plan. Email-only routing was checked, and the
+owner confirmed receipt of ordinary test emails. The [setup record](federation-better-stack-setup-20261008.md)
+distinguishes saved vendor settings from this stronger manual content/title
+check. The isolated failure, acknowledgment and automatic-recovery drill is
+prepared but not started; provider/API and suspicious-activity monitoring
+remain separate release requirements. No uptime-history or full monitoring
+acceptance claim follows from the initial Up results.
