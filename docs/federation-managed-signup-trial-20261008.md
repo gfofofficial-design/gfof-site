@@ -138,3 +138,15 @@ independently confirm settings, unchanged aggregate rows and rule/grants.
 The managed no-delivery condition also requires checking the controlled inbox,
 rather than inferring it solely from row counts. This proposal has not run and
 does not complete the separate privilege/fault/deadline matrix.
+
+### First reviewed rejection window stopped before requests
+
+The first reviewed window stopped at the independent open-state guard after
+three health/settings calls; no signup or OTP creation case was attempted.
+Registration was closed and independently confirmed within the approved bound.
+Aggregate rows and the pinned rule/rights remained unchanged. The first receipt
+did not identify which state condition failed; no propagation or caching cause
+is established. The revised checker retains fixed diagnostic booleans, and the
+next separately reviewed procedure verifies save/reload plus one short settling
+interval before its single state read. Eight offline tests pass. No managed
+non-Google rejection acceptance is claimed from this stopped window.
