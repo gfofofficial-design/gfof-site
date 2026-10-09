@@ -25,7 +25,8 @@ function apiFixture(stage){
  };
  const requests=[];const bounded=(url,options,settings)=>{requests.push({url,timeoutMs:settings.timeoutMs,maxBytes:settings.maxBytes});return readJsonBounded(url,options,{...settings,timeoutMs:5,fetcher});};
  const providerModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/lib/data-provider-config.cjs'),'utf8'),{module:providerModule,process:{env:{}}});
- const priceModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/lib/wallet-prices.cjs'),'utf8'),{module:priceModule,require:p=>p.includes('data-provider-config')?providerModule.exports:{readJsonBounded:bounded},fetch:fetcher});
+ const budgetModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/lib/price-budget.cjs'),'utf8'),{module:budgetModule,process:{env:{}},require:()=>({readJsonBounded:bounded}),fetch:fetcher});
+ const priceModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/lib/wallet-prices.cjs'),'utf8'),{module:priceModule,require:p=>p.includes('price-budget')?budgetModule.exports:p.includes('data-provider-config')?providerModule.exports:{readJsonBounded:bounded},fetch:fetcher});
  const walletModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/functions/federation-wallet.cjs'),'utf8'),{exports:walletModule.exports,require:p=>p.includes('wallet-prices')?priceModule.exports:p.includes('data-provider-config')?providerModule.exports:{readJsonBounded:bounded},URL,Buffer,fetch:fetcher});
  const origin='https://deploy-preview-104--gfof.netlify.app';return {requests,read:()=>walletModule.exports.handler({rawUrl:origin+'/api/federation-wallet',httpMethod:'POST',headers:{origin,'content-type':'application/json','sec-fetch-site':'same-origin'},body:JSON.stringify({address:'11111111111111111111111111111111'})})};
 }
@@ -33,7 +34,7 @@ test('RPC header and body deadlines return no partial wallet balances',{timeout:
  for(const stage of ['rpc-headers','rpc-body']){const app=apiFixture(stage);const r=await app.read();assert.equal(r.statusCode,503);assert.equal(JSON.parse(r.body).tokens,undefined);assert.equal(app.requests.length,3);for(const q of app.requests){assert.equal(q.timeoutMs,8000);assert.equal(q.maxBytes,2000000);}}
 });
 test('price header and body deadlines preserve checked on-chain quantities',{timeout:1000},async()=>{
- for(const stage of ['price-headers','price-body']){const app=apiFixture(stage);const r=await app.read();assert.equal(r.statusCode,200);const data=JSON.parse(r.body);assert.equal(data.sol,'0.0000001');assert.equal(data.pricing.status,'unavailable');assert.deepEqual(data.pricing.prices,{});const q=app.requests.find(q=>q.url.startsWith('https://api.jup.ag/'));assert.equal(q.timeoutMs,4000);assert.equal(q.maxBytes,100000);}
+ for(const stage of ['price-headers','price-body']){const app=apiFixture(stage);const r=await app.read();assert.equal(r.statusCode,200);const data=JSON.parse(r.body);assert.equal(data.sol,'0.0000001');assert.equal(data.pricing.status,'unavailable');assert.deepEqual(data.pricing.prices,{});const q=app.requests.find(q=>q.url.startsWith('https://api.jup.ag/'));assert.ok(q.timeoutMs>0&&q.timeoutMs<=4000);assert.equal(q.maxBytes,100000);}
 });
 
 test('late body bytes cannot continue decoding after a deadline',{timeout:1000},async()=>{
