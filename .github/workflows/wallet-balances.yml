@@ -1,0 +1,49 @@
+name: Wallet balance regression checks
+on:
+  pull_request:
+    paths:
+      - 'netlify/functions/federation-wallet.cjs'
+      - 'netlify/functions/treasury-locks.mjs'
+      - 'record/current-mint-locks-three-20261008.json'
+      - 'netlify/lib/read-json-bounded.cjs'
+      - 'netlify/lib/wallet-prices.cjs'
+      - 'assets/federation/fed-deck*.js'
+      - 'assets/federation/fed-deck.css'
+      - 'command-deck.html'
+      - 'tests/federation-deck*.cjs'
+      - 'tests/federation-wallet.test.cjs'
+      - 'tests/wallet-prices.test.cjs'
+      - 'tests/read-json-bounded.test.cjs'
+      - '.github/workflows/wallet-balances.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'netlify/functions/federation-wallet.cjs'
+      - 'netlify/functions/treasury-locks.mjs'
+      - 'record/current-mint-locks-three-20261008.json'
+      - 'netlify/lib/read-json-bounded.cjs'
+      - 'netlify/lib/wallet-prices.cjs'
+      - 'assets/federation/fed-deck*.js'
+      - 'assets/federation/fed-deck.css'
+      - 'command-deck.html'
+      - 'tests/federation-deck*.cjs'
+      - 'tests/federation-wallet.test.cjs'
+      - 'tests/wallet-prices.test.cjs'
+      - 'tests/read-json-bounded.test.cjs'
+      - '.github/workflows/wallet-balances.yml'
+permissions:
+  contents: read
+jobs:
+  fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - run: node --check netlify/lib/read-json-bounded.cjs
+      - run: node --check netlify/functions/federation-wallet.cjs
+      - run: node --test tests/read-json-bounded.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/federation-deck.test.cjs tests/federation-deck-phantom.test.cjs tests/federation-deck-staking.test.cjs tests/federation-deck-locks.test.cjs

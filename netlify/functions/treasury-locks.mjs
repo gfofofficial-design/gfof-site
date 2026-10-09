@@ -1,3 +1,4 @@
+import {readJsonBounded} from '../lib/read-json-bounded.cjs';
 const RPC = "https://api.mainnet-beta.solana.com";
 const MINT = "Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV";
 const KEYS = [
@@ -28,16 +29,11 @@ export default async function treasuryLocks(request) {
   const origin = request.headers.get("origin");
   if (origin && origin !== url.origin) return json({error: "Origin not allowed"}, 403);
   try {
-    const response = await fetch(RPC, {
+    const payload = await readJsonBounded(RPC, {
       method: "POST", headers: {"Content-Type": "application/json"},
       body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getMultipleAccounts",
-        params: [KEYS, {encoding: "jsonParsed", commitment: "finalized"}]}),
-      signal: AbortSignal.timeout(8000)
-    });
-    if (!response.ok) throw new Error("upstream unavailable");
-    const text = await response.text();
-    if (text.length > 20000) throw new Error("oversized response");
-    const payload = JSON.parse(text);
+        params: [KEYS, {encoding: "jsonParsed", commitment: "finalized"}]})
+    }, {timeoutMs: 8000, maxBytes: 20000});
     const result = payload?.result;
     if (payload.error || !Number.isSafeInteger(result?.context?.slot) ||
         !Array.isArray(result?.value) || result.value.length !== KEYS.length ||
