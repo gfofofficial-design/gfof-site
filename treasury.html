@@ -901,10 +901,16 @@ function rpc(method, params){
   if(method !== 'getAccountInfo') return Promise.reject(new Error('unsupported read'));
   if(!lockReadPromise){
     var controller = new AbortController();
+    var onAbort;
+    var aborted = new Promise(function(_,reject){
+      onAbort = function(){reject(new Error('lock read unavailable'));};
+      controller.signal.addEventListener('abort',onAbort,{once:true});
+    });
     var timer = setTimeout(function(){controller.abort();},12000);
-    lockReadPromise = fetch(RPC, {signal:controller.signal})
-      .then(function(r){if(!r.ok) throw new Error('lock read unavailable');return r.json();})
+    var responseRead = fetch(RPC, {signal:controller.signal})
+      .then(function(r){controller.signal.throwIfAborted();if(!r.ok) throw new Error('lock read unavailable');return r.json();})
       .then(function(d){
+        controller.signal.throwIfAborted();
         if(d.mint !== CA || d.commitment !== 'finalized' || !Number.isSafeInteger(d.slot) ||
            !Array.isArray(d.accounts) || d.accounts.length !== 7 ||
            !Number.isFinite(Date.parse(d.observedAt)) ||
@@ -912,7 +918,10 @@ function rpc(method, params){
         lockReadObservedAt = d.observedAt;
         lockReadSlot = d.slot;
         return d;
-      }).finally(function(){clearTimeout(timer);});
+      });
+    lockReadPromise = Promise.race([responseRead,aborted]).finally(function(){
+      clearTimeout(timer);controller.signal.removeEventListener('abort',onAbort);controller.abort();
+    });
   }
   return lockReadPromise.then(function(d){
     var entry = d.accounts.find(function(a){return a.address === params[0];});
