@@ -80,3 +80,33 @@ test('Show all assets returns keyboard focus to the filter without a request',()
  filter.value='missing';app.nodes.get('wallet-filter-clear').events.click();
  assert.equal(filter.value,'');assert.equal(app.document.activeElement,filter);
 });
+
+test('missing-price panel names excluded nonzero holdings without changing the priced subtotal',async()=>{
+ const address='11111111111111111111111111111111';const app=setup(async()=>({ok:true,status:200,json:async()=>({address,sol:'2',tokens:[{mint:'missing',symbol:'GFOF',quantity:'500'},{mint:'zero',symbol:'ZERO',quantity:'0'}],tokenAccounts:2,observedAt:new Date().toISOString(),pricing:{prices:{So11111111111111111111111111111111111111112:{usdPrice:100}}}})}));
+ app.nodes.get('wallet-address').value=address;await app.submit();
+ assert.equal(app.nodes.get('wallet-unpriced-panel').hidden,false);
+ assert.deepEqual(app.nodes.get('wallet-unpriced-list').children.map(n=>n.textContent),['GFOF · 500 tokens']);
+ assert.equal(app.nodes.get('priced-total').textContent,'$200.00');
+ assert.equal(app.nodes.get('wallet-unpriced-count').textContent,'1');
+});
+test('missing-price panel bounds its list and clears stale holdings after an edit or failed read',async()=>{
+ const address='11111111111111111111111111111111';let fail=false;
+ const app=setup(async()=>({ok:!fail,status:fail?503:200,json:async()=>fail?{error:'Unavailable'}:{address,sol:'0',tokens:Array.from({length:7},(_,i)=>({mint:'mint-'+i,symbol:null,quantity:'1'})),tokenAccounts:7,observedAt:new Date().toISOString()}}));
+ for(const action of ['edit','failure','clear']){
+  fail=false;app.nodes.get('wallet-address').value=address;await app.submit();
+  assert.equal(app.nodes.get('wallet-unpriced-list').children.length,5);
+  assert.match(app.nodes.get('wallet-unpriced-summary').textContent,/7.*first 5/);
+  if(action==='edit')app.nodes.get('wallet-address').events.input();
+  if(action==='failure'){fail=true;await app.submit();}
+  if(action==='clear')app.clear();
+  assert.equal(app.nodes.get('wallet-unpriced-panel').hidden,true);
+  assert.equal(app.nodes.get('wallet-unpriced-list').children.length,0);
+ }
+});
+test('a price outage includes native SOL while all-priced and zero-holding reads hide exclusions',async()=>{
+ const address='11111111111111111111111111111111';let mode='outage';
+ const app=setup(async()=>({ok:true,status:200,json:async()=>({address,sol:mode==='zero'?'0':'1',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString(),pricing:{prices:mode==='priced'?{So11111111111111111111111111111111111111112:{usdPrice:100}}:{}}})}));
+ app.nodes.get('wallet-address').value=address;await app.submit();
+ assert.deepEqual(app.nodes.get('wallet-unpriced-list').children.map(n=>n.textContent),['SOL · 1 SOL']);
+ for(mode of ['priced','zero']){await app.submit();assert.equal(app.nodes.get('wallet-unpriced-panel').hidden,true);assert.equal(app.nodes.get('wallet-unpriced-list').children.length,0);}
+});
