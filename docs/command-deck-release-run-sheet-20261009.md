@@ -90,8 +90,10 @@ provider-console links.
 On October 9 the hosting connector reported the current production deployment
 ready on main at the baseline commit above. This read confirms deployment
 metadata only; it does not prove runtime health, recovery permissions, automatic
-publishing or a tested recovery. The deployment record reports an API source,
-so do not assume that a Git push alone will publish a corrective release.
+publishing or a tested recovery. A later authenticated dashboard review verified the linked GitHub repository,
+active builds, production branch main and auto publishing enabled. Successful
+main deploys publish automatically. The earlier API-source observation did not
+by itself establish that configuration.
 
 A data-provider outage can leave wallet or lock reads unavailable while the
 homepage remains Up. Keep the explicit unavailable display, distinguish provider
@@ -142,3 +144,33 @@ administrator, prove separate registrar protection, or complete the least-access
 review. Review the actual authorized members and roles before closing that item.
 The remaining monitoring, service recovery and data-handling requirements are
 unchanged. PR #104 remains draft; this evidence does not authorize publication.
+
+## October 9 administrator access and publishing review
+
+The owner reported no other Cloudflare members at 11:40 AM Chicago. This is
+owner-reported membership evidence, not an API-token inventory or pending-invite
+review. Authenticated Netlify pages subsequently showed one team Owner, zero
+reviewers, no Git contributors and no pending member requests. The detailed roster
+is the evidence used; an earlier project-summary count differed. Private member
+identities and console URLs are omitted from this public record.
+
+The project is linked to the intended GitHub repository, with active builds,
+main as the production branch and automatic publishing on. Thus merging a
+release or corrective change into main can cause a production deploy; retain
+exact-scope approval before either action. No permissions, build settings or
+publishing controls were changed during this read-only review.
+
+An isolated changed-file fixture of candidate
+`80c834553e49d24cc1a48a48454d73e4a1e852e1` reversed all 27 changed files: six
+existing files returned to the baseline and 21 additions were removed. Source
+blob comparison identified one trailing-newline mismatch in staging; the exact
+source was restored before repeating the successful reversal. This supports
+preparing a corrective Git change for that candidate. It is not a full-site
+build, a production recovery rehearsal or proof the reversal applies cleanly
+after unrelated later edits. Recreate and review the corrective diff against the
+actual release/merge and current main before use.
+
+All three CI workflows passed at that candidate. Cloudflare token/invitation
+review, other-service access and recovery custody, monitoring response coverage
+and applicable data-handling requirements are still separate checks. No release
+approval follows from these results.
