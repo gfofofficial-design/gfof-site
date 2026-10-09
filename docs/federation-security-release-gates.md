@@ -94,3 +94,19 @@ All 141 applicable local tests passed. The account page now links a dedicated
 privacy notice; verified-request deletion, retention operations and monitoring
 remain unfinished. No subscription, managed signup hook, production account
 setting or public registration was enabled by this preparation.
+
+## October 9 managed creation and ordinary rejection evidence
+
+The separately approved temporary managed project completed new Google
+creation, PKCE/user read, refresh, consumed-code rejection, logout and rejection
+of the old refresh token on Auth v2.197.0. The later separately reviewed window
+rejected five Email/password, forged provider metadata and OTP creation cases
+with HTTP 403 and the exact installed rule message. Registration was closed
+and independently checked after each window; aggregate rows and restricted
+rights matched, and a dated exact-alias all-mail search found no test mail.
+
+This is finite managed evidence, not production-domain acceptance or ongoing
+monitoring. S4 remains partial: managed fault/deadline behavior, existing-user
+and production-session requirements and the operating/release checks remain.
+The [trial record](federation-managed-signup-trial-20261008.md) preserves the
+earlier stopped state-guard run and its unknown cause. PR #99 remains draft.

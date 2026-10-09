@@ -56,8 +56,13 @@ rejection, refresh/user match, local logout and old-refresh rejection on Auth
 v2.197.0. Ten instrumented Auth calls were made. Registration was closed within
 the approved window and independently verified; the receiver was stopped.
 Aggregate postflight showed one Google user/identity and no public tables.
-This closes the managed allowed-path portion only. Non-Google creation denials,
-fault/deadline behavior and the remaining release gates are still unfinished;
+The subsequent separately reviewed rejection window also passed five direct
+Email/password, forged provider metadata and OTP cases with the exact rule's
+HTTP 403 message. Registration was independently confirmed closed, rows and
+rule rights were unchanged, and a dated all-mail search found no matching test
+mail. The earlier stopped attempt is preserved. These close the managed allowed
+and ordinary rejection portions only. Fault/deadline behavior and the remaining
+release gates are still unfinished;
 see [the isolated trial record](federation-managed-signup-trial-20261008.md).
 
 ## Cost and availability decision

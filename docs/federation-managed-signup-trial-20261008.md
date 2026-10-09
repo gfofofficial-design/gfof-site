@@ -150,3 +150,22 @@ is established. The revised checker retains fixed diagnostic booleans, and the
 next separately reviewed procedure verifies save/reload plus one short settling
 interval before its single state read. Eight offline tests pass. No managed
 non-Google rejection acceptance is claimed from this stopped window.
+
+### Subsequent separately reviewed rejection window passed
+
+The next separately reviewed three-minute window verified save completion and
+the setting after reload, then allowed one planned 30-second settling interval.
+The fresh state read matched. All five managed cases on Auth v2.197.0 returned
+HTTP 403 and the exact pinned rule message, without account/session payloads.
+Eight Auth calls ran with no retries; a ninth independent settings read
+confirmed signup closed. Aggregate users/identities remained 1/1 with no new
+application tables, and the pinned function/rights matched after closure.
+Registration was closed within the bounded deadline.
+
+A dated exact-alias search of the controlled inbox, including Spam/Trash,
+showed no matching test mail. This is a finite observation, not an ongoing
+monitor or promise of future absence. The original stopped run is preserved;
+the successful procedure does not prove the cause of its earlier mismatch.
+Managed Google creation and non-Google rejection paths now have evidence.
+Privilege/function faults, deadline behavior, existing-user/production session
+and operating/release gates remain unfinished. Keep PR #99 draft.
