@@ -32,7 +32,7 @@ Preview: https://deploy-preview-104--gfof.netlify.app/command-deck
 | Physical device | Owner reported ordinary input/table/term use on the larger PR #99 preview | Check this exact PR #104 preview on a physical phone: input, table scrolling, filters, chart labels, Clear and mission navigation |
 | Administration | Repository, identity and hosting MFA confirmations recorded | Domain/DNS administrator MFA, recovery custody and least-access review |
 | Monitoring | Three-minute homepage monitors active on the Free plan; ordinary email receipt confirmed; isolated failure dispatch, authorized UI acknowledgment and automatic resolution observed | Specific drill failure receipt and separate recovery-email dispatch/receipt; provider/API response coverage and operating limits |
-| Recovery | Production baseline identified | Verify a previously successful production deploy can be restored through hosting; record responder and recovery access without publishing private details |
+| Recovery | Hosting reports the current production deploy ready at the baseline commit; exact-head wallet, lock and service-check CI passed at `fe6a6dec9b4f87174ddb34ee58f0e4d76cf4b205` | Prepare and review a Git revert/redeploy recovery path; verify responder access and publishing method without publishing private details |
 | Data handling | Wallet history is page memory only; optional mission storage remains device-local; provider logging disclosed | Review applicable privacy/retention disclosures for this scope; account/cloud-data gates cannot be claimed complete |
 
 The DNS/TLS shell attempt from the restricted work environment could not resolve
@@ -45,9 +45,11 @@ Homepage availability is not proof that wallet or lock APIs work.
    any application change since the reviewed revision and recheck affected evidence.
 2. Complete the remaining scope-specific acceptance above. Use PASS, FAIL or
    NOT RUN; do not substitute emulation for physical-device acceptance.
-3. Identify the exact previously successful production deploy and confirm the
-   owner has access to restore it. Do not perform a production rollback rehearsal
-   without a separately agreed window.
+3. Identify the known-good production commit and prepare the Git revert that
+   would remove the approved release without undoing unrelated later changes.
+   Review the resulting diff, test affected routes and verify the production
+   publishing method. No recovery deployment or production rehearsal follows
+   from this run sheet.
 4. Record the responder, provider contact path, observation limits and escalation
    procedure. Missing current data must remain unavailable rather than replaced
    with sample balances or totals.
@@ -71,17 +73,27 @@ remain visible, and missions have their intended local-storage consent flow.
 Record the exact deployed commit, time, checks and result. A failed check is a
 release incident, not permission to silently change account or provider settings.
 
-## Failure and rollback
+## Failure and recovery
 
 If the new page exposes unintended account/financial functionality, leaks
 private data, breaks request boundaries, or repeatedly fails its required reads,
-stop the release and assess restoring the identified successful production
-deploy. The actual restoration requires the agreed production authority.
-Confirm the restored homepage and affected routes, then preserve safe evidence
-for a corrective review. Do not publish credentials, private logs, account
-identifiers or provider-console links.
+stop the release and prepare a reviewed Git revert and new deployment. Do not
+republish an older hosting snapshot. A build that fails before publication does
+not replace the existing live deploy, so it needs diagnosis and a corrected
+build rather than a rollback. A bad published release needs a corrective commit,
+affected checks and the agreed production authority before publishing.
+Confirm the corrected homepage and affected routes, then preserve safe evidence
+for review. Do not publish credentials, private logs, account identifiers or
+provider-console links.
+
+On October 9 the hosting connector reported the current production deployment
+ready on main at the baseline commit above. This read confirms deployment
+metadata only; it does not prove runtime health, recovery permissions, automatic
+publishing or a tested recovery. The deployment record reports an API source,
+so do not assume that a Git push alone will publish a corrective release.
 
 A data-provider outage can leave wallet or lock reads unavailable while the
 homepage remains Up. Keep the explicit unavailable display, distinguish provider
 failure from a deployment regression, and do not advertise a successful dashboard
 check based only on the homepage monitor.
+
