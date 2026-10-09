@@ -24,8 +24,9 @@ function apiFixture(stage){
   const q=JSON.parse(options.body);return new Response(JSON.stringify({result:q.method==='getBalance'?{context:{slot:2},value:100}:{context:{slot:2},value:[]}}));
  };
  const requests=[];const bounded=(url,options,settings)=>{requests.push({url,timeoutMs:settings.timeoutMs,maxBytes:settings.maxBytes});return readJsonBounded(url,options,{...settings,timeoutMs:5,fetcher});};
- const priceModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/lib/wallet-prices.cjs'),'utf8'),{module:priceModule,require:()=>({readJsonBounded:bounded}),fetch:fetcher});
- const walletModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/functions/federation-wallet.cjs'),'utf8'),{exports:walletModule.exports,require:p=>p.includes('wallet-prices')?priceModule.exports:{readJsonBounded:bounded},URL,Buffer,fetch:fetcher});
+ const providerModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/lib/data-provider-config.cjs'),'utf8'),{module:providerModule,process:{env:{}}});
+ const priceModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/lib/wallet-prices.cjs'),'utf8'),{module:priceModule,require:p=>p.includes('data-provider-config')?providerModule.exports:{readJsonBounded:bounded},fetch:fetcher});
+ const walletModule={exports:{}};runInNewContext(readFileSync(require('node:path').join(__dirname,'../netlify/functions/federation-wallet.cjs'),'utf8'),{exports:walletModule.exports,require:p=>p.includes('wallet-prices')?priceModule.exports:p.includes('data-provider-config')?providerModule.exports:{readJsonBounded:bounded},URL,Buffer,fetch:fetcher});
  const origin='https://deploy-preview-104--gfof.netlify.app';return {requests,read:()=>walletModule.exports.handler({rawUrl:origin+'/api/federation-wallet',httpMethod:'POST',headers:{origin,'content-type':'application/json','sec-fetch-site':'same-origin'},body:JSON.stringify({address:'11111111111111111111111111111111'})})};
 }
 test('RPC header and body deadlines return no partial wallet balances',{timeout:1000},async()=>{
@@ -40,3 +41,4 @@ test('late body bytes cannot continue decoding after a deadline',{timeout:1000},
  await assert.rejects(readJsonBounded('https://fixture.invalid',{}, {timeoutMs:5,maxBytes:100,fetcher:async()=>({ok:true,body:{getReader:()=>({read(){reads++;return later.promise;},cancel:()=>new Promise(()=>{})})}})}),{name:'AbortError'});
  later.resolve({done:false,value:Buffer.from('{"amount":"99"}')});await new Promise(setImmediate);assert.equal(reads,1);
 });
+

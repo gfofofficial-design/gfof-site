@@ -7,6 +7,8 @@ on:
       - 'record/current-mint-locks-three-20261008.json'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'netlify/lib/wallet-prices.cjs'
+      - 'netlify/lib/data-provider-config.cjs'
+      - 'tests/data-provider-config.test.cjs'
       - 'assets/federation/fed-deck*.js'
       - 'assets/federation/fed-deck.css'
       - 'command-deck.html'
@@ -23,6 +25,8 @@ on:
       - 'record/current-mint-locks-three-20261008.json'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'netlify/lib/wallet-prices.cjs'
+      - 'netlify/lib/data-provider-config.cjs'
+      - 'tests/data-provider-config.test.cjs'
       - 'assets/federation/fed-deck*.js'
       - 'assets/federation/fed-deck.css'
       - 'command-deck.html'
@@ -46,4 +50,5 @@ jobs:
           node-version: '24'
       - run: node --check netlify/lib/read-json-bounded.cjs
       - run: node --check netlify/functions/federation-wallet.cjs
-      - run: node --test tests/read-json-bounded.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/federation-deck.test.cjs tests/federation-deck-staking.test.cjs tests/federation-deck-locks.test.cjs
+      - run: node --test tests/data-provider-config.test.cjs tests/read-json-bounded.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/federation-deck.test.cjs tests/federation-deck-staking.test.cjs tests/federation-deck-locks.test.cjs
+

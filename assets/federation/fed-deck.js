@@ -65,7 +65,7 @@
    })(),aborted]);
    if(request!==sequence)return;const {res,data}=payload;if(!res.ok)throw Error(data.error||'Wallet service unavailable.');if(data.address!==address||!Array.isArray(data.tokens)||data.tokens.length>1000||typeof data.sol!=='string')throw Error('Balance response could not be verified.');
    holdings(data);recordHistory(data);renderSources(data);
-   document.getElementById('wallet-count').textContent=String(data.tokens.length);document.getElementById('wallet-state').textContent='Address loaded';document.getElementById('wallet-scope').textContent=address.slice(0,6)+'…'+address.slice(-6)+' · ownership unverified';document.getElementById('wallet-caption').textContent='On-chain quantities · available reference values';document.getElementById('wallet-data-status').textContent='BALANCES LOADED';status.textContent='Observed '+new Date(data.observedAt).toLocaleString()+'. Source: Solana public RPC. '+data.tokenAccounts+' token accounts read. Zero-balance token accounts are omitted. These reads may come from different slots.';
+   document.getElementById('wallet-count').textContent=String(data.tokens.length);document.getElementById('wallet-state').textContent='Address loaded';document.getElementById('wallet-scope').textContent=address.slice(0,6)+'…'+address.slice(-6)+' · ownership unverified';document.getElementById('wallet-caption').textContent='On-chain quantities · available reference values';document.getElementById('wallet-data-status').textContent='BALANCES LOADED';status.textContent='Observed '+new Date(data.observedAt).toLocaleString()+'. Source: '+(data.source==='Helius Solana RPC'?'Helius Solana RPC':'Solana public RPC')+'. '+data.tokenAccounts+' token accounts read. Zero-balance token accounts are omitted. These reads may come from different slots.';
   }catch(e){if(request!==sequence)return;reset();clearHistory();status.textContent=e.name==='AbortError'?(timedOut?'Lookup timed out. Please try again later.':'Lookup cancelled.'):e.message;}finally{clearTimeout(timeout);requestController.signal.removeEventListener('abort',onAbort);if(request===sequence)button.disabled=false;}
  });
  input.addEventListener('input',()=>{input.setAttribute('aria-invalid','false');sequence++;controller?.abort();button.disabled=false;reset();clearHistory();status.textContent='Address changed. Read balances to load the new address.';});
@@ -89,3 +89,4 @@
  globalThis.addEventListener?.('pageshow',renderPassport);
  renderPassport();
 })();
+
