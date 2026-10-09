@@ -75,3 +75,27 @@ exact public-release approval. Keep PR #99 draft and production signup closed.
 
 References: [compute billing](https://supabase.com/docs/guides/platform/manage-your-usage/compute),
 [Before User Created hook](https://supabase.com/docs/guides/auth/auth-hooks/before-user-created-hook).
+
+## October 9 isolated preparation and incomplete provider attempt
+
+The owner separately approved and created the temporary target. Its pinned
+rule was applied with invoker/empty-search-path mode and restricted effective
+rights; only Auth has schema/function access. The Before User Created hook is
+attached. A dedicated Google client and exact localhost callback are configured;
+the owner handled the secret privately. Preflight and postflight both returned
+zero users and identities. These catalog/configuration observations do not
+prove managed signup enforcement or credential validity.
+
+The first short window stopped at local initiation. Offline Chrome reproduced
+the no-referrer form policy's Origin:null conflict; the repaired receiver keeps
+exact-origin checks, finishes the local POST before provider navigation, and
+retains no-referrer on that navigation. Eight tests and the wired offline
+browser handoff passed. A separately approved retry reached Google's account
+chooser, but no completed owner consent/callback receipt arrived. Registration
+was closed and independently verified within its ten-minute maximum, and the
+receiver and expired flow were removed. No user was created, no managed session
+acceptance is claimed, and no existing project or public website changed.
+
+The trial remains incomplete and closed. A fresh consent window and the rest
+of the managed acceptance matrix require review. Temporary compute continues
+until teardown is separately approved and verified. Keep PR #99 draft.

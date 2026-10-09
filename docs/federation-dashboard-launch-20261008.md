@@ -31,8 +31,11 @@ after more than one hour. These are one-profile observations, not public-user
 or production-domain acceptance.
 
 The owner reported that the wallet input, asset table and term controls were
-usable on a physical phone, with Phantom installed. The optional phone wallet
-permission/rejection/disconnect checks remain separate. The private recovery
+usable on a physical phone, with Phantom installed. The owner later reported
+that public-address permission, balance read and disconnect worked inside
+Phantom's browser with no signature request. That normal-path report does not
+prove rejection, cancellation, account change or independent quantity parity.
+The private recovery
 drill restored a current encrypted Auth export to a separate Supabase project
 and verified a fresh source/target password login and owner-ID match.
 
@@ -82,8 +85,10 @@ References: [pricing](https://supabase.com/pricing),
 
 1. Review the exact combined commit and hosted preview, including the production
    wallet host fix and privacy link. Record current checks and any findings.
-2. Complete physical-device Phantom acceptance and a separate phone Google
-   round trip. No signatures or token transfers are needed.
+2. Complete the remaining physical-device Phantom rejection, cancellation,
+   account-change and quantity-parity checks, plus a separate phone Google
+   round trip. The owner-reported normal address/disconnect path passed; no
+   signatures or token transfers are needed.
 3. Finalize the operating plan and check current billing. Verify administrator MFA for
    GitHub, Netlify, Supabase and domain/DNS access without collecting recovery
    codes. Establish a backup cadence, custody and deleted-account reconciliation.
