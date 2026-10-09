@@ -31,7 +31,7 @@ Preview: https://deploy-preview-104--gfof.netlify.app/command-deck
 | Application boundaries | 112 applicable local tests; wallet, lock and service-check CI passed at the application revision; preview deployed | Confirm the final release diff preserves this scope and all required checks pass on its exact head |
 | Hosted data reads | Finite preview wallet and lock checks passed; independent binary quantity comparison through the same RPC provider; origin rejection and clearing checked | Production-origin acceptance after separately approved release; no inference of independent provider agreement |
 | Physical device | Owner reviewed the PR #104 preview on a physical phone and confirmed wallet input, table scrolling, filters, Clear and mission navigation seemed to work on October 9 | Reported acceptance passed for those ordinary flows; this is owner-reported evidence, not an instrumented device test or account/wallet-permission acceptance |
-| Administration | Repository, identity and hosting MFA confirmations recorded | Domain/DNS administrator MFA, recovery custody and least-access review |
+| Administration | Repository, identity and hosting MFA confirmations recorded; owner reported Cloudflare two-factor authentication enabled and recovery codes saved on October 9 | Review administrator/member roles and recovery access for the relevant services; Cloudflare confirmation is owner reported, not an observed provider setting or recovery rehearsal |
 | Monitoring | Three-minute homepage monitors active on the Free plan; ordinary email receipt confirmed; isolated failure dispatch, authorized UI acknowledgment and automatic resolution observed | Specific drill failure receipt and separate recovery-email dispatch/receipt; provider/API response coverage and operating limits |
 | Recovery | Hosting reports the current production deploy ready at the baseline commit; exact-head wallet, lock and service-check CI passed at `fe6a6dec9b4f87174ddb34ee58f0e4d76cf4b205` | Prepare and review a Git revert/redeploy recovery path; verify responder access and publishing method without publishing private details |
 | Data handling | Wallet history is page memory only; optional mission storage remains device-local; provider logging disclosed | Review applicable privacy/retention disclosures for this scope; account/cloud-data gates cannot be claimed complete |
@@ -128,3 +128,17 @@ administrative recovery remain separate requirements.
 The phone report closes the named ordinary-flow acceptance item. It does not
 close the remaining administration, monitoring, recovery or data-handling items
 in the table. No production release follows from this update.
+
+## October 9 Cloudflare owner confirmation
+
+At 11:28 AM Chicago the owner confirmed that Cloudflare two-factor
+authentication was set up. At 11:29 AM the owner confirmed that its recovery
+codes were saved. Record these two items as **PASS — owner reported**. No codes,
+credential values or storage locations are published or requested.
+
+This confirmation covers the reported Cloudflare login and its saved codes. It
+does not demonstrate a recovery login, establish protections for every other
+administrator, prove separate registrar protection, or complete the least-access
+review. Review the actual authorized members and roles before closing that item.
+The remaining monitoring, service recovery and data-handling requirements are
+unchanged. PR #104 remains draft; this evidence does not authorize publication.
