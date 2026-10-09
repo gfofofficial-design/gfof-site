@@ -28,11 +28,13 @@ the activated vendor status monitors do not perform all of those assertions.
 
 ## Isolated failure and recovery drill
 
-Status: a separate monitor draft is prepared, but it has not been created or
-started. Its recurring check and failure/recovery notifications need explicit
-owner approval before submission.
+Status: the owner-approved isolated rehearsal ran on October 9, 2026. The
+failure-triggered email dispatch, authorized UI acknowledgment and automatic
+incident resolution were observed. The temporary monitor was paused within
+six minutes of creation. Specific failure-email receipt and separate recovery
+email dispatch/receipt remain unverified.
 
-Proposed settings: name `DRILL ONLY - Federation alert and recovery`, public
+Drill settings used: name `DRILL ONLY - Federation alert and recovery`, public
 target `https://galacticfederation.co/`, GET, three-minute interval, ten-second
 timeout, TLS verification on, redirects/cookie carryover off, sixty-second
 failure confirmation and recovery, email only to the existing intended owner.
@@ -51,17 +53,47 @@ The three operational homepage monitors remain in place.
    period. Do not manually resolve the incident to manufacture this result.
 5. Verify the recovery notification and record whether the owner received it.
    Keep dispatch, receipt, acknowledgment and automatic resolution distinct.
-6. Pause only the drill monitor when complete and preserve the dated evidence.
-   Stop if the provider requests an upgrade, new paid feature or wider routing.
+6. Pause only the drill monitor when complete or within the approved twenty-minute
+   cap, and preserve the dated evidence. Stop if the provider requests an upgrade,
+   new paid feature or wider routing.
 
 Overall time includes the polling interval, confirmation and recovery periods.
 A configured sixty-second period is not an end-to-end sixty-second deadline.
 Submit each notification or creation action once; inspect its result before
 considering a retry when the page responds slowly.
 
-The earlier ordinary email test and the active homepage checks are verified.
-The isolated failure/acknowledgment/recovery cycle remains pending. This does
-not complete the broader monitoring and response release gate.
+## October 9 observed rehearsal result
+
+The isolated monitor initially expected HTTP 503 from the normally healthy
+Federation homepage. Provider incident metadata showed the actual response was
+HTTP 200. After the failure was acknowledged, only the drill monitor's expected
+status was changed to HTTP 200.
+
+| Event | Observed result |
+| --- | --- |
+| Failed status check | Recorded at 8:16 AM Chicago time; the configured one-minute confirmation period began. |
+| Incident and failure email | Incident start and email dispatch were recorded at 8:17 AM. |
+| Acknowledgment | The authorized signed-in UI action was recorded at 8:18 AM. |
+| Healthy checks | Recovery was recorded at 8:19 AM, followed by the configured one-minute recovery period. |
+| Automatic resolution | The provider recorded automatic resolution at 8:20 AM. No manual Resolve action was used. |
+| Cleanup | The separate monitor was observed Paused at 8:22 AM, within the approved twenty-minute cap. |
+| Notification acceptance | Ordinary test receipt was previously owner-confirmed. Receipt of this specific failure alert and dispatch/receipt of a separate recovery email remain unverified. |
+
+Times above use the provider's minute-level display. They are observations from
+one rehearsal, not an alert-latency guarantee. The acknowledgment was performed
+through the signed-in UI under owner approval; it does not establish an owner
+email-link acknowledgment or backup responder coverage.
+
+Notification dispatch is not treated as explicit human receipt. No separate
+recovery-email send was visible in the incident timeline at the final check.
+This is an unverified notification result, not proof that the service cannot
+send recovery emails.
+
+This was a status-expectation simulation. Real network, DNS, TLS, provider/API,
+suspicious-activity and resource-usage failure paths need their own checks.
+The three operational homepage monitors remain active; the drill is retained
+paused for evidence. The wider monitoring and response release gate remains
+partial.
 
 ## October 8 preparation record
 

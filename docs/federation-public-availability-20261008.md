@@ -57,7 +57,10 @@ Three Better Stack homepage monitors were observed active and Up at three-minute
 intervals on the current Free plan. Email-only routing was checked, and the
 owner confirmed receipt of ordinary test emails. The [setup record](federation-better-stack-setup-20261008.md)
 distinguishes saved vendor settings from this stronger manual content/title
-check. The isolated failure, acknowledgment and automatic-recovery drill is
-prepared but not started; provider/API and suspicious-activity monitoring
-remain separate release requirements. No uptime-history or full monitoring
-acceptance claim follows from the initial Up results.
+check. The owner-approved isolated status-mismatch rehearsal subsequently
+produced failure-email dispatch, authorized UI acknowledgment and automatic
+resolution; its temporary monitor was paused within six minutes. Specific
+failure-email receipt and separate recovery-email dispatch/receipt remain
+unverified. Provider/API, suspicious-activity and resource-usage monitoring
+remain separate release requirements. Initial Up results and one controlled
+rehearsal do not establish sustained uptime or full monitoring acceptance.
