@@ -169,3 +169,41 @@ the successful procedure does not prove the cause of its earlier mismatch.
 Managed Google creation and non-Google rejection paths now have evidence.
 Privilege/function faults, deadline behavior, existing-user/production session
 and operating/release gates remain unfinished. Keep PR #99 draft.
+
+### Subsequent managed fault packet — refusals verified, deadline gap
+
+A separately approved packet tested three fault cases on managed Auth
+v2.197.0 / PostgreSQL 17.11. Removing only Auth's EXECUTE grant produced an
+explicit hook HTTP 500 in 155 ms. A constant function exception produced an
+explicit hook HTTP 500 in 206 ms. Both refused account creation; independent
+aggregate checks and a dated exact-alias all-mail search found no new user,
+identity or corresponding mail. The original rule and rights were restored
+after each closed window.
+
+The third case deliberately waited three seconds and then always denied,
+including Google payloads. Its single direct signup request returned the exact
+HTTP 403 denial after 3,149 ms, with no cancellation report. This did not meet
+the shorter expected hook-deadline criterion. The packet stopped immediately;
+the fourth restored ordinary-denial request was not run. Independent closure
+and exact original function/rights/aggregate restoration passed. Catalog
+restoration is not a fresh HTTP control.
+
+Sixteen Auth calls and three windows ran with no retries. Every registration
+window closed within its three-minute bound, and the whole packet ended within
+twenty minutes. Raw receipts remain separate from independent postflight.
+Existing projects and public websites were unchanged; public signup stays off.
+
+The [Auth Hooks documentation](https://supabase.com/docs/guides/auth/auth-hooks)
+still describes a two-second Postgres hook duration. Open upstream
+[issue #2852](https://github.com/supabase/auth/issues/2852) describes ineffective
+SET LOCAL on a nontransactional invocation path. Our result is consistent with
+that report, but does not establish the root cause, a specific SQL warning or
+the hosted upper cancellation bound. An earlier self-hosted ten-second API
+limit is not proof of this managed project's setting.
+
+Resolve the provider deadline discrepancy and review a supported validation
+path before claiming timeout acceptance. No global deadline was changed to
+manufacture a pass, no extra test follows from the stopped packet, and no
+support message has been sent. Production-session, privacy/operations,
+temporary-target teardown and public-release gates remain open. Keep PR #99
+draft; temporary compute continues until verified removal.

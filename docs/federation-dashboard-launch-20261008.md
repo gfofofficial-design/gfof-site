@@ -61,8 +61,13 @@ Email/password, forged provider metadata and OTP cases with the exact rule's
 HTTP 403 message. Registration was independently confirmed closed, rows and
 rule rights were unchanged, and a dated all-mail search found no matching test
 mail. The earlier stopped attempt is preserved. These close the managed allowed
-and ordinary rejection portions only. Fault/deadline behavior and the remaining
-release gates are still unfinished;
+and ordinary rejection portions only. Subsequent managed missing-EXECUTE and
+constant runtime-error tests also refused creation with explicit hook errors.
+A three-second always-deny function returned HTTP 403 after 3,149 ms without
+cancellation, so the packet stopped and the original rule/rights were restored
+with signup independently closed. The shorter expected deadline was not
+observed; the restored HTTP control was not run. Provider clarification and the
+remaining release gates are still unfinished;
 see [the isolated trial record](federation-managed-signup-trial-20261008.md).
 
 ## Cost and availability decision
