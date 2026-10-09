@@ -3,7 +3,7 @@
 Status: **HOLD — review candidate, not production release approval.**
 
 Candidate: [PR #104](https://github.com/gfofofficial-design/gfof-site/pull/104).
-Latest reviewed application revision: `9b751c47b910a1c0e894cf69eaac2987d0f65afb`.
+Latest reviewed application revision: `1545aa88d9cd7a1b7b1eac8074b21bc706bb45b6` (privacy page and dashboard links).
 The earlier 112-test application baseline was `8bb6714c7d5c582f19182cece4e2b7c3e4758d84`.
 Production baseline at review: `50be6258473374b46887da9605f177cc98d3c757`.
 A later documentation commit does not establish application changes or new production acceptance.
@@ -202,3 +202,19 @@ All three CI workflows and Netlify preview status passed at the privacy change
 retention/deletion handling, response rehearsals, recovery-message receipt,
 resource operating limits or production-specific acceptance. Those items remain
 open for the exact scoped release decision.
+
+## October 9 treasury API monitor activation
+
+At 12:35 PM Chicago the owner explicitly approved enabling the prepared treasury
+API monitor. It was created and its first observed result was **Up**, with zero
+incidents. It checks the public `/api/treasury-locks` endpoint every three minutes
+for the current token mint string. Email notification is enabled for the existing
+sole-owner response path. Confirmation and recovery periods are one minute,
+request timeout is ten seconds, TLS verification is on, and redirects are off.
+No credentials, new recipients, paid upgrade or intentional failure were used.
+
+This provides endpoint and case-insensitive mint-string coverage. It does not
+validate complete JSON, decode each lock, establish data freshness or verify
+wallet and pricing APIs. Failure and recovery email delivery for this monitor
+remain **NOT RUN**. The earlier drill remains paused. Production dashboard
+acceptance and the remaining release requirements above are unchanged.
