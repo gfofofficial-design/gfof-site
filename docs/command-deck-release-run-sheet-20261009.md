@@ -174,3 +174,31 @@ All three CI workflows passed at that candidate. Cloudflare token/invitation
 review, other-service access and recovery custody, monitoring response coverage
 and applicable data-handling requirements are still separate checks. No release
 approval follows from these results.
+
+## October 9 deployment-failure notification and privacy verification
+
+The owner explicitly approved adding the GFOF project's Netlify Deploy failed
+email notification. It was saved and observed in the notification list on
+October 9. The rule covers project deploy failures, including previews. It is
+not a provider/API availability alert, a recovery notification, a delivery test,
+or proof of an incident response. No failed build or production outage was
+intentionally generated. Recipient identity and private console evidence are
+omitted from this public record.
+
+The read-only data-and-privacy page is linked from both the wallet disclosure
+and the dashboard footer. Browser navigation and a corrected HTTP inspection
+verified both entry points and the page. The first HTTP checker incorrectly
+required double-quoted .html links; Netlify's clean-URL rewriting used single
+quotes and extensionless paths. Inspection confirmed the links were present,
+so this was a checker error rather than differing dashboard content. The
+corrected check returned HTTP 200 and verified no-referrer, frame denial,
+nosniff and no-store on the dashboard and privacy page. The host injects its
+preview script; the privacy page's application source contains no script and
+its meta policy disallows script execution. Do not claim that the delivered
+preview HTML contains no script tags.
+
+All three CI workflows and Netlify preview status passed at the privacy change
+`1545aa88d9cd7a1b7b1eac8074b21bc706bb45b6`. This does not close provider log
+retention/deletion handling, response rehearsals, recovery-message receipt,
+resource operating limits or production-specific acceptance. Those items remain
+open for the exact scoped release decision.
