@@ -181,7 +181,7 @@
   status = 200
   force = true
 
-# Read-only wallet viewer; handler permits only PR99 and the canonical live host,
+# Read-only wallet viewer; handler permits only PR104 and the canonical live host,
 # with requests confined to the origin that serves the page.
 [[redirects]]
   from = "/api/federation-wallet"
@@ -201,6 +201,12 @@
     X-Frame-Options = "DENY"
     Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
 
+
+[[redirects]]
+  from = "/command-deck"
+  to = "/command-deck.html"
+  status = 200
+  force = true
 
 # Catch-all — serve custom 404 page with proper 404 status
 [[redirects]]

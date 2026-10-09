@@ -3,7 +3,7 @@ const {readPrices}=require('../lib/wallet-prices.cjs');
 const {readJsonBounded}=require('../lib/read-json-bounded.cjs');
 // Reviewed hosts only. Each request must originate on the host serving it;
 // neither the preview nor production may call the other's wallet endpoint.
-const ORIGINS=new Set(['https://deploy-preview-99--gfof.netlify.app','https://galacticfederation.co']);
+const ORIGINS=new Set(['https://deploy-preview-104--gfof.netlify.app','https://galacticfederation.co']);
 const RPC='https://api.mainnet-beta.solana.com';
 const PROGRAMS=['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA','TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'];
 const GFOF='Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';

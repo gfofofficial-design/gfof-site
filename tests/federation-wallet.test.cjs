@@ -2,7 +2,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {handler,addressOK,quantity}=require('../netlify/functions/federation-wallet.cjs');
 const address='11111111111111111111111111111111';
-const origin='https://deploy-preview-99--gfof.netlify.app';
+const origin='https://deploy-preview-104--gfof.netlify.app';
 const event={rawUrl:origin+'/api/federation-wallet',httpMethod:'POST',headers:{origin,'content-type':'application/json','sec-fetch-site':'same-origin'},body:JSON.stringify({address})};
 
 test('canonical production requests read balances while hosts stay isolated',async()=>{
