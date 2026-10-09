@@ -1,4 +1,4 @@
-const WINDOW=60000, LIMIT=24, DAY_LIMIT=3000;
+const WINDOW=60000, LIMIT=24, DAY_LIMIT=3000, MIN_GAP=2500;
 const headers={'Content-Type':'application/json','Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'};
 const reply=(status,allowed=false)=>new Response(JSON.stringify({allowed}),{status,headers});
 // One named SQLite object coordinates every server instance. No address, IP,
@@ -17,7 +17,9 @@ export class PriceBudget {
     if(day<row.day)throw Error();if(day>row.day)used=0;
     times=times.filter(t=>now-t<WINDOW);
    }
-   if(times.length>=LIMIT||used>=DAY_LIMIT)return reply(429);
+   // Space reservations as well as capping totals: a minute allowance must
+   // not permit a simultaneous burst against the upstream service.
+   if((row&&now-row.last<MIN_GAP)||times.length>=LIMIT||used>=DAY_LIMIT)return reply(429);
    times.push(now);
    this.storage.sql.exec('INSERT INTO budget (id,day,used,last,times) VALUES (1,?,?,?,?) ON CONFLICT(id) DO UPDATE SET day=excluded.day,used=excluded.used,last=excluded.last,times=excluded.times',day,used+1,now,JSON.stringify(times));
    // Reservations are never refunded: network failures must not add capacity.
