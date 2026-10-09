@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Federation Account Privacy · GFOF</title>
+  <link rel="stylesheet" href="/assets/federation/fed-tokens.css">
+  <link rel="stylesheet" href="/assets/federation/fed-account.css">
+</head>
+<body>
+<header><a class="brand" href="/"><img src="/logo-circle.png" alt="Galactic Federation">GALACTIC FEDERATION</a><a href="/account">Back to your account →</a></header>
+<main>
+  <p class="eyebrow">FEDERATION // ACCOUNT PRIVACY</p>
+  <h1>What sign-in records.</h1>
+  <p class="lead">This notice covers Federation accounts and the Command Deck. Last updated October 8, 2026. The current account service is a private preview; public registration is not open.</p>
+  <aside>
+    <h2>Your account</h2>
+    <p>Supabase provides account authentication. Google sign-in shares your email and can share your name and profile picture with Supabase. Supabase retains the account identifier and linked sign-in identities; the Federation page displays your email. These records support sign-in, account recovery, and account administration.</p>
+    <p>We keep the account record while the account remains open. Signing out ends this browser session; it does not delete the account. An account does not establish wallet ownership, financial eligibility, or permission to move tokens.</p>
+  </aside>
+  <aside>
+    <h2>Cookies and device storage</h2>
+    <p>Sign-in uses secure session cookies that page scripts cannot read. The sign-in-flow cookie lasts up to ten minutes, the access cookie up to one hour, and the browser refresh cookie up to one day. These browser limits do not by themselves end every session held by the identity provider.</p>
+    <p>Journey choices and opted-in Explorer Passport progress stay in this browser's local storage. Sign-in does not synchronize them between devices. Wallet observations and their chart history last only for the current dashboard visit.</p>
+  </aside>
+  <aside>
+    <h2>Public wallet observations</h2>
+    <p>When you request a balance read, the Federation server sends the public address to Solana's public RPC service and requests its SOL and token-account quantities. Reference-price requests can send token mint identifiers to Jupiter. The dashboard does not save the wallet address, balances, or visit history to your Federation account.</p>
+    <p>Optional Phantom address access is a separate permission you grant in Phantom. The dashboard requests no message or transaction signature. Manage trusted-app permissions inside Phantom; signing out of your Federation account does not revoke those permissions.</p>
+  </aside>
+  <aside>
+    <h2>Service records and backups</h2>
+    <p>Netlify hosts the site and server functions; Supabase and Google provide sign-in services. Their operational and security records can include request times, IP addresses, browser information, and sign-in events under their own policies. The Federation application does not intentionally log authentication tokens, passwords, OAuth codes, or wallet request bodies.</p>
+    <p>Account information can remain in protected recovery backups after deletion from the active service. A provider's dashboard log-access window is not a promise that all underlying copies have been erased. We do not promise immediate deletion from every provider log or backup.</p>
+    <p><a href="https://supabase.com/privacy">Supabase privacy policy</a> · <a href="https://policies.google.com/privacy">Google privacy policy</a> · <a href="https://www.netlify.com/privacy/">Netlify privacy policy</a></p>
+  </aside>
+  <aside>
+    <h2>Account questions and deletion</h2>
+    <p><a href="mailto:gfofofficial@gmail.com?subject=Federation%20account%20privacy">Contact the Federation at gfofofficial@gmail.com</a> to ask about your account information or request deletion. Never email a password, recovery link, session token, seed phrase, or private key.</p>
+    <p>We verify control of the account before deleting its active account record and linked identities. An email sender address alone is not proof. We will explain the outcome and any known backup or service-record limits. Clearing Journey progress is a separate device action; account deletion does not erase local browser storage or public blockchain records.</p>
+  </aside>
+</main>
+<footer><a href="/account">Your account</a><a href="/command-deck.html">Command Deck</a><a href="/security">Security and disclosure</a></footer>
+</body>
+</html>

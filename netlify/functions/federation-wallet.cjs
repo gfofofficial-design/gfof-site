@@ -1,7 +1,9 @@
 'use strict';
 const {readPrices}=require('../lib/wallet-prices.cjs');
 const {readJsonBounded}=require('../lib/read-json-bounded.cjs');
-const ORIGIN='https://deploy-preview-99--gfof.netlify.app';
+// Reviewed hosts only. Each request must originate on the host serving it;
+// neither the preview nor production may call the other's wallet endpoint.
+const ORIGINS=new Set(['https://deploy-preview-99--gfof.netlify.app','https://galacticfederation.co']);
 const RPC='https://api.mainnet-beta.solana.com';
 const PROGRAMS=['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA','TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'];
 const GFOF='Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';
@@ -11,10 +13,10 @@ function quantity(raw,decimals){const s=raw.toString().padStart(decimals+1,'0');
 function reply(statusCode,data){return {statusCode,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Netlify-CDN-Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'},body:JSON.stringify(data)};}
 exports.handler=async event=>{
  let url;try{url=new URL(event.rawUrl);}catch{return reply(503,{error:'Wallet preview unavailable.'});}
- if(url.origin!==ORIGIN||url.pathname!=='/api/federation-wallet'||url.search)return reply(404,{error:'Not found.'});
+ if(!ORIGINS.has(url.origin)||url.username||url.password||url.pathname!=='/api/federation-wallet'||url.search)return reply(404,{error:'Not found.'});
  if(event.httpMethod!=='POST')return reply(405,{error:'Use the wallet viewer form.'});
  const headers=Object.fromEntries(Object.entries(event.headers||{}).map(([k,v])=>[k.toLowerCase(),v]));
- if(headers.origin!==ORIGIN||headers['sec-fetch-site']&&headers['sec-fetch-site']!=='same-origin')return reply(403,{error:'Open the wallet viewer on its preview page.'});
+ if(headers.origin!==url.origin||headers['sec-fetch-site']&&headers['sec-fetch-site']!=='same-origin')return reply(403,{error:'Open the wallet viewer on this Federation site.'});
  if(!/^application\/json(?:;|$)/i.test(headers['content-type']||'')||event.isBase64Encoded||typeof event.body!=='string'||Buffer.byteLength(event.body)>256)return reply(400,{error:'Enter a public Solana address.'});
  let address;try{const body=JSON.parse(event.body);if(!body||Object.keys(body).length!==1)throw Error();address=body.address;if(!addressOK(address))throw Error();}catch{return reply(400,{error:'Enter a valid public Solana address. Never enter a seed phrase or private key.'});}
  async function rpc(method,params){const data=await readJsonBounded(RPC,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params})},{timeoutMs:8000,maxBytes:2000000});if(data.error||!data.result)throw Error('rpc');return data.result;}

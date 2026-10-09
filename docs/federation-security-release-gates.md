@@ -76,3 +76,21 @@ All 51 focused tests passed locally, including 15 new synthetic tab/timeout
 checks. This does not establish real browser locking, provider cookie rotation,
 callback races or remote revocation. S4 remains partial; hosted browser and
 managed-provider acceptance are required before public registration.
+
+## October 8–9 private preview and launch preparation
+
+The owner Google round trip, second tab, cross-tab logout/reload, cancellation
+and natural access-expiry refresh were observed on the exact PR #99 preview
+in one Chrome profile. The owner also reported that the wallet input, asset
+table and term controls were usable on a physical phone with Phantom installed.
+That phone report does not establish wallet permission, rejection, account
+change, disconnect or phone sign-in behavior. S3 and S4 remain partial.
+
+The [Google-first launch packet](federation-dashboard-launch-20261008.md)
+records the intended scope, production configuration, unsubmitted Supabase
+cost estimate and remaining requirements. This draft fixes the wallet handler's
+preview-only host restriction, while rejecting preview/live cross-origin reads.
+All 141 applicable local tests passed. The account page now links a dedicated
+privacy notice; verified-request deletion, retention operations and monitoring
+remain unfinished. No subscription, managed signup hook, production account
+setting or public registration was enabled by this preparation.

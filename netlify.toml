@@ -217,7 +217,8 @@
   status = 200
   force = true
 
-# Read-only wallet viewer, isolated to PR99 by the handler.
+# Read-only wallet viewer; handler permits only PR99 and the canonical live host,
+# with requests confined to the origin that serves the page.
 [[redirects]]
   from = "/api/federation-wallet"
   to = "/.netlify/functions/federation-wallet"

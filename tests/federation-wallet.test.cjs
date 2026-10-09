@@ -4,6 +4,30 @@ const {handler,addressOK,quantity}=require('../netlify/functions/federation-wall
 const address='11111111111111111111111111111111';
 const origin='https://deploy-preview-99--gfof.netlify.app';
 const event={rawUrl:origin+'/api/federation-wallet',httpMethod:'POST',headers:{origin,'content-type':'application/json','sec-fetch-site':'same-origin'},body:JSON.stringify({address})};
+
+test('canonical production requests read balances while hosts stay isolated',async()=>{
+ const old=global.fetch;let calls=0;
+ global.fetch=async(url,options)=>{
+  if(url.startsWith('https://api.jup.ag/'))return new Response('{}');
+  assert.equal(url,'https://api.mainnet-beta.solana.com');calls++;
+  const req=JSON.parse(options.body);
+  return new Response(JSON.stringify({result:req.method==='getBalance'?{context:{slot:20},value:0}:{context:{slot:21},value:[]}}));
+ };
+ const live='https://galacticfederation.co';
+ try{
+  const res=await handler({...event,rawUrl:live+'/api/federation-wallet',headers:{...event.headers,origin:live}});
+  assert.equal(res.statusCode,200);assert.equal(calls,3);
+  const before=calls;
+  for(const bad of [
+   {...event,rawUrl:live+'/api/federation-wallet'},
+   {...event,headers:{...event.headers,origin:live}},
+   {...event,rawUrl:'https://deploy-preview-100--gfof.netlify.app/api/federation-wallet',headers:{...event.headers,origin:'https://deploy-preview-100--gfof.netlify.app'}},
+   {...event,rawUrl:live+'/.netlify/functions/federation-wallet',headers:{...event.headers,origin:live}},
+   {...event,rawUrl:'https://galacticfederation.co.evil.example/api/federation-wallet',headers:{...event.headers,origin:'https://galacticfederation.co.evil.example'}}
+  ])assert.ok((await handler(bad)).statusCode>=400);
+  assert.equal(calls,before);
+ }finally{global.fetch=old;}
+});
 test('base58 validation requires exactly 32 decoded bytes',()=>{assert.ok(addressOK(address));assert.ok(addressOK('Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV'));assert.equal(addressOK('1'.repeat(33)),false);assert.equal(addressOK('0'.repeat(32)),false);});
 test('quantities preserve integer precision and trim only fractional zeros',()=>{assert.equal(quantity(1000n,0),'1000');assert.equal(quantity(9007199254740993123n,6),'9007199254740.993123');assert.equal(quantity(0n,9),'0');assert.equal(quantity(120000000n,6),'120');});
 test('wrong host, direct function, cross-origin and arbitrary payload never query RPC',async()=>{const old=global.fetch;let calls=0;global.fetch=()=>{calls++;throw Error();};try{for(const bad of [{...event,rawUrl:'https://galacticfederation.co/api/federation-wallet'},{...event,rawUrl:origin+'/.netlify/functions/federation-wallet'},{...event,headers:{...event.headers,origin:'https://evil.example'}},{...event,body:JSON.stringify({address,url:'https://evil.example'})},{...event,body:JSON.stringify({address:'1'.repeat(33)})}])assert.ok((await handler(bad)).statusCode>=400);assert.equal(calls,0);}finally{global.fetch=old;}});
