@@ -99,3 +99,42 @@ acceptance is claimed, and no existing project or public website changed.
 The trial remains incomplete and closed. A fresh consent window and the rest
 of the managed acceptance matrix require review. Temporary compute continues
 until teardown is separately approved and verified. Keep PR #99 draft.
+
+## October 9 subsequent window — managed Google allowed path passed
+
+A fresh bounded window on the same temporary target completed one new,
+non-anonymous Google account and identity on managed Auth v2.197.0. Google
+reused the official account's existing consent. Ten instrumented Auth calls
+verified PKCE exchange and authenticated user read, rejection of the consumed
+sign-in code, refresh with a matching user, local logout and rejection of the
+old refresh token. No session tokens were displayed or saved.
+
+Registration was opened by 03:15:38 UTC and saved/refreshed off by 03:16:20 UTC.
+An independent settings read confirmed closed signup. Read-only aggregate
+postflight found one Google user, one identity and no public tables. The local
+receiver was stopped. Existing projects and the public site stayed unchanged.
+
+This supersedes the incomplete allowed-path status above; it does not complete
+the managed denial, privilege/fault, timeout, production-session or operations
+matrix. Prepare those checks with signup closed and obtain separate review for
+any new window or hosted change. The temporary project continues to accrue
+compute until verified teardown. Keep PR #99 draft.
+
+## Next bounded rejection window — prepared, not run
+
+The private exact-target runner passes eight offline tests. It proposes one
+separately reviewed three-minute window on the same temporary project, with
+five attempts: direct Email/password, forged user metadata, forged top-level
+provider fields, Email OTP requesting creation, and forged OTP metadata.
+Only owner-controlled mailbox aliases would be used. No existing user,
+installed rule, privileges, delivery configuration or public site changes.
+
+The normal path uses eight Auth calls, with at most one unexpected-session
+logout and one independent closure read: ten calls total, no retries. Every
+case must return HTTP 403 and the exact rule message. Generic errors, mail
+allowlist failures, rate limits or a success containing no session are not
+passes. Stop on the first uncertain result and close registration immediately;
+independently confirm settings, unchanged aggregate rows and rule/grants.
+The managed no-delivery condition also requires checking the controlled inbox,
+rather than inferring it solely from row counts. This proposal has not run and
+does not complete the separate privilege/fault/deadline matrix.

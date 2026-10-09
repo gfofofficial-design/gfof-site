@@ -50,6 +50,16 @@ The revised local suites passed **141 tests**: 133 account/dashboard/wallet/
 pricing/locks tests plus eight bounded-server-read regressions. This is local
 code evidence, not managed signup, production or real-wallet acceptance.
 
+One subsequent bounded trial in the separately approved temporary managed
+Auth project passed new Google creation, PKCE/user read, consumed-code
+rejection, refresh/user match, local logout and old-refresh rejection on Auth
+v2.197.0. Ten instrumented Auth calls were made. Registration was closed within
+the approved window and independently verified; the receiver was stopped.
+Aggregate postflight showed one Google user/identity and no public tables.
+This closes the managed allowed-path portion only. Non-Google creation denials,
+fault/deadline behavior and the remaining release gates are still unfinished;
+see [the isolated trial record](federation-managed-signup-trial-20261008.md).
+
 ## Cost and availability decision
 
 The signed-in Supabase organization checkout on October 8 shows **$25 due
