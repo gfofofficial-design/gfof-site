@@ -45,6 +45,9 @@ The next owner report confirmed that switching to an existing second Phantom
 account cleared the old display and handled the selected address, and that the
 requested SOL/token quantity comparison with Phantom worked. No exact amounts,
 source slots or device trace were supplied; this covers the tested accounts.
+For the remaining pending-request Clear case, the owner expressly confirmed
+that approving the still-open address request afterward left the page empty.
+All requested phone cases are now complete by owner report at this scope.
 The private recovery
 drill restored a current encrypted Auth export to a separate Supabase project
 and verified a fresh source/target password login and owner-ID match.
@@ -115,12 +118,11 @@ References: [pricing](https://supabase.com/pricing),
 
 1. Review the exact combined commit and hosted preview, including the production
    wallet host fix and privacy link. Record current checks and any findings.
-2. Complete the remaining physical-device Phantom pending-request Clear check
-   if the wallet UI allows access to the page while permission is unanswered.
-   Phone Google sign-in/reload/sign-out and Phantom address/disconnect,
-   permission rejection, account change and quantity comparison passed by owner
-   report for the tested accounts. No
-   signatures or token transfers are needed.
+2. Preserve the completed phone evidence: Google sign-in/reload/sign-out and
+   Phantom address/disconnect, permission rejection, account change, quantity
+   comparison and pending-request Clear followed by late approval passed by
+   owner report for the tested phone/accounts. Recheck affected behavior after
+   a relevant change; these reports are not general device or production proof.
 3. Finalize the operating plan and check current billing. Verify administrator MFA for
    GitHub, Netlify, Supabase and domain/DNS access without collecting recovery
    codes. Establish a backup cadence, custody and deleted-account reconciliation.
