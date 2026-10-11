@@ -69,11 +69,12 @@ Repeat source/target and fresh-cutoff checks before any operator action.
 No restored service is activated by a successful planning result.
 
 The [disposable native rehearsal](../tests/federation-auth-recovery-native.md)
-adds a real Auth/Postgres older-dump, exact-deletion and retained-user sequence
-to draft CI. It requires observed source/target rejection through the actual
-Federation handlers as well as Auth. Until its exact-head job completes,
-this is a prepared test, not passed evidence. Even a pass would remain synthetic
-and would not establish real requester verification or external ledger custody.
+passed against real Auth 2.197.0 and PostgreSQL 17.11 at draft head `ed76f4b`;
+[the exact-head job](https://github.com/gfofofficial-design/gfof-site/actions/runs/38181604660/job/114595164423)
+verified older-dump restoration, exact-deletion reconciliation, retained-user
+login and source/target rejection through the actual Federation handlers as well
+as Auth. Its dump was synthetic and memory-only. This does not establish real
+requester verification, external ledger custody or encrypted archive recovery.
 
 Supabase [User Management](https://supabase.com/docs/guides/auth/managing-user-data)
 explains that deleting a user does not immediately invalidate an existing JWT,
