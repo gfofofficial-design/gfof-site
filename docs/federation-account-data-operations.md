@@ -217,6 +217,12 @@ recovery and prove that a previously deleted disposable account stays absent
 and cannot resume its old session. Any failure keeps the restored service
 isolated.
 
+The [offline metadata planner](federation-auth-reconciliation-20261011.md) now
+has synthetic exact-ID, isolation, stale-ledger and secret-field refusal tests.
+It performs no I/O or deletion; operator attestations are not independently
+verified. A real external ledger, verified-request and restore/reconciliation
+rehearsal remain unimplemented and unproven.
+
 The deletion ledger and broad recovery reconciliation remain proposed. A
 separate one-owner isolated restore drill was performed; it did not send mail
 or activate production accounts. The isolated project's Google provider was
