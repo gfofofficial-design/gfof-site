@@ -68,6 +68,13 @@ Keep the target isolated throughout and preserve the existing owner account.
 Repeat source/target and fresh-cutoff checks before any operator action.
 No restored service is activated by a successful planning result.
 
+The [disposable native rehearsal](../tests/federation-auth-recovery-native.md)
+adds a real Auth/Postgres older-dump, exact-deletion and retained-user sequence
+to draft CI. It requires observed source/target rejection through the actual
+Federation handlers as well as Auth. Until its exact-head job completes,
+this is a prepared test, not passed evidence. Even a pass would remain synthetic
+and would not establish real requester verification or external ledger custody.
+
 Supabase [User Management](https://supabase.com/docs/guides/auth/managing-user-data)
 explains that deleting a user does not immediately invalidate an existing JWT,
 and storage ownership can prevent deletion. The broader
