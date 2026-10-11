@@ -41,6 +41,10 @@ owner report without a device/browser trace, not production or new-user proof.
 The owner subsequently reported that the phone Phantom Cancel/Reject check
 worked, in response to the request to remain disconnected without imported
 balances. Page-level Clear during a pending request is a distinct untested case.
+The next owner report confirmed that switching to an existing second Phantom
+account cleared the old display and handled the selected address, and that the
+requested SOL/token quantity comparison with Phantom worked. No exact amounts,
+source slots or device trace were supplied; this covers the tested accounts.
 The private recovery
 drill restored a current encrypted Auth export to a separate Supabase project
 and verified a fresh source/target password login and owner-ID match.
@@ -111,10 +115,11 @@ References: [pricing](https://supabase.com/pricing),
 
 1. Review the exact combined commit and hosted preview, including the production
    wallet host fix and privacy link. Record current checks and any findings.
-2. Complete the remaining physical-device Phantom pending-request Clear,
-   account-change and quantity-parity checks. Phone Google sign-in/reload/sign-out
-   and Phantom normal address/disconnect and permission-rejection paths passed
-   by owner report; no
+2. Complete the remaining physical-device Phantom pending-request Clear check
+   if the wallet UI allows access to the page while permission is unanswered.
+   Phone Google sign-in/reload/sign-out and Phantom address/disconnect,
+   permission rejection, account change and quantity comparison passed by owner
+   report for the tested accounts. No
    signatures or token transfers are needed.
 3. Finalize the operating plan and check current billing. Verify administrator MFA for
    GitHub, Netlify, Supabase and domain/DNS access without collecting recovery
