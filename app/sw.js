@@ -3,7 +3,7 @@
 // so published app copy refreshes while retaining an offline fallback.
 
 // Rotate the offline shell when current token or public program copy changes.
-const CACHE_VERSION = 'v21-2026-10-06-four-staking-terms';
+const CACHE_VERSION = 'v22-2026-10-12-app-zoom';
 const CACHE = 'gfof-' + CACHE_VERSION;
 const ASSETS = ['/app/', '/app/manifest.json'];
 
