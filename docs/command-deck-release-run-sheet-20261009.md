@@ -3,7 +3,7 @@
 Status: **HOLD — review candidate, not production release approval.**
 
 Candidate: [PR #104](https://github.com/gfofofficial-design/gfof-site/pull/104).
-Latest reviewed application revision: `1545aa88d9cd7a1b7b1eac8074b21bc706bb45b6` (privacy page and dashboard links).
+Original October 9 reviewed revision: `1545aa88d9cd7a1b7b1eac8074b21bc706bb45b6` (privacy page and dashboard links). Later acceptance is recorded below; use the current PR head for a release decision.
 The earlier 112-test application baseline was `8bb6714c7d5c582f19182cece4e2b7c3e4758d84`.
 Production baseline at review: `50be6258473374b46887da9605f177cc98d3c757`.
 A later documentation commit does not establish application changes or new production acceptance.
@@ -252,3 +252,49 @@ from its validated canonical origin; request data cannot disable it.
 Synthetic handler checks cover all four refusal cases and a configured allowed
 reservation. They do not configure production or replace its post-release
 acceptance. The isolated preview's existing connection and behavior are retained.
+
+## October 12 remaining launch review
+
+The current main baseline is `802edf8c2e338be0987df91b59ba4e702bb70de8`.
+An isolated Git-index reversal of candidate `378aea19a7afd6e6c4bb1a067411545d08e8dfb8`
+matched the exact baseline tree across all 35 changed files and preserved one
+synthetic unrelated later addition. It did not change a checkout, branch or
+hosted site, test later changes in the same file or perform a hosted recovery.
+Regenerate the corrective patch for the actual final candidate/merge before use.
+
+Fresh metadata confirms one Netlify team Owner and one accepted Cloudflare
+administrator with two-factor authentication enabled. This is stronger than
+the earlier Cloudflare owner-only report, but it is not a complete token/key
+inventory or a private recovery-login rehearsal. Existing provider variables
+are secret, Functions-scoped site values; their current vendor allowance and
+shared usage are not established by environment metadata.
+
+The data-and-privacy page now identifies the shared Cloudflare reservation path,
+its lack of viewed-wallet data, published provider policies and the existing
+operator contact. It distinguishes page clearing from provider deletion and
+does not invent one log-retention period. Jupiter's published interface policy
+does not establish an API-specific retention period. Provider-request handling
+and any applicable agreements remain operating review items.
+
+The earlier incident, acknowledgment and automatic-recovery emails for the
+October 9 drill were found together in the official Federation inbox on October
+12. They match the incident timeline and sender, closing the previously unverified
+receipt item. This is a past controlled drill, not proof of future response
+availability, wallet/pricing monitoring or delivery during a provider outage.
+The three homepage monitors and current-mint treasury monitor are active; the
+drill remains paused. No new email, monitor or setting was created for this check.
+
+The wallet visitor limit was previously attached to a redirect targeting a
+Lambda-compatible function. Netlify's documentation requires function limits
+in a function's exported configuration. The candidate now uses a modern custom
+route with the original balance handler in a library, a 256-byte/two-second
+inbound-body bound and the intended six-request/60-second IP-and-domain rule.
+The old redirect rule is removed. Request origins, quantity precision, provider
+deadlines, missing-price handling and the mandatory canonical price reservation
+are retained. Local route-boundary and ignored-cancellation tests passed.
+Hosted rule/route verification is pending at this source revision.
+
+Netlify documents up to ten seconds of enforcement delay. The visitor rule is
+neither an immediate six-request hard ceiling nor a shared RPC/day/spend cap.
+See [Netlify rate limiting](https://docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/).
+The separate shared price-reservation limit covers only the Jupiter price step.

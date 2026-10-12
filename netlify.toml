@@ -181,17 +181,7 @@
   status = 200
   force = true
 
-# Read-only wallet viewer; handler permits only PR104 and the canonical live host,
-# with requests confined to the origin that serves the page.
-[[redirects]]
-  from = "/api/federation-wallet"
-  to = "/.netlify/functions/federation-wallet"
-  status = 200
-  force = true
-  [redirects.rate_limit]
-    window_limit = 6
-    window_size = 60
-    aggregate_by = ["ip", "domain"]
+# The wallet's custom path and visitor rate limit are defined in its function.
 
 [[headers]]
   for = "/command-deck*"

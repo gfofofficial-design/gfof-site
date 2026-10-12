@@ -1,7 +1,7 @@
 'use strict';
-const {readPrices}=require('../lib/wallet-prices.cjs');
-const {readJsonBounded}=require('../lib/read-json-bounded.cjs');
-const {solanaProvider}=require('../lib/data-provider-config.cjs');
+const {readPrices}=require('./wallet-prices.cjs');
+const {readJsonBounded}=require('./read-json-bounded.cjs');
+const {solanaProvider}=require('./data-provider-config.cjs');
 // Reviewed hosts only. Each request must originate on the host serving it;
 // neither the preview nor production may call the other's wallet endpoint.
 const ORIGINS=new Set(['https://deploy-preview-104--gfof.netlify.app','https://galacticfederation.co']);

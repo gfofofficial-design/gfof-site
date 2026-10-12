@@ -1,6 +1,6 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
-const {handler}=require('../netlify/functions/federation-wallet.cjs');
+const {handler}=require('../netlify/lib/federation-wallet-handler.cjs');
 const {readPrices}=require('../netlify/lib/wallet-prices.cjs');
 const {solanaProvider,jupiterOptions}=require('../netlify/lib/data-provider-config.cjs');
 const origin='https://deploy-preview-104--gfof.netlify.app';
