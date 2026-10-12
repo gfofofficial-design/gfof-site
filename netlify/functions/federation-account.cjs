@@ -1,4 +1,5 @@
 'use strict';
+const {readJsonBounded} = require('../lib/read-json-bounded.cjs');
 const {randomBytes, createHash, timingSafeEqual} = require('node:crypto');
 const COOKIE = {access:'__Host-gf-access',refresh:'__Host-gf-refresh',flow:'__Host-gf-flow'};
 const headers = {'Content-Type':'application/json','Cache-Control':'private, no-store','Netlify-CDN-Cache-Control':'no-store','Vary':'Cookie','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'};
@@ -55,10 +56,22 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
     const site=event.headers?.['sec-fetch-site'];
     if(method==='POST'&&(origin!==cfg.origin||(site&&site!=='same-origin')))return result(403,{error:'Request origin rejected.'});
     async function api(path,{token,body,method='GET'}={}){
-      const response=await fetchImpl(cfg.url+path,{method,headers:{apikey:cfg.key,...(token?{Authorization:`Bearer ${token}`} : {}),...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(8000),redirect:'error'});
-      if(!response.ok){const error=Error('upstream');error.status=response.status;throw error;}
-      if(response.status===204)return null;
-      return response.json();
+      // Bound headers and streamed bytes even if transport cancellation stalls.
+      // Keep provider status handling separate from reading an untrusted body.
+      try{return await readJsonBounded(cfg.url+path,{method,headers:{apikey:cfg.key,...(token?{Authorization:`Bearer ${token}`} : {}),...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})},{
+        timeoutMs:8000,maxBytes:65536,
+        fetcher:async(url,options)=>{
+          const response=await fetchImpl(url,options);
+          if(!response.ok){const error=Error('upstream');error.status=response.status;throw error;}
+          // Logout can validly return no content; give the bounded reader a
+          // local null body without attempting to read a nonexistent stream.
+          return response.status===204?new Response('null'):response;
+        },
+      });}catch(error){
+        // Malformed provider JSON is a service failure, not invalid client input.
+        if(error instanceof SyntaxError)throw Error('upstream');
+        throw error;
+      }
     }
     async function user(token){if(!token)throw Object.assign(Error('auth'),{status:401});const u=await api('/auth/v1/user',{token});if(!u?.id||!u.email_confirmed_at||u.is_anonymous)throw Object.assign(Error('auth'),{status:401});return u;}
     try{
@@ -109,3 +122,4 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
 }
 exports.handler=createHandler();
 exports.createHandler=createHandler;
+
