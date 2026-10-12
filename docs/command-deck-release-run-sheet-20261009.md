@@ -240,3 +240,15 @@ and run the finite preview service checker. Preserve any unavailable-pricing
 result and its timing; an environment-settings readback alone is insufficient.
 Production configuration, release approval, account sign-in and monitoring
 acceptance remain separate requirements.
+
+## Production missing-configuration guard
+
+The canonical production wallet route now requires a successful price
+reservation before it can call Jupiter. Missing or incomplete budget settings,
+a denied reservation or a service failure leaves pricing unavailable while
+the confirmed balance response remains readable. The server chooses this rule
+from its validated canonical origin; request data cannot disable it.
+
+Synthetic handler checks cover all four refusal cases and a configured allowed
+reservation. They do not configure production or replace its post-release
+acceptance. The isolated preview's existing connection and behavior are retained.
