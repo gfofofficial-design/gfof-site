@@ -218,3 +218,25 @@ validate complete JSON, decode each lock, establish data freshness or verify
 wallet and pricing APIs. Failure and recovery email delivery for this monitor
 remain **NOT RUN**. The earlier drill remains paused. Production dashboard
 acceptance and the remaining release requirements above are unchanged.
+
+## October 12 price reservation preview connection
+
+The existing Cloudflare price-reservation service has been connected through
+Functions-only environment settings for this candidate's exact preview branch.
+Its original credential and shared SQLite state were retained. No production
+environment setting was added. This documentation update triggers a fresh
+Git-based PR preview build to apply those settings; runtime acceptance is still
+pending at this revision.
+
+The configured service limits reservations for the wallet's Jupiter price step
+to one per 2.5 seconds, 24 per rolling minute and 3,000 per UTC day across this
+preview. A refused or failed reservation leaves reference pricing unavailable;
+it does not substitute a price. A reservation is consumed even if the later
+price request fails. These limits do not cap Solana balance reads, the separate
+token price endpoint, hosting use or all project spending.
+
+Before counting this connection as accepted, verify the new exact-head preview
+and run the finite preview service checker. Preserve any unavailable-pricing
+result and its timing; an environment-settings readback alone is insufficient.
+Production configuration, release approval, account sign-in and monitoring
+acceptance remain separate requirements.
