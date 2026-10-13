@@ -2,11 +2,20 @@ name: Wallet balance regression checks
 on:
   pull_request:
     paths:
-      - 'netlify/functions/federation-wallet.cjs'
+      - 'netlify/lib/federation-wallet-handler.cjs'
+      - 'netlify/functions/federation-wallet.mjs'
+      - 'tests/federation-wallet-route.test.mjs'
       - 'netlify/functions/treasury-locks.mjs'
       - 'record/current-mint-locks-three-20261008.json'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'netlify/lib/wallet-prices.cjs'
+      - 'netlify/lib/price-budget.cjs'
+      - 'netlify/lib/wallet-budget.cjs'
+      - 'tests/wallet-budget.test.mjs'
+      - 'workers/price-budget-preview/**'
+      - 'tests/price-budget.test.mjs'
+      - 'netlify/lib/data-provider-config.cjs'
+      - 'tests/data-provider-config.test.cjs'
       - 'assets/federation/fed-deck*.js'
       - 'assets/federation/fed-deck.css'
       - 'command-deck.html'
@@ -18,11 +27,20 @@ on:
   push:
     branches: [main]
     paths:
-      - 'netlify/functions/federation-wallet.cjs'
+      - 'netlify/lib/federation-wallet-handler.cjs'
+      - 'netlify/functions/federation-wallet.mjs'
+      - 'tests/federation-wallet-route.test.mjs'
       - 'netlify/functions/treasury-locks.mjs'
       - 'record/current-mint-locks-three-20261008.json'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'netlify/lib/wallet-prices.cjs'
+      - 'netlify/lib/price-budget.cjs'
+      - 'netlify/lib/wallet-budget.cjs'
+      - 'tests/wallet-budget.test.mjs'
+      - 'workers/price-budget-preview/**'
+      - 'tests/price-budget.test.mjs'
+      - 'netlify/lib/data-provider-config.cjs'
+      - 'tests/data-provider-config.test.cjs'
       - 'assets/federation/fed-deck*.js'
       - 'assets/federation/fed-deck.css'
       - 'command-deck.html'
@@ -45,5 +63,9 @@ jobs:
         with:
           node-version: '24'
       - run: node --check netlify/lib/read-json-bounded.cjs
-      - run: node --check netlify/functions/federation-wallet.cjs
-      - run: node --test tests/read-json-bounded.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/federation-deck.test.cjs tests/federation-deck-phantom.test.cjs tests/federation-deck-staking.test.cjs tests/federation-deck-locks.test.cjs
+      - run: node --check netlify/lib/federation-wallet-handler.cjs
+      - run: node --check netlify/functions/federation-wallet.mjs
+      - run: node --test tests/federation-wallet-route.test.mjs
+      - run: node --test tests/wallet-budget.test.mjs
+      - run: node --test tests/price-budget.test.mjs tests/data-provider-config.test.cjs tests/read-json-bounded.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/federation-deck.test.cjs tests/federation-deck-staking.test.cjs tests/federation-deck-locks.test.cjs
+

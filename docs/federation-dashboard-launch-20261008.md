@@ -174,3 +174,33 @@ its permissions, monitoring, recovery point and current spending baseline.
 If any check fails, close signup first, disable production account entry and
 return to the last reviewed configuration. Do not disable the owner's tested
 recovery route or change financial services as part of this rollback.
+
+## Account draft after the read-only release — October 12, 2026 Central
+
+Command Deck is now public through separate PR104. This account draft incorporates
+that exact released main revision, retaining the modern wallet route, canonical
+reservation requirement, separate price gate, source-bound quantities, error
+handling, table focus and accurate loading state. The obsolete duplicate wallet
+function and its old redirect are removed. PR99 and PR104 have explicit permitted
+preview origins; each request must still originate on its own serving host.
+The existing private account route and explicit optional Phantom controls remain
+in this draft; it is not a publication or account-activation approval.
+
+215 combined local tests passed, including the new same-origin PR99 wallet-route
+case and refused requests from the other reviewed origins. Actual managed
+signup/recovery evidence remains the earlier dated evidence; these local tests
+do not repeat or complete the open managed deadline, account deletion/custody
+or production acceptance gates. No source provider was called by the fixture run.
+
+Fresh read-only Pilot settings show registration, anonymous sign-in and manual
+linking off; Google and Email enabled; Apple disabled. Skip nonce checks and
+allow-without-email are off. The Site URL and sole allowed callback still point
+only to PR99. No credential was read or changed and no setting saved. The
+separately created production Google client is not connected yet.
+
+The next credential step requires the owner to retain both the old working and
+new production OAuth items, privately enter the new pair in the original Pilot,
+and complete one existing-owner Google test while registration stays closed.
+Google brand/audience, canonical callback, operating/recovery and final account
+publication remain separately reviewed. A working public wallet viewer does
+not establish account-launch readiness.

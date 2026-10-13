@@ -1,0 +1,32 @@
+name: Command Deck service-check tests
+on:
+  pull_request:
+    paths:
+      - 'scripts/check-command-deck-health.mjs'
+      - 'tests/command-deck-health.test.mjs'
+      - 'netlify/lib/read-json-bounded.cjs'
+      - 'record/current-mint-locks-three-20261008.json'
+      - '.github/workflows/command-deck-health.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/check-command-deck-health.mjs'
+      - 'tests/command-deck-health.test.mjs'
+      - 'netlify/lib/read-json-bounded.cjs'
+      - 'record/current-mint-locks-three-20261008.json'
+      - '.github/workflows/command-deck-health.yml'
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - run: node --check scripts/check-command-deck-health.mjs
+      - run: node --test tests/command-deck-health.test.mjs tests/read-json-bounded.test.cjs

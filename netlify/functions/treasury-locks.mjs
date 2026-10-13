@@ -1,5 +1,5 @@
 import {readJsonBounded} from '../lib/read-json-bounded.cjs';
-const RPC = "https://api.mainnet-beta.solana.com";
+import {solanaProvider} from '../lib/data-provider-config.cjs';
 const MINT = "Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV";
 const KEYS = [
   "AiRhuw9iFyXiZYv2hqanBK12dckebF4vNMoAzj9Nj9nY",
@@ -29,7 +29,7 @@ export default async function treasuryLocks(request) {
   const origin = request.headers.get("origin");
   if (origin && origin !== url.origin) return json({error: "Origin not allowed"}, 403);
   try {
-    const payload = await readJsonBounded(RPC, {
+    const payload = await readJsonBounded(solanaProvider().url, {
       method: "POST", headers: {"Content-Type": "application/json"},
       body: JSON.stringify({jsonrpc: "2.0", id: 1, method: "getMultipleAccounts",
         params: [KEYS, {encoding: "jsonParsed", commitment: "finalized"}]})
@@ -55,3 +55,4 @@ export const config = {
   path: "/api/treasury-locks",
   rateLimit: {action: "rate_limit", aggregateBy: ["ip", "domain"], windowSize: 60, windowLimit: 30}
 };
+

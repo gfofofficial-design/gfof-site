@@ -1,13 +1,50 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
-const {handler,addressOK,quantity}=require('../netlify/functions/federation-wallet.cjs');
+const {handler,addressOK,quantity}=require('../netlify/lib/federation-wallet-handler.cjs');
 const address='11111111111111111111111111111111';
-const origin='https://deploy-preview-99--gfof.netlify.app';
+const origin='https://deploy-preview-104--gfof.netlify.app';
 const event={rawUrl:origin+'/api/federation-wallet',httpMethod:'POST',headers:{origin,'content-type':'application/json','sec-fetch-site':'same-origin'},body:JSON.stringify({address})};
+const walletEndpoint='https://gfof-price-budget-preview.gfofofficial.workers.dev/reserve-wallet';
+function enableWalletReservation(){const previous=[process.env.WALLET_BUDGET_URL,process.env.WALLET_BUDGET_SECRET];process.env.WALLET_BUDGET_URL=walletEndpoint;process.env.WALLET_BUDGET_SECRET='w'.repeat(43);return ()=>{for(const [i,key]of ['WALLET_BUDGET_URL','WALLET_BUDGET_SECRET'].entries()){if(previous[i]===undefined)delete process.env[key];else process.env[key]=previous[i];}};}
+
+test('production without a usable reservation cannot call pricing and keeps confirmed balances',async()=>{
+ const restoreWalletReservation=enableWalletReservation();
+ const oldFetch=global.fetch,oldUrl=process.env.PRICE_BUDGET_URL,oldSecret=process.env.PRICE_BUDGET_SECRET;
+ const endpoint='https://gfof-price-budget-preview.example.workers.dev/reserve-price';
+ const live='https://galacticfederation.co';
+ try{for(const mode of ['missing','partial','denied','unreachable','allowed']){
+  delete process.env.PRICE_BUDGET_URL;delete process.env.PRICE_BUDGET_SECRET;
+  if(mode!=='missing')process.env.PRICE_BUDGET_URL=endpoint;
+  if(!['missing','partial'].includes(mode))process.env.PRICE_BUDGET_SECRET='x'.repeat(43);
+  let balanceCalls=0,reservations=0,priceCalls=0;
+  global.fetch=async(url,options)=>{
+   if(url===walletEndpoint)return new Response('{"allowed":true}');
+   if(url===endpoint){reservations++;assert.equal(options.body,undefined);
+    if(mode==='unreachable')throw Error('synthetic private failure');
+    return new Response(JSON.stringify({allowed:mode==='allowed'}),{status:mode==='allowed'?200:429});
+   }
+   if(url.startsWith('https://api.jup.ag/')){
+    priceCalls++;assert.equal(mode,'allowed');assert.equal(reservations,1);
+    return new Response(JSON.stringify({So11111111111111111111111111111111111111112:{usdPrice:100,decimals:9,blockId:10000}}));
+   }
+   balanceCalls++;const req=JSON.parse(options.body);
+   return new Response(JSON.stringify({result:req.method==='getBalance'?{context:{slot:10000},value:1234567890}:{context:{slot:10000},value:[]}}));
+  };
+  const result=await handler({...event,rawUrl:live+'/api/federation-wallet',headers:{...event.headers,origin:live}});
+  const data=JSON.parse(result.body);assert.equal(result.statusCode,200,mode);
+  assert.equal(balanceCalls,3,mode);assert.equal(data.sol,'1.23456789',mode);
+  assert.equal(priceCalls,mode==='allowed'?1:0,mode);
+  assert.equal(reservations,['missing','partial'].includes(mode)?0:1,mode);
+  assert.equal(data.pricing.status,mode==='allowed'?'available':'unavailable',mode);
+  assert.equal(data.pricesAvailable,mode==='allowed',mode);
+ }}finally{restoreWalletReservation();global.fetch=oldFetch;for(const [key,value] of [['PRICE_BUDGET_URL',oldUrl],['PRICE_BUDGET_SECRET',oldSecret]]){if(value===undefined)delete process.env[key];else process.env[key]=value;}}
+});
 
 test('canonical production requests read balances while hosts stay isolated',async()=>{
+ const restoreWalletReservation=enableWalletReservation();
  const old=global.fetch;let calls=0;
  global.fetch=async(url,options)=>{
+  if(url===walletEndpoint)return new Response('{"allowed":true}');
   if(url.startsWith('https://api.jup.ag/'))return new Response('{}');
   assert.equal(url,'https://api.mainnet-beta.solana.com');calls++;
   const req=JSON.parse(options.body);
@@ -26,7 +63,7 @@ test('canonical production requests read balances while hosts stay isolated',asy
    {...event,rawUrl:'https://galacticfederation.co.evil.example/api/federation-wallet',headers:{...event.headers,origin:'https://galacticfederation.co.evil.example'}}
   ])assert.ok((await handler(bad)).statusCode>=400);
   assert.equal(calls,before);
- }finally{global.fetch=old;}
+ }finally{restoreWalletReservation();global.fetch=old;}
 });
 test('base58 validation requires exactly 32 decoded bytes',()=>{assert.ok(addressOK(address));assert.ok(addressOK('Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV'));assert.equal(addressOK('1'.repeat(33)),false);assert.equal(addressOK('0'.repeat(32)),false);});
 test('quantities preserve integer precision and trim only fractional zeros',()=>{assert.equal(quantity(1000n,0),'1000');assert.equal(quantity(9007199254740993123n,6),'9007199254740.993123');assert.equal(quantity(0n,9),'0');assert.equal(quantity(120000000n,6),'120');});

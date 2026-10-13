@@ -30,7 +30,7 @@
   </section>
   <section aria-labelledby="wallet-title">
     <h2 id="wallet-title">Public wallet observations</h2>
-    <p>When you request a balance read, the Federation server sends the public address to Solana’s public RPC service and requests its SOL and token-account quantities. Reference-price requests can send token mint identifiers to Jupiter. The dashboard does not save the wallet address, balances, or visit history to your Federation account.</p>
+    <p>When you request a balance read, the Federation server sends the public address to the configured Solana RPC provider (Helius when enabled, otherwise Solana’s public RPC) and requests its SOL and token-account quantities. Reference-price requests can send token mint identifiers to Jupiter. The dashboard does not save the wallet address, balances, or visit history to your Federation account.</p>
     <p>Optional Phantom address access is a separate permission you grant in Phantom. The dashboard requests no message or transaction signature. Manage trusted-app permissions inside Phantom; signing out of your Federation account does not revoke those permissions.</p>
   </section>
   <section aria-labelledby="records-title">

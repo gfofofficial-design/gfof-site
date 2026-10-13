@@ -80,3 +80,78 @@ test('Show all assets returns keyboard focus to the filter without a request',()
  filter.value='missing';app.nodes.get('wallet-filter-clear').events.click();
  assert.equal(filter.value,'');assert.equal(app.document.activeElement,filter);
 });
+
+test('missing-price panel names excluded nonzero holdings without changing the priced subtotal',async()=>{
+ const address='11111111111111111111111111111111';const app=setup(async()=>({ok:true,status:200,json:async()=>({address,sol:'2',tokens:[{mint:'missing',symbol:'GFOF',quantity:'500'},{mint:'zero',symbol:'ZERO',quantity:'0'}],tokenAccounts:2,observedAt:new Date().toISOString(),pricing:{prices:{So11111111111111111111111111111111111111112:{usdPrice:100}}}})}));
+ app.nodes.get('wallet-address').value=address;await app.submit();
+ assert.equal(app.nodes.get('wallet-unpriced-panel').hidden,false);
+ assert.deepEqual(app.nodes.get('wallet-unpriced-list').children.map(n=>n.textContent),['GFOF · 500 tokens']);
+ assert.equal(app.nodes.get('priced-total').textContent,'$200.00');
+ assert.equal(app.nodes.get('wallet-unpriced-count').textContent,'1');
+});
+test('missing-price panel bounds its list and clears stale holdings after an edit or failed read',async()=>{
+ const address='11111111111111111111111111111111';let fail=false;
+ const app=setup(async()=>({ok:!fail,status:fail?503:200,json:async()=>fail?{error:'Unavailable'}:{address,sol:'0',tokens:Array.from({length:7},(_,i)=>({mint:'mint-'+i,symbol:null,quantity:'1'})),tokenAccounts:7,observedAt:new Date().toISOString()}}));
+ for(const action of ['edit','failure','clear']){
+  fail=false;app.nodes.get('wallet-address').value=address;await app.submit();
+  assert.equal(app.nodes.get('wallet-unpriced-list').children.length,5);
+  assert.match(app.nodes.get('wallet-unpriced-summary').textContent,/7.*first 5/);
+  if(action==='edit')app.nodes.get('wallet-address').events.input();
+  if(action==='failure'){fail=true;await app.submit();}
+  if(action==='clear')app.clear();
+  assert.equal(app.nodes.get('wallet-unpriced-panel').hidden,true);
+  assert.equal(app.nodes.get('wallet-unpriced-list').children.length,0);
+ }
+});
+test('a price outage includes native SOL while all-priced and zero-holding reads hide exclusions',async()=>{
+ const address='11111111111111111111111111111111';let mode='outage';
+ const app=setup(async()=>({ok:true,status:200,json:async()=>({address,sol:mode==='zero'?'0':'1',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString(),pricing:{prices:mode==='priced'?{So11111111111111111111111111111111111111112:{usdPrice:100}}:{}}})}));
+ app.nodes.get('wallet-address').value=address;await app.submit();
+ assert.deepEqual(app.nodes.get('wallet-unpriced-list').children.map(n=>n.textContent),['SOL · 1 SOL']);
+ for(mode of ['priced','zero']){await app.submit();assert.equal(app.nodes.get('wallet-unpriced-panel').hidden,true);assert.equal(app.nodes.get('wallet-unpriced-list').children.length,0);}
+});
+
+test('shared daily and spacing refusals show their return guidance and remove old balances',async()=>{
+ const reasons=['The shared daily wallet-read limit has been reached. Please return after 00:00 UTC.','The wallet reader is busy. Please wait a moment before trying again.'];
+ for(const reason of reasons){
+  const app=setup(async()=>({ok:false,status:429,json:async()=>({error:reason})}));
+  app.nodes.get('wallet-address').value='11111111111111111111111111111111';app.nodes.get('wallet-rows').children=[{}];
+  await app.submit();assert.equal(app.nodes.get('wallet-message').textContent,reason);assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-count').textContent,'—');
+ }
+});
+
+test('platform HTML and unexpected 429 messages retain the short visitor-limit guidance',async()=>{
+ for(const json of [async()=>{throw Error('not JSON');},async()=>({error:'arbitrary upstream detail'})]){
+  const app=setup(async()=>({ok:false,status:429,json}));app.nodes.get('wallet-address').value='11111111111111111111111111111111';await app.submit();
+  assert.equal(app.nodes.get('wallet-message').textContent,'Too many lookups. Please wait a minute.');assert.equal(app.nodes.get('wallet-rows').children.length,0);
+ }
+});
+
+test('result-region busy state ends on success, failure, cancellation and a superseding edit',async()=>{
+ const address='11111111111111111111111111111111';
+ for(const action of ['success','failure','clear','edit']){
+  let complete;const app=setup(()=>new Promise(resolve=>complete=resolve));app.nodes.get('wallet-address').value=address;
+  const pending=app.submit(),region=app.nodes.get('wallet-table-scroll');assert.equal(region.attributes['aria-busy'],'true');
+  if(action==='clear')app.clear();if(action==='edit')app.nodes.get('wallet-address').events.input();
+  if(['clear','edit'].includes(action))assert.equal(region.attributes['aria-busy'],'false');
+  complete({ok:action!=='failure',status:action==='failure'?503:200,json:async()=>action==='failure'?{error:'Unavailable'}:{address,sol:'1',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()}});
+  await pending;assert.equal(region.attributes['aria-busy'],'false');
+  if(['clear','edit'].includes(action))assert.equal(app.nodes.get('wallet-rows').children.length,0);
+ }
+});
+
+test('a late cancelled lookup cannot clear the newer lookup busy state',async()=>{
+ const pendingReads=[],address='11111111111111111111111111111111';const app=setup(()=>new Promise(resolve=>pendingReads.push(resolve)));app.nodes.get('wallet-address').value=address;
+ const first=app.submit();app.nodes.get('wallet-address').events.input();const second=app.submit();await first;
+ assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'true');
+ pendingReads[0]({ok:true,status:200,json:async()=>({address,sol:'7',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()})});
+ await new Promise(setImmediate);assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'true');
+ pendingReads[1]({ok:false,status:503,json:async()=>({error:'Unavailable'})});await second;
+ assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'false');assert.equal(app.nodes.get('wallet-rows').children.length,0);
+});
+
+test('an invalid replacement clears the cancelled lookup busy state without another request',async()=>{
+ let calls=0;const app=setup(()=>{calls++;return new Promise(()=>{});});app.nodes.get('wallet-address').value='11111111111111111111111111111111';
+ const pending=app.submit();app.nodes.get('wallet-address').value='invalid';await app.submit();await pending;
+ assert.equal(calls,1);assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'false');assert.equal(app.nodes.get('wallet-rows').children.length,0);
+});
