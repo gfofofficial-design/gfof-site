@@ -126,3 +126,32 @@ test('platform HTML and unexpected 429 messages retain the short visitor-limit g
   assert.equal(app.nodes.get('wallet-message').textContent,'Too many lookups. Please wait a minute.');assert.equal(app.nodes.get('wallet-rows').children.length,0);
  }
 });
+
+test('result-region busy state ends on success, failure, cancellation and a superseding edit',async()=>{
+ const address='11111111111111111111111111111111';
+ for(const action of ['success','failure','clear','edit']){
+  let complete;const app=setup(()=>new Promise(resolve=>complete=resolve));app.nodes.get('wallet-address').value=address;
+  const pending=app.submit(),region=app.nodes.get('wallet-table-scroll');assert.equal(region.attributes['aria-busy'],'true');
+  if(action==='clear')app.clear();if(action==='edit')app.nodes.get('wallet-address').events.input();
+  if(['clear','edit'].includes(action))assert.equal(region.attributes['aria-busy'],'false');
+  complete({ok:action!=='failure',status:action==='failure'?503:200,json:async()=>action==='failure'?{error:'Unavailable'}:{address,sol:'1',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()}});
+  await pending;assert.equal(region.attributes['aria-busy'],'false');
+  if(['clear','edit'].includes(action))assert.equal(app.nodes.get('wallet-rows').children.length,0);
+ }
+});
+
+test('a late cancelled lookup cannot clear the newer lookup busy state',async()=>{
+ const pendingReads=[],address='11111111111111111111111111111111';const app=setup(()=>new Promise(resolve=>pendingReads.push(resolve)));app.nodes.get('wallet-address').value=address;
+ const first=app.submit();app.nodes.get('wallet-address').events.input();const second=app.submit();await first;
+ assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'true');
+ pendingReads[0]({ok:true,status:200,json:async()=>({address,sol:'7',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()})});
+ await new Promise(setImmediate);assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'true');
+ pendingReads[1]({ok:false,status:503,json:async()=>({error:'Unavailable'})});await second;
+ assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'false');assert.equal(app.nodes.get('wallet-rows').children.length,0);
+});
+
+test('an invalid replacement clears the cancelled lookup busy state without another request',async()=>{
+ let calls=0;const app=setup(()=>{calls++;return new Promise(()=>{});});app.nodes.get('wallet-address').value='11111111111111111111111111111111';
+ const pending=app.submit();app.nodes.get('wallet-address').value='invalid';await app.submit();await pending;
+ assert.equal(calls,1);assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'false');assert.equal(app.nodes.get('wallet-rows').children.length,0);
+});

@@ -336,3 +336,20 @@ source, not a measured account debit for this candidate.
 
 See [Helius credits](https://www.helius.dev/docs/billing/credits). Keep the live
 site unchanged until hosted acceptance and an exact production decision.
+
+## Accessibility-first continuation — October 12, 2026, Central
+
+The owner adopted accessibility as the Federation's first design priority.
+This candidate now gives the keyboard-focusable wallet table the same visible
+focus treatment as other controls and marks its loading state with aria-busy.
+Success, failure, cancellation, a replacement invalid input and a late cancelled
+response must all leave accurate state without restoring old results or clearing
+a newer request's loading indication. The live status message remains outside
+the busy results region so progress and errors can still be announced.
+
+Native labels, keyboard operation, the text/table equivalents, reduced-motion
+styles and no-JavaScript guidance are retained. Focused DOM tests and a local
+Chrome keyboard/invalid-input check support these changes; they do not establish
+real screen-reader announcements, full WCAG conformance or a new physical-phone
+check. Those checks are recorded separately from simulated or automated evidence.
+No new source call, cloud permission, account or publication is included.
