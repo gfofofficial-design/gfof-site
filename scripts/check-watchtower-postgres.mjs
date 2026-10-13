@@ -27,6 +27,8 @@ const evidenceSql=literal(JSON.stringify(evidence))+'::jsonb';
 assert.equal(await sql('SELECT public.finish_watchtower_candidate('+literal(a)+',1,'+evidenceSql+');'),'f');
 assert.equal(await sql('SELECT corroboration IS NULL FROM public.watchtower_candidates;'),'t');
 await assert.rejects(sql('SELECT public.finish_watchtower_candidate('+literal(a)+",2,'{}'::jsonb);"));
+const malformedState={...evidence,states:[{account,state:'present_at_account_slot',slot:125,ownerProgram:null,executable:false,dataBytes:0,dataSha256:null,stateSha256:null}]};
+await assert.rejects(sql('SELECT public.finish_watchtower_candidate('+literal(a)+',2,'+literal(JSON.stringify(malformedState))+'::jsonb);'));
 assert.equal(await sql('SELECT state FROM public.watchtower_candidates;'),'leased');
 assert.equal(await sql('SELECT corroboration IS NULL FROM public.watchtower_candidates;'),'t');
 assert.equal(await sql('SELECT public.finish_watchtower_candidate('+literal(a)+',2,'+evidenceSql+');'),'t');

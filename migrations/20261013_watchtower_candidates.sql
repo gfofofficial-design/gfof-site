@@ -83,11 +83,12 @@ BEGIN
    IS DISTINCT FROM candidate.matched_accounts THEN RAISE EXCEPTION 'Invalid corroboration binding'; END IF;
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(evidence->'states') AS states(value) WHERE
   jsonb_typeof(value) IS DISTINCT FROM 'object' OR value->'slot' IS DISTINCT FROM evidence->'accountSlot' OR
-  value->>'state' NOT IN ('absent_at_account_slot','present_at_account_slot') OR
+  jsonb_typeof(value->'state') IS DISTINCT FROM 'string' OR value->>'state' NOT IN ('absent_at_account_slot','present_at_account_slot') OR
   (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(value) AS keys(key)) IS DISTINCT FROM
    CASE WHEN value->>'state'='absent_at_account_slot' THEN ARRAY['account','slot','state']::text[]
    ELSE ARRAY['account','dataBytes','dataSha256','executable','ownerProgram','slot','state','stateSha256']::text[] END OR
   (value->>'state'='present_at_account_slot' AND (jsonb_typeof(value->'executable') IS DISTINCT FROM 'boolean' OR
+   jsonb_typeof(value->'ownerProgram') IS DISTINCT FROM 'string' OR jsonb_typeof(value->'dataSha256') IS DISTINCT FROM 'string' OR jsonb_typeof(value->'stateSha256') IS DISTINCT FROM 'string' OR
    jsonb_typeof(value->'dataBytes') IS DISTINCT FROM 'number' OR (value->>'dataBytes') !~ '^[0-9]{1,5}$' OR (value->>'dataBytes')::integer>32768 OR
    (value->>'ownerProgram') !~ '^[1-9A-HJ-NP-Za-km-z]{32,44}$' OR (value->>'dataSha256') !~ '^[a-f0-9]{64}$' OR (value->>'stateSha256') !~ '^[a-f0-9]{64}$')))
   THEN RAISE EXCEPTION 'Invalid corroboration state'; END IF;
