@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "pilotId": "gfof-mint-three-locks-20261013",
+  "ownerScopeApprovedAtUtc": "2026-10-13T19:43:11.000Z",
+  "chain": "solana-mainnet",
+  "enabled": false,
+  "mode": "prepare_observe_only",
+  "additionalProviderSpendUsd": 0,
+  "planUpgradeAllowed": false,
+  "activationRequiresCreditHeadroomCheck": true,
+  "notificationsEnabled": false,
+  "scopeSource": "https://galacticfederation.co/treasury",
+  "accounts": [
+    {"role": "mint_account", "address": "Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV"},
+    {"role": "streamflow_metadata", "address": "AiRhuw9iFyXiZYv2hqanBK12dckebF4vNMoAzj9Nj9nY"},
+    {"role": "streamflow_metadata", "address": "BW6ZUUT5NXxSGMKNAzoMYbqrXy5Dm1ev1ekEgYSXJWX8"},
+    {"role": "streamflow_metadata", "address": "EPdpg7AYEzcwudN7TRdEkCGHQeHRrFhoK2yiYxDdGLnv"}
+  ],
+  "proposedVerificationLimitsOnly": {
+    "dailyRequests": 2000,
+    "monthlyRequests": 60000
+  }
+}

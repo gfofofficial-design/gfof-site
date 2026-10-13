@@ -14,6 +14,9 @@ on:
       - 'tests/watchtower-worker.test.mjs'
       - 'tests/watchtower-rpc-transport.test.mjs'
       - 'tests/watchtower-rpc-allowance.test.mjs'
+      - 'tests/watchtower-pilot.test.mjs'
+      - 'config/watchtower-pilot.json'
+      - 'scripts/check-watchtower-pilot.mjs'
       - 'netlify/functions/_shared/watchtower-rpc-transport.mjs'
       - 'netlify/functions/_shared/watchtower-rpc-allowance.mjs'
       - 'netlify/functions/_shared/watchtower-worker.mjs'
@@ -38,4 +41,4 @@ jobs:
         with:
           node-version: '24'
       - name: Check synthetic fixtures without service credentials
-        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/watchtower-batch.test.mjs tests/watchtower-helius-intake.test.mjs tests/watchtower-receipt-sink.test.mjs tests/watchtower-verifier.test.mjs tests/watchtower-worker.test.mjs tests/watchtower-rpc-transport.test.mjs tests/watchtower-rpc-allowance.test.mjs
+        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/watchtower-batch.test.mjs tests/watchtower-helius-intake.test.mjs tests/watchtower-receipt-sink.test.mjs tests/watchtower-verifier.test.mjs tests/watchtower-worker.test.mjs tests/watchtower-rpc-transport.test.mjs tests/watchtower-rpc-allowance.test.mjs tests/watchtower-pilot.test.mjs
