@@ -1,0 +1,25 @@
+name: Federation automation offline review
+on:
+  pull_request:
+    paths:
+      - 'netlify/functions/chat.js'
+      - 'lib/*-core.mjs'
+      - 'automation-lab.html'
+      - 'assets/federation/fed-automation-lab.*'
+      - 'scripts/check-federation-pages.mjs'
+      - 'tests/voss-*.test.mjs'
+      - 'tests/federation-*.test.mjs'
+      - '.github/workflows/federation-automation-review.yml'
+permissions:
+  contents: read
+jobs:
+  offline-fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check synthetic fixtures without service credentials
+        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs
