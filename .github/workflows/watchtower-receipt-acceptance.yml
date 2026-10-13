@@ -1,0 +1,36 @@
+name: Watchtower isolated receipt acceptance
+on:
+  pull_request:
+    paths:
+      - 'migrations/20261013_watchtower_candidates.sql'
+      - 'netlify/functions/_shared/watchtower-receipt-sink.mjs'
+      - 'tests/watchtower-receipt-sink.test.mjs'
+      - 'scripts/check-watchtower-postgres.mjs'
+      - '.github/workflows/watchtower-receipt-acceptance.yml'
+permissions:
+  contents: read
+jobs:
+  isolated-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: fixture
+          POSTGRES_PASSWORD: fixture
+          POSTGRES_DB: watchtower_fixture
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/watchtower-receipt-sink.test.mjs
+      - run: node scripts/check-watchtower-postgres.mjs
+        env:
+          WATCHTOWER_TEST_CONTAINER: ${{ job.services.postgres.id }}

@@ -1,0 +1,32 @@
+import {spawn} from 'node:child_process';
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const container=process.env.WATCHTOWER_TEST_CONTAINER;
+if(process.env.GITHUB_ACTIONS!=='true'||typeof container!=='string'||!/^[a-f0-9]{12,64}$/.test(container))throw Error('Isolated CI service required');
+function sql(statement){return new Promise((resolve,reject)=>{
+ const child=spawn('docker',['exec','-i',container,'psql','-U','fixture','-d','watchtower_fixture','-X','-v','ON_ERROR_STOP=1','-At'],{stdio:['pipe','pipe','pipe']});
+ let output='';child.stdout.on('data',data=>{output+=data;});child.stderr.resume();child.on('error',()=>reject(Error('Fixture query failed')));
+ child.on('close',code=>code===0?resolve(output.trim()):reject(Error('Fixture query failed')));child.stdin.end(statement);
+});}
+const literal=value=>"'"+value.replaceAll("'","''")+"'";
+const a='1'.repeat(64),b='1'.repeat(63)+'2',account='1'.repeat(32);
+const candidate=(signature=a,slot=123)=>({signature,slot,matchedAccounts:[account]});
+const enqueue=items=>'SELECT public.enqueue_watchtower_candidates('+literal(JSON.stringify(items))+'::jsonb);';
+await sql(await readFile(new URL('../migrations/20261013_watchtower_candidates.sql',import.meta.url),'utf8'));
+const receipts=await Promise.all(Array.from({length:20},()=>sql(enqueue([candidate()]))));
+assert.ok(receipts.every(x=>x==='1'));assert.equal(await sql('SELECT count(*) FROM public.watchtower_candidates;'),'1');
+await assert.rejects(sql(enqueue([candidate(b),candidate(a,124)])));
+assert.equal(await sql('SELECT count(*) FROM public.watchtower_candidates;'),'1');
+const claims=await Promise.all(Array.from({length:10},()=>sql('SELECT signature FROM public.claim_watchtower_candidate();')));
+assert.equal(claims.filter(Boolean).length,1);
+await sql("UPDATE public.watchtower_candidates SET lease_until=clock_timestamp()-interval '1 second';");
+assert.equal(await sql('SELECT lease_version FROM public.claim_watchtower_candidate();'),'2');
+assert.equal(await sql('SELECT public.finish_watchtower_candidate('+literal(a)+',1);'),'f');
+assert.equal(await sql('SELECT public.finish_watchtower_candidate('+literal(a)+',2);'),'t');
+assert.equal(await sql('SELECT count(*) FROM public.claim_watchtower_candidate();'),'0');
+await sql(enqueue([candidate()]));assert.equal(await sql('SELECT state FROM public.watchtower_candidates;'),'processed');
+await sql(enqueue([candidate(b)]));
+await sql("UPDATE public.watchtower_candidates SET attempts=5,state='leased',lease_until=clock_timestamp()-interval '1 second' WHERE signature="+literal(b)+';');
+assert.equal(await sql('SELECT count(*) FROM public.claim_watchtower_candidate();'),'0');
+assert.equal(await sql('SELECT state FROM public.watchtower_candidates WHERE signature='+literal(b)+';'),'exhausted');
+process.stdout.write('Isolated PostgreSQL acceptance passed: concurrent idempotency, conflict rollback, exclusive claims, expired-lease recovery, stale-worker rejection and bounded exhaustion.\n');
