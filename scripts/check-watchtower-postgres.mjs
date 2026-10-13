@@ -9,7 +9,8 @@ function sql(statement){return new Promise((resolve,reject)=>{
  child.on('close',code=>code===0?resolve(output.trim()):reject(Error('Fixture query failed')));child.stdin.end(statement);
 });}
 const literal=value=>"'"+value.replaceAll("'","''")+"'";
-const a='1'.repeat(64),b='1'.repeat(63)+'2',account='1'.repeat(32);
+// Fresh b sorts before conflicting a, proving an earlier insertion is rolled back.
+const a='1'.repeat(63)+'2',b='1'.repeat(64),account='1'.repeat(32);
 const candidate=(signature=a,slot=123)=>({signature,slot,matchedAccounts:[account]});
 const enqueue=items=>'SELECT public.enqueue_watchtower_candidates('+literal(JSON.stringify(items))+'::jsonb);';
 await sql(await readFile(new URL('../migrations/20261013_watchtower_candidates.sql',import.meta.url),'utf8'));
