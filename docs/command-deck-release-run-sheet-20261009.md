@@ -353,3 +353,17 @@ Chrome keyboard/invalid-input check support these changes; they do not establish
 real screen-reader announcements, full WCAG conformance or a new physical-phone
 check. Those checks are recorded separately from simulated or automated evidence.
 No new source call, cloud permission, account or publication is included.
+
+## Shared wallet-cap preview connection — October 12, 2026, Central
+
+The owner approved the prepared preview-only connection. The existing reservation
+Worker was updated once with the reviewed wallet counter, preserving its secret
+binding, namespace, class and named object. Functions-only wallet-budget settings
+were added once for this exact PR branch, with no production/shared-team value.
+Readback confirmed the intended metadata and unchanged published site.
+
+This documentation commit rebuilds the Git-based preview to apply those settings.
+The three-request service-spacing proof and two-request wallet/price plus treasury
+acceptance packet are still unrun at this revision. No runtime daily-cap acceptance,
+hosted exhaustion, monetary spend cap or production protection follows from settings
+alone. Keep the PR draft until the finite packet and final production review pass.
