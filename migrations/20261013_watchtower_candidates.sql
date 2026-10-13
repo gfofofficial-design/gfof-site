@@ -7,7 +7,10 @@ CREATE TABLE public.watchtower_candidates (
  state text NOT NULL DEFAULT 'pending' CHECK (state IN ('pending','leased','processed','exhausted')),
  attempts integer NOT NULL DEFAULT 0 CHECK (attempts BETWEEN 0 AND 5),
  lease_version bigint NOT NULL DEFAULT 0,
- lease_until timestamptz
+ lease_until timestamptz,
+ corroboration jsonb,
+ corroborated_at timestamptz,
+ CHECK (state<>'processed' OR (corroboration IS NOT NULL AND corroborated_at IS NOT NULL))
 );
 CREATE INDEX watchtower_candidates_work ON public.watchtower_candidates(state,lease_until,first_received);
 REVOKE ALL ON public.watchtower_candidates FROM PUBLIC;
@@ -57,13 +60,40 @@ END;
 $$;
 REVOKE ALL ON FUNCTION public.claim_watchtower_candidate() FROM PUBLIC;
 
-CREATE FUNCTION public.finish_watchtower_candidate(candidate_signature text,version bigint) RETURNS boolean
+CREATE FUNCTION public.finish_watchtower_candidate(candidate_signature text,version bigint,evidence jsonb) RETURNS boolean
 LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$
-DECLARE changed integer;
+DECLARE changed integer; candidate public.watchtower_candidates%ROWTYPE;
 BEGIN
- UPDATE public.watchtower_candidates SET state='processed',lease_until=NULL
+ SELECT * INTO candidate FROM public.watchtower_candidates WHERE signature=candidate_signature FOR UPDATE;
+ IF NOT FOUND OR candidate.lease_version<>version OR candidate.state<>'leased' OR candidate.lease_until<=clock_timestamp() THEN RETURN false; END IF;
+ IF jsonb_typeof(evidence) IS DISTINCT FROM 'object' OR
+  pg_column_size(evidence)>32768 OR
+  (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(evidence) AS keys(key)) IS DISTINCT FROM
+   ARRAY['accountSlot','emitsFinding','finality','method','schema','signature','sourceAuthenticity','states','transactionSlot']::text[] OR
+  evidence->>'method' IS DISTINCT FROM 'rpc_corroborated_candidate' OR evidence->>'signature' IS DISTINCT FROM candidate_signature OR
+  evidence->'schema' IS DISTINCT FROM '1'::jsonb OR evidence->'emitsFinding' IS DISTINCT FROM 'false'::jsonb OR
+  evidence->>'sourceAuthenticity' IS DISTINCT FROM 'rpc_response_not_cryptographically_verified' OR
+  evidence->>'finality' IS DISTINCT FROM 'finalized_requested_from_reviewed_rpc' OR
+  jsonb_typeof(evidence->'transactionSlot') IS DISTINCT FROM 'number' OR jsonb_typeof(evidence->'accountSlot') IS DISTINCT FROM 'number' OR
+  (evidence->>'transactionSlot') !~ '^[1-9][0-9]{0,15}$' OR (evidence->>'accountSlot') !~ '^[1-9][0-9]{0,15}$' OR
+  (evidence->>'transactionSlot')::bigint IS DISTINCT FROM candidate.slot OR
+  (evidence->>'accountSlot')::bigint<candidate.slot OR (evidence->>'accountSlot')::bigint>9007199254740991 OR
+  jsonb_typeof(evidence->'states') IS DISTINCT FROM 'array' OR
+  (SELECT jsonb_agg(value->'account' ORDER BY ordinality) FROM jsonb_array_elements(evidence->'states') WITH ORDINALITY AS states(value,ordinality))
+   IS DISTINCT FROM candidate.matched_accounts THEN RAISE EXCEPTION 'Invalid corroboration binding'; END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(evidence->'states') AS states(value) WHERE
+  jsonb_typeof(value) IS DISTINCT FROM 'object' OR value->'slot' IS DISTINCT FROM evidence->'accountSlot' OR
+  value->>'state' NOT IN ('absent_at_account_slot','present_at_account_slot') OR
+  (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(value) AS keys(key)) IS DISTINCT FROM
+   CASE WHEN value->>'state'='absent_at_account_slot' THEN ARRAY['account','slot','state']::text[]
+   ELSE ARRAY['account','dataBytes','dataSha256','executable','ownerProgram','slot','state','stateSha256']::text[] END OR
+  (value->>'state'='present_at_account_slot' AND (jsonb_typeof(value->'executable') IS DISTINCT FROM 'boolean' OR
+   jsonb_typeof(value->'dataBytes') IS DISTINCT FROM 'number' OR (value->>'dataBytes') !~ '^[0-9]{1,5}$' OR (value->>'dataBytes')::integer>32768 OR
+   (value->>'ownerProgram') !~ '^[1-9A-HJ-NP-Za-km-z]{32,44}$' OR (value->>'dataSha256') !~ '^[a-f0-9]{64}$' OR (value->>'stateSha256') !~ '^[a-f0-9]{64}$')))
+  THEN RAISE EXCEPTION 'Invalid corroboration state'; END IF;
+ UPDATE public.watchtower_candidates SET state='processed',lease_until=NULL,corroboration=evidence,corroborated_at=clock_timestamp()
   WHERE signature=candidate_signature AND lease_version=version AND state='leased' AND lease_until>clock_timestamp();
  GET DIAGNOSTICS changed=ROW_COUNT;RETURN changed=1;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.finish_watchtower_candidate(text,bigint) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.finish_watchtower_candidate(text,bigint,jsonb) FROM PUBLIC;
