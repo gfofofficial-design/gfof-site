@@ -1,6 +1,7 @@
 import {spawn} from 'node:child_process';
 import {readFile} from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import {createWatchtowerRpcAllowance} from '../netlify/functions/_shared/watchtower-rpc-allowance.mjs';
 const container=process.env.WATCHTOWER_TEST_CONTAINER;
 if(process.env.GITHUB_ACTIONS!=='true'||typeof container!=='string'||!/^[a-f0-9]{12,64}$/.test(container))throw Error('Isolated CI service required');
 function sql(statement){return new Promise((resolve,reject)=>{
@@ -45,4 +46,19 @@ await sql(enqueue([candidate(c)]));
 assert.equal(await sql('SELECT lease_version FROM public.claim_watchtower_candidate();'),'1');
 const presentEvidence={...evidence,signature:c,states:[{account,state:'present_at_account_slot',slot:125,ownerProgram:account,executable:false,dataBytes:0,dataSha256:'0'.repeat(64),stateSha256:'0'.repeat(64)}]};
 assert.equal(await sql('SELECT public.finish_watchtower_candidate('+literal(c)+',1,'+literal(JSON.stringify(presentEvidence))+'::jsonb);'),'t');
-process.stdout.write('Isolated PostgreSQL acceptance passed: concurrent idempotency, conflict rollback, exclusive claims, expired-lease recovery, stale-worker rejection atomic evidence completion and bounded exhaustion.\n');
+const reservation={purpose:'watchtower_candidate_verification',method:'getTransaction',maxRequests:1,maxResponseBytes:1048576};
+const allowance=(dailyLimit,monthlyLimit,scope='preview')=>createWatchtowerRpcAllowance({scope,dailyLimit,monthlyLimit,query:async(statement,args)=>{
+ const command=statement.replace(/\$([1-3])/g,(_,index)=>typeof args[Number(index)-1]==='string'?literal(args[Number(index)-1]):String(args[Number(index)-1]));
+ const output=await sql(command+';');return {rowCount:output?1:0};
+}});
+const race=async run=>(await Promise.all(Array.from({length:20},()=>run(reservation)))).filter(Boolean).length;
+assert.equal(await race(allowance(7,10)),7);
+await sql("UPDATE public.watchtower_rpc_allowance SET day_utc=day_utc-1 WHERE scope='preview';");
+assert.equal(await race(allowance(7,10)),3);
+assert.equal(await race(allowance(7,10)),0);
+await sql("UPDATE public.watchtower_rpc_allowance SET day_utc=day_utc-1,month_utc=(month_utc-interval '1 month')::date WHERE scope='preview';");
+assert.equal(await race(allowance(7,10)),7);
+assert.equal(await race(allowance(2,3,'production')),2);
+await sql("UPDATE public.watchtower_rpc_allowance SET day_utc=day_utc+1 WHERE scope='preview';");
+assert.equal(await allowance(7,10)(reservation),false);
+process.stdout.write('Isolated PostgreSQL acceptance passed: concurrent idempotency, conflict rollback, exclusive claims, expired-lease recovery, stale-worker rejection atomic evidence completion, bounded exhaustion and concurrent daily/monthly allowance limits.\n');

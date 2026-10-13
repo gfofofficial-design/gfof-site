@@ -98,3 +98,12 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION public.finish_watchtower_candidate(text,bigint,jsonb) FROM PUBLIC;
+
+CREATE TABLE public.watchtower_rpc_allowance (
+ scope text PRIMARY KEY CHECK (scope IN ('preview','production')),
+ day_utc date NOT NULL,
+ month_utc date NOT NULL CHECK (month_utc=date_trunc('month',month_utc::timestamp)::date),
+ day_requests integer NOT NULL CHECK (day_requests BETWEEN 0 AND 100000),
+ month_requests integer NOT NULL CHECK (month_requests BETWEEN 0 AND 100000)
+);
+REVOKE ALL ON public.watchtower_rpc_allowance FROM PUBLIC;
