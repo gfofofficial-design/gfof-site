@@ -9,7 +9,7 @@ import {createWatchtowerWorker} from '../netlify/functions/_shared/watchtower-wo
 const container=process.env.WATCHTOWER_TEST_CONTAINER;
 if(process.env.GITHUB_ACTIONS!=='true'||typeof container!=='string'||!/^[a-f0-9]{12,64}$/.test(container))throw Error('Isolated CI service required');
 function sql(statement){return new Promise((resolve,reject)=>{
- const child=spawn('docker',['exec','-i',container,'psql','-U','fixture','-d','watchtower_fixture','-X','-v','ON_ERROR_STOP=1','-At'],{stdio:['pipe','pipe','pipe']});
+ const child=spawn('docker',['exec','-i',container,'psql','-U','fixture','-d','watchtower_fixture','-X','-q','-v','ON_ERROR_STOP=1','-At'],{stdio:['pipe','pipe','pipe']});
  let output='';child.stdout.on('data',data=>{output+=data;});child.stderr.resume();child.on('error',()=>reject(Error('Fixture query failed')));
  child.on('close',code=>code===0?resolve(output.trim()):reject(Error('Fixture query failed')));child.stdin.end(statement);
 });}
