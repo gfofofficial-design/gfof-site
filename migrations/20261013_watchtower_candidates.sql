@@ -23,7 +23,7 @@ BEGIN
  -- Canonical lock order avoids reversed-batch lock-order deadlocks.
  FOR item IN SELECT value FROM jsonb_array_elements(items) ORDER BY value->>'signature' LOOP
   IF jsonb_typeof(item) IS DISTINCT FROM 'object' OR
-   (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(item) AS keys(key)) IS DISTINCT FROM ARRAY['matchedAccounts','signature','slot']::text[] OR
+   (SELECT array_agg(key ORDER BY key COLLATE "C") FROM jsonb_object_keys(item) AS keys(key)) IS DISTINCT FROM ARRAY['matchedAccounts','signature','slot']::text[] OR
    jsonb_typeof(item->'signature') IS DISTINCT FROM 'string' OR (item->>'signature') !~ '^[1-9A-HJ-NP-Za-km-z]{64,88}$' OR
    jsonb_typeof(item->'slot') IS DISTINCT FROM 'number' OR (item->>'slot') !~ '^[1-9][0-9]{0,15}$' OR
    jsonb_typeof(item->'matchedAccounts') IS DISTINCT FROM 'array' OR jsonb_array_length(item->'matchedAccounts') NOT BETWEEN 1 AND 20 THEN
@@ -68,7 +68,7 @@ BEGIN
  IF NOT FOUND OR candidate.lease_version<>version OR candidate.state<>'leased' OR candidate.lease_until<=clock_timestamp() THEN RETURN false; END IF;
  IF jsonb_typeof(evidence) IS DISTINCT FROM 'object' OR
   pg_column_size(evidence)>32768 OR
-  (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(evidence) AS keys(key)) IS DISTINCT FROM
+  (SELECT array_agg(key ORDER BY key COLLATE "C") FROM jsonb_object_keys(evidence) AS keys(key)) IS DISTINCT FROM
    ARRAY['accountSlot','emitsFinding','finality','method','schema','signature','sourceAuthenticity','states','transactionSlot']::text[] OR
   evidence->>'method' IS DISTINCT FROM 'rpc_corroborated_candidate' OR evidence->>'signature' IS DISTINCT FROM candidate_signature OR
   evidence->'schema' IS DISTINCT FROM '1'::jsonb OR evidence->'emitsFinding' IS DISTINCT FROM 'false'::jsonb OR
@@ -84,7 +84,7 @@ BEGIN
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(evidence->'states') AS states(value) WHERE
   jsonb_typeof(value) IS DISTINCT FROM 'object' OR value->'slot' IS DISTINCT FROM evidence->'accountSlot' OR
   jsonb_typeof(value->'state') IS DISTINCT FROM 'string' OR value->>'state' NOT IN ('absent_at_account_slot','present_at_account_slot') OR
-  (SELECT array_agg(key ORDER BY key) FROM jsonb_object_keys(value) AS keys(key)) IS DISTINCT FROM
+  (SELECT array_agg(key ORDER BY key COLLATE "C") FROM jsonb_object_keys(value) AS keys(key)) IS DISTINCT FROM
    CASE WHEN value->>'state'='absent_at_account_slot' THEN ARRAY['account','slot','state']::text[]
    ELSE ARRAY['account','dataBytes','dataSha256','executable','ownerProgram','slot','state','stateSha256']::text[] END OR
   (value->>'state'='present_at_account_slot' AND (jsonb_typeof(value->'executable') IS DISTINCT FROM 'boolean' OR
