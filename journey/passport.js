@@ -25,4 +25,9 @@
  function sync(){const previous=read();if(previous.enabled&&!write([...previous.done,...session()]))return {...previous,available:false};return read();}
  function forget(){try{localStorage.removeItem(key);return true;}catch{return false;}}
  globalThis.FederationPassport=Object.freeze({key,missions,read,session,enable,mark,sync,forget});
+ // Mount only on known mission pages. Failure leaves the mission playable.
+ if(typeof document!=="undefined"&&typeof location!=="undefined"){
+  const missionId=location.pathname.split('/').pop().replace(/\.html$/,'');
+  if(ids.includes(missionId))import('/journey/mission-help.mjs').then(module=>module.mountMissionHelp(document,missionId)).catch(()=>{});
+ }
 })();
