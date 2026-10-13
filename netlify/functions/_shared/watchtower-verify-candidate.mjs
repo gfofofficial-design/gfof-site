@@ -22,7 +22,7 @@ export function createCandidateVerifier({enabled=false,watchedAccounts,rpc,reser
   const controller=new AbortController();let timer;
   const read=async(id,method,params)=>{
    if(controller.signal.aborted)throw Error('deadline');
-   if(await reserveAllowance({purpose:'watchtower_candidate_verification',method,maxRequests:1,maxResponseBytes:1048576})!==true||controller.signal.aborted)throw Error('allowance');
+   if(await reserveAllowance({purpose:'watchtower_candidate_verification',method,maxRequests:1,maxResponseBytes:1048576},{signal:controller.signal})!==true||controller.signal.aborted)throw Error('allowance');
    const response=await rpc({jsonrpc:'2.0',id,method,params},{signal:controller.signal});
    if(controller.signal.aborted)throw Error('deadline');return result(response,id);
   };

@@ -4,9 +4,14 @@ on:
     paths:
       - 'migrations/20261013_watchtower_candidates.sql'
       - 'sql/watchtower-runtime-access.sql'
+      - 'sql/watchtower-server-logins.sql'
+      - 'netlify/functions/_shared/watchtower-database.mjs'
+      - 'tests/watchtower-database.test.mjs'
       - 'netlify/functions/_shared/watchtower-receipt-sink.mjs'
       - 'tests/watchtower-receipt-sink.test.mjs'
       - 'scripts/check-watchtower-postgres.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/watchtower-receipt-acceptance.yml'
 permissions:
   contents: read
@@ -20,7 +25,9 @@ jobs:
         env:
           POSTGRES_USER: fixture
           POSTGRES_PASSWORD: fixture
-          POSTGRES_DB: watchtower_fixture
+          POSTGRES_DB: postgres
+        ports:
+          - 5432/tcp
         options: >-
           --health-cmd pg_isready
           --health-interval 5s
@@ -32,6 +39,8 @@ jobs:
         with:
           node-version: '24'
       - run: node --test tests/watchtower-receipt-sink.test.mjs
+      - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: node scripts/check-watchtower-postgres.mjs
         env:
           WATCHTOWER_TEST_CONTAINER: ${{ job.services.postgres.id }}
+          WATCHTOWER_TEST_PORT: ${{ job.services.postgres.ports[5432] }}

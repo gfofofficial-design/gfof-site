@@ -16,6 +16,10 @@ on:
       - 'tests/watchtower-rpc-allowance.test.mjs'
       - 'tests/watchtower-pilot.test.mjs'
       - 'tests/watchtower-pilot-runtime.test.mjs'
+      - 'tests/watchtower-database.test.mjs'
+      - 'netlify/functions/_shared/watchtower-database.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - 'netlify/functions/_shared/watchtower-pilot-runtime.mjs'
       - 'config/watchtower-pilot.json'
       - 'scripts/check-watchtower-pilot.mjs'
@@ -42,5 +46,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Install pinned database driver
+        # Driver installation is pinned; no dependency lifecycle scripts run.
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Check synthetic fixtures without service credentials
-        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/watchtower-batch.test.mjs tests/watchtower-helius-intake.test.mjs tests/watchtower-receipt-sink.test.mjs tests/watchtower-verifier.test.mjs tests/watchtower-worker.test.mjs tests/watchtower-rpc-transport.test.mjs tests/watchtower-rpc-allowance.test.mjs tests/watchtower-pilot.test.mjs tests/watchtower-pilot-runtime.test.mjs
+        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/watchtower-batch.test.mjs tests/watchtower-helius-intake.test.mjs tests/watchtower-receipt-sink.test.mjs tests/watchtower-verifier.test.mjs tests/watchtower-worker.test.mjs tests/watchtower-rpc-transport.test.mjs tests/watchtower-rpc-allowance.test.mjs tests/watchtower-pilot.test.mjs tests/watchtower-pilot-runtime.test.mjs tests/watchtower-database.test.mjs

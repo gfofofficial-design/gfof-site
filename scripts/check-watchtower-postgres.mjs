@@ -1,15 +1,22 @@
 import {spawn} from 'node:child_process';
-import {readFile} from 'node:fs/promises';
+import {readFile,mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import assert from 'node:assert/strict';
 import {createWatchtowerRpcAllowance} from '../netlify/functions/_shared/watchtower-rpc-allowance.mjs';
 import {createWatchtowerReceiptSink} from '../netlify/functions/_shared/watchtower-receipt-sink.mjs';
 import {createCandidateVerifier} from '../netlify/functions/_shared/watchtower-verify-candidate.mjs';
 import {createWatchtowerRpcTransport} from '../netlify/functions/_shared/watchtower-rpc-transport.mjs';
 import {createWatchtowerWorker} from '../netlify/functions/_shared/watchtower-worker.mjs';
+import {createWatchtowerDatabaseBindings} from '../netlify/functions/_shared/watchtower-database.mjs';
+import {Pool} from 'pg';
+import {createHash} from 'node:crypto';
+import {rootCertificates} from 'node:tls';
 const container=process.env.WATCHTOWER_TEST_CONTAINER;
-if(process.env.GITHUB_ACTIONS!=='true'||typeof container!=='string'||!/^[a-f0-9]{12,64}$/.test(container))throw Error('Isolated CI service required');
+const port=Number(process.env.WATCHTOWER_TEST_PORT);
+if(process.env.GITHUB_ACTIONS!=='true'||typeof container!=='string'||!/^[a-f0-9]{12,64}$/.test(container)||!Number.isInteger(port)||port<1||port>65535)throw Error('Isolated CI service required');
 function sql(statement){return new Promise((resolve,reject)=>{
- const child=spawn('docker',['exec','-i',container,'psql','-U','fixture','-d','watchtower_fixture','-X','-q','-v','ON_ERROR_STOP=1','-At'],{stdio:['pipe','pipe','pipe']});
+ const child=spawn('docker',['exec','-i',container,'psql','-U','fixture','-d','postgres','-X','-q','-v','ON_ERROR_STOP=1','-At'],{stdio:['pipe','pipe','pipe']});
  let output='';child.stdout.on('data',data=>{output+=data;});child.stderr.resume();child.on('error',()=>reject(Error('Fixture query failed')));
  child.on('close',code=>code===0?resolve(output.trim()):reject(Error('Fixture query failed')));child.stdin.end(statement);
 });}
@@ -122,4 +129,56 @@ await assert.rejects(asRole('watchtower_worker','DELETE FROM watchtower_private.
 assert.equal(await asRole('watchtower_worker',"SELECT count(*) FROM watchtower_private.watchtower_rpc_allowance WHERE scope='preview';"),'0');
 await assert.rejects(asRole('watchtower_worker',"INSERT INTO watchtower_private.watchtower_rpc_allowance VALUES ('preview',current_date,date_trunc('month',current_date)::date,1,1);"));
 for(const role of ['anon','authenticated','service_role'])await assert.rejects(asRole(role,'SELECT count(*) FROM watchtower_private.watchtower_candidates;'));
-process.stdout.write('Isolated PostgreSQL acceptance passed: concurrent idempotency, conflict rollback, exclusive claims, expired-lease recovery, stale-worker rejection atomic evidence completion, bounded exhaustion and concurrent daily/monthly allowance limits and queue/transport/verifier composition, restricted NOLOGIN intake/worker roles and scope/identity/access denials.\n');
+// Credential holders stay locked in the real template. Test actual role binding in this disposable service only.
+await sql(await readFile(new URL('../sql/watchtower-server-logins.sql',import.meta.url),'utf8'));
+assert.equal(await sql("SELECT bool_and(NOT rolcanlogin AND NOT rolinherit AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolbypassrls AND rolconnlimit=2) FROM pg_roles WHERE rolname IN ('watchtower_intake_login','watchtower_worker_login');"),'t');
+assert.equal(await sql("SELECT count(*) FROM pg_auth_members m JOIN pg_roles r ON r.oid=m.roleid JOIN pg_roles l ON l.oid=m.member WHERE (r.rolname,l.rolname) IN (('watchtower_intake','watchtower_intake_login'),('watchtower_worker','watchtower_worker_login')) AND NOT m.admin_option AND NOT m.inherit_option AND m.set_option;"),'2');
+await assert.rejects(sql(await readFile(new URL('../sql/watchtower-server-logins.sql',import.meta.url),'utf8')));
+for(const kind of ['intake','worker']){
+ await assert.rejects(sql('SET SESSION AUTHORIZATION watchtower_'+kind+'_login; SELECT count(*) FROM watchtower_private.watchtower_candidates;'));
+ const other=kind==='intake'?'worker':'intake';
+ await assert.rejects(sql('SET SESSION AUTHORIZATION watchtower_'+kind+'_login; SET ROLE watchtower_'+other+';'));
+ assert.equal(await sql('SET SESSION AUTHORIZATION watchtower_'+kind+'_login; BEGIN; SET LOCAL ROLE watchtower_'+kind+'; SELECT current_user||\',\'||session_user; COMMIT;'),
+  'watchtower_'+kind+',watchtower_'+kind+'_login');
+}
+// A self-signed public fixture certificate and private key live only inside the disposable container.
+const command=(program,args)=>new Promise((resolve,reject)=>{const child=spawn(program,args,{stdio:['ignore','pipe','pipe']});let output='';
+ child.stdout.on('data',d=>{output+=d;});child.stderr.resume();child.on('error',()=>reject(Error('Fixture setup failed')));
+ child.on('close',code=>code===0?resolve(output.trim()):reject(Error('Fixture setup failed')));});
+const certDirectory=await mkdtemp(join(tmpdir(),'watchtower-ci-tls-'));let ca;
+try{
+ const certPath=join(certDirectory,'fixture.crt'),keyPath=join(certDirectory,'fixture.key');
+ await command('openssl',['req','-x509','-newkey','rsa:2048','-nodes','-days','1','-subj','/CN=aws-0-us-east-2.pooler.supabase.com',
+  '-addext','subjectAltName=DNS:aws-0-us-east-2.pooler.supabase.com','-addext','basicConstraints=critical,CA:TRUE','-keyout',keyPath,'-out',certPath]);
+ ca=await readFile(certPath,'utf8');
+ await command('docker',['cp',certPath,container+':/tmp/watchtower-fixture.crt']);
+ await command('docker',['cp',keyPath,container+':/tmp/watchtower-fixture.key']);
+ await command('docker',['exec','-u','0',container,'sh','-c','chown postgres:postgres /tmp/watchtower-fixture.key /tmp/watchtower-fixture.crt && chmod 600 /tmp/watchtower-fixture.key']);
+}finally{await rm(certDirectory,{recursive:true,force:true});}
+await sql("ALTER SYSTEM SET ssl_cert_file='/tmp/watchtower-fixture.crt'; ALTER SYSTEM SET ssl_key_file='/tmp/watchtower-fixture.key'; ALTER SYSTEM SET ssl=on; SELECT pg_reload_conf();");
+await new Promise(r=>setTimeout(r,200));assert.equal(await sql('SHOW ssl;'),'on');
+const intakePassword='synthetic-fixture-intake-password',workerPassword='synthetic-fixture-worker-password';
+await sql('ALTER ROLE watchtower_intake_login LOGIN PASSWORD '+literal(intakePassword)+'; ALTER ROLE watchtower_worker_login LOGIN PASSWORD '+literal(workerPassword)+';');
+// This driver forces loopback and removes the Supavisor tenant suffix. It cannot contact a hosted project.
+class LocalFixturePool extends Pool{constructor(config){super({...config,host:'127.0.0.1',port,user:config.user.split('.')[0]});}}
+const connection={host:'aws-0-us-east-2.pooler.supabase.com',projectRef:'abcdefghijklmnopqrst',ca,
+ caSha256:createHash('sha256').update(ca).digest('hex'),intakePassword,workerPassword};
+for(const changed of [{intakePassword:'wrong-synthetic-intake-password'},
+ {ca:rootCertificates[0],caSha256:createHash('sha256').update(rootCertificates[0]).digest('hex')},
+ {host:'aws-9-us-east-2.pooler.supabase.com'}]){
+ const denied=createWatchtowerDatabaseBindings({enabled:true,Pool:LocalFixturePool,connection:{...connection,...changed}});
+ try{await assert.rejects(denied.intakeQuery('SELECT watchtower_private.enqueue_watchtower_candidates($1::jsonb) AS accepted',['[]']));}
+ finally{await denied.close();}
+}
+class WrongIdentityPool extends LocalFixturePool{constructor(config){super({...config,user:'fixture',password:'fixture'});}}
+const adminDenied=createWatchtowerDatabaseBindings({enabled:true,Pool:WrongIdentityPool,connection});
+try{await assert.rejects(adminDenied.intakeQuery('SELECT watchtower_private.enqueue_watchtower_candidates($1::jsonb) AS accepted',['[]']));}
+finally{await adminDenied.close();}
+const bindings=createWatchtowerDatabaseBindings({enabled:true,Pool:LocalFixturePool,connection});
+try{
+ const f='1'.repeat(63)+'8',saved=await bindings.intakeQuery('SELECT watchtower_private.enqueue_watchtower_candidates($1::jsonb) AS accepted',[JSON.stringify([{signature:f,slot:123,matchedAccounts:[approvedAccount]}])]);
+ assert.equal(saved.rows[0].accepted,1);
+ await assert.rejects(bindings.intakeQuery('SELECT * FROM watchtower_private.claim_watchtower_candidate()',[]));
+ const claimed=await bindings.workerQuery('SELECT * FROM watchtower_private.claim_watchtower_candidate()',[]);assert.equal(claimed.rows[0].signature,f);
+}finally{await bindings.close();}
+process.stdout.write('Isolated PostgreSQL acceptance passed: queue/recovery/allowance, restricted capability and credential roles, actual pg driver over fixture TLS, wrong password/CA/hostname/admin rejection and transaction-local role/identity checks. No hosted connection or provider call.\n');

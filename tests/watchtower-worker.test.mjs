@@ -25,3 +25,9 @@ test('timed-out verification cannot finish later and errors reveal no details',a
  assert.equal((await run()).reason,'worker_failed');resolve(verified);await new Promise(r=>setTimeout(r,0));assert.equal(calls,1);
  const bad=createWatchtowerWorker({enabled:true,query:async()=>{throw Error('private database detail');},verify:async()=>verified});assert.ok(!JSON.stringify(await bad()).includes('private database'));
 });
+test('worker deadline cancellation reaches an outstanding database claim',async()=>{
+ let signal,resolve;const run=createWatchtowerWorker({enabled:true,timeoutMs:10,verify:async()=>{assert.fail('must not verify');},
+  query:(sql,args,options)=>{signal=options.signal;return new Promise(r=>{resolve=r;});}});
+ assert.equal((await run()).reason,'worker_failed');assert.ok(signal instanceof AbortSignal);assert.equal(signal.aborted,true);
+ resolve({rowCount:1,rows:[row]});await new Promise(r=>setTimeout(r,0));
+});

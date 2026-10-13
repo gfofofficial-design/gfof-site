@@ -17,3 +17,8 @@ test('late durable completion cannot acknowledge an already aborted request',asy
  const controller=new AbortController();const run=createWatchtowerReceiptSink({query:async()=>{controller.abort();return {rowCount:1,rows:[{accepted:1}]};}});
  assert.equal(await run(receipt(),{signal:controller.signal}),false);
 });
+test('intake cancellation signal reaches the database adapter',async()=>{
+ const controller=new AbortController();
+ const run=createWatchtowerReceiptSink({query:async(sql,args,options)=>{assert.equal(options.signal,controller.signal);return {rowCount:1,rows:[{accepted:1}]};}});
+ assert.equal(await run(receipt(),{signal:controller.signal}),true);
+});
