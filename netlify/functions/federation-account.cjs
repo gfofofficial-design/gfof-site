@@ -77,7 +77,9 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
     try{
       if(action==='oauth'&&method==='POST'){
         if((event.body||'').length>1024)return result(413,{error:'Request too large.'});
-        const body=JSON.parse(event.body||'{}');if(!cfg.providers.includes(body.provider))return result(400,{error:'Sign-in provider is not available.'});
+        const body=JSON.parse(event.body||'{}');
+        if(!body||typeof body!=='object'||Array.isArray(body))return result(400,{error:'Invalid request.'});
+        if(!cfg.providers.includes(body.provider))return result(400,{error:'Sign-in provider is not available.'});
         const verifier=randomBytes(32).toString('base64url'),state=randomBytes(24).toString('base64url');
         const redirect=cfg.origin+'/api/federation-account/callback?state='+state;
         const url=new URL(cfg.url+'/auth/v1/authorize');url.search=new URLSearchParams({provider:body.provider,redirect_to:redirect,code_challenge:createHash('sha256').update(verifier).digest('base64url'),code_challenge_method:'s256'}).toString();

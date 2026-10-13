@@ -40,3 +40,15 @@ test('logout falls back to refresh after stale access is rejected',async()=>{con
 test('logout reports unverified revocation when the refresh exchange fails',async()=>{const h=createHandler({env,fetchImpl:async()=>response({},503)});const r=await h(event('logout','POST',{},'__Host-gf-refresh=old-refresh'));assert.deepEqual(parse(r),{signedOut:true,remoteRevoked:false});assert.ok(r.multiValueHeaders['Set-Cookie'].every(c=>c.includes('Max-Age=0')));});
 
 test('hosted runtime rejects wrong or missing request host without build context',async()=>{let calls=0;const h=createHandler({env,fetchImpl:async()=>calls++});for(const rawUrl of [undefined,'invalid','http://galacticfederation.co/api/federation-account/oauth','https://deploy-preview-99--gfof.netlify.app/api/federation-account/oauth','https://galacticfederation.co.attacker.invalid/api/federation-account/oauth']){assert.equal((await h({...event('oauth','POST',{provider:'google'}),rawUrl})).statusCode,503);}assert.equal(calls,0);});
+
+test('non-object OAuth JSON is rejected as client input without provider calls or cookies',async()=>{
+ let calls=0;
+ const h=createHandler({env,fetchImpl:async()=>{calls++;throw Error('unexpected provider call');}});
+ for(const body of ['null','[]','"google"','true','42']){
+  const r=await h({...event('oauth','POST'),body});
+  assert.equal(r.statusCode,400,body);
+  assert.equal(parse(r).error,'Invalid request.');
+  assert.deepEqual(r.multiValueHeaders['Set-Cookie'],[]);
+ }
+ assert.equal(calls,0);
+});
