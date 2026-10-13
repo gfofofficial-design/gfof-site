@@ -59,8 +59,8 @@
   try{
    const payload=await Promise.race([(async()=>{
     const res=await fetch('/api/federation-wallet',{method:'POST',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({address}),signal:requestController.signal});
-    if(res.status===429)throw Error('Too many lookups. Please wait a minute.');
-    let data;try{data=await res.json();}catch{throw Error('Wallet service is unavailable. Please try again later.');}
+    let data;try{data=await res.json();}catch{throw Error(res.status===429?'Too many lookups. Please wait a minute.':'Wallet service is unavailable. Please try again later.');}
+    if(res.status===429){const reasons=['The shared daily wallet-read limit has been reached. Please return after 00:00 UTC.','The wallet reader is busy. Please wait a moment before trying again.'];throw Error(reasons.includes(data?.error)?data.error:'Too many lookups. Please wait a minute.');}
     return {res,data};
    })(),aborted]);
    if(request!==sequence)return;const {res,data}=payload;if(!res.ok)throw Error(data.error||'Wallet service unavailable.');if(data.address!==address||!Array.isArray(data.tokens)||data.tokens.length>1000||typeof data.sol!=='string')throw Error('Balance response could not be verified.');

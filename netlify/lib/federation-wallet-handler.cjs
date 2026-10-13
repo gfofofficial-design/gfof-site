@@ -1,5 +1,6 @@
 'use strict';
 const {readPrices}=require('./wallet-prices.cjs');
+const {reserveWallet}=require('./wallet-budget.cjs');
 const {readJsonBounded}=require('./read-json-bounded.cjs');
 const {solanaProvider}=require('./data-provider-config.cjs');
 // Reviewed hosts only. Each request must originate on the host serving it;
@@ -22,6 +23,8 @@ exports.handler=async event=>{
  let provider;
  async function rpc(method,params){const data=await readJsonBounded(provider.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params})},{timeoutMs:8000,maxBytes:2000000});if(data.error||!data.result)throw Error('rpc');return data.result;}
  try{
+  const reservation=await reserveWallet(undefined,{required:url.origin==='https://galacticfederation.co'});
+  if(!reservation.allowed)return reply(reservation.reason==='unavailable'?503:429,{error:reservation.reason==='day'?'The shared daily wallet-read limit has been reached. Please return after 00:00 UTC.':reservation.reason==='spacing'?'The wallet reader is busy. Please wait a moment before trying again.':'The wallet reader is unavailable. No balance was confirmed.'});
   provider=solanaProvider();
   const [sol,...groups]=await Promise.all([rpc('getBalance',[address,{commitment:'confirmed'}]),...PROGRAMS.map(programId=>rpc('getTokenAccountsByOwner',[address,{programId},{encoding:'jsonParsed',commitment:'confirmed'}]))]);
   if(!Number.isSafeInteger(sol.value)||sol.value<0)throw Error('balance');

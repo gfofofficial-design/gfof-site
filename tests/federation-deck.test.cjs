@@ -110,3 +110,19 @@ test('a price outage includes native SOL while all-priced and zero-holding reads
  assert.deepEqual(app.nodes.get('wallet-unpriced-list').children.map(n=>n.textContent),['SOL · 1 SOL']);
  for(mode of ['priced','zero']){await app.submit();assert.equal(app.nodes.get('wallet-unpriced-panel').hidden,true);assert.equal(app.nodes.get('wallet-unpriced-list').children.length,0);}
 });
+
+test('shared daily and spacing refusals show their return guidance and remove old balances',async()=>{
+ const reasons=['The shared daily wallet-read limit has been reached. Please return after 00:00 UTC.','The wallet reader is busy. Please wait a moment before trying again.'];
+ for(const reason of reasons){
+  const app=setup(async()=>({ok:false,status:429,json:async()=>({error:reason})}));
+  app.nodes.get('wallet-address').value='11111111111111111111111111111111';app.nodes.get('wallet-rows').children=[{}];
+  await app.submit();assert.equal(app.nodes.get('wallet-message').textContent,reason);assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-count').textContent,'—');
+ }
+});
+
+test('platform HTML and unexpected 429 messages retain the short visitor-limit guidance',async()=>{
+ for(const json of [async()=>{throw Error('not JSON');},async()=>({error:'arbitrary upstream detail'})]){
+  const app=setup(async()=>({ok:false,status:429,json}));app.nodes.get('wallet-address').value='11111111111111111111111111111111';await app.submit();
+  assert.equal(app.nodes.get('wallet-message').textContent,'Too many lookups. Please wait a minute.');assert.equal(app.nodes.get('wallet-rows').children.length,0);
+ }
+});

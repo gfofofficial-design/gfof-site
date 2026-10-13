@@ -298,3 +298,41 @@ Netlify documents up to ten seconds of enforcement delay. The visitor rule is
 neither an immediate six-request hard ceiling nor a shared RPC/day/spend cap.
 See [Netlify rate limiting](https://docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/).
 The separate shared price-reservation limit covers only the Jupiter price step.
+
+## Shared wallet-read limit draft — October 12 Central / October 13 UTC
+
+The new draft adds a separate SQLite counter to the existing reservation service:
+500 permitted wallet lookups per UTC day, spaced at least one second apart.
+One permitted lookup can attempt three Solana RPC calls, with no application
+retries or refunded reservations. This bounds this route at 1,500 attempted RPC
+calls per UTC day when connected. The existing price counter, namespace, object
+identity and credential are retained. The two counters contain only shared
+counts and timing, without viewed addresses, balances or mint lists.
+
+The canonical production wallet route requires this reservation before any RPC
+call. Missing or incomplete configuration, invalid responses and service failure
+return unavailable without balances; the daily and spacing refusals give their
+own return guidance. The price reservation remains a separate step: unavailable
+prices can still accompany confirmed balances from a permitted wallet read.
+Unconnected previews retain their earlier behavior; they are not protected by
+this daily cap until the exact preview configuration has been approved and tested.
+
+Real SQLite fixtures cover simultaneous requests, object recreation, the full
+daily ceiling, UTC reset, corrupt state and preservation of the existing price
+row. Handler and page checks cover refusal before RPC, stale-data clearing and
+separate daily/visitor messages. This is offline evidence. No new Worker version,
+wallet budget variables, production configuration or release is authorized here.
+
+The proposed preview setup reuses the existing reservation service and secret,
+adds only Functions-scoped settings on this PR's exact branch, then performs
+one finite hosted acceptance packet. A later production decision would share
+these counters with that preview, so testing would consume the same allowance.
+These limits do not cover another draft, the separate token-price endpoint,
+treasury reads, hosting compute, all account usage or all project spending.
+The Helius dashboard showed Free-plan usage of 53/1,000,000 credits during the
+read-only launch review; that account observation does not establish the exact
+production key or future competing use. Published method pricing is a separate
+source, not a measured account debit for this candidate.
+
+See [Helius credits](https://www.helius.dev/docs/billing/credits). Keep the live
+site unchanged until hosted acceptance and an exact production decision.
