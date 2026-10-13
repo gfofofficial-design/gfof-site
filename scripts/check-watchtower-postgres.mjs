@@ -102,4 +102,24 @@ assert.equal((await worker()).reason,'corroboration_saved');assert.equal(fixture
 assert.equal(await sql('SELECT state FROM watchtower_private.watchtower_candidates WHERE signature='+literal(d)+';'),'processed');
 assert.equal(await sql("SELECT corroboration->>'accountSlot' FROM watchtower_private.watchtower_candidates WHERE signature="+literal(d)+';'),'125');
 assert.equal(await sql("SELECT day_requests FROM watchtower_private.watchtower_rpc_allowance WHERE scope='production';"),'4');
-process.stdout.write('Isolated PostgreSQL acceptance passed: concurrent idempotency, conflict rollback, exclusive claims, expired-lease recovery, stale-worker rejection atomic evidence completion, bounded exhaustion and concurrent daily/monthly allowance limits and queue/transport/verifier composition.\n');
+// Apply runtime roles after generic recovery fixtures; these have no login or memberships.
+await sql(await readFile(new URL('../sql/watchtower-runtime-access.sql',import.meta.url),'utf8'));
+assert.equal(await sql("SELECT bool_and(NOT rolcanlogin AND NOT rolbypassrls AND NOT rolsuper AND NOT rolcreaterole AND NOT rolcreatedb) FROM pg_roles WHERE rolname IN ('watchtower_intake','watchtower_worker');"),'t');
+const asRole=(role,statement)=>sql('SET ROLE '+role+'; '+statement);
+const approvedAccount='Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV',e='1'.repeat(63)+'5';
+const approvedCandidate={signature:e,slot:123,matchedAccounts:[approvedAccount]};
+assert.equal(await asRole('watchtower_intake',enqueue([approvedCandidate])),'1');
+assert.equal(await asRole('watchtower_intake',enqueue([approvedCandidate])),'1');
+await assert.rejects(asRole('watchtower_intake',enqueue([candidate('1'.repeat(63)+'6')])));
+await assert.rejects(asRole('watchtower_intake',"UPDATE watchtower_private.watchtower_candidates SET state='exhausted';"));
+await assert.rejects(asRole('watchtower_intake',"UPDATE watchtower_private.watchtower_candidates SET signature="+literal('1'.repeat(63)+'7')+' WHERE signature='+literal(e)+';'));
+await assert.rejects(asRole('watchtower_intake','SELECT * FROM watchtower_private.claim_watchtower_candidate();'));
+await assert.rejects(asRole('watchtower_intake','SELECT * FROM watchtower_private.watchtower_rpc_allowance;'));
+await assert.rejects(asRole('watchtower_worker',enqueue([approvedCandidate])));
+assert.equal(await asRole('watchtower_worker','SELECT signature FROM watchtower_private.claim_watchtower_candidate();'),e);
+await assert.rejects(asRole('watchtower_worker','UPDATE watchtower_private.watchtower_candidates SET slot=999;'));
+await assert.rejects(asRole('watchtower_worker','DELETE FROM watchtower_private.watchtower_candidates;'));
+assert.equal(await asRole('watchtower_worker',"SELECT count(*) FROM watchtower_private.watchtower_rpc_allowance WHERE scope='preview';"),'0');
+await assert.rejects(asRole('watchtower_worker',"INSERT INTO watchtower_private.watchtower_rpc_allowance VALUES ('preview',current_date,date_trunc('month',current_date)::date,1,1);"));
+for(const role of ['anon','authenticated','service_role'])await assert.rejects(asRole(role,'SELECT count(*) FROM watchtower_private.watchtower_candidates;'));
+process.stdout.write('Isolated PostgreSQL acceptance passed: concurrent idempotency, conflict rollback, exclusive claims, expired-lease recovery, stale-worker rejection atomic evidence completion, bounded exhaustion and concurrent daily/monthly allowance limits and queue/transport/verifier composition, restricted NOLOGIN intake/worker roles and scope/identity/access denials.\n');

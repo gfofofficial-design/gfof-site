@@ -3,8 +3,8 @@ on:
   pull_request:
     paths:
       - 'migrations/20261013_watchtower_candidates.sql'
+      - 'sql/watchtower-runtime-access.sql'
       - 'netlify/functions/_shared/watchtower-receipt-sink.mjs'
-      - 'netlify/functions/_shared/watchtower-rpc-allowance.mjs'
       - 'tests/watchtower-receipt-sink.test.mjs'
       - 'scripts/check-watchtower-postgres.mjs'
       - '.github/workflows/watchtower-receipt-acceptance.yml'
