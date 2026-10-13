@@ -1,3 +1,44 @@
+# Read-only Command Deck — release and operating record
+
+Current status: **LIVE — read-only Command Deck released October 12, 2026 (Central).**
+
+Live dashboard: https://galacticfederation.co/command-deck
+
+## Current release status — October 13, 2026
+
+The release is recorded in [PR #104](https://github.com/gfofofficial-design/gfof-site/pull/104), approved at head `e135da24ae9d46b650a568757f96dbffe89e8f6f` and merged as `06ec768379e650eb79417c7756a98afb72d9080b` on October 12 Central. That PR records finite preview and production acceptance, not full hosted quota exhaustion or a complete accessibility audit.
+
+[PR #106](https://github.com/gfofofficial-design/gfof-site/pull/106) subsequently merged the staking/intelligence paragraph fixes and legacy-app zoom/cache changes as `23b419903e9d9722608d261cc5cbc5d1bf411ad7`. This is the public main revision checked on October 13.
+
+[Dossier PR #63](https://github.com/gfofofficial-design/dossier-site/pull/63) and [FCC PR #6](https://github.com/gfofofficial-design/fcc-site/pull/6) are merged. Fresh public-page reads confirmed three Command Deck links on the Federation homepage, three on Dossier and two on FCC, all targeting the canonical dashboard. A merge alone is not proof of publishing; these served-page observations supply the link evidence.
+
+### October 13 public-page check
+
+Both `/command-deck` and `/command-deck.html`, and the dashboard privacy page, returned HTTP 200. Each returned private/no-store caching, no-referrer, nosniff, frame denial and a CSP header. The production `/account` route returned 404. No wallet, pricing, lock RPC, OAuth or signature request was made by this check; page availability is separate from data-service health.
+
+### Released scope and operating limits
+
+The public dashboard provides manual public-address reads, exact returned quantities, available reference values, current GFOF lock evidence and First Contact missions. Clear removes page wallet results and visit history. Proposed staking comparisons and fictional ranking examples remain labeled. No account registration, wallet signing, deposit, claim or public lending is included in this release.
+
+The released wallet path requires a separate shared reservation before RPC. Its configured counter allows 500 wallet reservations per UTC day, with at least one second between them. Each permitted lookup can attempt up to three RPC calls, with no application retries or refunded reservations: at most 1,500 attempted calls per day through that configured route. Preview and production share this allowance. It is not a cap on every provider account, other route or hosting cost.
+
+Prices have their own shared reservation counter: 24 per rolling minute, 3,000 per UTC day and at least 2.5 seconds apart. Pricing can be unavailable while confirmed quantities remain visible. Missing configuration and service failure must retain the unavailable behavior. The per-visitor six-request/60-second rule is also exported by the modern function; its documented enforcement delay prevents treating it as an immediate hard ceiling.
+
+### Remaining account and operating work
+
+- [PR #99](https://github.com/gfofofficial-design/gfof-site/pull/99) remains draft and unmerged. Its integration with the released dashboard has automated evidence, but a new Google round trip and affected normal-path acceptance remain distinct checks. Public-account activation and provider/client replacement retain separate release decisions.
+- The managed signup-hook timeout clarification and verified account deletion/recovery operations remain account gates. The read-only release does not close them.
+- Verify wallet/pricing failure coverage, current response ownership and operating allowances. The released PR does not claim automated wallet/pricing monitoring, measured provider-credit parity or full hosted daily exhaustion.
+- Real screen-reader acceptance, physical-device checks for newly changed flows and complete WCAG conformance remain distinct from semantic markup, source tests and browser emulation. Accessibility remains the first design priority recorded during the release work.
+- Regenerate any corrective Git change against the actual release and current main, preserving later unrelated changes. An old fixture or hosting snapshot is not a rehearsed current recovery. Further production publication retains its exact-scope decision.
+
+## Historical review evidence
+
+The collapsed material below preserves the October 9–12 pre-release record. Its HOLD, draft and pending statements are dated historical evidence; they do not override the current live status above. Later operating claims require their own evidence.
+
+<details>
+<summary>October 9–12 pre-release review history</summary>
+
 # Read-only Command Deck release run sheet — October 9, 2026
 
 Status: **HOLD — review candidate, not production release approval.**
@@ -367,3 +408,5 @@ The three-request service-spacing proof and two-request wallet/price plus treasu
 acceptance packet are still unrun at this revision. No runtime daily-cap acceptance,
 hosted exhaustion, monetary spend cap or production protection follows from settings
 alone. Keep the PR draft until the finite packet and final production review pass.
+
+</details>
