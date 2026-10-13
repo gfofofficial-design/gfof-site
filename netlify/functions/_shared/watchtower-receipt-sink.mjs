@@ -13,7 +13,7 @@ export function createWatchtowerReceiptSink({query}={}){
    seen.add(item.signature);items.push({signature:item.signature,slot:item.slot,matchedAccounts:[...item.matchedAccounts].sort()});
   }
   items.sort((a,b)=>a.signature.localeCompare(b.signature));
-  try{const result=await query('SELECT public.enqueue_watchtower_candidates($1::jsonb) AS accepted',[JSON.stringify(items)]);
+  try{const result=await query('SELECT watchtower_private.enqueue_watchtower_candidates($1::jsonb) AS accepted',[JSON.stringify(items)]);
    return !signal?.aborted&&result.rowCount===1&&result.rows[0]?.accepted===items.length;
   }catch{return false;}
  };

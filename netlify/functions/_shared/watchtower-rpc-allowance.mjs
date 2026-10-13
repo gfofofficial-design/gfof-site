@@ -1,4 +1,4 @@
-const SQL=`INSERT INTO public.watchtower_rpc_allowance AS b (scope,day_utc,month_utc,day_requests,month_requests)
+const SQL=`INSERT INTO watchtower_private.watchtower_rpc_allowance AS b (scope,day_utc,month_utc,day_requests,month_requests)
  VALUES ($1,(statement_timestamp() AT TIME ZONE 'UTC')::date,date_trunc('month',statement_timestamp() AT TIME ZONE 'UTC')::date,1,1)
  ON CONFLICT(scope) DO UPDATE SET day_utc=EXCLUDED.day_utc,month_utc=EXCLUDED.month_utc,
  day_requests=CASE WHEN b.day_utc=EXCLUDED.day_utc THEN b.day_requests+1 ELSE 1 END,

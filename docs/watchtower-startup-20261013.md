@@ -11,3 +11,11 @@ Actual delivery still requires an owner-selected live database with reviewed gra
 No email/Telegram destination was selected. Observation means saved candidate corroboration, not a public financial verdict or automatic message. Keep financial/control/lock-change interpretation gated on independently reviewed historical/program-specific evidence.
 
 Source: [Helius additional credits and Usage controls](https://www.helius.dev/docs/billing/additional-credits), reviewed October 13, 2026.
+
+## Supabase storage preparation
+
+The selected platform is Supabase. Storage uses watchtower_private, separate from public member tables. Both internal tables have enabled and forced RLS with no policies, and schema/table/function privileges are revoked from PUBLIC and the platform anon, authenticated and service_role roles. Functions remain SECURITY INVOKER. Existing auth configuration and public tables are not altered. The isolated fixture creates analogous platform roles and verifies denied table/function access in addition to concurrency/recovery tests.
+
+This preparation grants no runtime access. A separately reviewed least-privilege server connection and necessary RLS policies must be configured before startup can truthfully declare storageReady. Never use the database administrator credential as the routine intake/worker identity. Do not expose the private schema in the Data API or add it to a public realtime publication. Project identifiers, credentials and account usage evidence are not published in this review.
+
+The existing generic review migration is amended in place because it was not previously applied. Deployment must apply this exact reviewed migration once to an empty private schema, record the migration in Supabase history, and verify catalog privileges and security advisors. No production data or provider events are needed to validate private access controls.

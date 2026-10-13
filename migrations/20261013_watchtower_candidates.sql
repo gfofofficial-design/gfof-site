@@ -1,5 +1,7 @@
--- Review/isolated acceptance only. Do not apply to a live database without approval.
-CREATE TABLE public.watchtower_candidates (
+-- Private storage preparation; grants and live monitoring remain separate.
+CREATE SCHEMA watchtower_private;
+REVOKE ALL ON SCHEMA watchtower_private FROM PUBLIC;
+CREATE TABLE watchtower_private.watchtower_candidates (
  signature text PRIMARY KEY CHECK (signature ~ '^[1-9A-HJ-NP-Za-km-z]{64,88}$'),
  slot bigint NOT NULL CHECK (slot > 0),
  matched_accounts jsonb NOT NULL CHECK (jsonb_typeof(matched_accounts)='array' AND jsonb_array_length(matched_accounts) BETWEEN 1 AND 20),
@@ -12,12 +14,12 @@ CREATE TABLE public.watchtower_candidates (
  corroborated_at timestamptz,
  CHECK (state<>'processed' OR (corroboration IS NOT NULL AND corroborated_at IS NOT NULL))
 );
-CREATE INDEX watchtower_candidates_work ON public.watchtower_candidates(state,lease_until,first_received);
-REVOKE ALL ON public.watchtower_candidates FROM PUBLIC;
+CREATE INDEX watchtower_candidates_work ON watchtower_private.watchtower_candidates(state,lease_until,first_received);
+REVOKE ALL ON watchtower_private.watchtower_candidates FROM PUBLIC;
 
-CREATE FUNCTION public.enqueue_watchtower_candidates(items jsonb) RETURNS integer
-LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$
-DECLARE item jsonb; existing public.watchtower_candidates%ROWTYPE; accepted integer:=0; candidate_slot bigint;
+CREATE FUNCTION watchtower_private.enqueue_watchtower_candidates(items jsonb) RETURNS integer
+LANGUAGE plpgsql SET search_path=pg_catalog,watchtower_private AS $$
+DECLARE item jsonb; existing watchtower_private.watchtower_candidates%ROWTYPE; accepted integer:=0; candidate_slot bigint;
 BEGIN
  IF jsonb_typeof(items) IS DISTINCT FROM 'array' OR jsonb_array_length(items)>100 THEN RAISE EXCEPTION 'Invalid candidates'; END IF;
  -- Canonical lock order avoids reversed-batch lock-order deadlocks.
@@ -33,38 +35,38 @@ BEGIN
   IF candidate_slot>9007199254740991 OR EXISTS(SELECT 1 FROM jsonb_array_elements(item->'matchedAccounts') AS accounts(value)
     WHERE jsonb_typeof(value) IS DISTINCT FROM 'string' OR (value#>>'{}') !~ '^[1-9A-HJ-NP-Za-km-z]{32,44}$') OR
    (SELECT count(DISTINCT value) FROM jsonb_array_elements(item->'matchedAccounts'))<>jsonb_array_length(item->'matchedAccounts') THEN RAISE EXCEPTION 'Invalid candidates'; END IF;
-  INSERT INTO public.watchtower_candidates(signature,slot,matched_accounts)
+  INSERT INTO watchtower_private.watchtower_candidates(signature,slot,matched_accounts)
    VALUES(item->>'signature',candidate_slot,item->'matchedAccounts') ON CONFLICT(signature) DO NOTHING;
-  SELECT * INTO STRICT existing FROM public.watchtower_candidates WHERE signature=item->>'signature' FOR UPDATE;
+  SELECT * INTO STRICT existing FROM watchtower_private.watchtower_candidates WHERE signature=item->>'signature' FOR UPDATE;
   IF existing.slot<>candidate_slot OR existing.matched_accounts<>item->'matchedAccounts' THEN RAISE EXCEPTION 'Conflicting candidate'; END IF;
   accepted:=accepted+1;
  END LOOP;
  RETURN accepted;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.enqueue_watchtower_candidates(jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION watchtower_private.enqueue_watchtower_candidates(jsonb) FROM PUBLIC;
 
-CREATE FUNCTION public.claim_watchtower_candidate() RETURNS SETOF public.watchtower_candidates
-LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$
+CREATE FUNCTION watchtower_private.claim_watchtower_candidate() RETURNS SETOF watchtower_private.watchtower_candidates
+LANGUAGE plpgsql SET search_path=pg_catalog,watchtower_private AS $$
 BEGIN
- UPDATE public.watchtower_candidates SET state='exhausted',lease_until=NULL
+ UPDATE watchtower_private.watchtower_candidates SET state='exhausted',lease_until=NULL
   WHERE attempts>=5 AND (state='pending' OR (state='leased' AND lease_until<=clock_timestamp()));
  RETURN QUERY WITH chosen AS (
-  SELECT signature FROM public.watchtower_candidates WHERE attempts<5 AND
+  SELECT signature FROM watchtower_private.watchtower_candidates WHERE attempts<5 AND
    (state='pending' OR (state='leased' AND lease_until<=clock_timestamp()))
   ORDER BY first_received,signature FOR UPDATE SKIP LOCKED LIMIT 1
- ) UPDATE public.watchtower_candidates AS c SET state='leased',attempts=c.attempts+1,
+ ) UPDATE watchtower_private.watchtower_candidates AS c SET state='leased',attempts=c.attempts+1,
   lease_version=c.lease_version+1,lease_until=clock_timestamp()+interval '30 seconds'
  FROM chosen WHERE c.signature=chosen.signature RETURNING c.*;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.claim_watchtower_candidate() FROM PUBLIC;
+REVOKE ALL ON FUNCTION watchtower_private.claim_watchtower_candidate() FROM PUBLIC;
 
-CREATE FUNCTION public.finish_watchtower_candidate(candidate_signature text,version bigint,evidence jsonb) RETURNS boolean
-LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$
-DECLARE changed integer; candidate public.watchtower_candidates%ROWTYPE;
+CREATE FUNCTION watchtower_private.finish_watchtower_candidate(candidate_signature text,version bigint,evidence jsonb) RETURNS boolean
+LANGUAGE plpgsql SET search_path=pg_catalog,watchtower_private AS $$
+DECLARE changed integer; candidate watchtower_private.watchtower_candidates%ROWTYPE;
 BEGIN
- SELECT * INTO candidate FROM public.watchtower_candidates WHERE signature=candidate_signature FOR UPDATE;
+ SELECT * INTO candidate FROM watchtower_private.watchtower_candidates WHERE signature=candidate_signature FOR UPDATE;
  IF NOT FOUND OR candidate.lease_version<>version OR candidate.state<>'leased' OR candidate.lease_until<=clock_timestamp() THEN RETURN false; END IF;
  IF jsonb_typeof(evidence) IS DISTINCT FROM 'object' OR
   pg_column_size(evidence)>32768 OR
@@ -92,18 +94,34 @@ BEGIN
    jsonb_typeof(value->'dataBytes') IS DISTINCT FROM 'number' OR (value->>'dataBytes') !~ '^[0-9]{1,5}$' OR (value->>'dataBytes')::integer>32768 OR
    (value->>'ownerProgram') !~ '^[1-9A-HJ-NP-Za-km-z]{32,44}$' OR (value->>'dataSha256') !~ '^[a-f0-9]{64}$' OR (value->>'stateSha256') !~ '^[a-f0-9]{64}$')))
   THEN RAISE EXCEPTION 'Invalid corroboration state'; END IF;
- UPDATE public.watchtower_candidates SET state='processed',lease_until=NULL,corroboration=evidence,corroborated_at=clock_timestamp()
+ UPDATE watchtower_private.watchtower_candidates SET state='processed',lease_until=NULL,corroboration=evidence,corroborated_at=clock_timestamp()
   WHERE signature=candidate_signature AND lease_version=version AND state='leased' AND lease_until>clock_timestamp();
  GET DIAGNOSTICS changed=ROW_COUNT;RETURN changed=1;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.finish_watchtower_candidate(text,bigint,jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION watchtower_private.finish_watchtower_candidate(text,bigint,jsonb) FROM PUBLIC;
 
-CREATE TABLE public.watchtower_rpc_allowance (
+CREATE TABLE watchtower_private.watchtower_rpc_allowance (
  scope text PRIMARY KEY CHECK (scope IN ('preview','production')),
  day_utc date NOT NULL,
  month_utc date NOT NULL CHECK (month_utc=date_trunc('month',month_utc::timestamp)::date),
  day_requests integer NOT NULL CHECK (day_requests BETWEEN 0 AND 100000),
  month_requests integer NOT NULL CHECK (month_requests BETWEEN 0 AND 100000)
 );
-REVOKE ALL ON public.watchtower_rpc_allowance FROM PUBLIC;
+REVOKE ALL ON watchtower_private.watchtower_rpc_allowance FROM PUBLIC;
+
+-- No public/member access, including explicit grants installed by platform defaults.
+ALTER TABLE watchtower_private.watchtower_candidates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE watchtower_private.watchtower_candidates FORCE ROW LEVEL SECURITY;
+ALTER TABLE watchtower_private.watchtower_rpc_allowance ENABLE ROW LEVEL SECURITY;
+ALTER TABLE watchtower_private.watchtower_rpc_allowance FORCE ROW LEVEL SECURITY;
+REVOKE ALL ON ALL TABLES IN SCHEMA watchtower_private FROM PUBLIC;
+REVOKE ALL ON ALL FUNCTIONS IN SCHEMA watchtower_private FROM PUBLIC;
+DO $access$ DECLARE member_role text; BEGIN
+ FOR member_role IN SELECT rolname FROM pg_roles WHERE rolname IN ('anon','authenticated','service_role') LOOP
+  EXECUTE format('REVOKE ALL ON SCHEMA watchtower_private FROM %I', member_role);
+  EXECUTE format('REVOKE ALL ON ALL TABLES IN SCHEMA watchtower_private FROM %I', member_role);
+  EXECUTE format('REVOKE ALL ON ALL FUNCTIONS IN SCHEMA watchtower_private FROM %I', member_role);
+ END LOOP;
+END $access$;
+ALTER DEFAULT PRIVILEGES IN SCHEMA watchtower_private REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;

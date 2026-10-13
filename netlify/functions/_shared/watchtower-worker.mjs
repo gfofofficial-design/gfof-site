@@ -28,7 +28,7 @@ export function createWatchtowerWorker({enabled=false,query,verify,timeoutMs=100
   const controller=new AbortController();let timer;
   try{
    const work=(async()=>{
-    const claim=await query('SELECT * FROM public.claim_watchtower_candidate()',[]);
+    const claim=await query('SELECT * FROM watchtower_private.claim_watchtower_candidate()',[]);
     if(controller.signal.aborted)throw Error('deadline');
     if(claim.rowCount===0)return outcome('no_candidate');
     if(claim.rowCount!==1)throw Error('claim');
@@ -38,7 +38,7 @@ export function createWatchtowerWorker({enabled=false,query,verify,timeoutMs=100
     const candidate={signature:row.signature,slot,matchedAccounts:[...accounts]};
     const raw=await verify(candidate,{signal:controller.signal});if(controller.signal.aborted)throw Error('deadline');
     const evidence=project(raw,candidate);if(!evidence)return outcome('verification_not_completed');
-    const result=await query('SELECT public.finish_watchtower_candidate($1,$2,$3::jsonb) AS finished',[candidate.signature,version,JSON.stringify(evidence)]);
+    const result=await query('SELECT watchtower_private.finish_watchtower_candidate($1,$2,$3::jsonb) AS finished',[candidate.signature,version,JSON.stringify(evidence)]);
     if(controller.signal.aborted)throw Error('deadline');
     return outcome(result.rowCount===1&&result.rows[0]?.finished===true?'corroboration_saved':'lease_or_completion_not_accepted');
    })();
