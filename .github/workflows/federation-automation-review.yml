@@ -7,6 +7,7 @@ on:
       - 'journey/mission-help.mjs'
       - 'journey/passport.js'
       - 'tests/mission-help.test.mjs'
+      - 'tests/watchtower-batch.test.mjs'
       - 'automation-lab.html'
       - 'assets/federation/fed-automation-lab.*'
       - 'scripts/check-federation-pages.mjs'
@@ -25,4 +26,4 @@ jobs:
         with:
           node-version: '24'
       - name: Check synthetic fixtures without service credentials
-        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs
+        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/watchtower-batch.test.mjs
