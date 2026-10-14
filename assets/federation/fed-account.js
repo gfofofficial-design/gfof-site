@@ -76,6 +76,21 @@
    }catch(e){if(current(turn))message.textContent=e.status===401?'Your session has expired. Sign in again.':'Sign-in is temporarily unavailable. You can still browse the Federation.';}
   });}catch{if(current(turn))message.textContent='Account status is unavailable. You can still browse the Federation.';}
  }
+ function oauthDestination(raw,provider){
+  const invalid=()=>{throw Error('Invalid sign-in destination.');};
+  if(typeof raw!=='string'||raw.length>8192)invalid();
+  let u,callback;try{u=new URL(raw);callback=new URL(u.searchParams.get('redirect_to'));}catch{invalid();}
+  if(u.protocol!=='https:'||!/^[-a-z0-9]+\.supabase\.co$/.test(u.hostname)||u.pathname!=='/auth/v1/authorize'||
+   u.username||u.password||u.port||u.hash)invalid();
+  const keys=['code_challenge','code_challenge_method','provider','redirect_to'];
+  if([...u.searchParams.keys()].sort().join(',')!==keys.join(',')||
+   keys.some(key=>u.searchParams.getAll(key).length!==1)||u.searchParams.get('provider')!==provider||
+   u.searchParams.get('code_challenge_method')!=='s256'||!/^[-A-Za-z0-9_]{43}$/.test(u.searchParams.get('code_challenge')||''))invalid();
+  if(callback.protocol!=='https:'||callback.origin!==location.origin||callback.pathname!=='/api/federation-account/callback'||
+   callback.username||callback.password||callback.hash||[...callback.searchParams.keys()].join(',')!=='state'||
+   !/^[-A-Za-z0-9_]{32}$/.test(callback.searchParams.get('state')||''))invalid();
+  return u.href;
+ }
  function connectChannel(){
   if(channel||typeof globalThis.BroadcastChannel!=='function')return;
   try{
@@ -94,8 +109,7 @@
   try{await withSessionLock(async()=>{
    if(!current(turn))return;
    const r=await api('oauth',{provider:b.id});if(!current(turn))return;
-   const u=new URL(r.url);if(u.protocol!=='https:'||!/^[-a-z0-9]+\.supabase\.co$/.test(u.hostname)||u.pathname!=='/auth/v1/authorize')throw Error('Invalid sign-in destination.');
-   location.assign(u.href);navigating=true;
+   location.assign(oauthDestination(r.url,b.id));navigating=true;
   });}catch(e){if(current(turn))message.textContent=e.message;}
   finally{busy=navigating;buttonState();}
  }));

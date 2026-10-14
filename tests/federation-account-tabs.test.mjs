@@ -7,6 +7,9 @@ const source=readFileSync(new URL('../assets/federation/fed-account.js',import.m
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const response=(data,status=200)=>({status,ok:status>=200&&status<300,json:async()=>data});
+const origin='https://account-preview.example.invalid';
+function oauthUrl(){const u=new URL('https://syntheticfixture.supabase.co/auth/v1/authorize');u.search=new URLSearchParams({provider:'google',redirect_to:origin+'/api/federation-account/callback?state='+'s'.repeat(32),code_challenge:'c'.repeat(43),code_challenge_method:'s256'}).toString();return u.href;}
+
 const member={signedIn:true,user:{email:'member@example.invalid'}};
 
 function browser({locks=true,channels=true,timers}={}){
@@ -37,7 +40,7 @@ function browser({locks=true,channels=true,timers}={}){
       document,navigator:locks?{locks:lockManager}:{},
       ...(channels?{BroadcastChannel:Channel}:{}),
       fetch:async(url,options)=>{requests.push(url.split('/').at(-1));return fetch(url.split('/').at(-1),options);},
-      location:{search:'',hash:'',assign:url=>assigned.push(url)},history:{replaceState(){}},
+      location:{origin,search:'',hash:'',assign:url=>assigned.push(url)},history:{replaceState(){}},
       URL,URLSearchParams,AbortController,setTimeout:timers?.setTimeout||setTimeout,clearTimeout:timers?.clearTimeout||clearTimeout,
       addEventListener(name,fn){pageHandlers[name]=fn;},
     });
@@ -156,7 +159,7 @@ test('a pending response cannot restore identity after a logout notification',as
 
 test('a pending OAuth response cannot navigate after a logout notification',async()=>{
   const b=browser();const gate=deferred();
-  const t=b.tab(async action=>{if(action==='config')return response({enabled:true,providers:['google'],hasSessionCookie:false});await gate.promise;return response({url:'https://syntheticfixture.supabase.co/auth/v1/authorize'});});
+  const t=b.tab(async action=>{if(action==='config')return response({enabled:true,providers:['google'],hasSessionCookie:false});await gate.promise;return response({url:oauthUrl()});});
   await tick();const done=t.click('google');await tick();
   b.broadcast({type:'signed-out',remoteRevoked:true});gate.resolve();await done;
   assert.deepEqual(t.assigned,[]);
@@ -210,7 +213,7 @@ test('logout during initial configuration preserves available sign-in options wi
 
 test('a successful provider navigation keeps duplicate sign-in clicks blocked',async()=>{
   const b=browser();
-  const t=b.tab(async action=>action==='config'?response({enabled:true,providers:['google'],hasSessionCookie:false}):response({url:'https://syntheticfixture.supabase.co/auth/v1/authorize'}));
+  const t=b.tab(async action=>action==='config'?response({enabled:true,providers:['google'],hasSessionCookie:false}):response({url:oauthUrl()}));
   await tick();await t.click('google');await t.click('google');
   assert.deepEqual(t.requests,['config','oauth']);
   assert.equal(t.assigned.length,1);
@@ -219,7 +222,7 @@ test('a successful provider navigation keeps duplicate sign-in clicks blocked',a
 
 test('returning through browser history restores controls after provider navigation',async()=>{
   const b=browser();
-  const t=b.tab(async action=>action==='config'?response({enabled:true,providers:['google'],hasSessionCookie:false}):response({url:'https://syntheticfixture.supabase.co/auth/v1/authorize'}));
+  const t=b.tab(async action=>action==='config'?response({enabled:true,providers:['google'],hasSessionCookie:false}):response({url:oauthUrl()}));
   await tick();await t.click('google');assert.equal(t.elements.google.disabled,true);
   t.pageshow();await tick();
   assert.deepEqual(t.requests,['config','oauth','config']);
