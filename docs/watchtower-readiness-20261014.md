@@ -23,9 +23,9 @@ The isolated PostgreSQL fixture runs this report before its synthetic login acti
 
 No schedule, public signup, notification, provider call, secret installation, login activation, deletion or production merge is added by this readiness update. Existing account/member configuration remains separate. Project identifiers and private account evidence are not exported in this document.
 
-## Proposed trial retention — owner decision pending
+## Approved initial-trial retention — October 14, 2026
 
-For the initial finite trial, retain candidate receipts and their projected RPC corroboration for seven days after the recorded activation window ends, solely for verification and failure investigation. Do not automatically delete, archive or reset anything as part of this proposal. After that period, present an exact owner-reviewed cleanup set; unresolved or leased candidates must be investigated before any deletion. Keep the trial's sanitized acceptance record and preserve the daily/monthly allowance counters through their periods. Future continuous-monitoring retention requires its own design. This proposal does not authorize deletion or alter existing data.
+The owner approved this policy on October 14, 2026 at 10:26:18 UTC. For the initial finite trial, retain candidate receipts and their projected RPC corroboration for seven days after the recorded activation window ends, solely for verification and failure investigation. Do not automatically delete, archive or reset anything as part of this policy. After that period, present an exact owner-reviewed cleanup set; unresolved or leased candidates must be investigated before any deletion. Keep the trial's sanitized acceptance record and preserve the daily/monthly allowance counters through their periods. Future continuous-monitoring retention requires its own design. This approval establishes the retention period; it does not authorize deletion or alter existing data.
 
 ## Work-computer credential placement
 
