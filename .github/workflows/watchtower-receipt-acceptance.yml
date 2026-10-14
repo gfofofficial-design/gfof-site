@@ -4,6 +4,7 @@ on:
     paths:
       - 'migrations/20261013_watchtower_candidates.sql'
       - 'sql/watchtower-runtime-access.sql'
+      - 'sql/watchtower-readiness.sql'
       - 'sql/watchtower-server-logins.sql'
       - 'sql/watchtower-pilot-intake-bound.sql'
       - 'netlify/functions/_shared/watchtower-database.mjs'
@@ -52,3 +53,4 @@ jobs:
         env:
           WATCHTOWER_TEST_CONTAINER: ${{ job.services.postgres.id }}
           WATCHTOWER_TEST_PORT: ${{ job.services.postgres.ports[5432] }}
+

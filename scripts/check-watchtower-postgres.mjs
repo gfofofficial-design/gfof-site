@@ -134,6 +134,14 @@ for(const role of ['anon','authenticated','service_role'])await assert.rejects(a
 // Credential holders stay locked in the real template. Test actual role binding in this disposable service only.
 await sql(await readFile(new URL('../sql/watchtower-server-logins.sql',import.meta.url),'utf8'));
 await sql(await readFile(new URL('../sql/watchtower-pilot-intake-bound.sql',import.meta.url),'utf8'));
+const readinessSql=await readFile(new URL('../sql/watchtower-readiness.sql',import.meta.url),'utf8');
+const readiness=JSON.parse(await sql(readinessSql));
+assert.equal(readiness.schema,1);assert.equal(readiness.status,'storage_prepared_credentials_locked');assert.equal(readiness.activationProven,false);
+assert.ok(Object.values(readiness.checks).every(x=>x===true));
+assert.equal(readiness.candidateCounts.candidates,Number(await sql('SELECT count(*) FROM watchtower_private.watchtower_candidates;')));
+await sql('ALTER ROLE watchtower_intake_login LOGIN;');
+assert.equal(JSON.parse(await sql(readinessSql)).status,'review_required');
+await sql('ALTER ROLE watchtower_intake_login NOLOGIN;');
 assert.equal(await sql("SELECT bool_and(NOT rolcanlogin AND NOT rolinherit AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolbypassrls AND rolconnlimit=2) FROM pg_roles WHERE rolname IN ('watchtower_intake_login','watchtower_worker_login');"),'t');
 assert.equal(await sql("SELECT count(*) FROM pg_auth_members m JOIN pg_roles r ON r.oid=m.roleid JOIN pg_roles l ON l.oid=m.member WHERE (r.rolname,l.rolname) IN (('watchtower_intake','watchtower_intake_login'),('watchtower_worker','watchtower_worker_login')) AND NOT m.admin_option AND NOT m.inherit_option AND m.set_option;"),'2');
 await assert.rejects(sql(await readFile(new URL('../sql/watchtower-server-logins.sql',import.meta.url),'utf8')));
@@ -232,3 +240,4 @@ await sql("UPDATE watchtower_private.watchtower_candidates SET state='exhausted'
 await assert.rejects(asRole('watchtower_intake',enqueue([boundedCandidate(202)])));
 assert.equal(await sql('SELECT count(*) FROM watchtower_private.watchtower_candidates;'),'100');
 process.stdout.write('Isolated PostgreSQL acceptance passed: queue/recovery/allowance, restricted capability and credential roles, actual pg driver over fixture TLS, wrong password/CA/hostname/admin rejection, transaction-local role/identity checks, complete HTTP composition and the 100-row pilot bound under concurrency/direct inserts/replay/isolation changes. No hosted connection or provider call.\n');
+
