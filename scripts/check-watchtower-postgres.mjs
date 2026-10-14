@@ -133,6 +133,7 @@ await assert.rejects(asRole('watchtower_worker',"INSERT INTO watchtower_private.
 for(const role of ['anon','authenticated','service_role'])await assert.rejects(asRole(role,'SELECT count(*) FROM watchtower_private.watchtower_candidates;'));
 // Credential holders stay locked in the real template. Test actual role binding in this disposable service only.
 await sql(await readFile(new URL('../sql/watchtower-server-logins.sql',import.meta.url),'utf8'));
+await sql(await readFile(new URL('../sql/watchtower-pilot-intake-bound.sql',import.meta.url),'utf8'));
 assert.equal(await sql("SELECT bool_and(NOT rolcanlogin AND NOT rolinherit AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolbypassrls AND rolconnlimit=2) FROM pg_roles WHERE rolname IN ('watchtower_intake_login','watchtower_worker_login');"),'t');
 assert.equal(await sql("SELECT count(*) FROM pg_auth_members m JOIN pg_roles r ON r.oid=m.roleid JOIN pg_roles l ON l.oid=m.member WHERE (r.rolname,l.rolname) IN (('watchtower_intake','watchtower_intake_login'),('watchtower_worker','watchtower_worker_login')) AND NOT m.admin_option AND NOT m.inherit_option AND m.set_option;"),'2');
 await assert.rejects(sql(await readFile(new URL('../sql/watchtower-server-logins.sql',import.meta.url),'utf8')));
@@ -190,7 +191,7 @@ try{
 // make this independent HTTP scenario claim an unrelated synthetic candidate.
 await sql("UPDATE watchtower_private.watchtower_candidates SET state='exhausted',lease_until=NULL WHERE state='leased';");
 const g='1'.repeat(63)+'9',serverTime=Date.now(),siteId='11111111-1111-4111-8111-111111111111';
-const startup={additionalProviderSpendUsd:0,creditHeadroomChecked:true,automaticPurchasesDisabled:true,providerPauseReviewed:true,storageMigrationApproved:true,storageReady:true,limitsApproved:true,mainnetTransportReviewed:true,credentialProofReviewed:true,otherDatabaseScopeReviewed:true,providerWebhookCostsReviewed:true};
+const startup={additionalProviderSpendUsd:0,creditHeadroomChecked:true,automaticPurchasesDisabled:true,providerPauseReviewed:true,storageMigrationApproved:true,storageReady:true,limitsApproved:true,mainnetTransportReviewed:true,credentialProofReviewed:true,otherDatabaseScopeReviewed:true,providerWebhookCostsReviewed:true,intakeBoundReviewed:true};
 const serverEnv={WATCHTOWER_PILOT_ENABLED:'true',WATCHTOWER_INTAKE_AUTHORIZATION:'Bearer '+'a'.repeat(43),WATCHTOWER_WORKER_AUTHORIZATION:'Bearer '+'b'.repeat(43),
  WATCHTOWER_ACTIVATION:JSON.stringify({schema:1,siteId,sourceSha256:WATCHTOWER_SOURCE_SHA256,startsAtUtc:new Date(serverTime-1000).toISOString(),endsAtUtc:new Date(serverTime+120000).toISOString(),startup}),
  WATCHTOWER_SUPABASE_PROJECT_REF:connection.projectRef,WATCHTOWER_SUPABASE_POOLER_HOST:connection.host,WATCHTOWER_INTAKE_DATABASE_PASSWORD:intakePassword,WATCHTOWER_WORKER_DATABASE_PASSWORD:workerPassword,WATCHTOWER_HELIUS_API_KEY:'synthetic-fixture-provider-key'};
@@ -210,4 +211,24 @@ const completion=await serverWorker(new Request('https://fixture.invalid/api/wat
 assert.equal(completion.status,200);assert.equal((await completion.json()).code,'CORROBORATION_SAVED');assert.equal(serverReads,2);
 assert.equal(await sql('SELECT state FROM watchtower_private.watchtower_candidates WHERE signature='+literal(g)+';'),'processed');
 assert.equal(await sql("SELECT day_requests FROM watchtower_private.watchtower_rpc_allowance WHERE scope='production';"),'6');
-process.stdout.write('Isolated PostgreSQL acceptance passed: queue/recovery/allowance, restricted capability and credential roles, actual pg driver over fixture TLS, wrong password/CA/hostname/admin rejection, transaction-local role/identity checks and complete HTTP intake/worker composition. No hosted connection or provider call.\n');
+// Independent synthetic bound scenario: only the fixture administrator resets
+// its data. All ordinary inserts below run through the real intake capability.
+await sql('TRUNCATE watchtower_private.watchtower_candidates;');
+const alphabet='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+const boundSignature=i=>'1'.repeat(62)+alphabet[Math.floor(i/58)]+alphabet[i%58];
+const boundedCandidate=i=>({signature:boundSignature(i),slot:123,matchedAccounts:[approvedAccount]});
+const isolationSql="BEGIN ISOLATION LEVEL REPEATABLE READ; SET ROLE watchtower_intake; DO $$ DECLARE message text; BEGIN BEGIN INSERT INTO watchtower_private.watchtower_candidates(signature,slot,matched_accounts) VALUES ('"+boundSignature(500)+"',123,'[\""+approvedAccount+"\"]'::jsonb); RAISE EXCEPTION 'Unexpected insert'; EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS message=MESSAGE_TEXT; IF message<>'Pilot intake requires read committed' THEN RAISE; END IF; END; END $$; ROLLBACK;";
+await sql(isolationSql);assert.equal(await sql('SELECT count(*) FROM watchtower_private.watchtower_candidates;'),'0');
+assert.equal(await asRole('watchtower_intake',enqueue(Array.from({length:99},(_,i)=>boundedCandidate(i)))),'99');
+const boundedRace=await Promise.allSettled(Array.from({length:20},(_,i)=>asRole('watchtower_intake',enqueue([boundedCandidate(100+i)]))));
+assert.equal(boundedRace.filter(r=>r.status==='fulfilled').length,1);
+assert.equal(await sql('SELECT count(*) FROM watchtower_private.watchtower_candidates;'),'100');
+assert.equal(await asRole('watchtower_intake',enqueue([boundedCandidate(0)])),'1');
+await assert.rejects(asRole('watchtower_intake',enqueue([{...boundedCandidate(0),slot:124}])));
+await assert.rejects(asRole('watchtower_intake',enqueue([boundedCandidate(0),boundedCandidate(200)])));
+await assert.rejects(asRole('watchtower_intake',"INSERT INTO watchtower_private.watchtower_candidates(signature,slot,matched_accounts) VALUES ('"+boundSignature(201)+"',123,'[\""+approvedAccount+"\"]'::jsonb);"));
+await assert.rejects(asRole('watchtower_intake','DELETE FROM watchtower_private.watchtower_candidates;'));
+await sql("UPDATE watchtower_private.watchtower_candidates SET state='exhausted',lease_until=NULL WHERE signature="+literal(boundSignature(0))+';');
+await assert.rejects(asRole('watchtower_intake',enqueue([boundedCandidate(202)])));
+assert.equal(await sql('SELECT count(*) FROM watchtower_private.watchtower_candidates;'),'100');
+process.stdout.write('Isolated PostgreSQL acceptance passed: queue/recovery/allowance, restricted capability and credential roles, actual pg driver over fixture TLS, wrong password/CA/hostname/admin rejection, transaction-local role/identity checks, complete HTTP composition and the 100-row pilot bound under concurrency/direct inserts/replay/isolation changes. No hosted connection or provider call.\n');

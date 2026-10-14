@@ -23,6 +23,7 @@ on:
       - 'netlify/functions/_shared/watchtower-public-ca.mjs'
       - 'netlify/functions/_shared/watchtower-source-revision.mjs'
       - 'scripts/check-watchtower-server.mjs'
+      - 'sql/watchtower-pilot-intake-bound.sql'
       - 'netlify/functions/_shared/watchtower-database.mjs'
       - 'package.json'
       - 'package-lock.json'

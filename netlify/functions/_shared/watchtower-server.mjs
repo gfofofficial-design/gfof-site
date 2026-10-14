@@ -8,7 +8,7 @@ import {WATCHTOWER_SOURCE_SHA256} from './watchtower-source-revision.mjs';
 
 const PATHS={intake:'/api/watchtower/intake',worker:'/api/watchtower/process-one'};
 const REQUIRED=['creditHeadroomChecked','automaticPurchasesDisabled','providerPauseReviewed','storageMigrationApproved','storageReady','limitsApproved','mainnetTransportReviewed'];
-const SERVER_REQUIRED=['credentialProofReviewed','otherDatabaseScopeReviewed','providerWebhookCostsReviewed'];
+const SERVER_REQUIRED=['credentialProofReviewed','otherDatabaseScopeReviewed','providerWebhookCostsReviewed','intakeBoundReviewed'];
 const digest=value=>createHash('sha256').update(value).digest();
 const bearer=value=>typeof value==='string'&&/^Bearer [-A-Za-z0-9_]{43,128}$/.test(value);
 const reply=(status,code)=>new Response(JSON.stringify({schema:1,code}),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'private, no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer'}});

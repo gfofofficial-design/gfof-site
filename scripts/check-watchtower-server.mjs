@@ -4,7 +4,7 @@ import {WATCHTOWER_SOURCE_SHA256} from '../netlify/functions/_shared/watchtower-
 // Pin the imported runtime, fixed scope, SQL contract and dependency lock.
 // The generated digest module itself is excluded to avoid a circular hash.
 const files=['config/watchtower-pilot.json','lib/watchtower-batch-core.mjs','scripts/check-watchtower-pilot.mjs','scripts/check-watchtower-server.mjs',
- 'package.json','package-lock.json','migrations/20261013_watchtower_candidates.sql','sql/watchtower-runtime-access.sql','sql/watchtower-server-logins.sql',
+ 'package.json','package-lock.json','migrations/20261013_watchtower_candidates.sql','sql/watchtower-runtime-access.sql','sql/watchtower-server-logins.sql','sql/watchtower-pilot-intake-bound.sql',
  'netlify/functions/watchtower-intake.mjs','netlify/functions/watchtower-process-one.mjs',
  ...['watchtower-server','watchtower-public-ca','watchtower-database','watchtower-pilot-runtime','watchtower-helius-intake','watchtower-receipt-sink',
   'watchtower-worker','watchtower-verify-candidate','watchtower-rpc-transport','watchtower-rpc-allowance'].map(name=>'netlify/functions/_shared/'+name+'.mjs')].sort();

@@ -8,7 +8,7 @@ import intakeHandler,{config as intakeConfig} from '../netlify/functions/watchto
 import workerHandler,{config as workerConfig} from '../netlify/functions/watchtower-process-one.mjs';
 const time=Date.parse('2026-10-13T20:00:00.000Z');
 const context={site:{id:'11111111-1111-4111-8111-111111111111'},deploy:{context:'branch-deploy',published:false,id:'1'.repeat(24)}};
-const startup={additionalProviderSpendUsd:0,creditHeadroomChecked:true,automaticPurchasesDisabled:true,providerPauseReviewed:true,storageMigrationApproved:true,storageReady:true,limitsApproved:true,mainnetTransportReviewed:true,credentialProofReviewed:true,otherDatabaseScopeReviewed:true,providerWebhookCostsReviewed:true};
+const startup={additionalProviderSpendUsd:0,creditHeadroomChecked:true,automaticPurchasesDisabled:true,providerPauseReviewed:true,storageMigrationApproved:true,storageReady:true,limitsApproved:true,mainnetTransportReviewed:true,credentialProofReviewed:true,otherDatabaseScopeReviewed:true,providerWebhookCostsReviewed:true,intakeBoundReviewed:true};
 const record=()=>({schema:1,siteId:context.site.id,sourceSha256:WATCHTOWER_SOURCE_SHA256,startsAtUtc:new Date(time-1000).toISOString(),endsAtUtc:new Date(time+60000).toISOString(),startup:{...startup}});
 const environment=()=>({WATCHTOWER_PILOT_ENABLED:'true',WATCHTOWER_INTAKE_AUTHORIZATION:'Bearer '+'a'.repeat(43),WATCHTOWER_WORKER_AUTHORIZATION:'Bearer '+'b'.repeat(43),
  WATCHTOWER_ACTIVATION:JSON.stringify(record()),WATCHTOWER_SUPABASE_PROJECT_REF:'abcdefghijklmnopqrst',WATCHTOWER_SUPABASE_POOLER_HOST:'aws-0-us-east-2.pooler.supabase.com',
@@ -34,6 +34,7 @@ test('deployment, source version, prerequisites and absolute time gates refuse b
  const variants=[{record:{sourceSha256:'0'.repeat(64)}},{record:{siteId:'22222222-2222-4222-8222-222222222222'}},
   {record:{endsAtUtc:new Date(time).toISOString()}},{record:{startsAtUtc:new Date(time+1000).toISOString()}},
   {record:{endsAtUtc:new Date(time+600000).toISOString()}},{record:{startup:{...startup,otherDatabaseScopeReviewed:false}}},
+  {record:{startup:{...startup,intakeBoundReviewed:false}}},
   {record:{startup:{...startup,additionalProviderSpendUsd:25}}},{context:{...context,deploy:{...context.deploy,context:'production'}}},
   {context:{...context,deploy:{...context.deploy,published:true}}},{context:{}},{text:'invalid json'},{env:{WATCHTOWER_WORKER_AUTHORIZATION:'Bearer '+'a'.repeat(43)}}];
  for(const changed of variants){const env={...environment(),...changed.env};env.WATCHTOWER_ACTIVATION=changed.text??JSON.stringify({...record(),...changed.record});
