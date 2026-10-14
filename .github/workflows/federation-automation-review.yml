@@ -10,6 +10,12 @@ on:
       - 'automation-lab.html'
       - 'assets/federation/fed-automation-lab.*'
       - 'scripts/check-federation-pages.mjs'
+      - 'scripts/federation-operations-brief.mjs'
+      - 'scripts/federation-operations-report.mjs'
+      - 'tests/operations-report.test.mjs'
+      - 'tests/operations-brief.test.mjs'
+      - 'tests/release-evidence.test.mjs'
+      - 'scripts/check-release-evidence.mjs'
       - 'tests/voss-*.test.mjs'
       - 'tests/federation-*.test.mjs'
       - '.github/workflows/federation-automation-review.yml'
@@ -25,4 +31,4 @@ jobs:
         with:
           node-version: '24'
       - name: Check synthetic fixtures without service credentials
-        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs
+        run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/operations-brief.test.mjs tests/release-evidence.test.mjs tests/operations-report.test.mjs
