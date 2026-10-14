@@ -22,3 +22,13 @@ The isolated PostgreSQL fixture runs this report before its synthetic login acti
 6. Pause and verify the exact upstream webhook, relock the two credential roles, close/remove private activation settings and clean up exact trial deployments as authorized. Do not assume changing environment settings changes old deploys. Re-run the read-only report and retain dated acceptance evidence.
 
 No schedule, public signup, notification, provider call, secret installation, login activation, deletion or production merge is added by this readiness update. Existing account/member configuration remains separate. Project identifiers and private account evidence are not exported in this document.
+
+## Proposed trial retention — owner decision pending
+
+For the initial finite trial, retain candidate receipts and their projected RPC corroboration for seven days after the recorded activation window ends, solely for verification and failure investigation. Do not automatically delete, archive or reset anything as part of this proposal. After that period, present an exact owner-reviewed cleanup set; unresolved or leased candidates must be investigated before any deletion. Keep the trial's sanitized acceptance record and preserve the daily/monthly allowance counters through their periods. Future continuous-monitoring retention requires its own design. This proposal does not authorize deletion or alter existing data.
+
+## Work-computer credential placement
+
+The reviewed source expects private settings scoped to Functions and the exact review branch. The currently exposed Netlify connector can select a branch context but cannot name the exact branch for a value; it also cannot change an existing variable's secret flag/scopes through upsert. Do not compensate by placing credentials in production, all contexts, or every branch deployment. Use the owner's signed-in Netlify UI, or the already prepared private dev workflow, to inspect the key metadata and select the exact branch `review/watchtower-event-boundary-20261013` before installing any value. No unrelated environment variables need to be exported.
+
+Keep `WATCHTOWER_PILOT_ENABLED` closed during setup. Database passwords, intake/worker headers and the reviewed provider key belong in secret-marked server storage, never this document, screenshots or chat. Do not replace existing values without checking their purpose and custody. The public tenant/pooler configuration and the private activation record remain bound to the reviewed target. The activation record's absolute start/end window is selected when an operator is ready to observe the test, not hours beforehand. Installing settings alone does not activate roles, update old deployments, prove TLS or stop upstream billing.
