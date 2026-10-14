@@ -239,5 +239,14 @@ await assert.rejects(asRole('watchtower_intake','DELETE FROM watchtower_private.
 await sql("UPDATE watchtower_private.watchtower_candidates SET state='exhausted',lease_until=NULL WHERE signature="+literal(boundSignature(0))+';');
 await assert.rejects(asRole('watchtower_intake',enqueue([boundedCandidate(202)])));
 assert.equal(await sql('SELECT count(*) FROM watchtower_private.watchtower_candidates;'),'100');
+// Relock only disposable credentials; no row, counter or password mutation.
+const relockSql=await readFile(new URL('../sql/watchtower-relock.sql',import.meta.url),'utf8');
+for(let attempt=0;attempt<2;attempt++){
+ const closure=JSON.parse(await sql(relockSql));
+ assert.equal(closure.schema,1);assert.equal(closure.status,'logins_locked_no_visible_database_sessions');
+ assert.equal(closure.loginsLocked,true);assert.equal(closure.visibleDatabaseSessions,0);
+ assert.equal(closure.upstreamPauseProven,false);assert.equal(closure.oldDeploymentCleanupProven,false);
+}
+assert.equal(await sql('SELECT count(*) FROM watchtower_private.watchtower_candidates;'),'100');
 process.stdout.write('Isolated PostgreSQL acceptance passed: queue/recovery/allowance, restricted capability and credential roles, actual pg driver over fixture TLS, wrong password/CA/hostname/admin rejection, transaction-local role/identity checks, complete HTTP composition and the 100-row pilot bound under concurrency/direct inserts/replay/isolation changes. No hosted connection or provider call.\n');
 

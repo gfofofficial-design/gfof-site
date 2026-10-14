@@ -5,6 +5,7 @@ on:
       - 'migrations/20261013_watchtower_candidates.sql'
       - 'sql/watchtower-runtime-access.sql'
       - 'sql/watchtower-readiness.sql'
+      - 'sql/watchtower-relock.sql'
       - 'sql/watchtower-server-logins.sql'
       - 'sql/watchtower-pilot-intake-bound.sql'
       - 'netlify/functions/_shared/watchtower-database.mjs'
