@@ -15,3 +15,11 @@ Expected commits must be taken from independently reviewed owner release approva
 The core does not authenticate either supplied approvals or deploy snapshots. Connector provenance and an independently recorded approval remain operator responsibilities. Metadata equality does not prove served-file parity, security or sign-in. A new approved release requires a new expected-commit record; there is deliberately no self-updating baseline in code.
 
 Next stages: authenticated deployment evidence; durable incident deduplication; owner-approved cadence and notification destination; then optional AI-drafted explanations bound to the evidence. AI must not turn a timeout into an invented root cause, or homepage availability into a security verdict. Watchtower follows this operating foundation with separately reviewed live-source authentication, finality, deduplication and coverage controls.
+
+## Combined manual report
+
+Run `node scripts/federation-operations-report.mjs < reviewed-public-evidence.json` to validate bounded UTF-8 release evidence before making one fixed public-page check, then print one dated report. Supply the same independently reviewed expected revisions and fresh deployment snapshot accepted by the release-evidence CLI. The runner captures the input so callers cannot replace the approval baseline while the page check is running. Freshness is evaluated again at completion.
+
+The combined investigation list places availability tasks before release/navigation review. Missing or stale evidence remains a review task. `checked_scope_ok` covers only the checked pages/links and Command/Dossier publication metadata; it does not approve Safe Browsing, sign-in, monitoring or financial features. The three-homepage checker makes ordinary public GET requests only. There are no provider RPCs, credentials, cloud mutations, repairs, scheduled calls or messages. Exit status is 0 for checked scope, 1 for review-needed and 2 for invalid/unavailable evidence. Raw input extras and diagnostic errors are not printed.
+
+Six synthetic composition/CLI tests cover invalid preflight, combined task priority, post-check freshness, malformed/oversized input, omitted raw fields and immutable release expectations. Runtime behavior remains manual; the draft is not a live autonomous operations agent.
