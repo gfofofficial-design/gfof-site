@@ -30,7 +30,7 @@ export function createHeliusIntake({enabled=false,authorizationValue,watchedAcco
   Array.isArray(watchedAccounts)&&watchedAccounts.length>=1&&watchedAccounts.length<=20&&
   watchedAccounts.every(account=>base58Bytes(account,32))&&new Set(watchedAccounts).size===watchedAccounts.length&&typeof acceptReceipt==='function';
  const watched=new Set(configured?watchedAccounts:[]);const expected=configured?hash(authorizationValue):null;
- return async request=>{
+ return async(request,{signal=request.signal}={})=>{
   if(!enabled||!configured)return response(503,'INTAKE_DISABLED');
   if(request.method!=='POST')return response(405,'METHOD_NOT_ALLOWED');
   const auth=request.headers.get('authorization');
@@ -38,7 +38,10 @@ export function createHeliusIntake({enabled=false,authorizationValue,watchedAcco
   if(!/^application\/json(?:;|$)/i.test(request.headers.get('content-type')||'')||request.headers.has('content-encoding'))return response(415,'UNSUPPORTED_CONTENT');
   const length=request.headers.get('content-length');if(length!==null&&(!/^\d+$/.test(length)||Number(length)>262144))return response(413,'PAYLOAD_LIMIT');
   if(!request.body)return response(400,'INVALID_PAYLOAD');
+  if(!(signal instanceof AbortSignal)||signal.aborted)return response(503,'RECEIPT_NOT_ACCEPTED');
   const reader=request.body.getReader();const controller=new AbortController();let timer;
+  const abort=()=>controller.abort();signal.addEventListener('abort',abort,{once:true});
+  const stopped=new Promise((_,reject)=>controller.signal.addEventListener('abort',()=>reject(Error('deadline')),{once:true}));
   try{
    const work=(async()=>{
     const chunks=[];let bytes=0;
@@ -52,8 +55,9 @@ export function createHeliusIntake({enabled=false,authorizationValue,watchedAcco
     if(controller.signal.aborted||accepted!==true)throw Error('sink');
     return response(200,'RECEIPT_ACCEPTED');
    })();
-   return await Promise.race([work,new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('deadline'));},timeoutMs);})]);
+   timer=setTimeout(abort,timeoutMs);
+   return await Promise.race([work,stopped]);
   }catch{return response(503,'RECEIPT_NOT_ACCEPTED');}
-  finally{clearTimeout(timer);controller.abort();try{Promise.resolve(reader.cancel()).catch(()=>{});}catch{}}
+  finally{clearTimeout(timer);signal.removeEventListener('abort',abort);controller.abort();try{Promise.resolve(reader.cancel()).catch(()=>{});}catch{}}
  };
 }

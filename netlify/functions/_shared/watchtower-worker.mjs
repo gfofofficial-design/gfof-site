@@ -22,10 +22,13 @@ function project(value,candidate){
 }
 export function createWatchtowerWorker({enabled=false,query,verify,timeoutMs=10000}={}){
  if(typeof enabled!=='boolean'||!Number.isInteger(timeoutMs)||timeoutMs<1||timeoutMs>10000)throw Error('Invalid worker configuration');
- return async()=>{
+ return async({signal}={})=>{
   const outcome=reason=>({schema:1,mode:'single_candidate_worker',reason,emitsFinding:false});
   if(!enabled||typeof query!=='function'||typeof verify!=='function')return outcome('worker_disabled');
+  if((signal!==undefined&&!(signal instanceof AbortSignal))||signal?.aborted)return outcome('worker_failed');
   const controller=new AbortController();let timer;
+  const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});
+  const stopped=new Promise((_,reject)=>controller.signal.addEventListener('abort',()=>reject(Error('deadline')),{once:true}));
   try{
    const work=(async()=>{
     const claim=await query('SELECT * FROM watchtower_private.claim_watchtower_candidate()',[],{signal:controller.signal});
@@ -42,7 +45,8 @@ export function createWatchtowerWorker({enabled=false,query,verify,timeoutMs=100
     if(controller.signal.aborted)throw Error('deadline');
     return outcome(result.rowCount===1&&result.rows[0]?.finished===true?'corroboration_saved':'lease_or_completion_not_accepted');
    })();
-   return await Promise.race([work,new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('deadline'));},timeoutMs);})]);
-  }catch{return outcome('worker_failed');}finally{clearTimeout(timer);controller.abort();}
+   timer=setTimeout(abort,timeoutMs);
+   return await Promise.race([work,stopped]);
+  }catch{return outcome('worker_failed');}finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);controller.abort();}
  };
 }

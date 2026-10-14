@@ -12,14 +12,17 @@ export function createCandidateVerifier({enabled=false,watchedAccounts,rpc,reser
  const configured=Array.isArray(watchedAccounts)&&watchedAccounts.length>=1&&watchedAccounts.length<=20&&
   new Set(watchedAccounts).size===watchedAccounts.length&&watchedAccounts.every(a=>base58Bytes(a,32))&&typeof rpc==='function'&&typeof reserveAllowance==='function';
  const watched=new Set(configured?watchedAccounts:[]);
- return async candidate=>{
+ return async(candidate,{signal}={})=>{
   const unavailable=reason=>({schema:1,method:'verification_unavailable',reason,emitsFinding:false});
   if(!enabled||!configured)return unavailable('verifier_disabled');
+  if((signal!==undefined&&!(signal instanceof AbortSignal))||signal?.aborted)return unavailable('verification_failed');
   if(!candidate||Object.keys(candidate).sort().join(',')!=='matchedAccounts,signature,slot'||!base58Bytes(candidate.signature,64)||!validSlot(candidate.slot)||
    !Array.isArray(candidate.matchedAccounts)||candidate.matchedAccounts.length<1||candidate.matchedAccounts.length>20||
    new Set(candidate.matchedAccounts).size!==candidate.matchedAccounts.length||!candidate.matchedAccounts.every(a=>watched.has(a)))return unavailable('invalid_candidate');
   const signature=candidate.signature,slot=candidate.slot,accounts=[...candidate.matchedAccounts].sort();
   const controller=new AbortController();let timer;
+  const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});
+  const stopped=new Promise((_,reject)=>controller.signal.addEventListener('abort',()=>reject(Error('deadline')),{once:true}));
   const read=async(id,method,params)=>{
    if(controller.signal.aborted)throw Error('deadline');
    if(await reserveAllowance({purpose:'watchtower_candidate_verification',method,maxRequests:1,maxResponseBytes:1048576},{signal:controller.signal})!==true||controller.signal.aborted)throw Error('allowance');
@@ -53,7 +56,8 @@ export function createCandidateVerifier({enabled=false,watchedAccounts,rpc,reser
      sourceAuthenticity:'rpc_response_not_cryptographically_verified',finality:'finalized_requested_from_reviewed_rpc',
      limitations:['Transaction and account reads are separate observations.','Current account state is not necessarily the state immediately after this transaction.','No transfer, sale, owner identity, authority change, lock effect or safety verdict is inferred.','Reviewed mainnet RPC provenance and authenticated transport are caller requirements.']};
    })();
-   return await Promise.race([work,new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('deadline'));},timeoutMs);})]);
-  }catch{return unavailable('verification_failed');}finally{clearTimeout(timer);controller.abort();}
+   timer=setTimeout(abort,timeoutMs);
+   return await Promise.race([work,stopped]);
+  }catch{return unavailable('verification_failed');}finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);controller.abort();}
  };
 }

@@ -9,6 +9,8 @@ import {createCandidateVerifier} from '../netlify/functions/_shared/watchtower-v
 import {createWatchtowerRpcTransport} from '../netlify/functions/_shared/watchtower-rpc-transport.mjs';
 import {createWatchtowerWorker} from '../netlify/functions/_shared/watchtower-worker.mjs';
 import {createWatchtowerDatabaseBindings} from '../netlify/functions/_shared/watchtower-database.mjs';
+import {createWatchtowerServerHandler} from '../netlify/functions/_shared/watchtower-server.mjs';
+import {WATCHTOWER_SOURCE_SHA256} from '../netlify/functions/_shared/watchtower-source-revision.mjs';
 import {Pool} from 'pg';
 import {createHash} from 'node:crypto';
 import {rootCertificates} from 'node:tls';
@@ -181,4 +183,31 @@ try{
  await assert.rejects(bindings.intakeQuery('SELECT * FROM watchtower_private.claim_watchtower_candidate()',[]));
  const claimed=await bindings.workerQuery('SELECT * FROM watchtower_private.claim_watchtower_candidate()',[]);assert.equal(claimed.rows[0].signature,f);
 }finally{await bindings.close();}
-process.stdout.write('Isolated PostgreSQL acceptance passed: queue/recovery/allowance, restricted capability and credential roles, actual pg driver over fixture TLS, wrong password/CA/hostname/admin rejection and transaction-local role/identity checks. No hosted connection or provider call.\n');
+// Complete HTTP composition over the same disposable TLS service. The factory
+// substitutes only its local fixture CA after the real server config validates.
+// Requests and context are synthetic; no cloud route, secret or provider exists.
+// Retire unfinished claims from earlier denial fixtures so their lease age cannot
+// make this independent HTTP scenario claim an unrelated synthetic candidate.
+await sql("UPDATE watchtower_private.watchtower_candidates SET state='exhausted',lease_until=NULL WHERE state='leased';");
+const g='1'.repeat(63)+'9',serverTime=Date.now(),siteId='11111111-1111-4111-8111-111111111111';
+const startup={additionalProviderSpendUsd:0,creditHeadroomChecked:true,automaticPurchasesDisabled:true,providerPauseReviewed:true,storageMigrationApproved:true,storageReady:true,limitsApproved:true,mainnetTransportReviewed:true,credentialProofReviewed:true,otherDatabaseScopeReviewed:true,providerWebhookCostsReviewed:true};
+const serverEnv={WATCHTOWER_PILOT_ENABLED:'true',WATCHTOWER_INTAKE_AUTHORIZATION:'Bearer '+'a'.repeat(43),WATCHTOWER_WORKER_AUTHORIZATION:'Bearer '+'b'.repeat(43),
+ WATCHTOWER_ACTIVATION:JSON.stringify({schema:1,siteId,sourceSha256:WATCHTOWER_SOURCE_SHA256,startsAtUtc:new Date(serverTime-1000).toISOString(),endsAtUtc:new Date(serverTime+120000).toISOString(),startup}),
+ WATCHTOWER_SUPABASE_PROJECT_REF:connection.projectRef,WATCHTOWER_SUPABASE_POOLER_HOST:connection.host,WATCHTOWER_INTAKE_DATABASE_PASSWORD:intakePassword,WATCHTOWER_WORKER_DATABASE_PASSWORD:workerPassword,WATCHTOWER_HELIUS_API_KEY:'synthetic-fixture-provider-key'};
+const serverContext={site:{id:siteId},deploy:{context:'branch-deploy',published:false,id:'1'.repeat(24)}};
+let serverReads=0;
+const serverOptions={readEnv:name=>serverEnv[name],bindingsFactory:({connection:claimed})=>{
+ assert.equal(claimed.projectRef,connection.projectRef);assert.equal(claimed.host,connection.host);
+ return createWatchtowerDatabaseBindings({enabled:true,Pool:LocalFixturePool,connection:{...claimed,ca:connection.ca,caSha256:connection.caSha256}});
+},fetcher:async(_,options)=>{serverReads++;const request=JSON.parse(options.body);
+ return new Response(JSON.stringify({jsonrpc:'2.0',id:request.id,result:request.id===1?
+  {slot:123,version:'legacy',meta:{err:null},transaction:{signatures:[g],message:{accountKeys:[approvedAccount]}}}:{context:{slot:125},value:[null]}}),{headers:{'content-type':'application/json'}});
+}};
+const serverIntake=createWatchtowerServerHandler({kind:'intake',...serverOptions}),serverWorker=createWatchtowerServerHandler({kind:'worker',...serverOptions});
+const receipt=await serverIntake(new Request('https://fixture.invalid/api/watchtower/intake',{method:'POST',headers:{authorization:serverEnv.WATCHTOWER_INTAKE_AUTHORIZATION,'content-type':'application/json'},body:JSON.stringify([{signature:g,slot:123,accountData:[{account:approvedAccount}]}])}),serverContext);
+assert.equal(receipt.status,200);assert.equal((await receipt.json()).code,'RECEIPT_ACCEPTED');
+const completion=await serverWorker(new Request('https://fixture.invalid/api/watchtower/process-one',{method:'POST',headers:{authorization:serverEnv.WATCHTOWER_WORKER_AUTHORIZATION}}),serverContext);
+assert.equal(completion.status,200);assert.equal((await completion.json()).code,'CORROBORATION_SAVED');assert.equal(serverReads,2);
+assert.equal(await sql('SELECT state FROM watchtower_private.watchtower_candidates WHERE signature='+literal(g)+';'),'processed');
+assert.equal(await sql("SELECT day_requests FROM watchtower_private.watchtower_rpc_allowance WHERE scope='production';"),'6');
+process.stdout.write('Isolated PostgreSQL acceptance passed: queue/recovery/allowance, restricted capability and credential roles, actual pg driver over fixture TLS, wrong password/CA/hostname/admin rejection, transaction-local role/identity checks and complete HTTP intake/worker composition. No hosted connection or provider call.\n');
