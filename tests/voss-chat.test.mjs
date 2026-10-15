@@ -54,3 +54,26 @@ test('reviewed answers still reject off-origin requests', async () => {
   assert.equal(status, 403);
   assert.equal(body.code, 'E_ORIGIN');
 });
+
+test('staking answer uses the reviewed six-month 8 percent total-term proposal', async () => {
+ const {body}=await ask('What are the staking targets for six months?');
+ assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/8% for six months/);
+ assert.match(body.reply,/not APY or funded offers/);assert.doesNotMatch(body.reply,/6%/);
+});
+test('dashboard answer points to the released route and keeps public accounts closed',async()=>{
+ const {body}=await ask('Where is the Command Deck dashboard?');
+ assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/\/command-deck/);
+ assert.match(body.reply,/unreleased build/);assert.doesNotMatch(body.reply,/deploy-preview/);
+});
+test('Lens answer describes the live free guide and keeps model selection disabled',async()=>{
+ const {body}=await ask('How does the Dossier Lens report guide work?');
+ assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/https:\/\/dossiertrack.co\/token-structure-preview.html/);
+ assert.match(body.reply,/without an AI model/);assert.match(body.reply,/prepared but disabled/);
+ assert.match(body.reply,/not proof of token safety/);assert.match(body.reply,/paid tiers remain closed/);
+});
+test('lock answer separates dated current-mint schedule from historical mint',async()=>{
+ const {body}=await ask('What is locked in Streamflow?');
+ assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/three current-mint/);
+ assert.match(body.reply,/100M/);assert.match(body.reply,/not a current balance guarantee/);
+ assert.match(body.reply,/separate historical lock record/);
+});
