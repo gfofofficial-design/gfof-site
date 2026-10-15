@@ -1,3 +1,73 @@
+# Read-only Command Deck — release and operating record
+
+Current status: **LIVE — read-only Command Deck released October 12, 2026 (Central).**
+
+Live dashboard: https://galacticfederation.co/command-deck
+
+## Current checkpoint — October 15, 2026
+
+The public read-only dashboard is released. Account sign-in, public registration, cloud mission synchronization, live staking and public lending are not established by that release.
+
+### Published source and public routes
+
+The owner-approved tools-first homepage release is [PR #114](https://github.com/gfofofficial-design/gfof-site/pull/114), merged as `7cd97e7106a69fa6c91105c3f4ffd20ee75389d9`. That revision was still the published Command production release during the October 15 morning check. Dossier's observed production revision matched its separately approved `c7e17eba5bcf4d48f4df8e2cc1f154d472b84864`.
+
+A finite public-route check on October 15 at approximately 11:05 UTC (06:05 Central) observed:
+
+| Public route | Result | Response protections |
+| --- | --- | --- |
+| `/command-deck` | HTTP 200 | Private/no-store, no-referrer, nosniff, frame denial, restrictive CSP |
+| `/command-deck.html` | HTTP 200 | Same protections |
+| `/command-deck-privacy.html` | HTTP 200 | Same protections |
+| `/account` | HTTP 404 | No production account entry released |
+
+The manual Operations Assistant also passed its three-homepage/dashboard-link scope and the supplied approved Command/Dossier revision comparison on October 15. These are page and publication checks. No wallet lookup, price request, lock RPC, OAuth flow, provider configuration or credential action was performed. They do not establish data-service health, quota exhaustion, security clearance or browser sign-in acceptance.
+
+### Unreleased account integration
+
+[PR #99](https://github.com/gfofofficial-design/gfof-site/pull/99) remains a draft at `d72606053c282f23cd133bdcdad05e3093619bd1`. It now includes the released homepage, mission hints, Voss briefing and Operations Assistant. The homepage keeps the existing Google verification tag and private-pilot status without adding account navigation.
+
+All seven automated test jobs, plus header and redirect checks, passed at that head. The boundary suite reports 160 passing tests; the automation suite reports 47. Isolated signup/auth/recovery fixtures passed. The preview serves the reviewed source. None of these results is a real Google round trip or approval to expose accounts.
+
+The latest recorded owner-observed Google warning, October 14, listed preview `/account` for deceptive pages. No subsequent clearance evidence is recorded here. A confirmed compromise or confirmed false positive has not been established. Use the [account acceptance checklist](federation-google-release-acceptance-20261013.md), including its warning-clearance gate, before browser acceptance or a separate account release decision.
+
+The following October 13 evidence retains its original dates and scope. Its recorded route allowances are not a fresh provider-counter, billing or hosting-cost check.
+
+## Dated release evidence — October 13, 2026
+
+The release is recorded in [PR #104](https://github.com/gfofofficial-design/gfof-site/pull/104), approved at head `e135da24ae9d46b650a568757f96dbffe89e8f6f` and merged as `06ec768379e650eb79417c7756a98afb72d9080b` on October 12 Central. That PR records finite preview and production acceptance, not full hosted quota exhaustion or a complete accessibility audit.
+
+[PR #106](https://github.com/gfofofficial-design/gfof-site/pull/106) subsequently merged the staking/intelligence paragraph fixes and legacy-app zoom/cache changes as `23b419903e9d9722608d261cc5cbc5d1bf411ad7`. This is the public main revision checked on October 13.
+
+[Dossier PR #63](https://github.com/gfofofficial-design/dossier-site/pull/63) and [FCC PR #6](https://github.com/gfofofficial-design/fcc-site/pull/6) are merged. Fresh public-page reads confirmed three Command Deck links on the Federation homepage, three on Dossier and two on FCC, all targeting the canonical dashboard. A merge alone is not proof of publishing; these served-page observations supply the link evidence.
+
+### October 13 public-page check
+
+Both `/command-deck` and `/command-deck.html`, and the dashboard privacy page, returned HTTP 200. Each returned private/no-store caching, no-referrer, nosniff, frame denial and a CSP header. The production `/account` route returned 404. No wallet, pricing, lock RPC, OAuth or signature request was made by this check; page availability is separate from data-service health.
+
+### Released scope and operating limits
+
+The public dashboard provides manual public-address reads, exact returned quantities, available reference values, current GFOF lock evidence and First Contact missions. Clear removes page wallet results and visit history. Proposed staking comparisons and fictional ranking examples remain labeled. No account registration, wallet signing, deposit, claim or public lending is included in this release.
+
+The released wallet path requires a separate shared reservation before RPC. Its configured counter allows 500 wallet reservations per UTC day, with at least one second between them. Each permitted lookup can attempt up to three RPC calls, with no application retries or refunded reservations: at most 1,500 attempted calls per day through that configured route. Preview and production share this allowance. It is not a cap on every provider account, other route or hosting cost.
+
+Prices have their own shared reservation counter: 24 per rolling minute, 3,000 per UTC day and at least 2.5 seconds apart. Pricing can be unavailable while confirmed quantities remain visible. Missing configuration and service failure must retain the unavailable behavior. The per-visitor six-request/60-second rule is also exported by the modern function; its documented enforcement delay prevents treating it as an immediate hard ceiling.
+
+### Remaining account and operating work
+
+- [PR #99](https://github.com/gfofofficial-design/gfof-site/pull/99) remains draft and unmerged. Its integration with the released dashboard has automated evidence, but a new Google round trip and affected normal-path acceptance remain distinct checks. Public-account activation and provider/client replacement retain separate release decisions.
+- The managed signup-hook timeout clarification and verified account deletion/recovery operations remain account gates. The read-only release does not close them.
+- Verify wallet/pricing failure coverage, current response ownership and operating allowances. The released PR does not claim automated wallet/pricing monitoring, measured provider-credit parity or full hosted daily exhaustion.
+- Real screen-reader acceptance, physical-device checks for newly changed flows and complete WCAG conformance remain distinct from semantic markup, source tests and browser emulation. Accessibility remains the first design priority recorded during the release work.
+- Regenerate any corrective Git change against the actual release and current main, preserving later unrelated changes. An old fixture or hosting snapshot is not a rehearsed current recovery. Further production publication retains its exact-scope decision.
+
+## Historical review evidence
+
+The collapsed material below preserves the October 9–12 pre-release record. Its HOLD, draft and pending statements are dated historical evidence; they do not override the current live status above. Later operating claims require their own evidence.
+
+<details>
+<summary>October 9–12 pre-release review history</summary>
+
 # Read-only Command Deck release run sheet — October 9, 2026
 
 Status: **HOLD — review candidate, not production release approval.**
@@ -367,3 +437,5 @@ The three-request service-spacing proof and two-request wallet/price plus treasu
 acceptance packet are still unrun at this revision. No runtime daily-cap acceptance,
 hosted exhaustion, monetary spend cap or production protection follows from settings
 alone. Keep the PR draft until the finite packet and final production review pass.
+
+</details>
