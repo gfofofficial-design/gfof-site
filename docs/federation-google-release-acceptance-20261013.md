@@ -33,7 +33,7 @@ Use existing browser acceptance procedures; do not fabricate successful-code rep
 
 ## Gate 2 — public account operating readiness
 
-The existing [account operations plan](federation-account-data-operations.md), [readiness record](federation-account-readiness.md) and [security release gates](federation-security-release-gates.md) remain the detailed contracts. Record unresolved items rather than treating earlier technical drills as completed customer support.
+The proposed [account operations plan](https://github.com/gfofofficial-design/gfof-site/blob/d72606053c282f23cd133bdcdad05e3093619bd1/docs/federation-account-data-operations.md), [readiness record](https://github.com/gfofofficial-design/gfof-site/blob/d72606053c282f23cd133bdcdad05e3093619bd1/docs/federation-account-readiness.md) and [security release gates](https://github.com/gfofofficial-design/gfof-site/blob/d72606053c282f23cd133bdcdad05e3093619bd1/docs/federation-security-release-gates.md) are draft account contracts in PR #99, not adopted production procedures. Record unresolved items rather than treating earlier technical drills as completed customer support.
 
 | Required decision or proof | Acceptance condition |
 | --- | --- |
