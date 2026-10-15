@@ -4,7 +4,36 @@ Current status: **LIVE — read-only Command Deck released October 12, 2026 (Cen
 
 Live dashboard: https://galacticfederation.co/command-deck
 
-## Current release status — October 13, 2026
+## Current checkpoint — October 15, 2026
+
+The public read-only dashboard is released. Account sign-in, public registration, cloud mission synchronization, live staking and public lending are not established by that release.
+
+### Published source and public routes
+
+The owner-approved tools-first homepage release is [PR #114](https://github.com/gfofofficial-design/gfof-site/pull/114), merged as `7cd97e7106a69fa6c91105c3f4ffd20ee75389d9`. That revision was still the published Command production release during the October 15 morning check. Dossier's observed production revision matched its separately approved `c7e17eba5bcf4d48f4df8e2cc1f154d472b84864`.
+
+A finite public-route check on October 15 at approximately 11:05 UTC (06:05 Central) observed:
+
+| Public route | Result | Response protections |
+| --- | --- | --- |
+| `/command-deck` | HTTP 200 | Private/no-store, no-referrer, nosniff, frame denial, restrictive CSP |
+| `/command-deck.html` | HTTP 200 | Same protections |
+| `/command-deck-privacy.html` | HTTP 200 | Same protections |
+| `/account` | HTTP 404 | No production account entry released |
+
+The manual Operations Assistant also passed its three-homepage/dashboard-link scope and the supplied approved Command/Dossier revision comparison on October 15. These are page and publication checks. No wallet lookup, price request, lock RPC, OAuth flow, provider configuration or credential action was performed. They do not establish data-service health, quota exhaustion, security clearance or browser sign-in acceptance.
+
+### Unreleased account integration
+
+[PR #99](https://github.com/gfofofficial-design/gfof-site/pull/99) remains a draft at `d72606053c282f23cd133bdcdad05e3093619bd1`. It now includes the released homepage, mission hints, Voss briefing and Operations Assistant. The homepage keeps the existing Google verification tag and private-pilot status without adding account navigation.
+
+All seven automated test jobs, plus header and redirect checks, passed at that head. The boundary suite reports 160 passing tests; the automation suite reports 47. Isolated signup/auth/recovery fixtures passed. The preview serves the reviewed source. None of these results is a real Google round trip or approval to expose accounts.
+
+The latest recorded owner-observed Google warning, October 14, listed preview `/account` for deceptive pages. No subsequent clearance evidence is recorded here. A confirmed compromise or confirmed false positive has not been established. Use the [account acceptance checklist](federation-google-release-acceptance-20261013.md), including its warning-clearance gate, before browser acceptance or a separate account release decision.
+
+The following October 13 evidence retains its original dates and scope. Its recorded route allowances are not a fresh provider-counter, billing or hosting-cost check.
+
+## Dated release evidence — October 13, 2026
 
 The release is recorded in [PR #104](https://github.com/gfofofficial-design/gfof-site/pull/104), approved at head `e135da24ae9d46b650a568757f96dbffe89e8f6f` and merged as `06ec768379e650eb79417c7756a98afb72d9080b` on October 12 Central. That PR records finite preview and production acceptance, not full hosted quota exhaustion or a complete accessibility audit.
 

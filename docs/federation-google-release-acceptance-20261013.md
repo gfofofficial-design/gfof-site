@@ -1,12 +1,20 @@
 # Google account release acceptance — proposed operator checklist
 
-Prepared October 13, 2026. This is a review checklist, not release authorization or a completed acceptance record. The public read-only Command Deck and the draft account release have separate scopes. Keep account registration closed until every applicable gate has evidence and the owner approves the exact release.
+Prepared October 13; updated October 15, 2026. This is a review checklist, not release authorization or a completed acceptance record. The public read-only Command Deck and the draft account release have separate scopes. Keep account registration closed until every applicable gate has evidence and the owner approves the exact release.
+
+## Gate 0 — Google warning and exact candidate
+
+Latest recorded owner observation, October 14: Google listed the account preview `/account` for deceptive pages. No later clearance evidence is recorded in this checklist. The cause has not been established; expected page rendering and passing CI do not prove that the warning was incorrect or removed.
+
+Keep browser/phone sign-in, callback replay and authenticated acceptance **NOT RUN** while this gate remains unresolved. Do not bypass a browser warning or move the same flow to another hostname to evade it. Review current Safe Browsing/Search Console evidence for the exact destination before authorizing browser acceptance; URL indexing status is a different check.
+
+The October 15 source candidate is PR #99 head `d72606053c282f23cd133bdcdad05e3093619bd1`, synchronized with released main `7cd97e7106a69fa6c91105c3f4ffd20ee75389d9`. Automated and isolated-fixture checks passed at that head; real Google and physical-phone acceptance have not been established. Re-read the current head and deploy before later acceptance.
 
 ## Gate 1 — existing-owner Google acceptance
 
-Before any credential change, retain the currently working provider configuration privately and identify the exact rollback pair. Never place credentials, tokens, user identifiers or browser cookies in this repository.
+After Gate 0 is resolved, use the existing provider configuration unchanged for the separately authorized owner test. Keep new-user registration closed and Apple disabled. This checklist authorizes no credential creation, export, replacement or rotation, and no provider-setting change. If a configuration change is necessary, prepare its exact scope and recovery procedure for a separate decision.
 
-A separately approved operator may connect the dedicated production Google client to the reviewed identity project. Keep new-user registration closed, Apple disabled and the application callback limited to the reviewed preview during this step. Google returns to the identity project's /auth/v1/callback; the application callback is a different endpoint.
+Never place credentials, tokens, user identifiers or browser cookies in this repository. Google returns to the identity project's /auth/v1/callback; the application callback is a different endpoint. Verify the existing intended destinations before testing.
 
 | Check | Pass condition | Evidence to record |
 | --- | --- | --- |
@@ -50,10 +58,10 @@ Update navigation on Federation and companion sites only after the account desti
 
 ## Stop and rollback rules
 
-- Failed existing-owner login: keep signup closed and restore only the specifically reviewed working provider configuration. Do not reset the owner account or delete users.
-- Failed production account acceptance: close new signup first and disable the production account entry using the reviewed rollback; preserve the working read-only Command Deck.
+- Failed existing-owner login: stop acceptance, keep unreleased signup closed, and record a sanitized outcome. Investigate before proposing an exact recovery action. This checklist does not authorize provider changes, owner-account resets or user deletion.
+- Failed production account acceptance: stop acceptance, preserve the working read-only Command Deck and follow the exact recovery scope approved for that release. Generic checklist wording is not authorization to change production settings.
 - Failed recovery reconciliation: keep the restored service isolated with signup and outbound email closed.
-- Missing or ambiguous evidence: mark the gate pending. A hidden Email button, payment for a plan or an anonymous HTTP guard pass is not acceptance of public registration.
+- Missing or ambiguous evidence: use NOT RUN or NO CURRENT EVIDENCE as appropriate; do not call an unperformed test a failure. Mark the gate pending. A hidden Email button, payment for a plan or an anonymous HTTP guard pass is not acceptance of public registration.
 
 ## Evidence record template
 
