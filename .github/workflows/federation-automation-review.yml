@@ -39,6 +39,7 @@ on:
       - 'automation-lab.html'
       - 'assets/federation/fed-automation-lab.*'
       - 'scripts/check-federation-pages.mjs'
+      - 'scripts/check-federation-tools.mjs'
       - 'tests/voss-*.test.mjs'
       - 'tests/federation-*.test.mjs'
       - '.github/workflows/federation-automation-review.yml'
@@ -65,4 +66,4 @@ jobs:
       - name: Check synthetic fixtures without service credentials
         run: |
           node scripts/check-watchtower-server.mjs
-          node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/watchtower-batch.test.mjs tests/watchtower-helius-intake.test.mjs tests/watchtower-receipt-sink.test.mjs tests/watchtower-verifier.test.mjs tests/watchtower-worker.test.mjs tests/watchtower-rpc-transport.test.mjs tests/watchtower-rpc-allowance.test.mjs tests/watchtower-pilot.test.mjs tests/watchtower-pilot-runtime.test.mjs tests/watchtower-database.test.mjs tests/watchtower-server.test.mjs tests/operations-brief.test.mjs tests/release-evidence.test.mjs tests/operations-report.test.mjs
+          node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-tools.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/watchtower-batch.test.mjs tests/watchtower-helius-intake.test.mjs tests/watchtower-receipt-sink.test.mjs tests/watchtower-verifier.test.mjs tests/watchtower-worker.test.mjs tests/watchtower-rpc-transport.test.mjs tests/watchtower-rpc-allowance.test.mjs tests/watchtower-pilot.test.mjs tests/watchtower-pilot-runtime.test.mjs tests/watchtower-database.test.mjs tests/watchtower-server.test.mjs tests/operations-brief.test.mjs tests/release-evidence.test.mjs tests/operations-report.test.mjs

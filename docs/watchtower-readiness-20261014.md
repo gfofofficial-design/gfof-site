@@ -1,6 +1,6 @@
 # Watchtower owner/operator readiness — October 14, 2026
 
-The October 13 dev-session draft added closed intake and one-candidate worker routes, role-bound pg/TLS connections, a reviewed source fingerprint, locked credential-role preparation and a 100-distinct-candidate pilot ceiling. The draft is not a continuous-monitoring or public-release claim. The main site is still on its prior released commit.
+The October 13 dev-session draft added closed intake and one-candidate worker routes, role-bound pg/TLS connections, a reviewed source fingerprint, locked credential-role preparation and a 100-distinct-candidate pilot ceiling. The draft is not a continuous-monitoring or public-release claim. The production state referenced here belongs to that dated check; see the October 16 synchronization note below for the later released site.
 
 The current-head CI for that dev-session revision passed offline and isolated PostgreSQL acceptance. The recorded dev-session evidence also describes private-schema export/restore and disabled branch-route checks; those records are separate from the fresh catalog check below and do not prove an enabled hosted provider delivery or recovery of future receipt data.
 
@@ -42,3 +42,15 @@ Pause and verify the exact upstream trial webhook first. Keep the pilot setting 
 The disposable PostgreSQL fixture runs the relock action after its synthetic enabled-credential checks, verifies both credentials become locked with no visible sessions, and verifies a repeated relock remains safe. No hosted credentials or real provider calls are used. Keep the seven-day evidence retention and period-bound allowance counters intact during shutdown.
 
 The work-computer owner reports installing the closed pilot toggle, selected project/pooler settings and a secret-marked provider key on the review branch. These setup reports do not establish runtime secret placement or hosted TLS acceptance. The existence and assignment of the two dedicated database passwords remains unconfirmed; inspect the private dev setup before creating or replacing them.
+
+## October 16 released-site synchronization
+
+The draft now includes released production `92f532e3fd788dc76a48afdcbff713560caf3341`: Alliance, the prelaunch Community League and the expanded manual Operations Assistant. Twenty-seven incoming production paths were compared with exact shared ancestor `7cd97e7106a69fa6c91105c3f4ffd20ee75389d9`. The sole overlapping edit was the automation workflow; its merged form retains the Watchtower driver installation, source-fingerprint check and existing tests while adding the released tool-page trigger/test. All other incoming paths use their exact production Git blobs.
+
+No Watchtower runtime, pinned source input, dependency lock, four-address manifest, SQL, role boundary or activation contract changes in this synchronization. The reviewed fingerprint is retained without regeneration. The manifest remains disabled, notifications off, additional provider spend zero and upgrades disallowed. Netlify routing takes the exact released production version; it does not introduce Watchtower activation settings.
+
+This is preparation within draft PR #112, with no production merge requested. It does not establish current hosted credentials, roles, TLS, provider headroom, upstream webhook state or trial acceptance. No hosted schema/role change, provider/RPC call, secret installation, notification or schedule is performed. Owner-reported private setup from October 14 remains dated evidence; missing database-password assignment must be resolved through the existing private dev workflow before any controlled trial, without guessing or replacing credentials.
+
+The seven-day initial-trial retention decision still applies; no cleanup or allowance-counter reset is performed. The next dev-computer steps remain private credential-role pairing and TLS/denial checks, then a separately reviewed source-bound trial window and shutdown. Real account acceptance and public registration remain separately gated; League enrollment is still closed.
+
+Validation for the synchronized revision is recorded on PR #112 after its exact-head CI and disabled-preview checks complete. Passing offline/isolated checks and HTTP refusal are not proof of an enabled monitoring run or coverage of on-chain events.
