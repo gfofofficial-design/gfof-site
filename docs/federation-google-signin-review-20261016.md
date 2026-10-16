@@ -1,8 +1,9 @@
 # Google account presentation and warning evidence — October 16, 2026
 
-Scope: draft PR #99. Google Safe Browsing still reports one Deceptive pages
-issue for the preview `/account` URL. Its cause is undetermined. No clearance,
-production account release or real sign-in acceptance is recorded here.
+Scope: draft PR #99. The latest owner-supplied Search Console evidence reports
+one Deceptive pages issue for the preview `/account` URL. No newer Google
+verdict has been observed. Its cause is undetermined. No clearance, production
+account release or real sign-in acceptance is recorded here.
 
 ## Owner-supplied Google inspection evidence
 
@@ -169,3 +170,36 @@ The next authoritative security-status check remains the owner's Search Console
 Security Issues report for the flagged preview property. A green no-issues state
 or Google's review outcome must be observed directly; successful fetches,
 noindex, branding metadata and passing source checks are not substitutes.
+
+## Release handoff refresh after Community League publication
+
+The owner requested continued work on warning clearance and later real sign-in
+and phone acceptance while registration stays closed. The connected-browser
+attempt ended before any tab became available; no Google page or fresh verdict
+was observed. The October 16 owner evidence remains the latest recorded report,
+not a newly verified current classification. No warning was bypassed and no
+Google report/review or all-issues-fixed attestation was submitted.
+
+Released production advanced to `d9853cfef0a2d6445027c9132eee2c37ad26c61c`
+with the approved prelaunch Community League. The account branch is synchronized
+with those production changes for the next acceptance candidate. The sole
+overlapping production file is Command Deck; the three-way merge preserves the
+account branch's private-pilot copy and the released League. All other incoming
+production files use their exact existing Git blobs. Account handler, bounded
+reader, page/script/style, Google artwork and account configuration remain
+unchanged.
+
+The operator acceptance checklist now records October 16's latest observation,
+requires the current PR head and matching ready deployment, and distinguishes
+no-issues, review-in-progress, continued deceptive-page and missing-evidence
+outcomes. Normal anonymous Chrome/phone warning checks follow current report
+clearance before real OAuth acceptance. Request Review button visibility,
+indexing, Testing status and passing CI remain insufficient clearance evidence.
+Exact-head source, CI and passive preview results are recorded on PR #99.
+
+Real Google sign-in/cancellation/replay, cookies/expiry, multitab and physical
+phone acceptance remain NOT RUN for this candidate. Public signup, managed
+hooks, provider callbacks/scopes and credentials are not changed here. The
+League still has no real enrollment or score collector. The next required
+owner evidence is a current status readback from the exact flagged Search
+Console property and, if still listed, its expanded issue/review details.
