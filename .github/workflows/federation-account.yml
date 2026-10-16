@@ -6,6 +6,8 @@ on:
       - 'netlify/lib/read-json-bounded.cjs'
       - 'tests/federation-account-bounds.test.mjs'
       - 'assets/federation/fed-account.js'
+      - 'account.html'
+      - 'assets/federation/fed-account.css'
       - 'tests/federation-account.test.mjs'
       - 'tests/federation-account-page.test.mjs'
       - 'tests/federation-account-tabs.test.mjs'
