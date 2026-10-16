@@ -35,14 +35,25 @@
  }
  async function api(action,body){
   const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),12000);
+  // The server can perform two 8-second provider reads for refresh and three
+  // for logout. Leave room for those existing paths without adding any retry.
+  const timeoutMs=action==='logout'?30000:action==='refresh'?20000:12000;
+  let onAbort;
+  const interrupted=new Promise((_,reject)=>{
+   onAbort=()=>reject(Error('Account request took too long. Please try again later.'));
+   controller.signal.addEventListener('abort',onAbort,{once:true});
+  });
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
   try{
+   return await Promise.race([(async()=>{
    const r=await fetch('/api/federation-account/'+action,{method:body?'POST':'GET',credentials:'same-origin',cache:'no-store',signal:controller.signal,headers:body?{'Content-Type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
+   controller.signal.throwIfAborted();
    if(r.status===429)throw Object.assign(Error('Too many account requests. Please wait a minute and try again.'),{status:429});
    let data;try{data=await r.json();}catch{throw Object.assign(Error('Account service is temporarily unavailable.'),{status:r.status});}
    if(!r.ok)throw Object.assign(Error(data.error||'Account service unavailable.'),{status:r.status});
    return data;
-  }finally{clearTimeout(timer);}
+   })(),interrupted]);
+  }finally{clearTimeout(timer);controller.signal.removeEventListener('abort',onAbort);}
  }
  function signedIn(user){buttons.forEach(b=>{b.hidden=true;});logout.hidden=false;document.getElementById('identity').hidden=false;document.getElementById('member-email').textContent=user.email||'Signed-in member';message.textContent='You are signed in. Staking and lending remain in preparation.';}
  async function start(){

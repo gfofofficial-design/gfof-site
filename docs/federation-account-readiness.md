@@ -321,3 +321,15 @@ Production's account route returned 404. The [dev-computer acceptance sequence](
 records the exact request results, public wallet coverage browser evidence,
 remaining real-device steps and limits. No credentials, managed settings,
 public signup or financial integration changed. PR #99 remains draft.
+
+## October 16 browser wait recovery
+
+The [browser wait packet](federation-account-wait-20261016.md) records a
+frontend-only fix: refresh and logout waits now leave room for the unchanged
+server's sequential provider reads, and explicit deadline rejection releases a
+stalled fetch/body read even when abort is ignored. The 41 focused tests include
+16 new cases and a failing-before/passing-after reproduction. No additional
+retry, provider setting, backend cookie rule, registration or account data path
+was added. These tests establish synthetic page behavior, not real cookie or
+provider acceptance. Google warning clearance and actual browser acceptance
+remain pending; this branch stays draft.
