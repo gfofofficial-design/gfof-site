@@ -115,3 +115,57 @@ The Safe Browsing issue remains unresolved; these configuration observations do
 not identify its cause or establish that it has been corrected. Keep PR #99
 draft and real sign-in acceptance paused pending current security clearance and
 the remaining release gates.
+
+## Passive delivered-file integrity check — 12:54 UTC
+
+A finite, anonymous, read-only check at 12:54:44 UTC (07:54 America/Chicago)
+compared ten delivered preview resources with the Git tree at
+`83b36d5230b8e77919874cb1e0f11830ada4bad8`. All ten requests returned HTTP 200. Only public
+static pages and assets were requested; no sign-in, callback, Auth API, wallet,
+price or RPC request was made. Retrieved markup was inspected as data, not
+executed in a browser.
+
+The seven scripts, stylesheets and images were byte-identical to their reviewed
+Git blobs. The identifiers below are Git blob SHA-1 values used for exact source
+comparison, not a claim of independently authenticated provenance:
+
+| Resource | Matching Git blob |
+| --- | --- |
+| `assets/federation/fed-account-notices.css` | `5c0e7a793b00d18589eb6bf8e329311b183968d4` |
+| `assets/federation/fed-account.css` | `a03bdc5b0d31a2e51332ab1cbb939ad008bdbd49` |
+| `assets/federation/fed-account.js` | `bd7812aebbbad4b8bdb053245fc26a636f1cbde7` |
+| `assets/federation/fed-tokens.css` | `0238ed0b218473a25772f7c35f285fd39dd9d653` |
+| `assets/federation/google-signin-light.png` | `3e827a4920539d616b57e275b30c39ff04a3d588` |
+| `journey/passport.js` | `ff95209ae6d8aa0ba2cb840de1d2369320baeab9` |
+| `logo-circle.png` | `bf8d496fe1e115caf32368b5750dd0b1c4117483` |
+
+The HTML was not byte-identical. The complete observed difference for all three
+pages was hyperlink delivery rewriting: an `href="...html"` becomes
+`href='...'` with the `.html` extension removed. After applying only that exact
+rewrite to the source, each complete delivered document matched. The changed
+links were:
+
+- `account.html`: account privacy and Command Deck links.
+- `account-privacy.html`: the account terms link.
+- `account-terms.html`: two account privacy links.
+
+There was no additional markup difference in these responses. All three pages
+contained zero input elements and served `private, no-store`, `no-referrer`,
+`X-Frame-Options: DENY`, `X-Robots-Tag: noindex` and the expected account CSP.
+The policy restricts scripts, styles, images and connections to the same origin;
+it disallows inline script attributes, frames, objects, form actions and workers.
+The account page's script elements remain the two expected local scripts.
+The shared passport source adds no network request on the account path; its
+conditional mission-help import applies only to enumerated mission paths.
+
+The current production deploy identifier remained `6ad1390b9a22b5139b50293f`.
+The PR's Netlify deploy-preview commit status was successful. Neither observation
+establishes a current Google verdict. No new runtime defect or unexpected asset
+was found in this bounded review, and no runtime change was made. This is not a
+full audit, a finding about every possible browsing context, confirmation of
+provider consent behavior, or evidence that the Deceptive pages issue is fixed.
+
+The next authoritative security-status check remains the owner's Search Console
+Security Issues report for the flagged preview property. A green no-issues state
+or Google's review outcome must be observed directly; successful fetches,
+noindex, branding metadata and passing source checks are not substitutes.
