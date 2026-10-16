@@ -1,8 +1,8 @@
 # Google account presentation and warning evidence — October 16, 2026
 
-Scope: draft PR #99. The latest owner-supplied Search Console evidence reports
-one Deceptive pages issue for the preview `/account` URL. No newer Google
-verdict has been observed. Its cause is undetermined. No clearance, production
+Scope: draft PR #99. The latest owner-supplied Search Console view reports one Deceptive pages
+issue for the preview `/account` URL. No clearance or completed review outcome
+has been observed. Its cause is undetermined. No clearance, production
 account release or real sign-in acceptance is recorded here.
 
 ## Owner-supplied Google inspection evidence
@@ -203,3 +203,55 @@ hooks, provider callbacks/scopes and credentials are not changed here. The
 League still has no real enrollment or score collector. The next required
 owner evidence is a current status readback from the exact flagged Search
 Console property and, if still listed, its expanded issue/review details.
+
+## Owner expanded Security Issues report — October 16 follow-up
+
+A subsequent owner-supplied screenshot shows the exact Search Console property
+`https://deploy-preview-99--gfof.netlify.app/`, **1 issue detected**, an expanded
+**Deceptive pages** issue and the sample
+`https://deploy-preview-99--gfof.netlify.app/account`. Request Review is visible.
+No completed review outcome, review-in-progress confirmation or first-detected
+date is visible in this capture. Button visibility alone does not establish
+whether another report is pending. No screenshot, browser tabs, account avatar
+or other unrelated owner information is published here.
+
+This is fresh owner-observed continuation of the warning, not clearance and not
+a finding of its cause. Existing-owner sign-in, callback/cookie and phone
+acceptance remain NOT RUN, and registration stays closed. The next assisted
+Google action is to inspect the Request Review dialog without submitting or
+making an all-issues-fixed attestation, to read the current requirements/state.
+
+## Bounded source-wide HTML inventory
+
+At source commit `d368cc0ade7b544933aa160d002c5a0b24e1f832`, all 49 repository
+HTML files were read and their bytes matched their Git blobs. The
+[structured inventory](federation-google-html-inventory-20261016.json) records
+the examined paths and declared resources/controls. This is a source inventory,
+not confirmation that all paths are served identically or even reachable at
+their filename URLs.
+
+The markup inventory found:
+
+- Zero password-type input tags, externally addressed script tags and
+  meta-refresh tags.
+- Five form elements. Wallet-view and chat forms have no external action;
+  the avatar form is a local interaction; migration intake posts to its own
+  origin and the evidence-record form posts to `/record?submitted=1`.
+  No forms were submitted and no user data was entered.
+- One declared iframe, with `about:blank` in the legacy index source.
+- One download anchor, on the avatar page; it was not activated.
+- Local/relative script sources throughout the HTML. Some pages have inline
+  executable code, structured JSON-LD or event handlers. Their presence alone
+  is not a compromise finding, and absence of external script tags does not
+  mean scripts cannot import resources or make network requests.
+
+A narrow source read of the legacy index/app, current homepage and record
+navigation/network snippets identified expected source references to public
+market data, public project/social links and same-origin price/chat endpoints.
+None of these requests or pages was executed by this inspection.
+
+The inventory does not trace every JavaScript import, dynamic DOM change,
+server response, injected platform resource, referrer/device variant or
+third-party behavior. It is not a full security audit, proof of no phishing,
+a false-positive determination or support for an all-issues-fixed attestation.
+The warning remains unresolved. No runtime change was made from these findings.

@@ -1,0 +1,1180 @@
+{
+  "schema": 1,
+  "examinedCommit": "d368cc0ade7b544933aa160d002c5a0b24e1f832",
+  "reviewDate": "2026-10-16",
+  "scope": "Static source HTML inventory only; no script execution, live service calls, complete JavaScript audit or Google clearance claim.",
+  "summary": {
+    "htmlFiles": 49,
+    "allSourceGitBlobsMatched": true,
+    "passwordInputTags": 0,
+    "externalScriptTags": 0,
+    "forms": 5,
+    "metaRefreshTags": 0,
+    "embeddedFrameTags": 1,
+    "downloadAnchors": 1
+  },
+  "pages": [
+    {
+      "path": "404.html",
+      "gitBlob": "954840241f2a5631dbcb95e4e11b2e76841287dc",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "access-spec.html",
+      "gitBlob": "42ca186d38ac8dac58f73fb4c8cb8dbc2b229405",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "account-privacy.html",
+      "gitBlob": "78e10cb33c57695a7e2f263ee42f117e30dec702",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "account-terms.html",
+      "gitBlob": "5cb394f96eab0e096f04b5a1e51c71e34e12f4ae",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "account.html",
+      "gitBlob": "babbe103e336207f3159d4b21840eaa20a9959fd",
+      "scripts": [
+        {
+          "src": "/journey/passport.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "/assets/federation/fed-account.js",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "adjudication-method.html",
+      "gitBlob": "7d07f813dd4c2ae4bf8c6e8524e51e4d56baf3d7",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "alliance.html",
+      "gitBlob": "12e2cc87fdd0961f42eff9dc5202e908b7e46dff",
+      "scripts": [
+        {
+          "src": "/assets/federation/fed-alliance.mjs",
+          "type": "module"
+        },
+        {
+          "src": "/assets/federation/fed-community-league.mjs",
+          "type": "module"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "search"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "app/index.html",
+      "gitBlob": "17a525b8857f2ce8e6d8d09b7654da8292114f63",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 14
+    },
+    {
+      "path": "automation-lab.html",
+      "gitBlob": "dfc1fe45ed223b63c5c26bc65450504d76ce5c56",
+      "scripts": [
+        {
+          "src": "/assets/federation/fed-automation-lab.mjs",
+          "type": "module"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "building.html",
+      "gitBlob": "b67495138db74e382961ea47f3407895abe4a250",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "classified.html",
+      "gitBlob": "4312800c23e668a5c70c097277dc76210fab4d83",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "command-deck-privacy.html",
+      "gitBlob": "27b4cf249472d72a428beb33338ea1ec310c24e8",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "command-deck.html",
+      "gitBlob": "efa1a705104bded5f9ded47b2c9721d57aab96ac",
+      "scripts": [
+        {
+          "src": "/journey/passport.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "/assets/federation/fed-deck.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "/assets/federation/fed-deck-staking.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "/assets/federation/fed-deck-phantom.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "/assets/federation/fed-deck-locks.js",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [
+        {
+          "action": null,
+          "method": "get"
+        }
+      ],
+      "inputTypes": [
+        "search",
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "command-preview.html",
+      "gitBlob": "5d218340579ff8b158fab482403a6f30a353e1d1",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        },
+        {
+          "src": "assets/federation/fed-shell.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "assets/federation/fed-command.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [
+        {
+          "action": null,
+          "method": "get"
+        }
+      ],
+      "inputTypes": [
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "corrections.html",
+      "gitBlob": "a66625dabc2bf549531d0a0ff97c4d0115ae741c",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 2
+    },
+    {
+      "path": "creator-fee-spec.html",
+      "gitBlob": "7829938f5c7f67d4a65cb3fb100c8b7238bd3a75",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "docs/federation-os/component-lab.html",
+      "gitBlob": "c772f1d7214005d47a63f1e47923bc83a0b392cb",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "docs/federation-os/shell-lab.html",
+      "gitBlob": "1f7370309529c92c8eb7cc2bdba27ac91cb675a6",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        },
+        {
+          "src": "../../assets/federation/fed-shell.js",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "docs/federation-os/token-preview.html",
+      "gitBlob": "14788e23c4ff60592823f1b9c36c62e21eb03b8e",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "faq.html",
+      "gitBlob": "ff326d34d3ce25a375bb1ea97ae1b7dd8b7d1bc5",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "governance-spec.html",
+      "gitBlob": "36438da152e94d1414700a3ec333fe6fd65ee873",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "index.html",
+      "gitBlob": "c4a201a1f2be0ae0ef3d229cd6753b2197044f1f",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [
+        {
+          "tag": "iframe",
+          "src": "about:blank"
+        }
+      ],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 76
+    },
+    {
+      "path": "intel.html",
+      "gitBlob": "471cf00509d9d39038bcee2bbe31e6ebeb574a61",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 1
+    },
+    {
+      "path": "journey/after-the-crowd.html",
+      "gitBlob": "21b7fb8d411b33f6cfaf520530f22a37a6c78dff",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "after-the-crowd.js?v=passport1",
+          "type": "module"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/avatar.html",
+      "gitBlob": "e4af1f884eb75fa49a327b207143f3cf2ef796f2",
+      "scripts": [
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [
+        {
+          "action": null,
+          "method": "get"
+        }
+      ],
+      "inputTypes": [
+        "file",
+        "range",
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 1,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/borrowed-voice.html",
+      "gitBlob": "25a3c3aa8ca4281710aef05f4af6bda37fd34488",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "borrowed-voice.js?v=passport1",
+          "type": "module"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/changing-course.html",
+      "gitBlob": "8b80433f7a0d9ec5dd8ac7abd1776db7eed73f7d",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "changing-course.js?v=passport1",
+          "type": "module"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/docking-request.html",
+      "gitBlob": "faf7ffbd22527dccafb980d422b796b69316695a",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "docking-request.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "mission-progress.js?v=passport1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/holder-passport.html",
+      "gitBlob": "1466622d7051d78342587aafa098359fe574e4b7",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "holder-passport.js?v=2",
+          "type": "module"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/index.html",
+      "gitBlob": "17907e7deace46d9392285622e1abdffc03d7b53",
+      "scripts": [
+        {
+          "src": "cinematic.js?v=3",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-hub.js?v=passport1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "hub.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "passport-hub.js?v=1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/keys-to-the-gate.html",
+      "gitBlob": "3cdacbb17392848a35a3b742ee4591df97cde2a7",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "keys-to-the-gate.js?v=passport1",
+          "type": "module"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/lending-lab.html",
+      "gitBlob": "1c384fb393aa62d280155150e20d435bee3991e3",
+      "scripts": [
+        {
+          "src": "lending-lab.js",
+          "type": "module"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/long-way-home.html",
+      "gitBlob": "8ee14c2c3dcf96fcb841d5706ce2da82fc934b27",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "long-way-home.js?v=passport1",
+          "type": "module"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/meridian-relay.html",
+      "gitBlob": "93f4c289aa585c19cd4b6eb08d989515db4017f9",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "meridian-relay.js?v=passport1",
+          "type": "module"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/observatory-journey.html",
+      "gitBlob": "b30df011c56f1e470c1c2fca301288595168414f",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "observatory-journey.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "mission-progress.js?v=passport1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "range"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/repair-the-shuttle.html",
+      "gitBlob": "06ffd94b515a8349ed7613ddc484499f24f819ef",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "repair-the-shuttle.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "mission-progress.js?v=passport1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/starport-market.html",
+      "gitBlob": "c9c17a08464f29a269ba5bc5e1c68f729422983c",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "starport-market.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "mission-progress.js?v=passport1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "range"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/supply-run.html",
+      "gitBlob": "446d39a61961e701c23a825f951e72407efa8b81",
+      "scripts": [
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "supply-run.js",
+          "type": "module"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/the-signal.html",
+      "gitBlob": "03775b9758315f20ece98c469b1f6c25ef327a00",
+      "scripts": [
+        {
+          "src": "passport.js?v=1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "the-signal.js",
+          "type": "text/javascript"
+        },
+        {
+          "src": "mission-progress.js?v=passport1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-model.js?v=styles1",
+          "type": "text/javascript"
+        },
+        {
+          "src": "avatar-mission.js?v=styles1",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "journey/voss-briefing.html",
+      "gitBlob": "19f2d74d03ae4f6240763efcc6daaadc4d1879b0",
+      "scripts": [
+        {
+          "src": "voss-briefing.js",
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "liquidation-spec.html",
+      "gitBlob": "ee59c97544e88f57565751f59905d00a59058282",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "migration.html",
+      "gitBlob": "7425827f7c48eb469a68dcc3d04b28aa073d42da",
+      "scripts": [],
+      "forms": [
+        {
+          "action": null,
+          "method": "POST"
+        }
+      ],
+      "inputTypes": [
+        "checkbox",
+        "hidden",
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "record.html",
+      "gitBlob": "5639d0c2fe50eb78a0edb4de339dff11b2bd9b49",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [
+        {
+          "action": "/record?submitted=1",
+          "method": "POST"
+        }
+      ],
+      "inputTypes": [
+        "date",
+        "hidden",
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "record/treasury-former-mint-20261008.html",
+      "gitBlob": "d2f05ded3f1ee4f1c4a099c3404d6899daec96a2",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "research.html",
+      "gitBlob": "0ddeea519b4556140f4b49ee7d77906f44ad82be",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "roadmap.html",
+      "gitBlob": "9ce5dd8ef05d2f3f00559cee3c62919bc9267a14",
+      "scripts": [],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "security.html",
+      "gitBlob": "6791ce3f7af82c066a331de9c7070ff01c13ba01",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "staking.html",
+      "gitBlob": "ca84c33594e74f245848a7fd2413192582e5dd75",
+      "scripts": [
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [
+        "text"
+      ],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 0
+    },
+    {
+      "path": "treasury.html",
+      "gitBlob": "10c957d1358a2568b24fce78a60dd12042bc1e51",
+      "scripts": [
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "application/ld+json"
+        },
+        {
+          "src": null,
+          "type": "text/javascript"
+        }
+      ],
+      "forms": [],
+      "inputTypes": [],
+      "passwordInputCount": 0,
+      "embeds": [],
+      "metaRefresh": [],
+      "downloadAnchorCount": 0,
+      "inlineEventAttributeCount": 1
+    }
+  ]
+}

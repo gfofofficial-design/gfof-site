@@ -4,7 +4,7 @@ Prepared October 13; updated October 16, 2026. This is a review checklist, not r
 
 ## Gate 0 — Google warning and exact candidate
 
-Latest recorded owner observation, October 16: Google listed the account preview `/account` for deceptive pages. The cause has not been established; expected page rendering and passing CI do not prove that the warning was incorrect or removed. A subsequent connected-browser check could not obtain a tab, so no newer Google verdict was observed.
+Latest recorded owner observation, October 16: Google listed the account preview `/account` for deceptive pages. The cause has not been established; expected page rendering and passing CI do not prove that the warning was incorrect or removed. A later owner-supplied expanded report again shows one issue and the preview `/account` sample. No completed review outcome or review-in-progress confirmation is visible. A connected-browser check could not obtain a tab; it adds no separate Google observation.
 
 Keep browser/phone sign-in, callback replay and authenticated acceptance **NOT RUN** while this gate remains unresolved. Do not bypass a browser warning or move the same flow to another hostname to evade it. Review current Safe Browsing/Search Console evidence for the exact destination before authorizing browser acceptance; URL indexing status is a different check.
 
@@ -18,7 +18,7 @@ Open [Search Console Security Issues](https://search.google.com/search-console/s
 | --- | --- |
 | Current report shows no security issues | Record the property and time; check the account page anonymously in normal Chrome and the intended phone browser before entering sign-in. Continue only if neither presents a security interstitial. |
 | Review is in progress | Record that status and wait for the existing review's final decision. Do not duplicate it. |
-| Deceptive pages still appears | Expand it and record the sample URL, first-detected date and any review status/outcome. Investigate the reported scope; a visible Request Review button alone does not establish whether another report is pending. |
+| Deceptive pages still appears | Record the expanded sample and any review status/outcome. The latest capture has the /account sample but no visible review outcome or first-detected date. Inspect the current Request Review dialog without submitting or making an all-issues-fixed attestation; button visibility alone does not establish whether another report is pending. |
 | No current report or ambiguous property | Keep Gate 0 pending and all real sign-in checks NOT RUN. |
 
 The October 13 incorrect-warning report and the formal Search Console security review are separate. Current evidence does not establish the warning's cause or support an all-issues-fixed attestation. Follow [Google's current report guidance](https://support.google.com/webmasters/answer/9044101?hl=en); record evidence rather than assuming that source parity, noindex or branding changes establish clearance.
