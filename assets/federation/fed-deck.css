@@ -50,3 +50,6 @@
 
 /* Name excluded holdings beside the partial dollar subtotal. */
 .wallet-unpriced{padding:18px;border:1px solid var(--fed-authority);border-radius:10px;background:var(--fed-authority-soft);margin:20px 0}.wallet-unpriced h3{margin:0;color:var(--fed-authority)}.wallet-unpriced ul{padding-left:22px;margin:12px 0}.wallet-unpriced li{padding:6px 0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.wallet-unpriced[hidden]{display:none}
+
+/* A community program entry, separate from wallet and financial positions. */
+.deck .alliance-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin:28px 0;border-color:var(--fed-command);background:linear-gradient(115deg,var(--fed-command-soft),transparent 75%),var(--fed-space-panel)}.deck .alliance-entry h2{margin:8px 0 12px}.deck .alliance-entry p{max-width:800px}.deck .alliance-entry>a{border:1px solid var(--fed-border-strong);padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:700;white-space:nowrap}@media(max-width:760px){.deck .alliance-entry{grid-template-columns:minmax(0,1fr)}.deck .alliance-entry>a{width:fit-content;max-width:100%;white-space:normal}}
