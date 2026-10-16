@@ -57,7 +57,61 @@ provider consent-screen review and current Google clearance remain pending.
 
 The button finding is a separate branding requirement. There is no evidence that
 it caused or resolves the Deceptive pages classification. Keep sign-in acceptance
-paused, preserve noindex and the existing provider settings, and do not move the
+paused, preserve noindex and the existing authentication behavior, and do not move the
 flow to another hostname to evade the warning. The October 13 incorrect-warning
 report and formal Search Console review are different procedures; this packet
 neither submits another report nor attests that all security issues were fixed.
+
+## Owner Google Auth Platform configuration check
+
+Owner-supplied console screenshots on October 16, approximately 11:37–12:00 UTC
+(06:37–07:00 America/Chicago), establish the following limited observations.
+No screenshot, tester email, client secret or credential export is included in
+this public record.
+
+The owner entered and saved these Branding values. The console displayed
+`Branding changes saved!`:
+
+- Application home page: https://galacticfederation.co/
+- Privacy policy: https://galacticfederation.co/account-privacy.html
+- Terms: https://galacticfederation.co/account-terms.html
+- Added authorized domain: `galacticfederation.co`.
+- The three existing provider-domain entries were retained.
+
+Finite anonymous GETs to the three public links returned HTTP 200. The home
+page links to both account notices; the notices describe the private account
+preview and Google/Supabase identity data. Successful delivery does not establish
+Google brand approval or Safe Browsing clearance. Domain ownership verification
+for a future brand submission has not been independently confirmed here.
+
+The Audience page displays `Testing`, user type `External`, and one listed test
+user. No tester was added and no publishing action was taken. Those console
+observations alone do not independently establish the application's complete
+registration restrictions.
+
+The existing pilot web client's sole displayed authorized redirect URI matches
+the previously recorded pilot project and ends in `/auth/v1/callback`, as
+specified by [Supabase's Google setup guide](https://supabase.com/docs/guides/auth/social-login/auth-google).
+It was not edited. The AI-powered-agent option was unchecked. Two additional
+test/drill client entries were visible in the client list; they were not audited,
+modified or deleted during this check.
+
+Data Access lists only the three non-sensitive identity scopes: `openid`,
+`https://www.googleapis.com/auth/userinfo.email` and
+`https://www.googleapis.com/auth/userinfo.profile`. Both sensitive and restricted
+scope tables are empty. This records the console declarations; no live consent
+request was executed to establish its effective scopes.
+
+The Verification Center says verification is not required because the app has a
+Testing publishing status. This is an exemption for the current testing state,
+not a verified-brand decision or approval for public account release. The
+[Google brand verification guide](https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification)
+describes the separate published-app and domain requirements.
+
+This check changed only the owner-saved public branding links and domain
+metadata. There was no callback or scope change, new tester, OAuth publication,
+credential action, registration opening, deployment or sign-in acceptance.
+The Safe Browsing issue remains unresolved; these configuration observations do
+not identify its cause or establish that it has been corrected. Keep PR #99
+draft and real sign-in acceptance paused pending current security clearance and
+the remaining release gates.
