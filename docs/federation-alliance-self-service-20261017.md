@@ -84,6 +84,12 @@ Supabase guidance reviewed October 17: [RLS](https://supabase.com/docs/guides/da
 
 ## Profile foundation candidate — October 17
 
+Continuation: [account-to-profile transport candidate](federation-alliance-profile-transport-20261017.md)
+adds unmounted, disabled server and browser factories for verified-cookie profile
+requests, strict same-origin boundaries, private response shapes and honest
+cancellation/uncertain-write handling. The page's tab-only preview is unchanged;
+no API route, real Auth/Storage integration or hosted setup is activated.
+
 Owner approval covers independent member joining without routine operator approval. `sql/alliance-profile-candidate.sql` proposes private account bindings, one profile per account, owner-only edits/removal, explicit listing, protected moderation fields and deletion cascades. Directory access initially requires an eligible joined account; it is not an anonymous directory. Anonymous or missing eligibility claims fail closed.
 
 `lib/alliance-profile-store.mjs` is server-only, unmounted and disabled by default. It accepts only editable profile fields, uses fixed self-profile RPCs, bounds response sizes and deadlines, strips private fields and has no service key or anonymous fallback. Supabase must verify bearer tokens; adapter token-shape checks are not authentication. No UI imports it and no environment values are read. Images, challenges, suggestions, quotas and notifications are not connected.

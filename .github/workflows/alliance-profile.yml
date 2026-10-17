@@ -4,6 +4,9 @@ on:
     paths:
       - 'sql/alliance-profile-candidate.sql'
       - 'lib/alliance-profile-store.mjs'
+      - 'lib/alliance-profile-api.mjs'
+      - 'assets/federation/fed-alliance-profile-contract.mjs'
+      - 'assets/federation/fed-alliance-member-client.mjs'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'tests/alliance-profile*'
       - '.github/workflows/alliance-profile.yml'
@@ -21,7 +24,9 @@ jobs:
         with:
           node-version: '24'
       - run: node --check lib/alliance-profile-store.mjs
-      - run: node --test tests/alliance-profile-store.test.mjs
+      - run: node --check lib/alliance-profile-api.mjs
+      - run: node --check assets/federation/fed-alliance-member-client.mjs
+      - run: node --test tests/alliance-profile-store.test.mjs tests/alliance-profile-api.test.mjs tests/alliance-profile-client.test.mjs
   profile-native:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
