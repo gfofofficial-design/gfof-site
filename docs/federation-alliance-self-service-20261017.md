@@ -88,6 +88,13 @@ Optional images now have a separate [bounded processing candidate](federation-al
 
 A separate [private ownership/quota ledger candidate](federation-alliance-avatar-storage-20261017.md) adds disabled, unapplied database state for exact-once dispatch reservations, version fencing, account/global limits and physical-cleanup evidence. It does not provision Storage, authenticate a browser, implement the provider gateway, or activate a cleanup service. Real-account image access and metadata retention remain blocked until their acceptance gates pass.
 
+The subsequent [private Storage gateway candidate](federation-alliance-avatar-gateway-20261017.md)
+prepares bounded immutable writes, exact receipt/byte validation, private reads
+with two current-policy checks, and matching deletion evidence. It is disabled
+and unmounted; no bucket, credential, provider request or cleanup service is
+enabled. Durable receipt persistence, authenticated orchestration and actual
+Storage acceptance remain gates before it can be composed with the ledger.
+
 Continuation: [account-to-profile transport candidate](federation-alliance-profile-transport-20261017.md)
 adds unmounted, disabled server and browser factories for verified-cookie profile
 requests, strict same-origin boundaries, private response shapes and honest

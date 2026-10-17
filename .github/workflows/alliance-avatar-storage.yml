@@ -1,0 +1,26 @@
+name: Alliance private image gateway candidate
+on:
+  pull_request:
+    paths:
+      - 'lib/alliance-avatar-storage.mjs'
+      - 'lib/alliance-avatar-runtime/limits.mjs'
+      - 'tests/alliance-avatar-storage.test.mjs'
+      - '.github/workflows/alliance-avatar-storage.yml'
+permissions:
+  contents: read
+jobs:
+  avatar-storage:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: node --test tests/alliance-avatar-storage.test.mjs
