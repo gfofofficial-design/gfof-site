@@ -86,6 +86,8 @@ Supabase guidance reviewed October 17: [RLS](https://supabase.com/docs/guides/da
 
 Optional images now have a separate [bounded processing candidate](federation-alliance-avatar-processing-20261017.md): isolated native decoding, metadata removal, fixed output and cancellation/deadline controls. It remains disabled/unmounted. No storage bucket, upload route, durable quota or member-image handling is activated.
 
+A separate [private ownership/quota ledger candidate](federation-alliance-avatar-storage-20261017.md) adds disabled, unapplied database state for exact-once dispatch reservations, version fencing, account/global limits and physical-cleanup evidence. It does not provision Storage, authenticate a browser, implement the provider gateway, or activate a cleanup service. Real-account image access and metadata retention remain blocked until their acceptance gates pass.
+
 Continuation: [account-to-profile transport candidate](federation-alliance-profile-transport-20261017.md)
 adds unmounted, disabled server and browser factories for verified-cookie profile
 requests, strict same-origin boundaries, private response shapes and honest
