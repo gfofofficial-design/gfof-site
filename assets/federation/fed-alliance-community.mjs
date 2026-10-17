@@ -1,4 +1,4 @@
-import {CHALLENGE_KITS,PROFILE_ROLES,IDEA_CATEGORIES,matchingKits,createCommunitySandbox} from './fed-alliance-community-core.mjs';
+import {CHALLENGE_KITS,PROFILE_ROLES,IDEA_CATEGORIES,matchingKits,kitGoalLabel,createCommunitySandbox} from './fed-alliance-community-core.mjs';
 import {createArtworkSelection} from './fed-alliance-artwork.mjs';
 
 export function mountCommunityHub(document,options={}){
@@ -41,7 +41,7 @@ export function mountCommunityHub(document,options={}){
     get('hub-examples').textContent=examples?'Fictional crew added':'Add two fictional crew members';
   }
   function renderDirectory(){
-    const rows=store.directory(actor,get('hub-member-search').value);get('hub-directory-count').textContent=rows.length?rows.length+' profiles in this tab’s preview, including any fictional examples.':'No matching preview profiles.';
+    const rows=store.directory(actor,get('hub-member-search').value);get('hub-directory-count').textContent=rows.length?rows.length+' '+(rows.length===1?'profile':'profiles')+' in this tab’s preview, including any fictional examples.':'No matching preview profiles.';
     const cards=rows.map(m=>{
       const card=element('article','hub-member');const head=element('div','hub-member-top');const mark=element('div','hub-mini-avatar');
       if(m.id===self&&artwork.current){const img=element('img');img.src=artwork.current.url;img.alt='';mark.append(img);}else mark.textContent=m.name.split(/\s+/u).slice(0,2).map(x=>Array.from(x)[0]).join('').toLocaleUpperCase();
@@ -54,13 +54,17 @@ export function mountCommunityHub(document,options={}){
     const hidden=actor?store.blockedList(actor):[];get('hub-blocks').hidden=!hidden.length;get('hub-blocks').replaceChildren(...hidden.map(m=>button('Show '+m.name,()=>act(()=>store.block(actor,m.id),'Member shown again in this preview.'))));
   }
   function kitChanged(){const kit=CHALLENGE_KITS.find(k=>k.id===get('hub-challenge-kit').value)||CHALLENGE_KITS[0];get('hub-challenge-goal').value=String(kit.goal);get('hub-challenge-unit').textContent='Count '+kit.unit+'. '+kit.brief;}
-  function renderKits(){const kits=matchingKits(get('hub-kit-filter').value);get('hub-kits').replaceChildren(...kits.map(k=>{const card=element('article','hub-kit');card.append(element('span','eyebrow',k.category+' // CHALLENGE TEMPLATE'),element('h4','',k.title),element('p','',k.brief),element('p','small','Suggested goal: '+k.goal+' '+k.unit),button('Use this template',()=>{get('hub-challenge-kit').value=k.id;kitChanged();get('hub-challenge-target').focus();},'Use '+k.title+' challenge template'));return card;}));}
+  function renderKits(){const kits=matchingKits(get('hub-kit-filter').value);get('hub-kits').replaceChildren(...kits.map(k=>{const card=element('article','hub-kit');card.append(element('span','eyebrow',k.category+' // CHALLENGE TEMPLATE'),element('h4','',k.title),element('p','',k.brief),element('p','small','Suggested goal: '+kitGoalLabel(k,k.goal)),button('Use this template',()=>{get('hub-challenge-kit').value=k.id;kitChanged();get('hub-challenge-target').focus();},'Use '+k.title+' challenge template'));return card;}));}
   function renderTargets(preferred){
     const old=preferred||get('hub-challenge-target').value;const targets=store.directory(actor).filter(m=>m.id!==actor);
     get('hub-challenge-target').replaceChildren(...(targets.length?targets.map(m=>option(m.id,m.name+(m.community?' · '+m.community:''))):[option('','Add fictional crew to try an invitation')]));
     if(targets.some(m=>m.id===old))get('hub-challenge-target').value=old;
     get('hub-challenge-fields').disabled=!actor||!targets.length;
     get('hub-idea-fields').disabled=!actor;
+    const status=get('hub-challenge-status');
+    if(!actor)status.textContent='Create a preview profile to try an invitation.';
+    else if(!targets.length)status.textContent='Add fictional crew, or unhide another preview member, to try an invitation.';
+    else if(/^(Create a|Add fictional)/.test(status.textContent))status.textContent='Choose a template and a member. An invitation needs their acceptance in this preview.';
   }
   function progress(c,owner){const count=c.proofs.filter(p=>p.owner===owner&&p.status==='acknowledged').length;const box=element('div','hub-score');box.append(element('strong','',name(owner)),element('span','',count+' / '+c.goal+' acknowledged'));const meter=element('progress');meter.max=c.goal;meter.value=count;meter.setAttribute('aria-label',name(owner)+' preview acknowledged contributions');box.append(meter);return box;}
   function renderChallenges(){
@@ -68,7 +72,7 @@ export function mountCommunityHub(document,options={}){
     get('hub-challenges').replaceChildren(...(rows.length?rows.map(c=>{
       const kit=CHALLENGE_KITS.find(k=>k.id===c.kit),card=element('article','hub-challenge');card.dataset.status=c.status;card.id='hub-challenge-card-'+c.id;card.setAttribute('tabindex','-1');
       const top=element('div','hub-match-top');top.append(element('span','eyebrow',c.status.toLocaleUpperCase()+' // LOCAL PREVIEW'),element('span','small',c.days+'-day plan · clock not running'));card.append(top,element('h4','',kit.title));
-      card.append(element('p','hub-versus',name(c.from)+'  /  '+name(c.to)),element('p','',c.goal+' '+kit.unit+' per participant.'));
+      card.append(element('p','hub-versus',name(c.from)+'  /  '+name(c.to)),element('p','',kitGoalLabel(kit,c.goal)+' per participant.'));
       if(c.scope==='communities')card.append(element('p','hub-help','Cross-community proposal: '+(store.getMember(c.from).community)+' / '+(store.getMember(c.to).community)+'. Personal invitations; no official project agreement.'));
       if(c.note)card.append(element('p','',c.note));
       const scores=element('div','hub-scores');scores.append(progress(c,c.from),progress(c,c.to));card.append(scores);

@@ -1,12 +1,12 @@
 // A deliberately isolated, in-memory product preview. These checks are not
 // authentication, database authorization, moderation or a public scoring service.
 export const CHALLENGE_KITS = Object.freeze([
-  {id:'explain',title:'Explain the signal',category:'Create',unit:'sourced explainers',goal:3,brief:'Make a short, useful explanation of a financial or on-chain concept. Cite the source and name what remains uncertain.'},
-  {id:'feedback',title:'Find the friction',category:'Improve',unit:'actionable feedback notes',goal:5,brief:'Try a public tool. Record the route, device, expected behavior and one specific improvement. Do not include account details.'},
-  {id:'translate',title:'Translate the bridge',category:'Create',unit:'reviewed translations',goal:2,brief:'Translate a useful public guide, keep its source and date, and ask a speaker of that language to review the meaning.'},
-  {id:'research',title:'Evidence sprint',category:'Investigate',unit:'source-backed research notes',goal:3,brief:'Follow a public claim back to its source. Separate observation, interpretation and unanswered questions.'},
-  {id:'roundtable',title:'Bring the minds together',category:'Connect',unit:'discussion summaries',goal:1,brief:'Host a community discussion and share a useful summary. Get consent before quoting anyone; attendance is not proof of membership.'},
-  {id:'prototype',title:'Build something useful',category:'Build',unit:'working demonstrations',goal:1,brief:'Make a small tool, guide or prototype another community member can try. Explain its limits and collect feedback.'},
+  {id:'explain',title:'Explain the signal',category:'Create',unit:'sourced explainers',singular:'sourced explainer',goal:3,brief:'Make a short, useful explanation of a financial or on-chain concept. Cite the source and name what remains uncertain.'},
+  {id:'feedback',title:'Find the friction',category:'Improve',unit:'actionable feedback notes',singular:'actionable feedback note',goal:5,brief:'Try a public tool. Record the route, device, expected behavior and one specific improvement. Do not include account details.'},
+  {id:'translate',title:'Translate the bridge',category:'Create',unit:'reviewed translations',singular:'reviewed translation',goal:2,brief:'Translate a useful public guide, keep its source and date, and ask a speaker of that language to review the meaning.'},
+  {id:'research',title:'Evidence sprint',category:'Investigate',unit:'source-backed research notes',singular:'source-backed research note',goal:3,brief:'Follow a public claim back to its source. Separate observation, interpretation and unanswered questions.'},
+  {id:'roundtable',title:'Bring the minds together',category:'Connect',unit:'discussion summaries',singular:'discussion summary',goal:1,brief:'Host a community discussion and share a useful summary. Get consent before quoting anyone; attendance is not proof of membership.'},
+  {id:'prototype',title:'Build something useful',category:'Build',unit:'working demonstrations',singular:'working demonstration',goal:1,brief:'Make a small tool, guide or prototype another community member can try. Explain its limits and collect feedback.'},
 ].map(Object.freeze));
 export const PROFILE_ROLES=Object.freeze({explorer:'Explorer',builder:'Builder',researcher:'Researcher',connector:'Community connector'});
 export const IDEA_CATEGORIES=Object.freeze({tools:'Tools & dashboard',community:'Community',learning:'Learning',accessibility:'Accessibility',research:'Research & evidence'});
@@ -31,6 +31,7 @@ export function ideaFields(input={}){
   return {title:text(input.title,5,80),category:input.category,detail:text(input.detail,15,600,true)};
 }
 export function matchingKits(category='all'){return CHALLENGE_KITS.filter(x=>category==='all'||x.category===category);}
+export function kitGoalLabel(kit,count){return count+' '+(count===1?kit.singular:kit.unit);}
 export function createCommunitySandbox(){
   let next=0;const members=new Map(),challenges=new Map(),ideas=new Map(),blocks=new Map(),reports=new Set();
   const id=prefix=>prefix+'-'+(++next);
