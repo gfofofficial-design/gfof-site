@@ -1,27 +1,32 @@
 import {pathToFileURL} from 'node:url';
 import {checkFederationPages} from './check-federation-pages.mjs';
+import {checkFederationTools} from './check-federation-tools.mjs';
 import {buildOperationsBrief} from '../lib/operations-brief-core.mjs';
 import {buildReleaseFreshnessBrief} from '../lib/release-evidence-core.mjs';
+import {buildToolPageBrief} from '../lib/tool-page-brief-core.mjs';
 
-export async function runOperationsReport(releaseInput,{checker=checkFederationPages,now=Date.now}={}){
- if(typeof checker!=='function'||typeof now!=='function')throw Error('Invalid operations configuration');
+export async function runOperationsReport(releaseInput,{checker=checkFederationPages,toolsChecker=checkFederationTools,now=Date.now}={}){
+ if(typeof checker!=='function'||typeof toolsChecker!=='function'||typeof now!=='function')throw Error('Invalid operations configuration');
  // Validate supplied bindings before any public-page request; never derive approval from deployment data.
  const evidence=structuredClone(releaseInput);
  buildReleaseFreshnessBrief(evidence,{now:now()});
- const check=await checker();const completedAt=now();
+ const [check,toolsCheck]=await Promise.all([checker(),toolsChecker()]);const completedAt=now();
  const pages=buildOperationsBrief(check,{now:completedAt});
+ const toolPages=buildToolPageBrief(toolsCheck,{now:completedAt});
  const releases=buildReleaseFreshnessBrief(evidence,{now:completedAt});
  const tasks=[...pages.repairs.map(task=>({...task,source:'public_page_check'})),
+  ...toolPages.repairs.map(task=>({...task,source:'public_tool_page_check'})),
   ...releases.tasks.map(task=>({...task,source:'release_comparison'}))];
  if(pages.status==='stale_check')tasks.push({source:'public_page_check',priority:'P2',reason:'stale_check',nextStep:pages.nextStep});
+ if(toolPages.status==='stale_check')tasks.push({source:'public_tool_page_check',priority:'P2',reason:'stale_check',nextStep:toolPages.nextStep});
  tasks.sort((a,b)=>a.priority.localeCompare(b.priority)||String(a.site||'').localeCompare(String(b.site||''))||a.source.localeCompare(b.source));
  return {schema:1,method:'manual_federation_operations_report',completedAt:new Date(completedAt).toISOString(),
-  status:pages.status==='checked_pages_ok'&&releases.status==='expected_commits_observed'?'checked_scope_ok':'review_needed',
-  pages,releases,tasks,limitations:[
-   'This report covers three public homepages/dashboard links and Command/Dossier release metadata only.',
+  status:pages.status==='checked_pages_ok'&&toolPages.status==='checked_tool_pages_ok'&&releases.status==='expected_commits_observed'?'checked_scope_ok':'review_needed',
+  pages,toolPages,releases,tasks,limitations:[
+   'This report covers three public homepages/dashboard links, seven fixed public HTML tool pages and Command/Dossier release metadata only.',
    'Operator-supplied approvals and deployment snapshots are not authenticated by this report.',
    'A passing report does not establish security, Safe Browsing, sign-in, financial features or monitoring coverage.',
-   'One finite public-page check is made; no provider RPC, credential access, repair, deployment, schedule or notification occurs.']};
+   'One finite check of each fixed page is made; no provider RPC, credential access, repair, deployment, schedule or notification occurs.']};
 }
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){

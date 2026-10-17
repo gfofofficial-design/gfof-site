@@ -1,6 +1,6 @@
 # Google account release acceptance — proposed operator checklist
 
-Prepared October 13; updated October 16, 2026. This is a review checklist, not release authorization or a completed acceptance record. The public read-only Command Deck and the draft account release have separate scopes. Keep account registration closed until every applicable gate has evidence and the owner approves the exact release.
+Prepared October 13; updated October 17, 2026. This is a review checklist, not release authorization or a completed acceptance record. The public read-only Command Deck and the draft account release have separate scopes. Keep account registration closed until every applicable gate has evidence and the owner approves the exact release.
 
 ## Gate 0 — Google warning and exact candidate
 
@@ -8,7 +8,7 @@ Latest recorded owner observation, October 16: Google listed the account preview
 
 Keep browser/phone sign-in, callback replay and authenticated acceptance **NOT RUN** while this gate remains unresolved. Do not bypass a browser warning or move the same flow to another hostname to evade it. Review current Safe Browsing/Search Console evidence for the exact destination before authorizing browser acceptance; URL indexing status is a different check.
 
-The candidate is the **current PR #99 head and its matching ready preview**, read immediately before acceptance. Do not use an old SHA from a dated note as the test target. The preceding synchronized head `0bafd6328277cbf9f0ba68237be018900bc5f178` passed eight workflow jobs; this is historical evidence. The next synchronization includes released production `d9853cfef0a2d6445027c9132eee2c37ad26c61c` and the prelaunch Community League, preserving account runtime. Exact-head CI/deploy evidence is recorded on PR #99.
+The candidate is the **current PR #99 head and its matching ready preview**, read immediately before acceptance. Do not use an old SHA from a dated note as the test target. The earlier synchronized heads and their CI results are historical evidence. The October 17 source synchronization includes released production `92f532e3fd788dc76a48afdcbff713560caf3341`, including the manual Operations Assistant tool-page checks. Its seven incoming production files have no overlapping account edits. All 49 account-candidate HTML files, account runtime and account configuration retain their previous exact Git blobs; only this handoff checklist is additionally updated. This is source consistency, not a new Google observation or real sign-in/phone acceptance. Exact-head CI/deploy evidence is recorded on PR #99.
 
 ### Owner status readback
 
