@@ -23,7 +23,7 @@ export async function runOperationsReport(releaseInput,{checker=checkFederationP
  return {schema:1,method:'manual_federation_operations_report',completedAt:new Date(completedAt).toISOString(),
   status:pages.status==='checked_pages_ok'&&toolPages.status==='checked_tool_pages_ok'&&releases.status==='expected_commits_observed'?'checked_scope_ok':'review_needed',
   pages,toolPages,releases,tasks,limitations:[
-   'This report covers three public homepages/dashboard links, seven fixed public HTML tool pages and Command/Dossier release metadata only.',
+   'This report covers three public homepages/dashboard links, eight fixed public HTML tool pages and Command/Dossier release metadata only.',
    'Operator-supplied approvals and deployment snapshots are not authenticated by this report.',
    'A passing report does not establish security, Safe Browsing, sign-in, financial features or monitoring coverage.',
    'One finite check of each fixed page is made; no provider RPC, credential access, repair, deployment, schedule or notification occurs.']};
