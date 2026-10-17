@@ -91,7 +91,7 @@ export function crewPlan(ids, requestedPace='session') {
 }
 export function prepareProjectBrief(fields, checks=[]) {
   const name=typeof fields?.name === 'string' ? fields.name.trim() : '';
-  if(name.length < 2 || name.length > 70 || /[\u0000-\u001f\u007f<>]/.test(name)) return {ok:false,field:'project-name',message:'Enter a public project name, 2–70 characters on one line.'};
+  if(name.length < 2 || name.length > 70 || /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(name)) return {ok:false,field:'project-name',message:'Enter a public project name, 2–70 characters on one line, without hidden direction controls.'};
   const website=typeof fields.website === 'string' ? fields.website.trim() : '';
   let url;
   try { url=new URL(website); } catch {}

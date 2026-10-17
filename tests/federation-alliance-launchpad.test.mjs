@@ -57,7 +57,7 @@ test('unsafe or private-looking website forms are refused without reflecting the
   }
 });
 test('malformed project data and unknown checklist items cannot create an export',()=>{
-  for(const name of ['', 'a', 'x'.repeat(71), '<img src=x>', 'Line\nBreak'])assert.equal(prepareProjectBrief({...publicFields(),name}).ok,false);
+  for(const name of ['', 'a', 'x'.repeat(71), '<img src=x>', 'Line\nBreak', 'Hidden\u202eName'])assert.equal(prepareProjectBrief({...publicFields(),name}).ok,false);
   assert.equal(prepareProjectBrief({...publicFields(),mint:'ticker'}).ok,false);
   assert.equal(prepareProjectBrief({...publicFields(),interest:'__proto__'}).ok,false);
   for(const checks of [['unknown'],['consent','consent'],null])assert.equal(prepareProjectBrief(publicFields(),checks).ok,false);
