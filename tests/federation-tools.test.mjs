@@ -11,11 +11,12 @@ const titles=new Map([
  ['https://galacticfederation.co/staking','GFOF Staking Preparation · Galactic Federation of Finance'],
  ['https://galacticfederation.co/building',"What We're Building — Galactic Federation"],
  ['https://galacticfederation.co/treasury','Transparency Report — $GFOF Galactic Federation of Finance'],
- ['https://dossiertrack.co/token-structure','Token Structure Lens — Dossier Solana Beta']
+ ['https://dossiertrack.co/token-structure','Token Structure Lens — Dossier Solana Beta'],
+ ['https://dossiertrack.co/projects/gfof','GFOF project evidence · 2026-10-08 · Dossier']
 ]);
 const good=url=>new Response('<!doctype html><title>'+titles.get(url)+'</title><main>Public fixture</main>',{headers:{'content-type':'text/html; charset=utf-8'}});
 async function sample(){return checkFederationTools({fetcher:async url=>good(url),now:()=>at});}
-test('only seven canonical HTML pages are read, with no credentials, redirects or API calls',async()=>{
+test('only eight canonical HTML pages are read, with no credentials, redirects or API calls',async()=>{
  const calls=[];let active=0,peak=0;
  const check=await checkFederationTools({now:()=>at,fetcher:async(url,options)=>{
   calls.push({url,options});peak=Math.max(peak,++active);await setImmediate();active--;return good(url);
@@ -28,11 +29,24 @@ test('only seven canonical HTML pages are read, with no credentials, redirects o
 test('a 200 generic homepage or error page cannot count as delivery of the intended tool',async()=>{
  const check=await checkFederationTools({fetcher:async()=>new Response('<title>Page not found</title>',{headers:{'content-type':'text/html'}}),now:()=>at});
  assert.equal(check.healthy,false);assert.ok(check.results.every(r=>r.status===200&&!r.titleMatches&&r.reason==='page_identity_missing'));
- const brief=buildToolPageBrief(check,{now:at});assert.equal(brief.status,'attention_needed');assert.equal(brief.repairs.length,7);assert.ok(brief.repairs.every(r=>r.priority==='P1'));
+ const brief=buildToolPageBrief(check,{now:at});assert.equal(brief.status,'attention_needed');assert.equal(brief.repairs.length,8);assert.ok(brief.repairs.every(r=>r.priority==='P1'));
 });
 test('ordinary title whitespace and apostrophe entities do not create a false page-identity alarm',async()=>{
  const check=await checkFederationTools({now:()=>at,fetcher:async url=>new Response('<TITLE>\n '+titles.get(url).replace("We're","We&#39;re")+' \n</TITLE>',{headers:{'content-type':'text/html'}})});
  assert.equal(check.healthy,true);
+});
+test('the current evidence route cannot silently deliver a former-mint archive with HTTP 200',async()=>{
+ const calls=[];
+ const check=await checkFederationTools({now:()=>at,fetcher:async url=>{
+  calls.push(url);
+  return url==='https://dossiertrack.co/projects/gfof'?
+   new Response('<title>Former GFOF mint archive</title>',{headers:{'content-type':'text/html'}}):good(url);
+ }});
+ const brief=buildToolPageBrief(check,{now:at});
+ assert.equal(calls.length,8);assert.equal(brief.status,'attention_needed');
+ assert.deepEqual(brief.repairs.map(row=>[row.site,row.tool,row.priority,row.evidence.reason]),[['dossier','gfof-evidence','P1','page_identity_missing']]);
+ assert.ok(brief.checks.filter(row=>row.id!=='gfof-evidence').every(row=>row.healthy));
+ assert.ok(!JSON.stringify(brief).includes('Former GFOF mint archive'));
 });
 test('status, MIME and missing bodies remain distinct without returning diagnostic content',async()=>{
  let i=0,canceled=0;
@@ -48,19 +62,19 @@ test('status, MIME and missing bodies remain distinct without returning diagnost
 });
 test('stalled transport is bounded without retry even when abort is ignored',async()=>{
  const calls=new Map();const check=await checkFederationTools({timeoutMs:5,now:()=>at,fetcher:url=>{calls.set(url,(calls.get(url)||0)+1);return new Promise(()=>{});}});
- assert.equal(calls.size,7);assert.ok([...calls.values()].every(n=>n===1));assert.ok(check.results.every(r=>r.reason==='timeout'&&r.status===null));
+ assert.equal(calls.size,8);assert.ok([...calls.values()].every(n=>n===1));assert.ok(check.results.every(r=>r.reason==='timeout'&&r.status===null));
 });
 test('a stalled streamed body is bounded and canceled without awaiting cancellation',async()=>{
  let canceled=0;
  const check=await checkFederationTools({timeoutMs:5,now:()=>at,fetcher:async()=>new Response(new ReadableStream({pull(){return new Promise(()=>{});},cancel(){canceled++;return new Promise(()=>{});}}),{headers:{'content-type':'text/html'}})});
- assert.equal(canceled,7);assert.ok(check.results.every(r=>r.reason==='timeout'&&r.status===200));
+ assert.equal(canceled,8);assert.ok(check.results.every(r=>r.reason==='timeout'&&r.status===200));
 });
 test('late transport completion is canceled and cannot rewrite a finished timeout result',async()=>{
  const resolve=[];let canceled=0;
  const check=await checkFederationTools({timeoutMs:5,now:()=>at,fetcher:()=>new Promise(r=>resolve.push(r))});
  const before=JSON.stringify(check);
  for(const complete of resolve)complete(new Response(new ReadableStream({cancel(){canceled++;}}),{headers:{'content-type':'text/html'}}));
- await setImmediate();assert.equal(canceled,7);assert.equal(JSON.stringify(check),before);
+ await setImmediate();assert.equal(canceled,8);assert.equal(JSON.stringify(check),before);
 });
 test('the body cap withholds oversized HTML and malformed UTF-8 cannot pass by title',async()=>{
  let i=0;
