@@ -98,9 +98,10 @@ password is requested here. Any real hosted login/password/expiry/permission
 setup requires a separate exact decision and acceptance. A certificate setting
 or unit stub alone does not establish cloud least privilege.
 
-Next implement bounded upload orchestration that waits for committed reservations,
-processes once, requires a committed dispatch, preserves known provider evidence,
-and reconciles uncertain database outcomes without repeating a write. Compose
+The subsequent [disabled orchestration candidate](federation-alliance-avatar-flow-20261017.md)
+waits for committed reservations/claims, processes once and preserves known
+provider evidence. It does not yet reconcile lost receipts/crashes or authenticate
+members. Compose
 the existing real account candidate and current viewer/listing/moderation/member
 authorization before exposing any route. Durable cleanup claims, uncertain-write
 recovery, metadata retention and account/backup deletion without resurrection

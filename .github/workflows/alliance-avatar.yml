@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'lib/alliance-avatar-runtime/**'
+      - 'lib/alliance-avatar-server/flow*'
+      - 'lib/alliance-avatar-storage.mjs'
       - '.github/workflows/alliance-avatar.yml'
 permissions:
   contents: read
@@ -24,3 +26,4 @@ jobs:
       - run: npm ci --prefix lib/alliance-avatar-runtime --ignore-scripts --no-fund
       - run: npm audit --prefix lib/alliance-avatar-runtime --audit-level=high
       - run: npm test --prefix lib/alliance-avatar-runtime
+      - run: node --test lib/alliance-avatar-server/flow.native.mjs
