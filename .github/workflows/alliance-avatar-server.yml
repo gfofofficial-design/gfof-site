@@ -6,6 +6,7 @@ on:
       - 'lib/alliance-avatar-storage.mjs'
       - 'lib/alliance-avatar-runtime/limits.mjs'
       - 'sql/alliance-avatar-ledger-candidate.sql'
+      - 'sql/alliance-avatar-session-candidate.sql'
       - 'sql/alliance-profile-candidate.sql'
       - 'tests/alliance-profile-native*'
       - '.github/workflows/alliance-avatar-server.yml'
