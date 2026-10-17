@@ -93,8 +93,11 @@ revocation, deletion and refusal to release capacity on ambiguous absence. No
 provider call or actual Auth/Storage policy acceptance is implied. The additional
 Windows/Ubuntu CI workflow needs no package installation or credentials.
 
-Next: implement the parameterized ledger/orchestrator with real durable ownership
-and cleanup claims; accept retry/reconciliation and bounded
+The [server connection candidate](federation-alliance-avatar-server-20261017.md)
+adds disabled parameterized ledger transactions and real-driver TLS fixture
+checks. No hosted connection or upload orchestration is mounted.
+
+Next: implement authenticated bounded orchestration and cleanup claims; accept retry/reconciliation and bounded
 metadata retention without resurrection; implement real account authorization,
 abuse and serving limits; prove provider response shapes and credentials/policies
 in an approved isolated test. Native host isolation, backup/deletion reconciliation,

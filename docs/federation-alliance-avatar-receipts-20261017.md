@@ -91,7 +91,12 @@ responses and synthetic pixels. This proves contract composition, not real Auth,
 Storage, a database crash restart, backup recovery or deployed host behavior.
 The runner verifies rollback and removes its separately committed race fixture.
 
-Next connect a parameterized disabled server adapter/orchestrator; implement live
+The [disabled server connection adapter](federation-alliance-avatar-server-20261017.md)
+now prepares fixed parameterized transactions, restricted-identity/TLS checks and
+unknown-COMMIT handling, with real-driver disposable TLS acceptance. It is not
+mounted or connected to a hosted project.
+
+Next connect bounded authenticated orchestration; implement live
 viewer/current-image/listing/membership policy and durable profile mutation
 reconciliation; finish unknown-write recovery, physical cleanup claims and bounded
 retention; accept native host isolation, abuse/cost and backups/deletion. Reviewed
