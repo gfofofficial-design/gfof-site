@@ -53,9 +53,12 @@ Expected data flow:
 6. A future cleanup worker deletes through the Storage API and verifies absence
    after all writes are settled, then acknowledges deletion to release capacity.
 
-Gateway credentials, bucket access policies, parameterized SQL connection,
-private image serving, authorization on every read, and checksum/receipt checks
-are **not implemented or provisioned here**. Supabase service keys bypass Storage
+The subsequent [private gateway](federation-alliance-avatar-gateway-20261017.md)
+prepares bounded provider/byte checks, and the [receipt extension](federation-alliance-avatar-receipts-20261017.md)
+binds descriptors and persists confirmations in this candidate SQL. Gateway
+credentials, bucket access policies, parameterized SQL connection, mounted private
+image serving and real authorization on every read are **not provisioned here**.
+Supabase service keys bypass Storage
 RLS; do not assume a narrowly coded wrapper narrows such a key's actual rights.
 Credential scope/containment needs a separate reviewed access decision. No service
 key or secret is requested, installed or read by this candidate.

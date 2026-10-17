@@ -4,7 +4,10 @@ on:
     paths:
       - 'sql/alliance-avatar-ledger-candidate.sql'
       - 'sql/alliance-profile-candidate.sql'
+      - 'lib/alliance-avatar-storage.mjs'
+      - 'lib/alliance-avatar-runtime/limits.mjs'
       - 'tests/alliance-avatar-ledger*'
+      - 'tests/alliance-avatar-receipts-native.sql'
       - 'tests/alliance-profile-native*'
       - '.github/workflows/alliance-avatar-ledger.yml'
 permissions:

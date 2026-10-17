@@ -1,3 +1,18 @@
+-- Synthetic receipt helpers are fixture-only and disappear on rollback.
+create function public.avatar_descriptor(n integer) returns jsonb language sql immutable as $$
+ select jsonb_build_object('bytes',n,'sha256',repeat('a',64),'width',1,'height',1,'mime','image/png');
+$$;
+create function public.avatar_upload_result(operation uuid,ok boolean default true) returns jsonb
+language sql stable security definer set search_path='' as $$
+ select jsonb_build_object('state',case when ok then 'stored' else 'stored_unverified' end,'writeSettled',true,'verified',ok,'receipt',obj.descriptor||jsonb_build_object('profileId',obj.profile_id,'objectId',obj.id,'key','v1/'||obj.profile_id||'/'||obj.id||'.png','providerId',obj.id))
+ from alliance_avatar.objects obj join alliance_avatar.operations op on op.object_id=obj.id where op.id=operation;
+$$;
+create function public.avatar_deletion_result(object_id uuid) returns jsonb
+language sql stable security definer set search_path='' as $$
+ select jsonb_build_object('state','deleted','writeSettled',true,'receipt',obj.receipt) from alliance_avatar.objects obj where obj.id=object_id;
+$$;
+grant execute on function public.avatar_descriptor(integer),public.avatar_upload_result(uuid,boolean),public.avatar_deletion_result(uuid) to alliance_avatar_executor;
+
 -- Synthetic native database acceptance, inside the disposable fixture transaction.
 grant execute on function public.fixture_assert(boolean,text) to alliance_avatar_executor;
 create function public.avatar_expect_denied(statement text,label text) returns void language plpgsql security invoker as $$
@@ -40,28 +55,28 @@ select public.fixture_assert((alliance_avatar.reserve('aaaaaaaa-aaaa-4aaa-8aaa-a
 select public.avatar_expect_denied(format('select alliance_avatar.reserve(%L,%L,0)','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',:'avatar_op1'),'other account cannot replay an operation');
 select public.avatar_expect_denied($q$select alliance_avatar.reserve('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',gen_random_uuid(),0)$q$,'second pending decode refuses');
 select public.fixture_assert(jsonb_array_length(alliance_avatar.mine('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')->'pending')=1,'reload can discover its durable pending operation');
-select public.avatar_expect_denied(format('select alliance_avatar.claim_upload(%L,%L,1024)','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',:'avatar_op1'),'other actor cannot claim upload');
-select public.avatar_expect_denied(format('select alliance_avatar.claim_upload(%L,%L,307201)','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1'),'oversized derivative cannot dispatch');
-select public.fixture_assert((alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1',1024)->>'dispatch')='true','first upload dispatch succeeds');
-select public.fixture_assert((alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1',1024)->>'dispatch')='false','same object never uploads twice');
+select public.avatar_expect_denied(format('select alliance_avatar.claim_upload(%L,%L,public.avatar_descriptor(1024))','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',:'avatar_op1'),'other actor cannot claim upload');
+select public.avatar_expect_denied(format('select alliance_avatar.claim_upload(%L,%L,public.avatar_descriptor(307201))','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1'),'oversized derivative cannot dispatch');
+select public.fixture_assert((alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1',public.avatar_descriptor(1024))->>'dispatch')='true','first upload dispatch succeeds');
+select public.fixture_assert((alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1',public.avatar_descriptor(1024))->>'dispatch')='false','same object never uploads twice');
 select public.fixture_assert((alliance_avatar.cancel_reserved('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1')->>'state')='uploading','cancel cannot pretend an in-flight upload disappeared');
 select public.fixture_assert((alliance_avatar.mine('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')->>'objectId') is null,'pending upload is not visible');
-select public.fixture_assert((alliance_avatar.commit_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1')->>'version')='1','acknowledged upload publishes version one');
-select public.fixture_assert((alliance_avatar.commit_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1')->>'version')='1','commit replay does not increment version');
+select public.fixture_assert((alliance_avatar.commit_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1',public.avatar_upload_result(:'avatar_op1'))->>'version')='1','acknowledged upload publishes version one');
+select public.fixture_assert((alliance_avatar.commit_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op1',public.avatar_upload_result(:'avatar_op1'))->>'version')='1','commit replay does not increment version');
 select public.fixture_assert((alliance_avatar.mine('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb')->>'objectId') is null,'another account has no access to the first image');
-select public.avatar_expect_denied(format('select alliance_avatar.ack_deleted(%L)',:'avatar_o1'),'active object cannot be acknowledged as deleted');
+select public.avatar_expect_denied(format('select alliance_avatar.ack_deleted(%1$L,public.avatar_deletion_result(%1$L))',:'avatar_o1'),'active object cannot be acknowledged as deleted');
 select gen_random_uuid() as avatar_op2 \gset
 select alliance_avatar.reserve('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op2',1)->>'objectId' as avatar_o2 \gset
 select public.fixture_assert((alliance_avatar.mine('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')->>'objectId')=:'avatar_o1','replacement leaves current image intact');
-select alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op2',2048);
+select alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op2',public.avatar_descriptor(2048));
 select gen_random_uuid() as avatar_remove1 \gset
 select public.fixture_assert((alliance_avatar.remove_image('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_remove1',1)->>'version')='2','remove immediately detaches image and advances version');
 select public.fixture_assert((alliance_avatar.remove_image('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_remove1',1)->>'version')='2','remove replay is stable');
-select public.fixture_assert((alliance_avatar.commit_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op2')->>'state')='stale','late replacement cannot restore a removed image');
+select public.fixture_assert((alliance_avatar.commit_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op2',public.avatar_upload_result(:'avatar_op2'))->>'state')='stale','late replacement cannot restore a removed image');
 select public.fixture_assert((alliance_avatar.mine('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')->>'objectId') is null,'image stays empty after late success');
 select public.fixture_assert(jsonb_array_length(alliance_avatar.cleanup_batch(20))=2,'old and stale settled images await physical cleanup');
 select public.avatar_expect_denied($q$select alliance_avatar.reserve('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',gen_random_uuid(),2)$q$,'unremoved cleanup files still consume owner slots');
-select alliance_avatar.ack_deleted(:'avatar_o1');select alliance_avatar.ack_deleted(:'avatar_o2');select alliance_avatar.ack_deleted(:'avatar_o2');
+select alliance_avatar.ack_deleted(:'avatar_o1',public.avatar_deletion_result(:'avatar_o1'));select alliance_avatar.ack_deleted(:'avatar_o2',public.avatar_deletion_result(:'avatar_o2'));select alliance_avatar.ack_deleted(:'avatar_o2',public.avatar_deletion_result(:'avatar_o2'));
 select public.fixture_assert(jsonb_array_length(alliance_avatar.cleanup_batch(20))=0,'confirmed physical deletion releases cleanup entries idempotently');
 select gen_random_uuid() as avatar_op3 \gset
 select alliance_avatar.reserve('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op3',2)->>'objectId' as avatar_o3 \gset
@@ -75,21 +90,21 @@ select alliance_avatar.reserve('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_o
 reset role;
 update alliance_avatar.operations set expires_at=clock_timestamp()-interval '1 second' where id=:'avatar_op4';
 set local role alliance_avatar_executor;
-select public.fixture_assert((alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op4',1024)->>'dispatch')='false','expired reservation cannot upload');
+select public.fixture_assert((alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op4',public.avatar_descriptor(1024))->>'dispatch')='false','expired reservation cannot upload');
 select gen_random_uuid() as avatar_op5 \gset
 select alliance_avatar.reserve('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op5',2)->>'objectId' as avatar_o5 \gset
-select alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op5',1024);
+select alliance_avatar.claim_upload('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op5',public.avatar_descriptor(1024));
 reset role;
 delete from auth.users where id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 select public.fixture_assert((select object_id is null and removed_at is not null from alliance_avatar.heads where profile_id=:'avatar_a'),'account deletion detaches image through profile trigger');
 select public.fixture_assert((select state='cleanup' and not write_settled from alliance_avatar.objects where id=:'avatar_o5'),'unknown in-flight upload is quarantined after account deletion');
 set local role alliance_avatar_executor;
-select public.avatar_expect_denied(format('select alliance_avatar.ack_deleted(%L)',:'avatar_o5'),'absence alone cannot release unknown upload slot');
+select public.avatar_expect_denied(format('select alliance_avatar.ack_deleted(%1$L,public.avatar_deletion_result(%1$L))',:'avatar_o5'),'absence alone cannot release unknown upload slot');
 select public.fixture_assert(jsonb_array_length(alliance_avatar.cleanup_batch(20))=0,'uncertain writes excluded from cleanup dispatch');
-select public.avatar_expect_denied(format('select alliance_avatar.commit_upload(%L,%L)','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op5'),'deleted account cannot publish late upload');
-select alliance_avatar.settle_unpublished(:'avatar_op5');
+select public.avatar_expect_denied(format('select alliance_avatar.commit_upload(%1$L,%2$L,public.avatar_upload_result(%2$L))','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',:'avatar_op5'),'deleted account cannot publish late upload');
+select alliance_avatar.settle_unpublished(:'avatar_op5',public.avatar_upload_result(:'avatar_op5'));
 select public.fixture_assert(jsonb_array_length(alliance_avatar.cleanup_batch(20))=1,'definitively settled unpublished write becomes cleanup eligible');
-select alliance_avatar.ack_deleted(:'avatar_o5');
+select alliance_avatar.ack_deleted(:'avatar_o5',public.avatar_deletion_result(:'avatar_o5'));
 select public.avatar_expect_denied($q$select alliance_avatar.cleanup_batch(21)$q$,'cleanup pages are bounded');
 reset role;
 
@@ -100,19 +115,19 @@ reset role;
 set local role alliance_avatar_executor;
 select gen_random_uuid() as avatar_cop1 \gset
 select alliance_avatar.reserve('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop1',0)->>'objectId' as avatar_co1 \gset
-select alliance_avatar.claim_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop1',2048);
-select alliance_avatar.commit_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop1');
+select alliance_avatar.claim_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop1',public.avatar_descriptor(2048));
+select alliance_avatar.commit_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop1',public.avatar_upload_result(:'avatar_cop1'));
 select gen_random_uuid() as avatar_cop2 \gset
 select alliance_avatar.reserve('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop2',1)->>'objectId' as avatar_co2 \gset
-select alliance_avatar.claim_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop2',307200);
-select public.fixture_assert((alliance_avatar.commit_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop2')->>'version')='2','successful replacement advances version atomically');
+select alliance_avatar.claim_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop2',public.avatar_descriptor(307200));
+select public.fixture_assert((alliance_avatar.commit_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop2',public.avatar_upload_result(:'avatar_cop2'))->>'version')='2','successful replacement advances version atomically');
 select public.fixture_assert((alliance_avatar.mine('cccccccc-cccc-4ccc-8ccc-cccccccccccc')->>'objectId')=:'avatar_co2','new image replaces old reference');
-select alliance_avatar.ack_deleted(:'avatar_co1');
+select alliance_avatar.ack_deleted(:'avatar_co1',public.avatar_deletion_result(:'avatar_co1'));
 select gen_random_uuid() as avatar_cop3 \gset
 select alliance_avatar.reserve('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop3',2);
 select alliance_avatar.remove_image('cccccccc-cccc-4ccc-8ccc-cccccccccccc',gen_random_uuid(),2);
-select public.fixture_assert((alliance_avatar.claim_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop3',1024)->>'dispatch')='false','remove cancels an undispatched replacement');
-select alliance_avatar.ack_deleted(:'avatar_co2');
+select public.fixture_assert((alliance_avatar.claim_upload('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop3',public.avatar_descriptor(1024))->>'dispatch')='false','remove cancels an undispatched replacement');
+select alliance_avatar.ack_deleted(:'avatar_co2',public.avatar_deletion_result(:'avatar_co2'));
 reset role;
 select public.fixture_assert(not exists(select 1 from alliance_avatar.objects where profile_id=:'avatar_c' and state<>'deleted'),'remove and physical cleanup leave no retained owner slots');
 set local role alliance_avatar_executor;
@@ -120,14 +135,14 @@ select gen_random_uuid() as avatar_cop4 \gset
 select gen_random_uuid() as avatar_bop1 \gset
 select alliance_avatar.reserve('cccccccc-cccc-4ccc-8ccc-cccccccccccc',:'avatar_cop4',3);
 select alliance_avatar.reserve('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',:'avatar_bop1',0)->>'objectId' as avatar_bo1 \gset
-select alliance_avatar.claim_upload('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',:'avatar_bop1',1024);
+select alliance_avatar.claim_upload('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',:'avatar_bop1',public.avatar_descriptor(1024));
 reset role;
 update alliance_avatar.operations set expires_at=clock_timestamp()-interval '1 second' where id in(:'avatar_cop4',:'avatar_bop1');
 set local role alliance_avatar_executor;
 select public.fixture_assert(alliance_avatar.expire_batch(20)=2,'bounded expiry handles never-dispatched and uncertain operations separately');
 select public.fixture_assert(jsonb_array_length(alliance_avatar.mine('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb')->'pending')=1,'reload still reports an expired uncertain upload');
-select public.avatar_expect_denied(format('select alliance_avatar.ack_deleted(%L)',:'avatar_bo1'),'expiry does not free an unsettled object slot');
-select alliance_avatar.settle_unpublished(:'avatar_bop1');select alliance_avatar.ack_deleted(:'avatar_bo1');
+select public.avatar_expect_denied(format('select alliance_avatar.ack_deleted(%1$L,public.avatar_deletion_result(%1$L))',:'avatar_bo1'),'expiry does not free an unsettled object slot');
+select alliance_avatar.settle_unpublished(:'avatar_bop1',public.avatar_upload_result(:'avatar_bop1'));select alliance_avatar.ack_deleted(:'avatar_bo1',public.avatar_deletion_result(:'avatar_bo1'));
 reset role;
 
 update alliance_avatar.daily set attempts=10 where actor_id='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';

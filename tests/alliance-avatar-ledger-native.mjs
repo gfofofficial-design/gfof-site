@@ -3,15 +3,18 @@ import assert from 'node:assert/strict';
 import {execFileSync,spawn} from 'node:child_process';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+import {createAllianceAvatarStorage} from '../lib/alliance-avatar-storage.mjs';
 const root=new URL('../',import.meta.url);
 const profileRunner=fileURLToPath(new URL('alliance-profile-native.mjs',import.meta.url));
 const original=execFileSync(process.execPath,[profileRunner,'--print-sql'],{encoding:'utf8',maxBuffer:1024*1024});
 const avatar=readFileSync(new URL('sql/alliance-avatar-ledger-candidate.sql',root),'utf8');
 const checks=readFileSync(new URL('alliance-avatar-ledger-native.sql',import.meta.url),'utf8');
+const receiptChecks=readFileSync(new URL('alliance-avatar-receipts-native.sql',import.meta.url),'utf8');
 const version=process.argv.includes('--local18')?180006:170011;
 let fixture=original.replaceAll('federation_alliance_profile_test','federation_alliance_avatar_test').replaceAll('170011',String(version));
 const marker='\nrollback;\n';assert.equal(fixture.split(marker).length,2);
-const sql=fixture.replace(marker,()=>'\n'+avatar+'\n'+checks+marker)+`
+const sql=fixture.replace(marker,()=>'\n'+avatar+'\n'+checks+'\n'+receiptChecks+marker)+`
 do $$ begin
  if exists(select 1 from pg_roles where rolname in('alliance_avatar_owner','alliance_avatar_executor')) or exists(select 1 from pg_namespace where nspname='alliance_avatar') then raise exception 'Avatar rollback failed';end if;
  raise notice 'PASS avatar transaction rollback removes candidate roles and schema';
@@ -45,15 +48,15 @@ reset role;
 update alliance_avatar.control set enabled=true;
 commit;
 `;
-const race=(operation,actor='dddddddd-dddd-4ddd-8ddd-dddddddddddd')=>new Promise((resolve,reject)=>{
+const concurrent=statement=>new Promise((resolve,reject)=>{
  const child=spawn(command,args,{stdio:['pipe','pipe','pipe'],windowsHide:true});let out='',err='';
  const timer=setTimeout(()=>{child.kill('SIGKILL');reject(Error('Fixture connection deadline'));},15000);
  child.stdout.on('data',d=>{out+=d;});child.stderr.on('data',d=>{err+=d;});child.on('error',reject);
  child.on('exit',code=>{clearTimeout(timer);resolve({code,out,err});});
- child.stdin.end(`begin;set local statement_timeout='5s';set local lock_timeout='3s';set local role alliance_avatar_executor;
- select alliance_avatar.reserve('${actor}','${operation}',0);
- select pg_sleep(0.15);commit;`);
+ child.stdin.end(statement);
 });
+const race=(operation,actor='dddddddd-dddd-4ddd-8ddd-dddddddddddd')=>concurrent(`begin;set local statement_timeout='5s';set local lock_timeout='3s';set local role alliance_avatar_executor;
+ select alliance_avatar.reserve('${actor}','${operation}',0);select pg_sleep(0.15);commit;`);
 try{
  run(bootstrap);
  const results=await Promise.all(['eeeeeeee-eeee-4eee-8eee-eeeeeeeeeee1','eeeeeeee-eeee-4eee-8eee-eeeeeeeeeee2'].map(op=>race(op)));
@@ -78,6 +81,46 @@ try{
  assert.equal(lastAttempt.filter(r=>r.code===0).length,1);assert.equal(lastAttempt.filter(r=>r.err.includes('avatar_limit_reached')).length,1);
  assert.match(run("select attempts from alliance_avatar.daily where actor_id='00000000-0000-0000-0000-000000000000';"),/\n\s*200\s*\n/);
  console.log('PASS different accounts cannot spend the final global daily attempt twice');
+ // A separate committed fixture proves receipts survive fresh client processes.
+ // These synthetic fixture counter resets are not an application refund path.
+ const receiptActor='44444444-dddd-4444-8444-444444444444',receiptOperation='55555555-eeee-4555-8555-555555555555';
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAADUlEQVQImWMQjG34DwADXwHuQa7szAAAAABJRU5ErkJggg==','base64');
+ const descriptor={bytes:png.length,sha256:createHash('sha256').update(png).digest('hex'),width:1,height:1,mime:'image/png'};
+ run(`begin;select alliance_avatar.cancel_reserved(m.user_id,op.id) from alliance_avatar.operations op join public.alliance_member_owners m on m.id=op.profile_id where op.state='reserved';
+ update alliance_avatar.daily set attempts=0 where actor_id='00000000-0000-0000-0000-000000000000';
+ insert into auth.users values('${receiptActor}');select set_config('request.jwt.claim.sub','${receiptActor}',true),set_config('request.jwt.claim.is_anonymous','false',true);
+ set local role authenticated;select public.alliance_save_profile('Receipt Race','','Synthetic persisted receipt concurrency fixture.','builder',false);reset role;
+ set local role alliance_avatar_executor;select alliance_avatar.reserve('${receiptActor}','${receiptOperation}',0);
+ select alliance_avatar.claim_upload('${receiptActor}','${receiptOperation}','${JSON.stringify(descriptor)}'::jsonb);commit;`);
+ const recoveredText=run(`\n\\pset tuples_only on\n\\pset format unaligned\nset role alliance_avatar_executor;select alliance_avatar.operation_receipt('${receiptActor}','${receiptOperation}');`).split('\n').find(line=>line.startsWith('{'));
+ const recovered=JSON.parse(recoveredText),providerId='99999999-9999-4999-8999-999999999999';
+ const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json'}});
+ let storageCalls=0,removing=false;
+ const storage=createAllianceAvatarStorage({enabled:true,origin:'https://abcdefghijklmnopqrst.supabase.co',apiKey:'sb_publishable_synthetic_fixture_only_12345',bearerToken:'syntheticHeader.syntheticClaims.syntheticSignature',fetcher:async(url,init)=>{
+   storageCalls++;assert.ok(url.startsWith('https://abcdefghijklmnopqrst.supabase.co/storage/v1/object/alliance-member-images-v1'));
+   if(init.method==='POST')return json({Id:providerId,Key:'alliance-member-images-v1/'+recovered.key});
+   if(init.method==='DELETE')return json([{id:providerId,name:recovered.key}]);
+   return removing?json({code:'NoSuchKey'},404):new Response(png,{headers:{'Content-Type':'image/png'}});
+ }});
+ const proof=await storage.upload({profileId:recovered.profileId,objectId:recovered.objectId,derivative:{bytes:png,width:1,height:1,mime:'image/png'}});
+ assert.equal(proof.state,'stored');assert.equal(proof.receipt.sha256,descriptor.sha256);assert.equal(storageCalls,2);
+ const proofLiteral=JSON.stringify(proof).replaceAll("'","''");
+ const commits=await Promise.all([0,1].map(()=>concurrent(`begin;set local statement_timeout='5s';set local lock_timeout='3s';set local role alliance_avatar_executor;
+ select alliance_avatar.commit_upload('${receiptActor}','${receiptOperation}','${proofLiteral}'::jsonb);select pg_sleep(0.15);commit;`)));
+ assert.equal(commits.filter(r=>r.code===0).length,2);
+ assert.match(run(`set role alliance_avatar_executor;select case when (alliance_avatar.operation_receipt('${receiptActor}','${receiptOperation}')->'receipt')='${JSON.stringify(proof.receipt)}'::jsonb and (alliance_avatar.mine('${receiptActor}')->>'version')='1' then 'receipt_recovered' else 'bad_receipt' end;`),/receipt_recovered/);
+ console.log('PASS concurrent matching upload acknowledgements persist one version across fresh client processes');
+ run(`set role alliance_avatar_executor;select alliance_avatar.remove_image('${receiptActor}',gen_random_uuid(),1);`);
+ removing=true;
+ const deletionProof=await storage.remove(proof.receipt,{writeSettled:true,authorize:async()=>true});
+ assert.equal(deletionProof.state,'deleted');assert.equal(storageCalls,4);
+ const deletion=JSON.stringify(deletionProof);
+ const deletions=await Promise.all([0,1].map(()=>concurrent(`begin;set local statement_timeout='5s';set local lock_timeout='3s';set local role alliance_avatar_executor;
+ select alliance_avatar.ack_deleted('${proof.receipt.objectId}','${deletion}'::jsonb);select pg_sleep(0.15);commit;`)));
+ assert.equal(deletions.filter(r=>r.code===0).length,2);
+ assert.match(run(`set role alliance_avatar_executor;select case when alliance_avatar.operation_receipt('${receiptActor}','${receiptOperation}')->'deletionReceipt'='${deletion}'::jsonb then 'deletion_recovered' else 'bad_deletion' end;`),/deletion_recovered/);
+ console.log('PASS concurrent deletion acknowledgement persists an exact idempotent proof across fresh client processes');
+ console.log('PASS actual gateway upload/deletion result shapes compose with native ledger using only four in-memory provider calls');
 }finally{
  // Only these fixture-created roles/objects exist in the dedicated test DB.
  run(`begin;

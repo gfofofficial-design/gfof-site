@@ -60,11 +60,12 @@ HTML 404, legacy ambiguous not-found, or access error cannot release quota.
 Lost deletion acknowledgements stay unknown and require separate reconciliation;
 this source deliberately provides no unsafe recovery shortcut.
 
-The future orchestrator must persist receipts and settlement transitions before
-changing a pointer or releasing capacity. Current candidate SQL does not persist
-the provider ID/checksum/dimensions receipt, so it must be extended and accepted
-before this adapter can be connected. In-memory receipts are not durable proof.
-Neither this file nor its tests call ledger commit/ack functions or run cleanup.
+The [durable receipt candidate](federation-alliance-avatar-receipts-20261017.md)
+now binds the pre-dispatch descriptor and persists upload/deletion receipts in
+the unapplied SQL. A disposable composed fixture feeds this gateway's real result
+shapes into that native ledger. The parameterized server orchestrator remains
+unimplemented; in-memory responses alone cannot authorize durable publication or
+quota release. This adapter itself neither calls SQL nor runs cleanup.
 
 ## Private reads and privacy
 
@@ -92,8 +93,8 @@ revocation, deletion and refusal to release capacity on ambiguous absence. No
 provider call or actual Auth/Storage policy acceptance is implied. The additional
 Windows/Ubuntu CI workflow needs no package installation or credentials.
 
-Next: persist receipts and implement the parameterized ledger/orchestrator with
-real durable ownership and cleanup claims; accept retry/reconciliation and bounded
+Next: implement the parameterized ledger/orchestrator with real durable ownership
+and cleanup claims; accept retry/reconciliation and bounded
 metadata retention without resurrection; implement real account authorization,
 abuse and serving limits; prove provider response shapes and credentials/policies
 in an approved isolated test. Native host isolation, backup/deletion reconciliation,
