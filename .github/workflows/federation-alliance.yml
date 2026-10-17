@@ -12,6 +12,7 @@ on:
       - 'assets/federation/fed-deck.css'
       - 'netlify.toml'
       - 'tests/federation-alliance.test.mjs'
+      - 'tests/federation-alliance-launchpad.test.mjs'
       - '.github/workflows/federation-alliance.yml'
   push:
     branches: [main]
@@ -26,6 +27,7 @@ on:
       - 'assets/federation/fed-deck.css'
       - 'netlify.toml'
       - 'tests/federation-alliance.test.mjs'
+      - 'tests/federation-alliance-launchpad.test.mjs'
       - '.github/workflows/federation-alliance.yml'
 permissions:
   contents: read
@@ -42,6 +44,8 @@ jobs:
           node-version: '24'
       - run: node --check assets/federation/fed-alliance-registry.mjs
       - run: node --check assets/federation/fed-alliance.mjs
+      - run: node --check assets/federation/fed-alliance-launchpad-core.mjs
+      - run: node --check assets/federation/fed-alliance-launchpad.mjs
       - run: node --check assets/federation/fed-community-league.mjs
       - run: node --check netlify/lib/community-league.cjs
-      - run: node --test tests/federation-alliance.test.mjs tests/federation-community-league.test.mjs
+      - run: node --test tests/federation-alliance.test.mjs tests/federation-community-league.test.mjs tests/federation-alliance-launchpad.test.mjs
