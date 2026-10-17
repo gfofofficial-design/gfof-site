@@ -5,7 +5,7 @@ const {readJsonBounded}=require('./read-json-bounded.cjs');
 const {solanaProvider}=require('./data-provider-config.cjs');
 // Reviewed hosts only. Each request must originate on the host serving it;
 // neither the preview nor production may call the other's wallet endpoint.
-const ORIGINS=new Set(['https://deploy-preview-104--gfof.netlify.app','https://galacticfederation.co']);
+const ORIGINS=new Set(['https://deploy-preview-104--gfof.netlify.app','https://deploy-preview-99--gfof.netlify.app','https://galacticfederation.co']);
 const PROGRAMS=['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA','TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'];
 const GFOF='Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';
 const USDC='EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';

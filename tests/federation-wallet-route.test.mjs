@@ -39,6 +39,26 @@ test('modern route preserves parsed balances, source slots and available referen
   try{const r=await route(request());const d=await r.json();assert.equal(r.status,200);assert.equal(rpcCalls,3);assert.equal(d.sol,'1.23456789');assert.deepEqual(d.slots,[10000,10001,10001]);assert.equal(d.pricesAvailable,true);assert.equal(r.headers.get('netlify-cdn-cache-control'),'no-store');}finally{global.fetch=old;}
 });
 
+test('account preview uses the modern wallet route while other-origin reads stay refused',async()=>{
+  const preview='https://deploy-preview-99--gfof.netlify.app';
+  const old=global.fetch;let rpcCalls=0;
+  global.fetch=async(url,options)=>{
+    if(url.startsWith('https://api.jup.ag/'))return new Response('{}');
+    assert.equal(url,'https://api.mainnet-beta.solana.com');rpcCalls++;
+    const data=JSON.parse(options.body);
+    return new Response(JSON.stringify({result:data.method==='getBalance'?{context:{slot:10000},value:0}:{context:{slot:10001},value:[]}}));
+  };
+  try{
+    for(const from of [origin,'https://galacticfederation.co']){
+      const rejected=await route(request(undefined,{url:preview+'/api/federation-wallet',headers:{Origin:from,'Content-Type':'application/json'}}));
+      assert.equal(rejected.status,403);
+    }
+    assert.equal(rpcCalls,0);
+    const result=await route(request(undefined,{url:preview+'/api/federation-wallet',headers:{Origin:preview,'Content-Type':'application/json'}}));
+    assert.equal(result.status,200);assert.equal(rpcCalls,3);assert.equal((await result.json()).sol,'0');
+  }finally{global.fetch=old;}
+});
+
 test('an ignored-cancellation inbound stream settles without a late provider call',{timeout:4000},async()=>{
   const old=global.fetch;let calls=0,cancelled=0,finish;
   global.fetch=async()=>{calls++;throw Error('provider must not run');};

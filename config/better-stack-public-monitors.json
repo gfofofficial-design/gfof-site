@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "state": "prepared_not_created",
+  "apiEndpoint": "https://incidents.betterstack.com/api/v2/monitors",
+  "monitors": [
+    {
+      "id": "federation",
+      "body": {
+        "monitor_type": "expected_status_code",
+        "expected_status_codes": [
+          200
+        ],
+        "http_method": "GET",
+        "check_frequency": 180,
+        "request_timeout": 10,
+        "confirmation_period": 60,
+        "recovery_period": 60,
+        "verify_ssl": true,
+        "follow_redirects": false,
+        "remember_cookies": false,
+        "paused": true,
+        "email": false,
+        "sms": false,
+        "call": false,
+        "push": false,
+        "critical_alert": false,
+        "url": "https://galacticfederation.co/",
+        "pronounceable_name": "Federation homepage"
+      }
+    },
+    {
+      "id": "dossier",
+      "body": {
+        "monitor_type": "expected_status_code",
+        "expected_status_codes": [
+          200
+        ],
+        "http_method": "GET",
+        "check_frequency": 180,
+        "request_timeout": 10,
+        "confirmation_period": 60,
+        "recovery_period": 60,
+        "verify_ssl": true,
+        "follow_redirects": false,
+        "remember_cookies": false,
+        "paused": true,
+        "email": false,
+        "sms": false,
+        "call": false,
+        "push": false,
+        "critical_alert": false,
+        "url": "https://dossiertrack.co/",
+        "pronounceable_name": "Dossier homepage"
+      }
+    },
+    {
+      "id": "fcc",
+      "body": {
+        "monitor_type": "expected_status_code",
+        "expected_status_codes": [
+          200
+        ],
+        "http_method": "GET",
+        "check_frequency": 180,
+        "request_timeout": 10,
+        "confirmation_period": 60,
+        "recovery_period": 60,
+        "verify_ssl": true,
+        "follow_redirects": false,
+        "remember_cookies": false,
+        "paused": true,
+        "email": false,
+        "sms": false,
+        "call": false,
+        "push": false,
+        "critical_alert": false,
+        "url": "https://fcc.galacticfederation.co/",
+        "pronounceable_name": "FCC homepage"
+      }
+    }
+  ],
+  "optionalContentChecks": [
+    {
+      "id": "federation-content",
+      "body": {
+        "monitor_type": "keyword",
+        "http_method": "GET",
+        "check_frequency": 180,
+        "request_timeout": 10,
+        "confirmation_period": 60,
+        "recovery_period": 60,
+        "verify_ssl": true,
+        "follow_redirects": false,
+        "remember_cookies": false,
+        "paused": true,
+        "email": false,
+        "sms": false,
+        "call": false,
+        "push": false,
+        "critical_alert": false,
+        "url": "https://galacticfederation.co/",
+        "pronounceable_name": "Federation homepage content",
+        "required_keyword": "Galactic Federation"
+      }
+    },
+    {
+      "id": "dossier-content",
+      "body": {
+        "monitor_type": "keyword",
+        "http_method": "GET",
+        "check_frequency": 180,
+        "request_timeout": 10,
+        "confirmation_period": 60,
+        "recovery_period": 60,
+        "verify_ssl": true,
+        "follow_redirects": false,
+        "remember_cookies": false,
+        "paused": true,
+        "email": false,
+        "sms": false,
+        "call": false,
+        "push": false,
+        "critical_alert": false,
+        "url": "https://dossiertrack.co/",
+        "pronounceable_name": "Dossier homepage content",
+        "required_keyword": "Dossier"
+      }
+    },
+    {
+      "id": "fcc-content",
+      "body": {
+        "monitor_type": "keyword",
+        "http_method": "GET",
+        "check_frequency": 180,
+        "request_timeout": 10,
+        "confirmation_period": 60,
+        "recovery_period": 60,
+        "verify_ssl": true,
+        "follow_redirects": false,
+        "remember_cookies": false,
+        "paused": true,
+        "email": false,
+        "sms": false,
+        "call": false,
+        "push": false,
+        "critical_alert": false,
+        "url": "https://fcc.galacticfederation.co/",
+        "pronounceable_name": "FCC homepage content",
+        "required_keyword": "Federation Capital Command"
+      }
+    }
+  ]
+}
