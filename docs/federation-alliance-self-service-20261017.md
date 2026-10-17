@@ -84,6 +84,8 @@ Supabase guidance reviewed October 17: [RLS](https://supabase.com/docs/guides/da
 
 ## Profile foundation candidate — October 17
 
+Optional images now have a separate [bounded processing candidate](federation-alliance-avatar-processing-20261017.md): isolated native decoding, metadata removal, fixed output and cancellation/deadline controls. It remains disabled/unmounted. No storage bucket, upload route, durable quota or member-image handling is activated.
+
 Continuation: [account-to-profile transport candidate](federation-alliance-profile-transport-20261017.md)
 adds unmounted, disabled server and browser factories for verified-cookie profile
 requests, strict same-origin boundaries, private response shapes and honest
