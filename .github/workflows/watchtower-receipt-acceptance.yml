@@ -1,0 +1,57 @@
+name: Watchtower isolated receipt acceptance
+on:
+  pull_request:
+    paths:
+      - 'migrations/20261013_watchtower_candidates.sql'
+      - 'sql/watchtower-runtime-access.sql'
+      - 'sql/watchtower-readiness.sql'
+      - 'sql/watchtower-relock.sql'
+      - 'sql/watchtower-server-logins.sql'
+      - 'sql/watchtower-pilot-intake-bound.sql'
+      - 'netlify/functions/_shared/watchtower-database.mjs'
+      - 'netlify/functions/watchtower-*.mjs'
+      - 'netlify/functions/_shared/watchtower-*.mjs'
+      - 'config/watchtower-pilot.json'
+      - 'lib/watchtower-batch-core.mjs'
+      - 'scripts/check-watchtower-pilot.mjs'
+      - 'scripts/check-watchtower-server.mjs'
+      - 'tests/watchtower-database.test.mjs'
+      - 'netlify/functions/_shared/watchtower-receipt-sink.mjs'
+      - 'tests/watchtower-receipt-sink.test.mjs'
+      - 'scripts/check-watchtower-postgres.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/watchtower-receipt-acceptance.yml'
+permissions:
+  contents: read
+jobs:
+  isolated-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: fixture
+          POSTGRES_PASSWORD: fixture
+          POSTGRES_DB: postgres
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/watchtower-receipt-sink.test.mjs
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: node scripts/check-watchtower-server.mjs
+      - run: node scripts/check-watchtower-postgres.mjs
+        env:
+          WATCHTOWER_TEST_CONTAINER: ${{ job.services.postgres.id }}
+          WATCHTOWER_TEST_PORT: ${{ job.services.postgres.ports[5432] }}
+

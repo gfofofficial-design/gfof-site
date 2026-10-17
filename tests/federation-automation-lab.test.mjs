@@ -4,7 +4,7 @@ function lab(){
  const elements=new Map();
  function node(){return {children:[],textContent:'',value:'',listeners:{},append(x){this.children.push(x);if(!this.value&&x.value)this.value=x.value;},replaceChildren(){this.children=[];},addEventListener(t,f){this.listeners[t]=f;}};}
  const element=id=>{if(!elements.has(id))elements.set(id,node());return elements.get(id);};element('level').value='0';
- const script=readFileSync(new URL('../assets/federation/fed-automation-lab.mjs',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
+ const script=readFileSync(new URL('../assets/federation/fed-automation-lab.mjs',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'');
  runInNewContext(script,{document:{getElementById:element,createElement:node},missionHint,replayWatchtower,inspectAgentRecord,fetch:()=>{throw Error('network forbidden');}});
  return element;
 }

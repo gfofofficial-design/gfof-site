@@ -1,0 +1,11 @@
+# Single-candidate worker and atomic evidence completion
+
+The disabled worker claims at most one candidate, validates its signature/slot/lease version/accounts, invokes the injected reviewed verifier, and projects only structurally bound corroboration. Database bigint values are converted only when safe positive integers. No provider text, raw bytes or arbitrary extra fields are persisted.
+
+An unavailable or mismatched verification leaves work leased until expiry. A worker deadline stops late verification from issuing completion. The finish function locks the candidate, requires the current unexpired lease/version, checks evidence signature/transaction slot/account list and required source/finality labels, then writes corroboration, database receipt time and processed state in the same statement. Processed rows require stored corroboration. The previous finish-without-evidence signature is removed from this unapplied draft migration; no live migration or function replacement is executed.
+
+Processed means corroboration was saved, not that a financial finding was proved. RPC provenance is a reviewed caller obligation, and finalized request parameters do not cryptographically authenticate a returned response. Current account snapshots and transaction slots remain separate observations. Historical comparisons and program-specific interpretation are not implemented here.
+
+The worker defaults disabled and performs no schedule, RPC transport, account setup or notification. Enablement requires reviewed database query and verifier callbacks. Database/query cancellation and statement deadlines remain future transport obligations. A completion query can commit after a caller timeout; the next queue read must reconcile database state instead of assuming failure or emitting another event. There is no external side effect in this worker.
+
+Fixture checks cover unavailable/misbound verification, late completion prevention, empty queues and rejected leases. Disposable PostgreSQL acceptance additionally proves invalid evidence leaves the candidate leased with no evidence, and accepted evidence/completion is committed together. Before activation: real reviewed transport/allowances, storage/TLS/least privilege/migration/retention, retry versus review/exhaustion policy, recovery/backfill, scope/cost and owner authorization.

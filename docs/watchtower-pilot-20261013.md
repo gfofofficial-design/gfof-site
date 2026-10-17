@@ -1,0 +1,13 @@
+# Owner-selected Watchtower pilot — preparation only
+
+On October 13 the owner selected the recommended initial scope: the current GFOF mint and three published Streamflow lock contracts, using existing Helius credits without a plan upgrade or additional provider spending. The four public account addresses in config/watchtower-pilot.json match the current treasury page and October 8 source snapshot. This confirms the selected public identifiers, not present account state or continued escrow balances.
+
+The configuration is deliberately inactive and validated by `node scripts/check-watchtower-pilot.mjs`, which makes no network call. Scope is one mint account and three lock metadata accounts. Mint mentions do not guarantee all holder-transfer/trade coverage; escrow balances require their own scope or the existing separately verified read. No personal-wallet tracking or notification destination was selected.
+
+Proposed, not activated, verification limits are 2,000 requests/day and 60,000/month: at two successful verification reads per candidate, this supports up to 1,000/day or 30,000/month before retries. At the detailed current Helius one-credit rates for each of these read methods and one webhook delivery, a single-delivery/single-pass 30,000-candidate month would use about 90,000 credits. This is an illustrative budget, not measured traffic or an approved production limit. Extra deliveries, retries/backfill, hosting/storage and other services consume more. The public pricing FAQ has older archival-rate wording than the detailed credit table; verify actual account metering before activating or treating this estimate as a cap.
+
+The owner-approved zero-additional-spend direction requires checking current plan, remaining credits, prepaid/autoscaling settings and provider-side pause/usage controls before starting delivery. Our RPC allowance cannot stop charges for webhook deliveries already processed by Helius. Rejected deliveries can still cost credits, so do not claim the local limiter alone guarantees zero spending.
+
+Remaining work is independent approval of real limits; reviewed hosting/database/TLS/roles/retention/migration; provider/network binding and bounded backfill; deployment composition and live acceptance; then explicitly authorized subscription/worker activation within the available account allowance. No secret was read/created, no provider account changed and no live service started by this preparation.
+
+Sources reviewed October 13: [Helius pricing](https://www.helius.dev/pricing), [detailed credit table](https://www.helius.dev/docs/billing/credits), [webhook charging and retries](https://www.helius.dev/docs/faqs/webhooks), [public treasury](https://galacticfederation.co/treasury).
