@@ -1,0 +1,56 @@
+name: Alliance profile data candidate
+on:
+  pull_request:
+    paths:
+      - 'sql/alliance-profile-candidate.sql'
+      - 'lib/alliance-profile-store.mjs'
+      - 'lib/alliance-profile-api.mjs'
+      - 'assets/federation/fed-alliance-profile-contract.mjs'
+      - 'assets/federation/fed-alliance-member-client.mjs'
+      - 'netlify/lib/read-json-bounded.cjs'
+      - 'tests/alliance-profile*'
+      - '.github/workflows/alliance-profile.yml'
+permissions:
+  contents: read
+jobs:
+  profile-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: node --check lib/alliance-profile-store.mjs
+      - run: node --check lib/alliance-profile-api.mjs
+      - run: node --check assets/federation/fed-alliance-member-client.mjs
+      - run: node --test tests/alliance-profile-store.test.mjs tests/alliance-profile-api.test.mjs tests/alliance-profile-client.test.mjs
+  profile-native:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:17.11-bookworm
+        env:
+          POSTGRES_DB: federation_alliance_profile_test
+          POSTGRES_PASSWORD: alliance_disposable_fixture_only
+        options: >-
+          --health-cmd "pg_isready -U postgres -d federation_alliance_profile_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Verify native grants, row ownership and publication visibility
+        run: node tests/alliance-profile-native.mjs
+        env:
+          ALLIANCE_PROFILE_TEST_CONFIRM: disposable_profile_fixture
+          ALLIANCE_PROFILE_TEST_CONTAINER: ${{ job.services.postgres.id }}
