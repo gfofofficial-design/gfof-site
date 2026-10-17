@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {ACTIVITIES, ROUTES, PREP_CHECKS, matchingActivities, selectActivities, updateSelection, crewPlan, prepareProjectBrief} from '../assets/federation/fed-alliance-launchpad-core.mjs';
 import {mountAllianceLaunchpad} from '../assets/federation/fed-alliance-launchpad.mjs';
+import {ARTWORK_LIMITS, artworkFileProblem, artworkSignature, artworkDimensions, artworkBrief, createArtworkSelection} from '../assets/federation/fed-alliance-artwork.mjs';
 
 const publicFields=()=>({name:'Example Community',website:'https://example.com/',mint:'',interest:'education'});
 const flush=()=>new Promise(setImmediate);
@@ -86,6 +87,7 @@ function fixture(options={}){
   for(const [id,value] of Object.entries({'activity-role':'all','activity-time':'all','crew-route':'welcome','crew-pace':'session','project-interest':'education'}))get(id).value=value;
   const clock={timers,async advance(ms){now+=ms;for(const [id,timer] of [...timers])if(timer.at<=now){timers.delete(id);timer.fn();}await flush();}};
   const api=mountAllianceLaunchpad(document,{
+    artwork:options.artwork,
     copy(text){copies.push(text);return options.copy ? options.copy(text) : Promise.resolve();},
     createFile(text){if(options.files===false)return null;const url='blob:synthetic-'+(created.length+1);created.push({url,text});return url;},
     revokeFile:url=>revoked.push(url),
@@ -162,4 +164,84 @@ test('console interactions perform no network, storage or account work',()=>{
   globalThis.fetch=()=>{calls++;throw Error('network prohibited');};Object.defineProperty(globalThis,'localStorage',{configurable:true,get(){throw Error('storage prohibited');}});
   try{const b=fixture();b.get('crew-route').value='builders';b.get('crew-load-route').emit('click');b.setProject();b.get('project-form').emit('submit');assert.equal(calls,0);b.api.dispose();}
   finally{globalThis.fetch=previousFetch;if(storage)Object.defineProperty(globalThis,'localStorage',storage);else delete globalThis.localStorage;}
+});
+
+function pngHeader(width=512,height=512) {
+  const bytes=new Uint8Array(24),view=new DataView(bytes.buffer);
+  bytes.set([137,80,78,71,13,10,26,10]);view.setUint32(8,13);view.setUint32(12,0x49484452);view.setUint32(16,width);view.setUint32(20,height);return bytes;
+}
+function imageFile({name='example-logo.png',type='image/png',bytes=pngHeader(),read}={}) {
+  return {name,type,size:bytes.length,arrayBuffer:read || (async()=>bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength))};
+}
+function artworkFixture(extra={}) {
+  const created=[],revoked=[],updates=[],timers=new Map();let next=0;
+  const options={createUrl:file=>{const url='blob:artwork-'+(created.length+1);created.push({file,url});return url;},revokeUrl:url=>revoked.push(url),
+    inspect:()=>({promise:Promise.resolve({width:512,height:512}),cancel(){}}),
+    setTimeout(fn,ms){assert.equal(ms,ARTWORK_LIMITS.waitMs);const id=++next;timers.set(id,fn);return id;},clearTimeout:id=>timers.delete(id),...extra};
+  const art=createArtworkSelection({...options,update:state=>updates.push(state)});
+  return {art,options,created,revoked,updates,timers};
+}
+test('artwork refuses unsupported types, empty and oversized files before a read',async()=>{
+  const b=artworkFixture();let reads=0;
+  for(const file of [{type:'image/svg+xml',size:50},{type:'image/gif',size:20},{type:'image/heic',size:100},{type:'image/png',size:0},{type:'image/png',size:ARTWORK_LIMITS.bytes+1}]){
+    assert.ok(artworkFileProblem(file));await b.art.select({...file,arrayBuffer(){reads++;throw Error('not allowed');}});assert.equal(b.updates.at(-1).status,'error');
+  }
+  assert.equal(reads,0);assert.equal(b.created.length,0);b.art.dispose();
+});
+test('file signatures and bounded image headers are checked before the decoder',async()=>{
+  assert.equal(artworkSignature(new Uint8Array([255,216,255])),'image/jpeg');
+  const jpeg=new Uint8Array([255,216,255,192,0,8,8,1,0,2,0,3]);assert.deepEqual(artworkDimensions(jpeg,'image/jpeg'),{width:512,height:256});
+  const webp=new Uint8Array(30),view=new DataView(webp.buffer);webp.set([82,73,70,70]);view.setUint32(4,22,true);webp.set([87,69,66,80,86,80,56,88],8);view.setUint32(16,10,true);webp[24]=255;webp[27]=127;
+  assert.equal(artworkSignature(webp),'image/webp');assert.deepEqual(artworkDimensions(webp,'image/webp'),{width:256,height:128});
+  for(const bytes of [new Uint8Array([60,115,118,103]),pngHeader(99999,512)]){
+    const b=artworkFixture();await b.art.select(imageFile({bytes}));assert.equal(b.created.length,0);assert.equal(b.art.current,null);assert.equal(b.updates.at(-1).status,'error');b.art.dispose();
+  }
+  assert.equal(artworkDimensions(new Uint8Array([255,216,255,192,255,255]),'image/jpeg'),null);
+});
+test('valid artwork exports only a filename reminder, never the object URL or image data',async()=>{
+  const b=artworkFixture();await b.art.select(imageFile());assert.equal(b.updates.at(-1).status,'ready');assert.equal(b.timers.size,0);
+  const brief=artworkBrief(b.art.current);assert.match(brief,/example-logo.png/);assert.match(brief,/not embedded.*uploaded, saved or published/);assert.doesNotMatch(brief,/blob:|data:|base64/);
+  assert.equal(artworkBrief(null),'');b.art.dispose();assert.deepEqual(b.revoked,['blob:artwork-1']);
+});
+test('unsafe filenames are replaced with a plain attachment name',async()=>{
+  for(const name of ['<svg>.png','hidden\u202e.png','folder/private.png','Line\nBreak.png','x'.repeat(101)]){
+    const b=artworkFixture();await b.art.select(imageFile({name}));assert.equal(b.art.current.name,'project-image.png');b.art.dispose();
+  }
+});
+test('replacement and removal revoke prior URLs and cancel late decoder completion',async()=>{
+  const slow=deferred();let count=0,canceled=0;const b=artworkFixture({inspect:()=>({promise:++count===1?slow.promise:Promise.resolve({width:512,height:512}),cancel(){canceled++;}})});
+  const first=b.art.select(imageFile({name:'old.png'}));await flush();await b.art.select(imageFile({name:'new.png'}));await first;
+  assert.equal(b.art.current.name,'new.png');assert.ok(b.revoked.includes('blob:artwork-1'));slow.resolve({width:512,height:512});await flush();assert.equal(b.art.current.name,'new.png');
+  b.art.clear();assert.equal(b.art.current,null);assert.equal(b.updates.at(-1).status,'empty');assert.ok(b.revoked.includes('blob:artwork-2'));assert.ok(canceled>=2);assert.equal(b.timers.size,0);b.art.dispose();
+});
+test('slow image read times out and cannot create a later object URL',async()=>{
+  const slow=deferred(),b=artworkFixture();const selecting=b.art.select(imageFile({read:()=>slow.promise}));await flush();[...b.timers.values()][0]();await selecting;
+  assert.match(b.updates.at(-1).message,/took too long/);assert.equal(b.art.pending,false);assert.equal(b.timers.size,0);
+  slow.resolve(pngHeader().buffer);await flush();assert.equal(b.created.length,0);assert.equal(b.art.current,null);b.art.dispose();
+});
+test('unreadable and stalled decoders release object URLs and retain no image',async()=>{
+  for(const stalled of [false,true]){
+    const wait=deferred(),b=artworkFixture({inspect:()=>({promise:stalled?wait.promise:Promise.reject(Error('decode')),cancel(){}})});
+    const selecting=b.art.select(imageFile());await flush();if(stalled)[...b.timers.values()][0]();await selecting;
+    assert.equal(b.art.current,null);assert.equal(b.art.pending,false);assert.equal(b.updates.at(-1).status,'error');assert.deepEqual(b.revoked,['blob:artwork-1']);assert.equal(b.timers.size,0);
+    wait.resolve({width:512,height:512});await flush();assert.equal(b.art.current,null);b.art.dispose();
+  }
+});
+test('changing or removing artwork invalidates a prepared draft and pending copy',async()=>{
+  const a=artworkFixture(),slow=deferred(),b=fixture({artwork:a.options,copy:()=>slow.promise});b.setProject();b.get('project-form').emit('submit');
+  const copying=b.get('project-copy').emit('click');b.get('project-artwork').files=[imageFile()];await b.get('project-artwork').emit('change');await copying;
+  assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('project-artwork-image').hidden,false);assert.match(b.get('project-artwork-status').textContent,/example-logo/);
+  b.get('project-form').emit('submit');assert.match(b.get('project-brief').value,/Attach the original image separately/);assert.doesNotMatch(b.get('project-brief').value,/blob:/);
+  b.get('project-artwork-remove').emit('click');assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('project-artwork-image').hidden,true);assert.equal(b.get('project-artwork').value,'');assert.equal(b.document.activeElement,b.get('project-artwork'));
+  slow.resolve();await flush();assert.equal(b.get('project-copy-status').textContent,'');b.api.dispose();
+});
+test('preparing during an image check waits; clearing the worksheet cancels it',async()=>{
+  const wait=deferred(),a=artworkFixture({inspect:()=>({promise:wait.promise,cancel(){}})}),b=fixture({artwork:a.options});b.setProject();b.get('project-artwork').files=[imageFile()];const choosing=b.get('project-artwork').emit('change');await flush();
+  b.get('project-form').emit('submit');assert.equal(b.get('project-output').hidden,true);assert.match(b.get('project-prep-status').textContent,/Finish checking/);
+  b.get('project-clear').emit('click');await choosing;wait.resolve({width:512,height:512});await flush();assert.equal(b.get('project-artwork-image').hidden,true);assert.equal(b.get('project-artwork-remove').hidden,true);assert.equal(b.get('project-artwork').value,'');assert.equal(a.timers.size,0);assert.deepEqual(a.revoked,['blob:artwork-1']);b.api.dispose();
+});
+test('local artwork interaction performs no fetch or persistent storage operation',async()=>{
+  const fetch=globalThis.fetch,storage=Object.getOwnPropertyDescriptor(globalThis,'localStorage');globalThis.fetch=()=>{throw Error('network prohibited');};Object.defineProperty(globalThis,'localStorage',{configurable:true,get(){throw Error('storage prohibited');}});
+  try{const a=artworkFixture(),b=fixture({artwork:a.options});b.setProject();b.get('project-artwork').files=[imageFile()];await b.get('project-artwork').emit('change');b.get('project-form').emit('submit');assert.match(b.get('project-brief').value,/example-logo/);b.api.dispose();}
+  finally{globalThis.fetch=fetch;if(storage)Object.defineProperty(globalThis,'localStorage',storage);else delete globalThis.localStorage;}
 });
