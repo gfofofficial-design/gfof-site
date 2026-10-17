@@ -117,9 +117,16 @@ test('station changes update the mint, source links and pressed state together',
   assert.equal(app.get('partner-count').textContent,'1');
   assert.equal(app.get('station-controls').hidden,false);
   assert.equal(app.get('station-empty-note').hidden,true);
+  const previousHostLogo=app.get('station-badge').children[0];
+  assert.equal(previousHostLogo.src,'/logo-circle.png');
+  assert.equal(previousHostLogo.alt,'');
+  assert.equal(app.get('station-directory').children[0].children[0].children[0].src,'/logo-circle.png');
   app.get('station-picker').value='example'; app.get('station-picker').events.change();
   assert.equal(app.get('station-name').textContent,'Example Community');
   assert.equal(app.get('station-mint').textContent,partner().mint);
+  previousHostLogo.events.error();
+  assert.equal(app.get('station-badge').textContent,'EX');
+  assert.equal(app.get('station-badge').children.length,0);
   assert.equal(app.get('station-evidence').href,partner().evidence);
   assert.equal(app.get('station-explorer-link').href,'https://solscan.io/token/'+partner().mint);
   assert.equal(app.get('station-evidence-label').textContent,'Project-published evidence');
@@ -130,6 +137,11 @@ test('station changes update the mint, source links and pressed state together',
   app.get('station-picker').value='gfof'; app.get('station-picker').events.change();
   assert.equal(app.get('station-mint').textContent,HOST_STATION.mint);
   assert.equal(app.get('station-website').attributes.target,undefined);
+  const restoredLogo=app.get('station-badge').children[0];
+  assert.equal(restoredLogo.src,'/logo-circle.png');
+  restoredLogo.events.error();
+  assert.equal(app.get('station-badge').textContent,'GF');
+  assert.equal(app.get('station-badge').children.length,0);
 });
 
 test('selecting a station card moves focus to its updated details', () => {

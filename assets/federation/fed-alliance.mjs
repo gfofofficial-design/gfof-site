@@ -17,12 +17,25 @@ export function mountAlliance(document, location, history, stations = publishedS
   });
   picker.replaceChildren(...options);
 
+  function renderStationMark(node, station) {
+    node.textContent = station.badge;
+    if (station.id !== HOST_STATION.id || station.relationship !== 'host') return;
+    const logo = document.createElement('img');
+    logo.src = '/logo-circle.png';
+    logo.alt = ''; logo.width = 64; logo.height = 64;
+    logo.addEventListener('error', () => {
+      // An old image failure must not replace a newly selected station's badge.
+      if (node.children[0] === logo) node.textContent = station.badge;
+    });
+    node.replaceChildren(logo);
+  }
+
   function select(station, updateUrl = false) {
     const links = stationLinks(station);
     picker.value = station.id;
     byId('station-name').textContent = station.name;
     byId('station-symbol').textContent = '$' + station.symbol;
-    byId('station-badge').textContent = station.badge;
+    renderStationMark(byId('station-badge'), station);
     byId('station-relationship').textContent = station.relationship === 'host' ? 'FEDERATION HOST' : 'COMMUNITY PARTNER';
     byId('station-summary').textContent = station.summary;
     byId('station-mint').textContent = station.mint;
@@ -49,7 +62,7 @@ export function mountAlliance(document, location, history, stations = publishedS
       card.className = 'station-card';
       card.dataset.station = station.id;
       card.setAttribute('aria-pressed',String(picker.value === station.id));
-      const badge = document.createElement('span'); badge.className = 'station-mark'; badge.textContent = station.badge;
+      const badge = document.createElement('span'); badge.className = 'station-mark'; renderStationMark(badge, station);
       const title = document.createElement('strong'); title.textContent = station.name;
       const scope = document.createElement('span'); scope.className = 'station-meta';
       scope.textContent = '$' + station.symbol + (station.relationship === 'host' ? ' · Host station' : ' · Community partner');
