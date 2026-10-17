@@ -32,7 +32,7 @@ Default to no direct messages, anonymous uploads, financial wagers, token purcha
 
 ## Trust and data contract for the account integration
 
-No migration, hosted schema, storage bucket, route, API handler, environment value, email service or managed signup hook is created or changed in this PR. The following is proposed implementation work, not an adopted data collection practice or tested authorization policy.
+No migration, hosted schema, storage bucket, route, API handler, environment value, email service or managed signup hook is created or changed in this PR. Candidate SQL and an unmounted server adapter now cover profile ownership; the remaining records below are proposed work. None is an adopted data collection practice or hosted authorization acceptance.
 
 | Record | Ownership and publication rule |
 | --- | --- |
@@ -81,3 +81,11 @@ Email delivery should use a transactional outbox with idempotency keys, bounded 
 ## Current documentation sources
 
 Supabase guidance reviewed October 17: [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Storage access control](https://supabase.com/docs/guides/storage/security/access-control), [Storage buckets](https://supabase.com/docs/guides/storage/buckets/fundamentals), [File limits](https://supabase.com/docs/guides/storage/uploads/file-limits) and [Changelog](https://supabase.com/changelog). Relevant Data API exposure changes reinforce checking explicit grants and project settings. No SDK dependency or Supabase CLI was installed; no database migration was generated or applied.
+
+## Profile foundation candidate — October 17
+
+Owner approval covers independent member joining without routine operator approval. `sql/alliance-profile-candidate.sql` proposes private account bindings, one profile per account, owner-only edits/removal, explicit listing, protected moderation fields and deletion cascades. Directory access initially requires an eligible joined account; it is not an anonymous directory. Anonymous or missing eligibility claims fail closed.
+
+`lib/alliance-profile-store.mjs` is server-only, unmounted and disabled by default. It accepts only editable profile fields, uses fixed self-profile RPCs, bounds response sizes and deadlines, strips private fields and has no service key or anonymous fallback. Supabase must verify bearer tokens; adapter token-shape checks are not authentication. No UI imports it and no environment values are read. Images, challenges, suggestions, quotas and notifications are not connected.
+
+All 14 local adapter tests passed with synthetic in-memory responses. Native PostgreSQL assertions and a dedicated disposable PostgreSQL 17.11 CI workflow are included for actual ownership/grant checks; native execution remains pending until CI succeeds. The fixture uses synthetic claim settings, not real GoTrue/JWT verification. No hosted database, Auth, Storage, environment, email or deployment configuration was changed. This SQL is candidate source, not an applied or CLI-generated migration.
