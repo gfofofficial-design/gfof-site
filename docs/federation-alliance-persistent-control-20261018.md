@@ -77,6 +77,14 @@ must retain the same logical scope/epoch/minimum for the live deletion reader,
 current Auth/session/RLS, database switches, quotas and before/after checks.
 These are point-in-time checks, not a globally atomic freeze/revocation barrier.
 
+This row persists the **reviewed startup floor**, not every later deletion. Floor
+advancement currently occurs only during closed→review; no live deletion-write
+bridge updates this independent store before acknowledging a new removal. The
+existing deletion witness still remembers later observations only in memory.
+Durably anchoring each newly acknowledged removal, and checking that latest
+independent anchor during recovery, remains required before real member data.
+Do not claim this increment alone prevents resurrection of all later removals.
+
 ## What persistence proves, and what it does not
 
 Committed state survives ordinary application and database restart. A fresh signer
