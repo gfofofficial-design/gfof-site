@@ -133,3 +133,8 @@ The implementation uses existing Node JWK public-key import and Ed25519
 `sign(null, ...)` / `verify(null, ...)` conventions; no new crypto dependency or
 Node26-only context/raw-key feature is required. See
 [Node crypto documentation](https://nodejs.org/docs/latest-v22.x/api/crypto.html#cryptoverifyalgorithm-data-key-signature-callback).
+
+Follow-up: [complete recovery acceptance plan](federation-alliance-complete-recovery-plan-20261018.md)
+records the full component requirements and the added actual control schema/data
+restore test. That unencrypted synthetic fixture is not complete managed-service
+or independently encrypted recovery acceptance.
