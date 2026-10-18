@@ -96,9 +96,11 @@ until independent reconciliation, without automatic replay or new IDs.
 
 ## Remaining implementation and acceptance
 
-The next source gate is a separate transactional account store/admission and
-acknowledgement bridge, tested with concurrent admission/removal, failed writes,
-lost replies and older-copy recovery. Account admission must precede activation;
+A separate disabled [transactional store/acknowledgement candidate](federation-alliance-account-store-20261018.md)
+now implements that next source gate, with synthetic concurrency/lost-reply and
+old-history-row acceptance. It supplies no current signed authority or serving
+integration, and its new tables are not yet in the encrypted recovery inventory.
+Account admission must precede activation;
 pending profile/upload work must share the account fence. A fresh verified owner
 request must establish who may request removal. Browser claims cannot do this.
 
