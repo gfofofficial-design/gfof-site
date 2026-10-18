@@ -7,6 +7,7 @@ on:
       - 'lib/alliance-avatar-runtime/limits.mjs'
       - 'sql/alliance-avatar-ledger-candidate.sql'
       - 'sql/alliance-avatar-session-candidate.sql'
+      - 'sql/alliance-avatar-removal-candidate.sql'
       - 'sql/alliance-avatar-cleanup-candidate.sql'
       - 'sql/alliance-avatar-recovery-candidate.sql'
       - 'sql/alliance-avatar-restore-review-candidate.sql'

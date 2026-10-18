@@ -62,9 +62,9 @@ test('unsupported content, invalid JSON and excessive bytes stop before verifica
   const f=fixture();const badJson=new Request(origin+'/api/alliance-members/me',{method:'POST',headers:{Origin:origin,Cookie:cookie,'Content-Type':'application/json'},body:'{'});
   for(const req of [badJson,request('/me',{method:'POST',headers:{'Content-Type':'text/plain'},body:input()}),request('/me',{method:'POST',body:{...input(),bio:'x'.repeat(5000)}})])assert.equal((await f.api(req)).status,400);assert.equal(f.calls.length,0);
 });
-test('deletion requires explicit self-removal intent and is idempotent without a user-ID parameter',async()=>{
-  const f=fixture({profile:{removed:true}});for(const value of [{},{confirm:'remove_my_profile',user_id:id},{confirm:'remove_everyone'}])assert.equal((await f.api(request('/me',{method:'DELETE',body:value}))).status,400);
-  assert.equal(f.calls.length,0);assert.deepEqual(await body(await f.api(request('/me',{method:'DELETE',body:{confirm:'remove_my_profile'}}))),{removed:true});assert.equal(f.writes,1);assert.deepEqual(JSON.parse(f.calls[1].init.body),{});
+test('legacy profile deletion is closed before Auth/RPC pending journal-first session routing',async()=>{
+  const f=fixture({profile:{removed:true}});for(const value of [{},{confirm:'remove_my_profile',user_id:id},{confirm:'remove_everyone'},{confirm:'remove_my_profile'}])assert.equal((await f.api(request('/me',{method:'DELETE',body:value}))).status,503);
+  assert.equal(f.calls.length,0);assert.equal(f.writes,0);
 });
 test('directory filters and cursors are bounded and malformed queries perform no Auth calls',async()=>{
   const f=fixture({profile:[]});for(const path of ['/me?user_id='+id,'/directory?after=bad','/directory?limit=0','/directory?limit=20&limit=1','/directory?account=all'])assert.equal((await f.api(request(path))).status,400);assert.equal(f.calls.length,0);
