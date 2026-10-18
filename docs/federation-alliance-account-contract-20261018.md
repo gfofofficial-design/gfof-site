@@ -97,6 +97,11 @@ per-operation account/session/policy/content enforcement and in-flight removal.
 Coordinated managed Auth/Storage recovery, privacy/retention/capacity/HTTP/Google,
 browser/mobile/assistive and publication acceptance remain.
 
+An [explicit managed-host profile](federation-alliance-account-managed-20261018.md)
+supplements the unchanged strict default. It permits only its fixed provider
+schema and ADMIN-only creator-edge contract; no hosted compatibility or grant is
+inferred from the local managed-shape fixture.
+
 No interface changed. Future unavailable/unknown states need persistent plain text,
 keyboard and screen-reader access and support after sign-out. Never ask users to
 transcribe fingerprints or retry an uncertain write to make an error disappear.

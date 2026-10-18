@@ -8,6 +8,11 @@ signing key, provider request, purchase or public feature changes.
 
 ## Domains and data flow
 
+The [explicit managed-host candidate](federation-alliance-account-managed-20261018.md)
+adds an opt-in provider schema/creator-membership profile and offline installer.
+The strict default and original SQL files remain unchanged. It is not hosted
+acceptance or permission to enable a service.
+
 The [account contract](federation-alliance-account-history-contract-20261018.md)
 defines separate subject/event/record domains, potentially linkable tags and the
 128-admission/256-record lifetime bound. This storage candidate preserves it:
