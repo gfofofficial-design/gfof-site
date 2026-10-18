@@ -89,6 +89,12 @@ for tool provenance; published hashes are not a reproducible-build audit.
 
 ## Next release decisions and accessibility
 
+The subsequent [replacement-cluster exercise](federation-alliance-replacement-recovery-20261018.md)
+adds separate full-schema archives and password-free role/default-policy
+reconstruction on three fresh synthetic targets. It does not change the narrower
+coverage of the original fourteen-table round trip described above or establish
+managed Auth, Storage or independent key custody.
+
 Complete missing schema/global-security, managed Auth/account-deletion and Storage
 coverage before treating recovery as complete. Independently saved keys, current
 provenance/minima, off-device destination, actual access, costs, retention/cadence
