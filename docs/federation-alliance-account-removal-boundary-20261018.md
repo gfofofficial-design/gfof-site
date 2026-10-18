@@ -98,9 +98,12 @@ and scratch belong to disposable fixtures and are removed afterward.
    interface before replacing this hold or publishing a deletion feature.
 
 These are unresolved release requirements, not implemented services or authority
-to create cloud access, keys or new retention policy. The next source work should
-define the account subject/admission/acknowledgement contract before a managed
-Auth deletion trial. No owner secret or cloud change is needed for this local hold.
+to create cloud access, keys or new retention policy. The separate
+[account-history contract](federation-alliance-account-history-contract-20261018.md)
+now defines a pure account subject/admission/intent/acknowledgement structure and
+its privacy limits. It has no store, authenticated current witness, live serving
+integration or deletion writer; those are still required before a managed Auth
+deletion trial. No owner secret or cloud change is needed for this local work.
 
 ## Accessibility
 
