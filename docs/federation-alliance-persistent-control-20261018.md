@@ -1,5 +1,10 @@
 # Alliance persistent control candidate
 
+Later source extension: [live removal anchor](federation-alliance-live-removal-anchor-20261018.md)
+adds a separate durable live floor, acknowledgement bridge and newer witness/
+startup signer composition. It remains unapplied; protected copies/key custody and
+full recovery are still required. The baseline-only scope below is preserved.
+
 Source only, October 18, 2026. The SQL is **unapplied**. No hosted project, login,
 credential, signing key, backup, route or public feature is enabled. The journal
 pilot stays locked. This builds the durable-policy side of the

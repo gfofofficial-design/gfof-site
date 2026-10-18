@@ -18,6 +18,8 @@ on:
       - 'sql/alliance-member-recovery-inventory-candidate.sql'
       - 'sql/alliance-journal-recovery-inventory-candidate.sql'
       - 'sql/alliance-control-store-candidate.sql'
+      - 'sql/alliance-control-removal-anchor-candidate.sql'
+      - 'sql/alliance-member-anchored-removal-candidate.sql'
       - 'sql/alliance-profile-candidate.sql'
       - 'tests/alliance-profile-native*'
       - '.github/workflows/alliance-avatar-server.yml'
