@@ -77,6 +77,9 @@ fixture baseline; all views close and its outer fixture removes the databases.
 
 Implement protected durable head/ack pin and unknown-operation handoff, signed-key
 provenance/rotation, and current account checks across every member/content path.
+The [restart handoff candidate](federation-alliance-account-handoff-20261018.md)
+now defines canonical externally pinned records and sticky unresolved operations;
+it does not install durable storage, dispatch work or resolve unknown outcomes.
 Do not keep a five-second view as authorization or treat an unavailable witness as
 permission. Real issuer endpoint access/abuse controls and privacy must be reviewed:
 this source does not authorize arbitrary public queries about account subjects.
