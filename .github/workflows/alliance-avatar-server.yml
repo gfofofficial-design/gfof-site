@@ -74,4 +74,6 @@ jobs:
       - run: node lib/alliance-avatar-server/native.mjs
         env:
           ALLIANCE_AVATAR_SERVER_TEST_CONFIRM: disposable_server_fixture
+          ALLIANCE_RECOVERY_PACKAGE_TEST_CONFIRM: synthetic_encrypted_package
           ALLIANCE_AVATAR_SERVER_TEST_CONTAINER: ${{ job.services.postgres.id }}
+          ALLIANCE_ENCRYPTED_ARCHIVE_SOURCE_COMMIT: ${{ github.sha }}

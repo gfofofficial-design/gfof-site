@@ -108,9 +108,11 @@ and [age public-recipient usage](https://github.com/FiloSottile/age#usage).
 
 ## Next acceptance
 
-Connect the guarded actual member9/journal3/control2 archives and reviewed security
-exports to the package; verify their semantic recovery after decrypting a separate
-copy. Add real managed Auth/session/deletion and Storage-byte checks, protected
+The [combined database archive exercise](federation-alliance-encrypted-archives-20261018.md)
+now connects actual synthetic member9/journal3/control2 archives and control
+security metadata to this package, with semantic restore after fresh-process
+decryption of a separate copy. The marker-only exercise above remains separate.
+Add real managed Auth/session/deletion and Storage-byte checks, protected
 current minima/provenance, independent decryption/signing custody and fleet fencing.
 The real key, off-device destination, access, costs, retention/cadence and hosted
 test targets need their exact reviewed decisions. No running backup is claimed.
