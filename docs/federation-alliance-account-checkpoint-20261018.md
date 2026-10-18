@@ -98,6 +98,11 @@ Technical references: [Node SQLite](https://nodejs.org/api/sqlite.html),
 
 ## Next acceptance and accessibility
 
+The [validated checkpoint authority candidate](federation-alliance-account-checkpoint-authority-20261018.md)
+now receives next canonical bytes and bounded history proof. A real authority
+must retain and validate its own previous record; arbitrary digest CAS callbacks
+are still test capabilities, not an accepted production custody service.
+
 Select and verify the real independently protected record/receipt backends before
 any installation. Establish narrow credentials, CAS/durable commit/readback,
 backups and rollback-resistant current custody, restart/fleet fencing and bounded
