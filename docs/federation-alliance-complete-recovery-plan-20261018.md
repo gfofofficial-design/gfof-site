@@ -138,3 +138,8 @@ clear stopping status without countdown pressure, repeated secret entry, color-o
 meaning or automatic destructive repair. Secret confirmation stays private; evidence
 contains public fingerprints and sanitized outcomes. Actual assistive-technology,
 mobile, encrypted independent-copy and hosted acceptance remain outstanding.
+
+Follow-up: the [encrypted byte-package candidate](federation-alliance-encrypted-package-20261018.md)
+now implements the bounded manifest/age exercise and a fresh-process restore of
+synthetic bytes from a separate local copy. Actual database archives, managed
+Auth/Storage and real independent key/storage custody are not yet connected to it.

@@ -43,6 +43,9 @@ jobs:
       - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
       - run: npm audit --prefix lib/alliance-avatar-server --audit-level=high
       - run: npm test --prefix lib/alliance-avatar-server
+      - run: node lib/alliance-avatar-server/recovery-package.native.mjs --download-age
+        env:
+          ALLIANCE_RECOVERY_PACKAGE_TEST_CONFIRM: synthetic_encrypted_package
   ledger-tls-native:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
