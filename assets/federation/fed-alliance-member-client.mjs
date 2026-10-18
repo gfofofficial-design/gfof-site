@@ -3,6 +3,7 @@
 import {validateProfileInput,ownProfile,directoryPage,profileDirectoryOptions,profileRecord} from './fed-alliance-profile-contract.mjs';
 const MESSAGES={closed:'Member profiles are not available yet.',busy:'Finish or cancel the current profile request first.',checking:'Checking your member profile…',saving:'Saving your member profile…',removing:'Removing your member profile…',directory:'Loading listed members…',ready:'Your member profile is ready.',empty:'You have not created a member profile.',saved:'Your member profile was saved.',removed:'Your member profile was removed.',listed:'The member directory is ready.',sign_in_required:'Sign in again before using your member profile.',unavailable:'Your profile could not be confirmed.',unknown:'The save or removal may have completed. Read your profile again; further changes are paused.',review_required:'Your profile was read, but the earlier change is still uncertain. Further changes remain paused.',cancelled:'Profile request cancelled.',invalid:'Check your profile fields.'};
 const error=code=>Object.assign(new Error(MESSAGES[code]??MESSAGES.unavailable),{code});
+MESSAGES.removal_unavailable='Profile removal is not available through this form yet. No removal was started.';
 export function createMemberProfileClient({enabled=false,origin,fetcher=globalThis.fetch,onState=()=>{},timeoutMs=19000}={}){
   if(enabled===true&&(typeof origin!=='string'||!/^https:\/\/(?:galacticfederation\.co|deploy-preview-[1-9][0-9]*--gfof\.netlify\.app)$/.test(origin)))throw error('closed');
   if(!Number.isSafeInteger(timeoutMs)||timeoutMs<1||timeoutMs>19000)throw error('invalid');
@@ -54,7 +55,14 @@ export function createMemberProfileClient({enabled=false,origin,fetcher=globalTh
   return Object.freeze({
     load:()=>run('checking','/me','GET',undefined,profileBody),
     save(input){const fields=validateProfileInput(input);return run('saving','/me','POST',fields,data=>{const result=profileBody(data);if(!result.profile)throw error('unknown');return result;});},
-    remove:()=>run('removing','/me','DELETE',{confirm:'remove_my_profile'},data=>{if(!profileRecord(data)||data.removed!==true)throw error('unknown');return {removed:true};}),
+    async remove(){
+      if(disposed||enabled!==true){emit('closed');throw error('closed');}
+      if(pending)throw error('busy');
+      if(uncertain){emit('unknown');throw error('unknown');}
+      // Only the future journal-first operation-ID/version flow can remove a
+      // profile. Do not send the obsolete bearer/RPC deletion from this form.
+      emit('removal_unavailable');throw error('removal_unavailable');
+    },
     directory(options={}){const {after,limit}=profileDirectoryOptions(options);const query=new URLSearchParams({limit:String(limit)});if(after)query.set('after',after);return run('directory','/directory?'+query,'GET',undefined,data=>directoryPage(data,{after,limit}));},
     cancel,
     dispose(){cancel();disposed=true;},

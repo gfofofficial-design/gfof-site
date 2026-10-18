@@ -22,8 +22,8 @@ test('empty profile and unlisted saved profile remain distinct and sanitized',as
 test('input cannot supply owner, moderation, avatar or administrator fields',()=>{
   const f=fixture();for(const extra of [{user_id:id},{moderation_state:'visible'},{avatar:'blob:anything'},{role:'admin'}])assert.throws(()=>f.client.save({...input(),...extra}));assert.equal(f.calls.length,0);
 });
-test('client removal carries only explicit self-removal intent',async()=>{
-  const f=fixture({fetcher:async()=>json({removed:true,private_data:'ignored'})});assert.deepEqual(await f.client.remove(),{removed:true});assert.deepEqual(JSON.parse(f.calls[0][1].body),{confirm:'remove_my_profile'});assert.equal(f.calls[0][1].method,'DELETE');assert.equal(f.states.at(-1).status,'removed');
+test('legacy client removal stays closed with a clear not-started status and no request',async()=>{
+  const f=fixture({fetcher:async()=>json({removed:true,private_data:'ignored'})});await assert.rejects(f.client.remove(),{code:'removal_unavailable'});assert.equal(f.calls.length,0);assert.equal(f.states.at(-1).status,'removal_unavailable');assert.match(f.states.at(-1).message,/No removal was started/);
 });
 test('directory pages cannot expose private fields, duplicate rows or invented continuation cursors',async()=>{
   const publicRow={id,name:input().name,community:'',bio:input().bio,role:'builder'};
@@ -70,5 +70,5 @@ test('composed browser-to-cookie-Auth-to-profile flow uses no browser account ID
     return json(stored);
   }});
   const f=fixture({fetcher:(endpoint,init)=>api(new Request(endpoint,{...init,headers:{...init.headers,Cookie:'__Host-gf-access='+token,'Sec-Fetch-Site':'same-origin',...(init.method==='GET'?{}:{Origin:origin})}}))});
-  assert.deepEqual(await f.client.load(),{profile:null});await f.client.save(input());assert.deepEqual(await f.client.load(),{profile:profile()});await f.client.remove();assert.deepEqual(await f.client.load(),{profile:null});assert.equal(upstream.length,10);assert.ok(upstream.every(c=>c.init.headers.Authorization==='Bearer '+token));assert.ok(f.states.some(s=>s.status==='removed'));assert.doesNotMatch(JSON.stringify(f.states),new RegExp(token));
+  assert.deepEqual(await f.client.load(),{profile:null});await f.client.save(input());assert.deepEqual(await f.client.load(),{profile:profile()});await assert.rejects(f.client.remove(),{code:'removal_unavailable'});assert.deepEqual(await f.client.load(),{profile:profile()});assert.equal(upstream.length,8);assert.ok(upstream.every(c=>c.init.headers.Authorization==='Bearer '+token));assert.ok(!f.states.some(s=>s.status==='removed'));assert.doesNotMatch(JSON.stringify(f.states),new RegExp(token));
 });
