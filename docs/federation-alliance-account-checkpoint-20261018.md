@@ -63,9 +63,11 @@ as proof that the operation did not commit.
 `observe()` may checkpoint later complete history while preserving the identical
 pending operation. It returns pending versus checkpointed plus minima, explicitly
 establishing neither authorization nor erasure. A fresh `execute` seeing pending
-work cannot dispatch, assign a new ID, clear it or retry it. There is no resolver
-in this increment. This intentionally blocks later mutations until a separately
-reviewed reconciliation protocol can establish the exact outcome safely.
+work cannot dispatch, assign a new ID, clear it or retry it. The separate,
+[explicitly opted-in conditional reconciliation candidate](federation-alliance-account-resolution-20261018.md)
+can retain a version2 settlement receipt only when the canonical effect is
+satisfied or the original expected position has been displaced. It cannot prove
+which caller committed, infer noncommit from absence or retry a mutation.
 
 ## Actual storage evidence and limits
 
@@ -99,8 +101,8 @@ Technical references: [Node SQLite](https://nodejs.org/api/sqlite.html),
 Select and verify the real independently protected record/receipt backends before
 any installation. Establish narrow credentials, CAS/durable commit/readback,
 backups and rollback-resistant current custody, restart/fleet fencing and bounded
-operational failure handling. Then implement conservative unknown reconciliation,
-key provenance/rotation and per-operation account/session/policy/content checks
+operational failure handling and verify the reconciliation contract against the
+installed SQL/restore/old-producer barriers. Then key provenance/rotation and per-operation account/session/policy/content checks
 with in-flight removal barriers. No source-only test authorizes cloud privileges,
 spending, real keys, deployment or release.
 

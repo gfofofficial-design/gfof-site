@@ -63,6 +63,13 @@ now orders two injected CAS/commit/readback capabilities before one mutation and
 tests real synthetic storage interruption/restart. Production backend/custody,
 unknown resolution and runtime integration remain separate acceptance gates.
 
+The [conditional reconciliation candidate](federation-alliance-account-resolution-20261018.md)
+now adds a separate reviewer and explicit coordinator opt-in. Format1 bytes remain
+unchanged; a proven conditional effect/supersession can upgrade to format2 while
+retaining the original pending intent and causal evidence. Ordinary successors
+still cannot clear pending or replace a resolution receipt. Production backend,
+installed mutation contract, restore/old-producer barriers and custody remain open.
+
 ## Observed acceptance
 
 Focused tests cover canonical boundaries, external pins, generation/key/scope
