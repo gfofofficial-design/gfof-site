@@ -106,6 +106,10 @@ installed SQL/restore/old-producer barriers. Then key provenance/rotation and pe
 with in-flight removal barriers. No source-only test authorizes cloud privileges,
 spending, real keys, deployment or release.
 
+Account adapters now include [fixed installed-contract verification](federation-alliance-account-contract-20261018.md).
+This rejects observed persistent function/privilege drift; it does not establish
+independent custody, freeze privileged DDL or validate arbitrary callback stores.
+
 There is no new interface. Future unknown/pending/paused status must use persistent
 plain language, accessible keyboard/screen-reader controls and support after
 sign-out. The backend deadline is not a user countdown. Avoid repeated secret entry

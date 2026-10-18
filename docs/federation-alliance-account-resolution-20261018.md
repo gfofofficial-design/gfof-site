@@ -40,6 +40,11 @@ The unchanged SQL candidates are `alliance-account-history-store-candidate.sql`
 and `alliance-account-ack-store-candidate.sql`; generic storage providers or changed
 function bodies do not inherit this proof.
 
+The [installed-contract verification candidate](federation-alliance-account-contract-20261018.md)
+now checks the full reviewed function closure and narrow protections before
+dispatch and in a fresh catalogue snapshot after COMMIT. It detects persistent
+drift, while privileged-DDL races, restores and old-producer fencing remain gated.
+
 This is not global fleet fencing. Privileged history rewrites/restores, old servers
 with different mutation rules, changed SQL, non-conditional transports and other
 side effects invalidate these assumptions. Installed-definition/privilege checks,
