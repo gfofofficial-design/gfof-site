@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "engines": {"node": ">=22"},
-  "scripts": {"test": "node --test test.mjs flow.test.mjs member.test.mjs cleanup.test.mjs recovery.test.mjs restore-review.test.mjs deletion-journal.test.mjs journal-store.test.mjs journal-witness.test.mjs private-view.test.mjs removal.test.mjs profile-view.test.mjs creation.test.mjs recovery-pair.test.mjs startup-gate.test.mjs control.test.mjs anchored-removal.test.mjs anchored-witness.test.mjs trust-record.test.mjs recovery-package.test.mjs account-history.test.mjs account-store.test.mjs"},
+  "scripts": {"test": "node --test test.mjs flow.test.mjs member.test.mjs cleanup.test.mjs recovery.test.mjs restore-review.test.mjs deletion-journal.test.mjs journal-store.test.mjs journal-witness.test.mjs private-view.test.mjs removal.test.mjs profile-view.test.mjs creation.test.mjs recovery-pair.test.mjs startup-gate.test.mjs control.test.mjs anchored-removal.test.mjs anchored-witness.test.mjs trust-record.test.mjs recovery-package.test.mjs account-history.test.mjs account-store.test.mjs account-witness.test.mjs"},
   "dependencies": {"pg": "8.23.1"}
 }

@@ -110,8 +110,9 @@ defaults/forced RLS, reader restrictions and grant drift, lost history/ack COMMI
 replies, rollback against a separate floor, final-slot admission concurrency,
 all reserved removals after admission closure, switches and exact teardown.
 
-Next: incorporate both new domains into encrypted replacement recovery and a
-protected current account authority, then integrate admission/denial checks into
+Both account domains now have a separate encrypted replacement rehearsal and an
+unmounted [signed status candidate](federation-alliance-account-witness-20261018.md).
+Next persist protected minimum/unknown handoff and integrate admission/denial checks into
 every member/content operation. Owner/session verification, legacy admission and
 epoch carry-forward, managed Auth/Storage deletion, persistent unknown-operation
 handling, real keys/custody, privacy/retention, bounds and hosted acceptance remain.

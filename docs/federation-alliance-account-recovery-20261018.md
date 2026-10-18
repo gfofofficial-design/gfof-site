@@ -88,8 +88,9 @@ erasure by JavaScript/the OS. It does not coordinate member/Storage/account back
 generations, preserve a durable unknown-operation handoff, invalidate an old fleet
 or establish a current signed account witness. No RPO/RTO or backup cadence is set.
 
-Next build the protected current account authority and durable minimum/unknown
-handoff, then enforce account admission/removal denial across all member/content
+An unmounted [signed account-status issuer/reader](federation-alliance-account-witness-20261018.md)
+now checks fresh challenges and both process-memory pins. Durable protected pin/
+unknown handoff is still required, then account admission/removal denial across all member/content
 operations. Before live use, review coordinated recovery generations, legacy/epoch
 carry-forward, actual Auth/session/Storage deletion and old-copy acceptance, real
 key/operator custody, privacy/retention, hosted limits and HTTP/browser/Google/
