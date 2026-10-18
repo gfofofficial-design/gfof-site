@@ -58,6 +58,11 @@ instant revocation or physical erasure. Never use `pending: null` as permission.
 This is not a completed durable-store gate. SQL, hosted permissions, real keys,
 archive formats and the existing account hold remain unchanged.
 
+The [checkpoint coordinator candidate](federation-alliance-account-checkpoint-20261018.md)
+now orders two injected CAS/commit/readback capabilities before one mutation and
+tests real synthetic storage interruption/restart. Production backend/custody,
+unknown resolution and runtime integration remain separate acceptance gates.
+
 ## Observed acceptance
 
 Focused tests cover canonical boundaries, external pins, generation/key/scope
