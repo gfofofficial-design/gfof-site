@@ -13,6 +13,7 @@ on:
       - 'sql/alliance-avatar-recovery-candidate.sql'
       - 'sql/alliance-avatar-restore-review-candidate.sql'
       - 'sql/alliance-deletion-journal-store-candidate.sql'
+      - 'sql/alliance-journal-admission-candidate.sql'
       - 'sql/alliance-profile-candidate.sql'
       - 'tests/alliance-profile-native*'
       - '.github/workflows/alliance-avatar-server.yml'
