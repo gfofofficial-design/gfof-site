@@ -90,12 +90,13 @@ observed floors within its process, but no real key, durable pin custody, curren
 challenge response, cross-instance admission fence or restart/handoff is configured.
 Neither an admitted nor an acknowledged state is authorization to serve.
 
-The old-copy test rolls back only synthetic history rows while retaining the other
-cluster's higher floor; a new review refuses. It is not a complete encrypted
-backup/restore of the new account domains. Existing sixteen-table recovery archives
-do **not** include these three new tables. Updating their reviewed inventories,
-schema/role restoration and independent current trust is a required next recovery
-gate, before any real account-history storage is enabled. No running backup,
+The original old-copy test rolls back synthetic history rows while retaining the
+other cluster's higher floor. A separate [encrypted account capsule rehearsal](federation-alliance-account-recovery-20261018.md)
+now covers these three tables, full schema/roles and fresh replacements against an
+outside minimum. Existing sixteen-table archives remain unchanged; the companion
+is not a coordinated nineteen-table or managed-service recovery. Current signed
+authority, coordinated generations and real independent custody remain gates
+before account-history storage is enabled. No running backup,
 off-device custody, managed recovery, failover or RPO/RTO acceptance is claimed.
 
 ## Validation and remaining gates

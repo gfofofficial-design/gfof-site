@@ -99,7 +99,8 @@ until independent reconciliation, without automatic replay or new IDs.
 A separate disabled [transactional store/acknowledgement candidate](federation-alliance-account-store-20261018.md)
 now implements that next source gate, with synthetic concurrency/lost-reply and
 old-history-row acceptance. It supplies no current signed authority or serving
-integration, and its new tables are not yet in the encrypted recovery inventory.
+integration. Its new tables now have a separate [encrypted replacement rehearsal](federation-alliance-account-recovery-20261018.md),
+not a coordinated managed/member/account recovery service.
 Account admission must precede activation;
 pending profile/upload work must share the account fence. A fresh verified owner
 request must establish who may request removal. Browser claims cannot do this.
