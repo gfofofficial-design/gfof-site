@@ -4,7 +4,7 @@ import {createAllianceProfileApi} from '../lib/alliance-profile-api.mjs';
 import {journalFixture,event,chain} from '../lib/alliance-avatar-server/deletion-journal.fixture.mjs';
 const origin='https://deploy-preview-124--gfof.netlify.app';
 const url='https://syntheticfixture.supabase.co',key='sb_publishable_'+'fixture'.repeat(5);
-const token='syntheticHeader.syntheticClaims.syntheticSignature';
+const token='syntheticHeader.'+Buffer.from(JSON.stringify({sub:'11111111-1111-4111-8111-111111111111',session_id:'22222222-2222-4222-8222-222222222222',iss:url+'/auth/v1',role:'authenticated',aud:'authenticated',exp:Math.floor(Date.now()/1000)+120})).toString('base64url')+'.syntheticSignature';
 const cookie='__Host-gf-access='+token;
 const id='11111111-1111-4111-8111-111111111111';
 const input=()=>({name:'Fixture Explorer',community:'Example crew',bio:'A synthetic profile for private integration tests.',role:'builder',listed:false});
@@ -12,19 +12,31 @@ const row=()=>({id,...input(),publication:'private',updatedAt:'2026-10-17T16:00:
 const user=()=>({id,email:'private@example.invalid',email_confirmed_at:'2026-10-17T15:00:00Z',is_anonymous:false,user_metadata:{admin:true}});
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
 function request(path='/me',{method='GET',headers={},body,signal}={}){return new Request(origin+'/api/alliance-members'+path,{method,headers:{Cookie:cookie,'Sec-Fetch-Site':'same-origin',...(method==='GET'?{}:{Origin:origin,'Content-Type':'application/json'}),...headers},...(body===undefined?{}:{body:JSON.stringify(body)}),...(signal?{signal}:{})});}
-function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=200,run,events=[],journal,serving={authorize:()=>true}}={}){
+function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=200,run,events=[],journal,serving={authorize:()=>true},creation}={}){
   const calls=[];let writes=0;
   const signed=journalFixture({events});
-  const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:journal||signed.client,serving,fetcher:async(endpoint,init)=>{
+  const fetcher=async(endpoint,init)=>{
     calls.push({endpoint,init});
     if(run)return run(endpoint,init);
     if(endpoint.endsWith('/auth/v1/user'))return json(account,accountStatus);
     if(endpoint.endsWith('/alliance_save_profile')||endpoint.endsWith('/alliance_remove_profile'))writes++;
     return json(profile,profileStatus);
-  }});
+  };
+  const writer=creation||{profile:async(context,value,options)=>{assert.equal(context.actorId,id);assert.equal(context.sessionId,'22222222-2222-4222-8222-222222222222');const response=await fetcher('synthetic-admitted-profile-write',{body:JSON.stringify(value),signal:options.signal});writes++;if(!response.ok)throw Error('PRIVATE');return response.json();}};
+  const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:journal||signed.client,serving,creation:writer,fetcher});
   return {api,calls,signed,get writes(){return writes;}};
 }
 const body=async response=>JSON.parse(await response.text());
+
+test('profile save without admission bridge closes before Auth and never calls legacy save RPC',async()=>{
+  const signed=journalFixture({events:[]});let calls=0;const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:signed.client,serving:{authorize:()=>true},fetcher:()=>{calls++;throw Error();}});
+  assert.equal((await api(request('/me',{method:'POST',body:input()}))).status,503);assert.equal(calls,0);
+});
+
+test('profile writer receives only an Auth-bound current session and refuses malformed cookie claims',async()=>{
+  const f=fixture();const bad='syntheticHeader.'+Buffer.from(JSON.stringify({sub:id,session_id:id,iss:'https://other.example/auth/v1',role:'authenticated',aud:'authenticated',exp:Math.floor(Date.now()/1000)+120})).toString('base64url')+'.syntheticSignature';
+  assert.equal((await f.api(request('/me',{method:'POST',body:input(),headers:{Cookie:'__Host-gf-access='+bad}}))).status,503);assert.equal(f.writes,0);assert.equal(f.calls.length,1);
+});
 
 test('missing deletion or startup policy closes legacy text paths before Auth',async()=>{
   let calls=0;const api=createAllianceProfileApi({enabled:true,origin,url,key,fetcher:()=>{calls++;throw Error();}});
@@ -80,7 +92,7 @@ test('a missing own profile stays null after authentication, without creating on
 });
 test('a save is self-targeted, strips no invalid actor fields silently and forwards only editable values',async()=>{
   const f=fixture();for(const extra of [{user_id:id},{id},{moderation_state:'visible'},{avatar_url:'https://evil.example/image'},{listed:'true'}])assert.equal((await f.api(request('/me',{method:'POST',body:{...input(),...extra}}))).status,400);assert.equal(f.calls.length,0);
-  const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,200);assert.equal(f.writes,1);assert.deepEqual(JSON.parse(f.calls[1].init.body),{p_name:input().name,p_community:input().community,p_bio:input().bio,p_role:'builder',p_listed:false});
+  const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,200);assert.equal(f.writes,1);assert.deepEqual(JSON.parse(f.calls[1].init.body),input());assert.equal(f.calls[1].endpoint,'synthetic-admitted-profile-write');
 });
 test('unsupported content, invalid JSON and excessive bytes stop before verification or a write',async()=>{
   const f=fixture();const badJson=new Request(origin+'/api/alliance-members/me',{method:'POST',headers:{Origin:origin,Cookie:cookie,'Content-Type':'application/json'},body:'{'});

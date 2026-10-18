@@ -68,13 +68,13 @@ test('filtered short directory pages preserve visible continuation without accep
 });
 test('composed browser-to-cookie-Auth-to-profile flow uses no browser account IDs or service key',async()=>{
   const {journalFixture}=await import('../lib/alliance-avatar-server/deletion-journal.fixture.mjs');const signed=journalFixture({events:[]});
-  const token='syntheticHeader.syntheticClaims.syntheticSignature',upstream=[];let stored=null;
-  const api=createAllianceProfileApi({enabled:true,origin,url:'https://syntheticfixture.supabase.co',key:'sb_publishable_'+'fixture'.repeat(5),journal:signed.client,serving:{authorize:()=>true},fetcher:async(endpoint,init)=>{
+  const token='syntheticHeader.'+Buffer.from(JSON.stringify({sub:id,session_id:'22222222-2222-4222-8222-222222222222',iss:'https://syntheticfixture.supabase.co/auth/v1',role:'authenticated',aud:'authenticated',exp:Math.floor(Date.now()/1000)+120})).toString('base64url')+'.syntheticSignature',upstream=[];let stored=null;
+  const api=createAllianceProfileApi({enabled:true,origin,url:'https://syntheticfixture.supabase.co',key:'sb_publishable_'+'fixture'.repeat(5),journal:signed.client,serving:{authorize:()=>true},creation:{profile:async(context,value)=>{assert.equal(context.actorId,id);stored={...profile(),...value};return stored;}},fetcher:async(endpoint,init)=>{
     upstream.push({endpoint,init});if(endpoint.endsWith('/auth/v1/user'))return json({id,email_confirmed_at:'2026-10-17T16:00:00Z',is_anonymous:false});
     if(endpoint.endsWith('/alliance_save_profile')){const data=JSON.parse(init.body);stored={...profile(),name:data.p_name};return json(stored);}
     if(endpoint.endsWith('/alliance_remove_profile')){stored=null;return json({removed:true});}
     return json(stored);
   }});
   const f=fixture({fetcher:(endpoint,init)=>api(new Request(endpoint,{...init,headers:{...init.headers,Cookie:'__Host-gf-access='+token,'Sec-Fetch-Site':'same-origin',...(init.method==='GET'?{}:{Origin:origin})}}))});
-  assert.deepEqual(await f.client.load(),{profile:null});await f.client.save(input());assert.deepEqual(await f.client.load(),{profile:profile()});await assert.rejects(f.client.remove(),{code:'removal_unavailable'});assert.deepEqual(await f.client.load(),{profile:profile()});assert.equal(upstream.length,8);assert.ok(upstream.every(c=>c.init.headers.Authorization==='Bearer '+token));assert.ok(!f.states.some(s=>s.status==='removed'));assert.doesNotMatch(JSON.stringify(f.states),new RegExp(token));
+  assert.deepEqual(await f.client.load(),{profile:null});await f.client.save(input());assert.deepEqual(await f.client.load(),{profile:profile()});await assert.rejects(f.client.remove(),{code:'removal_unavailable'});assert.deepEqual(await f.client.load(),{profile:profile()});assert.equal(upstream.length,7);assert.ok(upstream.every(c=>c.init.headers.Authorization==='Bearer '+token));assert.ok(!f.states.some(s=>s.status==='removed'));assert.doesNotMatch(JSON.stringify(f.states),new RegExp(token));
 });

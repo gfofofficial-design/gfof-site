@@ -1,10 +1,11 @@
 # Alliance journal capacity admission candidate
 
 Source-only, October 17, 2026. This extension is **unapplied**. It does not enable
-a database login, create a member or upload an image. The journal-side store is
-implemented; profile preparation, profile creation and image reservation/upload
-have **not** been routed through it. Existing creation paths therefore do not yet
-have this end-to-end capacity safeguard. No public service or release is claimed.
+a database login, create a member or upload an image. This describes the
+journal-side layer. The subsequent [creation bridge candidate](federation-alliance-creation-admission-20261017.md)
+connects preparation, profile saving and image reservation in the unmounted draft
+and tests the sequence across two disposable servers. Neither extension is
+installed in a hosted member service. No public service or release is claimed.
 
 ## Purpose and data flow
 
@@ -17,7 +18,8 @@ The existing deletion hash-chain format is unchanged.
 The proposed flow is: persist prospective subject IDs in a member preparation;
 commit and confirm their independent journal admission; recheck current member,
 session and removal policy; then permit the matching database/provider creation.
-That orchestration and the closure of legacy bypass paths remain future work.
+That source orchestration and legacy-bypass closure are described in the creation
+bridge contract; managed hosted integration and release acceptance remain open.
 Admission alone is neither authentication nor permission to create an object.
 
 The extension requires an empty, disabled, unconfigured, separate journal. It
@@ -86,8 +88,8 @@ denial, durability settings and exact provider-management compatibility. Fixture
 use synthetic identities and remove their database objects, roles and TLS files.
 No hosted project, provider request or real credential is involved.
 
-Before release: wire persisted prospective IDs and admissions into all creation
-paths; verify two-domain crash/recovery behavior; persist the serving floor and
+Before release: accept the preparation/admission bridge against managed hosted
+Auth and storage, including its failure/recovery behavior; persist the serving floor and
 startup/restore interlock; complete account-removal integration and retention,
 key custody and encrypted recovery policy; review HTTP/UI errors, real Auth,
 hosted permissions, Google sign-in, mobile/assistive behavior and publication.
