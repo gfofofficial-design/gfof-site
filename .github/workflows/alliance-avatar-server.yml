@@ -8,6 +8,7 @@ on:
       - 'sql/alliance-avatar-ledger-candidate.sql'
       - 'sql/alliance-avatar-session-candidate.sql'
       - 'sql/alliance-avatar-cleanup-candidate.sql'
+      - 'sql/alliance-avatar-recovery-candidate.sql'
       - 'sql/alliance-profile-candidate.sql'
       - 'tests/alliance-profile-native*'
       - '.github/workflows/alliance-avatar-server.yml'

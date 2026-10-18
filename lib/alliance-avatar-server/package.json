@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "engines": {"node": ">=22"},
-  "scripts": {"test": "node --test test.mjs flow.test.mjs member.test.mjs cleanup.test.mjs"},
+  "scripts": {"test": "node --test test.mjs flow.test.mjs member.test.mjs cleanup.test.mjs recovery.test.mjs"},
   "dependencies": {"pg": "8.23.1"}
 }
