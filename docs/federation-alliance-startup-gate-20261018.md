@@ -5,6 +5,11 @@ credential, signing key, service, schedule or public route is created. The exist
 hosted journal pilot remains locked. This is a **consumer of independently signed
 control decisions**, not an implementation of their persistence or custody.
 
+The later [persistent control candidate](federation-alliance-persistent-control-20261018.md)
+adds unapplied third-domain storage, a read-only runtime adapter and signer factory.
+Its actual restart tests do not establish independent minimum/key custody or
+authorize a hosted installation/release.
+
 ## Why startup needs a separate decision
 
 Restored member data must not authorize itself. Even matching data inventories
