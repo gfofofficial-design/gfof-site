@@ -70,6 +70,11 @@ not a signature, and an operator-supplied freeze ID does not stop workers. Real
 checkpoint authentication, persistent independent floor/custody and the startup/
 restore interlock remain release gates. A match is not a complete recovery proof.
 
+The later [startup consumer candidate](federation-alliance-startup-gate-20261018.md)
+binds this comparison to fresh signed boot-specific review and separate release
+decisions. It does not implement the required independent persistent authority,
+key custody or actual freeze and remains disabled/unmounted.
+
 ## Actual synthetic archive test
 
 The guarded native fixture uses two disposable PostgreSQL servers and synthetic
