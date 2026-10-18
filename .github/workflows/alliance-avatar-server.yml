@@ -5,6 +5,7 @@ on:
       - 'lib/alliance-avatar-server/**'
       - 'lib/alliance-avatar-storage.mjs'
       - 'lib/alliance-avatar-runtime/limits.mjs'
+      - 'assets/federation/fed-alliance-profile-contract.mjs'
       - 'sql/alliance-avatar-ledger-candidate.sql'
       - 'sql/alliance-avatar-session-candidate.sql'
       - 'sql/alliance-avatar-removal-candidate.sql'

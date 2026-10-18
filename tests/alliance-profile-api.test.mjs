@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createAllianceProfileApi} from '../lib/alliance-profile-api.mjs';
+import {journalFixture,event,chain} from '../lib/alliance-avatar-server/deletion-journal.fixture.mjs';
 const origin='https://deploy-preview-124--gfof.netlify.app';
 const url='https://syntheticfixture.supabase.co',key='sb_publishable_'+'fixture'.repeat(5);
 const token='syntheticHeader.syntheticClaims.syntheticSignature';
@@ -11,18 +12,41 @@ const row=()=>({id,...input(),publication:'private',updatedAt:'2026-10-17T16:00:
 const user=()=>({id,email:'private@example.invalid',email_confirmed_at:'2026-10-17T15:00:00Z',is_anonymous:false,user_metadata:{admin:true}});
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
 function request(path='/me',{method='GET',headers={},body,signal}={}){return new Request(origin+'/api/alliance-members'+path,{method,headers:{Cookie:cookie,'Sec-Fetch-Site':'same-origin',...(method==='GET'?{}:{Origin:origin,'Content-Type':'application/json'}),...headers},...(body===undefined?{}:{body:JSON.stringify(body)}),...(signal?{signal}:{})});}
-function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=200,run}={}){
+function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=200,run,events=[],journal,serving={authorize:()=>true}}={}){
   const calls=[];let writes=0;
-  const api=createAllianceProfileApi({enabled:true,origin,url,key,fetcher:async(endpoint,init)=>{
+  const signed=journalFixture({events});
+  const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:journal||signed.client,serving,fetcher:async(endpoint,init)=>{
     calls.push({endpoint,init});
     if(run)return run(endpoint,init);
     if(endpoint.endsWith('/auth/v1/user'))return json(account,accountStatus);
     if(endpoint.endsWith('/alliance_save_profile')||endpoint.endsWith('/alliance_remove_profile'))writes++;
     return json(profile,profileStatus);
   }});
-  return {api,calls,get writes(){return writes;}};
+  return {api,calls,signed,get writes(){return writes;}};
 }
 const body=async response=>JSON.parse(await response.text());
+
+test('missing deletion or startup policy closes legacy text paths before Auth',async()=>{
+  let calls=0;const api=createAllianceProfileApi({enabled:true,origin,url,key,fetcher:()=>{calls++;throw Error();}});
+  for(const req of [request(),request('/directory'),request('/me',{method:'POST',body:input()})])assert.equal((await api(req)).status,503);assert.equal(calls,0);
+});
+test('restored own profile cannot leave the composed API when journal records removal',async()=>{
+  const f=fixture({events:[event({profileId:id})]});const r=await f.api(request());assert.equal(r.status,503);assert.doesNotMatch(JSON.stringify(await body(r)),/Fixture Explorer|synthetic profile|private@example/);assert.equal(f.writes,0);
+});
+test('directory response strips removed rows and keeps a browser-valid surviving cursor',async()=>{
+  const second='22222222-2222-4222-8222-222222222222',third='33333333-3333-4333-8333-333333333333';
+  const raw=()=>({id,display_name:input().name,community:'',bio:input().bio,contribution_role:'builder'});
+  const f=fixture({events:[event({profileId:second})],profile:[raw(),{...raw(),id:second},{...raw(),id:third}]});const r=await f.api(request('/directory?limit=2'));assert.equal(r.status,200);const result=await body(r);assert.equal(result.items.length,1);assert.equal(result.items[0].id,id);assert.equal(result.next,id);assert.equal(JSON.stringify(result).includes(second),false);
+});
+test('removal during one committed save withholds text and reports uncertainty without retry',async()=>{
+  let f,writes=0;f=fixture({run:async(endpoint)=>{
+    if(endpoint.endsWith('/auth/v1/user'))return json(user());
+    writes++;f.signed.history.push(chain([event({profileId:id})])[0]);return json(row());
+  }});const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const result=await body(r);assert.equal(result.mutation,'unknown');assert.doesNotMatch(JSON.stringify(result),/Fixture Explorer|synthetic profile/);assert.equal(writes,1);
+});
+test('failed pre-load journal or freeze does not dispatch a profile mutation',async()=>{
+  for(const policy of [{journal:{review:()=>({state:'unavailable'})}},{serving:{authorize:()=>false}}]){const f=fixture(policy);const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal(f.writes,0);assert.equal((await body(r)).mutation,undefined);}
+});
 test('default and non-boolean activation cannot perform account or database work',async()=>{
   let calls=0;for(const enabled of [undefined,false,'true']){const api=createAllianceProfileApi({enabled,fetcher:()=>{calls++;throw Error();}});assert.equal((await api(request())).status,404);}assert.equal(calls,0);
 });
@@ -71,7 +95,7 @@ test('directory filters and cursors are bounded and malformed queries perform no
   assert.deepEqual(await body(await f.api(request('/directory?limit=5'))),{items:[],next:null});assert.equal(new URL(f.calls[1].endpoint).searchParams.get('limit'),'6');
 });
 test('lost write acknowledgement returns an unknown outcome and never retries or refreshes',async()=>{
-  const f=fixture({profileStatus:500,profile:{error:'DO-NOT-RETURN'}});const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,502);const data=await body(r);assert.equal(data.mutation,'unknown');assert.equal(f.writes,1);assert.equal(f.calls.length,2);assert.doesNotMatch(JSON.stringify(data),/DO-NOT|access_token|refresh/);
+  const f=fixture({profileStatus:500,profile:{error:'DO-NOT-RETURN'}});const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const data=await body(r);assert.equal(data.mutation,'unknown');assert.equal(f.writes,1);assert.equal(f.calls.length,2);assert.doesNotMatch(JSON.stringify(data),/DO-NOT|access_token|refresh/);
 });
 test('cancellation before authentication never calls a provider',async()=>{
   const f=fixture(),controller=new AbortController();controller.abort();assert.equal((await f.api(request('/me',{signal:controller.signal}))).status,408);assert.equal(f.calls.length,0);

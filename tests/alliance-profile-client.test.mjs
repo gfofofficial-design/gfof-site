@@ -61,9 +61,15 @@ test('expired account requests sign-in but never starts OAuth or refresh automat
 test('disposed client aborts pending work and cannot repopulate page state',async()=>{
   const pending=deferred(),f=fixture({fetcher:()=>pending.promise});const load=f.client.load();f.client.dispose();await assert.rejects(load,{code:'cancelled'});const count=f.states.length;pending.resolve(json({profile:profile()}));await new Promise(r=>setImmediate(r));assert.equal(f.states.length,count);await assert.rejects(f.client.load(),{code:'closed'});
 });
+test('filtered short directory pages preserve visible continuation without accepting an empty cursor page',async()=>{
+  const {publication,updatedAt,listed,...item}=profile();const f=fixture({fetcher:async()=>json({items:[item],next:id})});
+  assert.deepEqual(await f.client.directory({limit:2}),{items:[item],next:id});assert.equal(f.states.at(-1).status,'listed');
+  const empty=fixture({fetcher:async()=>json({items:[],next:id})});await assert.rejects(empty.client.directory({limit:2}),{code:'unavailable'});
+});
 test('composed browser-to-cookie-Auth-to-profile flow uses no browser account IDs or service key',async()=>{
+  const {journalFixture}=await import('../lib/alliance-avatar-server/deletion-journal.fixture.mjs');const signed=journalFixture({events:[]});
   const token='syntheticHeader.syntheticClaims.syntheticSignature',upstream=[];let stored=null;
-  const api=createAllianceProfileApi({enabled:true,origin,url:'https://syntheticfixture.supabase.co',key:'sb_publishable_'+'fixture'.repeat(5),fetcher:async(endpoint,init)=>{
+  const api=createAllianceProfileApi({enabled:true,origin,url:'https://syntheticfixture.supabase.co',key:'sb_publishable_'+'fixture'.repeat(5),journal:signed.client,serving:{authorize:()=>true},fetcher:async(endpoint,init)=>{
     upstream.push({endpoint,init});if(endpoint.endsWith('/auth/v1/user'))return json({id,email_confirmed_at:'2026-10-17T16:00:00Z',is_anonymous:false});
     if(endpoint.endsWith('/alliance_save_profile')){const data=JSON.parse(init.body);stored={...profile(),name:data.p_name};return json(stored);}
     if(endpoint.endsWith('/alliance_remove_profile')){stored=null;return json({removed:true});}

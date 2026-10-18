@@ -24,7 +24,7 @@ export function directoryPage(data,{after=null,limit=20}={}){
     const p=validateProfileInput({name:row.name,community:row.community,bio:row.bio,role:row.role,listed:true});
     return {id:row.id,name:p.name,community:p.community,bio:p.bio,role:p.role};
   });
-  if(data.next!==null&&(items.length!==limit||data.next!==items.at(-1)?.id))throw error('profile_unavailable');
+  if(data.next!==null&&(!items.length||data.next!==items.at(-1)?.id))throw error('profile_unavailable');
   return {items,next:data.next};
 }
 export function profileDirectoryOptions({after=null,limit=20}={}){
