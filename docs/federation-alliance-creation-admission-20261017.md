@@ -87,9 +87,11 @@ must still be implemented and accepted before activation.
 Preparations retain account UUID, profile/image/operation UUIDs, expected version
 and activation state. These are potentially linkable personal metadata, not
 anonymous data. No profile text, source image, email or credential is stored in a
-preparation. Retention and account-deletion policy remain unresolved. Existing
-restore inventory/backup coverage must be extended to preparations and admissions
-and tested together before any recovery-completeness claim or hosted release.
+preparation. Retention and account-deletion policy remain unresolved. The
+subsequent [paired recovery candidate](federation-alliance-paired-recovery-20261017.md)
+adds complete fixed-list data inventories and a synthetic two-domain archive test
+including preparations/admissions. Real encrypted exports, schemas, Auth/Storage,
+keys and hosted recovery remain unaccepted; no recovery-completeness claim follows.
 
 ## Accessibility and verification
 

@@ -4,6 +4,11 @@ October17,2026. Disabled operator-only source and unapplied read-only SQL. No
 backup, deletion journal, restore, compaction, retention policy, hosted permission,
 route, scheduler or service activation is installed by this increment.
 
+This is the earlier six-table image-only comparison. The later
+[paired recovery candidate](federation-alliance-paired-recovery-20261017.md)
+covers profile ownership/text, preparations and independent admissions too;
+this older format cannot qualify as that complete fixed-list data inventory.
+
 ## Why compare before reopening
 
 An older backup can contain a removed image pointer, a lower version, an operation
