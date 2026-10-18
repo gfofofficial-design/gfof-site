@@ -89,6 +89,11 @@ public-release action was required.
 
 ## Limits and next release work
 
+The subsequent [account-removal boundary](federation-alliance-account-removal-boundary-20261018.md)
+adds an unapplied Auth deletion hold and verifies it survives this encrypted
+replacement exercise. It does not supply account-wide independent history or a
+managed erasure path; the Auth limitations below still apply.
+
 This proves neither a cross-version upgrade nor managed Supabase reconstruction.
 Source and target PostgreSQL versions match within each run. API roles, Auth rows,
 sessions and helper functions are test substitutes. Fresh Google login, logout,
