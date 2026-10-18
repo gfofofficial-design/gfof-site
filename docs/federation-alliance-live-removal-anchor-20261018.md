@@ -122,3 +122,8 @@ Auth/browser/fleet lifecycle; managed-host/Google-warning/assistive/publication
 acceptance. Hosted permissions, role installation/login, credentials, spending
 and activation need their concrete decisions. No ongoing backup or monitoring is
 claimed.
+
+Follow-up: the [pinned authority configuration candidate](federation-alliance-pinned-trust-20261018.md)
+implements one strict public-record consumer and explicit successor review for the
+anchored factories. It does not establish real key custody, protected pin storage,
+automatic latest-copy updates or complete encrypted recovery.
