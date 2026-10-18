@@ -64,11 +64,13 @@ fleet/restore fencing. It verifies persistent observed catalogue state under the
 existing trusted-server assumption. Quiescent DDL, protected deployment authority,
 installed-version and old-producer barriers remain release requirements.
 
-This is not an exhaustive column/default/generated-expression/constraint/policy
-attestation. It checks the table protections listed above and the whole reviewed function closure; managed-service
-configuration, administrator behavior, physical storage truth and all cross-domain
-recovery invariants remain separate. Provider-imposed role memberships are refused,
-not silently allowed. Hosted compatibility is unproved.
+The [account-table layout extension](federation-alliance-account-layout-20261018.md)
+now checks the specified columns/defaults/generated flags/constraints/indexes/
+policies and future-object grants too. This remains observed catalogue state,
+not an exhaustive managed-platform audit. Administrator behavior, physical storage
+truth and cross-domain recovery invariants remain separate. Strict mode refuses
+provider memberships; the explicit managed profile below permits only its fixed
+creator-management edges. Hosted compatibility is unproved.
 
 ## Observed verification
 

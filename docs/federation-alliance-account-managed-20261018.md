@@ -102,6 +102,11 @@ catalogue check is not a complete audit of a hosted project.
 
 ## Next release work and accessibility
 
+The shared [account-table layout guard](federation-alliance-account-layout-20261018.md)
+now covers the specified private column/default/constraint/index/policy and default
+ACL inventory in both profiles. This narrows the private-table gap; it does not
+establish a complete provider baseline or hosted compatibility.
+
 Finish exhaustive private-schema acceptance and a realistic managed-provider
 baseline rehearsal before proposing a billable project or hosted access. Choose
 and test the independent current-receipt backend, then database/old-fleet/restore
