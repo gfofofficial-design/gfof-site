@@ -26,6 +26,7 @@ on:
       - 'sql/alliance-account-ack-store-candidate.sql'
       - 'sql/alliance-profile-candidate.sql'
       - 'tests/alliance-profile-native*'
+      - 'tests/alliance-account-dynamodb-native.py'
       - '.github/workflows/alliance-avatar-server.yml'
 permissions:
   contents: read
@@ -81,3 +82,17 @@ jobs:
           ALLIANCE_RECOVERY_PACKAGE_TEST_CONFIRM: synthetic_encrypted_package
           ALLIANCE_AVATAR_SERVER_TEST_CONTAINER: ${{ job.services.postgres.id }}
           ALLIANCE_ENCRYPTED_ARCHIVE_SOURCE_COMMIT: ${{ github.sha }}
+  authority-dynamodb-native:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
+      - name: Actual isolated local DynamoDB protocol
+        run: sudo env ALLIANCE_DYNAMO_TEST_CONFIRM=synthetic_account_dynamodb ALLIANCE_NODE_BINARY="$(command -v node)" python3 -I tests/alliance-account-dynamodb-native.py

@@ -55,13 +55,18 @@ the separately supplied minimum: a stale backend plus stale minimum is not made
 current by this module. Provider/administrator power remains a trust assumption.
 Loss of authority must close service, never load genesis from an ordinary backup.
 
+A [DynamoDB backing-store candidate](federation-alliance-account-dynamodb-20261018.md)
+now exercises conditional writes against the local emulator; hosted identity/IAM,
+authenticated invocation and independent custody remain unaccepted.
 A separate-provider DynamoDB/Lambda implementation is an investigated candidate;
 a dedicated Supabase project offers a different, same-provider operational
 boundary. Neither is selected, installed or quoted by this source change. Real
 atomic commit/readback, denied-root restoration access, secret custody, transport
 authentication, bounded input parsing/rate limits, coordinated restore and
 deployment/session/in-flight-operation fences remain acceptance gates. No new
-dependency, SQL, hosted role, mode flag, UI or public route changed.
+dependency was added by the authority-only milestone; the separate backing-store
+candidate adds the exact SDK client. SQL, hosted roles, mode flags, UI and public
+routes remain unchanged.
 
 Canonical records and history proofs contain linkable subject hashes and
 operation identifiers, not anonymous data. A hosted authority introduces another
