@@ -145,3 +145,16 @@ Primary references reviewed October19: [Lambda execution roles](https://docs.aws
 and [Node crypto](https://nodejs.org/api/crypto.html). Netlify runtime-identity
 limitation is recorded from the owner-supplied support response, not an assumed
 issuer configuration.
+
+
+## Policy/custody increment
+
+The [policy and signing-key candidate](federation-alliance-gateway-custody-20261019.md)
+adds offline exact-resource IAM artifacts and a default-off private-KeyObject
+provider bound to independently expected Netlify site/deploy/context metadata.
+Both gateway sides now require canonical notBeforeUtc/notAfterUtc fields on the
+public caller-key descriptor and refuse use outside its finite window. Expiry
+after authority dispatch remains unknown, never an invented non-commit. This
+changes the unmounted configuration contract; no real key or hosted setting is
+installed. Early revocation, old-producer exclusion and an actual compatible
+AWS execution-role provider remain separate acceptance work.

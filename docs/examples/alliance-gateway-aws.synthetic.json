@@ -1,0 +1,353 @@
+{
+  "format": 1,
+  "binding": {
+    "gateway": {
+      "apiId": "abcdefghij",
+      "stage": "preview"
+    },
+    "bridge": {
+      "accountId": "123456789012",
+      "region": "us-east-2",
+      "functionName": "alliance-account-gateway-synthetic",
+      "version": "3"
+    },
+    "authority": {
+      "accountId": "123456789012",
+      "region": "us-east-2",
+      "functionName": "alliance-account-authority-synthetic",
+      "version": "7"
+    },
+    "nonce": {
+      "tableName": "alliance-account-nonce-synthetic",
+      "tableId": "11111111-2222-3333-4444-555555555555",
+      "epoch": "22222222-3333-4444-5555-666666666666"
+    },
+    "root": {
+      "tableName": "alliance-account-authority-synthetic",
+      "tableId": "33333333-4444-5555-6666-777777777777",
+      "rootKey": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "custodyId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "roles": {
+      "gateway": "alliance-account-gateway-role-synthetic",
+      "authority": "alliance-account-authority-role-synthetic"
+    },
+    "callerKeyId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "roleArns": {
+    "gateway": "arn:aws:iam::123456789012:role/alliance-account-gateway-role-synthetic",
+    "authority": "arn:aws:iam::123456789012:role/alliance-account-authority-role-synthetic"
+  },
+  "gatewayIdentity": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "InvokePinnedAuthority",
+        "Effect": "Allow",
+        "Action": [
+          "lambda:InvokeFunction"
+        ],
+        "Resource": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-authority-synthetic:7",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          }
+        }
+      },
+      {
+        "Sid": "InspectNonceTable",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-nonce-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          }
+        }
+      },
+      {
+        "Sid": "ClaimOwnKeyNonces",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-nonce-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "ForAllValues:StringLike": {
+            "dynamodb:LeadingKeys": [
+              "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#*"
+            ]
+          },
+          "Null": {
+            "dynamodb:LeadingKeys": "false"
+          }
+        }
+      }
+    ]
+  },
+  "authorityIdentity": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "InspectAuthorityTable",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-authority-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-authority-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          }
+        }
+      },
+      {
+        "Sid": "OwnRootRecord",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-authority-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-authority-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "ForAllValues:StringEquals": {
+            "dynamodb:LeadingKeys": [
+              "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            ]
+          },
+          "Null": {
+            "dynamodb:LeadingKeys": "false"
+          }
+        }
+      }
+    ]
+  },
+  "gatewayBoundary": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "InvokePinnedAuthority",
+        "Effect": "Allow",
+        "Action": [
+          "lambda:InvokeFunction"
+        ],
+        "Resource": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-authority-synthetic:7",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          }
+        }
+      },
+      {
+        "Sid": "InspectNonceTable",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-nonce-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          }
+        }
+      },
+      {
+        "Sid": "ClaimOwnKeyNonces",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-nonce-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "ForAllValues:StringLike": {
+            "dynamodb:LeadingKeys": [
+              "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#*"
+            ]
+          },
+          "Null": {
+            "dynamodb:LeadingKeys": "false"
+          }
+        }
+      }
+    ]
+  },
+  "authorityBoundary": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "InspectAuthorityTable",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-authority-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-authority-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          }
+        }
+      },
+      {
+        "Sid": "OwnRootRecord",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-account-authority-synthetic",
+        "Condition": {
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-authority-synthetic"
+          },
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "ForAllValues:StringEquals": {
+            "dynamodb:LeadingKeys": [
+              "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            ]
+          },
+          "Null": {
+            "dynamodb:LeadingKeys": "false"
+          }
+        }
+      }
+    ]
+  },
+  "gatewayExecutionTrust": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "LambdaServiceOnly",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "lambda.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "authorityExecutionTrust": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "LambdaServiceOnly",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "lambda.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "gatewayAddPermission": {
+    "FunctionName": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic",
+    "Qualifier": "3",
+    "StatementId": "AllianceExactRestGateway",
+    "Action": "lambda:InvokeFunction",
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": "arn:aws:execute-api:us-east-2:123456789012:abcdefghij/preview/POST/checkpoint",
+    "SourceAccount": "123456789012"
+  },
+  "gatewayResourcePolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "AllianceExactRestGateway",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "apigateway.amazonaws.com"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Resource": "arn:aws:lambda:us-east-2:123456789012:function:alliance-account-gateway-synthetic:3",
+        "Condition": {
+          "ArnLike": {
+            "AWS:SourceArn": "arn:aws:execute-api:us-east-2:123456789012:abcdefghij/preview/POST/checkpoint"
+          },
+          "StringEquals": {
+            "AWS:SourceAccount": "123456789012"
+          }
+        }
+      }
+    ]
+  },
+  "expectedAbsent": {
+    "authorityResourcePolicy": true,
+    "tableResourcePolicies": true,
+    "functionUrls": true
+  }
+}
