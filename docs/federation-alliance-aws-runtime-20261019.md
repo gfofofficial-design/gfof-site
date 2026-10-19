@@ -84,13 +84,14 @@ The package test command includes the new focused suite. Exact CI results are
 recorded in PR #124; no local execution environment was available for this
 increment.
 
-The runtime adapter and expected public AWS installation manifest remain
-unmounted. No Lambda environment reader, deployment handler wiring, key vault,
-secret scope, new STS access or IAM resource has been installed. The next concrete
-delivery work is to prepare the reviewed composition/installation plan and
-separately accept actual identity/IAM, ingress/version exclusions, table/TTL/
-current custody, independent initialization/restore barriers, bounded trial
-traffic/cost/logging, signing-key custody and recovery.
+The [AWS handler composition](federation-alliance-aws-composition-20261019.md) now
+provides an invocation-scoped environment reader and separate gateway/authority
+factories with fixed nested budgets and a concrete hosted acceptance procedure.
+They remain default off/unmounted; no real installation manifest, cloud handler,
+key vault, secret scope, STS access or IAM resource is installed. Actual identity/
+IAM, ingress/version exclusions, table/TTL/current custody, independent
+initialization/restore barriers, finite trial traffic/cost/logging, signing-key
+custody and recovery remain separate hosted acceptance work.
 
 Existing public account release gates remain: Google clearance, real sign-in/
 phone acceptance, member sessions/policy/content/abuse/privacy and coordinated
