@@ -60,9 +60,11 @@ request-body digest and a fixed expiration exceeding the entire accepted request
 window. It must atomically insert-if-absent across every instance, durably commit
 before returning literal `true`, and deny every repeat, even the same body.
 False/nonboolean, uncertain, failed or late claims never dispatch the authority.
-There is **no production nonce-store implementation or in-memory fallback** in
-this milestone. Tests explicitly use a shared synthetic claim fixture; those
-tests do not establish hosted durability, fleet-wide replay protection or TTL.
+The [DynamoDB nonce adapter candidate](federation-alliance-gateway-nonce-20261019.md)
+now supplies conditional claims, strong readback and exact table/TTL sampling,
+without an in-memory fallback. Unit fixtures and an isolated emulator exercise
+are separate from hosted durability, fleet replay protection and TTL acceptance.
+No production nonce store is installed.
 
 The default client uses Node certificate-validated HTTPS with TLS1.2 minimum,
 one socket, fixed port443, bounded body and overall deadline. It follows no
@@ -113,8 +115,8 @@ or physical-phone acceptance is inferred from backend tests.
    table/root/write/reset/restore/admin permission. Keep authority-store rights
    confined to the separate authority execution role; verify allowed and denied
    calls on the actual AWS account before a finite synthetic trial.
-4. Implement and test the durable atomic nonce capability, exact resource/TTL
-   binding, no-reuse rule, capacity/failure behavior, and restart/fleet cases.
+4. Accept the concrete nonce adapter against the actual dedicated resource/TTL,
+   no-reuse rule, capacity/failure behavior, and restart/fleet cases.
    DynamoDB TTL deletion is asynchronous; correctness must use atomic conditions
    and signature validity, never assume expiration deletes a row immediately.
    Nonce-store rollback, administrative reset or significant clock rollback must
