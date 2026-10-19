@@ -50,7 +50,7 @@ expirationless credential callback. For every SDK send, it:
 
 1. Reads and validates a new runtime snapshot within the request's cancellation
    and deadline budget; missing credentials cannot fall back to an earlier one.
-2. Creates one SDK client with that immutable snapshot, the existing pinned
+2. Creates one SDK client with its own copy of that snapshot, the existing pinned
    regional HTTPS endpoint, certificate validation, minimum TLS1.2, one attempt
    and bounded connection/request deadlines.
 3. Sends the one fixed command, then destroys its client/agent. The next send
