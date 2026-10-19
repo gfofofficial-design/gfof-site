@@ -110,13 +110,13 @@ the browser, build logs, screenshots, chat or PRs.
 1. Verify actual AWS account/Region/resource IDs, caller fingerprint and code
    artifacts; produce and review an exact plan. The synthetic bundle is not that
    approval. No cloud creation/apply command is included in this increment.
-2. Resolve the actual AWS-side temporary-credential provider contract. Existing
-   Lambda/nonce clients require a session token and explicit finite expiration.
-   Lambda documents execution-role environment credentials, but those docs do
-   not establish an expiry field satisfying this stricter adapter. Do not invent
-   expiration, loosen it silently, copy AWS keys into Netlify, or assume that an
-   extra STS role hop retains the SourceFunctionArn context. Compatibility and
-   real IAM source conditions require a separate supported-runtime test.
+2. The [AWS runtime candidate](federation-alliance-aws-runtime-20261019.md) now
+   supplies an explicit Lambda execution-role profile without fake expiration,
+   an STS hop or stale SDK-client reuse. The existing expiring-STS profiles stay
+   strict. Synthetic SDK wires cover Invoke, nonce and root adapters. The actual
+   runtime reader/context manifest remain unmounted; real execution-role issuer,
+   effective IAM/source-function conditions and hosted acceptance remain open.
+   No AWS keys go into Netlify.
 3. Establish independent key custody/recovery and an exact private-store adapter.
    If using Netlify environment storage, require a secret value scoped to runtime
    Functions and the reviewed exact context/branch, with distinct preview and

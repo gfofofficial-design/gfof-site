@@ -156,5 +156,8 @@ Both gateway sides now require canonical notBeforeUtc/notAfterUtc fields on the
 public caller-key descriptor and refuse use outside its finite window. Expiry
 after authority dispatch remains unknown, never an invented non-commit. This
 changes the unmounted configuration contract; no real key or hosted setting is
-installed. Early revocation, old-producer exclusion and an actual compatible
-AWS execution-role provider remain separate acceptance work.
+installed. The [AWS runtime provider candidate](federation-alliance-aws-runtime-20261019.md)
+now adds an explicit per-request execution-role profile to Invoke/nonce/root
+adapters, without inventing expiry or reusing expirationless SDK identities.
+Actual runtime wiring/issuer/IAM acceptance, early revocation and old-producer
+exclusion remain separate work.
