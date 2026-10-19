@@ -44,8 +44,11 @@ not enforce our semantic transition validation or a specific condition string;
 the authority service code/execution role remains trusted. The app needs only
 invocation access to one reviewed service identity/version, no table access.
 
-Authenticated invocation and short-lived caller credentials from the actual app
-host, old-credential/version refusal and global request limits are **unimplemented**.
+The [default-off Lambda invocation candidate](federation-alliance-account-lambda-20261018.md)
+adds a pinned synchronous SDK transport/handler factory with offline signing,
+version and uncertainty tests. Hosted authentication, short-lived caller
+credentials from the actual app host, old-credential/fleet refusal and global
+request limits remain **unimplemented/unverified**.
 Do not use administrator credentials as a shortcut. Initial root setup is a
 separate reviewed action after fresh ledger/ack state verification; runtime never
 resets authority from ordinary backups. No deployment/initialization tool exists.
