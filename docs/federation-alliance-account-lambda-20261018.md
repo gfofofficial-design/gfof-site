@@ -99,3 +99,16 @@ Primary references: [Invoke API](https://docs.aws.amazon.com/lambda/latest/api/A
 [OIDC federation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_oidc.html).
 The first two describe separate function-error/version signals and trusted
 runtime context; neither makes an event envelope an authentication mechanism.
+
+
+## Netlify runtime decision — October 19
+
+The owner supplied Netlify Support confirmation that Functions has no runtime
+OIDC token and approved preparing the [signed gateway candidate](federation-alliance-account-gateway-20261019.md).
+Netlify would authenticate with a dedicated server-side application signing key;
+the AWS gateway would use temporary execution-role credentials for this exact
+pinned Lambda client. The new candidate changes the calling boundary, not this
+client's temporary-credential requirement. No real key, issuer, role, gateway,
+nonce store or cloud permission is installed. Durable replay protection, caller
+key custody/revocation, actual IAM ingress/denial and existing account/authority
+acceptance still precede any hosted trial or release.
