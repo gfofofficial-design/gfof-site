@@ -6,7 +6,7 @@ clear a Safe Browsing warning, mount Alliance profiles or launch financial servi
 
 ## Implemented candidate
 
-The account page can request a six-digit email code and submit it in the same
+The account page can request an eight-digit email code and submit it in the same
 browser. The server calls the fixed Supabase OTP/verify endpoints with a
 publishable key, then independently verifies the confirmed, non-anonymous user
 and matching email before issuing the existing Secure, HttpOnly, host-only cookies.
@@ -29,7 +29,10 @@ closed test preview until release copy, managed policy and acceptance match.
 
 ## Current evidence and limits
 
-All 91 local account tests pass, including 15 new email handler/page tests.
+The initial email candidate passed 91 local account tests, including 15 new email
+handler/page tests. The October 20 Dev reconciliation then passed 100 focused
+account tests at commit 5845258; its runtime files are unchanged by the separate
+unapplied [email admission candidate](federation-email-admission-20261020.md).
 Coverage includes the fixed provider destination, no client signup/redirect
 option, origin and direct-function boundaries, neutral eligibility response,
 rate limits, flow expiry, wrong/unconfirmed user, malformed session refusal,
@@ -38,21 +41,26 @@ These are synthetic provider and VM tests. They do not prove real SMTP delivery,
 actual OTP one-time use, cookie timing on a real phone, hosted signup-hook behavior
 or production acceptance. No email was sent during these tests.
 
-Read-only account-project observations on October 20: custom SMTP is disabled.
-The dashboard now shows a Pro organization and a scheduled backup about thirteen
-hours old. Older Free/no-backups statements describe prior observations; the new
+An earlier read-only account-project observation on October 20 found custom SMTP
+disabled, a Pro organization and a scheduled backup about thirteen hours old.
+Reconcile the later work-computer setup before proposing another sender change;
+that earlier observation is not a fresh readback. Older Free/no-backups statements
+describe prior observations; the new
 backup display alone does not establish restorable Auth coverage, deletion
 reconciliation, independent custody or an adopted recovery procedure.
 
 ## Required before public email accounts
 
-1. **Sender:** configure an independently verified sender and protected custom
-   SMTP credentials. Supabase's default mail service is not a public production
+1. **Sender:** read back the existing sender first, then configure any missing
+   independently verified sender and protected custom SMTP credentials under its
+   approved scope. Supabase's default mail service is not a public production
    sender. Check SPF/DKIM/DMARC and inbox/spam delivery using an approved test
    address. Do not reuse another product's sender/key without reviewing its scope.
 2. **Templates:** install the reviewed `supabase/templates/federation-email-code.html`
    content for both signup confirmation and magic-link email templates, with
-   six-digit OTPs and the reviewed expiry. Suppress tracking/link rewriting.
+   eight-digit OTPs matching the candidate and the reviewed expiry. Suppress
+   tracking/link rewriting. Verify the managed project's actual code length;
+   the source change does not configure it.
 3. **Signup policy:** the existing unapplied `google_only` hook rejects new email
    accounts. Do not attach it or simply enable public signup for this launch.
    Prepare and test its replacement against the actual managed Auth routes.
