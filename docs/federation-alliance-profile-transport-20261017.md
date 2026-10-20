@@ -222,3 +222,45 @@ Local validation is syntax checking; the complete composed database assertions r
 only in the identity-checked disposable PostgreSQL/TLS CI job. The existing local
 76-test profile and 35-test driver results belong to the preceding increment;
 exact-head CI results are recorded in the PR and handoff after completion.
+
+## Profile API lifecycle and uncertain-write pause — October 20
+
+The callable API now owns one complete request from inbound parsing through Auth,
+profile work and final verification. A concurrent request is refused immediately,
+before another Auth request or body read is started; it is never queued. Incoming
+headers are snapshotted for that admitted request.
+
+`api.close()` is idempotent. It refuses future requests, aborts the admitted
+request and closes the API's own view guard. Caller-owned ledger, creation,
+journal and serving adapters are not closed. Their owner remains responsible for
+shutdown after its services have stopped. Native fixture cleanup now follows this
+order.
+
+Caller cancellation or shutdown resolves the outer request even when inbound
+bytes or Auth ignore cancellation. Late parsing/authentication cannot dispatch a
+profile change or release data. Caller cancellation retires the instance, as do
+body/Auth timeouts, uncertain Auth transport/context failures and interrupted data
+phases. An admitted request cannot be replaced with another orphaned request in
+the same instance. Known Auth refusals and ordinary validation errors retain their
+existing behavior. Shutdown after save dispatch reports an unknown mutation
+outcome and propagates cancellation without claiming rollback.
+
+Any unsuccessful response after creation dispatch also latches an instance-wide
+write pause. Subsequent POSTs receive `profile_changes_paused` before Auth or
+creation work, even if a fresh caller bypasses the browser client's pause. Where
+the instance has not been retired, reads remain possible; a successful read does
+not unlock writes. The native lost-acknowledgement case now attempts this direct
+retry after an actual committed save and requires one dispatch.
+
+This latch is deliberately conservative and applies to the entire instance. It is
+not durable or shared across processes and does not resolve the earlier mutation.
+A host must not automatically replace a retired/paused instance to resume writes.
+Durable reconciliation and an independent startup/serving decision remain release
+requirements before an enabled replacement can accept changes.
+
+Validation: 83 local profile store/API/client tests pass, including seven new
+lifecycle cases. Six cases reproduced missing shutdown/admission/pause behavior
+against the preceding API. Shutdown is exercised during inbound bytes, Auth and a
+dispatched save; late results remain withheld. Existing native composition is
+rerun in CI with explicit API cleanup and the direct uncertain-save retry check.
+No SQL candidate, dependency, mounted route, credential or hosted setting changes.

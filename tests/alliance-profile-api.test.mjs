@@ -83,7 +83,7 @@ test('upstream authentication refusal is sanitized and blocks all database work'
   for(const accountStatus of [401,403]){const f=fixture({accountStatus,account:{secret:'DO-NOT-RETURN'}});const r=await f.api(request());assert.equal(r.status,401);assert.doesNotMatch(JSON.stringify(await body(r)),/DO-NOT|private@example|token/);assert.equal(f.calls.length,1);}
 });
 test('an Auth outage is unavailable, never an empty profile or an invitation to retry a write',async()=>{
-  const f=fixture({accountStatus:500});const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal((await body(r)).error.code,'account_unavailable');assert.equal(f.writes,0);
+  const f=fixture({accountStatus:500});const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal((await body(r)).error.code,'account_unavailable');assert.equal(f.writes,0);assert.equal((await f.api(request())).status,503);assert.equal(f.calls.length,1);
 });
 test('validated account cookie is reused only server-side and private account fields are never returned',async()=>{
   const f=fixture({profile:{...row(),user_id:id,email:'DO-NOT-RETURN',access_token:'DO-NOT-RETURN'}});const r=await f.api(request());assert.equal(r.status,200);assert.deepEqual(await body(r),{profile:row()});assert.equal(f.calls.length,2);for(const c of f.calls){assert.equal(c.init.headers.Authorization,'Bearer '+token);assert.equal(c.init.credentials,'omit');assert.equal(c.init.redirect,'error');assert.equal(c.init.headers.Cookie,undefined);}assert.equal(r.headers.get('cache-control'),'private, no-store');assert.equal(r.headers.get('vary'),'Cookie');assert.equal(r.headers.get('access-control-allow-origin'),null);assert.equal(r.headers.get('set-cookie'),null);
@@ -206,6 +206,44 @@ test('a stalled final session check is bounded, cancelled and cannot release a l
 
 test('a final session check retains exclusive admission until its response is settled',async()=>{
  let checks=0,resolve,entered=false;const wait=new Promise(r=>resolve=r),f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>{if(++checks===2){entered=true;await wait;}return {actorId,sessionId};}}});
- const first=f.api(request());try{while(!entered)await new Promise(r=>setImmediate(r));const before=f.calls.length;const second=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(second.status,503);assert.equal(f.writes,0);assert.equal(checks,2);assert.equal(f.calls.length,before+1);resolve();assert.equal((await first).status,200);}
+ const first=f.api(request());try{while(!entered)await new Promise(r=>setImmediate(r));const before=f.calls.length;const second=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(second.status,503);assert.equal(f.writes,0);assert.equal(checks,2);assert.equal(f.calls.length,before);resolve();assert.equal((await first).status,200);}
  finally{resolve();await first;f.signed.client.close();}
+});
+
+test('an uncertain dispatched save pauses subsequent server writes even after a successful read',async()=>{
+ let writes=0;const f=fixture({creation:{profile:async()=>{if(++writes===1)throw Object.assign(Error('Synthetic committed reply lost'),{outcome:'unknown'});return row();}}});
+ try{const first=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(first.status,503);assert.equal((await body(first)).mutation,'unknown');assert.equal((await f.api(request())).status,200);
+  const again=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(again.status,503);assert.equal((await body(again)).error.code,'profile_changes_paused');assert.equal(writes,1);}
+ finally{f.api.close?.();f.signed.client.close();}
+});
+test('exclusive admission includes pending authentication and never queues a second upstream verification',async()=>{
+ let resolve,entered=false;const gate=new Promise(r=>resolve=r),f=fixture({run:async endpoint=>{if(endpoint.endsWith('/auth/v1/user')){entered=true;await gate;return json(user());}return json(row());}});const first=f.api(request());
+ try{while(!entered)await new Promise(r=>setImmediate(r));const second=f.api(request('/me',{method:'POST',body:input()}));const early=await Promise.race([second,new Promise(r=>setImmediate(()=>r(null)))]);assert.ok(early);assert.equal(early.status,503);assert.equal(f.calls.length,1);resolve();assert.equal((await first).status,200);await second;}
+ finally{resolve();await first;f.api.close?.();f.signed.client.close();}
+});
+test('cancellation during noncooperative Auth returns promptly and retires the instance before reuse',async()=>{
+ let resolve,entered=false;const gate=new Promise(r=>resolve=r),controller=new AbortController(),f=fixture({run:async()=>{entered=true;await gate;return json(user());}});const pending=f.api(request('/me',{signal:controller.signal}));
+ try{while(!entered)await new Promise(r=>setImmediate(r));controller.abort();const early=await Promise.race([pending,new Promise(r=>setImmediate(()=>r(null)))]);assert.ok(early);assert.equal(early.status,408);assert.equal((await f.api(request())).status,503);assert.equal(f.calls.length,1);resolve();await new Promise(r=>setImmediate(r));assert.equal(f.writes,0);}
+ finally{resolve();await pending;f.api.close?.();f.signed.client.close();}
+});
+test('explicit shutdown aborts Auth, withholds its late response and refuses subsequent requests',async()=>{
+ let resolve,upstreamSignal;const gate=new Promise(r=>resolve=r),f=fixture({run:async(_endpoint,init)=>{upstreamSignal=init.signal;await gate;return json(user());}});const pending=f.api(request());
+ try{while(!upstreamSignal)await new Promise(r=>setImmediate(r));f.api.close();assert.equal(upstreamSignal.aborted,true);const ended=await pending;assert.equal(ended.status,503);assert.equal((await body(ended)).mutation,undefined);assert.equal((await f.api(request())).status,503);resolve();await new Promise(r=>setImmediate(r));assert.equal(f.calls.length,1);}
+ finally{resolve();await pending;f.api.close?.();f.signed.client.close();}
+});
+test('shutdown after save dispatch returns unknown, cancels creation and ignores a late acknowledgement',async()=>{
+ let resolve,writeSignal;const gate=new Promise(r=>resolve=r),f=fixture({creation:{profile:async(_ctx,_input,{signal})=>{writeSignal=signal;await gate;return row();}}});const pending=f.api(request('/me',{method:'POST',body:input()}));
+ try{while(!writeSignal)await new Promise(r=>setImmediate(r));f.api.close();assert.equal(writeSignal.aborted,true);const ended=await pending;assert.equal(ended.status,503);assert.equal((await body(ended)).mutation,'unknown');resolve();await new Promise(r=>setImmediate(r));assert.equal((await f.api(request())).status,503);assert.equal(f.calls.length,1);}
+ finally{resolve();await pending;f.api.close?.();f.signed.client.close();}
+});
+test('close is idempotent and never closes caller-owned database, journal, creation or serving adapters',async()=>{
+ let externalCloses=0;const close=()=>externalCloses++,f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),close},journal:{review:()=>({state:'verified_evidence',checkProfile:()=>({state:'not_listed'}),close(){}}),close},serving:{authorize:()=>true,close},creation:{profile:async()=>row(),close}});
+ f.api.close();f.api.close();assert.equal(externalCloses,0);assert.equal((await f.api(request())).status,503);assert.equal(f.calls.length,0);f.signed.client.close();
+});
+
+test('shutdown during stalled inbound bytes returns without Auth and cannot dispatch after late parsing',async()=>{
+ let resolve,entered=false,first=true;const gate=new Promise(r=>resolve=r),bytes=new TextEncoder().encode(JSON.stringify(input())),f=fixture();
+ const source=request('/me',{method:'POST',body:input()}),req={url:source.url,method:source.method,headers:source.headers,signal:source.signal,body:{getReader:()=>({async read(){if(first){first=false;entered=true;await gate;return {done:false,value:bytes};}return {done:true};},cancel(){}})}};
+ const pending=f.api(req);try{while(!entered)await new Promise(r=>setImmediate(r));f.api.close();assert.equal((await pending).status,503);assert.equal(f.calls.length,0);resolve();await new Promise(r=>setImmediate(r));assert.equal(f.calls.length,0);assert.equal(f.writes,0);}
+ finally{resolve();await pending;f.api.close();f.signed.client.close();}
 });
