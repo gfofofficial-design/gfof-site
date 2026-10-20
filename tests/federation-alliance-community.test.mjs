@@ -224,3 +224,34 @@ test('an invitation draft never restores a target hidden by its author',async()=
  assert.notEqual(b.get('hub-challenge-target').value,other);assert.equal(b.get('hub-challenge-target').children.some(n=>n.value===other),false);assert.equal(b.get('hub-challenge-note').value,'Keep the brief while changing eligible recipients.');b.api.dispose();
 });
 
+function fillIdea(b,category='research'){b.get('hub-idea-title').value='Show public evidence sources';b.get('hub-idea-category').value=category;b.get('hub-idea-detail').value='Explain the public sources so new members can compare the evidence.';}
+test('posting an idea reveals and focuses its card when the selected category would hide it',async()=>{
+ const b=fixture();await b.create();b.get('hub-idea-filter').value='tools';await b.get('hub-idea-filter').emit('change');fillIdea(b);
+ await b.get('hub-idea-form').emit('submit');const idea=b.api.getState().ideas[0],card=b.get('hub-idea-card-'+idea.id);
+ assert.ok(card);assert.match(card.textContent,/Show public evidence sources/);assert.equal(b.get('hub-idea-filter').value,'research');assert.equal(b.document.activeElement,card);assert.match(b.get('hub-idea-status').textContent,/Showing Research & evidence/);b.api.dispose();
+});
+test('idea submission preserves an all-category or matching filter and focuses the created card',async()=>{
+ for(const filter of ['all','research']){const b=fixture();await b.create();b.get('hub-idea-filter').value=filter;fillIdea(b);await b.get('hub-idea-form').emit('submit');
+  assert.equal(b.get('hub-idea-filter').value,filter);assert.equal(b.document.activeElement,b.get('hub-idea-card-'+b.api.getState().ideas[0].id));assert.doesNotMatch(b.get('hub-idea-status').textContent,/Showing/);b.api.dispose();}
+});
+test('creating an invitation reveals and focuses it without claiming it is already active',async()=>{
+ for(const filter of ['active','complete']){const {b}=await draftFixture();b.get('hub-challenge-filter').value=filter;await b.get('hub-challenge-filter').emit('change');
+  b.get('hub-challenge-note').value='An invitation that still needs the other member’s acceptance.';await b.get('hub-challenge-form').emit('submit');const c=b.api.getState().challenges[0],card=b.get('hub-challenge-card-'+c.id);
+  assert.ok(card);assert.equal(c.status,'invited');assert.equal(card.dataset.status,'invited');assert.equal(b.get('hub-challenge-filter').value,'invited');assert.equal(b.document.activeElement,card);assert.match(b.get('hub-challenge-status').textContent,/Showing awaiting invitations/);assert.ok(b.find('hub-challenges','Cancel invitation'));b.api.dispose();}
+});
+test('invitation creation preserves an all-status or already-awaiting filter',async()=>{
+ for(const filter of ['all','invited']){const {b}=await draftFixture();b.get('hub-challenge-filter').value=filter;await b.get('hub-challenge-form').emit('submit');
+  assert.equal(b.get('hub-challenge-filter').value,filter);assert.equal(b.document.activeElement,b.get('hub-challenge-card-'+b.api.getState().challenges[0].id));assert.doesNotMatch(b.get('hub-challenge-status').textContent,/Showing/);b.api.dispose();}
+});
+test('failed submissions preserve filters, editable text and the existing keyboard position',async()=>{
+ const {b}=await draftFixture();b.get('hub-idea-filter').value='tools';fillIdea(b);b.get('hub-idea-title').value='tiny';b.get('hub-idea-title').focus();await b.get('hub-idea-form').emit('submit');
+ assert.equal(b.api.getState().ideas.length,0);assert.equal(b.get('hub-idea-filter').value,'tools');assert.equal(b.get('hub-idea-title').value,'tiny');assert.equal(b.document.activeElement,b.get('hub-idea-title'));assert.doesNotMatch(b.get('hub-idea-status').textContent,/Showing/);
+ b.get('hub-challenge-filter').value='active';b.get('hub-challenge-goal').value='0';b.get('hub-challenge-note').value='Keep this brief while repairing the goal.';b.get('hub-challenge-goal').focus();await b.get('hub-challenge-form').emit('submit');
+ assert.equal(b.api.getState().challenges.length,0);assert.equal(b.get('hub-challenge-filter').value,'active');assert.equal(b.get('hub-challenge-note').value,'Keep this brief while repairing the goal.');assert.equal(b.document.activeElement,b.get('hub-challenge-goal'));assert.doesNotMatch(b.get('hub-challenge-status').textContent,/Showing/);b.api.dispose();
+});
+test('revealing a new invitation preserves an unfinished contribution hidden by the new filter',async()=>{
+ const {b,key}=await activeFixture();b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');b.get('hub-proof-'+key).value='An unfinished contribution that must survive a new invitation.';await b.get('hub-proof-'+key).emit('input');
+ b.get('hub-challenge-kit').value='feedback';await b.get('hub-challenge-kit').emit('change');await b.get('hub-challenge-form').emit('submit');assert.equal(b.get('hub-challenge-filter').value,'invited');assert.equal(b.document.getElementById('hub-proof-'+key),null);
+ b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');assert.equal(b.get('hub-proof-'+key).value,'An unfinished contribution that must survive a new invitation.');b.api.dispose();
+});
+

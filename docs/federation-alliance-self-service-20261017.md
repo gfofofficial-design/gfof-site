@@ -138,3 +138,13 @@ Successful idea posting clears its title/detail; successful invitation creation 
 
 All 124 combined Alliance tests pass locally under Node24, including 44 Community Hub tests. Five new tests cover author-specific restoration/submission, invitation terms and eligible targets, validation and independent form clearing, reset/ID reuse and discarded drafts, and hidden-target exclusion. Three fail against the preceding module. Updated-preview browser results are recorded in the PR after deployment. This increment changes no HTML/CSS, core model, server, dependencies, account/permission setting or production gate.
 
+## Visible submission results — October 20
+
+Chrome reproduced successful submissions disappearing behind existing board filters: a Research idea posted while filtering Tools left the board empty, and a new invitation created while filtering Active challenges did the same. Both forms showed success without showing the created item.
+
+After successful submission, the preview now reveals the new card and moves keyboard focus to it. If the current idea filter excludes the new idea, it changes to that idea's category. If the challenge filter excludes a new invitation, it changes to Awaiting acceptance. The success message explains the filter change. All-category/all-status and already-matching filters are preserved. The invitation still requires the recipient's acceptance; revealing it does not make it active.
+
+Validation failure leaves filters, editable text and keyboard position unchanged. Revealing an invitation can temporarily hide an active challenge, but its unfinished contribution draft remains available when the Active filter is restored. No new memory cache, network operation or persistent state is introduced.
+
+All 130 combined Alliance tests pass locally under Node24, including 50 Community Hub tests. Six additional cases cover mismatched and matching filters, visible focused results, unchanged validation failures, and contribution-draft continuity across the automatic filter change. Five fail against the preceding module. The change is limited to the Community Hub module, tests and this contract; updated-preview browser checks follow deployment.
+
