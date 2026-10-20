@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {performance} from 'node:perf_hooks';
 import {createAllianceProfileApi} from '../lib/alliance-profile-api.mjs';
 import {journalFixture,event,chain} from '../lib/alliance-avatar-server/deletion-journal.fixture.mjs';
 const origin='https://deploy-preview-124--gfof.netlify.app';
@@ -128,4 +129,47 @@ test('oversized and invalid upstream account JSON cannot become a verified sessi
   for(const payload of ['"'+'x'.repeat(65536)+'"','{']){
     const f=fixture({run:async()=>new Response(payload,{headers:{'Content-Type':'application/json'}})});assert.equal((await f.api(request())).status,503);assert.equal(f.calls.length,1);
   }
+});
+
+function accountCookie(changes={}){return '__Host-gf-access=syntheticHeader.'+Buffer.from(JSON.stringify({sub:id,session_id:'22222222-2222-4222-8222-222222222222',iss:url+'/auth/v1',role:'authenticated',aud:'authenticated',exp:Math.floor(Date.now()/1000)+60,...changes})).toString('base64url')+'.syntheticSignature';}
+function expiryClock(t){let clock=Math.floor(Date.now()/1000)*1000;const expires=clock+5000;t.mock.method(Date,'now',()=>clock);return {expires,cookie:accountCookie({exp:expires/1000}),expire(){clock=expires;},reset(){clock=expires-5000;}};}
+test('self and directory reads require the same Auth-bound token context as writes',async()=>{
+ for(const path of ['/me','/directory'])for(const claims of [{sub:'33333333-3333-4333-8333-333333333333'},{session_id:undefined},{session_id:'browser-session'},{iss:'https://other.example/auth/v1'},{role:'anon'},{aud:'other'},{exp:0},{exp:1.5},{exp:Number.MAX_SAFE_INTEGER}]){
+  const f=fixture({profile:path==='/me'?row():[]});const r=await f.api(request(path,{headers:{Cookie:accountCookie(claims)}}));assert.equal(r.status,503);assert.equal(f.calls.length,1);assert.equal(f.writes,0);assert.doesNotMatch(JSON.stringify(await body(r)),/Fixture Explorer|private@example|syntheticHeader/);f.signed.client.close();
+ }
+});
+test('expiry after Auth but before loading prevents both a read and a profile write',async t=>{
+ const clock=expiryClock(t);
+ for(const method of ['GET','POST']){clock.reset();const f=fixture({serving:{authorize(){clock.expire();return true;}}});const r=await f.api(request('/me',{method,headers:{Cookie:clock.cookie},...(method==='POST'?{body:input()}:{})}));
+  assert.equal(r.status,401);assert.equal(f.calls.length,1);assert.equal(f.writes,0);assert.equal((await body(r)).mutation,undefined);f.signed.client.close();}
+});
+test('a profile response arriving at token expiry is withheld without another provider call',async t=>{
+ const clock=expiryClock(t),f=fixture({run:async endpoint=>{if(endpoint.endsWith('/auth/v1/user'))return json(user());clock.expire();return json(row());}});
+ const r=await f.api(request('/me',{headers:{Cookie:clock.cookie}}));assert.equal(r.status,401);assert.equal(f.calls.length,2);assert.doesNotMatch(JSON.stringify(await body(r)),/Fixture Explorer|synthetic profile/);f.signed.client.close();
+});
+test('expiry in the final serving check cannot release an otherwise verified directory',async t=>{
+ const clock=expiryClock(t);let permits=0;const f=fixture({profile:[],serving:{authorize(){if(++permits===3)clock.expire();return true;}}});
+ const r=await f.api(request('/directory',{headers:{Cookie:clock.cookie}}));assert.equal(permits,3);assert.equal(r.status,401);assert.equal((await body(r)).error.code,'sign_in_required');assert.equal(f.calls.length,2);f.signed.client.close();
+});
+test('token expiry during a dispatched save returns unknown instead of a retryable sign-in response',async t=>{
+ const clock=expiryClock(t),f=fixture({creation:{async profile(context,value,{signal}){assert.equal(context.expiresAt,clock.expires);assert.equal(signal.aborted,false);clock.expire();return row();}}});
+ const r=await f.api(request('/me',{method:'POST',headers:{Cookie:clock.cookie},body:input()}));assert.equal(r.status,408);const data=await body(r);assert.equal(data.mutation,'unknown');assert.equal(data.error.code,'request_ended');assert.doesNotMatch(JSON.stringify(data),/Fixture Explorer|synthetic profile/);assert.equal(f.calls.length,1);f.signed.client.close();
+});
+test('an expiry deadline interrupts a noncooperative read and ignores its late response',async t=>{
+ const now=Math.floor(Date.now()/1000)*1000;t.mock.timers.enable({apis:['Date','setTimeout'],now});let resolve,upstreamSignal;const wait=new Promise(r=>resolve=r),controller=new AbortController();
+ const f=fixture({run:async(endpoint,init)=>{if(endpoint.endsWith('/auth/v1/user'))return json(user());upstreamSignal=init.signal;return wait;}});
+ const pending=f.api(request('/me',{headers:{Cookie:accountCookie({exp:now/1000+5})},signal:controller.signal}));
+ try{while(!upstreamSignal)await new Promise(r=>setImmediate(r));t.mock.timers.tick(5000);assert.equal(upstreamSignal.aborted,true);const r=await pending;assert.equal(r.status,401);assert.equal((await body(r)).error.code,'sign_in_required');resolve(json(row()));await new Promise(r=>setImmediate(r));assert.equal(f.calls.length,2);}
+ finally{controller.abort();resolve(json(row()));await pending;f.signed.client.close();t.mock.timers.reset();}
+});
+test('an expiry deadline interrupts a noncooperative save and propagates cancellation without claiming rollback',async t=>{
+ const now=Math.floor(Date.now()/1000)*1000;t.mock.timers.enable({apis:['Date','setTimeout'],now});let resolve,writeSignal;const wait=new Promise(r=>resolve=r),controller=new AbortController();
+ const f=fixture({creation:{profile(_context,_value,{signal}){writeSignal=signal;return wait;}}});const pending=f.api(request('/me',{method:'POST',headers:{Cookie:accountCookie({exp:now/1000+5})},body:input(),signal:controller.signal}));
+ try{while(!writeSignal)await new Promise(r=>setImmediate(r));t.mock.timers.tick(5000);assert.equal(writeSignal.aborted,true);const r=await pending;assert.equal(r.status,408);assert.equal((await body(r)).mutation,'unknown');resolve(row());await new Promise(r=>setImmediate(r));assert.equal(f.calls.length,1);}
+ finally{controller.abort();resolve(row());await pending;f.signed.client.close();t.mock.timers.reset();}
+});
+test('a clock rollback and blocking policy check cannot extend the accepted token lifetime',async t=>{
+ const second=Math.floor(Date.now()/1000)*1000;let clock=second+990;t.mock.method(Date,'now',()=>clock);
+ const f=fixture({journal:{review:()=>({state:'verified_evidence',checkProfile:()=>({state:'not_listed'}),close(){}})},serving:{authorize(){clock=second-1000;const started=performance.now();while(performance.now()-started<25){}return true;}}});
+ const r=await f.api(request('/me',{headers:{Cookie:accountCookie({exp:second/1000+1})}}));assert.equal(r.status,401);assert.equal(f.calls.length,1);assert.equal((await body(r)).error.code,'sign_in_required');f.signed.client.close();
 });

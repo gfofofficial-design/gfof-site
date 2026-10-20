@@ -92,3 +92,51 @@ No hosted schema, grants, credentials, signup settings or public site is changed
 The requested lightweight changelog markdown index returned an unsupported-content
 fetch error. Current topic guidance was read; this is not a full changelog or
 dependency-security audit. No Supabase SDK or CLI dependency was added.
+
+## Verified token lifetime across profile requests — October 20
+
+The profile handler previously derived the verified subject/session/expiry context
+only for POST. GET self/directory reads could proceed with a mismatched context in
+synthetic Auth responses, and a response could be returned after the accepted
+token expired during the database or final serving checks. Seven new request
+regressions reproduced those failures against the preceding API.
+
+All profile reads and saves now bind the accepted cookie to the same verified
+subject, project issuer, authenticated audience/role, session UUID and safe expiry
+timestamp. The pinned Auth server must accept the cookie before its claims are
+decoded. This does not introduce local signature verification or authorization
+from user-editable metadata.
+
+After Auth, one request signal combines cancellation with a deadline bounded by
+both the token's remaining lifetime and the existing eight-second data/guard
+budget. Checks run before Data API dispatch, before/after the single load or save,
+after final journal/serving verification, and after constructing the response.
+The captured lifetime also has a monotonic elapsed-time bound, so a wall-clock
+rollback or a blocking policy callback cannot extend it while a timer is delayed.
+Expiry signals cancellation to database and creation work. A late response cannot
+release profile data. Cancellation cannot prove that an already dispatched write
+was rolled back.
+
+Expiry before a save is dispatched returns sign-in-required without a mutation
+claim. Once a save was attempted, expiry returns an unknown mutation outcome,
+never a plain sign-in response that could encourage retry. A composed browser/API
+test confirms that further writes stay paused even when a later authenticated
+read succeeds. No automatic refresh, retry or removal path is added.
+
+The existing guard's timeout/cancellation fault policy is retained; hosting must
+discard a faulted instance rather than treating a new cookie as reconciliation.
+Actual session-row revocation checks, provider/RLS acceptance, durable mutation
+reconciliation and production concurrency/lifecycle composition remain release
+work. Token expiry enforcement is not proof that a signed-out session has already
+been revoked. Supabase documents that stricter sign-out rejection requires checking
+the token's session ID against current session state.
+
+Validation: 55 profile store/API/client tests pass locally, including eight new
+request regressions and one client/API composition case. Existing native database
+tests remain unchanged. The API remains an unmounted source candidate; no hosted
+credentials, schema, access permissions, signup rule or public service is changed.
+
+Current [Supabase session guidance](https://supabase.com/docs/guides/auth/sessions)
+and the HTML changelog were reviewed. The lightweight `.md` index again returned
+an unsupported-content fetch error. No SDK, CLI, dependency or provider setting is
+changed by this increment.

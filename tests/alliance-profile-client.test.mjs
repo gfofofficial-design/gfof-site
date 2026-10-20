@@ -78,3 +78,17 @@ test('composed browser-to-cookie-Auth-to-profile flow uses no browser account ID
   const f=fixture({fetcher:(endpoint,init)=>api(new Request(endpoint,{...init,headers:{...init.headers,Cookie:'__Host-gf-access='+token,'Sec-Fetch-Site':'same-origin',...(init.method==='GET'?{}:{Origin:origin})}}))});
   assert.deepEqual(await f.client.load(),{profile:null});await f.client.save(input());assert.deepEqual(await f.client.load(),{profile:profile()});await assert.rejects(f.client.remove(),{code:'removal_unavailable'});assert.deepEqual(await f.client.load(),{profile:profile()});assert.equal(upstream.length,7);assert.ok(upstream.every(c=>c.init.headers.Authorization==='Bearer '+token));assert.ok(!f.states.some(s=>s.status==='removed'));assert.doesNotMatch(JSON.stringify(f.states),new RegExp(token));
 });
+
+test('composed token expiry after saving keeps browser writes paused through a later successful read',async t=>{
+ const {journalFixture}=await import('../lib/alliance-avatar-server/deletion-journal.fixture.mjs');let clock=Math.floor(Date.now()/1000)*1000;const expires=clock+5000;t.mock.method(Date,'now',()=>clock);
+ const url='https://syntheticfixture.supabase.co',makeCookie=exp=>'__Host-gf-access=syntheticHeader.'+Buffer.from(JSON.stringify({sub:id,session_id:'22222222-2222-4222-8222-222222222222',iss:url+'/auth/v1',role:'authenticated',aud:'authenticated',exp})).toString('base64url')+'.syntheticSignature';
+ let cookie=makeCookie(expires/1000),stored=null,writes=0;const signed=journalFixture({events:[]}),upstream=[];
+ const api=createAllianceProfileApi({enabled:true,origin,url,key:'sb_publishable_'+'fixture'.repeat(5),journal:signed.client,serving:{authorize:()=>true},creation:{profile:async()=>{writes++;stored=profile();clock=expires;return stored;}},fetcher:async endpoint=>{upstream.push(endpoint);return json(endpoint.endsWith('/auth/v1/user')?{id,email_confirmed_at:'2026-10-17T16:00:00Z',is_anonymous:false}:stored);}});
+ const f=fixture({fetcher:(endpoint,init)=>api(new Request(endpoint,{...init,headers:{...init.headers,Cookie:cookie,'Sec-Fetch-Site':'same-origin',...(init.method==='GET'?{}:{Origin:origin})}}))});
+ try{
+  await assert.rejects(f.client.save(input()),{code:'unknown'});assert.equal(writes,1);assert.equal(f.states.at(-1).status,'unknown');const dispatched=f.calls.length;
+  await assert.rejects(f.client.save(input()),{code:'unknown'});assert.equal(f.calls.length,dispatched);
+  cookie=makeCookie(clock/1000+60);assert.deepEqual(await f.client.load(),{profile:profile()});assert.equal(f.states.at(-1).status,'review_required');const afterRead=f.calls.length;
+  await assert.rejects(f.client.save(input()),{code:'unknown'});assert.equal(f.calls.length,afterRead);assert.equal(writes,1);assert.equal(upstream.length,3);
+ }finally{f.client.dispose();signed.client.close();}
+});
