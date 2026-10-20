@@ -309,3 +309,21 @@ identity-checked disposable PostgreSQL/TLS workflow; exact-head results are
 recorded only after CI completes. No hosted schema or permission change occurs.
 The operator review workflow, independently retained recovery checkpoints and
 member-facing recovery experience still need release acceptance before activation.
+
+## Recovery status and operator drill — October 20
+
+Guarded own reads and confirmed saves now return only `writeState: available` or
+`writeState: review_required` alongside the sanitized profile. Missing/unavailable
+receipt verification withholds the response; failure after save dispatch remains
+an unknown mutation. The unmounted member client shows a known review hold and
+blocks saves before HTTP. An explicit available read releases a known hold only;
+readback never clears an uncertain save. The 92 profile tests cover this behavior.
+
+The [closed pilot review procedure](federation-alliance-profile-review-20261020.md)
+sets out separate freeze, admission restriction, drain, exact review, closed-state
+verification and independent restart phases. A new disposable two-server drill
+proves that NOLOGIN does not disconnect admitted work, drains modeled pools,
+checks prepared transactions and demonstrates rollback/commit of the exact known
+receipt while features and logins remain closed. It does not review a lost reply
+or automatically restart. Hosted custody, full admission/queue accounting,
+independent evidence and provider/pooler acceptance remain release requirements.
