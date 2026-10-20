@@ -22,12 +22,13 @@ test('sandbox capacities bound profiles, ideas and pending contribution history'
 
 function fixture(options={}){
  const nodes=new Map();let document;
+ function detach(n){if(document?.activeElement===n)document.activeElement=null;if(n.id&&nodes.get(n.id)===n)nodes.delete(n.id);for(const child of n.children)detach(child);}
  class Element{
   constructor(tag='div'){this.tag=tag;this.children=[];this.events={};this.attributes={};this.dataset={};this.value='';this.checked=false;this.disabled=false;this.hidden=false;this._text='';}
   set id(v){this._id=v;nodes.set(v,this);}get id(){return this._id;}
-  set textContent(v){this._text=String(v);this.children=[];}get textContent(){return this._text+this.children.map(x=>x.textContent).join('');}
+  set textContent(v){for(const child of this.children)detach(child);this._text=String(v);this.children=[];}get textContent(){return this._text+this.children.map(x=>x.textContent).join('');}
   set innerHTML(_){throw Error('HTML interpolation forbidden');}
-  append(...v){this.children.push(...v);}replaceChildren(...v){this.children=[...v];this._text='';if(this.tag==='select')this.value=v[0]?.value||'';}
+  append(...v){this.children.push(...v);}replaceChildren(...v){for(const child of this.children)detach(child);this.children=[...v];this._text='';if(this.tag==='select')this.value=v[0]?.value||'';}
   setAttribute(k,v){this.attributes[k]=String(v);}getAttribute(k){return this.attributes[k]??null;}removeAttribute(k){delete this.attributes[k];if(k==='src')delete this.src;}
   addEventListener(k,f){(this.events[k]??=new Set()).add(f);}removeEventListener(k,f){this.events[k]?.delete(f);}
   emit(k,extra={}){return Promise.all([...(this.events[k]||[])].map(fn=>fn({preventDefault(){},...extra})));}
@@ -54,3 +55,53 @@ test('reset clears all roleplay content and restores the closed empty state',asy
 test('image selection is local and reset revokes its URL without adding bytes to profiles',async()=>{let revoked=[];const b=fixture({artwork:{createUrl:()=> 'blob:local-profile',revokeUrl:u=>revoked.push(u),inspect:()=>({promise:Promise.resolve({width:2,height:2}),cancel(){}})}});await b.create();const bytes=new Uint8Array(24);bytes.set([137,80,78,71,13,10,26,10]);const view=new DataView(bytes.buffer);view.setUint32(8,13);view.setUint32(12,0x49484452);view.setUint32(16,2);view.setUint32(20,2);b.get('hub-image').files=[{type:'image/png',name:'public-logo.png',size:bytes.length,arrayBuffer:async()=>bytes.buffer}];await b.get('hub-image').emit('change');assert.equal(b.get('hub-avatar-image').src,'blob:local-profile');assert.equal(b.get('hub-avatar-image').hidden,false);assert.doesNotMatch(JSON.stringify(b.api.getState()),/blob:|public-logo\.png|base64/);await b.get('hub-reset').emit('click');assert.deepEqual(revoked,['blob:local-profile']);assert.equal(b.get('hub-avatar-image').hidden,true);b.api.dispose();});
 test('disposing removes permanent handlers and guards existing dynamic buttons',async()=>{const b=fixture();const existing=b.find('hub-kits','Use Explain the signal challenge template');b.api.dispose();const before=b.get('hub-challenge-kit').value;await existing.emit('click');assert.equal(b.get('hub-challenge-kit').value,before);assert.equal(b.get('hub-profile-fields').disabled,true);assert.equal(b.get('hub-reset').events.click.size,0);});
 test('integration preserves the first three sections and makes the isolated scope visible',()=>{const html=readFileSync(new URL('../alliance.html',import.meta.url),'utf8');const ids=[...html.matchAll(/<section\b[^>]*id="([^"]+)"/g)].map(m=>m[1]);assert.deepEqual(ids.slice(0,4),['station-explorer','community-league','project-kit','community-hub']);assert.match(html,/INTERACTIVE PREVIEW · NOT PUBLIC MEMBERSHIP/);assert.match(html,/public joining remains closed/i);for(const file of ['fed-alliance-community.mjs','fed-alliance-community-core.mjs']){const source=readFileSync(new URL('../assets/federation/'+file,import.meta.url),'utf8');assert.doesNotMatch(source,/\bfetch\s*\(|localStorage|sessionStorage|document\.cookie|innerHTML|mailto:|t\.me/);}assert.match(html,/routine participation will not require Telegram intake or owner approval/i);});
+
+async function invitationFixture(goal=1){
+ const b=fixture();await b.create();await b.get('hub-examples').emit('click');
+ const target=b.api.getState().members.find(m=>m.example);
+ b.get('hub-challenge-target').value=target.id;b.get('hub-challenge-goal').value=String(goal);
+ await b.get('hub-challenge-form').emit('submit');
+ return {b,target,key:b.api.getState().challenges[0].id};
+}
+test('accept and decline return focus to the filter when an awaiting invitation disappears',async()=>{
+ for(const label of ['Accept invitation','Decline invitation']){
+  const {b,target,key}=await invitationFixture();b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');
+  b.get('hub-challenge-filter').value='invited';await b.get('hub-challenge-filter').emit('change');
+  const control=b.find('hub-challenges',label);control.focus();await control.emit('click');
+  assert.equal(b.document.getElementById('hub-challenge-card-'+key),null,'removed cards must not remain in the fixture document');
+  assert.equal(b.document.activeElement,b.get('hub-challenge-filter'));b.api.dispose();
+ }
+});
+test('cancelling a filtered invitation keeps a reachable keyboard destination',async()=>{
+ const {b,key}=await invitationFixture();b.get('hub-challenge-filter').value='invited';await b.get('hub-challenge-filter').emit('change');
+ const control=b.find('hub-challenges','Cancel invitation');control.focus();await control.emit('click');
+ assert.equal(b.document.getElementById('hub-challenge-card-'+key),null);assert.equal(b.document.activeElement,b.get('hub-challenge-filter'));b.api.dispose();
+});
+test('the final acknowledgement returns to the active filter while intermediate acknowledgement keeps its card',async()=>{
+ for(const goal of [1,2]){
+  const {b,target,key}=await invitationFixture(goal);const self=b.api.getState().self;
+  b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');await b.find('hub-challenges','Accept invitation').emit('click');
+  b.get('hub-actor').value=self;await b.get('hub-actor').emit('change');
+  const form=b.descendants(b.get('hub-challenges')).find(n=>n.tag==='form');
+  b.descendants(form).find(n=>n.tag==='textarea').value='A source-backed explanation for another member.';await form.emit('submit');
+  b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');
+  b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');
+  const control=b.find('hub-challenges','Acknowledge');control.focus();await control.emit('click');
+  assert.equal(b.document.activeElement,goal===1?b.get('hub-challenge-filter'):b.get('hub-challenge-card-'+key));b.api.dispose();
+ }
+});
+test('showing the last hidden member focuses its restored card or the search when excluded',async()=>{
+ for(const query of ['','no matching member']){
+  const b=fixture();await b.create();await b.get('hub-examples').emit('click');const target=b.api.getState().members.find(m=>m.example);
+  await b.find('hub-members','Hide '+target.name+' in this preview').emit('click');
+  b.get('hub-member-search').value=query;await b.get('hub-member-search').emit('input');
+  const control=b.find('hub-blocks','Show '+target.name);control.focus();await control.emit('click');
+  assert.equal(b.get('hub-blocks').hidden,true);assert.equal(b.document.activeElement,query?b.get('hub-member-search'):b.get('hub-member-card-'+target.id));b.api.dispose();
+ }
+});
+test('a status change keeps focus on its card when the current filter still includes it',async()=>{
+ const {b,target,key}=await invitationFixture();b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');
+ const control=b.find('hub-challenges','Accept invitation');control.focus();await control.emit('click');
+ assert.equal(b.document.activeElement,b.get('hub-challenge-card-'+key));b.api.dispose();
+});
+
