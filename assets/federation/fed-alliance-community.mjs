@@ -124,10 +124,12 @@ export function mountCommunityHub(document,options={}){
     }):[empty('No matching preview ideas. Create a profile, then post an idea above to try the exchange.')]));
   }
   function render(preferredTarget){renderProfile();renderSession();renderDirectory();renderTargets(preferredTarget);renderChallenges();renderIdeas();}
-  const tabs=['profile','challenges','ideas'];
+  const tabs=['profile','challenges','ideas'],tabMedia=document.defaultView?.matchMedia?.('(max-width:540px)');
+  function syncTabOrientation(){if(!disposed)get('hub-tabs').setAttribute('aria-orientation',tabMedia?.matches?'vertical':'horizontal');}
+  syncTabOrientation();if(tabMedia?.addEventListener)listen(tabMedia,'change',syncTabOrientation);
   for(const [index,key]of tabs.entries()){
     listen(get('hub-tab-'+key),'click',()=>openPanel(key));
-    listen(get('hub-tab-'+key),'keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%3;else if(event.key==='ArrowLeft')next=(index+2)%3;else if(event.key==='Home')next=0;else if(event.key==='End')next=2;else return;event.preventDefault();openPanel(tabs[next],true);});
+    listen(get('hub-tab-'+key),'keydown',event=>{const vertical=get('hub-tabs').getAttribute('aria-orientation')==='vertical';let next;if(event.key===(vertical?'ArrowDown':'ArrowRight'))next=(index+1)%3;else if(event.key===(vertical?'ArrowUp':'ArrowLeft'))next=(index+2)%3;else if(event.key==='Home')next=0;else if(event.key==='End')next=2;else return;event.preventDefault();openPanel(tabs[next],true);});
   }
   listen(get('hub-profile-form'),'submit',event=>{event.preventDefault();if(artwork.pending){get('hub-profile-status').textContent='Finish checking the image, or remove it to continue.';return;}try{
     if(self&&actor!==self)throw Error('Return to your own preview identity to edit this profile.');

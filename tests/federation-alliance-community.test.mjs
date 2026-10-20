@@ -37,6 +37,7 @@ function fixture(options={}){
  const html=readFileSync(new URL('../alliance.html',import.meta.url),'utf8');
  for(const m of html.matchAll(/<([a-z][a-z0-9-]*)\b[^>]*\bid="([^"]+)"[^>]*>/gi)){assert.equal(nodes.has(m[2]),false,'duplicate id '+m[2]);const n=new Element(m[1]);n.id=m[2];n.hidden=/\shidden(?:\s|>)/.test(m[0]);n.disabled=/\sdisabled(?:\s|>)/.test(m[0]);}
  document={getElementById:id=>nodes.get(id)||null,createElement:tag=>new Element(tag)};
+ if(options.media)document.defaultView={matchMedia:()=>options.media};
  const get=id=>nodes.get(id);for(const [id,v]of Object.entries({'hub-role':'explorer','hub-kit-filter':'all','hub-challenge-filter':'all','hub-challenge-scope':'members','hub-challenge-days':'7','hub-idea-category':'tools','hub-idea-filter':'all'}))get(id).value=v;
  const api=mountCommunityHub(document,options);
  const descendants=n=>[n,...n.children.flatMap(descendants)];
@@ -288,5 +289,34 @@ test('hiding and showing a participant preserves challenge history and its own u
  b.get('hub-proof-'+key).value='A separate unfinished contribution to keep working on.';await b.get('hub-proof-'+key).emit('input');const oldForm=proofForm(b,key);
  await b.find('hub-members','Hide '+target.name+' in this preview').emit('click');assert.equal(b.api.getState().challenges.length,0);assert.equal(b.document.getElementById('hub-proof-'+key),null);await oldForm.emit('submit');
  await b.find('hub-blocks','Show '+target.name).emit('click');assert.equal(b.api.getState().challenges[0].proofs.length,1);assert.equal(b.get('hub-proof-'+key).value,'A separate unfinished contribution to keep working on.');b.api.dispose();
+});
+
+function mediaFixture(matches=false){const listeners=new Set();return {matches,listeners,addEventListener(type,fn){assert.equal(type,'change');listeners.add(fn);},removeEventListener(type,fn){assert.equal(type,'change');listeners.delete(fn);},change(matches){this.matches=matches;for(const fn of [...listeners])fn({matches});}};}
+test('stacked tabs declare vertical orientation and use Up/Down with wrapping',async()=>{
+ const b=fixture({media:mediaFixture(true)});assert.equal(b.get('hub-tabs').getAttribute('aria-orientation'),'vertical');
+ await b.get('hub-tab-profile').emit('keydown',{key:'ArrowDown'});assert.equal(b.get('hub-panel-challenges').hidden,false);assert.equal(b.document.activeElement,b.get('hub-tab-challenges'));
+ await b.get('hub-tab-challenges').emit('keydown',{key:'ArrowUp'});assert.equal(b.get('hub-tab-profile').getAttribute('aria-selected'),'true');
+ await b.get('hub-tab-profile').emit('keydown',{key:'ArrowUp'});assert.equal(b.get('hub-tab-ideas').getAttribute('aria-selected'),'true');
+ await b.get('hub-tab-ideas').emit('keydown',{key:'ArrowDown'});assert.equal(b.get('hub-tab-profile').getAttribute('aria-selected'),'true');
+ assert.equal(['profile','challenges','ideas'].filter(k=>b.get('hub-tab-'+k).getAttribute('tabindex')==='0').length,1);b.api.dispose();
+});
+test('wide and no-media environments keep horizontal Left/Right navigation',async()=>{
+ for(const options of [{},{media:mediaFixture(false)}]){const b=fixture(options);assert.equal(b.get('hub-tabs').getAttribute('aria-orientation'),'horizontal');
+  await b.get('hub-tab-profile').emit('keydown',{key:'ArrowLeft'});assert.equal(b.get('hub-tab-ideas').getAttribute('aria-selected'),'true');await b.get('hub-tab-ideas').emit('keydown',{key:'ArrowRight'});assert.equal(b.get('hub-tab-profile').getAttribute('aria-selected'),'true');b.api.dispose();}
+});
+test('resizing changes tab orientation without changing the selected panel or keyboard position',async()=>{
+ const media=mediaFixture(false),b=fixture({media});await b.get('hub-tab-profile').emit('keydown',{key:'End'});const selected=b.document.activeElement;
+ media.change(true);assert.equal(b.get('hub-tabs').getAttribute('aria-orientation'),'vertical');assert.equal(b.get('hub-panel-ideas').hidden,false);assert.equal(b.document.activeElement,selected);
+ await b.get('hub-tab-ideas').emit('keydown',{key:'ArrowDown'});assert.equal(b.get('hub-panel-profile').hidden,false);media.change(false);assert.equal(b.get('hub-tabs').getAttribute('aria-orientation'),'horizontal');assert.equal(b.document.activeElement,b.get('hub-tab-profile'));
+ await b.get('hub-tab-profile').emit('keydown',{key:'ArrowRight'});assert.equal(b.get('hub-panel-challenges').hidden,false);b.api.dispose();
+});
+test('the unused arrow axis keeps normal browser behavior and Home/End work in both orientations',async()=>{
+ for(const narrow of [false,true]){const b=fixture({media:mediaFixture(narrow)});await b.get('hub-tab-profile').emit('click');b.get('hub-tab-profile').focus();let prevented=false;
+  for(const key of narrow?['ArrowLeft','ArrowRight']:['ArrowUp','ArrowDown'])await b.get('hub-tab-profile').emit('keydown',{key,preventDefault(){prevented=true;}});
+  assert.equal(prevented,false);assert.equal(b.get('hub-tab-profile').getAttribute('aria-selected'),'true');assert.equal(b.document.activeElement,b.get('hub-tab-profile'));
+  await b.get('hub-tab-profile').emit('keydown',{key:'End'});assert.equal(b.document.activeElement,b.get('hub-tab-ideas'));await b.get('hub-tab-ideas').emit('keydown',{key:'Home'});assert.equal(b.document.activeElement,b.get('hub-tab-profile'));b.api.dispose();}
+});
+test('disposing removes the responsive listener and ignores a late resize callback',()=>{
+ const media=mediaFixture(false),b=fixture({media});assert.equal(media.listeners.size,1);const late=[...media.listeners][0];b.api.dispose();assert.equal(media.listeners.size,0);media.matches=true;late({matches:true});assert.equal(b.get('hub-tabs').getAttribute('aria-orientation'),'horizontal');
 });
 

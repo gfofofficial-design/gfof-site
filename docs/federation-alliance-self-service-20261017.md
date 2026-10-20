@@ -156,3 +156,13 @@ The picker now starts with Choose a preview member. It preserves a valid explici
 
 All 136 combined Alliance tests pass locally under Node24, including 56 Community Hub tests. Six additional cases cover explicit and named selection, hiding the selected member, missing-recipient validation and retry, restoring a draft for an unlisted recipient, unhiding without automatic selection, and preservation of challenge history/contribution drafts through hiding and showing. Five fail against the preceding module. The shared test setup now explicitly selects its intended recipient. This increment changes only the Community Hub module, tests and this contract; the core model and hosted services are unchanged.
 
+## Responsive tab keyboard controls — October 20
+
+Chrome at a 390-pixel viewport reproduced stacked workspace tabs with no explicit vertical orientation and no Down Arrow navigation. Their CSS already stacks them at 540 pixels and below, while the original keyboard handler used Left/Right at every width.
+
+The tab list now declares its orientation and tracks that existing CSS breakpoint with a media query. Stacked tabs use Up/Down with wrapping; wider horizontal tabs keep Left/Right. The unused arrow axis retains normal browser behavior. Home/End continue to work in both layouts. Resizing updates orientation without changing the selected panel or moving focus. Disposal removes the media-query listener and ignores a late callback. A document without a media-query API retains the horizontal fallback.
+
+This follows the [W3C ARIA Authoring Practices tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). It is a focused keyboard repair, not a screen-reader or WCAG conformance claim. Browser viewport emulation does not establish physical-phone acceptance.
+
+All 141 combined Alliance tests pass locally under Node24, including 61 Community Hub tests. Five new cases cover stacked and horizontal navigation, resize continuity, unused arrow behavior, Home/End and responsive-listener cleanup; all fail against the preceding module. This increment changes the tab-list markup, Community Hub module, tests and this contract. CSS, the core model and hosted services are unchanged. Updated-preview width and keyboard checks follow deployment.
+
