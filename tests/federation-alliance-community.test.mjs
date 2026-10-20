@@ -141,3 +141,49 @@ test('profile listing can be changed without resetting preview ideas or invitati
  const html=readFileSync(new URL('../alliance.html',import.meta.url),'utf8');assert.match(html,/aria-describedby="hub-listing-help"/);assert.match(html,/Unlisting does not remove existing preview ideas or challenges/);b.api.dispose();
 });
 
+async function activeFixture(goal=2,b=fixture()){
+ await b.create();await b.get('hub-examples').emit('click');const self=b.api.getState().self,target=b.api.getState().members.find(m=>m.example);
+ b.get('hub-challenge-target').value=target.id;b.get('hub-challenge-goal').value=String(goal);await b.get('hub-challenge-form').emit('submit');
+ const key=b.api.getState().challenges[0].id;b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');await b.find('hub-challenges','Accept invitation').emit('click');
+ b.get('hub-actor').value=self;await b.get('hub-actor').emit('change');return {b,self,target,key};
+}
+function proofForm(b,key){const area=b.get('hub-proof-'+key);return b.descendants(b.get('hub-challenges')).find(n=>n.tag==='form'&&b.descendants(n).includes(area));}
+test('unsent contribution text survives filters and unrelated profile saves',async()=>{
+ const {b,key}=await activeFixture();const note='An unfinished source-backed explanation for another member.';
+ b.get('hub-proof-'+key).value=note;await b.get('hub-proof-'+key).emit('input');
+ b.get('hub-challenge-filter').value='invited';await b.get('hub-challenge-filter').emit('change');
+ b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');assert.equal(b.get('hub-proof-'+key).value,note);
+ await b.get('hub-profile-form').emit('submit');assert.equal(b.get('hub-proof-'+key).value,note);b.api.dispose();
+});
+test('submitting one contribution clears only that challenge draft',async()=>{
+ const {b,self,target,key}=await activeFixture();b.get('hub-challenge-kit').value='feedback';b.get('hub-challenge-goal').value='2';await b.get('hub-challenge-form').emit('submit');
+ const second=b.api.getState().challenges.find(c=>c.kit==='feedback').id;
+ b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');await b.find('hub-challenges','Accept invitation').emit('click');b.get('hub-actor').value=self;await b.get('hub-actor').emit('change');
+ for(const [id,note]of [[key,'A completed explanation ready for peer review.'],[second,'An unfinished feedback note to keep working on.']]){b.get('hub-proof-'+id).value=note;await b.get('hub-proof-'+id).emit('input');}
+ await proofForm(b,key).emit('submit');assert.equal(b.get('hub-proof-'+key).value,'');assert.equal(b.get('hub-proof-'+second).value,'An unfinished feedback note to keep working on.');
+ assert.equal(b.api.getState().challenges.find(c=>c.id===key).proofs.length,1);b.api.dispose();
+});
+test('contribution drafts belong to each preview identity and removed forms cannot submit later',async()=>{
+ const {b,self,target,key}=await activeFixture();const own='An unfinished note from my own preview identity.',other='A separate unfinished note from the fictional participant.';
+ const ownArea=b.get('hub-proof-'+key),oldOwnForm=proofForm(b,key);ownArea.value=own;await ownArea.emit('input');
+ b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');assert.equal(b.get('hub-proof-'+key).value,'');
+ const oldOtherArea=b.get('hub-proof-'+key);oldOtherArea.value=other;await oldOtherArea.emit('input');
+ b.get('hub-actor').value=self;await b.get('hub-actor').emit('change');assert.equal(b.get('hub-proof-'+key).value,own);
+ oldOtherArea.value='A late detached input must be ignored.';await oldOtherArea.emit('input');await oldOwnForm.emit('submit');assert.equal(b.api.getState().challenges[0].proofs.length,0);
+ b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');assert.equal(b.get('hub-proof-'+key).value,other);b.api.dispose();
+});
+test('reset clears drafts even when a fresh sandbox reuses the same preview IDs',async()=>{
+ const first=await activeFixture();const {b,key}=first,old=proofForm(b,key);b.get('hub-proof-'+key).value='An old draft that must not enter a new sandbox.';await b.get('hub-proof-'+key).emit('input');
+ await b.get('hub-reset').emit('click');const fresh=await activeFixture(2,b);assert.equal(fresh.key,key);assert.equal(b.get('hub-proof-'+key).value,'');
+ await old.emit('submit');assert.equal(b.api.getState().challenges[0].proofs.length,0);assert.equal(b.get('hub-proof-'+key).value,'');b.api.dispose();
+});
+test('validation failures retain draft text until a successful submission',async()=>{
+ const {b,key}=await activeFixture();b.get('hub-proof-'+key).value='short';await b.get('hub-proof-'+key).emit('input');await proofForm(b,key).emit('submit');
+ assert.equal(b.api.getState().challenges[0].proofs.length,0);b.get('hub-challenge-filter').value='invited';await b.get('hub-challenge-filter').emit('change');b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');assert.equal(b.get('hub-proof-'+key).value,'short');
+ b.get('hub-proof-'+key).value='A repaired explanation with enough public context.';await b.get('hub-proof-'+key).emit('input');await proofForm(b,key).emit('submit');assert.equal(b.api.getState().challenges[0].proofs.length,1);assert.equal(b.get('hub-proof-'+key).value,'');b.api.dispose();
+});
+test('intentionally clearing a contribution does not resurrect it after a filter change',async()=>{
+ const {b,key}=await activeFixture();b.get('hub-proof-'+key).value='A draft the member intentionally discards.';await b.get('hub-proof-'+key).emit('input');b.get('hub-proof-'+key).value='';await b.get('hub-proof-'+key).emit('input');
+ b.get('hub-challenge-filter').value='invited';await b.get('hub-challenge-filter').emit('change');b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');assert.equal(b.get('hub-proof-'+key).value,'');b.api.dispose();
+});
+

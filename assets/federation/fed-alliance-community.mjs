@@ -3,8 +3,8 @@ import {createArtworkSelection} from './fed-alliance-artwork.mjs';
 
 export function mountCommunityHub(document,options={}){
   const get=id=>document.getElementById(id);if(!get('community-hub'))return null;
-  let store=createCommunitySandbox(),self='',actor='',examples=false,disposed=false;
-  const listeners=[];
+  let store=createCommunitySandbox(),self='',actor='',examples=false,disposed=false,proofRender=0;
+  const listeners=[],proofDrafts=new Map();
   const element=(tag,cls='',text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
   function listen(n,event,fn){n.addEventListener(event,fn);listeners.push(()=>n.removeEventListener(event,fn));}
   function announce(message){get('hub-status').textContent=message;}
@@ -69,6 +69,8 @@ export function mountCommunityHub(document,options={}){
   }
   function progress(c,owner){const count=c.proofs.filter(p=>p.owner===owner&&p.status==='acknowledged').length;const box=element('div','hub-score');box.append(element('strong','',name(owner)),element('span','',count+' / '+c.goal+' acknowledged'));const meter=element('progress');meter.max=c.goal;meter.value=count;meter.setAttribute('aria-label',name(owner)+' preview acknowledged contributions');box.append(meter);return box;}
   function renderChallenges(){
+    const version=++proofRender,active=new Set(store.challengeList().filter(c=>c.status==='active').map(c=>c.id));
+    for(const [key,draft]of proofDrafts)if(!active.has(draft.challenge))proofDrafts.delete(key);
     const filter=get('hub-challenge-filter').value;const rows=store.challengeList(actor).filter(c=>filter==='all'||c.status===filter).reverse();
     get('hub-challenges').replaceChildren(...(rows.length?rows.map(c=>{
       const kit=CHALLENGE_KITS.find(k=>k.id===c.kit),card=element('article','hub-challenge');card.dataset.status=c.status;card.id='hub-challenge-card-'+c.id;card.setAttribute('tabindex','-1');
@@ -82,7 +84,13 @@ export function mountCommunityHub(document,options={}){
       if(c.status==='invited'&&actor===c.from)actions.append(button('Cancel invitation',()=>act(()=>store.cancel(actor,c.id),'Preview invitation cancelled.',card.id,'hub-challenge-filter')));
       if(c.status==='invited')card.append(element('p','hub-help','Only the invited member can accept. In this preview, change the fictional identity selector to try their response.'));
       if(c.status==='active'&&[c.from,c.to].includes(actor)){
-        const form=element('form','hub-proof-form'),label=element('label','','Describe one contribution · 10–240 characters'),area=element('textarea');const areaId='hub-proof-'+c.id;area.id=areaId;area.maxLength=240;area.rows=2;label.setAttribute('for',areaId);form.append(label,area);const submit=element('button','','Add contribution to preview');submit.type='submit';form.append(submit);form.addEventListener('submit',e=>{e.preventDefault();act(()=>store.addProof(actor,c.id,area.value),'Contribution added. The other participant can acknowledge it in this preview.',areaId);});card.append(form);
+        const form=element('form','hub-proof-form'),label=element('label','','Describe one contribution · 10–240 characters'),area=element('textarea');
+        const areaId='hub-proof-'+c.id,author=actor,draftKey=author+':'+c.id,live=()=>!disposed&&proofRender===version&&actor===author;
+        area.id=areaId;area.maxLength=240;area.rows=2;area.value=proofDrafts.get(draftKey)?.text||'';
+        const remember=()=>{const text=area.value.slice(0,240);if(text)proofDrafts.set(draftKey,{challenge:c.id,text});else proofDrafts.delete(draftKey);};
+        area.addEventListener('input',()=>{if(live())remember();});label.setAttribute('for',areaId);form.append(label,area);
+        const submit=element('button','','Add contribution to preview');submit.type='submit';form.append(submit);
+        form.addEventListener('submit',e=>{e.preventDefault();if(!live())return;remember();act(()=>{store.addProof(author,c.id,area.value);proofDrafts.delete(draftKey);},'Contribution added. The other participant can acknowledge it in this preview.',areaId);});card.append(form);
       }
       if(c.proofs.length){const list=element('ul','hub-proofs');for(const p of c.proofs){const li=element('li');li.append(element('strong','',name(p.owner)+' · '+p.status),element('p','',p.note));if(c.status==='active'&&[c.from,c.to].includes(actor)&&actor!==p.owner&&p.status==='pending')li.append(button('Acknowledge',()=>act(()=>store.reviewProof(actor,c.id,p.id,true),'Contribution acknowledged by the other preview participant.',card.id,'hub-challenge-filter')),button('Decline contribution',()=>act(()=>store.reviewProof(actor,c.id,p.id,false),'Contribution declined in this preview.',card.id,'hub-challenge-filter')));list.append(li);}card.append(list);}
       if(c.winner)card.append(element('p','hub-goal-reached','Preview goal reached by '+name(c.winner)+'. No public result or reward was created.'));
@@ -121,10 +129,10 @@ export function mountCommunityHub(document,options={}){
   listen(get('hub-challenge-filter'),'change',renderChallenges);
   listen(get('hub-idea-form'),'submit',event=>{event.preventDefault();try{store.postIdea(actor,{title:get('hub-idea-title').value,category:get('hub-idea-category').value,detail:get('hub-idea-detail').value});get('hub-idea-title').value='';get('hub-idea-detail').value='';get('hub-idea-status').textContent='Idea posted only to this preview board. No email, Telegram message or public suggestion was sent.';renderIdeas();}catch(error){get('hub-idea-status').textContent=error.message;}});
   listen(get('hub-idea-filter'),'change',renderIdeas);
-  listen(get('hub-reset'),'click',()=>{artwork.clear();store=createCommunitySandbox();self='';actor='';examples=false;for(const id of ['hub-name','hub-community','hub-bio','hub-member-search','hub-challenge-note','hub-idea-title','hub-idea-detail'])get(id).value='';get('hub-listed').checked=false;get('hub-role').value='explorer';get('hub-challenge-kit').value='explain';get('hub-challenge-scope').value='members';get('hub-challenge-days').value='7';get('hub-challenge-filter').value='all';get('hub-idea-category').value='tools';get('hub-idea-filter').value='all';get('hub-kit-filter').value='all';kitChanged();renderKits();render();openPanel('profile',true);get('hub-profile-status').textContent='Preview reset. No public profile or post was deleted, because none was created.';get('hub-challenge-status').textContent='Create a profile and add fictional crew to try an invitation.';get('hub-idea-status').textContent='Preview ideas stay in this tab; they are not delivered to the team.';announce('The local preview was cleared.');});
+  listen(get('hub-reset'),'click',()=>{proofDrafts.clear();artwork.clear();store=createCommunitySandbox();self='';actor='';examples=false;for(const id of ['hub-name','hub-community','hub-bio','hub-member-search','hub-challenge-note','hub-idea-title','hub-idea-detail'])get(id).value='';get('hub-listed').checked=false;get('hub-role').value='explorer';get('hub-challenge-kit').value='explain';get('hub-challenge-scope').value='members';get('hub-challenge-days').value='7';get('hub-challenge-filter').value='all';get('hub-idea-category').value='tools';get('hub-idea-filter').value='all';get('hub-kit-filter').value='all';kitChanged();renderKits();render();openPanel('profile',true);get('hub-profile-status').textContent='Preview reset. No public profile or post was deleted, because none was created.';get('hub-challenge-status').textContent='Create a profile and add fictional crew to try an invitation.';get('hub-idea-status').textContent='Preview ideas stay in this tab; they are not delivered to the team.';announce('The local preview was cleared.');});
   get('hub-challenge-kit').replaceChildren(...CHALLENGE_KITS.map(k=>option(k.id,k.title)));get('hub-challenge-kit').value='explain';kitChanged();renderKits();render();get('hub-reset').disabled=false;
   announce('The self-service preview is ready. No real account, upload, public post or message is created here.');
-  return {getState:()=>({self,actor,members:store.directory(),challenges:store.challengeList(actor),ideas:store.ideaList(actor)}),dispose(){disposed=true;artwork.dispose();for(const remove of listeners)remove();for(const id of ['hub-profile-fields','hub-challenge-fields','hub-idea-fields'])get(id).disabled=true;}};
+  return {getState:()=>({self,actor,members:store.directory(),challenges:store.challengeList(actor),ideas:store.ideaList(actor)}),dispose(){disposed=true;proofDrafts.clear();artwork.dispose();for(const remove of listeners)remove();for(const id of ['hub-profile-fields','hub-challenge-fields','hub-idea-fields'])get(id).disabled=true;}};
 }
 if(typeof document!=='undefined'){try{mountCommunityHub(document);}catch{const status=document.getElementById('hub-status');if(status)status.textContent='The member preview is unavailable. Public station links still work; nothing has been submitted.';}}
 

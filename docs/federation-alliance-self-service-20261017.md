@@ -118,3 +118,13 @@ Unlisting changes directory discovery only. It does not erase existing preview i
 
 All 113 combined Alliance tests pass locally under Node24, including 33 Community Hub tests. Four new tests cover owner-only listing changes and new invitation targeting, preservation of existing participation, reachable unlisted identity controls, and listing changes without resetting ideas/invitations. Updated preview browser acceptance is recorded in the PR after deployment. No hosted profile route, database policy, member data, storage object, account setting or public signup is changed by this source/UI increment.
 
+## Contribution draft continuity — October 20
+
+Chrome reproduced loss of an unfinished contribution when the challenge filter was changed away and back. Rebuilding another challenge or acting on an unrelated item also rebuilt these input fields.
+
+Unsubmitted contribution text now survives those rebuilds in the tab's existing memory-only preview. Drafts belong to the particular preview participant and challenge. Switching to a fictional identity starts with that identity's own draft; switching back restores the original participant's text. A successful submission clears only its matching draft. Validation failure preserves the unfinished text. Intentionally clearing the field stays cleared. Finished challenges discard cached drafts; reset and component disposal clear the draft map, and reloading/closing still loses all sandbox state. This is not durable autosave or an account-backed draft service.
+
+Each rendered form is bound to its participant and render version. Removed form/input handlers cannot later change drafts or submit a contribution, including after a reset reuses the same local IDs. These are UI lifecycle checks, not authentication. Only the two participants in an active challenge can create a draft, within the existing twelve-challenge cap; retained draft strings are bounded to the existing 240-character field limit. No browser storage, network call or hosted repository is added.
+
+All 119 combined Alliance tests pass locally under Node24, including 39 Community Hub tests. Six additional tests cover filter/unrelated-action continuity, independent drafts across challenges, participant separation and detached handlers, reset/ID reuse, validation retry and intentional clearing. Five fail against the preceding module. Updated-preview browser results are recorded in the PR after deployment. No HTML/CSS, core model, server, dependencies, account/permission setting or production gate changes in this increment.
+
