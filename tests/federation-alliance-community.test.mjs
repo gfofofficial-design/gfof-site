@@ -187,3 +187,40 @@ test('intentionally clearing a contribution does not resurrect it after a filter
  b.get('hub-challenge-filter').value='invited';await b.get('hub-challenge-filter').emit('change');b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');assert.equal(b.get('hub-proof-'+key).value,'');b.api.dispose();
 });
 
+async function draftFixture(){const b=fixture();await b.create();await b.get('hub-examples').emit('click');return {b,self:b.api.getState().self,other:b.api.getState().members.find(m=>m.example).id};}
+async function switchPreview(b,id){b.get('hub-actor').value=id;await b.get('hub-actor').emit('change');}
+test('idea drafts and categories follow their preview author, including return-to-own',async()=>{
+ const {b,self,other}=await draftFixture();b.get('hub-idea-title').value='My unfinished evidence guide';b.get('hub-idea-detail').value='Explain which public sources support the guide.';b.get('hub-idea-category').value='research';
+ await switchPreview(b,other);assert.equal(b.get('hub-idea-title').value,'');assert.equal(b.get('hub-idea-detail').value,'');assert.equal(b.get('hub-idea-category').value,'tools');
+ b.get('hub-idea-title').value='A fictional crew idea';b.get('hub-idea-detail').value='Make the preview easier to explore for a new member.';b.get('hub-idea-category').value='community';
+ await b.get('hub-return').emit('click');assert.equal(b.get('hub-idea-title').value,'My unfinished evidence guide');assert.equal(b.get('hub-idea-category').value,'research');
+ await b.get('hub-idea-form').emit('submit');assert.equal(b.api.getState().ideas[0].owner,self);assert.equal(b.get('hub-idea-title').value,'');
+ await switchPreview(b,other);assert.equal(b.get('hub-idea-title').value,'A fictional crew idea');assert.equal(b.get('hub-idea-category').value,'community');assert.doesNotMatch(b.get('hub-idea-status').textContent,/Idea posted/);
+ await b.get('hub-idea-form').emit('submit');assert.equal(b.api.getState().ideas.find(i=>i.owner===other).title,'A fictional crew idea');await switchPreview(b,self);assert.equal(b.get('hub-idea-title').value,'');b.api.dispose();
+});
+test('invitation drafts restore their own template, eligible target, terms and brief',async()=>{
+ const {b,self,other}=await draftFixture();b.get('hub-challenge-kit').value='feedback';await b.get('hub-challenge-kit').emit('change');b.get('hub-challenge-target').value=other;b.get('hub-challenge-scope').value='communities';b.get('hub-challenge-days').value='14';b.get('hub-challenge-goal').value='4';b.get('hub-challenge-note').value='A personal unfinished invitation brief.';
+ await switchPreview(b,other);assert.equal(b.get('hub-challenge-note').value,'');assert.equal(b.get('hub-challenge-kit').value,'explain');assert.equal(b.get('hub-challenge-scope').value,'members');assert.equal(b.get('hub-challenge-days').value,'7');assert.equal(b.get('hub-challenge-goal').value,'3');
+ b.get('hub-challenge-target').value=self;b.get('hub-challenge-note').value='A separate invitation from the fictional member.';b.get('hub-challenge-goal').value='2';
+ await switchPreview(b,self);assert.equal(b.get('hub-challenge-target').value,other);assert.equal(b.get('hub-challenge-kit').value,'feedback');assert.equal(b.get('hub-challenge-scope').value,'communities');assert.equal(b.get('hub-challenge-days').value,'14');assert.equal(b.get('hub-challenge-goal').value,'4');assert.match(b.get('hub-challenge-unit').textContent,/actionable feedback notes/);assert.equal(b.get('hub-challenge-note').value,'A personal unfinished invitation brief.');
+ await b.get('hub-challenge-form').emit('submit');assert.equal(b.api.getState().challenges[0].from,self);assert.equal(b.get('hub-challenge-note').value,'');assert.equal(b.get('hub-challenge-goal').value,'4');
+ await switchPreview(b,other);assert.equal(b.get('hub-challenge-target').value,self);assert.equal(b.get('hub-challenge-goal').value,'2');assert.equal(b.get('hub-challenge-note').value,'A separate invitation from the fictional member.');assert.doesNotMatch(b.get('hub-challenge-status').textContent,/invitation created/);b.api.dispose();
+});
+test('failed form submissions keep that identity’s editable drafts without crossing forms',async()=>{
+ const {b,self,other}=await draftFixture();b.get('hub-idea-title').value='tiny';b.get('hub-idea-detail').value='A valid detail with a title still needing work.';b.get('hub-challenge-goal').value='0';b.get('hub-challenge-note').value='A brief with an invalid contribution goal.';
+ await b.get('hub-idea-form').emit('submit');await b.get('hub-challenge-form').emit('submit');assert.equal(b.api.getState().ideas.length,0);assert.equal(b.api.getState().challenges.length,0);
+ await switchPreview(b,other);await switchPreview(b,self);assert.equal(b.get('hub-idea-title').value,'tiny');assert.equal(b.get('hub-challenge-goal').value,'0');assert.equal(b.get('hub-challenge-note').value,'A brief with an invalid contribution goal.');
+ b.get('hub-idea-title').value='A repaired evidence guide';await b.get('hub-idea-form').emit('submit');assert.equal(b.api.getState().ideas.length,1);assert.equal(b.get('hub-challenge-note').value,'A brief with an invalid contribution goal.');
+ b.get('hub-challenge-goal').value='3';await b.get('hub-challenge-form').emit('submit');assert.equal(b.api.getState().challenges.length,1);assert.equal(b.get('hub-idea-title').value,'');assert.equal(b.get('hub-challenge-note').value,'');b.api.dispose();
+});
+test('cleared form drafts stay cleared and reset discards all identities before IDs are reused',async()=>{
+ const {b,self,other}=await draftFixture();b.get('hub-idea-title').value='A discarded own idea';b.get('hub-challenge-note').value='An own invitation to discard.';await switchPreview(b,other);
+ b.get('hub-idea-title').value='An old fictional idea';b.get('hub-challenge-note').value='An old fictional invitation.';await switchPreview(b,self);b.get('hub-idea-title').value='';b.get('hub-challenge-note').value='';await switchPreview(b,other);await switchPreview(b,self);assert.equal(b.get('hub-idea-title').value,'');assert.equal(b.get('hub-challenge-note').value,'');
+ await b.get('hub-reset').emit('click');await b.create();await b.get('hub-examples').emit('click');assert.equal(b.api.getState().self,self);await switchPreview(b,other);assert.equal(b.get('hub-idea-title').value,'');assert.equal(b.get('hub-idea-detail').value,'');assert.equal(b.get('hub-challenge-note').value,'');b.api.dispose();
+});
+test('an invitation draft never restores a target hidden by its author',async()=>{
+ const {b,self,other}=await draftFixture();b.get('hub-challenge-target').value=other;b.get('hub-challenge-note').value='Keep the brief while changing eligible recipients.';await switchPreview(b,other);await switchPreview(b,self);
+ await b.find('hub-members','Hide '+b.api.getState().members.find(m=>m.id===other).name+' in this preview').emit('click');await switchPreview(b,other);await switchPreview(b,self);
+ assert.notEqual(b.get('hub-challenge-target').value,other);assert.equal(b.get('hub-challenge-target').children.some(n=>n.value===other),false);assert.equal(b.get('hub-challenge-note').value,'Keep the brief while changing eligible recipients.');b.api.dispose();
+});
+

@@ -128,3 +128,13 @@ Each rendered form is bound to its participant and render version. Removed form/
 
 All 119 combined Alliance tests pass locally under Node24, including 39 Community Hub tests. Six additional tests cover filter/unrelated-action continuity, independent drafts across challenges, participant separation and detached handlers, reset/ID reuse, validation retry and intentional clearing. Five fail against the preceding module. Updated-preview browser results are recorded in the PR after deployment. No HTML/CSS, core model, server, dependencies, account/permission setting or production gate changes in this increment.
 
+## Idea and invitation draft ownership — October 20
+
+Chrome reproduced unfinished idea text moving from the visitor's identity to Nova, and Nova's unfinished invitation brief appearing after returning to the visitor. The static forms previously kept the same contents while the actor selector changed who would submit them.
+
+Idea title, category and detail now follow the selected preview identity. Invitation template, eligible recipient, format, duration, goal and brief do the same. Both the selector and Return to my preview profile save the departing identity's fields and restore the arriving identity's own fields, or defaults on its first visit. The recipient is restored only if still eligible; hiding or unlisting does not resurrect an unavailable target. Restoring a custom contribution goal refreshes its template explanation without overwriting the goal. Status text resets so a different identity does not inherit another author's success message.
+
+Successful idea posting clears its title/detail; successful invitation creation clears its brief. Category and invitation choices remain available for reuse. The other form and other identities' drafts remain intact. Validation failures retain editable text, and deliberate clearing stays cleared. The cache retains only these known fields, bounded by their form limits and the existing profile cap. Reset and disposal clear it; reload/closure still loses the entire local sandbox. No persistence, network operation or authentication boundary is added.
+
+All 124 combined Alliance tests pass locally under Node24, including 44 Community Hub tests. Five new tests cover author-specific restoration/submission, invitation terms and eligible targets, validation and independent form clearing, reset/ID reuse and discarded drafts, and hidden-target exclusion. Three fail against the preceding module. Updated-preview browser results are recorded in the PR after deployment. This increment changes no HTML/CSS, core model, server, dependencies, account/permission setting or production gate.
+
