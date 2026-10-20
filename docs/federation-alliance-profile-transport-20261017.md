@@ -131,7 +131,7 @@ work. Token expiry enforcement is not proof that a signed-out session has alread
 been revoked. Supabase documents that stricter sign-out rejection requires checking
 the token's session ID against current session state.
 
-Validation: 55 profile store/API/client tests pass locally, including eight new
+Validation: 69 profile store/API/client tests pass locally, including eight new
 request regressions and one client/API composition case. Existing native database
 tests remain unchanged. The API remains an unmounted source candidate; no hosted
 credentials, schema, access permissions, signup rule or public service is changed.
