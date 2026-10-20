@@ -140,3 +140,47 @@ Current [Supabase session guidance](https://supabase.com/docs/guides/auth/sessio
 and the HTML changelog were reviewed. The lightweight `.md` index again returned
 an unsupported-content fetch error. No SDK, CLI, dependency or provider setting is
 changed by this increment.
+
+## Current account-session checks — October 20
+
+The profile API now also requires the trusted ledger's
+`authorizeAccountSession(actorId, sessionId, {signal})` entry point. Missing
+composition closes the candidate before Auth. The verified JWT's account and
+session IDs supply both arguments; browser fields and user metadata cannot select
+another account. The exact two-field result must match both IDs.
+
+The unapplied session SQL candidate factors the existing account/session predicate
+into a private invoker helper and adds one executor-only, fixed account-level
+entry point. It checks the exact current session/account, confirmation, anonymous,
+deleted and banned state, and session `not_after`. The enabled control guard is
+retained. No profile is required, so first-profile creation and a missing own
+profile remain possible. Existing image entry points still require a live profile.
+The executor gains no direct Auth-row access; public, anonymous, authenticated and
+service-role callers cannot execute the new entry point or its private helper.
+
+Each profile request checks the session immediately before the load/save and again
+after the final journal/serving review and response construction. Results are not
+cached. Both checks share the request's remaining token lifetime and eight-second
+data/guard budget; cancellation interrupts the wait even if a supplied transport
+ignores its signal. A late result cannot release a response. Refusal or unavailable
+session verification returns a sanitized unavailable response. After a dispatched
+save it also retains `mutation: "unknown"`; this cannot prove rollback or unlock
+retry. The creation coordinator's own transaction-time session checks remain
+required, since HTTP checks cannot make SQL writes atomic with concurrent logout.
+
+Validation: 76 profile store/API/client tests and 35 ledger driver tests pass
+locally. Five new request regressions failed against the previous API. Seven new
+cases cover missing ledger composition, revoked/mismatched session proofs,
+revocation during final serving work or after save dispatch, a stalled final
+check, and exclusive admission while that final asynchronous check is pending. Extended disposable native TLS fixtures verify profile-independent account
+authorization, removed/expired/foreign sessions and blocked accounts, restricted
+execution rights, and a composed profile read revoked while loading. Native SQL
+results are recorded only after that CI job passes.
+
+This is source preparation in the existing draft. The SQL is not applied to a
+hosted project, and the API remains unmounted. Supported hosted permissions,
+protected runtime composition, actual Auth/pooler and two-account acceptance,
+mutation reconciliation and production lifecycle/concurrency work remain launch
+gates. Session presence plus `not_after` does not independently enforce every
+Supabase inactivity/single-session policy; those provider settings are separately
+accepted. No login, credential, signup or production setting changes are included.

@@ -5,9 +5,8 @@ grant select(id,user_id,not_after) on auth.sessions to alliance_avatar_owner;
 grant select(id,email_confirmed_at,is_anonymous,deleted_at,banned_until) on auth.users to alliance_avatar_owner;
 grant select(moderation_state) on public.alliance_profiles to alliance_avatar_owner;
 set local role alliance_avatar_owner;
-create function alliance_avatar.require_session(p_actor uuid,p_session uuid) returns uuid
+create function alliance_avatar.require_account_session(p_actor uuid,p_session uuid) returns void
 language plpgsql security invoker set search_path='' as $$
-declare pid uuid;
 begin
   -- Indexed exact session/account lookup; no claim/user_metadata authorization.
   if p_actor is null or p_session is null or not exists(
@@ -17,6 +16,20 @@ begin
       and (u.banned_until is null or u.banned_until<=clock_timestamp())
       and (s.not_after is null or s.not_after>clock_timestamp())
   ) then raise insufficient_privilege using message='avatar_unavailable';end if;
+end $$;
+-- Account-level authorization also works before the first profile is created.
+-- Only the restricted server executor can call this fixed private entry point.
+create function alliance_avatar.authorize_account_session(p_actor uuid,p_session uuid) returns jsonb
+language plpgsql security definer set search_path='' as $$
+begin
+  perform alliance_avatar.lock_enabled();perform alliance_avatar.require_account_session(p_actor,p_session);
+  return jsonb_build_object('actorId',p_actor,'sessionId',p_session);
+end $$;
+create function alliance_avatar.require_session(p_actor uuid,p_session uuid) returns uuid
+language plpgsql security invoker set search_path='' as $$
+declare pid uuid;
+begin
+  perform alliance_avatar.require_account_session(p_actor,p_session);
   pid:=alliance_avatar.live_profile(p_actor);
   if pid is null then raise insufficient_privilege using message='avatar_unavailable';end if;
   return pid;
@@ -64,4 +77,6 @@ grant execute on function alliance_avatar.authorize_session(uuid,uuid),alliance_
 revoke execute on function alliance_avatar.mine(uuid),alliance_avatar.reserve(uuid,uuid,bigint),alliance_avatar.claim_upload(uuid,uuid,jsonb),alliance_avatar.commit_upload(uuid,uuid,jsonb),alliance_avatar.cancel_reserved(uuid,uuid),alliance_avatar.remove_image(uuid,uuid,bigint),alliance_avatar.operation_receipt(uuid,uuid) from alliance_avatar_executor;
 -- Existing unpublished settlement/cleanup functions remain trusted server-only,
 -- so logout/account removal cannot discard a known provider acknowledgement.
+revoke all on function alliance_avatar.require_account_session(uuid,uuid),alliance_avatar.authorize_account_session(uuid,uuid) from public,anon,authenticated,service_role,alliance_avatar_executor;
+grant execute on function alliance_avatar.authorize_account_session(uuid,uuid) to alliance_avatar_executor;
 reset role;

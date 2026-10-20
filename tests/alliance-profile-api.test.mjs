@@ -13,7 +13,7 @@ const row=()=>({id,...input(),publication:'private',updatedAt:'2026-10-17T16:00:
 const user=()=>({id,email:'private@example.invalid',email_confirmed_at:'2026-10-17T15:00:00Z',is_anonymous:false,user_metadata:{admin:true}});
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
 function request(path='/me',{method='GET',headers={},body,signal}={}){return new Request(origin+'/api/alliance-members'+path,{method,headers:{Cookie:cookie,'Sec-Fetch-Site':'same-origin',...(method==='GET'?{}:{Origin:origin,'Content-Type':'application/json'}),...headers},...(body===undefined?{}:{body:JSON.stringify(body)}),...(signal?{signal}:{})});}
-function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=200,run,events=[],journal,serving={authorize:()=>true},creation}={}){
+function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=200,run,events=[],journal,serving={authorize:()=>true},creation,ledger={authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId})}}={}){
   const calls=[];let writes=0;
   const signed=journalFixture({events});
   const fetcher=async(endpoint,init)=>{
@@ -24,7 +24,7 @@ function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=2
     return json(profile,profileStatus);
   };
   const writer=creation||{profile:async(context,value,options)=>{assert.equal(context.actorId,id);assert.equal(context.sessionId,'22222222-2222-4222-8222-222222222222');const response=await fetcher('synthetic-admitted-profile-write',{body:JSON.stringify(value),signal:options.signal});writes++;if(!response.ok)throw Error('PRIVATE');return response.json();}};
-  const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:journal||signed.client,serving,creation:writer,fetcher});
+  const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:journal||signed.client,serving,creation:writer,ledger,fetcher});
   return {api,calls,signed,get writes(){return writes;}};
 }
 const body=async response=>JSON.parse(await response.text());
@@ -172,4 +172,40 @@ test('a clock rollback and blocking policy check cannot extend the accepted toke
  const second=Math.floor(Date.now()/1000)*1000;let clock=second+990;t.mock.method(Date,'now',()=>clock);
  const f=fixture({journal:{review:()=>({state:'verified_evidence',checkProfile:()=>({state:'not_listed'}),close(){}})},serving:{authorize(){clock=second-1000;const started=performance.now();while(performance.now()-started<25){}return true;}}});
  const r=await f.api(request('/me',{headers:{Cookie:accountCookie({exp:second/1000+1})}}));assert.equal(r.status,401);assert.equal(f.calls.length,1);assert.equal((await body(r)).error.code,'sign_in_required');f.signed.client.close();
+});
+
+test('profile transport without a current-session ledger closes before authentication',async()=>{
+ const f=fixture({ledger:{}});assert.equal((await f.api(request())).status,503);assert.equal(f.calls.length,0);assert.equal(f.writes,0);f.signed.client.close();
+});
+test('revoked session prevents own reads, directory reads and first profile creation despite Auth acceptance',async()=>{
+ for(const [path,method] of [['/me','GET'],['/directory','GET'],['/me','POST']]){
+  const f=fixture({profile:null,ledger:{authorizeAccountSession:async()=>{throw Object.assign(Error('PRIVATE SESSION'),{outcome:'rejected'});}}});
+  const r=await f.api(request(path,{method,...(method==='POST'?{body:input()}:{})}));assert.equal(r.status,503);assert.equal(f.calls.length,1);assert.equal(f.writes,0);assert.equal((await body(r)).mutation,undefined);f.signed.client.close();
+ }
+});
+test('current-session proofs must match both verified IDs and contain no additional fields',async()=>{
+ for(const proof of [null,true,{}, {actorId:id,sessionId:id},{actorId:'33333333-3333-4333-8333-333333333333',sessionId:'22222222-2222-4222-8222-222222222222'}, {actorId:id,sessionId:'22222222-2222-4222-8222-222222222222',private:'PRIVATE'}]){
+  const f=fixture({ledger:{authorizeAccountSession:async()=>proof}});const r=await f.api(request());assert.equal(r.status,503);assert.equal(f.calls.length,1);assert.doesNotMatch(JSON.stringify(await body(r)),/PRIVATE|Fixture Explorer/);f.signed.client.close();
+ }
+});
+test('session is rechecked after final journal work and before returning own or directory data',async()=>{
+ for(const path of ['/me','/directory']){let revoked=false,checks=0,permits=0;const f=fixture({profile:path==='/me'?row():[],serving:{authorize(){if(++permits===3)revoked=true;return true;}},ledger:{authorizeAccountSession:async(actorId,sessionId)=>{checks++;if(revoked)throw Error('PRIVATE');return {actorId,sessionId};}}});
+  const r=await f.api(request(path));assert.equal(r.status,503);assert.equal(checks,2);assert.equal(f.calls.length,2);assert.doesNotMatch(JSON.stringify(await body(r)),/Fixture Explorer|PRIVATE/);f.signed.client.close();}
+});
+test('session revocation after a dispatched save retains unknown outcome without retry',async()=>{
+ let revoked=false,writes=0;const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>{if(revoked)throw Error('PRIVATE');return {actorId,sessionId};}},creation:{profile:async()=>{writes++;revoked=true;return row();}}});
+ const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal((await body(r)).mutation,'unknown');assert.equal(writes,1);assert.equal(f.calls.length,1);f.signed.client.close();
+});
+test('a stalled final session check is bounded, cancelled and cannot release a late profile',async t=>{
+ const now=Math.floor(Date.now()/1000)*1000;t.mock.timers.enable({apis:['Date','setTimeout'],now});let checks=0,resolve,finalSignal;const wait=new Promise(r=>resolve=r),controller=new AbortController();
+ const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId,{signal})=>{assert.equal(actorId,id);assert.equal(sessionId,'22222222-2222-4222-8222-222222222222');if(++checks===2){finalSignal=signal;return wait;}return {actorId,sessionId};}}});
+ const pending=f.api(request('/me',{headers:{Cookie:accountCookie({exp:now/1000+60})},signal:controller.signal}));
+ try{while(!finalSignal)await new Promise(r=>setImmediate(r));t.mock.timers.tick(8000);const r=await pending;assert.equal(r.status,503);assert.equal(finalSignal.aborted,true);resolve({actorId:id,sessionId:'22222222-2222-4222-8222-222222222222'});await new Promise(r=>setImmediate(r));assert.equal(f.calls.length,2);}
+ finally{controller.abort();resolve(null);await pending;f.signed.client.close();t.mock.timers.reset();}
+});
+
+test('a final session check retains exclusive admission until its response is settled',async()=>{
+ let checks=0,resolve,entered=false;const wait=new Promise(r=>resolve=r),f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>{if(++checks===2){entered=true;await wait;}return {actorId,sessionId};}}});
+ const first=f.api(request());try{while(!entered)await new Promise(r=>setImmediate(r));const before=f.calls.length;const second=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(second.status,503);assert.equal(f.writes,0);assert.equal(checks,2);assert.equal(f.calls.length,before+1);resolve();assert.equal((await first).status,200);}
+ finally{resolve();await first;f.signed.client.close();}
 });
