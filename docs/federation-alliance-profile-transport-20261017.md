@@ -264,3 +264,48 @@ against the preceding API. Shutdown is exercised during inbound bytes, Auth and 
 dispatched save; late results remain withheld. Existing native composition is
 rerun in CI with explicit API cleanup and the direct uncertain-save retry check.
 No SQL candidate, dependency, mounted route, credential or hosted setting changes.
+
+## Durable profile write fence — October 20
+
+The new **unapplied**, empty-disabled-store extension
+`sql/alliance-profile-write-fence-candidate.sql` stores a profile's write sequence,
+input/result SHA-256 receipts and pending-review flag in its existing creation-plan
+row. The member update and receipt commit in the same transaction. The existing
+session-bound finish signature now locks that row and refuses a pending receipt;
+its previous implementation is private to the owner, so the executor cannot
+bypass the fence. No new role, table, credential or public API is added.
+
+The API reads the exact actor/session-bound receipt before creation dispatch.
+Pending, missing-verifier, unavailable or malformed receipt verification prevents
+a save. Pending review returns the existing paused message without claiming that
+the newly requested mutation started. Own reads remain available. SQL independently
+enforces the hold if another runtime races past a previously clear preflight.
+The strict receipt DTO is shared by the API and fixed read-only ledger method.
+
+This is deliberately an **operator-controlled pilot**, not automatic recovery.
+Every committed save, including an acknowledged success, holds further profile
+changes until a separate owner review. The owner-only review seam requires all
+member feature switches closed, the exact sequence and both receipt digests,
+unchanged current profile contents/timestamp and the same ownership mapping.
+Old or changed proofs cannot clear it; the runtime/member roles receive no review
+permission. Reading the current profile is not proof of delivery and does not
+clear the hold. No member-facing acknowledgement or forced-clear path is added.
+An established store cannot silently adopt this candidate: installation requires
+no creation plans/profiles and disabled controls.
+
+The disposable fixture explicitly performs owner review only after it has received
+a known successful result. A lost acknowledgement remains pending. Fresh driver,
+service and API instances refuse a later save; a direct ledger finish also fails,
+leaving the committed value and receipt unchanged. Concurrent finishes must commit
+exactly one receipt. The paired recovery fixture hashes every creation-plan column,
+detects an attempted same-count clearing of the pending flag and restores that
+flag from the actual archive. Existing table counts and recovery table lists are
+unchanged.
+
+Local validation: 85 profile store/API/client tests and 37 ledger-driver tests pass.
+Two API receipt regressions fail against the preceding API. SQL concurrency,
+owner permissions, restart-instance refusal and archive acceptance run in the
+identity-checked disposable PostgreSQL/TLS workflow; exact-head results are
+recorded only after CI completes. No hosted schema or permission change occurs.
+The operator review workflow, independently retained recovery checkpoints and
+member-facing recovery experience still need release acceptance before activation.

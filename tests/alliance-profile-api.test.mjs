@@ -23,6 +23,7 @@ function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=2
     if(endpoint.endsWith('/alliance_save_profile')||endpoint.endsWith('/alliance_remove_profile'))writes++;
     return json(profile,profileStatus);
   };
+  ledger={profileWriteStatusSession:async()=>null,...ledger};
   const writer=creation||{profile:async(context,value,options)=>{assert.equal(context.actorId,id);assert.equal(context.sessionId,'22222222-2222-4222-8222-222222222222');const response=await fetcher('synthetic-admitted-profile-write',{body:JSON.stringify(value),signal:options.signal});writes++;if(!response.ok)throw Error('PRIVATE');return response.json();}};
   const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:journal||signed.client,serving,creation:writer,ledger,fetcher});
   return {api,calls,signed,get writes(){return writes;}};
@@ -246,4 +247,14 @@ test('shutdown during stalled inbound bytes returns without Auth and cannot disp
  const source=request('/me',{method:'POST',body:input()}),req={url:source.url,method:source.method,headers:source.headers,signal:source.signal,body:{getReader:()=>({async read(){if(first){first=false;entered=true;await gate;return {done:false,value:bytes};}return {done:true};},cancel(){}})}};
  const pending=f.api(req);try{while(!entered)await new Promise(r=>setImmediate(r));f.api.close();assert.equal((await pending).status,503);assert.equal(f.calls.length,0);resolve();await new Promise(r=>setImmediate(r));assert.equal(f.calls.length,0);assert.equal(f.writes,0);}
  finally{resolve();await pending;f.api.close();f.signed.client.close();}
+});
+
+test('a persisted pending profile receipt closes fresh API writes before creation and permits own reads',async()=>{
+ let statuses=0,writes=0;const receipt={profileId:id,sequence:1,pending:true,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)};
+ const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async(actorId,sessionId,{signal})=>{assert.equal(actorId,id);assert.equal(sessionId,'22222222-2222-4222-8222-222222222222');assert.equal(signal.aborted,false);statuses++;return receipt;}},creation:{profile:async()=>{writes++;return row();}}});
+ try{for(let n=0;n<2;n++){const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const b=await body(r);assert.equal(b.error.code,'profile_changes_paused');assert.equal(b.mutation,undefined);assert.doesNotMatch(JSON.stringify(b),/aaaaaaaa|bbbbbbbb/);}assert.equal(statuses,2);assert.equal(writes,0);assert.equal((await f.api(request())).status,200);}
+ finally{f.api.close();f.signed.client.close();}
+});
+test('missing, unavailable and malformed durable write receipts cannot dispatch a profile save',async()=>{
+ for(const status of [undefined,()=>Promise.reject(Error('PRIVATE')),async()=>true,async()=>({profileId:id,sequence:1,pending:false,inputSha256:null,resultSha256:null})]){let writes=0;const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:status},creation:{profile:async()=>{writes++;return row();}}});try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal(writes,0);assert.equal((await body(r)).mutation,undefined);}finally{f.api.close();f.signed.client.close();}}
 });

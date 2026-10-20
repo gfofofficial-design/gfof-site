@@ -15,6 +15,7 @@ on:
       - 'sql/alliance-deletion-journal-store-candidate.sql'
       - 'sql/alliance-journal-admission-candidate.sql'
       - 'sql/alliance-creation-admission-candidate.sql'
+      - 'sql/alliance-profile-write-fence-candidate.sql'
       - 'sql/alliance-member-recovery-inventory-candidate.sql'
       - 'sql/alliance-journal-recovery-inventory-candidate.sql'
       - 'sql/alliance-control-store-candidate.sql'
