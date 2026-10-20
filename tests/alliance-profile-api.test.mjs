@@ -14,7 +14,7 @@ const user=()=>({id,email:'private@example.invalid',email_confirmed_at:'2026-10-
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
 function request(path='/me',{method='GET',headers={},body,signal}={}){return new Request(origin+'/api/alliance-members'+path,{method,headers:{Cookie:cookie,'Sec-Fetch-Site':'same-origin',...(method==='GET'?{}:{Origin:origin,'Content-Type':'application/json'}),...headers},...(body===undefined?{}:{body:JSON.stringify(body)}),...(signal?{signal}:{})});}
 function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=200,run,events=[],journal,serving={authorize:()=>true},creation,ledger={authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId})}}={}){
-  const calls=[];let writes=0;
+  const calls=[];let writes=0,committedReceipt=null;
   const signed=journalFixture({events});
   const fetcher=async(endpoint,init)=>{
     calls.push({endpoint,init});
@@ -23,8 +23,8 @@ function fixture({account=user(),accountStatus=200,profile=row(),profileStatus=2
     if(endpoint.endsWith('/alliance_save_profile')||endpoint.endsWith('/alliance_remove_profile'))writes++;
     return json(profile,profileStatus);
   };
-  ledger={profileWriteStatusSession:async()=>null,...ledger};
-  const writer=creation||{profile:async(context,value,options)=>{assert.equal(context.actorId,id);assert.equal(context.sessionId,'22222222-2222-4222-8222-222222222222');const response=await fetcher('synthetic-admitted-profile-write',{body:JSON.stringify(value),signal:options.signal});writes++;if(!response.ok)throw Error('PRIVATE');return response.json();}};
+  ledger={profileWriteStatusSession:async()=>committedReceipt,...ledger};
+  const writer=creation||{profile:async(context,value,options)=>{assert.equal(context.actorId,id);assert.equal(context.sessionId,'22222222-2222-4222-8222-222222222222');const response=await fetcher('synthetic-admitted-profile-write',{body:JSON.stringify(value),signal:options.signal});writes++;if(!response.ok)throw Error('PRIVATE');const saved=await response.json();committedReceipt={profileId:saved?.id,sequence:1,pending:true,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)};return saved;}};
   const api=createAllianceProfileApi({enabled:true,origin,url,key,journal:journal||signed.client,serving,creation:writer,ledger,fetcher});
   return {api,calls,signed,get writes(){return writes;}};
 }
@@ -296,5 +296,20 @@ test('a mismatched receipt after save withholds success and pauses later writes'
  let saved=false,writes=0;
  const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>saved?{profileId:'33333333-3333-4333-8333-333333333333',sequence:1,pending:true,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)}:null},creation:{profile:async()=>{saved=true;writes++;return row();}}});
  try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const b=await body(r);assert.equal(b.mutation,'unknown');assert.doesNotMatch(JSON.stringify(b),/Fixture Explorer|33333333|aaaaaaaa|bbbbbbbb/);const retry=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(retry.status,503);assert.equal((await body(retry)).error.code,'profile_changes_paused');assert.equal(writes,1);}
+ finally{f.api.close();f.signed.client.close();}
+});
+
+test('save confirmation requires one newly advanced pending receipt',async()=>{
+ const receipt=(sequence,pending=true,profileId=id)=>({profileId,sequence,pending,inputSha256:sequence?'a'.repeat(64):null,resultSha256:sequence?'b'.repeat(64):null});
+ for(const [before,after] of [[null,null],[null,receipt(0,false)],[null,receipt(1,false)],[receipt(3,false),receipt(3)],[receipt(3,false),receipt(5)],[receipt(3,false,'33333333-3333-4333-8333-333333333333'),receipt(4)]]){
+  let saved=false,writes=0;const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>saved?after:before},creation:{profile:async()=>{saved=true;writes++;return row();}}});
+  try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const b=await body(r);assert.equal(b.mutation,'unknown');assert.doesNotMatch(JSON.stringify(b),/Fixture Explorer|aaaaaaaa|bbbbbbbb/);const retry=await f.api(request('/me',{method:'POST',body:input()}));assert.equal((await body(retry)).error.code,'profile_changes_paused');assert.equal(writes,1);}
+  finally{f.api.close();f.signed.client.close();}
+ }
+});
+
+test('a reviewed earlier save permits exactly the next pending receipt',async()=>{
+ let saved=false;const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>({profileId:id,sequence:saved?4:3,pending:saved,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)})},creation:{profile:async()=>{saved=true;return row();}}});
+ try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,200);assert.deepEqual(await body(r),{profile:row(),writeState:'review_required'});}
  finally{f.api.close();f.signed.client.close();}
 });
