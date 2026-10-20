@@ -13,6 +13,20 @@ export function mountCommunityHub(document,options={}){
   const element=(tag,cls='',text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
   function listen(n,event,fn){n.addEventListener(event,fn);listeners.push(()=>n.removeEventListener(event,fn));}
   function announce(message){get('hub-status').textContent=message;}
+  const profileInputs={name:'hub-name',community:'hub-community',bio:'hub-bio',role:'hub-role',listed:'hub-listed'};
+  function clearProfileError(input){
+    if(input.getAttribute('aria-invalid')!=='true')return false;
+    input.removeAttribute('aria-invalid');
+    const description=(input.getAttribute('aria-describedby')||'').split(/\s+/u).filter(id=>id&&id!=='hub-profile-status').join(' ');
+    if(description)input.setAttribute('aria-describedby',description);else input.removeAttribute('aria-describedby');
+    return true;
+  }
+  function clearProfileErrors(){for(const id of Object.values(profileInputs))clearProfileError(get(id));}
+  function showProfileError(error){
+    get('hub-profile-status').textContent=error.message;
+    const id=Object.hasOwn(profileInputs,error.field)?profileInputs[error.field]:null,input=id&&get(id);
+    if(input){input.setAttribute('aria-invalid','true');input.setAttribute('aria-describedby',[(input.getAttribute('aria-describedby')||''),'hub-profile-status'].filter(Boolean).join(' '));input.focus();}
+  }
   function act(fn,message,focusId,fallbackId){if(disposed)return;try{fn();render();if(message)announce(message);if(focusId)(get(focusId)||(fallbackId&&get(fallbackId)))?.focus();}catch(error){announce(error.message);}}
   function button(text,fn,label){const n=element('button','',text);n.type='button';if(label)n.setAttribute('aria-label',label);n.addEventListener('click',event=>{if(!disposed)fn(event);});return n;}
   function empty(text){return element('p','hub-empty',text);}
@@ -131,12 +145,13 @@ export function mountCommunityHub(document,options={}){
     listen(get('hub-tab-'+key),'click',()=>openPanel(key));
     listen(get('hub-tab-'+key),'keydown',event=>{const vertical=get('hub-tabs').getAttribute('aria-orientation')==='vertical';let next;if(event.key===(vertical?'ArrowDown':'ArrowRight'))next=(index+1)%3;else if(event.key===(vertical?'ArrowUp':'ArrowLeft'))next=(index+2)%3;else if(event.key==='Home')next=0;else if(event.key==='End')next=2;else return;event.preventDefault();openPanel(tabs[next],true);});
   }
-  listen(get('hub-profile-form'),'submit',event=>{event.preventDefault();if(artwork.pending){get('hub-profile-status').textContent='Finish checking the image, or remove it to continue.';return;}try{
+  for(const id of Object.values(profileInputs)){const input=get(id);listen(input,'input',()=>{if(clearProfileError(input))get('hub-profile-status').textContent='Changes are not saved yet. Save the profile to check them.';});}
+  listen(get('hub-profile-form'),'submit',event=>{event.preventDefault();clearProfileErrors();if(artwork.pending){get('hub-profile-status').textContent='Finish checking the image, or remove it to continue.';return;}try{
     if(self&&actor!==self)throw Error('Return to your own preview identity to edit this profile.');
     const fields={name:get('hub-name').value,community:get('hub-community').value,bio:get('hub-bio').value,role:get('hub-role').value,listed:get('hub-listed').checked};
     if(self)store.updateMember(actor,self,fields);else{const m=store.createMember(fields);self=m.id;actor=self;}
     get('hub-profile-status').textContent=(fields.listed?'Your profile is listed in this tab’s preview directory.':'Your profile is unlisted in this tab. You can choose to list it later.')+' No manual approval, message or real membership was created.';render();announce('Profile saved '+(fields.listed?'and listed':'without directory listing')+' in the preview. Add fictional crew to try challenges and suggestions.');
-  }catch(error){get('hub-profile-status').textContent=error.message;}});
+  }catch(error){showProfileError(error);}});
   listen(get('hub-image'),'change',()=>artwork.select(get('hub-image').files?.[0]));listen(get('hub-image-remove'),'click',()=>{artwork.clear();get('hub-image').focus();});
   listen(get('hub-examples'),'click',()=>act(()=>{if(!self)throw Error('Create your preview profile first.');if(examples)return;store.createMember({name:'Nova · example',community:'Ion Guild · fictional',bio:'A fictional builder for trying invitations and peer acknowledgements.',role:'builder',listed:true},{example:true});store.createMember({name:'Echo · example',community:'Orbit Circle · fictional',bio:'A fictional researcher for trying ideas, support and community proposals.',role:'researcher',listed:true},{example:true});examples=true;},'Two fictional crew members added. They are not people, partners or public members.'));
   listen(get('hub-actor'),'change',()=>{switchActor(get('hub-actor').value);announce('Preview identity changed. This is roleplay, not a real sign-in.');});
@@ -157,7 +172,7 @@ export function mountCommunityHub(document,options={}){
     renderIdeas();get('hub-idea-card-'+item.id)?.focus();
   }catch(error){get('hub-idea-status').textContent=error.message;}});
   listen(get('hub-idea-filter'),'change',renderIdeas);
-  listen(get('hub-reset'),'click',()=>{proofDrafts.clear();formDrafts.clear();artwork.clear();store=createCommunitySandbox();self='';actor='';examples=false;for(const id of ['hub-name','hub-community','hub-bio','hub-member-search','hub-challenge-note','hub-idea-title','hub-idea-detail'])get(id).value='';get('hub-listed').checked=false;get('hub-role').value='explorer';get('hub-challenge-kit').value='explain';get('hub-challenge-scope').value='members';get('hub-challenge-days').value='7';get('hub-challenge-filter').value='all';get('hub-idea-category').value='tools';get('hub-idea-filter').value='all';get('hub-kit-filter').value='all';kitChanged();renderKits();render();openPanel('profile',true);get('hub-profile-status').textContent='Preview reset. No public profile or post was deleted, because none was created.';get('hub-challenge-status').textContent='Create a profile and add fictional crew to try an invitation.';get('hub-idea-status').textContent='Preview ideas stay in this tab; they are not delivered to the team.';announce('The local preview was cleared.');});
+  listen(get('hub-reset'),'click',()=>{proofDrafts.clear();formDrafts.clear();clearProfileErrors();artwork.clear();store=createCommunitySandbox();self='';actor='';examples=false;for(const id of ['hub-name','hub-community','hub-bio','hub-member-search','hub-challenge-note','hub-idea-title','hub-idea-detail'])get(id).value='';get('hub-listed').checked=false;get('hub-role').value='explorer';get('hub-challenge-kit').value='explain';get('hub-challenge-scope').value='members';get('hub-challenge-days').value='7';get('hub-challenge-filter').value='all';get('hub-idea-category').value='tools';get('hub-idea-filter').value='all';get('hub-kit-filter').value='all';kitChanged();renderKits();render();openPanel('profile',true);get('hub-profile-status').textContent='Preview reset. No public profile or post was deleted, because none was created.';get('hub-challenge-status').textContent='Create a profile and add fictional crew to try an invitation.';get('hub-idea-status').textContent='Preview ideas stay in this tab; they are not delivered to the team.';announce('The local preview was cleared.');});
   get('hub-challenge-kit').replaceChildren(...CHALLENGE_KITS.map(k=>option(k.id,k.title)));get('hub-challenge-kit').value='explain';kitChanged();renderKits();render();get('hub-reset').disabled=false;
   announce('The self-service preview is ready. No real account, upload, public post or message is created here.');
   return {getState:()=>({self,actor,members:store.directory(),challenges:store.challengeList(actor),ideas:store.ideaList(actor)}),dispose(){disposed=true;proofDrafts.clear();formDrafts.clear();artwork.dispose();for(const remove of listeners)remove();for(const id of ['hub-profile-fields','hub-challenge-fields','hub-idea-fields'])get(id).disabled=true;}};

@@ -16,9 +16,11 @@ function text(value,min,max,multiline=false){
   const cleaned=value.trim();if(cleaned.length<min||cleaned.length>max)throw Error('Complete the required fields within the displayed length limits.');return cleaned;
 }
 export function profileFields(input={}){
-  if(!Object.hasOwn(PROFILE_ROLES,input.role))throw Error('Choose a contribution role.');
-  if(typeof input.listed!=='boolean')throw Error('Choose whether to list this preview profile in the directory.');
-  return {name:text(input.name,2,40),community:text(input.community,0,70),bio:text(input.bio,10,280,true),role:input.role,listed:input.listed};
+  const invalid=(field,message)=>Object.assign(Error(message),{field});
+  if(!Object.hasOwn(PROFILE_ROLES,input.role))throw invalid('role','Choose a contribution role.');
+  if(typeof input.listed!=='boolean')throw invalid('listed','Choose whether to list this preview profile in the directory.');
+  const fieldText=(field,label,min,max,multiline=false)=>{try{return text(input[field],min,max,multiline);}catch{throw invalid(field,label+': '+(min?'use '+min+'–'+max+' characters.':'use up to '+max+' characters, or leave it empty.')+' Remove angle brackets and unsupported hidden direction or control characters.');}};
+  return {name:fieldText('name','Display name',2,40),community:fieldText('community','Your project or community',0,70),bio:fieldText('bio','Your bio',10,280,true),role:input.role,listed:input.listed};
 }
 export function challengeFields(input={}){
   const kit=CHALLENGE_KITS.find(x=>x.id===input.kit);
