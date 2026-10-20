@@ -54,10 +54,10 @@ end $$;
 -- No executor/member grant. This is an owner-only, closed-store review seam,
 -- not an automatic acknowledgement or proof that an HTTP response was received.
 create function alliance_avatar.review_profile_write(p_actor uuid,p_sequence bigint,p_input_sha256 text,p_result_sha256 text) returns boolean
-language plpgsql security invoker set search_path='' set timezone='UTC' set datestyle='ISO, YMD' as $$
+language plpgsql security invoker set search_path='' set timezone='UTC' set datestyle='ISO, YMD' set lock_timeout='750ms' as $$
 declare p alliance_avatar.creation_plans;disabled boolean;current_result jsonb;
 begin
- if current_setting('synchronous_commit')<>'on' or current_setting('fsync')<>'on' or current_setting('full_page_writes')<>'on'
+ if current_setting('transaction_isolation')<>'read committed' or current_setting('synchronous_commit')<>'on' or current_setting('fsync')<>'on' or current_setting('full_page_writes')<>'on'
  then raise insufficient_privilege using message='profile_review_unavailable';end if;
  select not enabled and not creation_enabled and not cleanup_enabled into strict disabled from alliance_avatar.control where id for update;
  if not disabled then raise insufficient_privilege using message='profile_review_unavailable';end if;
@@ -65,7 +65,10 @@ begin
  if p_sequence is null or p_sequence<=0 or p.profile_write_sequence is distinct from p_sequence
   or p.profile_write_input_sha256 is distinct from p_input_sha256 or p.profile_write_result_sha256 is distinct from p_result_sha256
  then raise insufficient_privilege using message='profile_review_mismatch';end if;
- perform 1 from public.alliance_member_owners where id=p.profile_id and user_id=p_actor for share;
+ -- The owner already has DELETE here; this table lock needs no UPDATE grant
+ -- on the immutable account mapping. Normal member writes are closed.
+ lock table public.alliance_member_owners in share mode;
+ perform 1 from public.alliance_member_owners where id=p.profile_id and user_id=p_actor;
  if not found then raise insufficient_privilege using message='profile_review_mismatch';end if;
  perform 1 from public.alliance_profiles where id=p.profile_id for update;
  if not found then raise insufficient_privilege using message='profile_review_mismatch';end if;
