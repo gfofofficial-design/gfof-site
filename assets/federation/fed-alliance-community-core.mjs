@@ -17,8 +17,8 @@ function text(value,min,max,multiline=false){
 }
 export function profileFields(input={}){
   if(!Object.hasOwn(PROFILE_ROLES,input.role))throw Error('Choose a contribution role.');
-  if(input.listed!==true)throw Error('Choose whether to list this preview profile before joining the preview directory.');
-  return {name:text(input.name,2,40),community:text(input.community,0,70),bio:text(input.bio,10,280,true),role:input.role,listed:true};
+  if(typeof input.listed!=='boolean')throw Error('Choose whether to list this preview profile in the directory.');
+  return {name:text(input.name,2,40),community:text(input.community,0,70),bio:text(input.bio,10,280,true),role:input.role,listed:input.listed};
 }
 export function challengeFields(input={}){
   const kit=CHALLENGE_KITS.find(x=>x.id===input.kit);
@@ -54,7 +54,7 @@ export function createCommunitySandbox(){
     },
     invite(actor,target,input){
       const from=member(actor),to=member(target),fields=challengeFields(input);
-      if(actor===target||blocked(actor,target))throw Error('Choose another available preview member.');
+      if(actor===target||blocked(actor,target)||!to.listed)throw Error('Choose another available preview member.');
       if(fields.scope==='communities'&&(!from.community||!to.community||from.community.toLocaleLowerCase()===to.community.toLocaleLowerCase()))throw Error('Community proposals need two different self-described communities.');
       if(challenges.size>=12)throw Error('This preview holds up to 12 challenges. Reset it to start again.');
       if([...challenges.values()].some(c=>c.kit===fields.kit&&['invited','active'].includes(c.status)&&[c.from,c.to].includes(actor)&&[c.from,c.to].includes(target)))throw Error('That pair already has an open invitation for this template.');

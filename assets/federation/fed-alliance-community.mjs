@@ -29,6 +29,7 @@ export function mountCommunityHub(document,options={}){
     get('hub-card-community').textContent=m?(m.community||'Independent explorer')+' · self-described':'Your community · self-described';
     get('hub-card-bio').textContent=m?m.bio:'Tell other members what you build, study or bring to the conversation.';
     get('hub-card-role').textContent=m?PROFILE_ROLES[m.role]:'YOUR CONTRIBUTION';
+    get('hub-card-visibility').textContent=m?(m.listed?'Listed in this tab’s preview directory.':'Unlisted: your profile is not in this tab’s directory. Existing preview ideas and challenges remain.'):'Your listing choice will appear here after you save.';
     get('hub-avatar-mark').textContent=m?m.name.split(/\s+/u).slice(0,2).map(x=>Array.from(x)[0]).join('').toLocaleUpperCase():'YOU';
     get('hub-profile-save').textContent=self?'Save preview changes':'Create preview profile';
     get('hub-profile-fields').disabled=!!self&&actor!==self;
@@ -36,7 +37,7 @@ export function mountCommunityHub(document,options={}){
   function renderSession(){
     get('hub-session').hidden=!self;
     if(!self)return;
-    const all=store.directory();get('hub-actor').replaceChildren(...all.map(m=>option(m.id,m.name+(m.example?' · fictional roleplay':' · your local profile'))));get('hub-actor').value=actor;
+    const all=store.directory();if(!all.some(m=>m.id===self))all.unshift(store.getMember(self));get('hub-actor').replaceChildren(...all.map(m=>option(m.id,m.name+(m.example?' · fictional roleplay':m.listed?' · your local profile':' · your unlisted local profile'))));get('hub-actor').value=actor;
     get('hub-return').hidden=actor===self;get('hub-examples').disabled=examples;
     get('hub-examples').textContent=examples?'Fictional crew added':'Add two fictional crew members';
   }
@@ -50,7 +51,7 @@ export function mountCommunityHub(document,options={}){
       card.id='hub-member-card-'+m.id;card.setAttribute('tabindex','-1');
       if(actor&&actor!==m.id){const actions=element('div','hub-card-actions');actions.append(button('Challenge',()=>{openPanel('challenges');renderTargets(m.id);get('hub-challenge-target').focus();},'Challenge '+m.name),button('Hide member',()=>act(()=>store.block(actor,m.id),'Member hidden for this preview identity. Invitations between these identities are blocked.','hub-member-search'),'Hide '+m.name+' in this preview'),button('Report',()=>act(()=>store.report(actor,'member',m.id),'Report recorded only in this preview. No content was removed and nothing was sent.',card.id),'Report profile for '+m.name));card.append(actions);}
       return card;
-    });get('hub-members').replaceChildren(...(cards.length?cards:[empty(self?'No profiles match. Clear the search or check your hidden members.':'The public member directory is not open. Create a local profile to try it, then add fictional crew to test invitations.')]));
+    });get('hub-members').replaceChildren(...(cards.length?cards:[empty(self?(!store.getMember(self).listed&&!get('hub-member-search').value.trim()?'Your profile is unlisted. Add fictional crew to explore the directory, or list your profile above.':'No profiles match. Clear the search or check your hidden members.'):'The public member directory is not open. Create a local profile to try it, then add fictional crew to test invitations.')]));
     const hidden=actor?store.blockedList(actor):[];get('hub-blocks').hidden=!hidden.length;get('hub-blocks').replaceChildren(...hidden.map(m=>button('Show '+m.name,()=>act(()=>store.block(actor,m.id),'Member shown again in this preview.','hub-member-card-'+m.id,'hub-member-search'))));
   }
   function kitChanged(){const kit=CHALLENGE_KITS.find(k=>k.id===get('hub-challenge-kit').value)||CHALLENGE_KITS[0];get('hub-challenge-goal').value=String(kit.goal);get('hub-challenge-unit').textContent='Count '+kit.unit+'. '+kit.brief;}
@@ -109,7 +110,7 @@ export function mountCommunityHub(document,options={}){
     if(self&&actor!==self)throw Error('Return to your own preview identity to edit this profile.');
     const fields={name:get('hub-name').value,community:get('hub-community').value,bio:get('hub-bio').value,role:get('hub-role').value,listed:get('hub-listed').checked};
     if(self)store.updateMember(actor,self,fields);else{const m=store.createMember(fields);self=m.id;actor=self;}
-    get('hub-profile-status').textContent='Your profile is ready in this tab. No manual approval, message or real membership was created.';render();announce('Profile saved in the preview. Add fictional crew to try challenges and suggestions.');
+    get('hub-profile-status').textContent=(fields.listed?'Your profile is listed in this tab’s preview directory.':'Your profile is unlisted in this tab. You can choose to list it later.')+' No manual approval, message or real membership was created.';render();announce('Profile saved '+(fields.listed?'and listed':'without directory listing')+' in the preview. Add fictional crew to try challenges and suggestions.');
   }catch(error){get('hub-profile-status').textContent=error.message;}});
   listen(get('hub-image'),'change',()=>artwork.select(get('hub-image').files?.[0]));listen(get('hub-image-remove'),'click',()=>{artwork.clear();get('hub-image').focus();});
   listen(get('hub-examples'),'click',()=>act(()=>{if(!self)throw Error('Create your preview profile first.');if(examples)return;store.createMember({name:'Nova · example',community:'Ion Guild · fictional',bio:'A fictional builder for trying invitations and peer acknowledgements.',role:'builder',listed:true},{example:true});store.createMember({name:'Echo · example',community:'Orbit Circle · fictional',bio:'A fictional researcher for trying ideas, support and community proposals.',role:'researcher',listed:true},{example:true});examples=true;},'Two fictional crew members added. They are not people, partners or public members.'));

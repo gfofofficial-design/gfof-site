@@ -6,7 +6,7 @@ Owner direction, October 17, 2026: members should join independently, manage the
 
 An isolated Community Hub on `/alliance`, after the three explicitly ordered sections: Stations, Community League, Project Prep. The navigation links directly to it. The current production source baseline is `556f56ccc669abc28ff97bba449e2ba88799d90e`.
 
-- Create and edit a preview profile: display name, optional self-described project/community, contribution role, bio and optional local image. An explicit listing choice is required. There is no owner-approval step.
+- Create and edit a preview profile: display name, optional self-described project/community, contribution role, bio and optional local image. Listing is optional: an unchecked box creates an unlisted profile, and the member can list or unlist it later. There is no owner-approval step.
 - Local name/community search, hide/unhide and report interactions. A report cannot itself remove someone else's content.
 - Six non-Journey challenge templates: sourced explainers, actionable product feedback, reviewed translations, evidence notes, discussion summaries and working demonstrations.
 - Member invitations and cross-community proposals; the invited identity alone can accept/decline, and the sender can cancel an unanswered invitation. Contributions need the other participant's acknowledgement. A participant cannot approve their own proof. The first participant to reach the agreed preview goal is shown as the preview goal achiever.
@@ -106,3 +106,15 @@ Owner approval covers independent member joining without routine operator approv
 `lib/alliance-profile-store.mjs` is server-only, unmounted and disabled by default. It accepts only editable profile fields, uses fixed self-profile RPCs, bounds response sizes and deadlines, strips private fields and has no service key or anonymous fallback. Supabase must verify bearer tokens; adapter token-shape checks are not authentication. No UI imports it and no environment values are read. Images, challenges, suggestions, quotas and notifications are not connected.
 
 All 14 local adapter tests passed with synthetic in-memory responses. Native PostgreSQL assertions and a dedicated disposable PostgreSQL 17.11 CI workflow are included for actual ownership/grant checks; native execution remains pending until CI succeeds. The fixture uses synthetic claim settings, not real GoTrue/JWT verification. No hosted database, Auth, Storage, environment, email or deployment configuration was changed. This SQL is candidate source, not an applied or CLI-generated migration.
+
+
+## Optional preview listing — October 20
+
+The original preview required the listing checkbox to be checked even though the form presented it as a choice. Actual Chrome reproduced the refusal with valid name/bio fields and an unchecked box.
+
+The tab-only preview now accepts an explicit boolean listing value, including false; missing, null, numeric and string values still refuse. The member card and save status show Listed or Unlisted, and adjacent checkbox help describes the effect. An unlisted local profile stays available in the roleplay selector and can still be edited or used to initiate an intentional invitation to a listed member. It does not appear in the directory or new invitation targets. Knowing an unlisted profile's preview ID does not make it a valid new invitation target.
+
+Unlisting changes directory discovery only. It does not erase existing preview ideas, contribution history or invitations. Existing invited participants can still respond. The text makes this limit visible. Reset remains the action that clears the entire tab sandbox. The identity selector is still roleplay and provides no authentication or confidentiality boundary.
+
+All 113 combined Alliance tests pass locally under Node24, including 33 Community Hub tests. Four new tests cover owner-only listing changes and new invitation targeting, preservation of existing participation, reachable unlisted identity controls, and listing changes without resetting ideas/invitations. Updated preview browser acceptance is recorded in the PR after deployment. No hosted profile route, database policy, member data, storage object, account setting or public signup is changed by this source/UI increment.
+

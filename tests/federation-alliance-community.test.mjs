@@ -7,7 +7,7 @@ const profile=(name='Preview Explorer',community='Example crew')=>({name,communi
 const challenge=()=>({kit:'explain',scope:'members',days:7,goal:1,note:'Compare clear explanations using public sources.'});
 function pair(){const s=createCommunitySandbox(),a=s.createMember(profile()),b=s.createMember(profile('Other explorer','Other crew'));return {s,a,b};}
 test('six non-Journey templates cover creative, evidence, feedback and social goals',()=>{assert.equal(CHALLENGE_KITS.length,6);assert.equal(new Set(CHALLENGE_KITS.map(x=>x.id)).size,6);assert.equal(matchingKits('Create').length,2);assert.equal(matchingKits('missing').length,0);assert.equal(kitGoalLabel(CHALLENGE_KITS[5],1),'1 working demonstration');assert.equal(kitGoalLabel(CHALLENGE_KITS[0],2),'2 sourced explainers');for(const k of CHALLENGE_KITS){assert.ok(Object.isFrozen(k));assert.doesNotMatch(JSON.stringify(k),/journey|trade volume|buy token|staking|airdrop/i);}});
-test('profile fields require an explicit listing choice and never confer project authority',()=>{assert.throws(()=>profileFields({...profile(),listed:false}));assert.throws(()=>profileFields({...profile(),role:'admin'}));const m=profileFields({...profile(),verified:true,email:'private@example.invalid'});assert.deepEqual(Object.keys(m).sort(),['bio','community','listed','name','role']);});
+test('profile fields accept both listing choices, reject coercion and never confer project authority',()=>{for(const listed of [undefined,null,'false',0,1])assert.throws(()=>profileFields({...profile(),listed}));assert.equal(profileFields({...profile(),listed:false}).listed,false);assert.throws(()=>profileFields({...profile(),role:'admin'}));const m=profileFields({...profile(),verified:true,email:'private@example.invalid'});assert.deepEqual(Object.keys(m).sort(),['bio','community','listed','name','role']);});
 test('text limits and hidden direction or markup characters are rejected',()=>{for(const name of ['x','x'.repeat(41),'<script>','Hidden\u202eName','Line\nBreak'])assert.throws(()=>profileFields({...profile(),name}));assert.throws(()=>profileFields({...profile(),bio:'x'.repeat(281)}));assert.throws(()=>ideaFields({category:'tools',title:'<b>idea</b>',detail:'A useful change for the members.'}));for(const goal of [0,21,1.5,NaN,Infinity,'1'])assert.throws(()=>challengeFields({...challenge(),goal}));assert.throws(()=>challengeFields({...challenge(),days:4}));assert.throws(()=>ideaFields({category:'__proto__',title:'Useful idea',detail:'A useful change for everyone.'}));});
 test('routine profile creation and updates have no owner approval step',()=>{const {s,a,b}=pair();assert.equal(s.directory().length,2);s.updateMember(a.id,a.id,{...profile('Updated explorer'),community:'New self-described group'});assert.equal(s.getMember(a.id).name,'Updated explorer');assert.throws(()=>s.updateMember(b.id,a.id,profile('Impersonation')));const copy=s.directory();copy[0].bio='changed';assert.notEqual(s.getMember(a.id).bio,'changed');});
 test('only the invited participant can accept or decline and each invitation needs consent',()=>{const {s,a,b}=pair(),c=s.invite(a.id,b.id,challenge());assert.equal(c.status,'invited');assert.throws(()=>s.respond(a.id,c.id,'accept'));assert.throws(()=>s.addProof(a.id,c.id,'A sourced explanation for the crew.'));assert.equal(s.respond(b.id,c.id,'accept').status,'active');assert.throws(()=>s.respond(b.id,c.id,'accept'));assert.throws(()=>s.invite(a.id,b.id,challenge()));});
@@ -41,12 +41,12 @@ function fixture(options={}){
  const api=mountCommunityHub(document,options);
  const descendants=n=>[n,...n.children.flatMap(descendants)];
  function find(id,label){const result=descendants(get(id)).find(n=>n.tag==='button'&&(n.textContent===label||n.getAttribute('aria-label')===label));assert.ok(result,'missing button '+label);return result;}
- function create(){const p=profile();get('hub-name').value=p.name;get('hub-community').value=p.community;get('hub-bio').value=p.bio;get('hub-role').value=p.role;get('hub-listed').checked=true;return get('hub-profile-form').emit('submit');}
+ function create(listed=true){const p=profile();get('hub-name').value=p.name;get('hub-community').value=p.community;get('hub-bio').value=p.bio;get('hub-role').value=p.role;get('hub-listed').checked=listed;return get('hub-profile-form').emit('submit');}
  return {api,get,find,descendants,create,document};
 }
 test('hub starts with no invented members, ideas or active invitation and no provider calls',()=>{const b=fixture();assert.equal(b.api.getState().members.length,0);assert.equal(b.get('hub-session').hidden,true);assert.equal(b.get('hub-kits').children.length,6);assert.equal(b.get('hub-challenge-fields').disabled,true);assert.equal(b.get('hub-idea-fields').disabled,true);assert.match(b.get('hub-status').textContent,/No real account/);b.api.dispose();});
 test('profile UI creates and edits its own directory entry without a Telegram handoff',async()=>{const b=fixture();await b.create();assert.equal(b.api.getState().members.length,1);assert.equal(b.get('hub-card-name').textContent,'Preview Explorer');assert.equal(b.get('hub-session').hidden,false);assert.match(b.get('hub-profile-status').textContent,/No manual approval/);b.get('hub-name').value='Renamed explorer';await b.get('hub-profile-form').emit('submit');assert.equal(b.api.getState().members[0].name,'Renamed explorer');b.api.dispose();});
-test('listing choice is required and invalid profile input creates no member',async()=>{const b=fixture();await b.create();await b.get('hub-reset').emit('click');b.get('hub-name').value='New explorer';b.get('hub-bio').value='A useful public introduction.';await b.get('hub-profile-form').emit('submit');assert.equal(b.api.getState().members.length,0);assert.match(b.get('hub-profile-status').textContent,/listing choice|whether to list/);b.api.dispose();});
+test('invalid profile text creates no profile even when it would remain unlisted',async()=>{const b=fixture();b.get('hub-name').value='x';b.get('hub-bio').value='A useful public introduction.';await b.get('hub-profile-form').emit('submit');assert.equal(b.api.getState().members.length,0);assert.equal(b.api.getState().self,'');assert.match(b.get('hub-profile-status').textContent,/length limits/);b.api.dispose();});
 test('fictional crew is opt-in, roleplay is labelled and cannot edit the visitor profile',async()=>{const b=fixture();await b.create();await b.get('hub-examples').emit('click');assert.equal(b.api.getState().members.length,3);const other=b.api.getState().members.find(m=>m.example);b.get('hub-actor').value=other.id;await b.get('hub-actor').emit('change');assert.equal(b.get('hub-profile-fields').disabled,true);await b.get('hub-profile-form').emit('submit');assert.equal(b.api.getState().members[0].name,'Preview Explorer');assert.match(b.get('hub-profile-status').textContent,/own preview identity/);await b.get('hub-return').emit('click');assert.equal(b.get('hub-profile-fields').disabled,false);b.api.dispose();});
 test('member invitations can be accepted by roleplaying the invited fictional member',async()=>{const b=fixture();await b.create();await b.get('hub-examples').emit('click');const target=b.api.getState().members.find(m=>m.example);b.get('hub-challenge-target').value=target.id;b.get('hub-challenge-goal').value='1';await b.get('hub-challenge-form').emit('submit');assert.equal(b.api.getState().challenges[0].status,'invited');b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');await b.find('hub-challenges','Accept invitation').emit('click');assert.equal(b.api.getState().challenges[0].status,'active');assert.match(b.get('hub-status').textContent,/No real event/);b.api.dispose();});
 test('idea UI supports self-service post, other-member support and author removal',async()=>{const b=fixture();await b.create();await b.get('hub-examples').emit('click');b.get('hub-idea-title').value='A clearer dashboard';b.get('hub-idea-detail').value='Group missing prices so members can understand which assets are valued.';await b.get('hub-idea-form').emit('submit');const self=b.api.getState().self;assert.equal(b.api.getState().ideas.length,1);b.get('hub-actor').value=b.api.getState().members.find(m=>m.example).id;await b.get('hub-actor').emit('change');await b.find('hub-ideas','Support idea · 0').emit('click');assert.equal(b.api.getState().ideas[0].votes.length,1);assert.equal(b.document.activeElement,b.find('hub-ideas','Remove support · 1'));await b.find('hub-ideas','Remove support · 1').emit('click');assert.equal(b.api.getState().ideas[0].votes.length,0);b.get('hub-actor').value=self;await b.get('hub-actor').emit('change');await b.find('hub-ideas','Remove my idea').emit('click');assert.equal(b.api.getState().ideas.length,0);b.api.dispose();});
@@ -103,5 +103,41 @@ test('a status change keeps focus on its card when the current filter still incl
  const {b,target,key}=await invitationFixture();b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');
  const control=b.find('hub-challenges','Accept invitation');control.focus();await control.emit('click');
  assert.equal(b.document.activeElement,b.get('hub-challenge-card-'+key));b.api.dispose();
+});
+
+test('unlisted profiles remain editable by their owner and are unavailable as new invitation targets',()=>{
+ const {s,a,b}=pair();s.updateMember(a.id,a.id,{...profile(),listed:false});
+ assert.equal(s.getMember(a.id).listed,false);assert.equal(s.directory().some(m=>m.id===a.id),false);
+ assert.throws(()=>s.updateMember(b.id,a.id,{...profile(),listed:true}));assert.throws(()=>s.invite(b.id,a.id,challenge()));
+ s.updateMember(a.id,a.id,{...profile(),listed:true});assert.equal(s.directory().some(m=>m.id===a.id),true);
+});
+test('unlisting preserves existing invitations and ideas while allowing intentional outgoing invitations',()=>{
+ const {s,a,b}=pair(),c=s.invite(b.id,a.id,challenge());
+ const idea=s.postIdea(a.id,{title:'Useful evidence guide',category:'research',detail:'Explain the public sources and limits of a token-account snapshot.'});
+ s.updateMember(a.id,a.id,{...profile(),listed:false});
+ assert.equal(s.respond(a.id,c.id,'accept').status,'active');assert.equal(s.ideaList(a.id)[0].id,idea.id);
+ assert.equal(s.invite(a.id,b.id,{...challenge(),kit:'feedback'}).status,'invited');
+ assert.equal(s.challengeList(a.id).length,2);
+});
+test('an unchecked listing choice creates an unlisted profile and keeps its roleplay identity reachable',async()=>{
+ const b=fixture();await b.create(false);const self=b.api.getState().self;assert.ok(self);
+ assert.equal(b.api.getState().members.length,0);assert.equal(b.get('hub-actor').value,self);
+ assert.match(b.get('hub-actor').textContent,/unlisted local profile/);assert.match(b.get('hub-card-visibility').textContent,/Unlisted/);
+ assert.match(b.get('hub-profile-status').textContent,/unlisted/);assert.match(b.get('hub-members').textContent,/Your profile is unlisted/);
+ await b.get('hub-examples').emit('click');const target=b.api.getState().members[0];assert.equal(b.api.getState().members.length,2);
+ b.get('hub-actor').value=target.id;await b.get('hub-actor').emit('change');
+ assert.equal(b.get('hub-challenge-target').children.some(n=>n.value===self),false);
+ await b.get('hub-return').emit('click');assert.equal(b.get('hub-actor').value,self);assert.equal(b.get('hub-profile-fields').disabled,false);
+ assert.equal(b.get('hub-card-name').textContent,'Preview Explorer');b.api.dispose();
+});
+test('profile listing can be changed without resetting preview ideas or invitation history',async()=>{
+ const {b,key}=await invitationFixture();const self=b.api.getState().self;
+ b.get('hub-idea-title').value='A useful directory guide';b.get('hub-idea-detail').value='Explain how to list and unlist a preview profile.';await b.get('hub-idea-form').emit('submit');
+ b.get('hub-listed').checked=false;await b.get('hub-profile-form').emit('submit');
+ assert.equal(b.api.getState().members.some(m=>m.id===self),false);assert.equal(b.api.getState().challenges[0].id,key);assert.equal(b.api.getState().ideas.length,1);
+ assert.match(b.get('hub-card-visibility').textContent,/Existing preview ideas and challenges remain/);
+ b.get('hub-listed').checked=true;await b.get('hub-profile-form').emit('submit');
+ assert.equal(b.api.getState().members.some(m=>m.id===self),true);assert.equal(b.api.getState().ideas.length,1);assert.match(b.get('hub-card-visibility').textContent,/Listed/);
+ const html=readFileSync(new URL('../alliance.html',import.meta.url),'utf8');assert.match(html,/aria-describedby="hub-listing-help"/);assert.match(html,/Unlisting does not remove existing preview ideas or challenges/);b.api.dispose();
 });
 
