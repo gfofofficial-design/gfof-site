@@ -87,10 +87,10 @@ test('an Auth outage is unavailable, never an empty profile or an invitation to 
   const f=fixture({accountStatus:500});const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal((await body(r)).error.code,'account_unavailable');assert.equal(f.writes,0);assert.equal((await f.api(request())).status,503);assert.equal(f.calls.length,1);
 });
 test('validated account cookie is reused only server-side and private account fields are never returned',async()=>{
-  const f=fixture({profile:{...row(),user_id:id,email:'DO-NOT-RETURN',access_token:'DO-NOT-RETURN'}});const r=await f.api(request());assert.equal(r.status,200);assert.deepEqual(await body(r),{profile:row()});assert.equal(f.calls.length,2);for(const c of f.calls){assert.equal(c.init.headers.Authorization,'Bearer '+token);assert.equal(c.init.credentials,'omit');assert.equal(c.init.redirect,'error');assert.equal(c.init.headers.Cookie,undefined);}assert.equal(r.headers.get('cache-control'),'private, no-store');assert.equal(r.headers.get('vary'),'Cookie');assert.equal(r.headers.get('access-control-allow-origin'),null);assert.equal(r.headers.get('set-cookie'),null);
+  const f=fixture({profile:{...row(),user_id:id,email:'DO-NOT-RETURN',access_token:'DO-NOT-RETURN'}});const r=await f.api(request());assert.equal(r.status,200);assert.deepEqual(await body(r),{profile:row(),writeState:'available'});assert.equal(f.calls.length,2);for(const c of f.calls){assert.equal(c.init.headers.Authorization,'Bearer '+token);assert.equal(c.init.credentials,'omit');assert.equal(c.init.redirect,'error');assert.equal(c.init.headers.Cookie,undefined);}assert.equal(r.headers.get('cache-control'),'private, no-store');assert.equal(r.headers.get('vary'),'Cookie');assert.equal(r.headers.get('access-control-allow-origin'),null);assert.equal(r.headers.get('set-cookie'),null);
 });
 test('a missing own profile stays null after authentication, without creating one',async()=>{
-  const f=fixture({profile:null});assert.deepEqual(await body(await f.api(request())),{profile:null});assert.equal(f.writes,0);
+  const f=fixture({profile:null});assert.deepEqual(await body(await f.api(request())),{profile:null,writeState:'available'});assert.equal(f.writes,0);
 });
 test('a save is self-targeted, strips no invalid actor fields silently and forwards only editable values',async()=>{
   const f=fixture();for(const extra of [{user_id:id},{id},{moderation_state:'visible'},{avatar_url:'https://evil.example/image'},{listed:'true'}])assert.equal((await f.api(request('/me',{method:'POST',body:{...input(),...extra}}))).status,400);assert.equal(f.calls.length,0);
@@ -252,9 +252,22 @@ test('shutdown during stalled inbound bytes returns without Auth and cannot disp
 test('a persisted pending profile receipt closes fresh API writes before creation and permits own reads',async()=>{
  let statuses=0,writes=0;const receipt={profileId:id,sequence:1,pending:true,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)};
  const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async(actorId,sessionId,{signal})=>{assert.equal(actorId,id);assert.equal(sessionId,'22222222-2222-4222-8222-222222222222');assert.equal(signal.aborted,false);statuses++;return receipt;}},creation:{profile:async()=>{writes++;return row();}}});
- try{for(let n=0;n<2;n++){const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const b=await body(r);assert.equal(b.error.code,'profile_changes_paused');assert.equal(b.mutation,undefined);assert.doesNotMatch(JSON.stringify(b),/aaaaaaaa|bbbbbbbb/);}assert.equal(statuses,2);assert.equal(writes,0);assert.equal((await f.api(request())).status,200);}
+ try{for(let n=0;n<2;n++){const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const b=await body(r);assert.equal(b.error.code,'profile_changes_paused');assert.equal(b.mutation,undefined);assert.doesNotMatch(JSON.stringify(b),/aaaaaaaa|bbbbbbbb/);}assert.equal(statuses,2);assert.equal(writes,0);const own=await f.api(request());assert.equal(own.status,200);assert.deepEqual(await body(own),{profile:row(),writeState:'review_required'});assert.equal(statuses,3);}
  finally{f.api.close();f.signed.client.close();}
 });
 test('missing, unavailable and malformed durable write receipts cannot dispatch a profile save',async()=>{
  for(const status of [undefined,()=>Promise.reject(Error('PRIVATE')),async()=>true,async()=>({profileId:id,sequence:1,pending:false,inputSha256:null,resultSha256:null})]){let writes=0;const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:status},creation:{profile:async()=>{writes++;return row();}}});try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal(writes,0);assert.equal((await body(r)).mutation,undefined);}finally{f.api.close();f.signed.client.close();}}
+});
+
+test('a successful committed save exposes only its durable hold state',async()=>{
+ let committed=false;const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>committed?{profileId:id,sequence:1,pending:true,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)}:null},creation:{profile:async()=>{committed=true;return row();}}});
+ try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,200);assert.deepEqual(await body(r),{profile:row(),writeState:'review_required'});}finally{f.api.close();f.signed.client.close();}
+});
+test('unavailable receipt after dispatch withholds success and preserves mutation uncertainty',async()=>{
+ let committed=false;const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>{if(committed)throw Error('PRIVATE');return null;}},creation:{profile:async()=>{committed=true;return row();}}});
+ try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);assert.equal((await body(r)).mutation,'unknown');}finally{f.api.close();f.signed.client.close();}
+});
+test('an own-profile read with unavailable review status withholds profile data',async()=>{
+ const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>{throw Error('PRIVATE');}}});
+ try{const r=await f.api(request());assert.equal(r.status,503);assert.doesNotMatch(JSON.stringify(await body(r)),/Fixture Explorer|PRIVATE/);}finally{f.api.close();f.signed.client.close();}
 });
