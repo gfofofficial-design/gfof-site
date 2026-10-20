@@ -17,9 +17,10 @@ jobs:
         image: postgres:17.11-bookworm
         env:
           POSTGRES_DB: postgres
+          POSTGRES_USER: supabase_admin
           POSTGRES_PASSWORD: alliance_disposable_fixture_only
         options: >-
-          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-cmd "pg_isready -U supabase_admin -d postgres"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
