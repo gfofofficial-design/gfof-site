@@ -184,3 +184,41 @@ mutation reconciliation and production lifecycle/concurrency work remain launch
 gates. Session presence plus `not_after` does not independently enforce every
 Supabase inactivity/single-session policy; those provider settings are separately
 accepted. No login, credential, signup or production setting changes are included.
+
+## Composed profile creation and two-member acceptance — October 20
+
+The disposable two-server creation fixture now also runs the existing browser
+profile client through the cookie-bound profile API and real creation service.
+An initial own-profile read returns null; the first save prepares its stable ID,
+obtains independent journal admission, commits through the restricted member
+ledger and returns the profile. A subsequent read uses the authenticated member
+role and actual profile RLS. This replaces the fixture's former direct service
+call for that first successful creation.
+
+Two separate client/API contexts then verify private own reads, isolation from
+another unlisted profile, listing through the directory, and refusal of browser
+owner/profile overrides and a session belonging to the other account. Editing one
+member leaves the other unchanged. The directory selects only public fields.
+The RLS fixture also directly attempts a targeted read of the other private row
+under each member role and requires null.
+
+A third client loses the acknowledgement only after the real creation service has
+committed its SQL save. It reports unknown, dispatches the save once, retains the
+changed database value on readback and keeps further writes paused even after that
+read. The second member remains unchanged, and independent journal admission still
+has exactly the two original profile identities. This is readback evidence, not a
+new durable reconciliation mechanism or permission to retry from a fresh client.
+
+The member/session/creation and independent journal adapters use the fixture's
+actual restricted-driver TLS connections. Auth acceptance and the HTTP/Data API
+bridge are synthetic: fixed SQL reads set the modeled authenticated role/claims
+inside read-only transactions. Signed deletion views and serving policy are also
+fixture inputs. This does not substitute for hosted Auth, PostgREST/pooler, runtime
+custody, two-device sign-in or production acceptance.
+
+Only the native integration fixture and this document change. No application
+behavior, SQL candidate, dependency, deployed route or hosted setting changes.
+Local validation is syntax checking; the complete composed database assertions run
+only in the identity-checked disposable PostgreSQL/TLS CI job. The existing local
+76-test profile and 35-test driver results belong to the preceding increment;
+exact-head CI results are recorded in the PR and handoff after completion.
