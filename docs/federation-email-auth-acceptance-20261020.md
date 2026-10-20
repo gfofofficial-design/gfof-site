@@ -44,12 +44,20 @@ mail deliveries, confirmation and session effects:
 - The confirmed password account receives recovery mail while signup is closed.
   The recovery code works once, password update succeeds, old password fails and
   a fresh login with the replacement succeeds. Logout rejects refresh reuse.
+- The actual application handler then talks to these same services through an
+  injected test transport. Only its fixed synthetic Supabase origin and five
+  reviewed Auth paths map to the owned internal service; no real hosted request
+  occurs. Received code verification, independent user lookup, host-only Secure
+  HttpOnly cookies, session/refresh/logout and refresh rejection pass through the
+  unchanged handler. Unknown-address start remains neutral/no creation or mail.
+  An explicitly advanced test clock refuses an expired flow before provider I/O.
+  Foreign-origin/direct-function/unsigned failures make no provider call.
 - Missing function EXECUTE, schema USAGE or the selected function, and a synthetic
   runtime error all fail closed. A fixture-only two-second PostgreSQL statement
   deadline cancels a three-second hook and creates no user/mail. This explicit
   cancellation does not establish managed Auth's default hook deadline.
 - Restore the exact source function and admit one final synthetic OTP request;
-  close signup and verify four users/identities and six sink messages total.
+  close signup and verify four users/identities and eight sink messages total.
 - Remove and independently inspect absence of the three child containers and
   internal network. The dedicated PostgreSQL service is removed by CI teardown.
 
@@ -64,8 +72,9 @@ The template and generated users are synthetic. This proves neither inbox delive
 nor a real sender/domain's reputation, hosted eight-digit/expiry settings, abuse
 limits, account linking, restored deletion protection or SMTP recovery. Reconcile
 the existing sender configuration before duplicating keys or asking for resets.
-The application handler/cookies/browser are not invoked by this fixture; their
-existing tests remain separate and actual composed browser acceptance remains.
+The actual handler is invoked, but simulated events/cookie headers do not prove
+a browser accepts the attributes, applies cookie expiry or interoperates with
+real device storage/assistive technology. Actual composed browser acceptance remains.
 No managed hook, signup setting, feature flag or cloud account is changed here.
 
 Keep the exact destination's Google warning unresolved until actual clearance;

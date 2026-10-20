@@ -4,7 +4,8 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 import {candidateDDL,SCHEMA} from './federation-email-signup-candidate.mjs';
-import {EMAIL_AUTH_DB,AUTH_IMAGE,MAIL_IMAGE,TEMPLATE_IMAGE,CODE_TEMPLATE,fixtureConfig,fixtureOrigin,sinkCode} from './federation-email-auth-contract.mjs';
+import {EMAIL_AUTH_DB,AUTH_IMAGE,MAIL_IMAGE,TEMPLATE_IMAGE,CODE_TEMPLATE,fixtureConfig,fixtureOrigin,fixtureAuthPath,sinkCode} from './federation-email-auth-contract.mjs';
+import {handlerAcceptance} from './federation-email-auth-handler.mjs';
 
 const DB = EMAIL_AUTH_DB;
 const FN = `${SCHEMA}.email_provider_only`;
@@ -229,6 +230,13 @@ try {
   await unchanged('Recovery with signup closed');
   console.log('PASS recovery mail/code, one-use recovery, old password refused and fresh new-password login while signup remains closed');
 
+  const composed=await handlerAcceptance({email:otpEmail,id:first.user.id,messages,delivery,unchanged,
+    fetchImpl:async(url,options)=>{
+      const path=fixtureAuthPath(url);assert(++httpCount<=400,'Fixture HTTP budget exceeded');
+      return fetch(authOrigin+path,{...options,redirect:'error'});
+    }});
+  console.log(`PASS actual application handler: real code/user lookup, HttpOnly host-only cookies, session/refresh/logout, neutral unknown address and local expiry; ${composed.requests} provider requests`);
+
   await startAuth(false,true);
   query(`revoke execute on function ${FN}(jsonb) from supabase_auth_admin;`);
   rejected(await authHTTP('/signup',{email:'no-execute@example.invalid',password}),'Missing hook EXECUTE',500);
@@ -258,7 +266,7 @@ try {
   console.log('PASS missing grants/function, runtime error and explicit database cancellation create no account or mail; exact restored candidate admits again');
   await startAuth(true,true);await unchanged('Final closure');
   const final=await authHTTP('/signup',{email:'final-closed@example.invalid',password});rejected(final,'Final closed signup',422);
-  assert.equal(expectedUsers,4);assert.equal(delivered,6);
+  assert.equal(expectedUsers,4);assert.equal(delivered,8);
   console.log(`PASS final closure and exact counts: ${expectedUsers} synthetic users/identities, ${delivered} sink messages; ${httpCount} bounded HTTP requests, ${queryCount} SQL submissions`);
 } finally {
   let cleanupFailed=false;

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {fixtureConfig, fixtureOrigin, sinkCode, PG_IMAGE, EMAIL_AUTH_DB} from './federation-email-auth-contract.mjs';
+import {fixtureConfig, fixtureOrigin, fixtureAuthPath, sinkCode, PG_IMAGE, EMAIL_AUTH_DB} from './federation-email-auth-contract.mjs';
 
 test('fixture refuses hosted database settings, wrong versions and published container ports', () => {
   fixtureConfig({Image:PG_IMAGE, Env:[`POSTGRES_DB=${EMAIL_AUTH_DB}`]});
@@ -29,4 +29,12 @@ test('Auth runner refuses missing confirmation before any Docker command', () =>
   assert.notEqual(result.status,0);
   assert.match(result.stderr,/Explicit disposable email Auth confirmation/);
   assert.doesNotMatch(result.stderr,/spawnSync docker/);
+});
+test('composed handler transport accepts only exact synthetic origin and reviewed Auth routes', () => {
+  assert.equal(fixtureAuthPath('https://syntheticfixture.supabase.co/auth/v1/otp'),'/otp');
+  for(const value of ['https://other.supabase.co/auth/v1/otp',
+    'https://syntheticfixture.supabase.co/auth/v1/admin/users',
+    'https://syntheticfixture.supabase.co/auth/v1/otp?redirect_to=https://example.com',
+    'https://user:password@syntheticfixture.supabase.co/auth/v1/otp',
+    'https://syntheticfixture.supabase.co/auth/v1/otp#fragment'])assert.throws(()=>fixtureAuthPath(value));
 });

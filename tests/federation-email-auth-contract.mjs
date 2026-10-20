@@ -6,6 +6,16 @@ export const AUTH_IMAGE = 'supabase/gotrue:v2.197.0';
 export const MAIL_IMAGE = 'axllent/mailpit:v1.31.4';
 export const TEMPLATE_IMAGE = 'busybox:1.37.0';
 export const CODE_TEMPLATE = '<html><body><p>Disposable test code.</p><p>FEDERATION-CODE:{{ .Token }}</p></body></html>';
+export function fixtureAuthPath(value) {
+  const url=new URL(value);
+  assert.equal(url.origin,'https://syntheticfixture.supabase.co','Unexpected synthetic Auth origin');
+  assert.ok(!url.username&&!url.password&&!url.hash,'Unexpected synthetic Auth URL fields');
+  const suffix=url.pathname+url.search;
+  assert.ok(['/auth/v1/otp','/auth/v1/verify','/auth/v1/user',
+    '/auth/v1/token?grant_type=refresh_token','/auth/v1/logout?scope=local'].includes(suffix),
+    'Unexpected application Auth route');
+  return suffix.slice('/auth/v1'.length);
+}
 export function fixtureConfig(config) {
   assert.equal(config?.Image, PG_IMAGE, 'Wrong disposable PostgreSQL image');
   assert.ok(config.Env?.includes(`POSTGRES_DB=${EMAIL_AUTH_DB}`), 'Wrong disposable database');
