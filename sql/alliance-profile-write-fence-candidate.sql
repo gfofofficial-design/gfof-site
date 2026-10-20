@@ -65,6 +65,10 @@ begin
  if p_sequence is null or p_sequence<=0 or p.profile_write_sequence is distinct from p_sequence
   or p.profile_write_input_sha256 is distinct from p_input_sha256 or p.profile_write_result_sha256 is distinct from p_result_sha256
  then raise insufficient_privilege using message='profile_review_mismatch';end if;
+ perform 1 from public.alliance_member_owners where id=p.profile_id and user_id=p_actor for share;
+ if not found then raise insufficient_privilege using message='profile_review_mismatch';end if;
+ perform 1 from public.alliance_profiles where id=p.profile_id for update;
+ if not found then raise insufficient_privilege using message='profile_review_mismatch';end if;
  current_result:=alliance_avatar.profile_write_current(p.profile_id);
  if not exists(select 1 from public.alliance_member_owners where id=p.profile_id and user_id=p_actor) or current_result is null or encode(sha256(convert_to(current_result::text,'UTF8')),'hex') is distinct from p_result_sha256
  then raise insufficient_privilege using message='profile_review_mismatch';end if;
