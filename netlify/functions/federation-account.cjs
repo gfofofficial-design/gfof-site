@@ -28,7 +28,7 @@ function config(env) {
   const key=env.FEDERATION_AUTH_PUBLISHABLE_KEY||'';
   if(!/^sb_publishable_[a-zA-Z0-9_-]+$/.test(key))throw Error('config');
   const providers=['google','apple'].filter(p=>env[`FEDERATION_AUTH_${p.toUpperCase()}_ENABLED`]==='true');
-  return {origin:origin.origin,url:url.origin,key,providers};
+  return {origin:origin.origin,url:url.origin,key,providers,emailEnabled:env.FEDERATION_AUTH_EMAIL_ENABLED==='true',emailSignup:env.FEDERATION_AUTH_EMAIL_SIGNUP_ENABLED==='true'};
 }
 function equal(a,b){if(typeof a!=='string'||typeof b!=='string')return false;const x=Buffer.from(a),y=Buffer.from(b);return x.length===y.length&&timingSafeEqual(x,y);}
 function sessionCookies(data){
@@ -39,7 +39,7 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
   return async event=>{
     // Netlify's direct function URL must not bypass the account redirect's edge limit.
     const path=event.path||'';
-    if(!/^\/api\/federation-account\/(?:config|oauth|callback|session|refresh|logout)$/.test(path))return result(404,{error:'Account route unavailable.'});
+    if(!/^\/api\/federation-account\/(?:config|oauth|callback|session|refresh|logout|email-start|email-verify)$/.test(path))return result(404,{error:'Account route unavailable.'});
     const action=path.split('/').at(-1);
     const method=event.httpMethod;
     let cfg;try{cfg=config(env);}catch{return result(503,{error:'Account configuration is unavailable.'});}
@@ -50,7 +50,7 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
       catch{return result(503,{error:'Account configuration is unavailable.'});}
     }
     const jar=cookies(event);
-    if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[],hasSessionCookie:!!cfg&&!!(jar[COOKIE.access]||jar[COOKIE.refresh])});
+    if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[],hasSessionCookie:!!cfg&&!!(jar[COOKIE.access]||jar[COOKIE.refresh]),...(cfg?.emailEnabled?{emailEnabled:true,emailSignupEnabled:cfg.emailSignup}:{})});
     if(!cfg)return result(503,{error:'Federation accounts are being prepared.'});
     const origin=event.headers?.origin||event.headers?.Origin;
     const site=event.headers?.['sec-fetch-site'];
@@ -75,6 +75,39 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
     }
     async function user(token){if(!token)throw Object.assign(Error('auth'),{status:401});const u=await api('/auth/v1/user',{token});if(!u?.id||!u.email_confirmed_at||u.is_anonymous)throw Object.assign(Error('auth'),{status:401});return u;}
     try{
+      if(['email-start','email-verify'].includes(action)&&method==='POST'){
+        if(!cfg.emailEnabled)return result(404,{error:'Email sign-in is not available.'});
+        if(event.isBase64Encoded||(event.body||'').length>1024)return result(413,{error:'Request too large.'});
+        if(!/^application\/json(?:;|$)/i.test(event.headers?.['content-type']||event.headers?.['Content-Type']||''))return result(400,{error:'Invalid request.'});
+        const body=JSON.parse(event.body||'{}');
+        const validEmail=value=>typeof value==='string'&&value.length<=254&&/^[^@\s<>]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9.-]{0,187}[A-Za-z0-9])?\.[A-Za-z]{2,63}$/.test(value);
+        const exact=keys=>body&&typeof body==='object'&&!Array.isArray(body)&&Object.keys(body).sort().join(',')===keys.sort().join(',');
+        const clearFlow=[cookie(COOKIE.flow,'',0)];
+        if(action==='email-start'){
+          if(!exact(['email'])||!validEmail(body.email))return result(400,{error:'Enter a valid email address.'});
+          const email=body.email.toLowerCase(),challenge=randomBytes(24).toString('base64url');
+          try{await api('/auth/v1/otp',{method:'POST',body:{email,create_user:cfg.emailSignup}});}
+          catch(error){
+            // Do not reveal whether an address exists or is eligible for signup.
+            if(![400,422].includes(error.status))throw error;
+          }
+          return result(202,{sent:true,challenge,expiresIn:600},[cookie(COOKIE.flow,JSON.stringify({kind:'email',email,challenge,created:now()}),600)]);
+        }
+        let flow;try{flow=JSON.parse(jar[COOKIE.flow]||'null');}catch{}
+        if(!exact(['code','challenge'])||typeof body.code!=='string'||!/^\d{6}$/.test(body.code)||
+          typeof body.challenge!=='string'||!/^[A-Za-z0-9_-]{32}$/.test(body.challenge)||
+          !flow||flow.kind!=='email'||!validEmail(flow.email)||!equal(flow.challenge,body.challenge)||
+          !Number.isFinite(flow.created)||now()<flow.created||now()-flow.created>600000)return result(400,{error:'Request a new email code and try again.'},clearFlow);
+        try{
+          const data=await api('/auth/v1/verify',{method:'POST',body:{email:flow.email,token:body.code,type:'email'}});
+          const verified=await user(data.access_token);
+          if(typeof verified.email!=='string'||verified.email.toLowerCase()!==flow.email)throw Object.assign(Error('email'),{status:401});
+          return result(200,{ok:true},sessionCookies(data));
+        }catch(error){
+          return result(error.status===429?429:[400,401,403,422].includes(error.status)?401:502,
+            {error:error.status===429?'Too many requests. Please wait before requesting another code.':'Email sign-in could not be confirmed. Request a new code.'},clearFlow);
+        }
+      }
       if(action==='oauth'&&method==='POST'){
         if((event.body||'').length>1024)return result(413,{error:'Request too large.'});
         const body=JSON.parse(event.body||'{}');
@@ -113,6 +146,7 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
       return result(405,{error:'Method or route not available.'});
     }catch(error){
       if(action==='callback')return result(303,{},[cookie(COOKIE.flow,'',0)],{Location:cfg.origin+'/account?signin=failed'});
+      if(action==='email-start'&&error.status===429)return result(429,{error:'Too many requests. Please wait before requesting another code.'});
       if(error instanceof SyntaxError)return result(400,{error:'Invalid request.'});
       // A stale access token must not discard a still-usable refresh token.
       if(action==='session'&&(error.status===401||error.status===403))return result(401,{error:'Sign in again.'},[cookie(COOKIE.access,'',0)]);

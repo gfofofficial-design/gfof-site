@@ -191,6 +191,26 @@
     Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
 
 [[redirects]]
+  from = "/api/federation-account/email-start"
+  to = "/.netlify/functions/federation-account/email-start"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    aggregate_by = ["ip", "domain"]
+    window_limit = 10
+    window_size = 60
+
+[[redirects]]
+  from = "/api/federation-account/email-verify"
+  to = "/.netlify/functions/federation-account/email-verify"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    aggregate_by = ["ip", "domain"]
+    window_limit = 10
+    window_size = 60
+
+[[redirects]]
   from = "/api/federation-account/oauth"
   to = "/.netlify/functions/federation-account/oauth"
   status = 200

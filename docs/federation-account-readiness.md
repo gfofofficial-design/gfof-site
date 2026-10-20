@@ -91,8 +91,9 @@ Never enable preview signups against the production identity project.
 
 Configure provider rate limits and abuse controls, minimal scopes, user support,
 privacy/retention/deletion policy, backup/recovery and cost ceilings before
-registration opens. No email sign-in is implemented in this first build; it
-needs separately configured delivery and abuse controls.
+registration opens. The original build had no email sign-in. The October 20
+[email-first candidate](federation-email-release-20261020.md) adds a disabled-by-default
+code flow; delivery, managed signup policy and hosted acceptance remain pending.
 
 The draft Netlify redirects limit OAuth starts to 10 requests per minute per
 IP/domain and other account API paths to 60 requests per minute per IP/domain.
@@ -333,3 +334,13 @@ retry, provider setting, backend cookie rule, registration or account data path
 was added. These tests establish synthetic page behavior, not real cookie or
 provider acceptance. Google warning clearance and actual browser acceptance
 remain pending; this branch stays draft.
+
+
+## October 20 email-first direction
+
+The owner selected email sign-in as the account-launch path while Google work
+continues. See the [current candidate and exact release dependencies](federation-email-release-20261020.md).
+Custom SMTP is currently disabled. No email flag, template, signup rule or hosted
+account setting was changed by preparing this candidate. Older Free/backups
+observations above remain historical; current dashboard evidence and its limits
+are recorded in the dated email packet.

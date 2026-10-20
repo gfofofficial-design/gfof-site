@@ -3,6 +3,10 @@
  const message=document.getElementById('account-message');
  const buttons=['google','apple'].map(p=>document.getElementById(p));
  const logout=document.getElementById('logout');
+ const emailForm=document.getElementById('email-form'),codeForm=document.getElementById('email-code-form');
+ const emailInput=document.getElementById('email-address'),codeInput=document.getElementById('email-code');
+ const emailSend=document.getElementById('email-send'),emailVerify=document.getElementById('email-verify');
+ let emailEnabled=false,emailChallenge=null,emailNeedsReload=false;
  let busy=false, generation=0, signedOut=false, providers=[], channel=null;
  const sensitiveFragment=/(?:^#|&)(?:access_token|refresh_token|token_hash|provider_token|provider_refresh_token|error_code)=/i.test(location.hash||'');
  if(sensitiveFragment){
@@ -21,8 +25,8 @@
  const locks=globalThis.navigator?.locks;
  const coordinated=typeof locks?.request==='function';
  const current=turn=>turn===generation&&!signedOut;
- function buttonState(){buttons.forEach(b=>{b.disabled=busy||!providers.includes(b.id);});}
- function hideIdentity(){document.getElementById('identity').hidden=true;document.getElementById('member-email').textContent='';logout.hidden=true;buttons.forEach(b=>{b.hidden=false;});buttonState();}
+ function buttonState(){buttons.forEach(b=>{b.disabled=busy||emailNeedsReload||!providers.includes(b.id);});if(emailSend)emailSend.disabled=busy||!emailEnabled;if(emailVerify)emailVerify.disabled=busy||!emailEnabled||!emailChallenge;}
+ function hideIdentity(){document.getElementById('identity').hidden=true;document.getElementById('member-email').textContent='';logout.hidden=true;buttons.forEach(b=>{b.hidden=false;});if(emailForm)emailForm.hidden=!emailEnabled;if(codeForm)codeForm.hidden=!emailEnabled||!emailChallenge;buttonState();}
  function signedOutMessage(revoked){return revoked?'Signed out.':'Signed out of this browser. Remote session revocation could not be confirmed.';}
  // Keep all account-page operations that can update cookies in one same-origin
  // browser lock. A waiting tab reads the current cookies only after acquiring it.
@@ -37,7 +41,7 @@
   const controller=new AbortController();
   // The server can perform two 8-second provider reads for refresh and three
   // for logout. Leave room for those existing paths without adding any retry.
-  const timeoutMs=action==='logout'?30000:action==='refresh'?20000:12000;
+  const timeoutMs=action==='logout'?30000:['refresh','email-verify'].includes(action)?20000:12000;
   let onAbort;
   const interrupted=new Promise((_,reject)=>{
    onAbort=()=>reject(Error('Account request took too long. Please try again later.'));
@@ -55,7 +59,7 @@
    })(),interrupted]);
   }finally{clearTimeout(timer);controller.signal.removeEventListener('abort',onAbort);}
  }
- function signedIn(user){buttons.forEach(b=>{b.hidden=true;});logout.hidden=false;document.getElementById('identity').hidden=false;document.getElementById('member-email').textContent=user.email||'Signed-in member';message.textContent='You are signed in. Staking and lending remain in preparation.';}
+ function signedIn(user){emailChallenge=null;if(codeInput)codeInput.value='';if(emailForm)emailForm.hidden=true;if(codeForm)codeForm.hidden=true;buttons.forEach(b=>{b.hidden=true;});logout.hidden=false;document.getElementById('identity').hidden=false;document.getElementById('member-email').textContent=user.email||'Signed-in member';message.textContent='You are signed in. Staking and lending remain in preparation.';}
  async function start(){
   if(busy||signedOut)return;
   const turn=++generation;hideIdentity();
@@ -68,9 +72,9 @@
     if(signedOut&&!providers.length){providers=cfg.enabled&&Array.isArray(cfg.providers)?cfg.providers:[];buttonState();}
     return;
    }
-   providers=cfg.enabled&&Array.isArray(cfg.providers)?cfg.providers:[];buttonState();
+   providers=cfg.enabled&&Array.isArray(cfg.providers)?cfg.providers:[];emailEnabled=!emailNeedsReload&&cfg.enabled===true&&cfg.emailEnabled===true;hideIdentity();
    if(!cfg.enabled){message.textContent='Accounts are being prepared. Google and Apple sign-in are not open yet.';return;}
-   message.textContent=failedSignin?'Sign-in did not complete. Try again.':providers.length?'Choose an available sign-in option.':'Provider setup is in progress. Sign-in is not open yet.';
+   message.textContent=emailNeedsReload?'Reload this page before starting another sign-in.':failedSignin?'Sign-in did not complete. Try again.':emailEnabled?'Enter your email to request a one-time sign-in code.':providers.length?'Choose an available sign-in option.':'Provider setup is in progress. Sign-in is not open yet.';
    if(cfg.hasSessionCookie===false)return;
    try{
     let session;
@@ -108,13 +112,35 @@
    channel=new BroadcastChannel('gf-account-status');
    channel.onmessage=event=>{
     if(event.data?.type!=='signed-out'||typeof event.data.remoteRevoked!=='boolean')return;
-    generation++;signedOut=true;hideIdentity();message.textContent=signedOutMessage(event.data.remoteRevoked);
+    generation++;signedOut=true;emailChallenge=null;if(codeInput)codeInput.value='';hideIdentity();message.textContent=signedOutMessage(event.data.remoteRevoked);
    };
   }catch{channel=null;}
  }
  connectChannel();
+ emailForm?.addEventListener('submit',async event=>{
+  event.preventDefault();if(busy||!emailEnabled)return;
+  busy=true;signedOut=false;const turn=++generation;emailChallenge=null;hideIdentity();message.textContent='Requesting your email code…';
+  try{await withSessionLock(async()=>{
+   if(!current(turn))return;
+   const r=await api('email-start',{email:emailInput.value.trim()});if(!current(turn))return;
+   if(r.sent!==true||typeof r.challenge!=='string'||!/^[A-Za-z0-9_-]{32}$/.test(r.challenge))throw Error('Email sign-in is temporarily unavailable.');
+   emailChallenge=r.challenge;codeInput.value='';codeForm.hidden=false;message.textContent='If this address is eligible, check your inbox for a code. Enter it here within ten minutes.';codeInput.focus();
+  });}catch(e){if(current(turn))message.textContent=e.message;}
+  finally{busy=false;buttonState();}
+ });
+ codeForm?.addEventListener('submit',async event=>{
+  event.preventDefault();if(busy||!emailEnabled||!emailChallenge)return;
+  const code=codeInput.value.trim();if(!/^\d{6}$/.test(code)){message.textContent='Enter the six-digit code from your email.';return;}
+  busy=true;signedOut=false;const turn=++generation,challenge=emailChallenge;emailChallenge=null;codeInput.value='';buttonState();message.textContent='Confirming your email code…';
+  try{await withSessionLock(async()=>{
+   if(!current(turn))return;
+   const r=await api('email-verify',{code,challenge});if(!current(turn))return;if(r.ok!==true)throw Error('Email sign-in could not be confirmed.');
+   const session=await api('session');if(current(turn))signedIn(session.user);
+  });}catch{if(current(turn)){codeForm.hidden=true;message.textContent='Sign-in could not be confirmed. Reload this page before requesting a new code.';emailEnabled=false;emailNeedsReload=true;}}
+  finally{busy=false;buttonState();}
+ });
  buttons.forEach(b=>b.addEventListener('click',async()=>{
-  if(busy||!providers.includes(b.id))return;
+  if(busy||emailNeedsReload||!providers.includes(b.id))return;
   busy=true;signedOut=false;const turn=++generation;hideIdentity();message.textContent='Opening your sign-in provider…';
   let navigating=false;
   try{await withSessionLock(async()=>{
@@ -126,7 +152,7 @@
  }));
  logout.addEventListener('click',async()=>{
   if(busy)return;
-  busy=true;generation++;signedOut=true;hideIdentity();logout.hidden=false;logout.disabled=true;message.textContent='Signing out…';
+  busy=true;generation++;signedOut=true;emailChallenge=null;if(codeInput)codeInput.value='';hideIdentity();logout.hidden=false;logout.disabled=true;message.textContent='Signing out…';
   try{
    const r=await withSessionLock(()=>api('logout',{}));
    if(r.signedOut!==true)throw Error('logout');
@@ -137,7 +163,7 @@
   finally{busy=false;logout.disabled=false;buttonState();}
  });
  document.addEventListener?.('visibilitychange',()=>{if(document.visibilityState==='visible')start();});
- globalThis.addEventListener?.('pagehide',()=>{try{channel?.close();}catch{}channel=null;generation++;hideIdentity();});
+ globalThis.addEventListener?.('pagehide',()=>{try{channel?.close();}catch{}channel=null;generation++;emailChallenge=null;if(codeInput)codeInput.value='';hideIdentity();});
  globalThis.addEventListener?.('pageshow',event=>{connectChannel();if(event.persisted){busy=false;buttonState();start();}});
  if(failedSignin){message.textContent='Sign-in did not complete. Try again.';history.replaceState(null,'','/account');}
  start();
