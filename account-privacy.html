@@ -35,10 +35,11 @@
   </section>
   <section aria-labelledby="records-title">
     <h2 id="records-title">Service records and recovery</h2>
-    <p>Netlify hosts the site and server functions; Supabase and Google provide sign-in services. Their operational and security records can include request times, IP addresses, browser information, and sign-in events under their own policies. The Federation application does not intentionally log authentication tokens, passwords, OAuth codes, or wallet request bodies.</p>
+    <p>Netlify hosts the site and server functions; Supabase and Google provide sign-in services. For email sign-in, Supabase sends your destination email address and the sign-in message, including its temporary code, to Resend for delivery.</p>
+    <p>These providers’ operational and security records can include request times, IP addresses, browser information, sign-in events, and email delivery records under their own policies. The Federation application does not intentionally log authentication tokens, passwords, email sign-in codes, OAuth codes, or wallet request bodies.</p>
     <p>Account information can remain in protected recovery backups after deletion from the active service. A minimal deletion record—account identifier, case reference, deletion date and outcome—is retained separately while a retained recovery copy could reintroduce that account. It is used to keep a deleted account out of a restored service.</p>
     <p>A provider’s dashboard log-access window is not a promise that all underlying copies have been erased. We do not promise immediate deletion from every provider log or backup.</p>
-    <p><a href="https://supabase.com/privacy">Supabase privacy policy</a> · <a href="https://policies.google.com/privacy">Google privacy policy</a> · <a href="https://www.netlify.com/privacy/">Netlify privacy policy</a></p>
+    <p><a href="https://supabase.com/privacy">Supabase privacy policy</a> · <a href="https://policies.google.com/privacy">Google privacy policy</a> · <a href="https://resend.com/legal/privacy-policy">Resend privacy policy</a> · <a href="https://www.netlify.com/privacy/">Netlify privacy policy</a></p>
   </section>
   <section aria-labelledby="requests-title">
     <h2 id="requests-title">Account questions and deletion</h2>
