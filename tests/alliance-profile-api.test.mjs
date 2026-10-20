@@ -271,3 +271,30 @@ test('an own-profile read with unavailable review status withholds profile data'
  const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>{throw Error('PRIVATE');}}});
  try{const r=await f.api(request());assert.equal(r.status,503);assert.doesNotMatch(JSON.stringify(await body(r)),/Fixture Explorer|PRIVATE/);}finally{f.api.close();f.signed.client.close();}
 });
+
+test('a receipt for another profile cannot describe the current own-profile response',async()=>{
+ const receipt={profileId:'33333333-3333-4333-8333-333333333333',sequence:1,pending:true,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)};
+ for(const profile of [row(),null]){
+ const f=fixture({profile,ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>receipt}});
+ try{const r=await f.api(request());assert.equal(r.status,503);const b=await body(r);assert.equal(b.mutation,undefined);assert.doesNotMatch(JSON.stringify(b),/Fixture Explorer|33333333|aaaaaaaa|bbbbbbbb/);assert.equal(f.writes,0);}
+ finally{f.api.close();f.signed.client.close();}
+ }
+});
+
+test('receipt binding uses profile identity rather than the separate account identity',async()=>{
+ const profileId='33333333-3333-4333-8333-333333333333';
+ for(const committed of [false,true]){
+ const profile=committed?{...row(),id:profileId}:null;
+ const receipt={profileId,sequence:committed?1:0,pending:committed,inputSha256:committed?'a'.repeat(64):null,resultSha256:committed?'b'.repeat(64):null};
+ const f=fixture({profile,ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>receipt}});
+ try{const r=await f.api(request());assert.equal(r.status,200);assert.deepEqual(await body(r),{profile,writeState:committed?'review_required':'available'});}
+ finally{f.api.close();f.signed.client.close();}
+ }
+});
+
+test('a mismatched receipt after save withholds success and pauses later writes',async()=>{
+ let saved=false,writes=0;
+ const f=fixture({ledger:{authorizeAccountSession:async(actorId,sessionId)=>({actorId,sessionId}),profileWriteStatusSession:async()=>saved?{profileId:'33333333-3333-4333-8333-333333333333',sequence:1,pending:true,inputSha256:'a'.repeat(64),resultSha256:'b'.repeat(64)}:null},creation:{profile:async()=>{saved=true;writes++;return row();}}});
+ try{const r=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(r.status,503);const b=await body(r);assert.equal(b.mutation,'unknown');assert.doesNotMatch(JSON.stringify(b),/Fixture Explorer|33333333|aaaaaaaa|bbbbbbbb/);const retry=await f.api(request('/me',{method:'POST',body:input()}));assert.equal(retry.status,503);assert.equal((await body(retry)).error.code,'profile_changes_paused');assert.equal(writes,1);}
+ finally{f.api.close();f.signed.client.close();}
+});
