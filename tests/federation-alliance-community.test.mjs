@@ -187,7 +187,7 @@ test('intentionally clearing a contribution does not resurrect it after a filter
  b.get('hub-challenge-filter').value='invited';await b.get('hub-challenge-filter').emit('change');b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');assert.equal(b.get('hub-proof-'+key).value,'');b.api.dispose();
 });
 
-async function draftFixture(){const b=fixture();await b.create();await b.get('hub-examples').emit('click');return {b,self:b.api.getState().self,other:b.api.getState().members.find(m=>m.example).id};}
+async function draftFixture(){const b=fixture();await b.create();await b.get('hub-examples').emit('click');const other=b.api.getState().members.find(m=>m.example).id;b.get('hub-challenge-target').value=other;return {b,self:b.api.getState().self,other};}
 async function switchPreview(b,id){b.get('hub-actor').value=id;await b.get('hub-actor').emit('change');}
 test('idea drafts and categories follow their preview author, including return-to-own',async()=>{
  const {b,self,other}=await draftFixture();b.get('hub-idea-title').value='My unfinished evidence guide';b.get('hub-idea-detail').value='Explain which public sources support the guide.';b.get('hub-idea-category').value='research';
@@ -253,5 +253,40 @@ test('revealing a new invitation preserves an unfinished contribution hidden by 
  const {b,key}=await activeFixture();b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');b.get('hub-proof-'+key).value='An unfinished contribution that must survive a new invitation.';await b.get('hub-proof-'+key).emit('input');
  b.get('hub-challenge-kit').value='feedback';await b.get('hub-challenge-kit').emit('change');await b.get('hub-challenge-form').emit('submit');assert.equal(b.get('hub-challenge-filter').value,'invited');assert.equal(b.document.getElementById('hub-proof-'+key),null);
  b.get('hub-challenge-filter').value='active';await b.get('hub-challenge-filter').emit('change');assert.equal(b.get('hub-proof-'+key).value,'An unfinished contribution that must survive a new invitation.');b.api.dispose();
+});
+
+test('invitation recipients require an explicit choice while directory Challenge selects the named member',async()=>{
+ const b=fixture();await b.create();await b.get('hub-examples').emit('click');const other=b.api.getState().members.find(m=>m.example);
+ assert.equal(b.get('hub-challenge-target').value,'');assert.match(b.get('hub-challenge-target').children[0].textContent,/Choose a preview member/);
+ await b.find('hub-kits','Use Find the friction challenge template').emit('click');assert.equal(b.get('hub-challenge-target').value,'');
+ await b.find('hub-members','Challenge '+other.name).emit('click');assert.equal(b.get('hub-challenge-target').value,other.id);assert.equal(b.document.activeElement,b.get('hub-challenge-target'));
+ await switchPreview(b,other.id);assert.equal(b.get('hub-challenge-target').value,'');b.api.dispose();
+});
+test('hiding the intended recipient clears the choice without substituting another member',async()=>{
+ const {b,self,other}=await draftFixture();const note='An unfinished brief specifically intended for the selected member.';b.get('hub-challenge-note').value=note;
+ await b.find('hub-members','Hide '+b.api.getState().members.find(m=>m.id===other).name+' in this preview').emit('click');assert.equal(b.get('hub-challenge-target').value,'');assert.equal(b.get('hub-challenge-note').value,note);assert.match(b.get('hub-challenge-status').textContent,/recipient is unavailable/);
+ await b.get('hub-profile-form').emit('submit');assert.equal(b.get('hub-challenge-target').value,'');
+ const remaining=b.api.getState().members.find(m=>m.example&&m.id!==other);await switchPreview(b,remaining.id);await switchPreview(b,self);assert.equal(b.get('hub-challenge-target').value,'');assert.equal(b.get('hub-challenge-note').value,note);b.api.dispose();
+});
+test('a missing recipient preserves the draft until an available recipient is intentionally selected',async()=>{
+ const {b,other}=await draftFixture();b.get('hub-challenge-target').value='';b.get('hub-challenge-filter').value='active';b.get('hub-challenge-note').value='Keep this brief until I choose who should receive it.';b.get('hub-challenge-target').focus();await b.get('hub-challenge-form').emit('submit');
+ assert.equal(b.api.getState().challenges.length,0);assert.match(b.get('hub-challenge-status').textContent,/Choose an available preview member/);assert.equal(b.get('hub-challenge-filter').value,'active');assert.equal(b.document.activeElement,b.get('hub-challenge-target'));assert.equal(b.get('hub-challenge-note').value,'Keep this brief until I choose who should receive it.');
+ b.get('hub-challenge-target').value=other;await b.get('hub-challenge-form').emit('submit');assert.equal(b.api.getState().challenges[0].to,other);assert.equal(b.api.getState().challenges[0].note,'Keep this brief until I choose who should receive it.');b.api.dispose();
+});
+test('restoring a draft whose recipient was unlisted leaves the recipient blank',async()=>{
+ const {b,self,other}=await draftFixture();await switchPreview(b,other);b.get('hub-challenge-target').value=self;b.get('hub-challenge-note').value='A fictional invitation specifically intended for the original profile.';
+ await b.get('hub-return').emit('click');b.get('hub-listed').checked=false;await b.get('hub-profile-form').emit('submit');await switchPreview(b,other);
+ assert.equal(b.get('hub-challenge-target').value,'');assert.equal(b.get('hub-challenge-target').children.some(n=>n.value===self),false);assert.match(b.get('hub-challenge-note').value,/specifically intended/);assert.match(b.get('hub-challenge-status').textContent,/recipient is unavailable/);b.api.dispose();
+});
+test('unhiding a member does not automatically select them for a retained invitation draft',async()=>{
+ const {b,other}=await draftFixture();const examples=b.api.getState().members.filter(m=>m.example);b.get('hub-challenge-note').value='A brief to retain while no recipients are available.';
+ for(const m of examples)await b.find('hub-members','Hide '+m.name+' in this preview').emit('click');assert.equal(b.get('hub-challenge-fields').disabled,true);
+ const restored=examples.find(m=>m.id!==other);await b.find('hub-blocks','Show '+restored.name).emit('click');assert.equal(b.get('hub-challenge-fields').disabled,false);assert.equal(b.get('hub-challenge-target').value,'');assert.equal(b.get('hub-challenge-note').value,'A brief to retain while no recipients are available.');b.api.dispose();
+});
+test('hiding and showing a participant preserves challenge history and its own unfinished contribution',async()=>{
+ const {b,target,key}=await activeFixture();b.get('hub-proof-'+key).value='A finished contribution ready for the other participant.';await proofForm(b,key).emit('submit');
+ b.get('hub-proof-'+key).value='A separate unfinished contribution to keep working on.';await b.get('hub-proof-'+key).emit('input');const oldForm=proofForm(b,key);
+ await b.find('hub-members','Hide '+target.name+' in this preview').emit('click');assert.equal(b.api.getState().challenges.length,0);assert.equal(b.document.getElementById('hub-proof-'+key),null);await oldForm.emit('submit');
+ await b.find('hub-blocks','Show '+target.name).emit('click');assert.equal(b.api.getState().challenges[0].proofs.length,1);assert.equal(b.get('hub-proof-'+key).value,'A separate unfinished contribution to keep working on.');b.api.dispose();
 });
 

@@ -148,3 +148,11 @@ Validation failure leaves filters, editable text and keyboard position unchanged
 
 All 130 combined Alliance tests pass locally under Node24, including 50 Community Hub tests. Six additional cases cover mismatched and matching filters, visible focused results, unchanged validation failures, and contribution-draft continuity across the automatic filter change. Five fail against the preceding module. The change is limited to the Community Hub module, tests and this contract; updated-preview browser checks follow deployment.
 
+## Explicit invitation recipients — October 20
+
+Chrome reproduced a draft intended for Nova silently switching to Echo when Nova was hidden. The draft's original brief remained, and the form stayed enabled. The previous recipient picker automatically selected the first available member whenever its options were rebuilt.
+
+The picker now starts with Choose a preview member. It preserves a valid explicit choice; hiding or unlisting that recipient clears the choice and explains that the brief is kept. Other renders, identity changes and unhiding do not silently substitute a different member. Creating an invitation without a recipient gives a specific instruction while preserving the draft, current board filter and keyboard position. Selecting an available recipient then permits the usual invitation flow. A directory card's named Challenge button remains an intentional selection of that member.
+
+All 136 combined Alliance tests pass locally under Node24, including 56 Community Hub tests. Six additional cases cover explicit and named selection, hiding the selected member, missing-recipient validation and retry, restoring a draft for an unlisted recipient, unhiding without automatic selection, and preservation of challenge history/contribution drafts through hiding and showing. Five fail against the preceding module. The shared test setup now explicitly selects its intended recipient. This increment changes only the Community Hub module, tests and this contract; the core model and hosted services are unchanged.
+

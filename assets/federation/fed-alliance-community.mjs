@@ -72,13 +72,14 @@ export function mountCommunityHub(document,options={}){
   function renderKits(){const kits=matchingKits(get('hub-kit-filter').value);get('hub-kits').replaceChildren(...kits.map(k=>{const card=element('article','hub-kit');card.append(element('span','eyebrow',k.category+' // CHALLENGE TEMPLATE'),element('h4','',k.title),element('p','',k.brief),element('p','small','Suggested goal: '+kitGoalLabel(k,k.goal)),button('Use this template',()=>{get('hub-challenge-kit').value=k.id;kitChanged();get('hub-challenge-target').focus();},'Use '+k.title+' challenge template'));return card;}));}
   function renderTargets(preferred){
     const old=preferred??get('hub-challenge-target').value;const targets=store.directory(actor).filter(m=>m.id!==actor);
-    get('hub-challenge-target').replaceChildren(...(targets.length?targets.map(m=>option(m.id,m.name+(m.community?' · '+m.community:''))):[option('','Add fictional crew to try an invitation')]));
+    get('hub-challenge-target').replaceChildren(...(targets.length?[option('','Choose a preview member'),...targets.map(m=>option(m.id,m.name+(m.community?' · '+m.community:'')))]:[option('','Add fictional crew to try an invitation')]));
     if(targets.some(m=>m.id===old))get('hub-challenge-target').value=old;
     get('hub-challenge-fields').disabled=!actor||!targets.length;
     get('hub-idea-fields').disabled=!actor;
     const status=get('hub-challenge-status');
     if(!actor)status.textContent='Create a preview profile to try an invitation.';
     else if(!targets.length)status.textContent='Add fictional crew, or unhide another preview member, to try an invitation.';
+    else if(old&&!targets.some(m=>m.id===old))status.textContent='The previous preview recipient is unavailable. Choose another member; your brief is kept.';
     else if(/^(Create a|Add fictional)/.test(status.textContent))status.textContent='Choose a template and a member. An invitation needs their acceptance in this preview.';
   }
   function progress(c,owner){const count=c.proofs.filter(p=>p.owner===owner&&p.status==='acknowledged').length;const box=element('div','hub-score');box.append(element('strong','',name(owner)),element('span','',count+' / '+c.goal+' acknowledged'));const meter=element('progress');meter.max=c.goal;meter.value=count;meter.setAttribute('aria-label',name(owner)+' preview acknowledged contributions');box.append(meter);return box;}
@@ -140,7 +141,8 @@ export function mountCommunityHub(document,options={}){
   listen(get('hub-return'),'click',()=>{switchActor(self);openPanel('profile',true);announce('Returned to your own local preview profile.');});
   listen(get('hub-member-search'),'input',renderDirectory);listen(get('hub-kit-filter'),'change',renderKits);listen(get('hub-challenge-kit'),'change',kitChanged);
   listen(get('hub-challenge-form'),'submit',event=>{event.preventDefault();try{
-    const c=store.invite(actor,get('hub-challenge-target').value,{kit:get('hub-challenge-kit').value,scope:get('hub-challenge-scope').value,days:Number(get('hub-challenge-days').value),goal:Number(get('hub-challenge-goal').value),note:get('hub-challenge-note').value});
+    const target=get('hub-challenge-target').value;if(!target)throw Error('Choose an available preview member before creating an invitation.');
+    const c=store.invite(actor,target,{kit:get('hub-challenge-kit').value,scope:get('hub-challenge-scope').value,days:Number(get('hub-challenge-days').value),goal:Number(get('hub-challenge-goal').value),note:get('hub-challenge-note').value});
     const filter=get('hub-challenge-filter'),changed=filter.value!=='all'&&filter.value!==c.status;if(changed)filter.value=c.status;
     get('hub-challenge-note').value='';get('hub-challenge-status').textContent='Preview invitation created. Switch to the invited fictional identity to accept or decline. Nothing was sent.'+(changed?' Showing awaiting invitations so your new invitation is visible.':'');
     render();get('hub-challenge-card-'+c.id)?.focus();
