@@ -1,6 +1,11 @@
 # Galactic Federation of Finance — Netlify configuration
 # Security headers, API redirects, clean-URL rewrites.
 
+# Review the restricted static output on previews before adopting it for production.
+[context.deploy-preview]
+  command = "node scripts/build-static-publish.mjs"
+  publish = "dist"
+
 # ─── Security headers (applied to every response) ───
 [[headers]]
   for = "/*"
@@ -273,4 +278,3 @@
     X-Frame-Options = "DENY"
     X-Robots-Tag = "noindex"
     Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self' blob:; connect-src 'none'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
-
