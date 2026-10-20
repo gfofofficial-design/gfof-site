@@ -94,7 +94,7 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
           return result(202,{sent:true,challenge,expiresIn:600},[cookie(COOKIE.flow,JSON.stringify({kind:'email',email,challenge,created:now()}),600)]);
         }
         let flow;try{flow=JSON.parse(jar[COOKIE.flow]||'null');}catch{}
-        if(!exact(['code','challenge'])||typeof body.code!=='string'||!/^\d{6}$/.test(body.code)||
+        if(!exact(['code','challenge'])||typeof body.code!=='string'||!/^\d{8}$/.test(body.code)||
           typeof body.challenge!=='string'||!/^[A-Za-z0-9_-]{32}$/.test(body.challenge)||
           !flow||flow.kind!=='email'||!validEmail(flow.email)||!equal(flow.challenge,body.challenge)||
           !Number.isFinite(flow.created)||now()<flow.created||now()-flow.created>600000)return result(400,{error:'Request a new email code and try again.'},clearFlow);
@@ -158,4 +158,3 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
 }
 exports.handler=createHandler();
 exports.createHandler=createHandler;
-

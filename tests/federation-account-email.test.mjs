@@ -45,25 +45,25 @@ test('ineligible addresses have the same generic send response without leaking p
  const outage=fixture({otpStatus:503});assert.equal((await outage.start()).statusCode,502);
 });
 test('verified email establishes only HttpOnly cookies after an independent confirmed-user lookup',async()=>{
- const f=fixture(),start=await f.start(),r=await f.handler(event('email-verify',{code:'123456',challenge:parse(start).challenge},{jar:jar(start)}));
- assert.equal(r.statusCode,200);assert.deepEqual(parse(r),{ok:true});assert.equal(f.calls.length,3);assert.deepEqual(JSON.parse(f.calls[1].init.body),{email,token:'123456',type:'email'});assert.equal(f.calls[2].init.headers.Authorization,'Bearer synthetic-access');
- assert.equal(r.headers['Cache-Control'],'private, no-store');assert.equal(r.multiValueHeaders['Set-Cookie'].length,3);assert.ok(r.multiValueHeaders['Set-Cookie'].every(c=>c.includes('Secure; HttpOnly; SameSite=Lax')));assert.doesNotMatch(r.body,/123456|synthetic|member@example/);
+ const f=fixture(),start=await f.start(),r=await f.handler(event('email-verify',{code:'12345678',challenge:parse(start).challenge},{jar:jar(start)}));
+ assert.equal(r.statusCode,200);assert.deepEqual(parse(r),{ok:true});assert.equal(f.calls.length,3);assert.deepEqual(JSON.parse(f.calls[1].init.body),{email,token:'12345678',type:'email'});assert.equal(f.calls[2].init.headers.Authorization,'Bearer synthetic-access');
+ assert.equal(r.headers['Cache-Control'],'private, no-store');assert.equal(r.multiValueHeaders['Set-Cookie'].length,3);assert.ok(r.multiValueHeaders['Set-Cookie'].every(c=>c.includes('Secure; HttpOnly; SameSite=Lax')));assert.doesNotMatch(r.body,/12345678|synthetic|member@example/);
 });
 test('email verification rejects absent, duplicated, foreign, expired and future flow cookies before network',async()=>{
  for(const change of ['missing','duplicate','foreign','expired','future','oauth']){
   let clock=2000000;const f=fixture({clock:()=>clock}),start=await f.start(),challenge=parse(start).challenge;
   let cookies=jar(start);if(change==='missing')cookies='';if(change==='duplicate')cookies+='; '+cookies;if(change==='foreign')cookies='__Host-gf-flow='+encodeURIComponent(JSON.stringify({kind:'email',email,challenge:'x'.repeat(32),created:clock}));if(change==='expired')clock+=600001;if(change==='future')clock--;if(change==='oauth')cookies='__Host-gf-flow='+encodeURIComponent(JSON.stringify({state:challenge,verifier:'v'.repeat(43),created:clock}));
-  const r=await f.handler(event('email-verify',{code:'123456',challenge},{jar:cookies}));assert.equal(r.statusCode,400,change);assert.equal(f.calls.length,1,change);assert.match(r.multiValueHeaders['Set-Cookie'][0],/Max-Age=0/);
+  const r=await f.handler(event('email-verify',{code:'12345678',challenge},{jar:cookies}));assert.equal(r.statusCode,400,change);assert.equal(f.calls.length,1,change);assert.match(r.multiValueHeaders['Set-Cookie'][0],/Max-Age=0/);
  }
 });
 test('malformed code and extra identity fields cannot select a different account',async()=>{
- for(const body of [{code:'12345'},{code:123456},{code:'123456',email:'other@example.invalid'},{code:'123456',type:'recovery'}]){
+ for(const body of [{code:'12345'},{code:'123456'},{code:'1234567'},{code:'123456789'},{code:12345678},{code:'12345678',email:'other@example.invalid'},{code:'12345678',type:'recovery'}]){
   const f=fixture(),start=await f.start(),r=await f.handler(event('email-verify',{challenge:parse(start).challenge,...body},{jar:jar(start)}));assert.equal(r.statusCode,400);assert.equal(f.calls.length,1);
  }
 });
 test('wrong or unconfirmed returned identities and malformed sessions never set session cookies',async()=>{
  for(const options of [{verified:{...user,email:'other@example.invalid'}},{verified:{...user,email_confirmed_at:null}},{verified:{...user,is_anonymous:true}},{verify:{...tokens,refresh_token:null}},{verifyStatus:400},{verifyStatus:429}]){
-  const f=fixture(options),start=await f.start(),r=await f.handler(event('email-verify',{code:'123456',challenge:parse(start).challenge},{jar:jar(start)}));assert.ok([401,429,502].includes(r.statusCode));assert.equal(r.multiValueHeaders['Set-Cookie'].length,1);assert.match(r.multiValueHeaders['Set-Cookie'][0],/^__Host-gf-flow=.*Max-Age=0/);assert.doesNotMatch(r.body,/other@example|synthetic-access/);
+  const f=fixture(options),start=await f.start(),r=await f.handler(event('email-verify',{code:'12345678',challenge:parse(start).challenge},{jar:jar(start)}));assert.ok([401,429,502].includes(r.statusCode));assert.equal(r.multiValueHeaders['Set-Cookie'].length,1);assert.match(r.multiValueHeaders['Set-Cookie'][0],/^__Host-gf-flow=.*Max-Age=0/);assert.doesNotMatch(r.body,/other@example|synthetic-access/);
  }
 });
 const source=readFileSync(new URL('../assets/federation/fed-account.js',import.meta.url),'utf8');
@@ -79,19 +79,19 @@ function page({emailEnabled=true,routes={}}={}){
 }
 test('email-only page asks for a code then verifies the cookie session without OAuth or browser token storage',async()=>{
  const p=page();await tick();assert.equal(p.elements['email-form'].hidden,false);p.elements['email-address'].value=email;await p.submit('email-form');assert.equal(p.elements['email-code'].focused,true);assert.equal(p.elements['email-code-form'].hidden,false);
- p.elements['email-code'].value='123456';await p.submit('email-code-form');assert.deepEqual(p.calls.map(c=>c.action),['config','email-start','email-verify','session']);assert.equal(p.elements['email-code'].value,'');assert.equal(p.elements.identity.hidden,false);assert.equal(p.elements['email-form'].hidden,true);assert.equal(p.elements['member-email'].textContent,email);p.pagehide();
+ p.elements['email-code'].value='12345678';await p.submit('email-code-form');assert.deepEqual(p.calls.map(c=>c.action),['config','email-start','email-verify','session']);assert.equal(p.elements['email-code'].value,'');assert.equal(p.elements.identity.hidden,false);assert.equal(p.elements['email-form'].hidden,true);assert.equal(p.elements['member-email'].textContent,email);p.pagehide();
 });
 test('disabled email and invalid codes cannot dispatch sign-in requests',async()=>{
  const closed=page({emailEnabled:false});await tick();await closed.submit('email-form');assert.equal(closed.calls.length,1);assert.equal(closed.elements['email-form'].hidden,true);closed.pagehide();
  const p=page();await tick();p.elements['email-address'].value=email;await p.submit('email-form');p.elements['email-code'].value='123';await p.submit('email-code-form');assert.equal(p.calls.length,2);p.pagehide();
 });
 test('uncertain email verification clears code, requests reload and does not retry or fetch a session',async()=>{
- const p=page({routes:{'email-verify':async()=>{throw Error('network');}}});await tick();p.elements['email-address'].value=email;await p.submit('email-form');p.elements['email-code'].value='123456';await p.submit('email-code-form');assert.equal(p.elements.identity.hidden,true);assert.match(p.elements['account-message'].textContent,/Reload/);assert.equal(p.elements['email-code'].value,'');const n=p.calls.length;await p.submit('email-form');assert.equal(p.calls.length,n);p.pagehide();
+ const p=page({routes:{'email-verify':async()=>{throw Error('network');}}});await tick();p.elements['email-address'].value=email;await p.submit('email-form');p.elements['email-code'].value='12345678';await p.submit('email-code-form');assert.equal(p.elements.identity.hidden,true);assert.match(p.elements['account-message'].textContent,/Reload/);assert.equal(p.elements['email-code'].value,'');const n=p.calls.length;await p.submit('email-form');assert.equal(p.calls.length,n);p.pagehide();
 });
 test('late email send response cannot repopulate the form after pagehide',async()=>{
  let release;const gate=new Promise(r=>release=r);const p=page({routes:{'email-start':async()=>{await gate;return {ok:true,status:202,json:async()=>({sent:true,challenge:'c'.repeat(32)})};}}});await tick();p.elements['email-address'].value=email;const sending=p.submit('email-form');await tick();p.pagehide();release();await sending;assert.equal(p.elements['email-code-form'].hidden,true);assert.equal(p.elements.identity.hidden,true);
 });
 
 test('visibility readback cannot reopen sign-in after uncertain verification',async()=>{
- const p=page({routes:{'email-verify':async()=>{throw Error('network');}}});await tick();p.elements['email-address'].value=email;await p.submit('email-form');p.elements['email-code'].value='123456';await p.submit('email-code-form');p.visible();await tick();const n=p.calls.length;await p.submit('email-form');assert.equal(p.calls.length,n);assert.match(p.elements['account-message'].textContent,/Reload/);assert.equal(p.elements['email-form'].hidden,true);p.pagehide();
+ const p=page({routes:{'email-verify':async()=>{throw Error('network');}}});await tick();p.elements['email-address'].value=email;await p.submit('email-form');p.elements['email-code'].value='12345678';await p.submit('email-code-form');p.visible();await tick();const n=p.calls.length;await p.submit('email-form');assert.equal(p.calls.length,n);assert.match(p.elements['account-message'].textContent,/Reload/);assert.equal(p.elements['email-form'].hidden,true);p.pagehide();
 });

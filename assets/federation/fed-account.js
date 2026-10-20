@@ -130,7 +130,7 @@
  });
  codeForm?.addEventListener('submit',async event=>{
   event.preventDefault();if(busy||!emailEnabled||!emailChallenge)return;
-  const code=codeInput.value.trim();if(!/^\d{6}$/.test(code)){message.textContent='Enter the six-digit code from your email.';return;}
+  const code=codeInput.value.trim();if(!/^\d{8}$/.test(code)){message.textContent='Enter the eight-digit code from your email.';return;}
   busy=true;signedOut=false;const turn=++generation,challenge=emailChallenge;emailChallenge=null;codeInput.value='';buttonState();message.textContent='Confirming your email code…';
   try{await withSessionLock(async()=>{
    if(!current(turn))return;
