@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {mountAllianceMemberPage} from '../assets/federation/fed-alliance-member-page.mjs';
+import {createAllianceAccountBridge} from '../assets/federation/fed-alliance-account-bridge.mjs';
 const html=readFileSync(new URL('../alliance-profile.html',import.meta.url),'utf8'),entry=readFileSync(new URL('../assets/federation/fed-alliance-profile-page.mjs',import.meta.url),'utf8');
 const origin='https://deploy-preview-124--gfof.netlify.app',profileId='33333333-3333-4333-8333-333333333333';
 const p=(name='Fixture member')=>({id:profileId,name,community:'Example crew',bio:'A synthetic member profile for page acceptance.',role:'builder',listed:false,publication:'private',updatedAt:'2026-10-21T12:00:00Z'});
@@ -47,4 +48,18 @@ test('shared response bound withholds oversized account content instead of popul
 });
 test('a stale host detach for an earlier generation cannot close the new account',()=>{
  const f=fixture(()=>{throw Error('No automatic reads');});f.controller.attach(1);f.controller.attach(2);assert.equal(f.controller.detach(1),false);assert.equal(f.get('fields').disabled,false);assert.equal(f.controller.detach(2),true);assert.equal(f.get('fields').disabled,true);assert.equal(f.calls.length,0);f.controller.dispose();
+});
+test('explicit verified account bridge opens real components and logout clears their private state',async()=>{
+ const f=fixture(()=>json({profile:p(),revision:1}));let channel,sessionReads=0;
+ const bridge=createAllianceAccountBridge({enabled:true,origin,memberPage:f.controller,
+  document:new EventTarget(),window:new EventTarget(),locks:{request:async(_name,_options,work)=>work()},
+  channelFactory(){channel={close(){}};return channel;},fetcher:async(url)=>{
+   assert.equal(url,origin+'/api/federation-account/session');sessionReads++;
+   return json({signedIn:true,user:{id:'11111111-1111-4111-8111-111111111111'}});
+  }});
+ assert.equal(f.get('fields').disabled,true);assert.equal(await bridge.verify(),true);
+ assert.equal(f.calls.length,0);await f.get('read').emit('click');assert.equal(f.get('name').value,'Fixture member');
+ f.get('name').value='Private unsent draft';channel.onmessage({data:{type:'signed-out'}});
+ assert.equal(f.get('name').value,'');assert.equal(f.get('current-body').textContent,'');assert.equal(f.get('fields').disabled,true);
+ assert.equal(sessionReads,1);assert.equal(f.calls.length,1);bridge.dispose();f.controller.dispose();
 });
