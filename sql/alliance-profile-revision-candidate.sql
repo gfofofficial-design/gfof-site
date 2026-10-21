@@ -71,6 +71,50 @@ begin
  where actor_id=p_actor and kind='profile';
  return jsonb_build_object('state','saved','revision',p_expected+1,'operationId',p_operation,'profile',saved);
 end $$;
+-- A single guarded transaction reads fields and their revision together. The
+-- common control lock excludes ordinary saves/removals while they are read.
+-- No row is created, no receipt cleared and no unknown write resumed.
+create function alliance_avatar.profile_revision_read_session(p_actor uuid,p_session uuid) returns jsonb
+language plpgsql security definer set search_path='' set timezone='UTC' set datestyle='ISO, YMD' as $$
+declare p alliance_avatar.creation_plans;current_result jsonb;
+begin
+ perform alliance_avatar.creation_live(p_actor,p_session);
+ if not exists(select 1 from alliance_avatar.control where id and profile_revision_enabled)
+ then raise insufficient_privilege using message='profile_revision_unavailable';end if;
+ select * into p from alliance_avatar.creation_plans where actor_id=p_actor and kind='profile';
+ if not found then
+  if exists(select 1 from public.alliance_member_owners where user_id=p_actor)
+  then raise insufficient_privilege using message='profile_revision_state_changed';end if;
+  return jsonb_build_object('profile',null,'revision',0);
+ end if;
+ perform alliance_avatar.check_creation_plan(p_actor,alliance_avatar.creation_plan(p));
+ if p.profile_write_pending or p.profile_write_sequence>0 and p.profile_last_operation is null
+ then raise insufficient_privilege using message='profile_write_review_required';end if;
+ current_result:=alliance_avatar.profile_write_current(p.profile_id);
+ if p.profile_write_sequence=0 then
+  if current_result is not null or p.activated or exists(select 1 from public.alliance_member_owners where id=p.profile_id)
+  then raise insufficient_privilege using message='profile_revision_state_changed';end if;
+ else
+  if not exists(select 1 from public.alliance_member_owners where id=p.profile_id and user_id=p_actor)
+   or current_result is distinct from p.profile_last_result
+   or encode(sha256(convert_to(current_result::text,'UTF8')),'hex') is distinct from p.profile_write_result_sha256
+  then raise insufficient_privilege using message='profile_revision_state_changed';end if;
+ end if;
+ return jsonb_build_object('profile',current_result,'revision',p.profile_write_sequence);
+end $$;
+revoke all on function alliance_avatar.profile_revision_read_session(uuid,uuid) from public,anon,authenticated,service_role,alliance_avatar_executor;
+grant execute on function alliance_avatar.profile_revision_read_session(uuid,uuid) to alliance_avatar_executor;
 revoke all on function alliance_avatar.finish_profile_session(uuid,uuid,jsonb,jsonb,jsonb),alliance_avatar.finish_profile_revision_session(uuid,uuid,jsonb,jsonb,jsonb,uuid,bigint) from public,anon,authenticated,service_role,alliance_avatar_executor;
 grant execute on function alliance_avatar.finish_profile_session(uuid,uuid,jsonb,jsonb,jsonb),alliance_avatar.finish_profile_revision_session(uuid,uuid,jsonb,jsonb,jsonb,uuid,bigint) to alliance_avatar_executor;
+-- The latest replay result contains profile text. Removal must not leave that
+-- second copy behind; keep only sequence/digest/tombstone evidence. The legacy
+-- pending flag is not cleared. This trigger runs even while serving is closed.
+create function alliance_avatar.profile_revision_removed() returns trigger
+language plpgsql security definer set search_path='' as $$ begin
+ update alliance_avatar.creation_plans set profile_last_operation=null,profile_last_expected=null,profile_last_result=null
+ where kind='profile' and profile_id=old.id and profile_last_operation is not null;
+ return old;
+end $$;
+revoke all on function alliance_avatar.profile_revision_removed() from public,anon,authenticated,service_role,alliance_avatar_executor;
 reset role;
+create trigger alliance_profile_revision_removed after delete on public.alliance_profiles for each row execute function alliance_avatar.profile_revision_removed();

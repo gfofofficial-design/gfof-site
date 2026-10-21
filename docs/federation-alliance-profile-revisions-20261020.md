@@ -1,8 +1,10 @@
 # Self-service profile edits: revision protocol candidate
 
-Status: unapplied, default-off database protocol, verified only in a disposable
-PostgreSQL/TLS fixture. This is not the member API, a migration for an existing
-member store, a hosted installation, or release approval.
+Status: unapplied, default-off database/server/client-transport candidate,
+verified in disposable PostgreSQL/TLS fixtures. The factories explicitly opt
+into revision mode; their defaults retain the legacy fence. No form or route is
+mounted, no hosted installer includes it, and this is not release approval or a
+migration for an existing member store.
 
 ## Problem and intended member behavior
 
@@ -57,27 +59,64 @@ digest before replay or another edit. An out-of-protocol moderation/change is a
 reconciliation case, not permission to replace the expected receipt silently.
 Removal/session checks still run before an exact replay.
 
+The result contains profile text, so a deletion trigger clears that copy and
+its last-operation fields in the same transaction as profile removal. It retains
+only the sequence/digests and existing removal evidence, without clearing any
+legacy hold. Rolling back deletion also rolls back receipt clearing. Existing
+backup retention/privacy rules still apply to earlier archives; this is not a
+claim that all prior copies disappear on deletion.
+
+## Integrated service behavior
+
+The restricted driver now has fixed parameterized revision-save and coherent-read
+methods. `createAllianceCreation`, `createAllianceProfileApi` and
+`createMemberProfileClient` accept the explicit `profileRevisions: true` option;
+non-boolean values refuse. Defaults remain unchanged. Revision requests contain
+only an operation ID, expected revision and validated editable profile fields.
+The server still derives actor/session from the accepted account cookie and
+checks the current SQL session before loading and before returning a response.
+
+The coherent SQL read holds the common control lock while obtaining the profile
+and receipt revision. It creates no row, clears no hold and resumes no write.
+The API preserves serving and independent signed-journal checks around reads
+and mutation responses. It returns a known conflict as 409, with no profile
+payload, and withholds content if removal or session revocation intervenes.
+
+The browser transport requires an explicit initial read. Save generates one
+operation ID for one request; it never retries or changes the draft input.
+Conflict or an unknown response pauses further saves. An explicit `load()` then
+announces `comparison_ready`; it does not unlock saving. Only
+`acceptCurrent(theDisplayedRevision)` selects that read as the next baseline,
+without submitting anything. A later Save is a new intention with a new operation
+ID and the selected expected revision. If another change intervenes, it conflicts
+again. This accepts the displayed current version; it does not prove delivery or
+the outcome of the earlier HTTP response.
+
+`unconfirmedSave()` retains only a copied operation/revision reference in this
+client's memory after uncertainty, never a credential or operator receipt. It
+performs no lookup and clears after explicit current-version acceptance/disposal.
+Reloading/disposal is not durable draft or operation storage. A page must preserve
+the draft visibly and must not call acceptance automatically.
+
 ## Remaining integration before adoption
 
-1. Extend the restricted driver and creation coordinator with exact revision
-   request/result contracts. Keep independent journal admission and serving
-   checks, including suppression after a concurrent recorded removal.
-2. Provide a guarded atomic own-profile + revision read. Do not obtain a profile
-   and revision in unrelated reads and describe them as one coherent version.
-   Bind operation recovery to the verified current account/session; no profile
-   IDs, operator receipts or arbitrary SQL from the browser.
-3. Wire explicit Save/conflict/unknown/status behavior into the member client and
-   page. Keep drafts on conflict, use text and accessible status announcements,
+1. Mount the opt-in service and form only through a separately reviewed host
+   composition and release decision. Keep account admission, serving authority,
+   current-session, independent journal, privacy and publication gates. No
+   existing held store may be converted by toggling the new flag.
+2. Wire the transport's explicit Save/conflict/comparison states into the page.
+   Keep drafts on conflict, provide text and accessible status announcements,
    preserve keyboard focus and avoid timing-dependent interactions. No extra
-   password, CAPTCHA or owner approval for ordinary editing. The existing
-   unmounted API/client intentionally still use the older fence.
-4. Extend paired recovery inventories, archive schema and startup verification
-   to cover the new control flag and receipt columns. Verify that a restored
-   older revision cannot pass current checkpoint checks. No existing installer
-   includes this candidate and no existing profile hold is cleared by it.
-5. Compose the native member journey: verified session → create → second edit →
-   unlist → independent journal-first removal, including late/conflicting saves
-   and refresh after an unknown result. Avatar and removal versions stay separate.
+   password, CAPTCHA or owner approval for ordinary editing. Physical-device and
+   screen-reader acceptance remain; a callback test is not assistive acceptance.
+3. Finish the browser's own-removal operation-ID/version route and confirmation.
+   The native journey composes the real journal-first removal coordinator, but
+   this transport's `remove()` and the old DELETE route remain unavailable.
+4. Review actual hosted schema/privileges, current authority/custody, coordinated
+   freeze/restore/startup and operating acceptance. The existing format-2 paired
+   inventory hashes all columns, and data-only archives copy the new columns:
+   native verification now covers these rather than inventing a new format.
+   Synthetic signed control is not independent hosted recovery authority.
 
 This continues the full member release; it does not cut images, invitations,
 contributions, ideas, blocking/reporting or portal records from its scope.
@@ -93,9 +132,20 @@ that is separate evidence, not a claim that local testing used 17.11.
 Actual restricted TLS connections exercised create/edit/unlist, exact replay,
 changed reuse, stale and concurrent editors, rollback, a discarded committed
 reply, legacy fencing, forgery/direct-access denials, state changes, revoked
-sessions and removed-profile replay. The admission event and Auth table are
-synthetic here; no real Google login, remote journal admission, browser workflow,
-managed provider behavior, full restore or accessibility conformance is proved.
+sessions and removed-profile replay. The added composed journey uses the actual
+browser-transport/API/coordinator code, two separate PostgreSQL servers, real
+restricted journal admission and signed journal read guards. It exercises
+conflict/current-version acceptance, a lost response without automatic retry,
+and journal-first own removal with replay-text clearing. Auth HTTP and serving
+control remain synthetic; this is not an actual Google or physical-browser test.
+
+Actual paired data-only dumps/restores preserve the revision control flag,
+operation/result columns and cleared removal receipt. Same-count revision
+regression, changed operation/result content and changed flag fail the checkpoint;
+a fresh modeled signed startup quarantines regressed data. Restoring the exact
+archives re-establishes the closed checkpoint without changing the independent
+journal. This establishes disposable schema/data coverage, not managed-provider
+behavior, independent production custody or a live recovery guarantee.
 
 ## Documentation checked
 
