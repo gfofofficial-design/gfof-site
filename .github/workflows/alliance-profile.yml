@@ -7,6 +7,9 @@ on:
       - 'sql/alliance-profile-revision-candidate.sql'
       - 'lib/alliance-profile-store.mjs'
       - 'lib/alliance-profile-api.mjs'
+      - 'lib/alliance-profile-removal-api.mjs'
+      - 'lib/alliance-avatar-server/removal.mjs'
+      - 'lib/alliance-avatar-server/removal.fixture.mjs'
       - 'lib/alliance-avatar-server/profile-view.mjs'
       - 'lib/alliance-avatar-server/member.mjs'
       - 'lib/alliance-avatar-server/creation.mjs'
@@ -15,6 +18,7 @@ on:
       - 'assets/federation/fed-alliance-profile-contract.mjs'
       - 'assets/federation/fed-alliance-profile-revision-contract.mjs'
       - 'assets/federation/fed-alliance-member-client.mjs'
+      - 'assets/federation/fed-alliance-profile-removal-*.mjs'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'tests/alliance-profile*'
       - '.github/workflows/alliance-profile.yml'
@@ -35,6 +39,7 @@ jobs:
       - run: node --check lib/alliance-profile-api.mjs
       - run: node --check assets/federation/fed-alliance-member-client.mjs
       - run: node --test tests/alliance-profile-store.test.mjs tests/alliance-profile-api.test.mjs tests/alliance-profile-client.test.mjs tests/alliance-profile-revisions.test.mjs
+      - run: node --test tests/alliance-profile-removal.test.mjs tests/alliance-profile-removal-composed.test.mjs tests/alliance-profile-removal-panel.test.mjs
   profile-native:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
@@ -62,3 +67,4 @@ jobs:
         env:
           ALLIANCE_PROFILE_TEST_CONFIRM: disposable_profile_fixture
           ALLIANCE_PROFILE_TEST_CONTAINER: ${{ job.services.postgres.id }}
+
