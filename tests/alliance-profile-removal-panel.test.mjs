@@ -22,3 +22,13 @@ test('unknown outcome exposes an explicit same-request check without repeating c
 test('disposal removes all handlers and ignores callbacks from an earlier account',async()=>{
  const f=fixture();let callback,disposed=0;const p=mountProfileRemovalPanel(f.root,{enabled:true,version:7,createClient:onState=>{callback=onState;return {confirm(){throw Error('No request');},reconcile(){},cancel(){},dispose(){disposed++;}};}});const review=f.find('Review profile removal');p.dispose();callback({status:'removed',message:'Old account'});await review.emit('click');assert.equal(f.root.children.length,0);assert.equal(review.events.click.size,0);assert.equal(disposed,1);
 });
+test('review explicitly reads current removal version before confirmation and discards it when member backs out',async()=>{
+ const f=fixture(),calls=[];let reads=0;const p=mountProfileRemovalPanel(f.root,{enabled:true,version:999,readVersion:async()=>({version:++reads}),createClient:onState=>({async confirm(v){calls.push(v);onState({status:'removed',message:'Removed'});},reconcile(){},cancel(){},dispose(){}})});
+ assert.equal(reads,0);await f.find('Review profile removal').emit('click');assert.equal(reads,1);await f.find('Keep my profile').emit('click');await f.find('Review profile removal').emit('click');assert.equal(reads,2);const check=f.root.children[3].children[0].children[0];check.checked=true;await check.emit('change');await f.find('Remove my Alliance profile').emit('click');assert.deepEqual(calls,[{version:2,confirm:'remove_my_profile'}]);assert.equal(reads,2);p.dispose();
+});
+test('failed version read never presents confirmation or starts removal',async()=>{
+ const f=fixture();let calls=0;const p=mountProfileRemovalPanel(f.root,{enabled:true,readVersion:async()=>{throw Error('No current authority');},createClient:()=>({confirm(){calls++;},reconcile(){},cancel(){},dispose(){}})});await f.find('Review profile removal').emit('click');assert.equal(f.root.children[3].hidden,true);assert.equal(f.find('Review profile removal').hidden,false);assert.match(f.root.children[4].textContent,/No removal was started/);assert.equal(calls,0);p.dispose();
+});
+test('disposal cancels current-version read and cannot display another account from a late callback',async()=>{
+ const f=fixture();let resolve,signal;const p=mountProfileRemovalPanel(f.root,{enabled:true,readVersion:opts=>{signal=opts.signal;return new Promise(r=>resolve=r);},createClient:()=>({confirm(){throw Error('No removal');},reconcile(){},cancel(){},dispose(){}})});const reading=f.find('Review profile removal').emit('click');p.dispose();assert.equal(signal.aborted,true);resolve({version:7});await reading;assert.equal(f.root.children.length,0);
+});
