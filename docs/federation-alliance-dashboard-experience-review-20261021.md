@@ -177,3 +177,16 @@ Four focused tests cover format/text boundaries, local action/focus and draft
 preservation, export invalidation/noncompetition exclusion, and clear/disposal.
 They establish local preparation behavior only; real invitations, authorized
 project representation, server storage and notification delivery are unchanged.
+
+## Founder starter briefs
+
+Each Arena format now offers a concrete public starting deliverable: a short
+creative video, a working tool/demo, a sourced research answer, a guide or
+translation, or an agreed head-to-head resource. A visible preview precedes the
+explicit Use this starting brief action. It fills only an empty deliverable
+field; an existing founder draft is kept and focused. Changing the format
+updates the suggestion and invalidates old exports without replacing typed work.
+Unknown formats, inactive competition interest and disposed controls cannot
+apply a starter. No suggestion schedules, submits or accepts a match.
+Three additional tests cover draft preservation, format changes/export behavior
+and inactive/unknown/disposed refusal.

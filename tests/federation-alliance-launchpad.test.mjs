@@ -278,3 +278,19 @@ test('clearing a competition worksheet removes its draft and disposed Arena acti
  assert.equal(b.get('project-competition').hidden,true);assert.equal(b.get('project-brief').value,'');assert.equal(b.get('project-download').hidden,true);
  b.api.dispose();b.get('arena-prepare').emit('click');assert.equal(b.get('project-interest').value,'education');assert.equal(b.get('arena-prepare').disabled,true);
 });
+
+test('starter briefs fill only an empty competition draft and preserve the founder’s edits',()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');assert.match(b.get('project-starter-preview').textContent,/30-second video/);
+ b.get('project-use-starter').emit('click');assert.match(b.get('project-goal').value,/30-second video/);assert.equal(b.document.activeElement,b.get('project-goal'));
+ b.get('project-goal').value='Our own original public deliverable for both project teams.';b.get('project-form').emit('submit');const before=b.get('project-brief').value;
+ b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'Our own original public deliverable for both project teams.');assert.equal(b.get('project-brief').value,before);assert.match(b.get('project-prep-status').textContent,/Your draft was kept/);b.api.dispose();
+});
+test('changing format updates the suggested brief without replacing an existing deliverable',()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');b.get('project-goal').value='An existing founder draft that must not be overwritten.';b.get('project-form').emit('submit');
+ b.get('project-format').value='builder';b.get('project-format').emit('change');assert.match(b.get('project-starter-preview').textContent,/working public tool/);assert.equal(b.get('project-goal').value,'An existing founder draft that must not be overwritten.');assert.equal(b.get('project-output').hidden,true);
+ b.get('project-goal').value='';b.get('project-goal').emit('input');b.get('project-use-starter').emit('click');b.get('project-form').emit('submit');assert.match(b.get('project-brief').value,/Proposed format: Builder Battle/);assert.match(b.get('project-brief').value,/working public tool/);b.api.dispose();
+});
+test('starter action refuses unknown formats, inactive interests and disposal',()=>{
+ const b=fixture();b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');b.get('arena-prepare').emit('click');b.get('project-format').value='__proto__';b.get('project-format').emit('change');assert.equal(b.get('project-use-starter').disabled,true);assert.equal(b.get('project-starter-preview').textContent,'');b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');
+ b.get('project-clear').emit('click');assert.equal(b.get('project-use-starter').disabled,true);b.get('arena-prepare').emit('click');b.api.dispose();b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');assert.equal(b.get('project-use-starter').disabled,true);
+});

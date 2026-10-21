@@ -101,6 +101,13 @@ export function crewPlan(ids, requestedPace='session') {
   return {activities,minutes,text:parts.join('\n')};
 }
 export const COMPETITION_FORMATS=Object.freeze({creative:'Creative Clash',builder:'Builder Battle',research:'Research Showdown',exchange:'Community Exchange',headtohead:'Head-to-Head'});
+export const COMPETITION_STARTERS=Object.freeze({
+ creative:'Create one original 30-second video explaining a useful public concept, with permission for any third-party material.',
+ builder:'Build a small working public tool, include a short demo and document one limitation and how another team can try it.',
+ research:'Answer one agreed public research question with dated sources, a clear conclusion and explicit unanswered questions.',
+ exchange:'Create one practical beginner guide or reviewed translation that another community can use, with its public sources.',
+ headtohead:'Both projects create one original resource for the same agreed audience and problem, using equal entry limits and published judging criteria.'
+});
 export function prepareProjectBrief(fields, checks=[]) {
   const name=typeof fields?.name === 'string' ? fields.name.trim() : '';
   if(name.length < 2 || name.length > 70 || /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(name)) return {ok:false,field:'project-name',message:'Enter a public project name, 2–70 characters on one line, without hidden direction controls.'};
