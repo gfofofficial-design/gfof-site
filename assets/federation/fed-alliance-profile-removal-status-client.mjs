@@ -14,8 +14,8 @@ export function createProfileRemovalStatusClient({enabled=false,origin,fetcher=g
    reader=response.body.getReader();const chunks=[];let size=0;
    for(;;){const p=await reader.read();check();if(p.done)break;if(!(p.value instanceof Uint8Array)||(size+=p.value.byteLength)>1024)throw Error('profile_removal_status_unavailable');chunks.push(p.value);}
    const bytes=new Uint8Array(size);let at=0;for(const p of chunks){bytes.set(p,at);at+=p.byteLength;}const v=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));check();
-   if(!v||typeof v!=='object'||Array.isArray(v)||Object.keys(v).length!==2||v.state!=='ready'||!Object.hasOwn(v,'version')||!Number.isSafeInteger(v.version)||v.version<0||v.version>=Number.MAX_SAFE_INTEGER)throw Error('profile_removal_status_unavailable');
-   return Object.freeze({version:v.version});
+   if(!v||typeof v!=='object'||Array.isArray(v)||Object.keys(v).length!==3||v.state!=='ready'||typeof v.profileId!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v.profileId)||!Object.hasOwn(v,'version')||!Number.isSafeInteger(v.version)||v.version<0||v.version>=Number.MAX_SAFE_INTEGER)throw Error('profile_removal_status_unavailable');
+   return Object.freeze({profileId:v.profileId,version:v.version});
   })(),stopped]);}
   finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);c.signal.removeEventListener('abort',onAbort);c.abort();try{void Promise.resolve(reader?reader.cancel():response?.body?.cancel()).catch(()=>{});}catch{}if(active===c)active=null;}
  },dispose(){disposed=true;active?.abort();}});

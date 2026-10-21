@@ -1,7 +1,7 @@
 // Explicitly mounted, profile-only confirmation panel. Not imported by a page.
 // Host must supply a fresh account-bound removal version, not an edit revision.
-export function mountProfileRemovalPanel(root,{enabled=false,version,readVersion,createClient}={}){
- if(!root||!root.ownerDocument||typeof enabled!=='boolean'||readVersion!==undefined&&typeof readVersion!=='function'||enabled&&(typeof createClient!=='function'||typeof readVersion!=='function'&&(!Number.isSafeInteger(version)||version<0||version>=Number.MAX_SAFE_INTEGER)))throw Error('profile_removal_panel_configuration');
+export function mountProfileRemovalPanel(root,{enabled=false,profileBinding=false,version,readVersion,createClient}={}){
+ if(!root||!root.ownerDocument||typeof enabled!=='boolean'||typeof profileBinding!=='boolean'||profileBinding&&typeof readVersion!=='function'||readVersion!==undefined&&typeof readVersion!=='function'||enabled&&(typeof createClient!=='function'||typeof readVersion!=='function'&&(!Number.isSafeInteger(version)||version<0||version>=Number.MAX_SAFE_INTEGER)))throw Error('profile_removal_panel_configuration');
  const doc=root.ownerDocument,make=(tag,text)=>{const node=doc.createElement(tag);if(text)node.textContent=text;return node;};
  const title=make('h2','Remove your Alliance profile'),scope=make('p','This removes your Alliance profile and detaches its image access. It does not delete your sign-in account or erase stored backups. Provider objects and backups may remain; this action does not confirm physical erasure.'),status=make('p',enabled?'Review the scope before continuing.':'Profile removal is not available yet. No request has been started.');
  status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.setAttribute('aria-atomic','true');status.setAttribute('tabindex','-1');
@@ -10,7 +10,7 @@ export function mountProfileRemovalPanel(root,{enabled=false,version,readVersion
  const confirm=make('button','Remove my Alliance profile'),back=make('button','Keep my profile');confirm.type=back.type='button';confirm.disabled=true;confirmation.append(label,confirm,back);confirmation.hidden=true;
  const reconcile=make('button','Check the same removal request'),cancel=make('button','Stop waiting');reconcile.type=cancel.type='button';reconcile.hidden=cancel.hidden=true;
  root.replaceChildren(title,scope,review,confirmation,status,reconcile,cancel);
- let disposed=false,busy=false,started=false,client,versionRead,selectedVersion=version;
+ let disposed=false,busy=false,started=false,client,versionRead,selectedVersion=version,selectedProfileId;
  const onState=s=>{if(disposed)return;status.textContent=s.message;busy=s.status==='removing';cancel.hidden=!busy;
   if(s.status==='removed'){started=true;confirmation.hidden=true;review.hidden=true;reconcile.hidden=true;}
   else if(['unknown','removal_pending','sign_in_required','unavailable'].includes(s.status)&&started){reconcile.hidden=false;confirmation.hidden=true;review.hidden=true;}
@@ -26,17 +26,17 @@ export function mountProfileRemovalPanel(root,{enabled=false,version,readVersion
    if(readVersion){
     busy=true;review.disabled=true;selectedVersion=undefined;versionRead=new AbortController();status.textContent='Checking your current profile removal status…';
     try{const value=await readVersion({signal:versionRead.signal});if(disposed||versionRead.signal.aborted)return;
-     if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).length!==1||!Number.isSafeInteger(value.version)||value.version<0||value.version>=Number.MAX_SAFE_INTEGER)throw Error('unavailable');selectedVersion=value.version;
+     if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).length!==(profileBinding?2:1)||profileBinding&&(typeof value.profileId!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(value.profileId))||!Number.isSafeInteger(value.version)||value.version<0||value.version>=Number.MAX_SAFE_INTEGER)throw Error('unavailable');selectedVersion=value.version;selectedProfileId=profileBinding?value.profileId:undefined;
     }catch{if(!disposed)status.textContent='Your removal status could not be confirmed. No removal was started. Try Review again or contact support.';return;}
     finally{busy=false;if(!disposed)review.disabled=false;versionRead=undefined;}
    }
    if(disposed)return;status.textContent='Review the removal scope, then confirm if you wish to continue.';confirmation.hidden=false;review.hidden=true;check.focus();
   });
   listen(check,'change',()=>{confirm.disabled=busy||!check.checked;});
-  listen(back,'click',()=>{if(disposed||busy||started)return;confirmation.hidden=true;check.checked=false;review.hidden=false;if(readVersion)selectedVersion=undefined;review.focus();});
-  listen(confirm,'click',()=>{if(disposed||busy||started||!check.checked||!Number.isSafeInteger(selectedVersion))return;started=true;review.hidden=true;confirmation.hidden=true;status.textContent='Removing your Alliance profile…';status.focus();return run(()=>client.confirm({version:selectedVersion,confirm:'remove_my_profile'}));});
+  listen(back,'click',()=>{if(disposed||busy||started)return;confirmation.hidden=true;check.checked=false;review.hidden=false;if(readVersion){selectedVersion=undefined;selectedProfileId=undefined;}review.focus();});
+  listen(confirm,'click',()=>{if(disposed||busy||started||!check.checked||!Number.isSafeInteger(selectedVersion))return;started=true;review.hidden=true;confirmation.hidden=true;status.textContent='Removing your Alliance profile…';status.focus();return run(()=>client.confirm({version:selectedVersion,confirm:'remove_my_profile',...(profileBinding?{profileId:selectedProfileId}:{})}));});
   listen(reconcile,'click',()=>{if(disposed||!started||busy)return;return run(()=>client.reconcile());});
   listen(cancel,'click',()=>{if(disposed||!busy)return;client.cancel();});
  }
- return Object.freeze({dispose(){if(disposed)return;disposed=true;versionRead?.abort();selectedVersion=undefined;client?.dispose();for(const off of handlers)off();root.replaceChildren();}});
+ return Object.freeze({dispose(){if(disposed)return;disposed=true;versionRead?.abort();selectedVersion=undefined;selectedProfileId=undefined;client?.dispose();for(const off of handlers)off();root.replaceChildren();}});
 }

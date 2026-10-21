@@ -32,3 +32,10 @@ test('failed version read never presents confirmation or starts removal',async()
 test('disposal cancels current-version read and cannot display another account from a late callback',async()=>{
  const f=fixture();let resolve,signal;const p=mountProfileRemovalPanel(f.root,{enabled:true,readVersion:opts=>{signal=opts.signal;return new Promise(r=>resolve=r);},createClient:()=>({confirm(){throw Error('No removal');},reconcile(){},cancel(){},dispose(){}})});const reading=f.find('Review profile removal').emit('click');p.dispose();assert.equal(signal.aborted,true);resolve({version:7});await reading;assert.equal(f.root.children.length,0);
 });
+test('bound panel carries read identity only as a precondition and does not ask the member to type it',async()=>{
+ const f=fixture(),profileId='33333333-3333-4333-8333-333333333333',calls=[];const p=mountProfileRemovalPanel(f.root,{enabled:true,profileBinding:true,readVersion:async()=>({profileId,version:0}),createClient:onState=>({async confirm(v){calls.push(v);onState({status:'removed',message:'Profile removed.'});},reconcile(){},cancel(){},dispose(){}})});
+ await f.find('Review profile removal').emit('click');const check=f.root.children[3].children[0].children[0];check.checked=true;await check.emit('change');await f.find('Remove my Alliance profile').emit('click');assert.deepEqual(calls,[{profileId,version:0,confirm:'remove_my_profile'}]);assert.equal(JSON.stringify(f.root.children.map(n=>n.textContent)).includes(profileId),false);p.dispose();
+});
+test('bound panel refuses a version-only read before displaying confirmation',async()=>{
+ const f=fixture();const p=mountProfileRemovalPanel(f.root,{enabled:true,profileBinding:true,readVersion:async()=>({version:0}),createClient:()=>({confirm(){throw Error('No removal');},reconcile(){},cancel(){},dispose(){}})});await f.find('Review profile removal').emit('click');assert.equal(f.root.children[3].hidden,true);assert.match(f.root.children[4].textContent,/No removal was started/);p.dispose();
+});

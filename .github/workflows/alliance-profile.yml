@@ -5,6 +5,7 @@ on:
       - 'sql/alliance-profile-candidate.sql'
       - 'sql/alliance-profile-write-fence-candidate.sql'
       - 'sql/alliance-profile-revision-candidate.sql'
+      - 'sql/alliance-profile-bound-removal-candidate.sql'
       - 'lib/alliance-profile-store.mjs'
       - 'lib/alliance-profile-api.mjs'
       - 'lib/alliance-profile-removal-api.mjs'
@@ -41,7 +42,7 @@ jobs:
       - run: node --check lib/alliance-profile-api.mjs
       - run: node --check assets/federation/fed-alliance-member-client.mjs
       - run: node --test tests/alliance-profile-store.test.mjs tests/alliance-profile-api.test.mjs tests/alliance-profile-client.test.mjs tests/alliance-profile-revisions.test.mjs
-      - run: node --test tests/alliance-profile-removal.test.mjs tests/alliance-profile-removal-composed.test.mjs tests/alliance-profile-removal-panel.test.mjs tests/alliance-profile-removal-version.test.mjs
+      - run: node --test tests/alliance-profile-removal.test.mjs tests/alliance-profile-removal-composed.test.mjs tests/alliance-profile-removal-panel.test.mjs tests/alliance-profile-removal-version.test.mjs tests/alliance-profile-removal-binding.test.mjs
   profile-native:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04

@@ -23,6 +23,7 @@ on:
       - 'sql/alliance-control-store-candidate.sql'
       - 'sql/alliance-control-removal-anchor-candidate.sql'
       - 'sql/alliance-member-anchored-removal-candidate.sql'
+      - 'sql/alliance-profile-bound-removal-candidate.sql'
       - 'sql/alliance-auth-deletion-guard-candidate.sql'
       - 'sql/alliance-account-protocol-candidate.sql'
       - 'sql/alliance-account-history-store-candidate.sql'
@@ -99,3 +100,4 @@ jobs:
       - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
       - name: Actual isolated local DynamoDB protocol
         run: sudo env ALLIANCE_DYNAMO_TEST_CONFIRM=synthetic_account_dynamodb ALLIANCE_NODE_BINARY="$(command -v node)" python3 -I tests/alliance-account-dynamodb-native.py
+

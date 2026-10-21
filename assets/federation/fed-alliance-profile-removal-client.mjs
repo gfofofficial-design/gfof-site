@@ -5,8 +5,8 @@ const uuid=v=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f
 const version=v=>Number.isSafeInteger(v)&&v>=0&&v<Number.MAX_SAFE_INTEGER;
 const messages={closed:'Profile removal is not available.',confirmation_required:'Confirm removal of your Alliance profile and image access. Your sign-in account and retained backups are not erased.',ready:'Review profile removal before confirming.',removing:'Removing your Alliance profile…',removed:'Your Alliance profile was removed. Your sign-in account and retained backups were not erased.',unknown:'Removal may have completed. Keep this page open and explicitly check the same request; no automatic retry will occur.',removal_pending:'Removal is pending. Explicitly check the same request; no automatic retry will occur.',sign_in_required:'Sign in again before checking the same removal request.',unavailable:'Removal could not be confirmed. The same request is retained.',busy:'Wait for or cancel the current request.'};
 const fail=code=>Object.assign(Error(messages[code]),{code});
-export function createProfileRemovalClient({enabled=false,origin,fetcher=globalThis.fetch,onState=()=>{},newOperationId=()=>globalThis.crypto.randomUUID(),timeoutMs=35000}={}){
- if(typeof enabled!=='boolean'||!Number.isInteger(timeoutMs)||timeoutMs<1||timeoutMs>35000)throw fail('closed');
+export function createProfileRemovalClient({enabled=false,profileBinding=false,origin,fetcher=globalThis.fetch,onState=()=>{},newOperationId=()=>globalThis.crypto.randomUUID(),timeoutMs=35000}={}){
+ if(typeof enabled!=='boolean'||typeof profileBinding!=='boolean'||!Number.isInteger(timeoutMs)||timeoutMs<1||timeoutMs>35000)throw fail('closed');
  if(enabled&&(!/^https:\/\/(?:galacticfederation\.co|deploy-preview-[1-9][0-9]*--gfof\.netlify\.app)$/.test(origin)||typeof fetcher!=='function'||typeof newOperationId!=='function'))throw fail('closed');
  let disposed=false,pending=null,intention=null,committed=false,sequence=0;
  const emit=status=>{if(!disposed)try{onState(Object.freeze({status,message:messages[status]}));}catch{}};
@@ -37,9 +37,9 @@ export function createProfileRemovalClient({enabled=false,origin,fetcher=globalT
  return Object.freeze({
   // Host supplies a freshly authorized REMOVAL version, never profile edit revision.
   // No operation is created before the explicit confirmation action.
-  confirm(input){available();if(intention||committed||!exact(input,['version','confirm'])||!version(input.version)||input.confirm!=='remove_my_profile')throw fail('confirmation_required');const operationId=newOperationId();if(!uuid(operationId))throw fail('confirmation_required');intention=Object.freeze({operationId,version:input.version,confirm:'remove_my_profile'});return dispatch();},
+  confirm(input){available();if(intention||committed||!exact(input,['version','confirm',...(profileBinding?['profileId']:[])])||profileBinding&&!uuid(input.profileId)||!version(input.version)||input.confirm!=='remove_my_profile')throw fail('confirmation_required');const operationId=newOperationId();if(!uuid(operationId))throw fail('confirmation_required');intention=Object.freeze({operationId,version:input.version,confirm:'remove_my_profile',...(profileBinding?{profileId:input.profileId}:{})});return dispatch();},
   reconcile(){return dispatch();},
-  pendingOperation:()=>!disposed&&intention&&!committed?{operationId:intention.operationId,version:intention.version}:null,
+  pendingOperation:()=>!disposed&&intention&&!committed?{operationId:intention.operationId,version:intention.version,...(profileBinding?{profileId:intention.profileId}:{})}:null,
   cancel(){if(pending){sequence++;pending.controller.abort();pending=null;emit('unknown');}},
   dispose(){if(disposed)return;disposed=true;sequence++;pending?.controller.abort();pending=null;intention=null;},
  });

@@ -67,7 +67,7 @@ independent profile denial evidence and two matching session-scoped `mineSession
 reads, with fresh journal/session checks between them. Pending image work,
 malformed data, changed versions/pointers, profile denial, expiry or unavailable
 evidence refuse. Version zero without an image is supported. The guard has an
-eight-second maximum deadline and returns only `state` and `version`.
+eight-second maximum deadline and returns only `state`, the member's own `profileId` and `version`.
 
 The separate default-off status HTTP adapter accepts only that GET and an
 explicit same-origin Origin or Fetch Metadata signal. It rejects query/body,
@@ -86,15 +86,73 @@ automatically changes them. Neither the helper nor this read issues SQL writes,
 new grants, credentials, physical provider cleanup or account erasure.
 
 This is point-in-time preflight, not a lock or a confirmation capability. The
-existing mutation independently validates the then-current owner/session and
-version. A version alone does not bind the read to a stable profile identity:
-removal/recreation could produce the same numeric version for a new profile.
-Before mounting, add and prove an exact profile-identity precondition enforced
-atomically by the mutation. Do not describe this read as solving that race or as
-authorizing a deletion. All hosted and page flags remain off.
+profile identity is a precondition, never actor authority. The opt-in identity
+binding below closes the earlier version-only recreation gap. Legacy paths do
+not gain that guarantee. All hosted and page flags remain off.
 
 Updated local evidence:37 focused removal/status/panel/composed cases and25
 unchanged member-service cases pass. The composed path uses actual status
 client/HTTP/member/read-guard code, then the separately confirmed existing
 coordinator. Auth HTTP, SQL ledger, journal storage/serving authority remain
 synthetic. This adds no new native database or hosted acceptance claim.
+
+## Exact profile-identity precondition
+
+The status DTO now includes the member's own profile UUID, already part of the
+own-profile contract. It is potentially linkable metadata, not an Auth ID,
+credential or anonymized value. It stays out of the displayed confirmation text,
+URLs, storage and journal additions. Version-only status responses refuse.
+
+Explicit `profileBinding` options select the browser panel/client, HTTP adapter
+and anchored coordinator; `profileBindingEnabled` selects the member facade.
+Defaults remain false. In bound mode the removal input has exactly operation ID,
+version, profile ID and confirmation. The server still derives actor/session
+solely from verified cookies. The requested profile ID is only an expected-state
+precondition; it cannot select another account. No flag is inferred from a URL,
+browser storage, metadata or request field, and there is no fallback to the old
+three-field request when bound mode refuses.
+
+The unapplied `alliance-profile-bound-removal-candidate.sql` adds one narrow
+private owner function, with empty search path and no public/anon/authenticated/
+service-role execution. The restricted executor gets the fixed parameterized
+wrapper only. It uses the existing global control lock and live removal-session
+check. Before new operation/quota work it requires the current session's profile
+ID to equal the expected ID, then invokes the existing anchored preparation in
+the same transaction. It writes no independent journal itself. SECURITY DEFINER
+retains the existing private owner/executor separation; the executor receives no
+table access or owner-review authority.
+
+For an existing operation, it instead verifies the operation's original actor,
+profile, kind and version. A committed replay returns its original prepared plan,
+even after that profile is gone. The coordinator checks that plan's exact profile
+binding before any journal append, and still revalidates the independent anchor
+before finish/replay acknowledgement. A new profile cannot replace the old plan
+or become the target of its reconciliation. New intentions need a new explicit
+read/confirmation; the browser never switches a pending operation automatically.
+
+The extension preserves legacy grants for older image/removal candidates. It is
+an opt-in path, not universal enforcement against a trusted executor choosing an
+older procedure. Before adoption, host composition must require bound profile
+mode and review/refuse legacy profile routes; source defaults are not proof of
+installed permissions. Administrative database changes remain outside the
+application protocol. No hosted installer, role LOGIN, route or page is enabled.
+
+Local evidence now totals83 tests:44 focused removal/status/panel/composed cases,
+25 existing member-service cases and14 existing anchored-removal cases. New
+composed cases cover a removed/recreated profile at the same numeric version,
+lost committed reply followed by recreation, mismatched prepared identity and
+missing/forged preconditions. They use real coordinator/facade/transport logic
+with synthetic Auth, SQL ledger and independent stores.
+
+The guarded PostgreSQL17.11 CI fixture additionally installs the SQL in its owned
+disposable member domain. It is prepared to test the new fixed driver call under
+restricted TLS, changed-profile/version denial, anchored committed replay after
+cascade, and a rollback-only restricted-role old/new profile exercise proving
+rejected identity consumes no operation/quota. Public execution is checked. Do
+not claim that native result until the matching CI actually passes. The control
+schema-recovery drill then includes the installed private function. None of this
+is a managed Supabase or real-device acceptance test.
+
+PostgreSQL17 explicit-locking guidance and Supabase database-function privileges/
+search-path guidance were checked October21. The current changelog's HTTP TLS
+cipher notice does not change this SQL protocol or establish hosted compatibility.
