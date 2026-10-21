@@ -1,0 +1,168 @@
+# Alliance self-service members — product preview and integration contract
+
+Owner direction, October 17, 2026: members should join independently, manage their own image/bio/community, challenge other members or projects beyond the Journey, and make suggestions. Do not make Michael approve every member or collect routine information through Telegram. Email is preferred for requests needing team attention; the portal should retain their record and status.
+
+## What this change actually implements
+
+An isolated Community Hub on `/alliance`, after the three explicitly ordered sections: Stations, Community League, Project Prep. The navigation links directly to it. The current production source baseline is `556f56ccc669abc28ff97bba449e2ba88799d90e`.
+
+- Create and edit a preview profile: display name, optional self-described project/community, contribution role, bio and optional local image. Listing is optional: an unchecked box creates an unlisted profile, and the member can list or unlist it later. There is no owner-approval step.
+- Local name/community search, hide/unhide and report interactions. A report cannot itself remove someone else's content.
+- Six non-Journey challenge templates: sourced explainers, actionable product feedback, reviewed translations, evidence notes, discussion summaries and working demonstrations.
+- Member invitations and cross-community proposals; the invited identity alone can accept/decline, and the sender can cancel an unanswered invitation. Contributions need the other participant's acknowledgement. A participant cannot approve their own proof. The first participant to reach the agreed preview goal is shown as the preview goal achiever.
+- Suggestion categories, self-service posting/removal and one reversible support vote per other preview identity. No invented roadmap decision is assigned to an idea.
+- Optional fictional crew, loaded only on request, to try both sides of an invitation and another member's vote. Their names and communities are visibly fictional; no real partner is asserted.
+- Reset clears the tab's sandbox and revokes its selected image URL. The existing bounded PNG/JPEG/WebP inspector is reused: 2 MiB, 4096 per dimension, matching signature, bounded decode wait, cancellation and URL cleanup.
+- Official project contact uses the existing published Federation email address. The mailto link opens the visitor's email app; it does not send anything itself or create a tracking record.
+
+**This is not a working hosted member service.** All profile/challenge/idea/report state is in memory in the visitor's tab. It is lost on reload or closure. No account, stored upload, public profile, invitation, vote, report, deadline, email, ticket, notification, score or membership is created. No fetch, cookie, local/session storage, Supabase, price/RPC or model/provider call is made by these two new modules. The global preview notice, action labels, empty states and status messages retain that boundary.
+
+The preview identity selector is roleplay, not authentication. The model's local ownership checks describe intended interactions; they are not a security boundary. Never accept its IDs, actor selector, flags, counters, proofs or votes as trusted production input. Do not automatically import preview state into live accounts.
+
+## Intended live member flow
+
+1. Sign in through the existing Federation account flow after its release gates pass.
+2. Create an ordinary profile independently. Preview the image/bio, choose whether to list it, and publish after automated eligibility and content checks. No Telegram message or per-member owner approval.
+3. Edit, unlist or remove the profile through the member account. Self-described affiliation remains separate from an official project representative designation or partner station.
+4. Discover eligible members and send a bounded invitation. The recipient accepts, declines or blocks within the portal. Invites are not automatic enrollment; routine invites need no Michael approval.
+5. Post suggestions and support another member's idea. Show a permanent reference and genuine team status on the portal. Votes indicate interest, not a release commitment.
+6. Escalate reported abuse and official partnership applications to a small exception queue. Email notifications link to that queue; email is not the database or the only copy of a request.
+
+Default to no direct messages, anonymous uploads, financial wagers, token purchases, paid prizes, wallet-size ranks or automatic social posting in the first member release. No League recruitment/activation points are awarded by these contribution counts. Account verification does not establish one unique human.
+
+## Trust and data contract for the account integration
+
+No migration, hosted schema, storage bucket, route, API handler, environment value, email service or managed signup hook is created or changed in this PR. Candidate SQL and an unmounted server adapter now cover profile ownership; the remaining records below are proposed work. None is an adopted data collection practice or hosted authorization acceptance.
+
+| Record | Ownership and publication rule |
+| --- | --- |
+| Private member binding | Verified account ID to random public profile ID; one profile per account. Account IDs, emails and provider details never appear in public directory responses. |
+| Profile | Name, bio, contribution role, self-described affiliation, listing choice, processed avatar reference and publication state. Owner can edit/unlist/remove their row. Moderation flags and official representative roles are protected fields. |
+| Avatar | Owned upload path, bounded file metadata and processing state. A member cannot supply another person's object path or an arbitrary remote image URL. |
+| Invitation | Server-selected sender from the verified session, intended recipient, template/version, target, duration and terms snapshot. Only the recipient can accept/decline and only the sender can cancel an unanswered invitation. |
+| Contribution | Participating account, challenge ID, bounded source/note and review status. Only the other participant may acknowledge; a single acknowledgement cannot count twice. |
+| Suggestion/support | Author-owned suggestion; unique account/suggestion vote. Public responses expose an aggregate count, not voter IDs. Author removal and genuine team statuses are distinct permissions. |
+| Block/report | Private, requester-owned block and deduplicated report records. Reports cannot grant takedown or moderator power to the reporter. |
+| Review request/outbox | Permanent server reference, category, status, timestamps and a deduplicated email delivery record. Reports and team-only decisions are not exposed as public member data. |
+
+Use the verified server session and database ownership rules for every operation. Do not authorize from a browser-supplied actor ID, editable profile affiliation, display name, `user_metadata`, local storage or this preview model. Retain PKCE/state, same-origin/CSRF checks and Secure HttpOnly cookies from the account build. Never send service/secret keys to a client.
+
+Before a real schema is adopted: use explicit least-privilege grants and RLS for exposed tables; test read/insert/update/delete allow-and-deny cases across anonymous, owner, another member and moderator roles. Owner update rules must constrain both the existing and resulting ownership. Protected status/representative columns must not become writable through a general profile update. Use security-invoker views or a reviewed equivalent; a view must not expose private account bindings or bypass underlying ownership rules. Verify the actual project's Data API exposure settings rather than assuming defaults.
+
+Official project-to-project challenges require both projects' designated representatives to opt in. A self-described affiliation never creates that designation. The team's initial partnership/representation confirmation is separate from ordinary community-member joining; routine member challenges do not require owner approval.
+
+### Bounded uploads and automated checks
+
+Proposed initial profile-image limit: 2 MiB and 4096 × 4096, PNG/JPEG/WebP only. Repeat type, signature, size and dimension checks on the server; browser checks are usability only. Store the original in an owned private staging area, process to a bounded derivative with metadata removed, and publish only the intended derivative after checks and listing consent. Do not treat a public bucket as a control on who can retrieve a known image URL. Restrict writes/replacements/deletion to the verified owner path. Reject SVG/HTML, remote URL imports, oversized decompression and unsupported animation. Set storage/processing quotas and cleanup for abandoned, replaced, unlisted and deleted images before activation.
+
+### Abuse and time boundaries
+
+Proposed starting limits for trial acceptance: one profile/account; five new invitations/day; three ideas/day; ten contributions/day; five reports/day; one active vote/account/idea. Review actual usage and costs before adopting them. Enforce quotas atomically on the server/database, including direct Data API and simultaneous requests, with separate route/IP controls. The preview's 12-profile, 12-challenge and 20-idea capacities are sandbox bounds, not production abuse controls.
+
+Production challenge acceptance must snapshot the agreed rules and create server-time start/end timestamps atomically. Late contributions, duplicate evidence, deleted/blocked participants, simultaneous acknowledgements and expired/cancelled invitations need tested transition rules. This preview deliberately runs no deadline clock. Public results must identify peer acknowledgements accurately and must not claim independent verification.
+
+Reports need deduplication, reason categories, review history and an appeal/recovery route. Reserve staff/project-role names and apply automated content/rate checks, but make no bot-proof or perfectly automated-moderation claim. Do not blanket hold every profile for Michael. Blocking should stop invitations and hide the relevant content without revealing who reported someone. Publish actual conduct and privacy rules before accepting public posts.
+
+## Request tracking and email delivery
+
+Keep routine member joins/edits and normal invitations self-service. Keep suggestions searchable on the portal. Give partnership applications and escalated reports durable server references and an in-portal status. An email may point Michael to a request requiring action; a configurable suggestion digest can summarize new ideas without emailing every join or vote. The owner has expressed the preferred routing, but no notification schedule or external delivery is activated here.
+
+Email delivery should use a transactional outbox with idempotency keys, bounded retries and visible delivery state. A delivery failure must not lose the request or create duplicate records. Notifications should include a minimal category/reference and a canonical portal link; avoid raw private report bodies, account identifiers, credentials, untrusted HTML or attacker-supplied destination links. Recipients and sender must be verified before activation. The dashboard remains authoritative even if an email goes to spam. Never claim that a mailto click submitted a tracked request.
+
+## Release dependencies and acceptance
+
+- The account preview still has Google's deceptive-page issue recorded on October 17. Public registration stays closed. Do not move the account flow to a new preview hostname to evade that warning.
+- Clear the exact account destination, then perform actual Google, session/expiry, multitab and intended-phone acceptance. Account-operation gates remain: managed signup behavior, deletion/recovery, backup custody, privacy/support, usage controls and Google audience/brand requirements.
+- Implement and test the hosted member repository, ownership policies, image pipeline, server quotas, recipient-only transitions, opt-in publication and private report queue. This PR supplies an interaction preview and integration contract; it does not implement those hosted services.
+- Test two real authorized disposable accounts: join without operator approval; edit only self; publish/unlist; replace/delete image; invite/accept/decline/cancel; block/report; deduplicate contributions/votes; restore after deletion without resurrecting removed data. Test cross-account denial through both application routes and directly permitted database APIs.
+- Test requester confirmation, permanent references, queue statuses, notification deduplication and email failure recovery without using real members' information. Confirm data retention and account deletion cover community rows, stored files, derived thumbnails, backups and queued notifications.
+- Stage a separately reviewed activation with the exact source, scope, operating budget and recovery procedure. Passing local preview tests is not public signup, hosted security, moderation or email-delivery acceptance.
+
+## Current documentation sources
+
+Supabase guidance reviewed October 17: [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Storage access control](https://supabase.com/docs/guides/storage/security/access-control), [Storage buckets](https://supabase.com/docs/guides/storage/buckets/fundamentals), [File limits](https://supabase.com/docs/guides/storage/uploads/file-limits) and [Changelog](https://supabase.com/changelog). Relevant Data API exposure changes reinforce checking explicit grants and project settings. No SDK dependency or Supabase CLI was installed; no database migration was generated or applied.
+
+## Profile foundation candidate — October 17
+
+Optional images now have a separate [bounded processing candidate](federation-alliance-avatar-processing-20261017.md): isolated native decoding, metadata removal, fixed output and cancellation/deadline controls. It remains disabled/unmounted. No storage bucket, upload route, durable quota or member-image handling is activated.
+
+A separate [private ownership/quota ledger candidate](federation-alliance-avatar-storage-20261017.md) adds disabled, unapplied database state for exact-once dispatch reservations, version fencing, account/global limits and physical-cleanup evidence. It does not provision Storage, authenticate a browser, implement the provider gateway, or activate a cleanup service. Real-account image access and metadata retention remain blocked until their acceptance gates pass.
+
+The subsequent [private Storage gateway candidate](federation-alliance-avatar-gateway-20261017.md)
+prepares bounded immutable writes, exact receipt/byte validation, private reads
+with two current-policy checks, and matching deletion evidence. It is disabled
+and unmounted; no bucket, credential, provider request or cleanup service is
+enabled. Durable receipt persistence, authenticated orchestration and actual
+Storage acceptance remain gates before it can be composed with the ledger.
+
+Continuation: [account-to-profile transport candidate](federation-alliance-profile-transport-20261017.md)
+adds unmounted, disabled server and browser factories for verified-cookie profile
+requests, strict same-origin boundaries, private response shapes and honest
+cancellation/uncertain-write handling. The page's tab-only preview is unchanged;
+no API route, real Auth/Storage integration or hosted setup is activated.
+
+Owner approval covers independent member joining without routine operator approval. `sql/alliance-profile-candidate.sql` proposes private account bindings, one profile per account, owner-only edits/removal, explicit listing, protected moderation fields and deletion cascades. Directory access initially requires an eligible joined account; it is not an anonymous directory. Anonymous or missing eligibility claims fail closed.
+
+`lib/alliance-profile-store.mjs` is server-only, unmounted and disabled by default. It accepts only editable profile fields, uses fixed self-profile RPCs, bounds response sizes and deadlines, strips private fields and has no service key or anonymous fallback. Supabase must verify bearer tokens; adapter token-shape checks are not authentication. No UI imports it and no environment values are read. Images, challenges, suggestions, quotas and notifications are not connected.
+
+All 14 local adapter tests passed with synthetic in-memory responses. Native PostgreSQL assertions and a dedicated disposable PostgreSQL 17.11 CI workflow are included for actual ownership/grant checks; native execution remains pending until CI succeeds. The fixture uses synthetic claim settings, not real GoTrue/JWT verification. No hosted database, Auth, Storage, environment, email or deployment configuration was changed. This SQL is candidate source, not an applied or CLI-generated migration.
+
+
+## Optional preview listing — October 20
+
+The original preview required the listing checkbox to be checked even though the form presented it as a choice. Actual Chrome reproduced the refusal with valid name/bio fields and an unchecked box.
+
+The tab-only preview now accepts an explicit boolean listing value, including false; missing, null, numeric and string values still refuse. The member card and save status show Listed or Unlisted, and adjacent checkbox help describes the effect. An unlisted local profile stays available in the roleplay selector and can still be edited or used to initiate an intentional invitation to a listed member. It does not appear in the directory or new invitation targets. Knowing an unlisted profile's preview ID does not make it a valid new invitation target.
+
+Unlisting changes directory discovery only. It does not erase existing preview ideas, contribution history or invitations. Existing invited participants can still respond. The text makes this limit visible. Reset remains the action that clears the entire tab sandbox. The identity selector is still roleplay and provides no authentication or confidentiality boundary.
+
+All 113 combined Alliance tests pass locally under Node24, including 33 Community Hub tests. Four new tests cover owner-only listing changes and new invitation targeting, preservation of existing participation, reachable unlisted identity controls, and listing changes without resetting ideas/invitations. Updated preview browser acceptance is recorded in the PR after deployment. No hosted profile route, database policy, member data, storage object, account setting or public signup is changed by this source/UI increment.
+
+## Contribution draft continuity — October 20
+
+Chrome reproduced loss of an unfinished contribution when the challenge filter was changed away and back. Rebuilding another challenge or acting on an unrelated item also rebuilt these input fields.
+
+Unsubmitted contribution text now survives those rebuilds in the tab's existing memory-only preview. Drafts belong to the particular preview participant and challenge. Switching to a fictional identity starts with that identity's own draft; switching back restores the original participant's text. A successful submission clears only its matching draft. Validation failure preserves the unfinished text. Intentionally clearing the field stays cleared. Finished challenges discard cached drafts; reset and component disposal clear the draft map, and reloading/closing still loses all sandbox state. This is not durable autosave or an account-backed draft service.
+
+Each rendered form is bound to its participant and render version. Removed form/input handlers cannot later change drafts or submit a contribution, including after a reset reuses the same local IDs. These are UI lifecycle checks, not authentication. Only the two participants in an active challenge can create a draft, within the existing twelve-challenge cap; retained draft strings are bounded to the existing 240-character field limit. No browser storage, network call or hosted repository is added.
+
+All 119 combined Alliance tests pass locally under Node24, including 39 Community Hub tests. Six additional tests cover filter/unrelated-action continuity, independent drafts across challenges, participant separation and detached handlers, reset/ID reuse, validation retry and intentional clearing. Five fail against the preceding module. Updated-preview browser results are recorded in the PR after deployment. No HTML/CSS, core model, server, dependencies, account/permission setting or production gate changes in this increment.
+
+## Idea and invitation draft ownership — October 20
+
+Chrome reproduced unfinished idea text moving from the visitor's identity to Nova, and Nova's unfinished invitation brief appearing after returning to the visitor. The static forms previously kept the same contents while the actor selector changed who would submit them.
+
+Idea title, category and detail now follow the selected preview identity. Invitation template, eligible recipient, format, duration, goal and brief do the same. Both the selector and Return to my preview profile save the departing identity's fields and restore the arriving identity's own fields, or defaults on its first visit. The recipient is restored only if still eligible; hiding or unlisting does not resurrect an unavailable target. Restoring a custom contribution goal refreshes its template explanation without overwriting the goal. Status text resets so a different identity does not inherit another author's success message.
+
+Successful idea posting clears its title/detail; successful invitation creation clears its brief. Category and invitation choices remain available for reuse. The other form and other identities' drafts remain intact. Validation failures retain editable text, and deliberate clearing stays cleared. The cache retains only these known fields, bounded by their form limits and the existing profile cap. Reset and disposal clear it; reload/closure still loses the entire local sandbox. No persistence, network operation or authentication boundary is added.
+
+All 124 combined Alliance tests pass locally under Node24, including 44 Community Hub tests. Five new tests cover author-specific restoration/submission, invitation terms and eligible targets, validation and independent form clearing, reset/ID reuse and discarded drafts, and hidden-target exclusion. Three fail against the preceding module. Updated-preview browser results are recorded in the PR after deployment. This increment changes no HTML/CSS, core model, server, dependencies, account/permission setting or production gate.
+
+## Visible submission results — October 20
+
+Chrome reproduced successful submissions disappearing behind existing board filters: a Research idea posted while filtering Tools left the board empty, and a new invitation created while filtering Active challenges did the same. Both forms showed success without showing the created item.
+
+After successful submission, the preview now reveals the new card and moves keyboard focus to it. If the current idea filter excludes the new idea, it changes to that idea's category. If the challenge filter excludes a new invitation, it changes to Awaiting acceptance. The success message explains the filter change. All-category/all-status and already-matching filters are preserved. The invitation still requires the recipient's acceptance; revealing it does not make it active.
+
+Validation failure leaves filters, editable text and keyboard position unchanged. Revealing an invitation can temporarily hide an active challenge, but its unfinished contribution draft remains available when the Active filter is restored. No new memory cache, network operation or persistent state is introduced.
+
+All 130 combined Alliance tests pass locally under Node24, including 50 Community Hub tests. Six additional cases cover mismatched and matching filters, visible focused results, unchanged validation failures, and contribution-draft continuity across the automatic filter change. Five fail against the preceding module. The change is limited to the Community Hub module, tests and this contract; updated-preview browser checks follow deployment.
+
+## Explicit invitation recipients — October 20
+
+Chrome reproduced a draft intended for Nova silently switching to Echo when Nova was hidden. The draft's original brief remained, and the form stayed enabled. The previous recipient picker automatically selected the first available member whenever its options were rebuilt.
+
+The picker now starts with Choose a preview member. It preserves a valid explicit choice; hiding or unlisting that recipient clears the choice and explains that the brief is kept. Other renders, identity changes and unhiding do not silently substitute a different member. Creating an invitation without a recipient gives a specific instruction while preserving the draft, current board filter and keyboard position. Selecting an available recipient then permits the usual invitation flow. A directory card's named Challenge button remains an intentional selection of that member.
+
+All 136 combined Alliance tests pass locally under Node24, including 56 Community Hub tests. Six additional cases cover explicit and named selection, hiding the selected member, missing-recipient validation and retry, restoring a draft for an unlisted recipient, unhiding without automatic selection, and preservation of challenge history/contribution drafts through hiding and showing. Five fail against the preceding module. The shared test setup now explicitly selects its intended recipient. This increment changes only the Community Hub module, tests and this contract; the core model and hosted services are unchanged.
+
+## Responsive tab keyboard controls — October 20
+
+Chrome at a 390-pixel viewport reproduced stacked workspace tabs with no explicit vertical orientation and no Down Arrow navigation. Their CSS already stacks them at 540 pixels and below, while the original keyboard handler used Left/Right at every width.
+
+The tab list now declares its orientation and tracks that existing CSS breakpoint with a media query. Stacked tabs use Up/Down with wrapping; wider horizontal tabs keep Left/Right. The unused arrow axis retains normal browser behavior. Home/End continue to work in both layouts. Resizing updates orientation without changing the selected panel or moving focus. Disposal removes the media-query listener and ignores a late callback. A document without a media-query API retains the horizontal fallback.
+
+This follows the [W3C ARIA Authoring Practices tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). It is a focused keyboard repair, not a screen-reader or WCAG conformance claim. Browser viewport emulation does not establish physical-phone acceptance.
+
+All 141 combined Alliance tests pass locally under Node24, including 61 Community Hub tests. Five new cases cover stacked and horizontal navigation, resize continuity, unused arrow behavior, Home/End and responsive-listener cleanup; all fail against the preceding module. This increment changes the tab-list markup, Community Hub module, tests and this contract. CSS, the core model and hosted services are unchanged. Updated-preview width and keyboard checks follow deployment.
+
