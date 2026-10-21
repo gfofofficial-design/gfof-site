@@ -62,7 +62,7 @@ export function mountMemberProfileForm(document,{enabled=false,createClient}={})
  }
  client=createClient(onState);
  if(!client||!['load','compare','save','acceptCurrent','cancel','dispose'].every(k=>typeof client[k]==='function')){client?.dispose?.();throw Error('member_form_unavailable');}
- get('fields').disabled=false;get('read').disabled=false;get('save').disabled=false;
+ get('fields').disabled=false;get('read').disabled=false;get('save').disabled=false;get('accept').disabled=false;
  get('service-note').textContent='Read your current profile before saving. Reading does not submit your draft.';
  status('Read your current profile to begin. Nothing has been submitted.');controls();
  function clearError(k){get(k).removeAttribute('aria-invalid');get(k).setAttribute('aria-describedby','ap-'+k+'-help');get(k+'-error').textContent='';get(k+'-error').hidden=true;}
@@ -86,5 +86,6 @@ export function mountMemberProfileForm(document,{enabled=false,createClient}={})
   }catch{status('Read the current profile again before confirming. Your draft is kept.');}
  });
  listen(get('cancel'),'click',()=>{if(disposed||!busy)return;client.cancel();get('read').focus();});
- return Object.freeze({dispose(){if(disposed)return;disposed=true;client.dispose();for(const remove of listeners)remove();writeFields(null);current=null;comparison=null;submitted=null;get('current-body').replaceChildren();get('current').hidden=true;get('comparison').hidden=true;get('compare-jump').hidden=true;get('status').textContent='Member profile form closed. No further requests will start.';get('fields').disabled=true;get('read').disabled=true;get('save').disabled=true;get('accept').disabled=true;}});
+ return Object.freeze({dispose(){if(disposed)return;disposed=true;client.dispose();for(const remove of listeners)remove();for(const k of fields)clearError(k);writeFields(null);current=null;comparison=null;submitted=null;get('current-body').replaceChildren();get('current').hidden=true;get('comparison').hidden=true;get('compare-jump').hidden=true;get('status').textContent='Member profile form closed. No further requests will start.';get('fields').disabled=true;get('read').disabled=true;get('save').disabled=true;get('accept').disabled=true;}});
 }
+

@@ -18,7 +18,7 @@
   <main id="profile-main" class="wrap member-profile" tabindex="-1">
     <!-- local fixture hooks -->
     <div class="profile-heading"><p class="eyebrow">FEDERATION ALLIANCE // YOUR PROFILE</p><h1>A place for your contribution.</h1><p>Choose what you share. Keep a draft while you compare changes.</p></div>
-    <aside class="profile-notice" aria-label="Service availability"><strong>Member service closed</strong><p id="ap-service-note">This form is a draft. Member profiles and sign-in are not open here. No account or profile request will start.</p></aside>
+    <aside class="profile-notice" aria-label="Service availability"><strong id="ap-service-title">Member service closed</strong><p id="ap-service-note">This form is a draft. Member profiles and sign-in are not open here. No account or profile request will start.</p></aside>
     <noscript><p>The service is closed. This form cannot submit without the reviewed member service and JavaScript.</p></noscript>
     <div class="profile-toolbar"><button id="ap-read" type="button" disabled>Read current profile</button><button id="ap-cancel" type="button" hidden>Cancel request</button></div>
     <p id="ap-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true">Member profiles are not open yet. No account or profile request has started.</p>
@@ -39,10 +39,11 @@
       <div class="profile-reading">
         <section id="ap-current" class="profile-current" aria-labelledby="current-title" tabindex="-1" hidden><h2 id="current-title">Recorded profile</h2><p class="profile-help">Details from the last successful profile response. This view does not replace your draft or establish the outcome of an interrupted save.</p><dl id="ap-current-body"></dl></section>
         <section id="ap-comparison" class="profile-comparison" aria-labelledby="comparison-title" hidden><h2 id="comparison-title">Keep your draft. Check the current version.</h2><p>Compare the last read profile with your draft. Continuing keeps your text and uses that version for your next save. Nothing is submitted until you choose Save my profile.</p><button id="ap-accept" type="button">Keep my draft and continue</button></section>
-        <section class="profile-removal" aria-labelledby="removal-title"><h2 id="removal-title">Remove your profile</h2><p>Removal controls are still in preparation. This draft form cannot send a removal request. Unlisting and removal are different actions.</p><button type="button" disabled>Remove my profile</button></section>
+        <section id="ap-removal" class="profile-removal" aria-label="Profile removal"><h2 id="removal-title">Remove your profile</h2><p>Removal controls are still in preparation. This draft form cannot send a removal request. Unlisting and removal are different actions.</p><button type="button" disabled>Remove my profile</button></section>
       </div>
     </div>
   </main>
   <footer class="site-footer wrap"><a href="/alliance.html">Federation Alliance</a><p>Draft member interface. No membership, upload, invitation or public record is created by opening this page.</p></footer>
 </body>
 </html>
+

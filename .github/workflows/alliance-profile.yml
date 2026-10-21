@@ -21,6 +21,10 @@ on:
       - 'assets/federation/fed-alliance-profile-contract.mjs'
       - 'assets/federation/fed-alliance-profile-revision-contract.mjs'
       - 'assets/federation/fed-alliance-member-client.mjs'
+      - 'assets/federation/fed-alliance-member-page.mjs'
+      - 'assets/federation/fed-alliance-member-form.mjs'
+      - 'assets/federation/fed-alliance-profile-page.mjs'
+      - 'alliance-profile.html'
       - 'assets/federation/fed-alliance-profile-removal-*.mjs'
       - 'netlify/lib/read-json-bounded.cjs'
       - 'tests/alliance-profile*'
@@ -43,6 +47,7 @@ jobs:
       - run: node --check assets/federation/fed-alliance-member-client.mjs
       - run: node --test tests/alliance-profile-store.test.mjs tests/alliance-profile-api.test.mjs tests/alliance-profile-client.test.mjs tests/alliance-profile-revisions.test.mjs
       - run: node --test tests/alliance-profile-removal.test.mjs tests/alliance-profile-removal-composed.test.mjs tests/alliance-profile-removal-panel.test.mjs tests/alliance-profile-removal-version.test.mjs tests/alliance-profile-removal-binding.test.mjs
+      - run: node --test tests/alliance-profile-member-page.test.mjs tests/federation-alliance-member-form.test.mjs
   profile-native:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04

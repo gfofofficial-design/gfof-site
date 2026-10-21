@@ -1,6 +1,6 @@
 // Explicitly mounted, profile-only confirmation panel. Not imported by a page.
 // Host must supply a fresh account-bound removal version, not an edit revision.
-export function mountProfileRemovalPanel(root,{enabled=false,profileBinding=false,version,readVersion,createClient}={}){
+export function mountProfileRemovalPanel(root,{enabled=false,profileBinding=false,version,readVersion,createClient,beforeConfirm=()=>true}={}){
  if(!root||!root.ownerDocument||typeof enabled!=='boolean'||typeof profileBinding!=='boolean'||profileBinding&&typeof readVersion!=='function'||readVersion!==undefined&&typeof readVersion!=='function'||enabled&&(typeof createClient!=='function'||typeof readVersion!=='function'&&(!Number.isSafeInteger(version)||version<0||version>=Number.MAX_SAFE_INTEGER)))throw Error('profile_removal_panel_configuration');
  const doc=root.ownerDocument,make=(tag,text)=>{const node=doc.createElement(tag);if(text)node.textContent=text;return node;};
  const title=make('h2','Remove your Alliance profile'),scope=make('p','This removes your Alliance profile and detaches its image access. It does not delete your sign-in account or erase stored backups. Provider objects and backups may remain; this action does not confirm physical erasure.'),status=make('p',enabled?'Review the scope before continuing.':'Profile removal is not available yet. No request has been started.');
@@ -34,7 +34,7 @@ export function mountProfileRemovalPanel(root,{enabled=false,profileBinding=fals
   });
   listen(check,'change',()=>{confirm.disabled=busy||!check.checked;});
   listen(back,'click',()=>{if(disposed||busy||started)return;confirmation.hidden=true;check.checked=false;review.hidden=false;if(readVersion){selectedVersion=undefined;selectedProfileId=undefined;}review.focus();});
-  listen(confirm,'click',()=>{if(disposed||busy||started||!check.checked||!Number.isSafeInteger(selectedVersion))return;started=true;review.hidden=true;confirmation.hidden=true;status.textContent='Removing your Alliance profile…';status.focus();return run(()=>client.confirm({version:selectedVersion,confirm:'remove_my_profile',...(profileBinding?{profileId:selectedProfileId}:{})}));});
+  listen(confirm,'click',()=>{if(disposed||busy||started||!check.checked||!Number.isSafeInteger(selectedVersion))return;try{if(beforeConfirm()!==true){status.textContent='Finish the current profile request before confirming removal. No removal was started.';return;}}catch{status.textContent='Removal could not start. No removal was started.';return;}started=true;review.hidden=true;confirmation.hidden=true;status.textContent='Removing your Alliance profile…';status.focus();return run(()=>client.confirm({version:selectedVersion,confirm:'remove_my_profile',...(profileBinding?{profileId:selectedProfileId}:{})}));});
   listen(reconcile,'click',()=>{if(disposed||!started||busy)return;return run(()=>client.reconcile());});
   listen(cancel,'click',()=>{if(disposed||!busy)return;client.cancel();});
  }
