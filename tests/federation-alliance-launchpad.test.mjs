@@ -309,3 +309,15 @@ test('closing during a clipboard wait prevents late success and cancels remainin
  const gate=deferred(),b=fixture({copy:()=>gate.promise});const copying=b.get('crew-copy').emit('click');assert.equal(b.clock.timers.size,1);
  b.api.dispose();await copying;gate.resolve();await flush();assert.equal(b.clock.timers.size,0);assert.equal(b.get('crew-copy-status').textContent,'');assert.equal(b.get('crew-download').hidden,true);
 });
+
+test('request intake is an explicit separate native form with reply consent and no artwork upload',()=>{
+ const html=readFileSync(new URL('../alliance.html',import.meta.url),'utf8');const form=html.match(/<form id="project-send-form"[\s\S]*?<\/form>/)?.[0];
+ assert.ok(form);assert.match(form,/name="alliance-project-request"/);assert.match(form,/method="POST"/);assert.match(form,/action="\/alliance-request-received"/);assert.match(form,/data-netlify="true"/);assert.match(form,/netlify-honeypot="bot-field"/);
+ assert.match(form,/<textarea[^>]*name="proposal"[^>]*readonly/);assert.match(form,/<input[^>]*type="email"[^>]*name="email"[^>]*required/);assert.match(form,/<input[^>]*name="review-consent"[^>]*required/);assert.match(form,/%\{submissionId\}/);assert.doesNotMatch(form,/type="file"|<form[\s\S]*<form/);
+ assert.match(html,/connect-src 'none'/);assert.match(html,/form-action 'self'/);
+ const received=readFileSync(new URL('../alliance-request-received.html',import.meta.url),'utf8');assert.match(received,/not a delivery receipt/);assert.match(received,/no public request-status portal/);
+});
+test('clearing and closing project intake remove reply-email and consent state',()=>{
+ const b=fixture();b.get('project-reply-email').value='owner@example.com';b.get('project-send-consent').checked=true;b.get('project-clear').emit('click');assert.equal(b.get('project-reply-email').value,'');assert.equal(b.get('project-send-consent').checked,false);
+ b.get('project-reply-email').value='owner@example.com';b.get('project-send-consent').checked=true;b.api.dispose();assert.equal(b.get('project-reply-email').value,'');assert.equal(b.get('project-send-consent').checked,false);assert.equal(b.get('project-send').disabled,true);
+});

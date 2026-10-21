@@ -213,7 +213,7 @@ export function mountAllianceLaunchpad(document, options={}) {
   listen(byId('arena-prepare'),'click',prepareArena);byId('arena-prepare').hidden=false;
   for(const key of Object.keys(PREP_CHECKS)) listen(byId('prep-'+key),'change',changedProject);
   listen(byId('project-clear'),'click',()=>{
-    artwork.clear();
+    artwork.clear();byId('project-reply-email').value='';byId('project-send-consent').checked=false;
     for(const id of ['project-name','project-website','project-mint']) byId(id).value='';
     byId('project-interest').value='education';byId('project-format').value='creative';byId('project-goal').value='';syncCompetition();for(const key of Object.keys(PREP_CHECKS))byId('prep-'+key).checked=false;
     clearProjectOutput();prepCount();byId('project-prep-status').textContent='Worksheet cleared from this tab. Copies or downloaded files are not deleted.';byId('project-name').focus();
@@ -224,7 +224,7 @@ export function mountAllianceLaunchpad(document, options={}) {
   for(const id of ['activity-controls','crew-controls','crew-output'])byId(id).hidden=false;
   byId('project-fields').disabled=false;
   byId('project-prep-status').textContent='Use public project details only. The draft stays in this tab until you choose to copy or download it.';
-  return {getSelection:()=>[...selected],dispose(){if(disposed)return;disposed=true;for(const removeListener of listeners)removeListener();listeners.length=0;byId('project-fields').disabled=true;for(const key of ['crew','project']){byId(key+'-copy').disabled=true;byId(key+'-output').hidden=true;}byId('project-use-starter').disabled=true;byId('arena-prepare').disabled=true;artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
+  return {getSelection:()=>[...selected],dispose(){if(disposed)return;disposed=true;for(const removeListener of listeners)removeListener();listeners.length=0;byId('project-fields').disabled=true;byId('project-send').disabled=true;byId('project-reply-email').value='';byId('project-send-consent').checked=false;for(const key of ['crew','project']){byId(key+'-copy').disabled=true;byId(key+'-output').hidden=true;}byId('project-use-starter').disabled=true;byId('arena-prepare').disabled=true;artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
 }
 
 if(typeof document !== 'undefined') {
