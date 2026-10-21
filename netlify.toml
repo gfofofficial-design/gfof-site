@@ -1,6 +1,11 @@
 # Galactic Federation of Finance — Netlify configuration
 # Security headers, API redirects, clean-URL rewrites.
 
+# Review the restricted static output on previews before adopting it for production.
+[context.deploy-preview]
+  command = "node scripts/build-static-publish.mjs"
+  publish = "dist"
+
 # ─── Security headers (applied to every response) ───
 [[headers]]
   for = "/*"
@@ -181,6 +186,61 @@
   status = 200
   force = true
 
+# Shared Federation account foundation (closed until provider setup).
+[[headers]]
+  for = "/account*"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
+[[redirects]]
+  from = "/api/federation-account/email-start"
+  to = "/.netlify/functions/federation-account/email-start"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    aggregate_by = ["ip", "domain"]
+    window_limit = 10
+    window_size = 60
+
+[[redirects]]
+  from = "/api/federation-account/email-verify"
+  to = "/.netlify/functions/federation-account/email-verify"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    aggregate_by = ["ip", "domain"]
+    window_limit = 10
+    window_size = 60
+
+[[redirects]]
+  from = "/api/federation-account/oauth"
+  to = "/.netlify/functions/federation-account/oauth"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    window_limit = 10
+    window_size = 60
+    aggregate_by = ["ip", "domain"]
+
+[[redirects]]
+  from = "/api/federation-account/*"
+  to = "/.netlify/functions/federation-account/:splat"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    window_limit = 60
+    window_size = 60
+    aggregate_by = ["ip", "domain"]
+
+[[redirects]]
+  from = "/account"
+  to = "/account.html"
+  status = 200
+  force = true
+
 # The wallet's custom path and visitor rate limit are defined in its function.
 
 [[headers]]
@@ -218,4 +278,3 @@
     X-Frame-Options = "DENY"
     X-Robots-Tag = "noindex"
     Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self' blob:; connect-src 'none'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
-

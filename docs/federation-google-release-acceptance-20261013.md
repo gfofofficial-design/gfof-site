@@ -1,14 +1,27 @@
 # Google account release acceptance — proposed operator checklist
 
-Prepared October 13; updated October 15, 2026. This is a review checklist, not release authorization or a completed acceptance record. The public read-only Command Deck and the draft account release have separate scopes. Keep account registration closed until every applicable gate has evidence and the owner approves the exact release.
+Prepared October 13; updated October 17, 2026. This is a review checklist, not release authorization or a completed acceptance record. The public read-only Command Deck and the draft account release have separate scopes. Keep account registration closed until every applicable gate has evidence and the owner approves the exact release.
 
 ## Gate 0 — Google warning and exact candidate
 
-Latest recorded owner observation, October 14: Google listed the account preview `/account` for deceptive pages. No later clearance evidence is recorded in this checklist. The cause has not been established; expected page rendering and passing CI do not prove that the warning was incorrect or removed.
+Current connected-Chrome observation, October 17, 2026: Search Console Security Issues for the exact property `https://deploy-preview-99--gfof.netlify.app/` shows **1 issue detected**, **Deceptive pages** and the sample `https://deploy-preview-99--gfof.netlify.app/account`. No completed review outcome or review-in-progress confirmation is visible. The Request review dialog shows an unchecked **All issues were fixed** box, an empty disabled explanation and disabled Submit request. It was cancelled without changing the checkbox, entering text or submitting. The cause has not been established; expected page rendering and passing CI do not prove that the warning was incorrect or removed. This supersedes the earlier unavailable-browser observation as a current status read, not as clearance.
 
 Keep browser/phone sign-in, callback replay and authenticated acceptance **NOT RUN** while this gate remains unresolved. Do not bypass a browser warning or move the same flow to another hostname to evade it. Review current Safe Browsing/Search Console evidence for the exact destination before authorizing browser acceptance; URL indexing status is a different check.
 
-The October 15 source candidate is PR #99 head `d72606053c282f23cd133bdcdad05e3093619bd1`, synchronized with released main `7cd97e7106a69fa6c91105c3f4ffd20ee75389d9`. Automated and isolated-fixture checks passed at that head; real Google and physical-phone acceptance have not been established. Re-read the current head and deploy before later acceptance.
+The candidate is the **current PR #99 head and its matching ready preview**, read immediately before acceptance. Do not use an old SHA from a dated note as the test target. The earlier synchronized heads and their CI results are historical evidence. The latest October 17 synchronization combines account head `5e7220a4910312cf780773f1ee2a16ca38dd0c2f` with released production `556f56ccc669abc28ff97bba449e2ba88799d90e` (production deploy `6ad389d8c12a590598b5b371`). It carries fourteen released path changes: Alliance Mission Console, local Crew Plans and Project Prep artwork, the stations-first section order, homepage Alliance links and GF host seals. Twelve paths use exact released Git blobs. Two clean three-way merges retain the preview's existing Google verification tag and account routing, limits, private/no-store headers and account CSP while adding the released homepage links and Alliance-only blob image support. This checklist is the only additional edit. The account page, scripts, styles, Google artwork, handler, bounded provider reader, wallet handler and database/schema sources retain their exact prior blobs. Historical HTML/flow inventories remain dated; the Alliance page and homepage have changed since that inventory. This remains a pinned released baseline; compare later production changes before account acceptance. Exact-head CI/deploy and passive delivery evidence are recorded on PR #99. No real sign-in or phone acceptance was run.
+
+### Owner status readback
+
+Open [Search Console Security Issues](https://search.google.com/search-console/security-issues) and select the exact property `https://deploy-preview-99--gfof.netlify.app/`. A report for the production domain, an indexing result or the Google OAuth Verification Center is a different observation.
+
+| Observation to record | Next step |
+| --- | --- |
+| Current report shows no security issues | Record the property and time; check the account page anonymously in normal Chrome and the intended phone browser before entering sign-in. Continue only if neither presents a security interstitial. |
+| Review is in progress | Record that status and wait for the existing review's final decision. Do not duplicate it. |
+| Deceptive pages still appears | Record the expanded sample and any review status/outcome. The latest capture has the /account sample but no visible review outcome or first-detected date. Inspect the current Request Review dialog without submitting or making an all-issues-fixed attestation; button visibility alone does not establish whether another report is pending. |
+| No current report or ambiguous property | Keep Gate 0 pending and all real sign-in checks NOT RUN. |
+
+The October 13 incorrect-warning report and the formal Search Console security review are separate. Current evidence does not establish the warning's cause or support an all-issues-fixed attestation. Follow [Google's current report guidance](https://support.google.com/webmasters/answer/9044101?hl=en); record evidence rather than assuming that source parity, noindex or branding changes establish clearance.
 
 ## Gate 1 — existing-owner Google acceptance
 
@@ -33,7 +46,7 @@ Use existing browser acceptance procedures; do not fabricate successful-code rep
 
 ## Gate 2 — public account operating readiness
 
-The proposed [account operations plan](https://github.com/gfofofficial-design/gfof-site/blob/d72606053c282f23cd133bdcdad05e3093619bd1/docs/federation-account-data-operations.md), [readiness record](https://github.com/gfofofficial-design/gfof-site/blob/d72606053c282f23cd133bdcdad05e3093619bd1/docs/federation-account-readiness.md) and [security release gates](https://github.com/gfofofficial-design/gfof-site/blob/d72606053c282f23cd133bdcdad05e3093619bd1/docs/federation-security-release-gates.md) are draft account contracts in PR #99, not adopted production procedures. Record unresolved items rather than treating earlier technical drills as completed customer support.
+The proposed [account operations plan](federation-account-data-operations.md), [readiness record](federation-account-readiness.md) and [security release gates](federation-security-release-gates.md) are draft account contracts in PR #99, not adopted production procedures. Record unresolved items rather than treating earlier technical drills as completed customer support.
 
 | Required decision or proof | Acceptance condition |
 | --- | --- |
@@ -48,7 +61,7 @@ The proposed [account operations plan](https://github.com/gfofofficial-design/gf
 
 ## Gate 3 — separately approved production acceptance
 
-Only after the preceding gates pass, review the exact production commit, environment scope, canonical origin, provider settings and rollback. A preview pass does not authorize changing production environment values or opening signup.
+Only after the preceding gates pass, review the exact production commit, environment scope, canonical origin, provider settings and the approved recovery procedure. A preview pass does not authorize changing production environment values or opening signup.
 
 The application origin must be https://galacticfederation.co. The intended application redirect pattern is https://galacticfederation.co/api/federation-account/callback?state=*; the only wildcard is generated state. Register the separate provider callback at the reviewed identity project.
 
@@ -56,7 +69,7 @@ Verify production sign-in, cancellation, replay refusal, server session, Secure/
 
 Update navigation on Federation and companion sites only after the account destination works publicly. Check both normal and mobile paths; never point users at a preview as the permanent account service.
 
-## Stop and rollback rules
+## Stop and recovery rules
 
 - Failed existing-owner login: stop acceptance, keep unreleased signup closed, and record a sanitized outcome. Investigate before proposing an exact recovery action. This checklist does not authorize provider changes, owner-account resets or user deletion.
 - Failed production account acceptance: stop acceptance, preserve the working read-only Command Deck and follow the exact recovery scope approved for that release. Generic checklist wording is not authorization to change production settings.
