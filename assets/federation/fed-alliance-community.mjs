@@ -133,14 +133,15 @@ export function mountCommunityHub(document,options={}){
     }):[empty('No matching preview challenges. Create an invitation above; no real challenge is published.')]));
   }
   function renderIdeas(){
-    const rows=store.ideaList(actor,get('hub-idea-filter').value);
+    const category=get('hub-idea-filter').value,rows=store.ideaList(actor,category);
+    const emptyMessage=!actor?'Create a preview profile to post an idea and try the exchange.':category==='all'?'No preview ideas yet. Post an idea above to start the exchange.':'No preview ideas in this category. Choose All categories or post an idea above.';
     get('hub-ideas').replaceChildren(...(rows.length?rows.map(item=>{
       const card=element('article','hub-idea');card.id='hub-idea-card-'+item.id;card.setAttribute('tabindex','-1');card.append(element('span','eyebrow',IDEA_CATEGORIES[item.category]+' // PREVIEW IDEA'),element('h4','',item.title),element('p','',item.detail),element('p','small','By '+name(item.owner)+' · Preview reference '+item.id));
       const actions=element('div','hub-card-actions');const vote=button((item.votes.includes(actor)?'Remove support':'Support idea')+' · '+item.votes.length,()=>act(()=>store.vote(actor,item.id),'Preview support updated. One vote per preview identity; no public vote was recorded.','hub-vote-'+item.id));vote.id='hub-vote-'+item.id;vote.disabled=!actor||actor===item.owner;vote.setAttribute('aria-pressed',String(item.votes.includes(actor)));actions.append(vote);
       if(actor===item.owner)actions.append(button('Remove my idea',()=>act(()=>store.removeIdea(actor,item.id),'Your idea was removed from this preview.','hub-ideas-title')));
       else if(actor)actions.append(button('Report idea',()=>act(()=>store.report(actor,'idea',item.id),'Idea report recorded only in this preview. Nothing was sent.',card.id)));
       card.append(actions);return card;
-    }):[empty('No matching preview ideas. Create a profile, then post an idea above to try the exchange.')]));
+    }):[empty(emptyMessage)]));
   }
   function render(preferredTarget){renderProfile();renderSession();renderDirectory();renderTargets(preferredTarget);renderChallenges();renderIdeas();}
   const tabs=['profile','challenges','ideas'],tabMedia=document.defaultView?.matchMedia?.('(max-width:540px)');
