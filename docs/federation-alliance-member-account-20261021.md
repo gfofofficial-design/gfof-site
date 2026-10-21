@@ -63,10 +63,13 @@ Seventy relevant local cases cover the new account bridge and existing real
 editor/removal components: default closure, exact origins, signed-out/bad/cacheable
 responses, byte/deadline limits, queued/noncooperative work, sign-out/late replies,
 same-account draft/focus preservation, changed-account isolation and preservation
-of unknown removal without another mutation. Two additional local contract cases
-use the actual account dashboard session-handler source with in-memory transport;
-no provider, key or email is used. The account implementation is still maintained
-in the separate account draft, so this is not a hosted combined route.
+of unknown removal without another mutation. A further two-step contract case uses the actual account dashboard session handler
+with in-memory transport and synthetic credentials; no provider or email is used.
+The latest work-computer `main` (16f3740) includes the closed account foundation
+and public Arena/request-intake release. This draft reconciles both, and the
+contract case now imports the handler in this same repository and runs in CI.
+The merge and affected-interface suite passes236 cases locally. This remains
+source-level acceptance, not a hosted combined member route.
 
 An actual local Chrome fictional fixture checks keyboard order, same-account
 draft preservation, changed-account clearing, sign-out, narrow360px reflow and

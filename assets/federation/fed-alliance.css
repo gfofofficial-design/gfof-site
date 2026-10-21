@@ -3,6 +3,12 @@
 
 .station-insignia{padding:5px}.station-mark{padding:2px}.station-insignia>img,.station-mark>img{display:block;width:100%;height:100%;object-fit:contain}
 
+/* Entry paths keep public activities ahead of pilot forms and prelaunch scores. */
+.alliance-start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.alliance-start-grid .activity-card{display:flex;flex-direction:column;gap:.75rem}
+.alliance-start-grid .text-link{margin-top:auto}
+@media(max-width:760px){.alliance-start-grid{grid-template-columns:1fr}}
+
 /* A tools-first introduction; role paths and proposal limits stay visible. */
 .pilot-status{display:flex;align-items:center;flex-wrap:wrap;gap:8px 24px;padding:12px 16px;margin-top:20px;background:var(--fed-space-panel);border:1px solid var(--fed-border-strong);border-radius:8px;font-size:13px;color:var(--fed-text-display);z-index:5}
 .pilot-status>strong{color:var(--fed-authority)}

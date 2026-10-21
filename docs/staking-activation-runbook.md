@@ -83,3 +83,7 @@ A zero platform charge does not establish a funded reward budget or cost-free
 participation. Keep the public page in preparation, with no wallet connection,
 until provider verification and the existing funding, legal and launch gates
 are satisfied. Do not infer a launch from bonding or from another token's pool.
+
+## October 7 website/account security requirement
+
+The owner agreed to the additional [Federation security release gates](federation-security-release-gates.md). Apply them alongside G0–G5 before financial invitations or integrations. Read-only public-address access in the separate Command Deck preview does not satisfy ownership, custody, pool approval or transaction review. A provider audit must match the deployed program/version and authorities actually used; it does not by itself establish the Federation site's security. No transaction, paid review or provider purchase is authorized by adoption of these gates.

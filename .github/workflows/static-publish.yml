@@ -1,0 +1,27 @@
+name: Static publish boundary
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  static-output:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: node --test tests/static-publish.test.mjs
+      - run: node scripts/build-static-publish.mjs
+      - name: Check real checkout output and source exclusions
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {access} from 'node:fs/promises';
+          for(const path of ['account.html','account-privacy.html','command-preview.html','command-deck.html','alliance.html','assets/federation/fed-account.js','assets/federation/fed-account.css','assets/federation/fed-tokens.css','journey/passport.js','logo-circle.png','robots.txt','sitemap.xml'])await access('dist/'+path);
+          for(const path of ['netlify','tests','scripts','supabase','workers','.github','netlify.toml','.env','dist'])await assert.rejects(access('dist/'+path));
+          JS

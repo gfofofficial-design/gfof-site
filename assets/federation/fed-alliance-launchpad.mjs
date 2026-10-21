@@ -1,4 +1,4 @@
-import {ACTIVITIES, ROUTES, PREP_CHECKS, matchingActivities, updateSelection, crewPlan, prepareProjectBrief} from './fed-alliance-launchpad-core.mjs';
+import {ACTIVITIES, ROUTES, PREP_CHECKS, COMPETITION_FORMATS, COMPETITION_STARTERS, matchingActivities, updateSelection, crewPlan, prepareProjectBrief} from './fed-alliance-launchpad-core.mjs';
 import {createArtworkSelection, artworkBrief} from './fed-alliance-artwork.mjs';
 
 export function mountAllianceLaunchpad(document, options={}) {
@@ -16,7 +16,11 @@ export function mountAllianceLaunchpad(document, options={}) {
   });
   const revokeFile=options.revokeFile || (url=>globalThis.URL?.revokeObjectURL?.(url));
   const files=new Map(), copies=new Map();
-  let selected=[...ROUTES.welcome.ids];
+  let selected=[...ROUTES.welcome.ids],disposed=false;
+  const listeners=[];
+  function guarded(handler){return (...args)=>{if(!disposed)return handler(...args);};}
+  function listen(node,event,handler){const fn=guarded(handler);node.addEventListener(event,fn);listeners.push(()=>node.removeEventListener?.(event,fn));}
+  function listenDynamic(node,event,handler){node.addEventListener(event,guarded(handler));}
 
   function invalidateCopy(key) {
     copies.get(key)?.cancel(); copies.delete(key);
@@ -30,7 +34,7 @@ export function mountAllianceLaunchpad(document, options={}) {
     try { const url=createFile(text); if(url) {files.set(key,url);link.href=url;link.hidden=false;} } catch {}
   }
   function bindCopy(key) {
-    byId(key+'-copy').addEventListener('click',async()=>{
+    listen(byId(key+'-copy'),'click',async()=>{
       const area=byId(key+'-brief'), text=area.value;
       if(!text || byId(key+'-output').hidden) return;
       invalidateCopy(key);
@@ -81,7 +85,7 @@ export function mountAllianceLaunchpad(document, options={}) {
       button.type='button'; button.id='activity-toggle-'+activity.id;
       button.setAttribute('aria-pressed',String(chosen));
       button.setAttribute('aria-label',(chosen ? 'Remove ' : 'Add ')+activity.title+(chosen ? ' from' : ' to')+' your crew plan');
-      button.addEventListener('click',()=>{
+      listenDynamic(button,'click',()=>{
         const next=updateSelection(selected,activity.id);
         if(!chosen && next.length === selected.length) {
           byId('crew-status').textContent='Your three plan slots are full. Remove an activity before adding another.'; return;
@@ -107,14 +111,14 @@ export function mountAllianceLaunchpad(document, options={}) {
       if(index > 0) {
         const earlier=element('button','','Move earlier ↑'); earlier.type='button';
         earlier.setAttribute('aria-label','Move '+activity.title+' earlier in the plan');
-        earlier.addEventListener('click',()=>{
+        listenDynamic(earlier,'click',()=>{
           [selected[index-1],selected[index]]=[selected[index],selected[index-1]];
           renderPlan(); byId('crew-status').textContent='Activity order updated.'; byId('crew-plan-title').focus();
         }); controls.append(earlier);
       }
       const remove=element('button','','Remove'); remove.type='button';
       remove.setAttribute('aria-label','Remove '+activity.title+' from the plan');
-      remove.addEventListener('click',()=>{selected=selected.filter(id=>id !== activity.id);renderActivities();renderPlan();byId('crew-status').textContent='Activity removed from your plan.';byId('crew-plan-title').focus();});
+      listenDynamic(remove,'click',()=>{selected=selected.filter(id=>id !== activity.id);renderActivities();renderPlan();byId('crew-status').textContent='Activity removed from your plan.';byId('crew-plan-title').focus();});
       controls.append(remove); row.append(controls); return row;
     });
     byId('crew-selected').replaceChildren(...rows);
@@ -130,7 +134,15 @@ export function mountAllianceLaunchpad(document, options={}) {
   function clearProjectOutput() {
     invalidateCopy('project'); byId('project-output').hidden=true;
     byId('project-brief').value=''; download('project','');
-    for(const id of ['project-name','project-website','project-mint','project-interest']) byId(id).removeAttribute('aria-invalid');
+    for(const id of ['project-name','project-website','project-mint','project-interest','project-format','project-goal']) byId(id).removeAttribute('aria-invalid');
+  }
+  function syncCompetition(){
+    const active=byId('project-interest').value==='competition';
+    byId('project-competition').hidden=!active;
+    for(const id of ['project-format','project-goal'])byId(id).disabled=!active;
+    const known=Object.hasOwn(COMPETITION_STARTERS,byId('project-format').value);
+    byId('project-starter-preview').textContent=active&&known?'Suggested starting point: '+COMPETITION_STARTERS[byId('project-format').value]:'';
+    byId('project-use-starter').disabled=!active||!known;
   }
   function changedProject() {
     clearProjectOutput(); prepCount();
@@ -160,25 +172,25 @@ export function mountAllianceLaunchpad(document, options={}) {
       byId('project-prep-status').textContent='Artwork changed. Prepare a fresh discussion draft when ready. Nothing has been submitted.';
     },
   });
-  byId('project-artwork').addEventListener('change',()=>artwork.select(byId('project-artwork').files?.[0]));
-  byId('project-artwork-remove').addEventListener('click',()=>{artwork.clear();byId('project-artwork').focus();});
+  listen(byId('project-artwork'),'change',()=>artwork.select(byId('project-artwork').files?.[0]));
+  listen(byId('project-artwork-remove'),'click',()=>{artwork.clear();byId('project-artwork').focus();});
 
-  role.addEventListener('change',renderActivities); time.addEventListener('change',renderActivities);
-  byId('activity-reset').addEventListener('click',()=>{role.value='all';time.value='all';renderActivities();role.focus();});
-  byId('crew-load-route').addEventListener('click',()=>{
+  listen(role,'change',renderActivities); listen(time,'change',renderActivities);
+  listen(byId('activity-reset'),'click',()=>{role.value='all';time.value='all';renderActivities();role.focus();});
+  listen(byId('crew-load-route'),'click',()=>{
     const choice=byId('crew-route').value;
     const route=Object.hasOwn(ROUTES,choice) ? ROUTES[choice] : ROUTES.welcome;
     selected=[...route.ids];renderActivities();renderPlan();
     byId('crew-status').textContent=route.title+' loaded into your plan. No event or enrollment has been created.';
   });
-  byId('crew-pace').addEventListener('change',renderPlan);
-  byId('crew-clear').addEventListener('click',()=>{selected=[];renderActivities();renderPlan();byId('crew-status').textContent='Plan cleared from this tab. Any copy or downloaded file remains under your control.';});
-  byId('project-form').addEventListener('submit',event=>{
+  listen(byId('crew-pace'),'change',renderPlan);
+  listen(byId('crew-clear'),'click',()=>{selected=[];renderActivities();renderPlan();byId('crew-status').textContent='Plan cleared from this tab. Any copy or downloaded file remains under your control.';});
+  listen(byId('project-form'),'submit',event=>{
     event.preventDefault(); clearProjectOutput();
     if(artwork.pending) {
       byId('project-prep-status').textContent='Finish checking the image, or remove it to continue without one.';byId('project-artwork').focus();return;
     }
-    const result=prepareProjectBrief({name:byId('project-name').value,website:byId('project-website').value,mint:byId('project-mint').value,interest:byId('project-interest').value},prepCount());
+    const result=prepareProjectBrief({name:byId('project-name').value,website:byId('project-website').value,mint:byId('project-mint').value,interest:byId('project-interest').value,format:byId('project-format').value,goal:byId('project-goal').value},prepCount());
     if(!result.ok) {
       byId('project-prep-status').textContent=result.message;
       const field=byId(result.field);field.setAttribute('aria-invalid','true');field.focus();return;
@@ -188,22 +200,31 @@ export function mountAllianceLaunchpad(document, options={}) {
     download('project',text);
     byId('project-prep-status').textContent='Discussion draft prepared. '+result.prepared+' of 4 items self-reported; identity, consent and sources still need review. Nothing has been sent.';
   });
-  for(const id of ['project-name','project-website','project-mint']) byId(id).addEventListener('input',changedProject);
-  byId('project-interest').addEventListener('change',changedProject);
-  for(const key of Object.keys(PREP_CHECKS)) byId('prep-'+key).addEventListener('change',changedProject);
-  byId('project-clear').addEventListener('click',()=>{
-    artwork.clear();
+  for(const id of ['project-name','project-website','project-mint','project-goal']) listen(byId(id),'input',changedProject);
+  listen(byId('project-interest'),'change',()=>{syncCompetition();changedProject();});
+  listen(byId('project-format'),'change',()=>{syncCompetition();changedProject();});
+  const useStarter=()=>{
+    if(disposed||byId('project-interest').value!=='competition'||!Object.hasOwn(COMPETITION_STARTERS,byId('project-format').value))return;
+    if(byId('project-goal').value.trim()){byId('project-prep-status').textContent='Your draft was kept. Clear the deliverable field first if you want to use the suggested brief.';byId('project-goal').focus();return;}
+    byId('project-goal').value=COMPETITION_STARTERS[byId('project-format').value];changedProject();byId('project-prep-status').textContent='Starting brief added to your local draft. Adapt it for both teams before preparing a proposal. Nothing has been sent.';byId('project-goal').focus();
+  };
+  listen(byId('project-use-starter'),'click',useStarter);
+  const prepareArena=()=>{if(disposed)return;byId('project-interest').value='competition';if(!Object.hasOwn(COMPETITION_FORMATS,byId('project-format').value))byId('project-format').value='creative';syncCompetition();changedProject();byId('project-format').focus();};
+  listen(byId('arena-prepare'),'click',prepareArena);byId('arena-prepare').hidden=false;
+  for(const key of Object.keys(PREP_CHECKS)) listen(byId('prep-'+key),'change',changedProject);
+  listen(byId('project-clear'),'click',()=>{
+    artwork.clear();byId('project-reply-email').value='';byId('project-send-consent').checked=false;
     for(const id of ['project-name','project-website','project-mint']) byId(id).value='';
-    byId('project-interest').value='education';for(const key of Object.keys(PREP_CHECKS))byId('prep-'+key).checked=false;
+    byId('project-interest').value='education';byId('project-format').value='creative';byId('project-goal').value='';syncCompetition();for(const key of Object.keys(PREP_CHECKS))byId('prep-'+key).checked=false;
     clearProjectOutput();prepCount();byId('project-prep-status').textContent='Worksheet cleared from this tab. Copies or downloaded files are not deleted.';byId('project-name').focus();
   });
   bindCopy('crew'); bindCopy('project');
-  renderActivities();renderPlan();prepCount();
+  renderActivities();renderPlan();prepCount();syncCompetition();
   byId('crew-plan-title').setAttribute('tabindex','-1');
   for(const id of ['activity-controls','crew-controls','crew-output'])byId(id).hidden=false;
   byId('project-fields').disabled=false;
   byId('project-prep-status').textContent='Use public project details only. The draft stays in this tab until you choose to copy or download it.';
-  return {getSelection:()=>[...selected],dispose(){artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
+  return {getSelection:()=>[...selected],dispose(){if(disposed)return;disposed=true;for(const removeListener of listeners)removeListener();listeners.length=0;byId('project-fields').disabled=true;byId('project-send').disabled=true;byId('project-reply-email').value='';byId('project-send-consent').checked=false;for(const key of ['crew','project']){byId(key+'-copy').disabled=true;byId(key+'-output').hidden=true;}byId('project-use-starter').disabled=true;byId('arena-prepare').disabled=true;artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
 }
 
 if(typeof document !== 'undefined') {
