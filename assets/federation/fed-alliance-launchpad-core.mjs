@@ -37,6 +37,16 @@ export const ACTIVITIES = Object.freeze([
     href:'/command-deck', link:'Open Command Deck',
     steps:['Choose a public dashboard flow on your own device.', 'Note the expected and observed behavior without private wallet or account data.', 'Draft one reproducible improvement for the team to review.'],
     limit:'Do not bypass browser warnings or test sign-in, signatures or financial actions.'},
+  {id:'permission-pause', title:'Pause before giving permission', role:'explore', minutes:8, kind:'FICTIONAL SAFETY MISSION',
+    summary:'Explore Keys to the Gate with Eno and discuss the scope of a request before deciding.',
+    href:'/journey/keys-to-the-gate', link:'Play Keys to the Gate',
+    steps:['Play the fictional chapter with Eno.', 'Describe what a request would allow and what remains unclear.', 'Compare the questions each crew member would ask before proceeding.'],
+    limit:'Fictional scenario. No wallet connection, signature or real permission is needed.'},
+  {id:'crowd-judgment', title:'Count what actually remains', role:'explore', minutes:8, kind:'FICTIONAL DECISION MISSION',
+    summary:'Run a fictional stall with Kael and distinguish sales, cash paid out and unsold stock.',
+    href:'/journey/after-the-crowd', link:'Play After the Crowd',
+    steps:['Play the fictional chapter with Kael.', 'Compare sales received, cash paid out and the stock left over.', 'Change the demand assumption and explain why sales alone do not establish profit.'],
+    limit:'Educational discussion, not a recommendation to buy, sell or hold a token.'},
   {id:'project-intro', title:'Prepare your community’s introduction', role:'connect', minutes:10, kind:'PROJECT PREPARATION',
     summary:'Use the public project worksheet to make a useful first conversation easier.',
     href:'#project-kit', link:'Open the Project Prep kit',
@@ -47,6 +57,7 @@ export const ACTIVITIES = Object.freeze([
 export const ROUTES = Object.freeze({
   welcome:Object.freeze({title:'Welcome relay', ids:Object.freeze(['first-mission','lending-lab','crew-relay'])}),
   evidence:Object.freeze({title:'Evidence workshop', ids:Object.freeze(['lens-notes','lock-evidence','useful-guide'])}),
+  safety:Object.freeze({title:'Safety & judgment', ids:Object.freeze(['first-mission','permission-pause','crowd-judgment'])}),
   builders:Object.freeze({title:'Builder circle', ids:Object.freeze(['mobile-check','useful-guide','project-intro'])}),
 });
 export const PACES = Object.freeze({session:'One shared session', week:'Across one week', fortnight:'Across two weeks'});
@@ -85,10 +96,18 @@ export function crewPlan(ids, requestedPace='session') {
     parts.push(`${slots[index]} — ${item.title}`, ...item.steps.map((step,n)=>`${n+1}. ${step}`),
       new URL(item.href,'https://galacticfederation.co/alliance').href, item.limit, '');
   });
-  parts.push('This is a suggested plan, not a scheduled event, competition entry or verified completion record. No membership, League points, prizes or rewards are awarded. Nothing is submitted or saved by this planner.',
+  parts.push('HOST YOUR CREW', 'Rotate the reader, questioner and summarizer between activities. Anyone can pass; use fictional examples rather than personal finances.', 'After each activity: What did we choose? What supports it? What would change our minds?', 'Close with one useful takeaway per person and choose an optional next discussion together. Keep contributions voluntary; do not record or quote people without consent.', '', 'This is a suggested plan, not a scheduled event, competition entry or verified completion record. No membership, League points, prizes or rewards are awarded. Nothing is submitted or saved by this planner.',
     'Explore the Alliance: https://galacticfederation.co/alliance#crew-console');
   return {activities,minutes,text:parts.join('\n')};
 }
+export const COMPETITION_FORMATS=Object.freeze({creative:'Creative Clash',builder:'Builder Battle',research:'Research Showdown',exchange:'Community Exchange',headtohead:'Head-to-Head'});
+export const COMPETITION_STARTERS=Object.freeze({
+ creative:'Create one original 30-second video explaining a useful public concept, with permission for any third-party material.',
+ builder:'Build a small working public tool, include a short demo and document one limitation and how another team can try it.',
+ research:'Answer one agreed public research question with dated sources, a clear conclusion and explicit unanswered questions.',
+ exchange:'Create one practical beginner guide or reviewed translation that another community can use, with its public sources.',
+ headtohead:'Both projects create one original resource for the same agreed audience and problem, using equal entry limits and published judging criteria.'
+});
 export function prepareProjectBrief(fields, checks=[]) {
   const name=typeof fields?.name === 'string' ? fields.name.trim() : '';
   if(name.length < 2 || name.length > 70 || /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(name)) return {ok:false,field:'project-name',message:'Enter a public project name, 2–70 characters on one line, without hidden direction controls.'};
@@ -98,12 +117,19 @@ export function prepareProjectBrief(fields, checks=[]) {
   if(!safeWebsite(website) || url.search || url.hash) return {ok:false,field:'project-website',message:'Use a public HTTPS website without a login, query string or fragment.'};
   const mint=typeof fields.mint === 'string' ? fields.mint.trim() : '';
   if(mint && !validMint(mint)) return {ok:false,field:'project-mint',message:'Enter the full Solana mint address, or leave it blank for the first discussion.'};
-  const interests={education:'Financial education and crew missions', research:'Token structure and evidence', feedback:'Product feedback and useful guides', community:'Joint community activities'};
+  const interests={competition:'Project-versus-project competitions',education:'Financial education and crew missions', research:'Token structure and evidence', feedback:'Product feedback and useful guides', community:'Joint community activities'};
   if(!Object.hasOwn(interests,fields.interest)) return {ok:false,field:'project-interest',message:'Choose a shared activity from the list.'};
   if(!Array.isArray(checks) || checks.length > 4 || new Set(checks).size !== checks.length || checks.some(key=>!Object.hasOwn(PREP_CHECKS,key))) return {ok:false,field:'project-prep-status',message:'Review the preparation checklist again.'};
+  const competition=[];
+  if(fields.interest==='competition'){
+    if(!Object.hasOwn(COMPETITION_FORMATS,fields.format))return {ok:false,field:'project-format',message:'Choose one of the proposed Arena formats.'};
+    const goal=typeof fields.goal==='string'?fields.goal.trim():'';
+    if(goal.length<20||goal.length>240||/[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(goal))return {ok:false,field:'project-goal',message:'Describe what teams would make in 20–240 characters on one line, without markup or hidden direction controls.'};
+    competition.push(`Proposed format: ${COMPETITION_FORMATS[fields.format]}`,`Proposed shared deliverable: ${goal}`, 'Before a match: both authorized project representatives must agree on the brief, deadline/time zone, equal entry limits, eligibility, originality/tool disclosures, judging criteria, reviewer conflicts and dispute process.', 'This is an unsent discussion proposal, not an invitation, accepted match, scheduled event or prize commitment.', '');
+  }
   const text=['PROSPECTIVE ALLIANCE STATION — DISCUSSION DRAFT',`Project: ${name}`,`Public website: ${website}`,
     mint ? `Chain/mint supplied for review: Solana / ${mint}` : 'Chain/mint: not supplied; confirm before any listing.',
-    `Shared interest: ${interests[fields.interest]}`, '', 'Preparation — self-reported, not independently verified:',
+    `Shared interest: ${interests[fields.interest]}`, '', ...competition, 'Preparation — self-reported, not independently verified:',
     ...Object.entries(PREP_CHECKS).map(([key,label])=>`${checks.includes(key) ? '[prepared]' : '[to discuss]'} ${label}`), '',
     'Please confirm identity, team consent, public sources, station scope and any commercial terms through official channels before publication. This worksheet does not approve a partner, create an account, enroll members or grant access.',
     'No wallet keys, private contact details or account credentials belong in this brief.',
