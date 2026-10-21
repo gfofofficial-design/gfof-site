@@ -23,14 +23,20 @@ export function profileFields(input={}){
   return {name:fieldText('name','Display name',2,40),community:fieldText('community','Your project or community',0,70),bio:fieldText('bio','Your bio',10,280,true),role:input.role,listed:input.listed};
 }
 export function challengeFields(input={}){
+  const invalid=(field,message)=>Object.assign(Error(message),{field});
   const kit=CHALLENGE_KITS.find(x=>x.id===input.kit);
-  if(!kit||!['members','communities'].includes(input.scope))throw Error('Choose a challenge template and format.');
-  if(![3,7,14,30].includes(input.days)||!Number.isSafeInteger(input.goal)||input.goal<1||input.goal>20)throw Error('Choose 3–30 days and a whole-number goal from 1 to 20.');
-  return {kit:kit.id,scope:input.scope,days:input.days,goal:input.goal,note:text(input.note,0,400,true)};
+  if(!kit)throw invalid('kit','Choose an available challenge template.');
+  if(!['members','communities'].includes(input.scope))throw invalid('scope','Choose Member vs member or Cross-community proposal.');
+  if(![3,7,14,30].includes(input.days))throw invalid('days','Window after acceptance: choose 3, 7, 14 or 30 days.');
+  if(!Number.isSafeInteger(input.goal)||input.goal<1||input.goal>20)throw invalid('goal','Goal per participant: use a whole number from 1 to 20.');
+  let note;try{note=text(input.note,0,400,true);}catch{throw invalid('note','Shared brief: use up to 400 characters, or leave it empty. Remove angle brackets and unsupported hidden direction or control characters.');}
+  return {kit:kit.id,scope:input.scope,days:input.days,goal:input.goal,note};
 }
 export function ideaFields(input={}){
-  if(!Object.hasOwn(IDEA_CATEGORIES,input.category))throw Error('Choose an idea category.');
-  return {title:text(input.title,5,80),category:input.category,detail:text(input.detail,15,600,true)};
+  const invalid=(field,message)=>Object.assign(Error(message),{field});
+  if(!Object.hasOwn(IDEA_CATEGORIES,input.category))throw invalid('category','Choose an available idea category.');
+  const fieldText=(field,label,min,max,multiline=false)=>{try{return text(input[field],min,max,multiline);}catch{throw invalid(field,label+': use '+min+'–'+max+' characters. Remove angle brackets and unsupported hidden direction or control characters.');}};
+  return {title:fieldText('title','Idea title',5,80),category:input.category,detail:fieldText('detail','What would change, and who would it help?',15,600,true)};
 }
 export function matchingKits(category='all'){return CHALLENGE_KITS.filter(x=>category==='all'||x.category===category);}
 export function kitGoalLabel(kit,count){return count+' '+(count===1?kit.singular:kit.unit);}

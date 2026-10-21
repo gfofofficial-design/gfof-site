@@ -201,6 +201,51 @@ test('intentionally clearing a contribution does not resurrect it after a filter
 
 async function draftFixture(){const b=fixture();await b.create();await b.get('hub-examples').emit('click');const other=b.api.getState().members.find(m=>m.example).id;b.get('hub-challenge-target').value=other;return {b,self:b.api.getState().self,other};}
 async function switchPreview(b,id){b.get('hub-actor').value=id;await b.get('hub-actor').emit('change');}
+
+test('invitation errors focus the exact field and preserve the recipient and brief for correction',async()=>{
+ const {b,other}=await draftFixture(),brief='Keep this public brief while correcting the goal.';
+ b.get('hub-challenge-note').value=brief;b.get('hub-challenge-goal').value='1.5';await b.get('hub-challenge-form').emit('submit');
+ assert.equal(b.api.getState().challenges.length,0);assert.equal(b.document.activeElement,b.get('hub-challenge-goal'));
+ assert.equal(b.get('hub-challenge-goal').getAttribute('aria-invalid'),'true');assert.equal(b.get('hub-challenge-goal').getAttribute('aria-describedby'),'hub-challenge-status');assert.match(b.get('hub-challenge-status').textContent,/Goal per participant/);
+ assert.equal(b.get('hub-challenge-target').value,other);assert.equal(b.get('hub-challenge-note').value,brief);
+ b.get('hub-challenge-goal').value='2';await b.get('hub-challenge-goal').emit('input');assert.equal(b.get('hub-challenge-goal').getAttribute('aria-invalid'),null);assert.match(b.get('hub-challenge-status').textContent,/not submitted/);
+ b.get('hub-challenge-note').value='A <brief>';await b.get('hub-challenge-form').emit('submit');assert.equal(b.document.activeElement,b.get('hub-challenge-note'));assert.equal(b.get('hub-challenge-note').getAttribute('aria-invalid'),'true');assert.match(b.get('hub-challenge-status').textContent,/Shared brief/);
+ b.get('hub-challenge-note').value=brief;await b.get('hub-challenge-note').emit('input');await b.get('hub-challenge-form').emit('submit');assert.equal(b.api.getState().challenges.length,1);assert.equal(b.api.getState().challenges[0].note,brief);assert.equal(b.get('hub-challenge-note').getAttribute('aria-invalid'),null);b.api.dispose();
+});
+
+test('idea errors keep the draft and help association, then clear on correction and identity change',async()=>{
+ const {b,self,other}=await draftFixture(),detail='A useful accessible explanation for people trying the dashboard.';
+ b.get('hub-idea-title').value='x';b.get('hub-idea-detail').value=detail;b.get('hub-idea-title').setAttribute('aria-describedby','title-help');await b.get('hub-idea-form').emit('submit');
+ assert.equal(b.api.getState().ideas.length,0);assert.equal(b.document.activeElement,b.get('hub-idea-title'));assert.match(b.get('hub-idea-status').textContent,/Idea title/);assert.equal(b.get('hub-idea-title').getAttribute('aria-describedby'),'title-help hub-idea-status');assert.equal(b.get('hub-idea-detail').value,detail);
+ b.get('hub-idea-title').value='A useful public guide';await b.get('hub-idea-title').emit('input');assert.equal(b.get('hub-idea-title').getAttribute('aria-describedby'),'title-help');assert.equal(b.get('hub-idea-title').getAttribute('aria-invalid'),null);
+ b.get('hub-idea-detail').value='short';await b.get('hub-idea-form').emit('submit');assert.equal(b.document.activeElement,b.get('hub-idea-detail'));assert.match(b.get('hub-idea-status').textContent,/What would change/);
+ await switchPreview(b,other);assert.equal(b.get('hub-idea-detail').getAttribute('aria-invalid'),null);assert.equal(b.get('hub-idea-detail').value,'');
+ await switchPreview(b,self);assert.equal(b.get('hub-idea-title').value,'A useful public guide');assert.equal(b.get('hub-idea-detail').value,'short');
+ b.get('hub-idea-detail').value=detail;await b.get('hub-idea-form').emit('submit');assert.equal(b.api.getState().ideas.length,1);assert.equal(b.get('hub-idea-detail').getAttribute('aria-invalid'),null);b.api.dispose();
+});
+
+test('invalid invitation and idea controls identify only allowlisted fields without changing accepted limits',()=>{
+ for(const [field,value]of [['kit','missing'],['scope','unknown'],['days',4],['goal',0],['goal',21],['goal',1.5],['note','<brief>'],['note','x'.repeat(401)]])assert.throws(()=>challengeFields({...challenge(),[field]:value}),e=>e.field===field&&e.message.length>10);
+ const validIdea={title:'A public guide',category:'tools',detail:'Explain the public evidence and limits.'};
+ for(const [field,value]of [['category','__proto__'],['title','tiny'],['title','x'.repeat(81)],['detail','short'],['detail','x'.repeat(601)],['detail','hidden\u202econtent']])assert.throws(()=>ideaFields({...validIdea,[field]:value}),e=>e.field===field&&e.message.length>10);
+ assert.equal(challengeFields({...challenge(),note:''}).note,'');assert.equal(ideaFields(validIdea).title,validIdea.title);
+});
+
+test('missing-recipient errors, repeated submission and reset preserve help and remove stale associations',async()=>{
+ const {b}=await draftFixture();b.get('hub-challenge-target').value='';b.get('hub-challenge-target').setAttribute('aria-describedby','recipient-help');
+ for(let i=0;i<2;i++)await b.get('hub-challenge-form').emit('submit');
+ assert.equal(b.document.activeElement,b.get('hub-challenge-target'));assert.equal(b.get('hub-challenge-target').getAttribute('aria-describedby'),'recipient-help hub-challenge-status');
+ b.get('hub-idea-title').value='x';b.get('hub-idea-detail').value='Keep this unfinished idea while correcting its title.';await b.get('hub-idea-form').emit('submit');
+ await b.get('hub-reset').emit('click');
+ for(const id of ['hub-challenge-target','hub-idea-title'])assert.equal(b.get(id).getAttribute('aria-invalid'),null);
+ assert.equal(b.get('hub-challenge-target').getAttribute('aria-describedby'),'recipient-help');assert.equal(b.get('hub-idea-title').getAttribute('aria-describedby'),null);assert.equal(b.api.getState().ideas.length,0);assert.equal(b.api.getState().challenges.length,0);b.api.dispose();
+});
+
+test('template selection clears a replaced goal error without hiding a separate brief error',async()=>{
+ const {b}=await draftFixture();b.get('hub-challenge-goal').value='0';await b.get('hub-challenge-form').emit('submit');assert.equal(b.get('hub-challenge-goal').getAttribute('aria-invalid'),'true');
+ b.get('hub-challenge-kit').value='feedback';await b.get('hub-challenge-kit').emit('change');assert.equal(b.get('hub-challenge-goal').value,'5');assert.equal(b.get('hub-challenge-goal').getAttribute('aria-invalid'),null);assert.match(b.get('hub-challenge-status').textContent,/not submitted/);
+ b.get('hub-challenge-note').value='<brief>';await b.get('hub-challenge-form').emit('submit');b.get('hub-challenge-kit').value='explain';await b.get('hub-challenge-kit').emit('change');assert.equal(b.get('hub-challenge-note').getAttribute('aria-invalid'),'true');assert.match(b.get('hub-challenge-status').textContent,/Shared brief/);b.api.dispose();
+});
 test('idea drafts and categories follow their preview author, including return-to-own',async()=>{
  const {b,self,other}=await draftFixture();b.get('hub-idea-title').value='My unfinished evidence guide';b.get('hub-idea-detail').value='Explain which public sources support the guide.';b.get('hub-idea-category').value='research';
  await switchPreview(b,other);assert.equal(b.get('hub-idea-title').value,'');assert.equal(b.get('hub-idea-detail').value,'');assert.equal(b.get('hub-idea-category').value,'tools');
