@@ -109,3 +109,49 @@ Production page observations confirmed the ordering and stale account copy.
 The local-browser extension was unavailable; public rendered inspection used the
 cloud browser. New layout rendering/physical-device acceptance remains outstanding.
 All changes remain in draft integration PR #125; no merge or deployment follows.
+
+
+## Approved direction correction: project competition first
+
+Michael clarified that project-versus-project competition and founder incentives,
+rather than the Journey, should be the main attraction. He retained the other
+improvements and approved the researched Arena proposal. This supersedes the
+activity-first positioning above, not the persistent-service release requirements.
+
+The welcome and first-visit paths now lead to five proposed competition formats:
+Creative Clash, Builder Battle, Research Showdown, Community Exchange and
+Head-to-Head. Founder benefits describe branded stations, easier event setup,
+reviewed work/achievements, useful connections and a planned participation view.
+No analytics are represented as collecting real competition activity. The
+Journey and public crew planner remain optional later sections. Existing section
+IDs, preview disclosures and closed account/backend boundaries are preserved.
+The dashboard links directly to the proposed Arena. The project worksheet can
+now explicitly identify project competition as its discussion interest.
+
+The pilot proposal is four projects, two weeks, up to three eligible entries per
+team, with each team's best eligible entry determining its judged result.
+Proposed rubric: originality40%, execution30%, usefulness20%, clarity10%.
+Judges, conflicts/recusal, eligibility, originality/tool disclosure, moderation,
+corrections and disputes require published final rules before entry opens.
+Audience choice is separate; no paid/token-weighted vote, prize funding, dates,
+confirmed projects, live scores or team enrollment are announced.
+
+Research checked October21:
+- [Zealy timed sprints](https://zealy.io/docs/leaderboard/create-sprint): selected
+  activities, finite windows and standings are useful format references.
+- [Guild community management](https://docs.guild.xyz/guild): community identity,
+  quests and analytics inform founder needs; vendor claims are not proof of
+  Federation growth or integration acceptance.
+- [DoraHacks event setup](https://hellodorahacks.github.io/dorahacks-wiki/guides/create-hackathon/):
+  tracks, submissions and judging are useful operating references.
+- [Galxe product status](https://help.galxe.com/en/articles/16196692-thank-you-starboard-a-note-on-what-s-next):
+  Starboard ended August3,2026; Quest and related products continue. Do not
+  present frozen Starboard rankings as a currently operating alternative.
+- [Confetti documentation](https://docs.confetti.win/): JokeRace's site and docs
+  currently redirect to Confetti. The [Reown example](https://reown.com/blog/mission-reown)
+  is a historical2024 builder contest, not an upcoming event or GFOF partner.
+
+The current change is a closed product proposal and navigation/copy update,
+not the backend implementation of a scored team competition. All235 focused
+component/regression tests pass locally; final layout/device and current CI
+acceptance remain separate.

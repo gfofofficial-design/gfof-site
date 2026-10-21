@@ -109,7 +109,7 @@ export function prepareProjectBrief(fields, checks=[]) {
   if(!safeWebsite(website) || url.search || url.hash) return {ok:false,field:'project-website',message:'Use a public HTTPS website without a login, query string or fragment.'};
   const mint=typeof fields.mint === 'string' ? fields.mint.trim() : '';
   if(mint && !validMint(mint)) return {ok:false,field:'project-mint',message:'Enter the full Solana mint address, or leave it blank for the first discussion.'};
-  const interests={education:'Financial education and crew missions', research:'Token structure and evidence', feedback:'Product feedback and useful guides', community:'Joint community activities'};
+  const interests={competition:'Project-versus-project competitions',education:'Financial education and crew missions', research:'Token structure and evidence', feedback:'Product feedback and useful guides', community:'Joint community activities'};
   if(!Object.hasOwn(interests,fields.interest)) return {ok:false,field:'project-interest',message:'Choose a shared activity from the list.'};
   if(!Array.isArray(checks) || checks.length > 4 || new Set(checks).size !== checks.length || checks.some(key=>!Object.hasOwn(PREP_CHECKS,key))) return {ok:false,field:'project-prep-status',message:'Review the preparation checklist again.'};
   const text=['PROSPECTIVE ALLIANCE STATION — DISCUSSION DRAFT',`Project: ${name}`,`Public website: ${website}`,
