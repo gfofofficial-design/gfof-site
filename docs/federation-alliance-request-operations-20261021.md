@@ -58,3 +58,30 @@ preview. Submit one clearly labelled synthetic owner test, confirm a captured
 record and matching inbox notification, and test reply-email/privacy boundaries.
 A successful POST alone is insufficient to claim email delivery. No main merge
 or production deployment follows from adding this source.
+
+## Reviewed public challenge board
+
+`fed-alliance-challenges.mjs` now renders reviewed public records on the Arena.
+The shipping registry is empty: there are no invented projects, matches, dates,
+scores or results. Records pin a stable ARENA ID, exactly two distinct published
+station IDs, reviewed format, UTC window/update time and exact same-site rules
+and results paths. Announced, Judging, Results published and Cancelled are
+explicit reviewed labels; no clock starts a match or advances status.
+
+Publication requires the source record to state both teams accepted and that
+publication was approved, with a dated public review reference. These shape
+checks are not authentication, signatures or proof of consent. The operator must
+retain actual private approvals and review the source/deploy; never place those
+agreements, intake IDs, reply emails or pending prospects in this public file.
+Even a record omitted by the renderer would remain downloadable in source.
+
+Judging/results cannot be recorded with an update before the published close.
+Results require their own exact public results path. Duplicate IDs, unknown or
+unapproved stations, extra fields, invalid dates, unsafe links and pending review
+are excluded. Reviewed rules/results pages must exist before a real publication.
+There are no join/upload/vote controls and no API or member/account reads.
+
+This gives the operator a source-reviewed public posting path, not a private
+admin editor, live event service or automatic transition/audit system. A future
+admin tool must write authorized durable records and preserve rule versions,
+acceptance and correction history; this public registry cannot replace it.

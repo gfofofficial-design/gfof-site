@@ -13,6 +13,7 @@ on:
       - 'assets/federation/fed-deck.css'
       - 'netlify.toml'
       - 'tests/federation-alliance.test.mjs'
+      - 'tests/federation-alliance-challenges.test.mjs'
       - 'tests/federation-alliance-launchpad.test.mjs'
       - 'tests/federation-alliance-community.test.mjs'
       - 'tests/federation-alliance-member-form.test.mjs'
@@ -31,6 +32,7 @@ on:
       - 'assets/federation/fed-deck.css'
       - 'netlify.toml'
       - 'tests/federation-alliance.test.mjs'
+      - 'tests/federation-alliance-challenges.test.mjs'
       - 'tests/federation-alliance-launchpad.test.mjs'
       - 'tests/federation-alliance-community.test.mjs'
       - 'tests/federation-alliance-member-form.test.mjs'
@@ -56,4 +58,4 @@ jobs:
       - run: node --check assets/federation/fed-alliance-community.mjs
       - run: node --check assets/federation/fed-community-league.mjs
       - run: node --check netlify/lib/community-league.cjs
-      - run: node --test tests/federation-alliance.test.mjs tests/federation-community-league.test.mjs tests/federation-alliance-launchpad.test.mjs tests/federation-alliance-community.test.mjs tests/federation-alliance-member-form.test.mjs
+      - run: node --test tests/federation-alliance-challenges.test.mjs tests/federation-alliance.test.mjs tests/federation-community-league.test.mjs tests/federation-alliance-launchpad.test.mjs tests/federation-alliance-community.test.mjs tests/federation-alliance-member-form.test.mjs
