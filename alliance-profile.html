@@ -20,6 +20,10 @@
     <div class="profile-heading"><p class="eyebrow">FEDERATION ALLIANCE // YOUR PROFILE</p><h1>A place for your contribution.</h1><p>Choose what you share. Keep a draft while you compare changes.</p></div>
     <aside class="profile-notice" aria-label="Service availability"><strong id="ap-service-title">Member service closed</strong><p id="ap-service-note">This form is a draft. Member profiles and sign-in are not open here. No account or profile request will start.</p></aside>
     <noscript><p>The service is closed. This form cannot submit without the reviewed member service and JavaScript.</p></noscript>
+    <div class="profile-toolbar"><button id="ap-account-check" type="button" aria-describedby="ap-account-help" disabled>Check sign-in and open editor</button><a id="ap-account-link" href="/account" hidden>Open account page</a></div>
+    <p id="ap-account-help" class="profile-help">This button clears your unsaved draft. After a tab switch, we show it only when the same account is confirmed. Signing out, leaving this page or an uncertain check clears it. Interrupted changes may still need reconciliation.</p>
+    <p id="ap-account-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true">Account connection is closed. No sign-in check has started.</p>
+    <div id="ap-member-surface">
     <div class="profile-toolbar"><button id="ap-read" type="button" disabled>Read current profile</button><button id="ap-cancel" type="button" hidden>Cancel request</button></div>
     <p id="ap-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true">Member profiles are not open yet. No account or profile request has started.</p>
     <p id="ap-compare-jump" hidden><a href="#ap-current">Compare the last read profile with my draft</a></p>
@@ -41,6 +45,7 @@
         <section id="ap-comparison" class="profile-comparison" aria-labelledby="comparison-title" hidden><h2 id="comparison-title">Keep your draft. Check the current version.</h2><p>Compare the last read profile with your draft. Continuing keeps your text and uses that version for your next save. Nothing is submitted until you choose Save my profile.</p><button id="ap-accept" type="button">Keep my draft and continue</button></section>
         <section id="ap-removal" class="profile-removal" aria-label="Profile removal"><h2 id="removal-title">Remove your profile</h2><p>Removal controls are still in preparation. This draft form cannot send a removal request. Unlisting and removal are different actions.</p><button type="button" disabled>Remove my profile</button></section>
       </div>
+    </div>
     </div>
   </main>
   <footer class="site-footer wrap"><a href="/alliance.html">Federation Alliance</a><p>Draft member interface. No membership, upload, invitation or public record is created by opening this page.</p></footer>

@@ -1,7 +1,8 @@
 # Closed member-page composition
 
-Source candidate only. The normal `alliance-profile.html` entry calls
-`mountAllianceMemberPage(document)` with no enabled option. The editor/removal
+Source candidate only. The normal `alliance-profile.html` entry now uses the
+[default-closed account wrapper](federation-alliance-member-account-20261021.md),
+which composes `mountAllianceMemberPage` with no enabled option. The editor/removal
 surfaces stay disabled, CSP still has `connect-src 'none'` and `form-action
 'none'`, and opening the page performs no account/profile/status read. No hosted
 route, grant, LOGIN, signup or production setting is changed.
