@@ -1,5 +1,6 @@
 import {mountAllianceMemberPage} from './fed-alliance-member-page.mjs';
-// Closed by default. No query string, browser storage or page attribute can
-// enable a hosted member service. A reviewed host composition is still needed.
-mountAllianceMemberPage(document);
-
+import {mountAllianceAccountControls} from './fed-alliance-account-controls.mjs';
+// Closed by default. Only a reviewed source composition can enable these.
+// Query strings, browser storage and page attributes cannot open the service.
+const memberPage=mountAllianceMemberPage(document);
+mountAllianceAccountControls(document,{memberPage});

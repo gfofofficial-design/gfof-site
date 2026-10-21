@@ -2,8 +2,9 @@
 
 The account email delivery, owner sign-in, reload and logout journey passed on
 production October21. This bridge is a separate source candidate for Alliance.
-The normal member-page entry and its CSP remain closed; this module is not
-imported or enabled by that entry and installs no hosted routes or permissions.
+The normal member-page entry and its CSP remain closed. It now mounts disabled
+account controls that import this bridge without enabling it. No hosted routes
+or permissions are installed.
 
 An explicitly enabled host supplies the member-page controller and approved
 origin, then calls `verify()` in response to an explicit account check. The
@@ -45,3 +46,24 @@ runtime and independent custody, operation reconciliation, public signup,
 privacy/support/abuse and actual browser acceptance. No public-registration,
 financial-service, member-write or production-release authorization follows
 from passing this bridge's tests.
+
+## Explicit account controls
+
+The normal entry now composes `mountAllianceAccountControls` with the disabled
+member controller. The visible Check sign-in control is disabled and makes no
+startup request. The page links to the existing account route and explains that
+checking, signing out, hiding or leaving clears profile details and unsaved edits.
+The document retains `connect-src 'none'` and its native form remains inert.
+No DOM attribute, query parameter, storage value or runtime feature discovery
+can enable the host. Adoption requires a separately reviewed source composition
+that enables both controller and bridge, plus working authenticated backend
+routes and the necessary reviewed CSP.
+
+For an explicitly enabled host, only a button action checks the session. Busy
+state disables overlapping clicks and is announced with aria-busy; a failed or
+missing session leaves the editor closed with plain-language return guidance.
+A passing check does not read or save a profile: those remain explicit member
+actions. Lifecycle closure updates the account status, disposal removes the
+click handler, and late responses cannot reopen or rewrite disposed controls.
+Composed tests cover these states using the real member page and clients.
+No physical browser or assistive-device acceptance is inferred.

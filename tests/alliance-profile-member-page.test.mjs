@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {mountAllianceMemberPage} from '../assets/federation/fed-alliance-member-page.mjs';
+import {mountAllianceAccountControls} from '../assets/federation/fed-alliance-account-controls.mjs';
 import {createAllianceAccountBridge} from '../assets/federation/fed-alliance-account-bridge.mjs';
 const html=readFileSync(new URL('../alliance-profile.html',import.meta.url),'utf8'),entry=readFileSync(new URL('../assets/federation/fed-alliance-profile-page.mjs',import.meta.url),'utf8');
 const origin='https://deploy-preview-124--gfof.netlify.app',profileId='33333333-3333-4333-8333-333333333333';
@@ -12,7 +13,7 @@ function fixture(fetcher,enabled=true){
  const nodes=new Map();let doc;
  class Element{constructor(tag){this.tag=tag;this.children=[];this.events={};this.attributes={};this.value='';this.checked=false;this.hidden=false;this.disabled=false;this._text='';}get ownerDocument(){return doc;}set textContent(v){this._text=String(v);this.children=[];}get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}append(...v){this.children.push(...v);}replaceChildren(...v){this.children=[...v];this._text='';}setAttribute(k,v){this.attributes[k]=String(v);}getAttribute(k){return this.attributes[k]??null;}removeAttribute(k){delete this.attributes[k];}addEventListener(k,f){(this.events[k]??=new Set()).add(f);}removeEventListener(k,f){this.events[k]?.delete(f);}focus(){doc.activeElement=this;}async emit(k){for(const f of this.events[k]||[])await f({preventDefault(){}});}}
  for(const m of html.matchAll(/<([a-z][a-z0-9-]*)\b[^>]*\bid="([^"]+)"[^>]*>/gi)){const n=new Element(m[1]);n.disabled=/\sdisabled(?:\s|>)/.test(m[0]);n.hidden=/\shidden(?:\s|>)/.test(m[0]);nodes.set(m[2],n);}
- doc={activeElement:null,getElementById:id=>nodes.get(id)||null,createElement:tag=>new Element(tag)};const get=id=>nodes.get('ap-'+id);get('role').value='explorer';const calls=[];
+ const lifecycle=new EventTarget();doc={addEventListener:lifecycle.addEventListener.bind(lifecycle),removeEventListener:lifecycle.removeEventListener.bind(lifecycle),dispatchEvent:lifecycle.dispatchEvent.bind(lifecycle),activeElement:null,getElementById:id=>nodes.get(id)||null,createElement:tag=>new Element(tag)};const get=id=>nodes.get('ap-'+id);get('role').value='explorer';const calls=[];
  const controller=mountAllianceMemberPage(doc,{enabled,origin,fetcher:async(url,init)=>{calls.push({url,init,body:init.body?JSON.parse(init.body):null});return fetcher(url,init);}});
  const find=text=>{const walk=n=>{if(n.textContent===text)return n;for(const c of n.children){const v=walk(c);if(v)return v;}};return walk(get('removal'));};
  const checkbox=()=>get('removal').children[3].children[0].children[0];
@@ -62,4 +63,48 @@ test('explicit verified account bridge opens real components and logout clears t
  f.get('name').value='Private unsent draft';channel.onmessage({data:{type:'signed-out'}});
  assert.equal(f.get('name').value,'');assert.equal(f.get('current-body').textContent,'');assert.equal(f.get('fields').disabled,true);
  assert.equal(sessionReads,1);assert.equal(f.calls.length,1);bridge.dispose();f.controller.dispose();
+});
+
+function accountControls(f,{enabled=true,fetcher,channelFactory=()=>({close(){}})}={}){
+ return mountAllianceAccountControls(f.doc,{memberPage:f.controller,enabled,origin,
+  window:new EventTarget(),locks:{request:async(_name,_options,work)=>work()},channelFactory,fetcher});
+}
+test('account host controls stay disabled in the normal entry with no startup session read',async()=>{
+ const f=fixture(()=>{throw Error('No profile I/O');},false);let reads=0;
+ const host=accountControls(f,{enabled:false,fetcher:()=>{reads++;throw Error('No session I/O');}});
+ assert.equal(f.get('account-check').disabled,true);await f.get('account-check').emit('click');
+ assert.equal(reads,0);assert.equal(f.calls.length,0);assert.equal(f.get('fields').disabled,true);
+ assert.match(entry,/mountAllianceAccountControls\(document,\{memberPage\}\)/);
+ assert.match(html,/Checking your sign-in clears previous profile details and unsaved edits/);
+ assert.match(html,/connect-src 'none'/);host.dispose();f.controller.dispose();
+});
+test('account host explicit check opens real member controls without reading profile, and logout explains closure',async()=>{
+ const f=fixture(()=>json({profile:p(),revision:1}));let channel,reads=0;
+ const host=accountControls(f,{fetcher:async()=>{reads++;return json({signedIn:true,user:{id:profileId}});},channelFactory:()=>channel={close(){}}});
+ assert.equal(reads,0);await f.get('account-check').emit('click');assert.equal(reads,1);assert.equal(f.calls.length,0);
+ assert.equal(f.get('fields').disabled,false);assert.match(f.get('account-status').textContent,/Choose Read current profile/);
+ await f.get('read').emit('click');f.get('name').value='Unsaved private text';channel.onmessage({data:{type:'signed-out'}});
+ assert.equal(f.get('name').value,'');assert.equal(f.get('fields').disabled,true);assert.match(f.get('account-status').textContent,/Profile editing is closed/);
+ host.dispose();f.controller.dispose();
+});
+test('account host serializes checks, reports missing sign-in and ignores a disposed late response',async()=>{
+ const gate=deferred();const f=fixture(()=>{throw Error('No profile read');});let reads=0;
+ const host=accountControls(f,{fetcher:async()=>{reads++;return reads===1?json({},401):gate.promise;}});
+ await f.get('account-check').emit('click');assert.match(f.get('account-status').textContent,/Sign in on the account page/);
+ const checking=f.get('account-check').emit('click');await tick();assert.equal(f.get('account-check').disabled,true);
+ assert.equal(f.get('account-check').getAttribute('aria-busy'),'true');assert.match(f.get('account-status').textContent,/Checking your sign-in/);await f.get('account-check').emit('click');assert.equal(reads,2);
+ host.dispose();gate.resolve(json({signedIn:true,user:{id:profileId}}));await checking;
+ assert.equal(f.get('fields').disabled,true);assert.equal(f.get('account-check').disabled,true);
+ assert.equal(f.get('account-check').getAttribute('aria-busy'),'false');assert.match(f.get('account-status').textContent,/No further sign-in checks/);
+ f.controller.dispose();
+});
+
+test('account host explains lifecycle closure and never automatically rechecks on return',async()=>{
+ const f=fixture(()=>json({profile:p(),revision:1}));let reads=0;
+ const host=accountControls(f,{fetcher:async()=>{reads++;return json({signedIn:true,user:{id:profileId}});}});
+ await f.get('account-check').emit('click');await f.get('read').emit('click');
+ f.doc.dispatchEvent(new Event('visibilitychange'));assert.equal(f.get('fields').disabled,true);
+ assert.equal(f.get('name').value,'');assert.match(f.get('account-status').textContent,/Profile editing is closed/);
+ f.doc.dispatchEvent(new Event('visibilitychange'));await tick();assert.equal(reads,1);assert.equal(f.calls.length,1);
+ host.dispose();f.controller.dispose();
 });

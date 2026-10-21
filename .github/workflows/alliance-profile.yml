@@ -23,6 +23,8 @@ on:
       - 'assets/federation/fed-alliance-member-client.mjs'
       - 'assets/federation/fed-alliance-member-page.mjs'
       - 'assets/federation/fed-alliance-account-bridge.mjs'
+      - 'assets/federation/fed-alliance-account-controls.mjs'
+      - 'assets/federation/fed-alliance-profile-page.mjs'
       - 'tests/alliance-account-bridge.test.mjs'
       - 'assets/federation/fed-alliance-member-form.mjs'
       - 'assets/federation/fed-alliance-profile-page.mjs'
