@@ -1,0 +1,29 @@
+name: Alliance image processing candidate
+on:
+  pull_request:
+    paths:
+      - 'lib/alliance-avatar-runtime/**'
+      - 'lib/alliance-avatar-server/flow*'
+      - 'lib/alliance-avatar-storage.mjs'
+      - '.github/workflows/alliance-avatar.yml'
+permissions:
+  contents: read
+jobs:
+  avatar-native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci --prefix lib/alliance-avatar-runtime --ignore-scripts --no-fund
+      - run: npm audit --prefix lib/alliance-avatar-runtime --audit-level=high
+      - run: npm test --prefix lib/alliance-avatar-runtime
+      - run: node --test lib/alliance-avatar-server/flow.native.mjs

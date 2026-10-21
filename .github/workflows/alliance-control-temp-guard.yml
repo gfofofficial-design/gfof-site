@@ -1,0 +1,38 @@
+name: Alliance temporary-object guard behavior candidate
+on:
+  pull_request:
+    paths:
+      - 'sql/alliance-control-temp-guard-branch-drill.sql'
+      - 'tests/alliance-control-temp-guard-native.mjs'
+      - '.github/workflows/alliance-control-temp-guard.yml'
+permissions:
+  contents: read
+jobs:
+  temp-guard-native:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:17.11-bookworm
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: supabase_admin
+          POSTGRES_PASSWORD: alliance_disposable_fixture_only
+        options: >-
+          --health-cmd "pg_isready -U supabase_admin -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Check rollback-only temporary-object guard in disposable PostgreSQL
+        run: node tests/alliance-control-temp-guard-native.mjs
+        env:
+          ALLIANCE_TEMP_GUARD_TEST_CONFIRM: disposable_control_temp_guard
+          ALLIANCE_TEMP_GUARD_TEST_CONTAINER: ${{ job.services.postgres.id }}

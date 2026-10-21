@@ -58,7 +58,7 @@ jobs:
       - run: node --test tests/federation-account-email.test.mjs tests/federation-account.test.mjs tests/federation-account-bounds.test.mjs tests/federation-account-page.test.mjs tests/federation-account-tabs.test.mjs tests/federation-account-wait.test.mjs tests/federation-auth-reconciliation.test.mjs tests/federation-deck.test.cjs tests/federation-deck-locks.test.cjs tests/federation-deck-phantom.test.cjs tests/federation-deck-staking.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/treasury-locks.test.mjs
   signup-role:
     # Disposable native SQL proof only; no secrets, hosted projects or deployment.
-    if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository
+    if: (github.event.pull_request.number == 99 || (github.event.pull_request.number == 125 && github.head_ref == 'review/account-alliance-integration-20261021')) && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     services:
@@ -88,7 +88,7 @@ jobs:
           FEDERATION_SIGNUP_TEST_CONTAINER: ${{ job.services.postgres.id }}
   email-signup-role:
     # Unapplied email-provider candidate; generated disposable service only.
-    if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository
+    if: (github.event.pull_request.number == 99 || (github.event.pull_request.number == 125 && github.head_ref == 'review/account-alliance-integration-20261021')) && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     services:
@@ -116,7 +116,7 @@ jobs:
           FEDERATION_EMAIL_SIGNUP_TEST_CONTAINER: ${{ job.services.postgres.id }}
   email-signup-auth:
     # Real Auth and SMTP sink, exclusively generated data on an internal network.
-    if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository
+    if: (github.event.pull_request.number == 99 || (github.event.pull_request.number == 125 && github.head_ref == 'review/account-alliance-integration-20261021')) && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     services:
@@ -144,7 +144,7 @@ jobs:
           FEDERATION_EMAIL_AUTH_TEST_POSTGRES: ${{ job.services.postgres.id }}
   recovery:
     # Only generated credentials/synthetic accounts in runner-owned services.
-    if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository
+    if: (github.event.pull_request.number == 99 || (github.event.pull_request.number == 125 && github.head_ref == 'review/account-alliance-integration-20261021')) && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     services:
@@ -172,7 +172,7 @@ jobs:
           FEDERATION_RECOVERY_TEST_POSTGRES: ${{ job.services.postgres.id }}
   signup-auth:
     # Real Auth HTTP routes against disposable local services; no hosted keys or projects.
-    if: github.event.pull_request.number == 99 && github.event.pull_request.head.repo.full_name == github.repository
+    if: (github.event.pull_request.number == 99 || (github.event.pull_request.number == 125 && github.head_ref == 'review/account-alliance-integration-20261021')) && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     services:

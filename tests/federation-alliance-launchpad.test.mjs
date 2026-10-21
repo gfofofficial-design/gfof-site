@@ -10,7 +10,7 @@ const flush=()=>new Promise(setImmediate);
 function deferred(){let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};}
 
 test('activity links use reviewed tools and never start a lookup through a query',()=>{
-  assert.equal(ACTIVITIES.length,8);assert.equal(new Set(ACTIVITIES.map(a=>a.id)).size,8);
+  assert.equal(ACTIVITIES.length,10);assert.equal(new Set(ACTIVITIES.map(a=>a.id)).size,10);
   for(const activity of ACTIVITIES){
     const url=new URL(activity.href,'https://galacticfederation.co/alliance');
     assert.ok(['https://galacticfederation.co','https://dossiertrack.co'].includes(url.origin));
@@ -20,11 +20,11 @@ test('activity links use reviewed tools and never start a lookup through a query
   }
 });
 test('role and time filters combine without treating an empty match as unavailable tools',()=>{
-  assert.equal(matchingActivities('all','all').length,8);
+  assert.equal(matchingActivities('all','all').length,10);
   assert.equal(matchingActivities('research','10').length,2);
   assert.equal(matchingActivities('research','5').length,0);
   assert.equal(matchingActivities('create','all').length,2);
-  assert.equal(matchingActivities('__proto__','bogus').length,8);
+  assert.equal(matchingActivities('__proto__','bogus').length,10);
 });
 test('selection is bounded, unique, reviewed and immutable to its caller',()=>{
   const ids=[...ROUTES.welcome.ids];assert.equal(updateSelection(ids,'lens-notes').length,3);
@@ -98,7 +98,7 @@ function fixture(options={}){
   return {get,api,document,created,revoked,copies,clock,setProject};
 }
 test('the console mounts eight activities, a usable route and no enrollment state',()=>{
-  const b=fixture();assert.equal(b.get('activity-list').children.length,8);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
+  const b=fixture();assert.equal(b.get('activity-list').children.length,10);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
   assert.equal(b.get('crew-count').textContent,'3 / 3');assert.equal(b.get('activity-controls').hidden,false);
   assert.equal(b.get('project-fields').disabled,false);assert.equal(b.get('project-output').hidden,true);
   assert.match(b.get('crew-brief').value,/LOCAL DRAFT/);assert.equal(b.created.length,1);b.api.dispose();
@@ -106,7 +106,7 @@ test('the console mounts eight activities, a usable route and no enrollment stat
 test('filter reset recovers an empty match while preserving the crew plan',()=>{
   const b=fixture();b.get('activity-role').value='research';b.get('activity-time').value='5';b.get('activity-role').emit('change');
   assert.equal(b.get('activity-list').children.length,0);assert.match(b.get('activity-status').textContent,/No activities match/);
-  b.get('activity-reset').emit('click');assert.equal(b.get('activity-list').children.length,8);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
+  b.get('activity-reset').emit('click');assert.equal(b.get('activity-list').children.length,10);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
   assert.equal(b.document.activeElement,b.get('activity-role'));b.api.dispose();
 });
 test('adding, removing and clearing activities enforce the three-slot limit',()=>{
@@ -244,4 +244,80 @@ test('local artwork interaction performs no fetch or persistent storage operatio
   const fetch=globalThis.fetch,storage=Object.getOwnPropertyDescriptor(globalThis,'localStorage');globalThis.fetch=()=>{throw Error('network prohibited');};Object.defineProperty(globalThis,'localStorage',{configurable:true,get(){throw Error('storage prohibited');}});
   try{const a=artworkFixture(),b=fixture({artwork:a.options});b.setProject();b.get('project-artwork').files=[imageFile()];await b.get('project-artwork').emit('change');b.get('project-form').emit('submit');assert.match(b.get('project-brief').value,/example-logo/);b.api.dispose();}
   finally{globalThis.fetch=fetch;if(storage)Object.defineProperty(globalThis,'localStorage',storage);else delete globalThis.localStorage;}
+});
+
+test('competition briefs bind a reviewed format and public deliverable without creating a match',()=>{
+ const fields={...publicFields(),interest:'competition',format:'creative',goal:'Create one original short video explaining a shared public topic.'};
+ const result=prepareProjectBrief(fields);assert.equal(result.ok,true);assert.match(result.text,/Proposed format: Creative Clash/);
+ assert.match(result.text,/Proposed shared deliverable: Create one original/);assert.match(result.text,/not an invitation, accepted match, scheduled event or prize commitment/);
+ for(const format of ['builder','research','exchange','headtohead'])assert.equal(prepareProjectBrief({...fields,format}).ok,true);
+ for(const format of ['',undefined,'__proto__','unknown'])assert.equal(prepareProjectBrief({...fields,format}).field,'project-format');
+ for(const goal of ['', 'x'.repeat(19),'x'.repeat(241),'<img src=x> enough text here','Hidden\u202e direction with enough text','Line one with enough text\nline two'])assert.equal(prepareProjectBrief({...fields,goal}).field,'project-goal');
+ assert.equal(prepareProjectBrief({...fields,goal:'x'.repeat(20)}).ok,true);assert.equal(prepareProjectBrief({...fields,goal:'x'.repeat(240)}).ok,true);
+ const ordinary=prepareProjectBrief({...fields,interest:'education'});assert.equal(ordinary.ok,true);assert.doesNotMatch(ordinary.text,/Proposed shared deliverable|Create one original/);
+});
+test('Arena preparation opens only local worksheet fields and preserves project details',()=>{
+ const b=fixture();b.setProject();assert.equal(b.get('project-competition').hidden,true);assert.equal(b.get('project-goal').disabled,true);
+ b.get('arena-prepare').emit('click');assert.equal(b.get('project-interest').value,'competition');assert.equal(b.get('project-format').value,'creative');
+ assert.equal(b.get('project-competition').hidden,false);assert.equal(b.get('project-goal').disabled,false);assert.equal(b.document.activeElement,b.get('project-format'));
+ assert.equal(b.get('project-name').value,'Example Community');assert.equal(b.get('project-output').hidden,true);
+ b.get('project-form').emit('submit');assert.equal(b.document.activeElement,b.get('project-goal'));assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('project-name').value,'Example Community');b.api.dispose();
+});
+test('editing or changing competition interest invalidates old exports without losing the proposal draft',async()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');b.get('project-goal').value='Create one original public guide another project can use.';
+ b.get('project-form').emit('submit');assert.equal(b.get('project-output').hidden,false);assert.match(b.get('project-brief').value,/Proposed format: Creative Clash/);
+ await b.get('project-copy').emit('click');assert.match(b.copies.at(-1),/not an invitation/);
+ b.get('project-format').value='builder';b.get('project-format').emit('change');assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('project-download').hidden,true);
+ b.get('project-interest').value='education';b.get('project-interest').emit('change');assert.equal(b.get('project-competition').hidden,true);assert.equal(b.get('project-goal').disabled,true);
+ b.get('project-form').emit('submit');assert.doesNotMatch(b.get('project-brief').value,/Create one original public guide/);
+ b.get('arena-prepare').emit('click');assert.equal(b.get('project-format').value,'builder');assert.match(b.get('project-goal').value,/original public guide/);b.api.dispose();
+});
+test('clearing a competition worksheet removes its draft and disposed Arena actions stay inert',()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');b.get('project-goal').value='Create one original public guide another project can use.';b.get('project-form').emit('submit');
+ b.get('project-clear').emit('click');assert.equal(b.get('project-goal').value,'');assert.equal(b.get('project-format').value,'creative');assert.equal(b.get('project-goal').disabled,true);
+ assert.equal(b.get('project-competition').hidden,true);assert.equal(b.get('project-brief').value,'');assert.equal(b.get('project-download').hidden,true);
+ b.api.dispose();b.get('arena-prepare').emit('click');assert.equal(b.get('project-interest').value,'education');assert.equal(b.get('arena-prepare').disabled,true);
+});
+
+test('starter briefs fill only an empty competition draft and preserve the founder’s edits',()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');assert.match(b.get('project-starter-preview').textContent,/30-second video/);
+ b.get('project-use-starter').emit('click');assert.match(b.get('project-goal').value,/30-second video/);assert.equal(b.document.activeElement,b.get('project-goal'));
+ b.get('project-goal').value='Our own original public deliverable for both project teams.';b.get('project-form').emit('submit');const before=b.get('project-brief').value;
+ b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'Our own original public deliverable for both project teams.');assert.equal(b.get('project-brief').value,before);assert.match(b.get('project-prep-status').textContent,/Your draft was kept/);b.api.dispose();
+});
+test('changing format updates the suggested brief without replacing an existing deliverable',()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');b.get('project-goal').value='An existing founder draft that must not be overwritten.';b.get('project-form').emit('submit');
+ b.get('project-format').value='builder';b.get('project-format').emit('change');assert.match(b.get('project-starter-preview').textContent,/working public tool/);assert.equal(b.get('project-goal').value,'An existing founder draft that must not be overwritten.');assert.equal(b.get('project-output').hidden,true);
+ b.get('project-goal').value='';b.get('project-goal').emit('input');b.get('project-use-starter').emit('click');b.get('project-form').emit('submit');assert.match(b.get('project-brief').value,/Proposed format: Builder Battle/);assert.match(b.get('project-brief').value,/working public tool/);b.api.dispose();
+});
+test('starter action refuses unknown formats, inactive interests and disposal',()=>{
+ const b=fixture();b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');b.get('arena-prepare').emit('click');b.get('project-format').value='__proto__';b.get('project-format').emit('change');assert.equal(b.get('project-use-starter').disabled,true);assert.equal(b.get('project-starter-preview').textContent,'');b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');
+ b.get('project-clear').emit('click');assert.equal(b.get('project-use-starter').disabled,true);b.get('arena-prepare').emit('click');b.api.dispose();b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');assert.equal(b.get('project-use-starter').disabled,true);
+});
+
+test('closed planner ignores retained form, copy, route and detached activity handlers',async()=>{
+ const b=fixture();b.setProject();b.get('project-form').emit('submit');
+ const toggle=b.get('activity-toggle-first-mission'),remove=b.get('crew-selected').children[0].children[1].children.at(-1),selection=b.api.getSelection();
+ b.api.dispose();const files=b.created.length,revoked=b.revoked.length;
+ await b.get('project-form').emit('submit');await b.get('project-copy').emit('click');await b.get('crew-copy').emit('click');
+ b.get('crew-route').value='evidence';b.get('crew-load-route').emit('click');toggle.emit('click');remove.emit('click');b.get('project-clear').emit('click');
+ assert.deepEqual(b.api.getSelection(),selection);assert.equal(b.created.length,files);assert.equal(b.revoked.length,revoked);assert.equal(b.copies.length,0);
+ assert.equal(b.get('project-fields').disabled,true);assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('crew-output').hidden,true);assert.equal(b.get('project-name').value,'Example Community');
+ b.api.dispose();assert.equal(b.revoked.length,revoked);
+});
+test('closing during a clipboard wait prevents late success and cancels remaining local timers',async()=>{
+ const gate=deferred(),b=fixture({copy:()=>gate.promise});const copying=b.get('crew-copy').emit('click');assert.equal(b.clock.timers.size,1);
+ b.api.dispose();await copying;gate.resolve();await flush();assert.equal(b.clock.timers.size,0);assert.equal(b.get('crew-copy-status').textContent,'');assert.equal(b.get('crew-download').hidden,true);
+});
+
+test('request intake is an explicit separate native form with reply consent and no artwork upload',()=>{
+ const html=readFileSync(new URL('../alliance.html',import.meta.url),'utf8');const form=html.match(/<form id="project-send-form"[\s\S]*?<\/form>/)?.[0];
+ assert.ok(form);assert.match(form,/name="alliance-project-request"/);assert.match(form,/method="POST"/);assert.match(form,/action="\/alliance-request-received"/);assert.match(form,/data-netlify="true"/);assert.match(form,/netlify-honeypot="bot-field"/);
+ assert.match(form,/<textarea[^>]*name="proposal"[^>]*readonly/);assert.match(form,/<input[^>]*type="email"[^>]*name="email"[^>]*required/);assert.match(form,/<input[^>]*name="review-consent"[^>]*required/);assert.match(form,/%\{submissionId\}/);assert.doesNotMatch(form,/type="file"|<form[\s\S]*<form/);
+ assert.match(html,/connect-src 'none'/);assert.match(html,/form-action 'self'/);
+ const received=readFileSync(new URL('../alliance-request-received.html',import.meta.url),'utf8');assert.match(received,/not a delivery receipt/);assert.match(received,/no public request-status portal/);
+});
+test('clearing and closing project intake remove reply-email and consent state',()=>{
+ const b=fixture();b.get('project-reply-email').value='owner@example.com';b.get('project-send-consent').checked=true;b.get('project-clear').emit('click');assert.equal(b.get('project-reply-email').value,'');assert.equal(b.get('project-send-consent').checked,false);
+ b.get('project-reply-email').value='owner@example.com';b.get('project-send-consent').checked=true;b.api.dispose();assert.equal(b.get('project-reply-email').value,'');assert.equal(b.get('project-send-consent').checked,false);assert.equal(b.get('project-send').disabled,true);
 });
