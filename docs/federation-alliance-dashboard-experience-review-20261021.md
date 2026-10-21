@@ -190,3 +190,23 @@ Unknown formats, inactive competition interest and disposed controls cannot
 apply a starter. No suggestion schedules, submits or accepts a match.
 Three additional tests cover draft preservation, format changes/export behavior
 and inactive/unknown/disposed refusal.
+
+## Work-computer release review and planner closure
+
+All eleven workflows and the Netlify preview status passed on starter-brief head
+174f1f0476c971d61e1492670cce3ab592cdc3e8. The hosted preview navigated to Netlify
+team protection in the cloud browser. No protection was changed, login was not
+completed, and no rendered-layout/phone acceptance is claimed from that visit.
+
+Source review found that older planner form, route and copy handlers could still
+respond after controller disposal, despite the newer Arena actions already
+being guarded. Permanent listeners now unregister on disposal; retained callbacks
+and detached dynamic buttons also check the disposed lifecycle. Dynamic nodes
+are not retained in the permanent cleanup list. Disposal is idempotent, disables
+the project fieldset/copy controls, hides generated outputs, revokes generated
+object URLs and cancels outstanding local clipboard waits. A late OS clipboard
+write cannot be physically undone; its result cannot restore a success message.
+
+Two regression tests cover retained form/copy/route/dynamic handlers, no regenerated
+exports or repeated cleanup, and a late clipboard completion with no remaining
+timers or stale success. This is local lifecycle behavior, not server revocation.

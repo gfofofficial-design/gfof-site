@@ -294,3 +294,18 @@ test('starter action refuses unknown formats, inactive interests and disposal',(
  const b=fixture();b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');b.get('arena-prepare').emit('click');b.get('project-format').value='__proto__';b.get('project-format').emit('change');assert.equal(b.get('project-use-starter').disabled,true);assert.equal(b.get('project-starter-preview').textContent,'');b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');
  b.get('project-clear').emit('click');assert.equal(b.get('project-use-starter').disabled,true);b.get('arena-prepare').emit('click');b.api.dispose();b.get('project-use-starter').emit('click');assert.equal(b.get('project-goal').value,'');assert.equal(b.get('project-use-starter').disabled,true);
 });
+
+test('closed planner ignores retained form, copy, route and detached activity handlers',async()=>{
+ const b=fixture();b.setProject();b.get('project-form').emit('submit');
+ const toggle=b.get('activity-toggle-first-mission'),remove=b.get('crew-selected').children[0].children[1].children.at(-1),selection=b.api.getSelection();
+ b.api.dispose();const files=b.created.length,revoked=b.revoked.length;
+ await b.get('project-form').emit('submit');await b.get('project-copy').emit('click');await b.get('crew-copy').emit('click');
+ b.get('crew-route').value='evidence';b.get('crew-load-route').emit('click');toggle.emit('click');remove.emit('click');b.get('project-clear').emit('click');
+ assert.deepEqual(b.api.getSelection(),selection);assert.equal(b.created.length,files);assert.equal(b.revoked.length,revoked);assert.equal(b.copies.length,0);
+ assert.equal(b.get('project-fields').disabled,true);assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('crew-output').hidden,true);assert.equal(b.get('project-name').value,'Example Community');
+ b.api.dispose();assert.equal(b.revoked.length,revoked);
+});
+test('closing during a clipboard wait prevents late success and cancels remaining local timers',async()=>{
+ const gate=deferred(),b=fixture({copy:()=>gate.promise});const copying=b.get('crew-copy').emit('click');assert.equal(b.clock.timers.size,1);
+ b.api.dispose();await copying;gate.resolve();await flush();assert.equal(b.clock.timers.size,0);assert.equal(b.get('crew-copy-status').textContent,'');assert.equal(b.get('crew-download').hidden,true);
+});
