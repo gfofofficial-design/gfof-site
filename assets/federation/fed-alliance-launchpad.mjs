@@ -1,4 +1,4 @@
-import {ACTIVITIES, ROUTES, PREP_CHECKS, matchingActivities, updateSelection, crewPlan, prepareProjectBrief} from './fed-alliance-launchpad-core.mjs';
+import {ACTIVITIES, ROUTES, PREP_CHECKS, COMPETITION_FORMATS, matchingActivities, updateSelection, crewPlan, prepareProjectBrief} from './fed-alliance-launchpad-core.mjs';
 import {createArtworkSelection, artworkBrief} from './fed-alliance-artwork.mjs';
 
 export function mountAllianceLaunchpad(document, options={}) {
@@ -16,7 +16,7 @@ export function mountAllianceLaunchpad(document, options={}) {
   });
   const revokeFile=options.revokeFile || (url=>globalThis.URL?.revokeObjectURL?.(url));
   const files=new Map(), copies=new Map();
-  let selected=[...ROUTES.welcome.ids];
+  let selected=[...ROUTES.welcome.ids],disposed=false;
 
   function invalidateCopy(key) {
     copies.get(key)?.cancel(); copies.delete(key);
@@ -130,7 +130,12 @@ export function mountAllianceLaunchpad(document, options={}) {
   function clearProjectOutput() {
     invalidateCopy('project'); byId('project-output').hidden=true;
     byId('project-brief').value=''; download('project','');
-    for(const id of ['project-name','project-website','project-mint','project-interest']) byId(id).removeAttribute('aria-invalid');
+    for(const id of ['project-name','project-website','project-mint','project-interest','project-format','project-goal']) byId(id).removeAttribute('aria-invalid');
+  }
+  function syncCompetition(){
+    const active=byId('project-interest').value==='competition';
+    byId('project-competition').hidden=!active;
+    for(const id of ['project-format','project-goal'])byId(id).disabled=!active;
   }
   function changedProject() {
     clearProjectOutput(); prepCount();
@@ -178,7 +183,7 @@ export function mountAllianceLaunchpad(document, options={}) {
     if(artwork.pending) {
       byId('project-prep-status').textContent='Finish checking the image, or remove it to continue without one.';byId('project-artwork').focus();return;
     }
-    const result=prepareProjectBrief({name:byId('project-name').value,website:byId('project-website').value,mint:byId('project-mint').value,interest:byId('project-interest').value},prepCount());
+    const result=prepareProjectBrief({name:byId('project-name').value,website:byId('project-website').value,mint:byId('project-mint').value,interest:byId('project-interest').value,format:byId('project-format').value,goal:byId('project-goal').value},prepCount());
     if(!result.ok) {
       byId('project-prep-status').textContent=result.message;
       const field=byId(result.field);field.setAttribute('aria-invalid','true');field.focus();return;
@@ -188,22 +193,25 @@ export function mountAllianceLaunchpad(document, options={}) {
     download('project',text);
     byId('project-prep-status').textContent='Discussion draft prepared. '+result.prepared+' of 4 items self-reported; identity, consent and sources still need review. Nothing has been sent.';
   });
-  for(const id of ['project-name','project-website','project-mint']) byId(id).addEventListener('input',changedProject);
-  byId('project-interest').addEventListener('change',changedProject);
+  for(const id of ['project-name','project-website','project-mint','project-goal']) byId(id).addEventListener('input',changedProject);
+  byId('project-interest').addEventListener('change',()=>{syncCompetition();changedProject();});
+  byId('project-format').addEventListener('change',changedProject);
+  const prepareArena=()=>{if(disposed)return;byId('project-interest').value='competition';if(!Object.hasOwn(COMPETITION_FORMATS,byId('project-format').value))byId('project-format').value='creative';syncCompetition();changedProject();byId('project-format').focus();};
+  byId('arena-prepare').addEventListener('click',prepareArena);byId('arena-prepare').hidden=false;
   for(const key of Object.keys(PREP_CHECKS)) byId('prep-'+key).addEventListener('change',changedProject);
   byId('project-clear').addEventListener('click',()=>{
     artwork.clear();
     for(const id of ['project-name','project-website','project-mint']) byId(id).value='';
-    byId('project-interest').value='education';for(const key of Object.keys(PREP_CHECKS))byId('prep-'+key).checked=false;
+    byId('project-interest').value='education';byId('project-format').value='creative';byId('project-goal').value='';syncCompetition();for(const key of Object.keys(PREP_CHECKS))byId('prep-'+key).checked=false;
     clearProjectOutput();prepCount();byId('project-prep-status').textContent='Worksheet cleared from this tab. Copies or downloaded files are not deleted.';byId('project-name').focus();
   });
   bindCopy('crew'); bindCopy('project');
-  renderActivities();renderPlan();prepCount();
+  renderActivities();renderPlan();prepCount();syncCompetition();
   byId('crew-plan-title').setAttribute('tabindex','-1');
   for(const id of ['activity-controls','crew-controls','crew-output'])byId(id).hidden=false;
   byId('project-fields').disabled=false;
   byId('project-prep-status').textContent='Use public project details only. The draft stays in this tab until you choose to copy or download it.';
-  return {getSelection:()=>[...selected],dispose(){artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
+  return {getSelection:()=>[...selected],dispose(){disposed=true;byId('arena-prepare').removeEventListener?.('click',prepareArena);byId('arena-prepare').disabled=true;artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
 }
 
 if(typeof document !== 'undefined') {

@@ -100,6 +100,7 @@ export function crewPlan(ids, requestedPace='session') {
     'Explore the Alliance: https://galacticfederation.co/alliance#crew-console');
   return {activities,minutes,text:parts.join('\n')};
 }
+export const COMPETITION_FORMATS=Object.freeze({creative:'Creative Clash',builder:'Builder Battle',research:'Research Showdown',exchange:'Community Exchange',headtohead:'Head-to-Head'});
 export function prepareProjectBrief(fields, checks=[]) {
   const name=typeof fields?.name === 'string' ? fields.name.trim() : '';
   if(name.length < 2 || name.length > 70 || /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(name)) return {ok:false,field:'project-name',message:'Enter a public project name, 2–70 characters on one line, without hidden direction controls.'};
@@ -112,9 +113,16 @@ export function prepareProjectBrief(fields, checks=[]) {
   const interests={competition:'Project-versus-project competitions',education:'Financial education and crew missions', research:'Token structure and evidence', feedback:'Product feedback and useful guides', community:'Joint community activities'};
   if(!Object.hasOwn(interests,fields.interest)) return {ok:false,field:'project-interest',message:'Choose a shared activity from the list.'};
   if(!Array.isArray(checks) || checks.length > 4 || new Set(checks).size !== checks.length || checks.some(key=>!Object.hasOwn(PREP_CHECKS,key))) return {ok:false,field:'project-prep-status',message:'Review the preparation checklist again.'};
+  const competition=[];
+  if(fields.interest==='competition'){
+    if(!Object.hasOwn(COMPETITION_FORMATS,fields.format))return {ok:false,field:'project-format',message:'Choose one of the proposed Arena formats.'};
+    const goal=typeof fields.goal==='string'?fields.goal.trim():'';
+    if(goal.length<20||goal.length>240||/[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(goal))return {ok:false,field:'project-goal',message:'Describe what teams would make in 20–240 characters on one line, without markup or hidden direction controls.'};
+    competition.push(`Proposed format: ${COMPETITION_FORMATS[fields.format]}`,`Proposed shared deliverable: ${goal}`, 'Before a match: both authorized project representatives must agree on the brief, deadline/time zone, equal entry limits, eligibility, originality/tool disclosures, judging criteria, reviewer conflicts and dispute process.', 'This is an unsent discussion proposal, not an invitation, accepted match, scheduled event or prize commitment.', '');
+  }
   const text=['PROSPECTIVE ALLIANCE STATION — DISCUSSION DRAFT',`Project: ${name}`,`Public website: ${website}`,
     mint ? `Chain/mint supplied for review: Solana / ${mint}` : 'Chain/mint: not supplied; confirm before any listing.',
-    `Shared interest: ${interests[fields.interest]}`, '', 'Preparation — self-reported, not independently verified:',
+    `Shared interest: ${interests[fields.interest]}`, '', ...competition, 'Preparation — self-reported, not independently verified:',
     ...Object.entries(PREP_CHECKS).map(([key,label])=>`${checks.includes(key) ? '[prepared]' : '[to discuss]'} ${label}`), '',
     'Please confirm identity, team consent, public sources, station scope and any commercial terms through official channels before publication. This worksheet does not approve a partner, create an account, enroll members or grant access.',
     'No wallet keys, private contact details or account credentials belong in this brief.',

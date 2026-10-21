@@ -245,3 +245,36 @@ test('local artwork interaction performs no fetch or persistent storage operatio
   try{const a=artworkFixture(),b=fixture({artwork:a.options});b.setProject();b.get('project-artwork').files=[imageFile()];await b.get('project-artwork').emit('change');b.get('project-form').emit('submit');assert.match(b.get('project-brief').value,/example-logo/);b.api.dispose();}
   finally{globalThis.fetch=fetch;if(storage)Object.defineProperty(globalThis,'localStorage',storage);else delete globalThis.localStorage;}
 });
+
+test('competition briefs bind a reviewed format and public deliverable without creating a match',()=>{
+ const fields={...publicFields(),interest:'competition',format:'creative',goal:'Create one original short video explaining a shared public topic.'};
+ const result=prepareProjectBrief(fields);assert.equal(result.ok,true);assert.match(result.text,/Proposed format: Creative Clash/);
+ assert.match(result.text,/Proposed shared deliverable: Create one original/);assert.match(result.text,/not an invitation, accepted match, scheduled event or prize commitment/);
+ for(const format of ['builder','research','exchange','headtohead'])assert.equal(prepareProjectBrief({...fields,format}).ok,true);
+ for(const format of ['',undefined,'__proto__','unknown'])assert.equal(prepareProjectBrief({...fields,format}).field,'project-format');
+ for(const goal of ['', 'x'.repeat(19),'x'.repeat(241),'<img src=x> enough text here','Hidden\u202e direction with enough text','Line one with enough text\nline two'])assert.equal(prepareProjectBrief({...fields,goal}).field,'project-goal');
+ assert.equal(prepareProjectBrief({...fields,goal:'x'.repeat(20)}).ok,true);assert.equal(prepareProjectBrief({...fields,goal:'x'.repeat(240)}).ok,true);
+ const ordinary=prepareProjectBrief({...fields,interest:'education'});assert.equal(ordinary.ok,true);assert.doesNotMatch(ordinary.text,/Proposed shared deliverable|Create one original/);
+});
+test('Arena preparation opens only local worksheet fields and preserves project details',()=>{
+ const b=fixture();b.setProject();assert.equal(b.get('project-competition').hidden,true);assert.equal(b.get('project-goal').disabled,true);
+ b.get('arena-prepare').emit('click');assert.equal(b.get('project-interest').value,'competition');assert.equal(b.get('project-format').value,'creative');
+ assert.equal(b.get('project-competition').hidden,false);assert.equal(b.get('project-goal').disabled,false);assert.equal(b.document.activeElement,b.get('project-format'));
+ assert.equal(b.get('project-name').value,'Example Community');assert.equal(b.get('project-output').hidden,true);
+ b.get('project-form').emit('submit');assert.equal(b.document.activeElement,b.get('project-goal'));assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('project-name').value,'Example Community');b.api.dispose();
+});
+test('editing or changing competition interest invalidates old exports without losing the proposal draft',async()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');b.get('project-goal').value='Create one original public guide another project can use.';
+ b.get('project-form').emit('submit');assert.equal(b.get('project-output').hidden,false);assert.match(b.get('project-brief').value,/Proposed format: Creative Clash/);
+ await b.get('project-copy').emit('click');assert.match(b.copies.at(-1),/not an invitation/);
+ b.get('project-format').value='builder';b.get('project-format').emit('change');assert.equal(b.get('project-output').hidden,true);assert.equal(b.get('project-download').hidden,true);
+ b.get('project-interest').value='education';b.get('project-interest').emit('change');assert.equal(b.get('project-competition').hidden,true);assert.equal(b.get('project-goal').disabled,true);
+ b.get('project-form').emit('submit');assert.doesNotMatch(b.get('project-brief').value,/Create one original public guide/);
+ b.get('arena-prepare').emit('click');assert.equal(b.get('project-format').value,'builder');assert.match(b.get('project-goal').value,/original public guide/);b.api.dispose();
+});
+test('clearing a competition worksheet removes its draft and disposed Arena actions stay inert',()=>{
+ const b=fixture();b.setProject();b.get('arena-prepare').emit('click');b.get('project-goal').value='Create one original public guide another project can use.';b.get('project-form').emit('submit');
+ b.get('project-clear').emit('click');assert.equal(b.get('project-goal').value,'');assert.equal(b.get('project-format').value,'creative');assert.equal(b.get('project-goal').disabled,true);
+ assert.equal(b.get('project-competition').hidden,true);assert.equal(b.get('project-brief').value,'');assert.equal(b.get('project-download').hidden,true);
+ b.api.dispose();b.get('arena-prepare').emit('click');assert.equal(b.get('project-interest').value,'education');assert.equal(b.get('arena-prepare').disabled,true);
+});

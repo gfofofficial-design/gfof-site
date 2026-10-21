@@ -155,3 +155,25 @@ The current change is a closed product proposal and navigation/copy update,
 not the backend implementation of a scored team competition. All235 focused
 component/regression tests pass locally; final layout/device and current CI
 acceptance remain separate.
+
+## Competition discussion composer
+
+The Arena now has an explicit Prepare a competition proposal action. It opens
+only the local project worksheet, selects competition interest and focuses the
+format control without submitting, enrolling or sending anything. Existing
+public project details and a previously drafted competition idea are preserved.
+
+Founders select one of five reviewed formats and describe a public shared
+deliverable in20–240 characters on one line. The text export includes the format,
+deliverable and unresolved agreement items (representative consent, deadlines,
+entry limits, eligibility, judging/conflicts and disputes). It explicitly remains
+an unsent proposal, not a match invitation, accepted event or prize commitment.
+Invalid data focuses its field without clearing the project details. Edits
+invalidate old copy/download output. Switching to a noncompetition interest
+excludes the hidden idea from the export; Clear removes it from this tab.
+The new Arena action is disabled/inert after controller disposal.
+
+Four focused tests cover format/text boundaries, local action/focus and draft
+preservation, export invalidation/noncompetition exclusion, and clear/disposal.
+They establish local preparation behavior only; real invitations, authorized
+project representation, server storage and notification delivery are unchanged.
