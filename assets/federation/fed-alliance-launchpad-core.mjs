@@ -37,6 +37,16 @@ export const ACTIVITIES = Object.freeze([
     href:'/command-deck', link:'Open Command Deck',
     steps:['Choose a public dashboard flow on your own device.', 'Note the expected and observed behavior without private wallet or account data.', 'Draft one reproducible improvement for the team to review.'],
     limit:'Do not bypass browser warnings or test sign-in, signatures or financial actions.'},
+  {id:'permission-pause', title:'Pause before giving permission', role:'explore', minutes:8, kind:'FICTIONAL SAFETY MISSION',
+    summary:'Explore Keys to the Gate with Eno and discuss the scope of a request before deciding.',
+    href:'/journey/keys-to-the-gate', link:'Play Keys to the Gate',
+    steps:['Play the fictional chapter with Eno.', 'Describe what a request would allow and what remains unclear.', 'Compare the questions each crew member would ask before proceeding.'],
+    limit:'Fictional scenario. No wallet connection, signature or real permission is needed.'},
+  {id:'crowd-judgment', title:'Count what actually remains', role:'explore', minutes:8, kind:'FICTIONAL DECISION MISSION',
+    summary:'Run a fictional stall with Kael and distinguish sales, cash paid out and unsold stock.',
+    href:'/journey/after-the-crowd', link:'Play After the Crowd',
+    steps:['Play the fictional chapter with Kael.', 'Compare sales received, cash paid out and the stock left over.', 'Change the demand assumption and explain why sales alone do not establish profit.'],
+    limit:'Educational discussion, not a recommendation to buy, sell or hold a token.'},
   {id:'project-intro', title:'Prepare your community’s introduction', role:'connect', minutes:10, kind:'PROJECT PREPARATION',
     summary:'Use the public project worksheet to make a useful first conversation easier.',
     href:'#project-kit', link:'Open the Project Prep kit',
@@ -47,6 +57,7 @@ export const ACTIVITIES = Object.freeze([
 export const ROUTES = Object.freeze({
   welcome:Object.freeze({title:'Welcome relay', ids:Object.freeze(['first-mission','lending-lab','crew-relay'])}),
   evidence:Object.freeze({title:'Evidence workshop', ids:Object.freeze(['lens-notes','lock-evidence','useful-guide'])}),
+  safety:Object.freeze({title:'Safety & judgment', ids:Object.freeze(['first-mission','permission-pause','crowd-judgment'])}),
   builders:Object.freeze({title:'Builder circle', ids:Object.freeze(['mobile-check','useful-guide','project-intro'])}),
 });
 export const PACES = Object.freeze({session:'One shared session', week:'Across one week', fortnight:'Across two weeks'});
@@ -85,7 +96,7 @@ export function crewPlan(ids, requestedPace='session') {
     parts.push(`${slots[index]} — ${item.title}`, ...item.steps.map((step,n)=>`${n+1}. ${step}`),
       new URL(item.href,'https://galacticfederation.co/alliance').href, item.limit, '');
   });
-  parts.push('This is a suggested plan, not a scheduled event, competition entry or verified completion record. No membership, League points, prizes or rewards are awarded. Nothing is submitted or saved by this planner.',
+  parts.push('HOST YOUR CREW', 'Rotate the reader, questioner and summarizer between activities. Anyone can pass; use fictional examples rather than personal finances.', 'After each activity: What did we choose? What supports it? What would change our minds?', 'Close with one useful takeaway per person and choose an optional next discussion together. Keep contributions voluntary; do not record or quote people without consent.', '', 'This is a suggested plan, not a scheduled event, competition entry or verified completion record. No membership, League points, prizes or rewards are awarded. Nothing is submitted or saved by this planner.',
     'Explore the Alliance: https://galacticfederation.co/alliance#crew-console');
   return {activities,minutes,text:parts.join('\n')};
 }

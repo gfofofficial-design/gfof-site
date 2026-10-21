@@ -10,7 +10,7 @@ const flush=()=>new Promise(setImmediate);
 function deferred(){let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};}
 
 test('activity links use reviewed tools and never start a lookup through a query',()=>{
-  assert.equal(ACTIVITIES.length,8);assert.equal(new Set(ACTIVITIES.map(a=>a.id)).size,8);
+  assert.equal(ACTIVITIES.length,10);assert.equal(new Set(ACTIVITIES.map(a=>a.id)).size,10);
   for(const activity of ACTIVITIES){
     const url=new URL(activity.href,'https://galacticfederation.co/alliance');
     assert.ok(['https://galacticfederation.co','https://dossiertrack.co'].includes(url.origin));
@@ -20,11 +20,11 @@ test('activity links use reviewed tools and never start a lookup through a query
   }
 });
 test('role and time filters combine without treating an empty match as unavailable tools',()=>{
-  assert.equal(matchingActivities('all','all').length,8);
+  assert.equal(matchingActivities('all','all').length,10);
   assert.equal(matchingActivities('research','10').length,2);
   assert.equal(matchingActivities('research','5').length,0);
   assert.equal(matchingActivities('create','all').length,2);
-  assert.equal(matchingActivities('__proto__','bogus').length,8);
+  assert.equal(matchingActivities('__proto__','bogus').length,10);
 });
 test('selection is bounded, unique, reviewed and immutable to its caller',()=>{
   const ids=[...ROUTES.welcome.ids];assert.equal(updateSelection(ids,'lens-notes').length,3);
@@ -98,7 +98,7 @@ function fixture(options={}){
   return {get,api,document,created,revoked,copies,clock,setProject};
 }
 test('the console mounts eight activities, a usable route and no enrollment state',()=>{
-  const b=fixture();assert.equal(b.get('activity-list').children.length,8);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
+  const b=fixture();assert.equal(b.get('activity-list').children.length,10);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
   assert.equal(b.get('crew-count').textContent,'3 / 3');assert.equal(b.get('activity-controls').hidden,false);
   assert.equal(b.get('project-fields').disabled,false);assert.equal(b.get('project-output').hidden,true);
   assert.match(b.get('crew-brief').value,/LOCAL DRAFT/);assert.equal(b.created.length,1);b.api.dispose();
@@ -106,7 +106,7 @@ test('the console mounts eight activities, a usable route and no enrollment stat
 test('filter reset recovers an empty match while preserving the crew plan',()=>{
   const b=fixture();b.get('activity-role').value='research';b.get('activity-time').value='5';b.get('activity-role').emit('change');
   assert.equal(b.get('activity-list').children.length,0);assert.match(b.get('activity-status').textContent,/No activities match/);
-  b.get('activity-reset').emit('click');assert.equal(b.get('activity-list').children.length,8);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
+  b.get('activity-reset').emit('click');assert.equal(b.get('activity-list').children.length,10);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
   assert.equal(b.document.activeElement,b.get('activity-role'));b.api.dispose();
 });
 test('adding, removing and clearing activities enforce the three-slot limit',()=>{
