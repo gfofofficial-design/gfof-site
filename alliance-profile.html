@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>Your Alliance profile · Galactic Federation</title>
+  <link rel="stylesheet" href="/assets/federation/fed-tokens.css">
+  <link rel="stylesheet" href="/assets/federation/fed-alliance.css">
+  <link rel="stylesheet" href="/assets/federation/fed-alliance-member-form.css">
+  <script type="module" src="/assets/federation/fed-alliance-profile-page.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#profile-main">Skip to your profile</a>
+  <header class="site-header wrap"><a class="brand" href="/"><img src="/logo-circle.png" width="44" height="44" alt="">GALACTIC FEDERATION</a><nav aria-label="Profile navigation"><a href="/alliance.html">Back to the Alliance</a><a href="/command-deck">Command Deck</a></nav></header>
+  <main id="profile-main" class="wrap member-profile" tabindex="-1">
+    <!-- local fixture hooks -->
+    <div class="profile-heading"><p class="eyebrow">FEDERATION ALLIANCE // YOUR PROFILE</p><h1>A place for your contribution.</h1><p>Choose what you share. Keep a draft while you compare changes.</p></div>
+    <aside class="profile-notice" aria-label="Service availability"><strong>Member service closed</strong><p id="ap-service-note">This form is a draft. Member profiles and sign-in are not open here. No account or profile request will start.</p></aside>
+    <noscript><p>The service is closed. This form cannot submit without the reviewed member service and JavaScript.</p></noscript>
+    <div class="profile-toolbar"><button id="ap-read" type="button" disabled>Read current profile</button><button id="ap-cancel" type="button" hidden>Cancel request</button></div>
+    <p id="ap-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true">Member profiles are not open yet. No account or profile request has started.</p>
+    <p id="ap-compare-jump" hidden><a href="#ap-current">Compare the last read profile with my draft</a></p>
+    <div class="profile-layout">
+      <form id="ap-form" novalidate aria-labelledby="draft-title" aria-describedby="ap-draft-note">
+        <fieldset id="ap-fields" disabled>
+          <legend id="draft-title">Your draft</legend>
+          <p id="ap-draft-note" class="profile-help">This draft stays in this page. Closing or reloading the page may lose unsaved text.</p>
+          <label for="ap-name">Display name</label><input id="ap-name" name="name" type="text" autocomplete="nickname" minlength="2" maxlength="40" required aria-describedby="ap-name-help"><p id="ap-name-help" class="profile-help">2–40 characters. This is the name other members would see.</p><p id="ap-name-error" class="profile-error" hidden></p>
+          <label for="ap-community">Project or community <span class="profile-help">(optional)</span></label><input id="ap-community" name="community" type="text" maxlength="70" autocomplete="off" aria-describedby="ap-community-help"><p id="ap-community-help" class="profile-help">Up to 70 characters. Self-described; this does not establish an official partnership.</p><p id="ap-community-error" class="profile-error" hidden></p>
+          <label for="ap-bio">Bio</label><textarea id="ap-bio" name="bio" rows="5" minlength="10" maxlength="280" required aria-describedby="ap-bio-help"></textarea><p id="ap-bio-help" class="profile-help">10–280 characters. Avoid private contact details, credentials and financial information.</p><p id="ap-bio-error" class="profile-error" hidden></p>
+          <label for="ap-role">Contribution role</label><select id="ap-role" name="role" aria-describedby="ap-role-help"><option value="explorer">Explorer</option><option value="builder">Builder</option><option value="researcher">Researcher</option><option value="connector">Community connector</option></select><p id="ap-role-help" class="profile-help">How you would like to contribute. This grants no authority or account privileges.</p><p id="ap-role-error" class="profile-error" hidden></p>
+          <label class="profile-check" for="ap-listed"><input id="ap-listed" name="listed" type="checkbox" aria-describedby="ap-listed-help"><span>List my profile in the member directory</span></label><p id="ap-listed-help" class="profile-help">Off by default. Unlisting hides the directory entry; it does not remove the profile.</p><p id="ap-listed-error" class="profile-error" hidden></p>
+          <button id="ap-save" type="submit" disabled>Save my profile</button>
+        </fieldset>
+      </form>
+      <div class="profile-reading">
+        <section id="ap-current" class="profile-current" aria-labelledby="current-title" tabindex="-1" hidden><h2 id="current-title">Recorded profile</h2><p class="profile-help">Details from the last successful profile response. This view does not replace your draft or establish the outcome of an interrupted save.</p><dl id="ap-current-body"></dl></section>
+        <section id="ap-comparison" class="profile-comparison" aria-labelledby="comparison-title" hidden><h2 id="comparison-title">Keep your draft. Check the current version.</h2><p>Compare the last read profile with your draft. Continuing keeps your text and uses that version for your next save. Nothing is submitted until you choose Save my profile.</p><button id="ap-accept" type="button">Keep my draft and continue</button></section>
+        <section class="profile-removal" aria-labelledby="removal-title"><h2 id="removal-title">Remove your profile</h2><p>Removal controls are still in preparation. This draft form cannot send a removal request. Unlisting and removal are different actions.</p><button type="button" disabled>Remove my profile</button></section>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer wrap"><a href="/alliance.html">Federation Alliance</a><p>Draft member interface. No membership, upload, invitation or public record is created by opening this page.</p></footer>
+</body>
+</html>

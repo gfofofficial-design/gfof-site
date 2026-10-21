@@ -76,6 +76,10 @@ export function createMemberProfileClient({enabled=false,profileRevisions=false,
   function profileBody(data){if(!profileRecord(data)||!Object.hasOwn(data,'profile')||!Object.hasOwn(data,'writeState')||!['available','review_required'].includes(data.writeState))throw error('unavailable');return {profile:ownProfile(data.profile),writeState:data.writeState};}
   return Object.freeze({
     load:()=>run('checking','/me','GET',undefined,profileRevisions?profileRevisionSnapshot:profileBody),
+    compare(){
+      if(disposed||enabled!==true||!profileRevisions)throw error('closed');if(pending)throw error('busy');
+      needsComparison=true;return run('checking','/me','GET',undefined,profileRevisionSnapshot);
+    },
     save(input){
       const fields=validateProfileInput(input);
       if(!profileRevisions)return run('saving','/me','POST',fields,data=>{const result=profileBody(data);if(!result.profile)throw error('unknown');return result;});
