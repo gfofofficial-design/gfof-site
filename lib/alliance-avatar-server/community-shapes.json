@@ -1,0 +1,86 @@
+{
+  "sourceSha256": "07dfc24b1a81a8a2b9fd48a74ad07804651be5057883320f807b2c125ce0c1f5",
+  "functions": [
+    {
+      "name": "clean_text",
+      "arguments": "text, integer, integer",
+      "result": "text",
+      "language": "plpgsql",
+      "definer": false,
+      "settings": 1,
+      "bodySha256": "bb5788288ceb043464b5cec264d2cde5bdd63e499d63e7bcc89a3be61cb0750d"
+    },
+    {
+      "name": "member",
+      "arguments": "uuid, uuid, boolean",
+      "result": "uuid",
+      "language": "plpgsql",
+      "definer": false,
+      "settings": 1,
+      "bodySha256": "5b303fc8c397f49dadb41ced803bb48d2a128db1403a34f09e76207101bb28fd"
+    },
+    {
+      "name": "visible",
+      "arguments": "uuid, uuid",
+      "result": "boolean",
+      "language": "sql",
+      "definer": false,
+      "settings": 1,
+      "bodySha256": "65c5160b1e00ebcdbd2b047bf6d86f512004d8af5a59d0c16854656ec5b66ac0"
+    },
+    {
+      "name": "snapshot",
+      "arguments": "uuid, uuid",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": false,
+      "settings": 3,
+      "bodySha256": "5ac62d4fc366fb9e7bd2f375ff892e5132a55ab4a24211d403165580f8473628"
+    },
+    {
+      "name": "read_session",
+      "arguments": "uuid, uuid, uuid",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 1,
+      "bodySha256": "50967a4df5598997b6fc7abc8c7a74023f0e42acc581b7aefb91c09d0eba8ad3"
+    },
+    {
+      "name": "list_session",
+      "arguments": "uuid, uuid, uuid, integer",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 1,
+      "bodySha256": "2f2941ca7f51bee12e1ad7c7ac3b0d57f1c67d987fb59fa1fe8954ed870843d7"
+    },
+    {
+      "name": "change_session",
+      "arguments": "uuid, uuid, jsonb",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 3,
+      "bodySha256": "390789de607fb63a97c46066b51ff36c5360666547b06264c816b48dde6d51c8"
+    },
+    {
+      "name": "block_session",
+      "arguments": "uuid, uuid, uuid, boolean",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 1,
+      "bodySha256": "2399fb94ffe286bdd554618b43a0df5de208a24885c36ec025e6411e01fce029"
+    },
+    {
+      "name": "recovery_inventory",
+      "arguments": "",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 3,
+      "bodySha256": "f85afeb841f1b202afe894d3493d126264c9d91adc2ca680bfd287bc6a937c0b"
+    }
+  ]
+}
