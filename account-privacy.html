@@ -16,11 +16,11 @@
 <main>
   <p class="eyebrow">FEDERATION // ACCOUNT PRIVACY</p>
   <h1>What sign-in records.</h1>
-  <p class="status">The account service is a private preview. Public account registration is not open.</p>
-  <p class="lead">This notice describes the private account preview and the initial service being prepared for public launch. It covers Federation accounts and the Command Deck. Last updated October 20, 2026. The service is operated personally by the Federation’s founder, who can be contacted at <a href="mailto:gfofofficial@gmail.com">gfofofficial@gmail.com</a>.</p>
+  <p class="status">Existing-account email-code sign-in is available. Public account registration is not open.</p>
+  <p class="lead">This notice describes existing-account sign-in and the initial service being prepared for public launch. It covers Federation accounts and the Command Deck. Last updated October 22, 2026. The service is operated personally by the Federation’s founder, who can be contacted at <a href="mailto:gfofofficial@gmail.com">gfofofficial@gmail.com</a>.</p>
   <section aria-labelledby="account-title">
     <h2 id="account-title">Your account</h2>
-    <p>Supabase provides account authentication. Email sign-in sends a one-time code to your email address through the configured delivery provider and verifies that code before establishing a session. Google sign-in shares your email and can share your name and profile picture with Supabase. Supabase retains the account identifier and linked sign-in identities; the Federation page displays your email. These records support sign-in, account recovery, and account administration.</p>
+    <p>Supabase provides account authentication. Email sign-in sends a one-time code to your email address through the configured delivery provider and verifies that code before establishing a session. When password sign-in is offered, your Federation password passes through the Federation account service to Supabase for verification. Supabase stores a password hash. Do not enter your email-provider password here. If Google sign-in is offered, it shares your email and can share your name and profile picture with Supabase. Supabase retains the account identifier and linked sign-in identities; the Federation page displays your email. These records support sign-in, account recovery, and account administration.</p>
     <p>We keep the active account record while the account remains open. Signing out ends this browser session; it does not delete the account. An account does not establish wallet ownership, financial eligibility, or permission to move tokens.</p>
   </section>
   <section aria-labelledby="device-title">
@@ -35,7 +35,7 @@
   </section>
   <section aria-labelledby="records-title">
     <h2 id="records-title">Service records and recovery</h2>
-    <p>Netlify hosts the site and server functions; Supabase and Google provide sign-in services. For email sign-in, Supabase sends your destination email address and the sign-in message, including its temporary code, to Resend for delivery.</p>
+    <p>Netlify hosts the site and server functions; Supabase provides account authentication; Google participates only when Google sign-in is offered. For email sign-in, Supabase sends your destination email address and the sign-in message, including its temporary code, to Resend for delivery.</p>
     <p>These providers’ operational and security records can include request times, IP addresses, browser information, sign-in events, and email delivery records under their own policies. The Federation application does not intentionally log authentication tokens, passwords, email sign-in codes, OAuth codes, or wallet request bodies.</p>
     <p>Account information can remain in protected recovery backups after deletion from the active service. A minimal deletion record—account identifier, case reference, deletion date and outcome—is retained separately while a retained recovery copy could reintroduce that account. It is used to keep a deleted account out of a restored service.</p>
     <p>A provider’s dashboard log-access window is not a promise that all underlying copies have been erased. We do not promise immediate deletion from every provider log or backup.</p>
