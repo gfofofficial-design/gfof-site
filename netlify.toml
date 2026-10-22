@@ -197,7 +197,7 @@
 
 [[redirects]]
   from = "/api/federation-account/email-start"
-  to = "/.netlify/functions/federation-account/email-start"
+  to = "/.netlify/functions/federation-email-trial/email-start"
   status = 200
   force = true
   [redirects.rate_limit]
@@ -207,7 +207,7 @@
 
 [[redirects]]
   from = "/api/federation-account/email-verify"
-  to = "/.netlify/functions/federation-account/email-verify"
+  to = "/.netlify/functions/federation-email-trial/email-verify"
   status = 200
   force = true
   [redirects.rate_limit]
@@ -217,7 +217,7 @@
 
 [[redirects]]
   from = "/api/federation-account/oauth"
-  to = "/.netlify/functions/federation-account/oauth"
+  to = "/.netlify/functions/federation-email-trial/oauth"
   status = 200
   force = true
   [redirects.rate_limit]
@@ -227,7 +227,7 @@
 
 [[redirects]]
   from = "/api/federation-account/*"
-  to = "/.netlify/functions/federation-account/:splat"
+  to = "/.netlify/functions/federation-email-trial/:splat"
   status = 200
   force = true
   [redirects.rate_limit]
