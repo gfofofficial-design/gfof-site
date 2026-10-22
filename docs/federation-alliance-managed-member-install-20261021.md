@@ -72,7 +72,8 @@ durable community features, mail/Google and publication remain release work.
 `managedMemberDiagnosticSql()` is an offline proposal for isolating a managed
 compatibility refusal. It reuses the exact installation prefix with every login
 and mode closed. The final block reports fifteen fixed boundary predicates, four
-cleanup/count booleans and the proposed roles' creator edges. It never reports
+cleanup/count booleans, the proposed roles' creator edges and the verifier's
+owner/type/search-path metadata plus a SHA-256 of its fixed SQL body. It never reports
 account rows, tokens, passwords or credential hashes. An unconditional exception
 aborts the entire transaction even when every predicate passes; there is no success
 or COMMIT path. It is not an alternate installer or authority to retry a failed
