@@ -28,7 +28,7 @@ function config(env) {
   const key=env.FEDERATION_AUTH_PUBLISHABLE_KEY||'';
   if(!/^sb_publishable_[a-zA-Z0-9_-]+$/.test(key))throw Error('config');
   const providers=['google','apple'].filter(p=>env[`FEDERATION_AUTH_${p.toUpperCase()}_ENABLED`]==='true');
-  return {origin:origin.origin,url:url.origin,key,providers,emailEnabled:env.FEDERATION_AUTH_EMAIL_ENABLED==='true',emailSignup:env.FEDERATION_AUTH_EMAIL_SIGNUP_ENABLED==='true'};
+  return {origin:origin.origin,url:url.origin,key,providers,emailEnabled:env.FEDERATION_AUTH_EMAIL_ENABLED==='true',emailSignup:env.FEDERATION_AUTH_EMAIL_SIGNUP_ENABLED==='true',passwordEnabled:env.FEDERATION_AUTH_PASSWORD_ENABLED==='true'};
 }
 function equal(a,b){if(typeof a!=='string'||typeof b!=='string')return false;const x=Buffer.from(a),y=Buffer.from(b);return x.length===y.length&&timingSafeEqual(x,y);}
 function sessionCookies(data){
@@ -39,7 +39,7 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
   return async event=>{
     // Netlify's direct function URL must not bypass the account redirect's edge limit.
     const path=event.path||'';
-    if(!/^\/api\/federation-account\/(?:config|oauth|callback|session|refresh|logout|email-start|email-verify)$/.test(path))return result(404,{error:'Account route unavailable.'});
+    if(!/^\/api\/federation-account\/(?:config|oauth|callback|session|refresh|logout|email-start|email-verify|password-signin)$/.test(path))return result(404,{error:'Account route unavailable.'});
     const action=path.split('/').at(-1);
     const method=event.httpMethod;
     let cfg;try{cfg=config(env);}catch{return result(503,{error:'Account configuration is unavailable.'});}
@@ -50,7 +50,7 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
       catch{return result(503,{error:'Account configuration is unavailable.'});}
     }
     const jar=cookies(event);
-    if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[],hasSessionCookie:!!cfg&&!!(jar[COOKIE.access]||jar[COOKIE.refresh]),...(cfg?.emailEnabled?{emailEnabled:true,emailSignupEnabled:cfg.emailSignup}:{})});
+    if(action==='config'&&method==='GET')return result(200,{enabled:!!cfg,providers:cfg?.providers||[],hasSessionCookie:!!cfg&&!!(jar[COOKIE.access]||jar[COOKIE.refresh]),...(cfg?.emailEnabled?{emailEnabled:true,emailSignupEnabled:cfg.emailSignup}:{}),...(cfg?.passwordEnabled?{passwordEnabled:true}:{})});
     if(!cfg)return result(503,{error:'Federation accounts are being prepared.'});
     const origin=event.headers?.origin||event.headers?.Origin;
     const site=event.headers?.['sec-fetch-site'];
@@ -75,6 +75,27 @@ function createHandler({env=process.env,fetchImpl=fetch,now=Date.now}={}){
     }
     async function user(token){if(!token)throw Object.assign(Error('auth'),{status:401});const u=await api('/auth/v1/user',{token});if(!u?.id||!u.email_confirmed_at||u.is_anonymous)throw Object.assign(Error('auth'),{status:401});return u;}
     try{
+      if(action==='password-signin'&&method==='POST'){
+        if(!cfg.passwordEnabled)return result(404,{error:'Password sign-in is not available.'});
+        if(jar[COOKIE.access]||jar[COOKIE.refresh])return result(409,{error:'Sign out before starting another sign-in.'});
+        if(event.isBase64Encoded||(event.body||'').length>2048)return result(413,{error:'Request too large.'});
+        if(!/^application\/json(?:;|$)/i.test(event.headers?.['content-type']||event.headers?.['Content-Type']||''))return result(400,{error:'Invalid request.'});
+        const body=JSON.parse(event.body||'{}');
+        if(!body||Array.isArray(body)||Object.keys(body).sort().join(',')!=='email,password'||
+          typeof body.email!=='string'||body.email.length>254||! /^[^@\s<>]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9.-]{0,187}[A-Za-z0-9])?\.[A-Za-z]{2,63}$/.test(body.email)||
+          typeof body.password!=='string'||body.password.length<1||body.password.length>128)return result(400,{error:'Enter your email and password.'});
+        const email=body.email.toLowerCase();
+        try{
+          const data=await api('/auth/v1/token?grant_type=password',{method:'POST',body:{email,password:body.password}});
+          if(!data?.access_token||!data?.refresh_token)throw Error('session');
+          const verified=await user(data.access_token);
+          if(typeof verified.email!=='string'||verified.email.toLowerCase()!==email)throw Object.assign(Error('auth'),{status:401});
+          return result(200,{ok:true},sessionCookies(data));
+        }catch(error){
+          return result(error.status===429?429:[400,401,403,422].includes(error.status)?401:502,
+            {error:error.status===429?'Too many sign-in attempts. Please wait and try again.':'Password sign-in could not be confirmed.'},[cookie(COOKIE.flow,'',0)]);
+        }
+      }
       if(['email-start','email-verify'].includes(action)&&method==='POST'){
         if(!cfg.emailEnabled)return result(404,{error:'Email sign-in is not available.'});
         if(event.isBase64Encoded||(event.body||'').length>1024)return result(413,{error:'Request too large.'});
