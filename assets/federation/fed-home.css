@@ -272,3 +272,7 @@
   .home-v2 .cmd-seal__orbit{animation:none}
 }
 
+
+/* Account entry stays visible when desktop navigation is hidden. */
+.home-v2 .home-signin{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;color:var(--fed-command);font:inherit;font-weight:600;white-space:nowrap;border:1px solid var(--fed-border-strong);border-radius:6px}
+.home-v2 .home-signin:focus-visible{outline:3px solid var(--fed-command);outline-offset:3px}

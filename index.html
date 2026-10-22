@@ -269,8 +269,6 @@ body::after {
   clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px);
 }
 .nav-buy:hover { box-shadow:0 0 28px rgba(240,192,64,0.35); border-color:var(--gold); color:var(--gold2); }
-.nav-signin { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:8px 12px; color:var(--cyan); font-family:var(--raj); font-size:14px; font-weight:700; white-space:nowrap; }
-.nav-signin:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
 .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; margin-left:auto; }
 .hamburger span { display:block; width:22px; height:1.5px; background:var(--text); border-radius:1px; transition:all .3s; }
 .mobile-nav { display:flex; position:fixed; inset:0; z-index:200; background:rgba(2,6,18,0.99); flex-direction:column; align-items:center; justify-content:center; gap:28px; backdrop-filter:blur(20px); opacity:0; pointer-events:none; transform:translateY(-12px); transition:opacity .3s ease, transform .3s ease; }
@@ -1765,7 +1763,6 @@ html::after{content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
       </div>
     </div>
   </div>
-  <a class="nav-signin" href="/account">Sign in</a>
   <button class="nav-ca-copy" id="nav-ca-copy" onclick="copyCAFromNav()" title="Copy contract address">
     <span class="ncc-icon">⎘</span><span class="ncc-txt">COPY CA</span>
   </button>
