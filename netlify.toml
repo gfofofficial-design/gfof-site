@@ -258,6 +258,26 @@
   status = 200
   force = true
 
+# Private recovery acceptance page, available only in the isolated trial branch.
+[[headers]]
+  for = "/recovery-trial*"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self' https://arjycxziiqlkfomieocc.supabase.co; form-action 'none'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'"
+
+[[redirects]]
+  from = "/api/federation-recovery-trial/config"
+  to = "/.netlify/functions/federation-recovery-trial-config"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    aggregate_by = ["ip", "domain"]
+    window_limit = 10
+    window_size = 60
+
 # Catch-all — serve custom 404 page with proper 404 status
 [[redirects]]
   from = "/*"
