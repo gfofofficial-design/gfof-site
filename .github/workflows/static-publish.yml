@@ -13,7 +13,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '22'
+          node-version: '22.23.4'
       - run: node --test tests/static-publish.test.mjs
       - run: node scripts/build-static-publish.mjs
       - name: Check real checkout output and source exclusions

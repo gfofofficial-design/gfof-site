@@ -52,7 +52,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: '22'
+          node-version: '22.23.4'
       - run: node --check assets/federation/fed-account.js
       - run: node --test tests/federation-email-signup.test.mjs tests/federation-email-auth-contract.test.mjs
       - run: node --test tests/federation-account-email.test.mjs tests/federation-account.test.mjs tests/federation-account-bounds.test.mjs tests/federation-account-page.test.mjs tests/federation-account-tabs.test.mjs tests/federation-account-wait.test.mjs tests/federation-auth-reconciliation.test.mjs tests/federation-deck.test.cjs tests/federation-deck-locks.test.cjs tests/federation-deck-phantom.test.cjs tests/federation-deck-staking.test.cjs tests/federation-wallet.test.cjs tests/wallet-prices.test.cjs tests/treasury-locks.test.mjs
@@ -80,7 +80,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: '22'
+          node-version: '22.23.4'
       - name: Check native Auth-role execution and public-role denial
         run: node tests/federation-google-signup-native.mjs
         env:
@@ -108,7 +108,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '22'
+          node-version: '22.23.4'
       - name: Verify provider decisions and least privilege in disposable PostgreSQL
         run: node tests/federation-email-signup-native.mjs
         env:
@@ -136,7 +136,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '22'
+          node-version: '22.23.4'
       - name: Verify delivered email codes, confirmation, recovery and hook closure
         run: node tests/federation-email-signup-auth.mjs
         env:
@@ -164,7 +164,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: '22'
+          node-version: '22.23.4'
       - name: Verify exact-user deletion survives isolated data restore
         run: node tests/federation-auth-recovery-native.mjs
         env:
@@ -194,7 +194,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: '22'
+          node-version: '22.23.4'
       - name: Verify direct Auth routes, mail isolation and hook-failure closure
         run: node tests/federation-google-signup-auth.mjs
         env:

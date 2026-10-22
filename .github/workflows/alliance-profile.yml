@@ -54,7 +54,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '24'
+          node-version: '24.22.1'
       - run: node --check lib/alliance-profile-store.mjs
       - run: node --check lib/alliance-member-http.mjs
       - run: node --test tests/alliance-member-http.test.mjs
@@ -85,7 +85,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '24'
+          node-version: '24.22.1'
       - name: Verify native grants, row ownership and publication visibility
         run: node tests/alliance-profile-native.mjs
         env:

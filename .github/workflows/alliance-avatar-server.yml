@@ -49,7 +49,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '24'
+          node-version: '24.22.1'
       - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
       - run: npm audit --prefix lib/alliance-avatar-server --audit-level=high
       - run: npm test --prefix lib/alliance-avatar-server
@@ -79,7 +79,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '24'
+          node-version: '24.22.1'
       - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
       - run: node lib/alliance-avatar-server/native.mjs
         env:
@@ -97,7 +97,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: '24'
+          node-version: '24.22.1'
       - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
       - name: Actual isolated local DynamoDB protocol
         run: sudo env ALLIANCE_DYNAMO_TEST_CONFIRM=synthetic_account_dynamodb ALLIANCE_NODE_BINARY="$(command -v node)" python3 -I tests/alliance-account-dynamodb-native.py
