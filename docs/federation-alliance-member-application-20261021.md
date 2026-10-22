@@ -55,8 +55,9 @@ This does not establish real managed connections, runtime keys/current authority
 provider billing bounds or durable fleet fencing. Fresh read-only hosted catalogue
 inspection found no Alliance member schema in the Account Pilot and only the
 original journal functions in the Journal Pilot. The journal/control roles remain
-locked. Existing strict member/journal drivers also refuse creator-management
-memberships; they must not silently learn a weaker baseline from a live database.
+locked. The strict member driver refuses creator-management memberships; the journal
+driver already recognizes its fixed bootstrap exception. Neither may silently
+learn a weaker baseline from a live database.
 An exact reviewed managed installation/profile is still needed before runtime use.
 
 Existing accessible member controls, comparison, confirmation and uncertainty
