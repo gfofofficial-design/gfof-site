@@ -23,7 +23,11 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24.22.1'
-      - run: npm ci --prefix lib/alliance-avatar-runtime --ignore-scripts --no-fund
-      - run: npm audit --prefix lib/alliance-avatar-runtime --audit-level=high
+      # Keep advisory availability separate from installing locked packages;
+      # audit remains a mandatory failing step after the actual source checks.
+      - run: npm ci --prefix lib/alliance-avatar-runtime --ignore-scripts --no-fund --no-audit
       - run: npm test --prefix lib/alliance-avatar-runtime
       - run: node --test lib/alliance-avatar-server/flow.native.mjs
+      - name: Mandatory dependency security audit
+        timeout-minutes: 1
+        run: npm audit --prefix lib/alliance-avatar-runtime --audit-level=high --fetch-timeout=10000 --fetch-retries=0

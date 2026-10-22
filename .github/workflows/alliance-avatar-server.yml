@@ -50,12 +50,16 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24.22.1'
-      - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
-      - run: npm audit --prefix lib/alliance-avatar-server --audit-level=high
+      # Installation must not wait on npm's implicit, duplicate advisory call.
+      # The explicit mandatory audit below still blocks acceptance on failure.
+      - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund --no-audit
       - run: npm test --prefix lib/alliance-avatar-server
       - run: node lib/alliance-avatar-server/recovery-package.native.mjs --download-age
         env:
           ALLIANCE_RECOVERY_PACKAGE_TEST_CONFIRM: synthetic_encrypted_package
+      - name: Mandatory dependency security audit
+        timeout-minutes: 1
+        run: npm audit --prefix lib/alliance-avatar-server --audit-level=high --fetch-timeout=10000 --fetch-retries=0
   ledger-tls-native:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
@@ -80,7 +84,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24.22.1'
-      - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
+      - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund --no-audit
       - run: node lib/alliance-avatar-server/native.mjs
         env:
           ALLIANCE_AVATAR_SERVER_TEST_CONFIRM: disposable_server_fixture
@@ -98,7 +102,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24.22.1'
-      - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund
+      - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund --no-audit
       - name: Actual isolated local DynamoDB protocol
         run: sudo env ALLIANCE_DYNAMO_TEST_CONFIRM=synthetic_account_dynamodb ALLIANCE_NODE_BINARY="$(command -v node)" python3 -I tests/alliance-account-dynamodb-native.py
 
