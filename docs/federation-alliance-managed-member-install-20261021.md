@@ -1,8 +1,11 @@
 # Closed managed member candidate
 
-This is an unapplied installation/profile for the existing Federation Account
-Pilot. It creates no project, runtime password, login, key, serving transition,
-member record or mounted function. Publication and account signup remain separate.
+This is the fixed installation/profile candidate for the existing Federation
+Account Pilot. An explicitly approved disabled installation is recorded separately;
+the original "unapplied" preparation status does not describe every later deployment.
+The installer creates no project, runtime password, enabled login, key, serving
+transition, member record or mounted function. Publication and account signup
+remain separate. This source is not authority to repeat an installation.
 
 ## Managed Auth boundary
 

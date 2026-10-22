@@ -51,14 +51,45 @@ authority, unsupported/cross-site input and late shutdown fail closed. No signin
 secret is saved, logged or used with a provider. The affected seven-file suite
 passes125 cases. Prior actual SQL/TLS suites remain separate CI evidence.
 
-This does not establish real managed connections, runtime keys/current authority,
-provider billing bounds or durable fleet fencing. Fresh read-only hosted catalogue
-inspection found no Alliance member schema in the Account Pilot and only the
-original journal functions in the Journal Pilot. The journal/control roles remain
-locked. The strict member driver refuses creator-management memberships; the journal
-driver already recognizes its fixed bootstrap exception. Neither may silently
-learn a weaker baseline from a live database.
-An exact reviewed managed installation/profile is still needed before runtime use.
+The fixed [managed member profile](federation-alliance-managed-member-install-20261021.md)
+and [independent journal extension](federation-alliance-journal-managed-extension-20261021.md)
+now supply the required installation candidates. Their explicitly approved hosted
+installation and restricted-connection acceptance are separate operational records;
+the earlier observation that those schemas were absent is superseded. Neither
+construction of this application nor a local test enables hosted logins or modes.
+The strict member driver still refuses creator-management memberships; a reviewed
+host must select `supabase-managed` explicitly. No driver learns a weaker baseline
+from the current database.
+
+## Complete managed-database journey
+
+`member-application.native.mjs` joins this application, the actual browser clients,
+managed member ledger, independent journal, control reader/anchor writer and signed
+startup/witness implementations against three disposable TLS database servers.
+It uses the same source-generated managed installation candidates and modeled
+provider creator edges/default grants. It checks closed preparation, explicit
+fictional serving, profile creation, a second ordinary edit, directory visibility,
+unlisting and identity-bound journal/anchor-first removal. No routine operator
+approval substitutes for those ordinary member actions. Final SQL verifies the
+profile/owner and cached saved text are gone; journal and anchor each advance once.
+
+The same journey deletes the fictional SQL session while its mocked Auth server
+still accepts the cookie: the SQL guard refuses, HTTP returns generic profile
+unavailability with no profile, and an explicitly restored fixture session can
+read the unchanged revision again. A later signed serving withdrawal prevents
+further Auth/profile work. The API does not label a SQL refusal as a definitive
+Auth-server rejection. Every pool/fixture is retired in `finally`.
+
+The guarded local PostgreSQL18.6/TLS run passes; the native runner also includes
+this journey in its PostgreSQL17.11 CI path. A CI result must be observed before
+claiming that version passed. Auth responses and authority transport are simulated;
+keys are ephemeral and no actual provider is called. This is source integration,
+not email/Google sign-in, real key custody, deployed IAM/runtime or browser proof.
+There is no default function, live serving transition, cloud mutation, account
+registration or public feature activation in this change.
+
+Remaining hosted acceptance includes runtime keys/current authority, credential
+custody, provider billing bounds, durable fleet fencing and coordinated recovery.
 
 Existing accessible member controls, comparison, confirmation and uncertainty
 messages are reused. No new user timing/gesture task, telemetry or UI is added.
