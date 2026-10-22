@@ -67,6 +67,29 @@ does not establish screen-reader/device acceptance or WCAG conformance. Real
 runtime custody/connections, journal extensions, authority/recovery/privacy,
 durable community features, mail/Google and publication remain release work.
 
+## Existing administrator and temporary grants
+
+An administrator that already inherits `pg_read_all_data` has implicit schema
+USAGE even without an ACL grant. This is standard
+[PostgreSQL predefined-role behavior](https://www.postgresql.org/docs/17/predefined-roles.html).
+Absence of effective administrator USAGE is therefore an incorrect proxy for
+removing the installer's temporary schema grant.
+
+The revised closed installer/inspector requires the expected private schema owner,
+no direct PUBLIC/postgres schema grant, no administrator CREATE right, no direct
+PUBLIC/postgres callback EXECUTE grant, and no surviving owner SET edge. Effective
+administrator USAGE is accepted only when the existing `pg_read_all_data` path
+explains it. No membership in that built-in role is granted by the installer.
+All fifteen application-boundary predicates and runtime checks remain unchanged.
+
+Native fixtures reproduce the exact original installer hash's final refusal using
+the inherited read-all role. The revised installer passes under that same model;
+deliberately retained schema/callback grants still cause rollback. Granting read-all
+to either new application role is also refused. This distinguishes cleanup of our
+temporary ACLs from the existing administrator's broader authority. The design does
+not isolate member data from the trusted administrator or provider; their existing
+ability to read/manage data must remain explicit in deployment review.
+
 ## Unapplied rollback-only diagnostic
 
 `managedMemberDiagnosticSql()` is an offline proposal for isolating a managed
