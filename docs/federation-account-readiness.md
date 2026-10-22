@@ -1,4 +1,57 @@
-# Federation account foundation — review build
+# Federation account readiness
+
+## Current status — October 22, 2026
+
+This section supersedes conflicting statements in the historical build log below.
+
+- Existing-account email-code sign-in is live on GalacticFederation.co. The
+  production account configuration offers email, no OAuth providers, and does
+  not permit automatic account creation. Public registration remains closed.
+- The owner selected confirmed-email accounts supporting OTP and native password
+  routes. The website currently offers codes; a password form is not implemented.
+  Google work can continue separately from the email-first release.
+- Owner email delivery, code entry, session reload and logout have passed in the
+  production account service. No wallet access or financial participation follows.
+- In the separate managed acceptance project, existing-owner email-code sign-in,
+  reload, logout and reload passed. A separately approved, address-restricted
+  trial then created exactly one new test account and delivered one confirmation
+  email. Owner code entry confirmed that account; reload, logout and reload passed.
+- That trial is closed: managed signup is off, the original hook is restored,
+  and the separate protected trial preview is disabled. The test account remains
+  in the isolated project. This does not authorize opening production signup.
+- The isolated SMTP sender, eight-digit code templates, 600-second expiry,
+  secure password change and leaked-password protection were configured and
+  checked. Do not treat these isolated settings as a verified production
+  password-security baseline.
+- The account visibility fix from PR #131 is published in production and carried
+  into this member candidate. Its regression failed before the fix; 57 focused
+  account tests passed afterward.
+
+## Remaining evidence
+
+Before public new-user admission, complete the managed native-password and
+recovery checks for the adopted policy, actual hook failure behavior, operational
+abuse/cost/support and recovery requirements. A recipient-guard expiry test is
+not proof of managed Auth's cancellation deadline. Existing synthetic and
+self-hosted evidence retains its documented scope.
+
+Member profiles and private collaboration remain a separate closed release
+candidate. Hosted foundation installation and restricted-connection acceptance
+are already recorded; do not repeat installation from an older absence note.
+Current runtime activation, coordinated recovery and custody evidence must be
+reconciled with the owner's completed Dev-computer work before marking any step
+unfinished. The owner reported additional completed work; do not ask for key
+regeneration or repeat setup based on this historical document.
+
+No public challenge enrollment, live League scoring, staking or lending release
+is established by account sign-in or these email tests.
+
+## Historical build log
+
+The dated records below describe their original scope. References to absent
+production settings, disabled SMTP, Free-plan status or pending owner OTP
+acceptance are historical and must not override the current status above.
+
 
 Requested by the owner on October 6, 2026 for a shared Federation account,
 including eventual staking and lending participation. This implementation is

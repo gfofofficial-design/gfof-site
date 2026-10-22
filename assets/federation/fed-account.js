@@ -26,7 +26,7 @@
  const coordinated=typeof locks?.request==='function';
  const current=turn=>turn===generation&&!signedOut;
  function buttonState(){buttons.forEach(b=>{b.disabled=busy||emailNeedsReload||!providers.includes(b.id);});if(emailSend)emailSend.disabled=busy||!emailEnabled;if(emailVerify)emailVerify.disabled=busy||!emailEnabled||!emailChallenge;}
- function hideIdentity(){document.getElementById('identity').hidden=true;document.getElementById('member-email').textContent='';logout.hidden=true;buttons.forEach(b=>{b.hidden=false;});if(emailForm)emailForm.hidden=!emailEnabled;if(codeForm)codeForm.hidden=!emailEnabled||!emailChallenge;buttonState();}
+ function hideIdentity(checking=false){document.getElementById('identity').hidden=true;document.getElementById('member-email').textContent='';logout.hidden=true;buttons.forEach(b=>{b.hidden=checking;});if(emailForm)emailForm.hidden=checking||!emailEnabled;if(codeForm)codeForm.hidden=checking||!emailEnabled||!emailChallenge;buttonState();}
  function signedOutMessage(revoked){return revoked?'Signed out.':'Signed out of this browser. Remote session revocation could not be confirmed.';}
  // Keep all account-page operations that can update cookies in one same-origin
  // browser lock. A waiting tab reads the current cookies only after acquiring it.
@@ -62,7 +62,7 @@
  function signedIn(user){emailChallenge=null;if(codeInput)codeInput.value='';if(emailForm)emailForm.hidden=true;if(codeForm)codeForm.hidden=true;buttons.forEach(b=>{b.hidden=true;});logout.hidden=false;document.getElementById('identity').hidden=false;document.getElementById('member-email').textContent=user.email||'Signed-in member';message.textContent='You are signed in. Staking and lending remain in preparation.';}
  async function start(){
   if(busy||signedOut)return;
-  const turn=++generation;hideIdentity();
+  const turn=++generation;hideIdentity(true);message.textContent='Checking your account status…';
   try{await withSessionLock(async()=>{
    if(!current(turn))return;
    const cfg=await api('config');
@@ -163,7 +163,7 @@
   finally{busy=false;logout.disabled=false;buttonState();}
  });
  document.addEventListener?.('visibilitychange',()=>{if(document.visibilityState==='visible')start();});
- globalThis.addEventListener?.('pagehide',()=>{try{channel?.close();}catch{}channel=null;generation++;emailChallenge=null;if(codeInput)codeInput.value='';hideIdentity();});
+ globalThis.addEventListener?.('pagehide',()=>{try{channel?.close();}catch{}channel=null;generation++;emailChallenge=null;if(codeInput)codeInput.value='';hideIdentity(true);message.textContent='Account status will be checked when you return.';});
  globalThis.addEventListener?.('pageshow',event=>{connectChannel();if(event.persisted){busy=false;buttonState();start();}});
  if(failedSignin){message.textContent='Sign-in did not complete. Try again.';history.replaceState(null,'','/account');}
  start();
