@@ -1,0 +1,1322 @@
+{
+  "sources": [
+    {
+      "name": "alliance-deletion-journal-store-candidate.sql",
+      "sha256": "3afb9c08aa1078f67dbb315aca578c6d4ff3062cee5f620df54c5007ffd232ac"
+    },
+    {
+      "name": "alliance-journal-admission-candidate.sql",
+      "sha256": "174f99b23250148feb095f0c5c28f7464dc661de5a75946c94e86d760065764d"
+    },
+    {
+      "name": "alliance-journal-recovery-inventory-candidate.sql",
+      "sha256": "0277299fb64d62b56827f0a61cf43b2d0b311ec8e4b5209c7126fc470b91bf6c"
+    }
+  ],
+  "base": {
+    "tables": [
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "DELETE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "INSERT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "MAINTAIN",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "REFERENCES",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "SELECT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRIGGER",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRUNCATE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "UPDATE",
+            false
+          ]
+        ],
+        "rls": true,
+        "kind": "r",
+        "name": "control",
+        "owner": "alliance_journal_owner",
+        "columns": [
+          [
+            "id",
+            "boolean",
+            true,
+            "true",
+            []
+          ],
+          [
+            "enabled",
+            "boolean",
+            true,
+            "false",
+            []
+          ],
+          [
+            "project_ref",
+            "text",
+            false,
+            null,
+            []
+          ],
+          [
+            "epoch",
+            "uuid",
+            false,
+            null,
+            []
+          ],
+          [
+            "sequence",
+            "integer",
+            true,
+            "0",
+            []
+          ],
+          [
+            "sha256",
+            "text",
+            true,
+            "repeat('0'::text, 64)",
+            []
+          ]
+        ],
+        "indexes": [
+          "CREATE UNIQUE INDEX control_pkey ON alliance_journal.control USING btree (id)"
+        ],
+        "policies": [
+          [
+            "owner_only",
+            "*",
+            true,
+            [
+              "alliance_journal_owner"
+            ],
+            "true",
+            "true"
+          ]
+        ],
+        "forcedRls": true,
+        "constraints": [
+          [
+            "control_check",
+            "c",
+            "CHECK (project_ref IS NULL AND epoch IS NULL AND NOT enabled AND sequence = 0 OR project_ref IS NOT NULL AND epoch IS NOT NULL)",
+            true
+          ],
+          [
+            "control_check1",
+            "c",
+            "CHECK (sequence <> 0 OR sha256 = repeat('0'::text, 64))",
+            true
+          ],
+          [
+            "control_id_check",
+            "c",
+            "CHECK (id)",
+            true
+          ],
+          [
+            "control_pkey",
+            "p",
+            "PRIMARY KEY (id)",
+            true
+          ],
+          [
+            "control_project_ref_check",
+            "c",
+            "CHECK (project_ref ~ '^[a-z0-9]{20}$'::text)",
+            true
+          ],
+          [
+            "control_sequence_check",
+            "c",
+            "CHECK (sequence >= 0 AND sequence <= 256)",
+            true
+          ],
+          [
+            "control_sha256_check",
+            "c",
+            "CHECK (sha256 ~ '^[0-9a-f]{64}$'::text)",
+            true
+          ]
+        ]
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "DELETE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "INSERT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "MAINTAIN",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "REFERENCES",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "SELECT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRIGGER",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRUNCATE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "UPDATE",
+            false
+          ]
+        ],
+        "rls": true,
+        "kind": "r",
+        "name": "entries",
+        "owner": "alliance_journal_owner",
+        "columns": [
+          [
+            "sequence",
+            "integer",
+            true,
+            null,
+            []
+          ],
+          [
+            "event_id",
+            "uuid",
+            true,
+            null,
+            []
+          ],
+          [
+            "kind",
+            "text",
+            true,
+            null,
+            []
+          ],
+          [
+            "profile_id",
+            "uuid",
+            true,
+            null,
+            []
+          ],
+          [
+            "object_id",
+            "uuid",
+            false,
+            null,
+            []
+          ],
+          [
+            "previous",
+            "text",
+            true,
+            null,
+            []
+          ],
+          [
+            "sha256",
+            "text",
+            true,
+            null,
+            []
+          ]
+        ],
+        "indexes": [
+          "CREATE UNIQUE INDEX entries_event_id_key ON alliance_journal.entries USING btree (event_id)",
+          "CREATE UNIQUE INDEX entries_pkey ON alliance_journal.entries USING btree (sequence)",
+          "CREATE UNIQUE INDEX entries_sha256_key ON alliance_journal.entries USING btree (sha256)"
+        ],
+        "policies": [
+          [
+            "owner_only",
+            "*",
+            true,
+            [
+              "alliance_journal_owner"
+            ],
+            "true",
+            "true"
+          ]
+        ],
+        "forcedRls": true,
+        "constraints": [
+          [
+            "entries_check",
+            "c",
+            "CHECK (kind = 'profile_remove_requested'::text AND object_id IS NULL OR kind = 'image_remove_requested'::text AND object_id IS NOT NULL)",
+            true
+          ],
+          [
+            "entries_event_id_key",
+            "u",
+            "UNIQUE (event_id)",
+            true
+          ],
+          [
+            "entries_kind_check",
+            "c",
+            "CHECK (kind = ANY (ARRAY['profile_remove_requested'::text, 'image_remove_requested'::text]))",
+            true
+          ],
+          [
+            "entries_pkey",
+            "p",
+            "PRIMARY KEY (sequence)",
+            true
+          ],
+          [
+            "entries_previous_check",
+            "c",
+            "CHECK (previous ~ '^[0-9a-f]{64}$'::text)",
+            true
+          ],
+          [
+            "entries_sequence_check",
+            "c",
+            "CHECK (sequence >= 1 AND sequence <= 256)",
+            true
+          ],
+          [
+            "entries_sha256_check",
+            "c",
+            "CHECK (sha256 ~ '^[0-9a-f]{64}$'::text)",
+            true
+          ],
+          [
+            "entries_sha256_key",
+            "u",
+            "UNIQUE (sha256)",
+            true
+          ]
+        ]
+      }
+    ],
+    "functions": [
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "append",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_sequence integer, p_hash text, p_event jsonb",
+        "bodySha256": "7e9533796434ff0ccb04ab165ef60c990efa9aac21d44f7a5878c8e40fcd9a2b",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "lookup",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_id uuid",
+        "bodySha256": "d91db720b04490daedd42d25dc7c7701c407a7d82b62a95047ec0559ba062052",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "record_value",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": false,
+        "language": "sql",
+        "arguments": "c alliance_journal.control, e alliance_journal.entries",
+        "bodySha256": "0b3d83fe778efec00899ddf477fe962b883348e9e9cdf543ac3d5cf0e8a03fae",
+        "volatility": "i"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "records",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_through integer, p_hash text",
+        "bodySha256": "259574611f9a3fb89e2ba3fce74b53d5e01f02c982bf8454af56dcb5fd9f5ca0",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "tip",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid",
+        "bodySha256": "528a026279c130ecdc3de8bc3d58162a5322d05071308f61e820ac65992a4269",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "tip_value",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": false,
+        "language": "sql",
+        "arguments": "c alliance_journal.control",
+        "bodySha256": "078b7725eb81d24febe50a7f55317b5e7bf14feb125ef3aaaf2b090affa592b0",
+        "volatility": "i"
+      }
+    ],
+    "schemaAcl": [
+      [
+        "alliance_journal_executor",
+        "alliance_journal_owner",
+        "USAGE",
+        false
+      ],
+      [
+        "alliance_journal_owner",
+        "alliance_journal_owner",
+        "CREATE",
+        false
+      ],
+      [
+        "alliance_journal_owner",
+        "alliance_journal_owner",
+        "USAGE",
+        false
+      ]
+    ],
+    "schemaOwner": "alliance_journal_owner"
+  },
+  "extended": {
+    "tables": [
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "DELETE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "INSERT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "MAINTAIN",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "REFERENCES",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "SELECT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRIGGER",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRUNCATE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "UPDATE",
+            false
+          ]
+        ],
+        "rls": true,
+        "kind": "r",
+        "name": "admissions",
+        "owner": "alliance_journal_owner",
+        "columns": [
+          [
+            "slot",
+            "smallint",
+            true,
+            null,
+            []
+          ],
+          [
+            "event_id",
+            "uuid",
+            true,
+            null,
+            []
+          ],
+          [
+            "kind",
+            "text",
+            true,
+            null,
+            []
+          ],
+          [
+            "profile_id",
+            "uuid",
+            true,
+            null,
+            []
+          ],
+          [
+            "object_id",
+            "uuid",
+            false,
+            null,
+            []
+          ]
+        ],
+        "indexes": [
+          "CREATE UNIQUE INDEX admission_object ON alliance_journal.admissions USING btree (object_id) WHERE (object_id IS NOT NULL)",
+          "CREATE UNIQUE INDEX admission_profile ON alliance_journal.admissions USING btree (profile_id) WHERE (kind = 'profile_remove_requested'::text)",
+          "CREATE UNIQUE INDEX admissions_pkey ON alliance_journal.admissions USING btree (event_id)",
+          "CREATE UNIQUE INDEX admissions_slot_key ON alliance_journal.admissions USING btree (slot)"
+        ],
+        "policies": [
+          [
+            "owner_only",
+            "*",
+            true,
+            [
+              "alliance_journal_owner"
+            ],
+            "true",
+            "true"
+          ]
+        ],
+        "forcedRls": true,
+        "constraints": [
+          [
+            "admissions_check",
+            "c",
+            "CHECK (kind = 'profile_remove_requested'::text AND object_id IS NULL OR kind = 'image_remove_requested'::text AND object_id IS NOT NULL)",
+            true
+          ],
+          [
+            "admissions_kind_check",
+            "c",
+            "CHECK (kind = ANY (ARRAY['profile_remove_requested'::text, 'image_remove_requested'::text]))",
+            true
+          ],
+          [
+            "admissions_pkey",
+            "p",
+            "PRIMARY KEY (event_id)",
+            true
+          ],
+          [
+            "admissions_slot_check",
+            "c",
+            "CHECK (slot >= 1 AND slot <= 256)",
+            true
+          ],
+          [
+            "admissions_slot_key",
+            "u",
+            "UNIQUE (slot)",
+            true
+          ]
+        ]
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "DELETE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "INSERT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "MAINTAIN",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "REFERENCES",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "SELECT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRIGGER",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRUNCATE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "UPDATE",
+            false
+          ]
+        ],
+        "rls": true,
+        "kind": "r",
+        "name": "control",
+        "owner": "alliance_journal_owner",
+        "columns": [
+          [
+            "id",
+            "boolean",
+            true,
+            "true",
+            []
+          ],
+          [
+            "enabled",
+            "boolean",
+            true,
+            "false",
+            []
+          ],
+          [
+            "project_ref",
+            "text",
+            false,
+            null,
+            []
+          ],
+          [
+            "epoch",
+            "uuid",
+            false,
+            null,
+            []
+          ],
+          [
+            "sequence",
+            "integer",
+            true,
+            "0",
+            []
+          ],
+          [
+            "sha256",
+            "text",
+            true,
+            "repeat('0'::text, 64)",
+            []
+          ],
+          [
+            "admission_enabled",
+            "boolean",
+            true,
+            "false",
+            []
+          ]
+        ],
+        "indexes": [
+          "CREATE UNIQUE INDEX control_pkey ON alliance_journal.control USING btree (id)"
+        ],
+        "policies": [
+          [
+            "owner_only",
+            "*",
+            true,
+            [
+              "alliance_journal_owner"
+            ],
+            "true",
+            "true"
+          ]
+        ],
+        "forcedRls": true,
+        "constraints": [
+          [
+            "control_check",
+            "c",
+            "CHECK (project_ref IS NULL AND epoch IS NULL AND NOT enabled AND sequence = 0 OR project_ref IS NOT NULL AND epoch IS NOT NULL)",
+            true
+          ],
+          [
+            "control_check1",
+            "c",
+            "CHECK (sequence <> 0 OR sha256 = repeat('0'::text, 64))",
+            true
+          ],
+          [
+            "control_id_check",
+            "c",
+            "CHECK (id)",
+            true
+          ],
+          [
+            "control_pkey",
+            "p",
+            "PRIMARY KEY (id)",
+            true
+          ],
+          [
+            "control_project_ref_check",
+            "c",
+            "CHECK (project_ref ~ '^[a-z0-9]{20}$'::text)",
+            true
+          ],
+          [
+            "control_sequence_check",
+            "c",
+            "CHECK (sequence >= 0 AND sequence <= 256)",
+            true
+          ],
+          [
+            "control_sha256_check",
+            "c",
+            "CHECK (sha256 ~ '^[0-9a-f]{64}$'::text)",
+            true
+          ]
+        ]
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "DELETE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "INSERT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "MAINTAIN",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "REFERENCES",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "SELECT",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRIGGER",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "TRUNCATE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "UPDATE",
+            false
+          ]
+        ],
+        "rls": true,
+        "kind": "r",
+        "name": "entries",
+        "owner": "alliance_journal_owner",
+        "columns": [
+          [
+            "sequence",
+            "integer",
+            true,
+            null,
+            []
+          ],
+          [
+            "event_id",
+            "uuid",
+            true,
+            null,
+            []
+          ],
+          [
+            "kind",
+            "text",
+            true,
+            null,
+            []
+          ],
+          [
+            "profile_id",
+            "uuid",
+            true,
+            null,
+            []
+          ],
+          [
+            "object_id",
+            "uuid",
+            false,
+            null,
+            []
+          ],
+          [
+            "previous",
+            "text",
+            true,
+            null,
+            []
+          ],
+          [
+            "sha256",
+            "text",
+            true,
+            null,
+            []
+          ]
+        ],
+        "indexes": [
+          "CREATE UNIQUE INDEX entries_event_id_key ON alliance_journal.entries USING btree (event_id)",
+          "CREATE UNIQUE INDEX entries_pkey ON alliance_journal.entries USING btree (sequence)",
+          "CREATE UNIQUE INDEX entries_sha256_key ON alliance_journal.entries USING btree (sha256)"
+        ],
+        "policies": [
+          [
+            "owner_only",
+            "*",
+            true,
+            [
+              "alliance_journal_owner"
+            ],
+            "true",
+            "true"
+          ]
+        ],
+        "forcedRls": true,
+        "constraints": [
+          [
+            "entries_check",
+            "c",
+            "CHECK (kind = 'profile_remove_requested'::text AND object_id IS NULL OR kind = 'image_remove_requested'::text AND object_id IS NOT NULL)",
+            true
+          ],
+          [
+            "entries_event_id_key",
+            "u",
+            "UNIQUE (event_id)",
+            true
+          ],
+          [
+            "entries_kind_check",
+            "c",
+            "CHECK (kind = ANY (ARRAY['profile_remove_requested'::text, 'image_remove_requested'::text]))",
+            true
+          ],
+          [
+            "entries_pkey",
+            "p",
+            "PRIMARY KEY (sequence)",
+            true
+          ],
+          [
+            "entries_previous_check",
+            "c",
+            "CHECK (previous ~ '^[0-9a-f]{64}$'::text)",
+            true
+          ],
+          [
+            "entries_sequence_check",
+            "c",
+            "CHECK (sequence >= 1 AND sequence <= 256)",
+            true
+          ],
+          [
+            "entries_sha256_check",
+            "c",
+            "CHECK (sha256 ~ '^[0-9a-f]{64}$'::text)",
+            true
+          ],
+          [
+            "entries_sha256_key",
+            "u",
+            "UNIQUE (sha256)",
+            true
+          ],
+          [
+            "journal_admitted",
+            "f",
+            "FOREIGN KEY (event_id) REFERENCES alliance_journal.admissions(event_id)",
+            true
+          ]
+        ]
+      }
+    ],
+    "functions": [
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "admission",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_event jsonb",
+        "bodySha256": "6185587b39839e21f403a44561806467e4ebf1e200fb1bf0f00e662ff10d7241",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "admission_event",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": false,
+        "language": "plpgsql",
+        "arguments": "p_event jsonb",
+        "bodySha256": "853ccc59322d7e3866b4dcb504a0dfebbb4b68f0e99d519c1764214e244f440f",
+        "volatility": "i"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "admit",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_event jsonb",
+        "bodySha256": "81e6dba1e2caac92548824efa7961a887aab7eb2d2217c9aea61f0caf7a85b18",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "append",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_sequence integer, p_hash text, p_event jsonb",
+        "bodySha256": "d26ac7cb3d2c3815e5bee39e6b9a0d5286d246ab89951c903cdf523db00b28c1",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "append_unreserved",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_sequence integer, p_hash text, p_event jsonb",
+        "bodySha256": "7e9533796434ff0ccb04ab165ef60c990efa9aac21d44f7a5878c8e40fcd9a2b",
+        "volatility": "v"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "lookup",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_id uuid",
+        "bodySha256": "d91db720b04490daedd42d25dc7c7701c407a7d82b62a95047ec0559ba062052",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "record_value",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": false,
+        "language": "sql",
+        "arguments": "c alliance_journal.control, e alliance_journal.entries",
+        "bodySha256": "0b3d83fe778efec00899ddf477fe962b883348e9e9cdf543ac3d5cf0e8a03fae",
+        "volatility": "i"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "records",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid, p_through integer, p_hash text",
+        "bodySha256": "259574611f9a3fb89e2ba3fce74b53d5e01f02c982bf8454af56dcb5fd9f5ca0",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "recovery_inventory",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\"",
+          "TimeZone=UTC",
+          "DateStyle=ISO, YMD"
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid",
+        "bodySha256": "fb9ec97f19614bce6be4575ffeed002917604378b2fbb60a2783b8e015b1c483",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_executor",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ],
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "tip",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": true,
+        "language": "plpgsql",
+        "arguments": "p_ref text, p_epoch uuid",
+        "bodySha256": "528a026279c130ecdc3de8bc3d58162a5322d05071308f61e820ac65992a4269",
+        "volatility": "s"
+      },
+      {
+        "acl": [
+          [
+            "alliance_journal_owner",
+            "alliance_journal_owner",
+            "EXECUTE",
+            false
+          ]
+        ],
+        "name": "tip_value",
+        "owner": "alliance_journal_owner",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "jsonb",
+        "definer": false,
+        "language": "sql",
+        "arguments": "c alliance_journal.control",
+        "bodySha256": "078b7725eb81d24febe50a7f55317b5e7bf14feb125ef3aaaf2b090affa592b0",
+        "volatility": "i"
+      }
+    ],
+    "schemaAcl": [
+      [
+        "alliance_journal_executor",
+        "alliance_journal_owner",
+        "USAGE",
+        false
+      ],
+      [
+        "alliance_journal_owner",
+        "alliance_journal_owner",
+        "CREATE",
+        false
+      ],
+      [
+        "alliance_journal_owner",
+        "alliance_journal_owner",
+        "USAGE",
+        false
+      ]
+    ],
+    "schemaOwner": "alliance_journal_owner"
+  }
+}
