@@ -95,3 +95,9 @@ test('late email send response cannot repopulate the form after pagehide',async(
 test('visibility readback cannot reopen sign-in after uncertain verification',async()=>{
  const p=page({routes:{'email-verify':async()=>{throw Error('network');}}});await tick();p.elements['email-address'].value=email;await p.submit('email-form');p.elements['email-code'].value='12345678';await p.submit('email-code-form');p.visible();await tick();const n=p.calls.length;await p.submit('email-form');assert.equal(p.calls.length,n);assert.match(p.elements['account-message'].textContent,/Reload/);assert.equal(p.elements['email-form'].hidden,true);p.pagehide();
 });
+
+test('leaving a signed-in page clears the success message without reopening sign-in',async()=>{
+ const p=page();await tick();p.elements['email-address'].value=email;await p.submit('email-form');p.elements['email-code'].value='12345678';await p.submit('email-code-form');
+ assert.equal(p.elements.identity.hidden,false);p.pagehide();
+ assert.equal(p.elements.identity.hidden,true);assert.equal(p.elements['email-form'].hidden,true);assert.equal(p.elements['email-code-form'].hidden,true);assert.doesNotMatch(p.elements['account-message'].textContent,/You are signed in/);
+});
