@@ -1,0 +1,33 @@
+THE FEDERATION RECORD — FORECAST FR-001
+galacticfederation.co/record
+
+ID:            FR-001
+HANDLE:        @WelksCrypto
+FILED:         2026-07-28
+STATUS:        Open
+
+CLAIM:
+The Senate will not hold a roll-call cloture vote on the motion to proceed
+to the CLARITY Act before 2026-08-08.
+
+CONFIDENCE:    75%
+RESOLVES:      2026-08-08
+SOURCE:        senate.gov roll call votes, 119th Congress 2nd Session
+
+REASONING:
+No cloture motion has been filed as of July 27. The floor is committed to a
+nominations package and then a Russia sanctions bill whose own cloture process
+starts this week, and Senate procedure effectively serializes contested bills.
+Senator Graham's funeral consumes Tuesday and Wednesday. Cloture requires an
+intervening session day before the vote, which leaves almost no room before
+senators depart August 7. The 25% covers Majority Leader Thune following
+through on his stated intent to force a position-taking vote even knowing it
+fails — he has said as much publicly, and a failed cloture vote would still
+resolve this No.
+
+--
+This file is the canonical text of forecast FR-001. Its SHA-256 hash is
+anchored to the Bitcoin blockchain via OpenTimestamps. The accompanying
+fr-001.txt.ots proof allows anyone to verify this text existed in this exact
+form on the filing date, without trusting the Federation. Any change to this
+file, including whitespace, invalidates the proof.

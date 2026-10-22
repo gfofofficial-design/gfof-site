@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="robots" content="noindex">
+<title>HISTORICAL ARCHIVE — Transparency Report — $GFOF Galactic Federation of Finance</title>
+<meta name="description" content="On-chain transparency report for $GFOF: live Streamflow lock reads, designated wallet purposes, dated balance snapshots, and direct public verification links.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/record/treasury-former-mint-20261008.html">
+<meta property="og:title" content="$GFOF Transparency Report — Live On-Chain">
+<meta property="og:description" content="Verify Streamflow locks, designated wallet purposes, and dated balance snapshots through direct public links.">
+<meta property="og:image" content="https://galacticfederation.co/assets/social/social-treasury-v1.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Federation transparency: check public locks, wallets, and receipts.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="$GFOF Transparency Report — Live On-Chain">
+<meta name="twitter:description" content="Live lock reads and clearly labeled wallet disclosures with direct public verification links.">
+<meta name="twitter:image" content="https://galacticfederation.co/assets/social/social-treasury-v1.png">
+<meta name="twitter:image:alt" content="Federation transparency: check public locks, wallets, and receipts.">
+<link rel="canonical" href="https://galacticfederation.co/treasury">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="https://galacticfederation.co/logo.png">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#040818; --bg-2:#020510;
+  --gold:#F0C040; --gold-2:#FFE880; --gold-3:#C08020;
+  --green:#3DFFA0; --green-glow:rgba(61,255,160,0.5);
+  --cyan:#40C0FF; --purple:#A78BFA; --red:#FF5E7B;
+  --text:#DEE2F5; --text-dim:#A9B0CC; --muted:#8896BC;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif; --raj:'Rajdhani',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16px;line-height:1.6;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(61,255,160,0.05),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    radial-gradient(ellipse at 50% 90%,rgba(240,192,64,0.04),transparent 60%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+
+/* ─── NAV (minimal, back to site) ─── */
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);
+  transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+/* ─── CONTAINER ─── */
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ─── HERO ─── */
+.hero{padding:60px 0 30px;text-align:center}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--green);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(61,255,160,0.3);
+  background:rgba(61,255,160,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+.hero-tag-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);
+  animation:pulse-dot 1.6s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.35}}
+.hero h1{
+  font-family:var(--orb);font-size:clamp(32px,5.5vw,56px);
+  font-weight:900;letter-spacing:-1px;line-height:1.05;
+  margin-bottom:16px;color:var(--text);
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 24px rgba(240,192,64,0.3));
+}
+.hero p{
+  max-width:680px;margin:0 auto;
+  font-size:17px;color:var(--text-dim);line-height:1.65;
+}
+.hero p strong{color:var(--green);font-weight:600}
+
+/* ─── THE PROMISE (key statement) ─── */
+.promise{
+  max-width:860px;margin:40px auto 0;
+  padding:24px 28px;
+  background:rgba(61,255,160,0.03);
+  border:1px solid rgba(61,255,160,0.2);
+  position:relative;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.promise::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.promise-title{
+  font-family:var(--orb);font-size:11px;color:var(--green);
+  letter-spacing:3px;margin-bottom:10px;font-weight:700;
+}
+.promise-body{
+  font-family:var(--raj);font-size:15.5px;color:var(--text);
+  line-height:1.7;
+}
+.promise-body strong{color:var(--gold)}
+
+/* ─── REFRESH / STATUS ─── */
+.status-bar{
+  max-width:860px;margin:18px auto 0;
+  padding:12px 18px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:1.5px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--line);
+}
+.status-bar .k{color:var(--muted)}
+.status-bar .v{color:var(--green);font-weight:600}
+.status-bar .sep{width:1px;height:14px;background:rgba(255,255,255,0.12)}
+.status-bar .refresh-btn{
+  margin-left:auto;
+  padding:6px 12px;font-size:10px;letter-spacing:1.5px;
+  color:var(--cyan);
+  border:1px solid rgba(64,192,255,0.3);
+  background:rgba(64,192,255,0.05);
+  border-radius:2px;
+  cursor:pointer;transition:all .2s;
+}
+.status-bar .refresh-btn:hover{background:rgba(64,192,255,0.12)}
+.status-bar .refresh-btn.spinning{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── SUMMARY TILES ─── */
+.summary{
+  margin:50px auto 0;max-width:1040px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+@media(max-width:780px){.summary{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px){.summary{grid-template-columns:1fr}}
+.summary-cell{
+  background:rgba(4,8,24,0.7);
+  padding:22px 22px;
+  font-family:var(--mono);
+  position:relative;
+}
+.summary-cell .k{font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:10px}
+.summary-cell .v{
+  font-family:var(--orb);font-size:26px;font-weight:800;
+  color:var(--text);letter-spacing:-0.5px;line-height:1.05;
+  font-variant-numeric:tabular-nums;
+}
+.summary-cell .v.gold{color:var(--gold);text-shadow:0 0 18px rgba(240,192,64,0.25)}
+.summary-cell .v.green{color:var(--green);text-shadow:0 0 18px rgba(61,255,160,0.25)}
+.summary-cell .v.cyan{color:var(--cyan)}
+.summary-cell .s{font-size:10.5px;color:var(--text-dim);margin-top:6px;letter-spacing:0.5px}
+.summary-cell .v.loading{opacity:0.4;animation:pulse-val 1.4s ease-in-out infinite}
+@keyframes pulse-val{0%,100%{opacity:0.4}50%{opacity:0.8}}
+
+/* ─── SECTION HEADER ─── */
+.section-head{
+  margin:70px auto 24px;max-width:1040px;padding:0 4px;
+}
+.section-head .tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--green);margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.section-head .tag::after{
+  content:'';display:block;
+  width:60px;height:1px;
+  background:linear-gradient(90deg,var(--green),transparent);
+}
+.section-head h2{
+  font-family:var(--orb);font-size:clamp(24px,4vw,36px);
+  font-weight:800;letter-spacing:-0.5px;line-height:1.1;
+  margin-bottom:10px;color:var(--text);
+}
+.section-head p{
+  max-width:720px;color:var(--text-dim);font-size:15.5px;line-height:1.65;
+}
+
+/* ─── LOCK CARDS ─── */
+.lock-list{
+  max-width:1040px;margin:0 auto;
+  display:grid;grid-template-columns:1fr;gap:14px;
+}
+.lock-card{
+  padding:24px 26px;
+  background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);
+  position:relative;
+  transition:border-color .2s,background .2s;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.lock-card:hover{
+  background:rgba(61,255,160,0.02);
+  border-color:rgba(61,255,160,0.22);
+}
+.lock-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(61,255,160,0.4),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.lock-card:hover::before{opacity:1}
+.lc-head{
+  display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap;
+}
+.lc-badge{
+  width:44px;height:44px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(61,255,160,0.15),rgba(240,192,64,0.08));
+  border:1px solid rgba(61,255,160,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--orb);font-size:14px;font-weight:900;color:var(--green);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+}
+.lc-title{flex:1;min-width:180px}
+.lc-title .name{
+  font-family:var(--orb);font-size:15px;color:var(--text);
+  font-weight:700;letter-spacing:0.5px;margin-bottom:4px;
+}
+.lc-title .addr{
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:0.5px;word-break:break-all;
+}
+.lc-status{
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;
+  padding:6px 12px;
+  color:var(--green);
+  border:1px solid rgba(61,255,160,0.3);
+  background:rgba(61,255,160,0.04);
+  display:flex;align-items:center;gap:6px;
+  clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);
+  white-space:nowrap;
+}
+.lc-status .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 6px var(--green);
+  animation:pulse-dot 1.6s ease-in-out infinite;
+}
+.lc-body{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+}
+@media(max-width:600px){.lc-body{grid-template-columns:1fr}}
+.lc-stat .k{
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:6px;
+}
+.lc-stat .v{
+  font-family:var(--mono);font-size:15px;color:var(--text);
+  font-weight:600;word-break:break-all;
+}
+.lc-stat .v.gold{color:var(--gold)}
+.lc-stat .v.green{color:var(--green)}
+.lc-stat .v.loading{
+  display:inline-block;width:120px;height:16px;
+  background:linear-gradient(90deg,rgba(255,255,255,0.04),rgba(61,255,160,0.08),rgba(255,255,255,0.04));
+  background-size:200% 100%;animation:skel 1.6s linear infinite;
+  border-radius:2px;color:transparent;
+}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.lc-actions{
+  margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;
+}
+.lc-actions a{
+  font-family:var(--mono);font-size:10px;letter-spacing:1.5px;
+  padding:8px 14px;
+  color:var(--text-dim);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.02);
+  transition:all .2s;
+  border-radius:2px;
+}
+.lc-actions a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.lc-actions a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+.lc-actions a.primary:hover{background:rgba(61,255,160,0.12)}
+
+/* ─── DESIGNATED WALLET DISCLOSURES ─── */
+.wallet-disclosure{
+  max-width:1040px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+}
+@media(max-width:760px){.wallet-disclosure{grid-template-columns:1fr}}
+.wallet-card{
+  padding:22px 24px;background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);position:relative;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.wallet-card.personal{border-color:rgba(240,192,64,0.22);background:rgba(240,192,64,0.025)}
+.wallet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px 16px;margin-bottom:14px;flex-wrap:wrap}
+.wallet-id{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--cyan);margin-bottom:5px}
+.wallet-title{font-family:var(--orb);font-size:16px;font-weight:750;line-height:1.3;color:var(--text)}
+.wallet-state{
+  flex-shrink:0;font-family:var(--mono);font-size:12px;letter-spacing:1.2px;
+  color:var(--green);border:1px solid rgba(61,255,160,0.3);padding:5px 9px;
+}
+.wallet-state.owner{color:var(--gold);border-color:rgba(240,192,64,0.35)}
+.wallet-address{
+  display:block;font-family:var(--mono);font-size:12px;line-height:1.55;
+  color:var(--muted);word-break:break-all;margin-bottom:14px;
+}
+.wallet-address:hover{color:var(--cyan)}
+.wallet-fact{padding-top:12px;border-top:1px solid var(--line);margin-top:12px}
+.wallet-fact .k{font-family:var(--mono);font-size:12px;letter-spacing:1.4px;color:var(--muted);margin-bottom:5px}
+.wallet-fact .v{font-size:14px;line-height:1.55;color:var(--text-dim)}
+.wallet-fact .v strong{color:var(--text)}
+.wallet-boundary{
+  max-width:1040px;margin:16px auto 0;padding:17px 20px;
+  border-left:2px solid var(--gold);background:rgba(240,192,64,0.035);
+  color:var(--text-dim);font-size:14px;line-height:1.65;
+}
+.wallet-boundary strong{color:var(--gold)}
+
+/* ─── VERIFY YOURSELF ─── */
+.verify-card{
+  max-width:1040px;margin:50px auto 0;
+  padding:28px 30px;
+  background:linear-gradient(135deg,rgba(240,192,64,0.04),rgba(255,255,255,0.01));
+  border:1px solid rgba(240,192,64,0.2);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.verify-card h3{
+  font-family:var(--orb);font-size:15px;color:var(--gold);
+  font-weight:700;letter-spacing:1px;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.verify-card h3 .ico{font-size:18px}
+.verify-steps{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+@media(max-width:780px){.verify-steps{grid-template-columns:1fr}}
+.verify-step{padding:14px 0;border-top:1px solid var(--line)}
+.verify-step:first-child{border-top:0}
+@media(max-width:780px){.verify-step{border-top:1px solid var(--line)}.verify-step:first-child{border-top:1px solid var(--line)}}
+.vs-num{
+  font-family:var(--mono);font-size:10px;color:var(--gold);
+  letter-spacing:2px;margin-bottom:6px;
+}
+.vs-body{
+  font-size:13.5px;color:var(--text-dim);line-height:1.6;
+}
+.vs-body strong{color:var(--text)}
+.vs-body a{color:var(--cyan);text-decoration:underline;text-underline-offset:2px}
+
+/* ─── UNLOCK SCHEDULE (v11 addition) ─── */
+.unlock-commitment{
+  max-width:1040px;margin:50px auto 20px;
+  padding:22px 26px;
+  background:rgba(167,139,250,0.04);
+  border:1px solid rgba(167,139,250,0.22);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.unlock-commitment .title{
+  font-family:var(--orb);font-size:11px;color:var(--purple);
+  letter-spacing:3px;margin-bottom:10px;font-weight:700;
+}
+.unlock-commitment .body{
+  font-family:var(--raj);font-size:15.5px;color:var(--text);
+  line-height:1.7;
+}
+.unlock-commitment .body strong{color:var(--purple)}
+
+.next-unlock-card{
+  max-width:1040px;margin:0 auto 30px;
+  padding:28px 30px;
+  background:linear-gradient(135deg,rgba(167,139,250,0.06),rgba(64,192,255,0.03));
+  border:1px solid rgba(167,139,250,0.3);
+  position:relative;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+}
+.next-unlock-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--purple),transparent);
+}
+.next-unlock-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px;
+}
+.next-unlock-head .tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--purple);
+}
+.next-unlock-head .source{
+  font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;
+}
+.next-unlock-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;align-items:end;
+}
+@media(max-width:720px){.next-unlock-grid{grid-template-columns:1fr 1fr;gap:18px}}
+@media(max-width:440px){.next-unlock-grid{grid-template-columns:1fr}}
+.nu-cell .k{
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  letter-spacing:2.5px;margin-bottom:8px;
+}
+.nu-cell .v{
+  font-family:var(--orb);font-weight:800;letter-spacing:-0.5px;
+  color:var(--text);line-height:1.05;font-variant-numeric:tabular-nums;
+}
+.nu-cell .v.big{font-size:28px;color:var(--purple);text-shadow:0 0 20px rgba(167,139,250,0.3)}
+.nu-cell .v.mid{font-size:22px}
+.nu-cell .v.sub{font-size:13px;font-family:var(--mono);color:var(--text-dim);margin-top:4px;font-weight:500}
+.nu-cell .v.loading{opacity:0.4;animation:pulse-val 1.4s ease-in-out infinite}
+
+.countdown-row{
+  display:flex;gap:8px;margin-top:4px;
+  font-family:var(--mono);font-variant-numeric:tabular-nums;
+}
+.cd-unit{
+  flex:1;padding:10px 6px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--line);
+  text-align:center;
+}
+.cd-unit .n{
+  font-family:var(--orb);font-size:22px;font-weight:800;
+  color:var(--purple);line-height:1;display:block;
+}
+.cd-unit .l{
+  font-size:9px;color:var(--muted);letter-spacing:1.5px;
+  margin-top:4px;display:block;
+}
+
+.timeline{
+  max-width:1040px;margin:40px auto 0;
+  padding:26px 28px;
+  background:rgba(255,255,255,0.015);
+  border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+}
+.timeline-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:22px;flex-wrap:wrap;gap:10px;
+}
+.timeline-head h3{
+  font-family:var(--orb);font-size:14px;color:var(--text);
+  letter-spacing:1px;font-weight:700;
+}
+.timeline-head .legend{
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;
+  display:flex;gap:14px;
+}
+.timeline-head .legend span{display:inline-flex;align-items:center;gap:6px}
+.timeline-head .legend .dot{width:8px;height:8px;border-radius:50%}
+.timeline-head .legend .d1{background:var(--green)}
+.timeline-head .legend .d2{background:var(--purple)}
+.timeline-head .legend .d3{background:var(--cyan)}
+
+.timeline-track{
+  position:relative;height:44px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid var(--line);border-radius:2px;
+  overflow:hidden;
+}
+.timeline-progress{
+  position:absolute;top:0;bottom:0;left:0;
+  background:linear-gradient(90deg,rgba(61,255,160,0.18),rgba(61,255,160,0.08));
+  border-right:1px solid rgba(61,255,160,0.4);
+  transition:width 0.8s ease;
+}
+.timeline-marker{
+  position:absolute;top:0;bottom:0;
+  width:2px;background:var(--purple);
+  box-shadow:0 0 10px rgba(167,139,250,0.6);
+}
+.timeline-marker.now{background:var(--gold);box-shadow:0 0 10px rgba(240,192,64,0.8)}
+.timeline-marker .lbl{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  margin-top:4px;white-space:nowrap;
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;
+}
+.timeline-marker.now .lbl{color:var(--gold)}
+.timeline-scale{
+  display:flex;justify-content:space-between;margin-top:26px;
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;
+}
+
+.unlock-grid{
+  max-width:1040px;margin:30px auto 0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
+  background:var(--line);border:1px solid var(--line);
+}
+@media(max-width:780px){.unlock-grid{grid-template-columns:1fr}}
+.unlock-cell{
+  background:rgba(4,8,24,0.7);padding:18px 20px;
+}
+.unlock-cell .lock-id{
+  font-family:var(--mono);font-size:9px;color:var(--purple);
+  letter-spacing:2.5px;margin-bottom:10px;font-weight:700;
+}
+.unlock-cell .row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:6px 0;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:12px;
+}
+.unlock-cell .row:first-of-type{border-top:0}
+.unlock-cell .row .k{color:var(--muted);font-size:10px;letter-spacing:1.5px}
+.unlock-cell .row .v{color:var(--text);font-variant-numeric:tabular-nums}
+
+/* ─── COMMITMENT ─── */
+.commitment{
+  max-width:860px;margin:60px auto 0;text-align:center;
+  padding:32px 24px;
+  font-family:var(--orb);font-size:clamp(17px,2.3vw,22px);
+  color:var(--gold);line-height:1.6;font-weight:600;
+  text-shadow:0 0 30px rgba(240,192,64,0.15);
+  position:relative;
+}
+.commitment::before,.commitment::after{
+  font-family:Georgia,serif;font-size:clamp(40px,6vw,64px);
+  color:rgba(61,255,160,0.18);position:absolute;line-height:1;
+}
+.commitment::before{content:'"';top:-4px;left:10%}
+.commitment::after{content:'"';bottom:-10px;right:10%}
+.commitment-by{
+  margin-top:20px;
+  font-family:var(--mono);font-size:10px;color:var(--green);
+  letter-spacing:2.5px;
+}
+
+/* ─── FOOTER ─── */
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:1px;line-height:1.7;
+}
+.foot a{color:var(--text-dim)}
+.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+.foot .version{
+  display:inline-block;margin-top:10px;
+  padding:4px 10px;font-size:9px;letter-spacing:2px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:2px;opacity:0.6;
+}
+
+/* ─── ERROR ROW ─── */
+.err-row{
+  max-width:1040px;margin:14px auto 0;
+  padding:12px 18px;
+  font-family:var(--mono);font-size:11px;
+  color:var(--red);
+  background:rgba(255,94,123,0.05);
+  border:1px solid rgba(255,94,123,0.2);
+  letter-spacing:0.5px;line-height:1.5;
+  display:none;
+}
+.err-row.show{display:block}
+.err-row strong{color:var(--red)}
+
+/* ═══════════ BOLD TIER OVERRIDES — readability (2026-07-22, ported from Dossier) ═══════════ */
+:root{--font-read:'Inter',system-ui,sans-serif;}
+.hero p, .section-head p, .promise-body, .vs-body{font-family:var(--font-read); letter-spacing:0;}
+.hero p{font-size:17.5px; line-height:1.6;}
+.section-head p{font-size:16px; line-height:1.62;}
+.promise-body{font-size:16px; line-height:1.65;}
+.vs-body{font-size:14.5px; line-height:1.6;}
+@media(max-width:520px){.hero p{font-size:16px}.promise-body,.section-head p{font-size:15px}}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/intel">INTEL ↗</a>
+    <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">CURRENT TOKEN ↗</a>
+  </div>
+</nav>
+
+<div class="container"><section class="promise"><h1>Former-mint archive</h1><p>Archived October 8, 2026. This is the former token’s historical disclosure, not current custody or a live balance report. <a href="/treasury">View the three current-mint locks →</a></p></section>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag"><span class="hero-tag-dot"></span>LIVE · READ FROM SOLANA</div>
+    <h1>Transparency <span class="grad">Report</span></h1>
+    <p>Most projects <em>claim</em> transparency. We let you verify the historical record yourself: Streamflow lock balances for the <strong>former GFOF mint</strong> are read from Solana, while designated-wallet snapshots are dated and linked to their public accounts.</p>
+    <p><strong>Current mint:</strong> <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code></a>. <strong>Former mint in the locks below:</strong> <code style="overflow-wrap:anywhere">2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon</code>. These old-mint locks do not prove new-token locks. See <a href="/migration">the holder migration process</a>.</p>
+  </section>
+
+  <!-- THE PROMISE -->
+  <div class="promise">
+    <div class="promise-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> THE PROMISE</div>
+    <div class="promise-body">
+      The original page queried Solana's public mainnet RPC directly from your browser for four <strong>old-mint</strong> Streamflow locks. Those live reads answer what remains in those historical contracts, not what is locked from the replacement mint. Designated-wallet purposes are owner-supplied and unlocked balances are dated snapshots with direct explorer links. This archive does not perform live reads.
+    </div>
+  </div>
+
+  <!-- LOCK CONTRACTS -->
+  <div class="section-head">
+    <div class="tag">ON-CHAIN LOCK CONTRACTS</div>
+    <h2>The Four Active Locks</h2>
+    <p>Each active lock is an independent Streamflow vesting contract holding a portion of the 13% dev allocation. The 40M third lock matured on August 18, 2026 and was re-locked through August 18, 2028. Its expired predecessor remains linked as part of the public lineage.</p>
+  </div>
+  <div class="lock-list" id="lock-list"><p>Historical lock 1: <a href="https://app.streamflow.finance/contract/solana/mainnet/2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y">2mChitupSi1zoFZ3qXeerYJdNrz5bxz3cGodcgVzRs1y</a></p><p>Historical lock 2: <a href="https://app.streamflow.finance/contract/solana/mainnet/DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv">DXkrssY5FMJ2oWHUkRQHDkiGYhiZ27jx8EBw5RE2GnYv</a></p><p>Historical lock 3: <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS">6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS</a></p><p>Historical lock 4: <a href="https://app.streamflow.finance/contract/solana/mainnet/Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x">Fi2bBhWjU8j5W9orTfzrQi3QyTGgY8RFkmzKogeHnJ5x</a></p></div>
+
+  <div class="unlock-commitment">
+    <div class="title">✓ FIRST UNLOCK COMMITMENT — KEPT</div>
+    <div class="body">
+      The original 40,000,000 $GFOF Lock 3 reached its scheduled cliff on <strong>August 18, 2026</strong>. The full scheduled allocation was placed into a new Streamflow contract on <strong>August 28, 2026</strong>, with a new full-cliff date of <strong>August 18, 2028</strong>. Verify the <a href="https://app.streamflow.finance/contract/solana/mainnet/6VjeLZ27NKpTs7n2rVj5pXPQaUrRFFjdk7AV2FwbzojS" target="_blank" rel="noopener" style="color:var(--cyan)">active re-lock</a>, the <a href="https://app.streamflow.finance/contract/solana/mainnet/7HKRtFyeFAmxuSzXrZ8rayDYGBwSJZMgrn8Xna6hqg7k" target="_blank" rel="noopener" style="color:var(--cyan)">expired predecessor</a>, and the <a href="https://solscan.io/tx/5zr6i6atKvtHi6dPQqTo9du8dBcoHNfqSSU3nubGoQF8PTh876Q8yS5hr9cxjiUDtGxoxU2qUyA8ACCU5nKwjqXD" target="_blank" rel="noopener" style="color:var(--cyan)">re-lock transaction</a> independently.
+    </div>
+  </div>
+
+  <!-- DESIGNATED WALLET DISCLOSURES -->
+  <div class="section-head">
+    <div class="tag">DESIGNATED WALLET DISCLOSURES</div>
+    <h2>Purpose, Status, and Boundaries</h2>
+    <p>These public addresses are disclosed so holders can verify material balances, control boundaries, and intended uses. Purpose labels and control statements are owner-supplied; on-chain balances and lock restrictions are independently verifiable. Balances for unlocked wallets are a dated snapshot; follow each address for current activity.</p>
+  </div>
+
+  <div class="wallet-disclosure">
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-001</div><div class="wallet-title">Post-Bond Liquidity Reserve</div></div><span class="wallet-state owner">OWNER-CONTROLLED</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/4RDWqoyKt6MhuKeaTq7JRQvrw9hsqyfedUPsRaa4yob9" target="_blank" rel="noopener">4RDWqoyKt6MhuKeaTq7JRQvrw9hsqyfedUPsRaa4yob9 ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>16,594,141.713749 GFOF · 1.66%</strong></div></div>
+      <div class="wallet-fact"><div class="k">PURPOSE</div><div class="v">Personally funded reserve accumulating through open-market purchases toward a target of up to 20,000,000 GFOF, intended for staged liquidity contributions after bonding.</div></div>
+      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled and currently unlocked. It is outside Federation treasury, is not a liquidity pool, and is not held or controlled by Moonshot. The target and intended use are not enforced by an on-chain lock.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-004</div><div class="wallet-title">Development-Linked Marketing</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y" target="_blank" rel="noopener">G1MLNThNPE8hcZQfNTcjZGEDaSx1otutcNScLazBc92Y ↗</a>
+      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>70,000,000 GFOF</strong> across Lock 3 and Lock 4; 0 unlocked when verified 2026-09-07.</div></div>
+      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Both contracts are immutable, non-cancelable, and non-transferable. Unlocks: 2028-08-18 and 2028-05-31.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-005</div><div class="wallet-title">Operations</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7" target="_blank" rel="noopener">8RZvY4oNGNY9fHKaZmr65BEumxfaM4ECXgVKJPQvZc7 ↗</a>
+      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>30,000,000 GFOF</strong> in Lock 1; 0 unlocked when verified 2026-09-07.</div></div>
+      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Immutable, non-cancelable, and non-transferable. Unlock: 2027-04-01.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-006</div><div class="wallet-title">Marketing / Promotion</div></div><span class="wallet-state">LOCK BENEFICIARY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6" target="_blank" rel="noopener">DqtrauD2dDNB2v38cG9xVsDYxjwT1hwVV6aGRLwsPcd6 ↗</a>
+      <div class="wallet-fact"><div class="k">STREAMFLOW</div><div class="v"><strong>30,000,000 GFOF</strong> in Lock 2; 0 unlocked when verified 2026-09-07.</div></div>
+      <div class="wallet-fact"><div class="k">RESTRICTION</div><div class="v">Immutable, non-cancelable, and non-transferable. Unlock: 2027-04-01.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-008</div><div class="wallet-title">GFOF Creator Wallet</div></div><span class="wallet-state owner">OWNER-CONTROLLED</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/Fv6J7pxzz3bmEDC7BjkXchNme64SaLRY5ztQVowF3z8d" target="_blank" rel="noopener">Fv6J7pxzz3bmEDC7BjkXchNme64SaLRY5ztQVowF3z8d ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>1,093,521.409153 GFOF · 0.11%</strong></div></div>
+      <div class="wallet-fact"><div class="k">ROLE</div><div class="v">This wallet signed the <a href="https://solscan.io/tx/DuUxP3N7qf9cpnyLSKm62yLPJCDNSMhg7mL67wsohgaN95a9X4uADijbNhYAL3fQtAdJW3itmvQRnU5P5Qj7psh" target="_blank" rel="noopener" style="color:var(--cyan)">on-chain creation transaction</a> for the <strong>former</strong> GFOF mint and its Meteora Dynamic Bonding Curve virtual pool. It is not evidence of new-mint custody.</div></div>
+      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled and currently unlocked. Remaining assets are intended for a potential future liquidity contribution, but they are not currently deposited, locked, or held in Moonshot custody.</div></div>
+    </article>
+
+    <article class="wallet-card personal">
+      <div class="wallet-head"><div><div class="wallet-id">W-009</div><div class="wallet-title">Owner Personal Holdings</div></div><span class="wallet-state owner">OUTSIDE TREASURY</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/1nSZULzNiMkmtNKWuNaasYToxBeaCoNceJfxSvcPM5F" target="_blank" rel="noopener">1nSZULzNiMkmtNKWuNaasYToxBeaCoNceJfxSvcPM5F ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>20,424,128.443982 GFOF · 2.04%</strong></div></div>
+      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled, unlocked personal holdings outside Federation treasury. This wallet has no operational allocation and carries no Federation spending commitment.</div></div>
+    </article>
+
+    <article class="wallet-card">
+      <div class="wallet-head"><div><div class="wallet-id">W-010</div><div class="wallet-title">Community and Holder-Benefits Reserve</div></div><span class="wallet-state owner">NOT ACTIVE</span></div>
+      <a class="wallet-address" href="https://solscan.io/account/Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC" target="_blank" rel="noopener">Hz44vHXNX2stCULK6SMuG6P8ozDXVxhay7fpRnvy2dKC ↗</a>
+      <div class="wallet-fact"><div class="k">SNAPSHOT · 2026-09-09</div><div class="v"><strong>26,854,995.530832 GFOF · 2.69%</strong></div></div>
+      <div class="wallet-fact"><div class="k">PURPOSE</div><div class="v">Reserved for possible future community incentives, contributor recognition, holder benefits, or liquidity-participation rewards. No airdrop, reward amount, eligibility rule, distribution, staking, or APY is authorized.</div></div>
+      <div class="wallet-fact"><div class="k">CONTROL BOUNDARY</div><div class="v">Sole owner-controlled and currently unlocked. A public specification and at least seven days’ notice are required before the first distribution or a material change of purpose.</div></div>
+    </article>
+  </div>
+
+  <div class="wallet-boundary"><strong>Disclosure boundary:</strong> W-002, W-003, and W-007 were retired after the owner confirmed those addresses are not owner- or Federation-controlled; see <a href="/corrections#c034" style="color:var(--cyan)">correction #034</a>. Unknown holder wallets are not attributed to the Federation. For unlocked wallets, a stated purpose is an intention rather than an on-chain restriction; sole-owner approval is currently sufficient to move assets unless a published policy above adds notice requirements.</div>
+
+  <!-- VERIFY YOURSELF -->
+  <div class="verify-card">
+    <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M9 3l4 4-5 5-4-4 5-5z"/><path d="M11 9l5 5"/><path d="M6 20h12M9 20l4-4"/></svg></span>VERIFY THIS YOURSELF — THREE WAYS</h3>
+    <div class="verify-steps">
+      <div class="verify-step">
+        <div class="vs-num">METHOD 01</div>
+        <div class="vs-body"><strong>Open your devtools console (F12).</strong> The Solana RPC call is logged on every refresh — same call you could run yourself. No backend, no middleware, no trust required.</div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">METHOD 02</div>
+        <div class="vs-body"><strong>Use Solscan or Solana Explorer.</strong> Paste any of the four lock addresses below. The escrow balances are public. Compare them to what we show on this page.</div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">METHOD 03</div>
+        <div class="vs-body"><strong>Use Streamflow's public dashboard.</strong> Every lock has a dedicated Streamflow page showing the full unlock schedule, cliff, period, and recipient. <a href="https://app.streamflow.finance" target="_blank">app.streamflow.finance ↗</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THIRD-PARTY TOOLS (v17.2) -->
+  <div class="verify-card">
+    <h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1.5 1.5M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1.5-1.5"/></svg></span>VERIFY ON THIRD-PARTY TOOLS</h3>
+    <p style="font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 18px;">The links below inspect the <strong>former mint</strong> whose Streamflow locks this page reads. For the replacement mint, use <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">Solscan</a> and the announced <a href="https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener">TebFun market</a>.</p>
+    <div class="verify-steps">
+      <div class="verify-step">
+        <div class="vs-num">SOLSCAN</div>
+        <div class="vs-body"><strong>Former-mint token page, holders and transfers.</strong> Use it to inspect the old token underlying these locks.<br><a href="https://solscan.io/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">solscan.io/token/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">DEXSCREENER</div>
+        <div class="vs-body"><strong>Former-mint market history.</strong> This chart is not the replacement token's trading page.<br><a href="https://dexscreener.com/solana/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">dexscreener.com/solana/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">BIRDEYE</div>
+        <div class="vs-body"><strong>Alternative former-mint market view.</strong> Do not confuse this with the replacement mint.<br><a href="https://birdeye.so/token/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon?chain=solana" target="_blank">birdeye.so/token/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+      <div class="verify-step">
+        <div class="vs-num">SOLANA EXPLORER</div>
+        <div class="vs-body"><strong>The former mint on Solana Explorer.</strong> Useful for inspecting old token accounts and transactions at the protocol level.<br><a href="https://explorer.solana.com/address/2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon" target="_blank">explorer.solana.com/address/2oQmH…2iZCmoon ↗</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNLOCK COMMITMENT (v11) -->
+  <div class="unlock-commitment">
+    <div class="title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> UNLOCK COMMITMENT</div>
+    <div class="body">
+      This schedule and commitment concern the <strong>former GFOF mint only</strong>. Every old-mint Streamflow unlock event is published here before it happens. The stated plan is to rotate released tokens into operational treasury rather than sell them on the open market. Follow the linked contracts for current balances and the <a href="/corrections" style="color:var(--cyan)">public corrections log</a> for changes.
+    </div>
+  </div>
+
+  <!-- COMMITMENT (existing below) -->
+  <div class="commitment">
+    The federation's transparency is not a marketing claim. It is structural. Every decision that touches token supply is made on-chain, verifiable by anyone, at any time.
+    <div class="commitment-by">— ADMIRAL ZORAN VOSS · FEDERATION DECREE #002</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/intel">Intel Report</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version" id="footer-version">v18.0 · treasury · updated 2026-09-07</span>
+</div>
+
+
+</body>
+</html>

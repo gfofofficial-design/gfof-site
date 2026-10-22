@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Liquidation, Redesigned — $GFOF Lending Protocol Spec v0.2.2</title>
+<meta name="description" content="A draft public design specification for borrower-protective liquidation. The trigger remains unresolved; no live liquidation rule exists.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/liquidation-spec">
+<meta property="og:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.2">
+<meta property="og:description" content="Draft liquidation design with an unresolved trigger; no live lending service or liquidation rule.">
+<meta property="og:image" content="https://galacticfederation.co/assets/social/social-research-v1.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Federation research: design and specifications before code.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="Liquidation, Redesigned — $GFOF Spec v0.2.2">
+<meta name="twitter:description" content="Draft liquidation design with an unresolved trigger; no live liquidation rule.">
+<meta name="twitter:image" content="https://galacticfederation.co/assets/social/social-research-v1.png">
+<meta name="twitter:image:alt" content="Federation research: design and specifications before code.">
+<link rel="canonical" href="https://galacticfederation.co/liquidation-spec">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Liquidation, Redesigned for the Borrower — $GFOF Lending Protocol Spec v0.2.2",
+  "name": "Liquidation, Redesigned for the Borrower",
+  "description": "A public design specification for borrower-protective liquidation in the $GFOF lending protocol. A design proposal supported by synthetic accounting research. Open to criticism, revision, and public challenge.",
+  "abstract": "Introduces a liquidation mechanism combining a grace window, escalating on-chain warnings, partial-only liquidations capped below 100%, batched keeper rewards, and a catastrophic-threshold fallback. Section 7 sets out research questions for event-dependent, illiquid and credit-based collateral; support is not established.",
+  "inLanguage": "en",
+  "articleSection": [
+    "DeFi lending",
+    "Liquidation mechanism design",
+    "Borrower protection",
+    "Collateral systems"
+  ],
+  "keywords": "DeFi, liquidation, lending protocol, borrower protection, Solana, collateral, oracle design, capital efficiency, partial liquidation, batched rewards, GFOF",
+  "about": [
+    {"@type": "Thing", "name": "DeFi liquidation mechanism"},
+    {"@type": "Thing", "name": "Borrower-protective lending protocol design"},
+    {"@type": "Thing", "name": "Non-standard collateral in decentralized finance"}
+  ],
+  "version": "0.2.2",
+  "datePublished": "2026-04-20",
+  "dateModified": "2026-09-19",
+  "url": "https://galacticfederation.co/liquidation-spec",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://galacticfederation.co/liquidation-spec"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://galacticfederation.co/og-image-v3.jpg",
+    "width": 1200,
+    "height": 630
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "alternateName": "GFOF",
+    "url": "https://galacticfederation.co"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Galactic Federation of Finance",
+    "alternateName": "GFOF",
+    "url": "https://galacticfederation.co",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://galacticfederation.co/logo.png"
+    }
+  },
+  "license": "https://galacticfederation.co/liquidation-spec",
+  "creativeWorkStatus": "Draft — open for comment",
+  "copyrightYear": 2026,
+  "isAccessibleForFree": true,
+  "hasPart": [
+    {"@type": "WebPageElement", "name": "Why this document exists", "url": "https://galacticfederation.co/liquidation-spec#why-this-doc-exists"},
+    {"@type": "WebPageElement", "name": "How liquidations work in DeFi today", "url": "https://galacticfederation.co/liquidation-spec#how-liquidations-work-today"},
+    {"@type": "WebPageElement", "name": "Design principles for borrower-protective liquidation", "url": "https://galacticfederation.co/liquidation-spec#design-principles"},
+    {"@type": "WebPageElement", "name": "The mechanism — grace, warnings, partial, batched", "url": "https://galacticfederation.co/liquidation-spec#the-mechanism"},
+    {"@type": "WebPageElement", "name": "A worked example", "url": "https://galacticfederation.co/liquidation-spec#worked-example"},
+    {"@type": "WebPageElement", "name": "Open questions and unresolved trade-offs", "url": "https://galacticfederation.co/liquidation-spec#open-questions"},
+    {"@type": "WebPageElement", "name": "Research toward broader on-chain collateral", "url": "https://galacticfederation.co/liquidation-spec#non-standard-collateral"},
+    {"@type": "WebPageElement", "name": "Revision history", "url": "https://galacticfederation.co/liquidation-spec#versions"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://galacticfederation.co" },
+    { "@type": "ListItem", "position": 2, "name": "Lending Spec", "item": "https://galacticfederation.co/liquidation-spec" }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#8896BC;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:100px}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16.5px;line-height:1.7;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(167,139,250,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple)}
+strong{color:var(--text)}
+
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;flex-wrap:wrap}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+
+.doc-header{padding:60px 0 30px}
+.doc-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--purple);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(167,139,250,0.3);
+  background:rgba(167,139,250,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+h1.doc-title{
+  font-family:var(--orb);font-size:clamp(30px,5vw,48px);
+  font-weight:900;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:14px;color:var(--text);
+}
+h1.doc-title .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.doc-sub{font-size:17px;color:var(--text-dim);max-width:720px;line-height:1.6;margin-bottom:12px}
+.doc-meta{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:1.5px;padding:14px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;
+}
+.doc-meta span strong{color:var(--cyan);font-weight:500}
+
+.toc{
+  margin:30px 0;padding:20px 24px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.toc-title{
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:2.5px;margin-bottom:10px;
+}
+.toc ol{list-style:none;counter-reset:toc;padding:0}
+.toc li{
+  counter-increment:toc;padding:4px 0;
+  font-family:var(--mono);font-size:13px;color:var(--text-dim);
+}
+.toc li::before{
+  content:counter(toc,decimal-leading-zero) '  ';color:var(--muted);margin-right:8px;
+}
+.toc a{color:var(--text-dim);transition:color .15s}
+.toc a:hover{color:var(--cyan)}
+
+h2{
+  font-family:var(--orb);font-size:24px;font-weight:800;
+  letter-spacing:-0.3px;line-height:1.2;color:var(--text);
+  margin:50px 0 8px;padding-top:20px;border-top:1px solid var(--line);
+}
+h2 .num{
+  font-family:var(--mono);font-size:11px;color:var(--purple);
+  letter-spacing:2.5px;display:block;margin-bottom:6px;font-weight:600;
+}
+h3{
+  font-family:var(--orb);font-size:17px;font-weight:700;
+  color:var(--text);letter-spacing:0.1px;line-height:1.3;
+  margin:28px 0 8px;
+}
+p{margin-bottom:14px;color:var(--text-dim);font-size:15.5px}
+p strong{color:var(--text)}
+ul,ol{margin:10px 0 16px 20px;color:var(--text-dim)}
+ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
+
+.callout{
+  margin:20px 0;padding:18px 22px;
+  background:rgba(167,139,250,0.04);
+  border:1px solid rgba(167,139,250,0.2);
+  border-left:3px solid var(--purple);
+}
+.callout .k{
+  font-family:var(--mono);font-size:10px;color:var(--purple);
+  letter-spacing:2px;margin-bottom:6px;font-weight:700;
+}
+.callout p{color:var(--text);font-size:15px;margin:0}
+
+.callout.amber{background:rgba(240,192,64,0.04);border-color:rgba(240,192,64,0.22);border-left-color:var(--gold)}
+.callout.amber .k{color:var(--gold)}
+
+.callout.red{background:rgba(255,94,123,0.04);border-color:rgba(255,94,123,0.22);border-left-color:var(--red)}
+.callout.red .k{color:var(--red)}
+
+.callout.green{background:rgba(61,255,160,0.04);border-color:rgba(61,255,160,0.22);border-left-color:var(--green)}
+.callout.green .k{color:var(--green)}
+
+.compare-table{
+  margin:24px 0;width:100%;
+  border:1px solid var(--line);
+  font-size:13.5px;
+}
+.compare-table thead th{
+  background:rgba(255,255,255,0.03);
+  font-family:var(--mono);font-size:10.5px;color:var(--text);
+  letter-spacing:1.5px;text-align:left;padding:12px 14px;
+  border-bottom:1px solid var(--line);font-weight:700;
+}
+.compare-table tbody td{
+  padding:12px 14px;border-top:1px solid var(--line);
+  color:var(--text-dim);vertical-align:top;
+}
+.compare-table tbody tr td:first-child{
+  font-family:var(--mono);font-size:11px;color:var(--gold);
+  letter-spacing:1px;font-weight:600;width:30%;
+}
+
+.versions{
+  margin:40px 0 20px;padding:20px 22px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.versions h3{font-size:13px;margin:0 0 12px;color:var(--gold)}
+.v-row{
+  display:flex;gap:14px;padding:8px 0;
+  border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;
+}
+.v-row:first-of-type{border-top:0}
+.v-row .ver{color:var(--cyan);width:60px;flex-shrink:0}
+.v-row .dt{color:var(--muted);width:110px;flex-shrink:0}
+.v-row .ch{color:var(--text-dim);flex:1}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  letter-spacing:1px;line-height:1.7;
+}
+.foot a{color:var(--text-dim)}.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 10px;color:rgba(255,255,255,0.15)}
+.foot .version{
+  display:inline-block;margin-top:10px;padding:4px 10px;
+  font-size:9px;letter-spacing:2px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:2px;opacity:0.6;
+}
+
+/* ── PRINT STYLESHEET ── institutional-grade printout */
+@media print {
+  @page { margin: 18mm 16mm; size: A4; }
+  body, html {
+    background: #fff !important; color: #000 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important; line-height: 1.45 !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after { display: none !important; }
+  .top-nav, .foot, .versions, nav, .toc, .top-nav-links, .top-nav-brand-icon,
+  .toc-title, .doc-tag, .breadcrumbs, .verify-banner, .nav-bottom,
+  .actions, video, audio, iframe, canvas, .hunt-tracker, #bond-bar,
+  .skel, .live-dot, [class*="loading"], button, .stat-live, .copy-btn { display: none !important; }
+  a { color: #000 !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
+  a[href^="/"]::after, a[href^="#"]::after { content: ""; }
+  h1, h2, h3, h4, h5 {
+    color: #000 !important; font-family: Georgia, serif !important;
+    font-weight: 700 !important; page-break-after: avoid;
+    background: none !important; -webkit-text-fill-color: initial !important;
+    text-shadow: none !important; border: none !important; padding: 0 !important;
+  }
+  h1 { font-size: 22pt !important; margin: 0 0 8pt; }
+  h2 { font-size: 14pt !important; margin: 16pt 0 6pt; padding-top: 8pt !important; border-top: 1px solid #aaa !important; }
+  h3 { font-size: 12pt !important; margin: 12pt 0 4pt; }
+  h2 .num { color: #666 !important; font-size: 9pt !important; }
+  h1 .grad, h1 .accent { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
+  p, li { color: #111 !important; font-size: 11pt !important; orphans: 3; widows: 3; }
+  strong, b { color: #000 !important; font-weight: 700; }
+  code {
+    background: #f0f0f0 !important; color: #000 !important;
+    border: 1px solid #ccc !important; font-family: 'Courier New', monospace;
+    font-size: 9.5pt !important; padding: 1pt 3pt;
+  }
+  ul, ol { margin-left: 20pt !important; }
+  .callout {
+    background: #fafafa !important; border: 1px solid #999 !important;
+    border-left: 3px solid #000 !important; padding: 8pt 12pt !important;
+    margin: 10pt 0 !important; page-break-inside: avoid;
+  }
+  .callout .k { color: #000 !important; font-weight: 700 !important; font-size: 9pt !important; }
+  .callout p { color: #111 !important; }
+  .compare-table, table { border: 1px solid #000 !important; page-break-inside: avoid; }
+  .compare-table th, table th, .compare-table td, table td {
+    border: 1px solid #888 !important; color: #000 !important;
+    padding: 4pt 6pt !important; font-size: 10pt !important;
+  }
+  .doc-meta { border-color: #888 !important; color: #444 !important; font-size: 9pt !important; }
+  .doc-meta strong { color: #000 !important; }
+  .doc-sub, p.lede { color: #222 !important; font-size: 12pt !important; font-style: italic; }
+  /* Footer note for print: where readers came from */
+  .container::after {
+    content: "Printed from galacticfederation.co · Always verify against the live document and corrections log.";
+    display: block; margin-top: 24pt; padding-top: 12pt;
+    border-top: 1px solid #999; font-size: 8.5pt; color: #555;
+    font-style: italic; text-align: center;
+  }
+}
+
+
+/* ═══════════ BOLD TIER OVERRIDES — readability (2026-07-22, ported from Dossier) ═══════════ */
+:root{--font-read:'Inter',system-ui,sans-serif;}
+p, .callout p{font-family:var(--font-read); letter-spacing:0;}
+p{font-size:16.5px; line-height:1.64;}
+.callout p{font-size:15.5px;}
+@media(max-width:520px){p{font-size:15.5px}.callout p{font-size:15px}}
+@media screen and (max-width:600px){
+  .top-nav{position:relative;flex-direction:column;align-items:flex-start}
+  .top-nav-links{gap:6px}
+  .top-nav-links a{letter-spacing:.5px}
+  .container{overflow-wrap:anywhere}
+  .v-row{flex-wrap:wrap}
+  .v-row .ch{flex-basis:100%;min-width:0}
+  [id]{scroll-margin-top:16px}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/governance-spec">GOVERNANCE SPEC ↗</a>
+    <a href="/treasury">TREASURY ↗</a>
+    <a href="/security">SECURITY ↗</a>
+    <a href="/corrections">CORRECTIONS ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <header class="doc-header">
+    <div class="doc-tag">DESIGN SPECIFICATION · OPEN FOR REVIEW</div>
+    <h1 class="doc-title">Liquidation, <span class="grad">Redesigned</span> for the Borrower</h1>
+    <p class="doc-sub">A public design specification for the liquidation mechanism in the forthcoming $GFOF lending protocol. A design proposal supported by synthetic accounting research. Open to criticism, revision, and public challenge.</p>
+    <div class="doc-meta">
+      <span><strong>Version:</strong> v0.2.2</span>
+      <span><strong>Status:</strong> DRAFT · OPEN FOR COMMENT</span>
+      <span><strong>Published:</strong> 2026-04-21</span>
+      <span><strong>Revised:</strong> 2026-09-19</span>
+    </div>
+  </header>
+
+  <div class="callout amber">
+    <div class="k">CLAIMS CLARIFICATION · 19 SEPTEMBER 2026</div>
+    <p>This revision distinguishes design objectives from demonstrated capabilities and retains the published arithmetic correction. The ordinary liquidation trigger remains unresolved; <a href="#eligibility-review"><u>read the eligibility notice in Section 5</u></a>. No production lending rule is adopted by these corrections.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">PROJECT STATUS UPDATE · 22 SEPTEMBER 2026</div>
+    <p>Since this specification's September 19 revision, a private Solana prototype has exercised selected supply, draw, interest-accounting and principal-repayment flows with synthetic tokens. The design-only status described below reflects that earlier revision. There is still no public lending market, audited application or live liquidation rule. <a href="/building#lending-progress"><u>See current progress and remaining gates</u></a>. This status note does not change the proposed liquidation mechanism or the specification's revision history.</p>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">TABLE OF CONTENTS</div>
+    <ol>
+      <li><a href="#why-this-doc-exists">Why this document exists</a></li>
+      <li><a href="#how-liquidations-work-today">How liquidations work in DeFi today</a></li>
+      <li><a href="#design-principles">Design principles for borrower-protective liquidation</a></li>
+      <li><a href="#the-mechanism">The mechanism — grace, warnings, partial, batched</a></li>
+      <li><a href="#worked-example">A worked example</a></li>
+      <li><a href="#open-questions">Open questions and trade-offs we haven't resolved</a></li>
+      <li><a href="#non-standard-collateral">Research toward broader on-chain collateral</a></li>
+      <li><a href="#versions">Revision history</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <h2 id="why-this-doc-exists"><span class="num">SECTION 01</span>Why this document exists</h2>
+
+  <p>The Federation is researching lending infrastructure as part of its broader mission to bring financial activity on-chain. This specification explores whether advance warnings, time to respond and controlled partial liquidation can improve borrower outcomes while accounting for lender exposure and executable liquidity.</p>
+
+  <p>The lending protocol is not live. The current work comprises a design proposal and synthetic accounting models, not an audited lending application. Publishing the design makes its assumptions, trade-offs and unresolved decisions available for scrutiny before implementation.</p>
+
+  <!-- 2 -->
+  <h2 id="how-liquidations-work-today"><span class="num">SECTION 02</span>How liquidations work in DeFi today</h2>
+
+  <h3>Liquidation approaches and the questions they raise</h3>
+
+  <p>Liquidation mechanisms differ by protocol, version and market. In a debt-repayment model, a liquidator repays some eligible debt and receives collateral valued to include a liquidation bonus. A close factor limits debt repayment; it is not automatically the same percentage of total collateral transferred. Aave's documentation describes repayment limits that vary with the position's health factor and size. Any numerical comparison must identify the relevant market, version and assumptions. <a href="https://aave.com/help/borrowing/liquidations"><u>Source: Aave liquidation documentation</u></a>.</p>
+
+  <p>Gradual conversion is another design approach: collateral exposure changes over a price range rather than through a single liquidation step. Its outcomes depend on liquidity, price paths and the mechanism's rules. A smoother process does not by itself establish lower losses.</p>
+
+  <p>The Federation's research asks three practical questions: can borrowers receive useful warning, can execution avoid unnecessary collateral transfers, and can liquidators remain willing to execute under stressed conditions? These questions need matched scenarios and explicit loss accounting, rather than a universal ranking of protocols.</p>
+
+  <!-- 3 -->
+  <h2 id="design-principles"><span class="num">SECTION 03</span>Design principles for borrower-protective liquidation</h2>
+
+  <p>These are design objectives. They are not guarantees delivered by the present model. Future revisions should explain where objectives conflict and what evidence supports a chosen trade-off.</p>
+
+  <ol><li>Give borrowers useful warning and a defined opportunity to respond during ordinary operation, with notification failures and emergency exceptions made explicit.</li><li>Size repayment to a stated recovery objective, subject to collateral availability, execution costs and aggregate limits.</li><li>Test whether execution and reward rules reduce ordering advantages without removing the incentive to participate.</li><li>Distinguish liquidation bonuses, price losses and residual shortfalls. Publish the limits of any claimed loss bound.</li><li>Explain ordinary behavior and failure cases in language borrowers and lenders can understand.</li></ol>
+
+  <!-- 4 -->
+  <h2 id="the-mechanism"><span class="num">SECTION 04</span>The mechanism — grace, warnings, partial, batched</h2>
+
+  <p>The proposed mechanism combines advance warnings, a grace period, partial liquidation and batched execution. Their interaction is the subject of this research; novelty and superiority are not established by combining them.</p>
+
+  <h3>4.1 Advance-warning thresholds</h3>
+
+  <p>Every collateral market defines three thresholds, not one:</p>
+
+  <ul>
+    <li><strong>Advisory LTV</strong> — a warning level published in the borrower's position view. On-chain flag set; no action permitted against the position.</li>
+    <li><strong>Grace LTV</strong> — a higher-risk level. A grace period begins (see 4.2). The position is flagged as grace-active.</li>
+    <li><strong>Liquidation LTV</strong> — the level at which, if grace has lapsed, partial liquidation is permitted.</li>
+  </ul>
+
+  <p>Thresholds would need to be specified for each supported market. The authority to set or change them, the evidence required and the bounds on those changes remain to be defined under the Federation's controlling governance arrangements.</p>
+
+  <h3>4.2 Grace period with off-chain signal</h3>
+
+  <p>When a position enters the grace LTV band, a grace timer starts. During this window (initial proposal: <code>30 minutes</code> for stablecoin-collateralized positions, <code>10 minutes</code> for volatile collateral), the position is not liquidatable. The grace period exists to give the borrower time to:</p>
+
+  <ul>
+    <li>Receive an off-chain notification (wallet push via Phantom, Solflare, or equivalent; email if opted in; optional Telegram bot integration)</li>
+    <li>Add more collateral, repay part of the debt, or voluntarily close the position</li>
+    <li>Experience a price recovery that moves the position out of grace naturally</li>
+  </ul>
+
+  <p>If the position exits grace LTV during the window, the timer resets. If the position stays in grace and the window closes, the position becomes liquidatable — but only up to a partial amount (4.3).</p>
+
+  <p><strong>Unresolved conflict:</strong> the preceding eligibility description differs from Section 4.1, which also requires reaching liquidation LTV. <a href="#eligibility-review"><u>See the worked-example notice</u></a>. Neither interpretation is selected by this correction.</p>
+
+  <div class="callout red">
+    <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3L2 20h20L12 3z"/><path d="M12 9v5M12 17h.01"/></svg> CATASTROPHIC DROP EXCEPTION</div>
+    <p><strong>Emergency handling remains unresolved.</strong> The earlier proposal compared a price drop with an LTV threshold without defining consistent units. No operational emergency threshold is selected here. A complete design must specify the trigger, data requirements, permitted response, authority and treatment of losses that execution cannot recover. Bypassing grace alone does not establish solvency.</p>
+  </div>
+
+  <h3>4.3 Partial liquidation limits</h3>
+
+
+
+  <p>The research uses an illustrative cap of 25% of outstanding debt for a fill. The specification still needs to define how that budget is shared across transactions, actors and blocks. A cap alone does not determine the repayment needed to restore a chosen LTV or guarantee that enough collateral and liquidity remain.</p>
+
+  <p>The intended benefit is to avoid unnecessary liquidation while preserving an opportunity for borrowers to respond. Whether that opportunity is usable depends on scheduling, transaction inclusion, data availability and price movement. Repeated fills can accumulate costs, and a price collapse can create a shortfall before any fill occurs. Emergency cap changes and their authorization remain open decisions.</p>
+
+  <h3>4.4 Batched execution research</h3>
+
+  <p>The proposed direction groups eligible liquidation requests into defined execution windows and explores sharing rewards among valid participants. The aim is to reduce advantages from transaction ordering while retaining sufficient incentive to execute.</p>
+
+  <p>Batching does not establish that MEV, manipulation or fee competition disappears. The design must address ordering, spam, collusion, censorship, failed attempts and aggregate repayment limits. Neither the reward mechanism nor those adversarial properties has been validated by the current accounting model. Window length, participation conditions and settlement rules remain research choices.</p>
+
+  <!-- 5 -->
+  <h2 id="worked-example"><span class="num">SECTION 05</span>A worked example</h2>
+
+  <p>This example illustrates position accounting at a fixed valuation. Numbers are illustrative, not committed parameters.</p>
+
+  <div class="callout amber" id="eligibility-review">
+    <div class="k">ELIGIBILITY RULE UNDER REVIEW</div>
+    <p>Sections 4.1 and 4.2 describe different ordinary liquidation conditions. Section 4.1 requires expired grace and reaching the liquidation threshold; Section 4.2 permits liquidation above the grace threshold after grace expires. The example below does not resolve that conflict. Its hypothetical fill demonstrates accounting, not an adopted eligibility rule. This specification remains a research proposal.</p>
+  </div>
+
+  <p><strong>Setup.</strong> A borrower deposits $10,000 worth of SOL as collateral and borrows $5,000 of USDC. The market has an advisory LTV of 65%, grace LTV of 72%, and liquidation LTV of 78%. Initial LTV: 50%.</p>
+
+  <p><strong>Event 1.</strong> SOL drops 20%. Collateral is now worth $8,000. LTV = 5000 / 8000 = 62.5%. Still below advisory. Position is healthy. No action taken.</p>
+
+  <p><strong>Event 2.</strong> SOL drops another 8%. Collateral now $7,360. LTV = 5000 / 7360 = 67.9%. Advisory flag set. Borrower's wallet shows a yellow badge on the position. No penalty. No action permitted against the position.</p>
+
+  <p><strong>Event 3.</strong> SOL drops another 7%. Collateral is now $6,844.80. LTV = 5000 / 6844.80 ≈ 73.0482%, above the 72% grace threshold but below the 78% liquidation threshold. Under the proposed notification flow, the position enters grace and a 10-minute countdown begins. Notification delivery is not established by this example.</p>
+
+  <p><strong>Event 4 — two paths.</strong></p>
+
+  <ul>
+    <li><strong>Path A (borrower responds):</strong> Assuming the market accepts the additional collateral at its stated value, the borrower adds $1,000 of USDC. Collateral becomes $7,844.80 and LTV falls to approximately 63.7365%. Under the proposed recovery rule, the position exits grace and the timer resets. No liquidation bonus is charged.</li>
+    <li><strong>Path B (borrower does not respond):</strong> Ten minutes elapse with collateral still worth $6,844.80. Expired grace alone does not settle eligibility: the position remains below the 78% threshold required by Section 4.1. <strong>If a $1,250 repayment were eligible under the eventual rules</strong>, a 5% bonus would be $62.50. Collateral valued at $1,312.50 would be transferred, leaving $5,532.30 of collateral and $3,750 of debt. At the same valuation, LTV would be approximately 67.7837%. This calculation excludes execution price changes and other fees.</li>
+  </ul>
+
+  <p><strong>Controlled bonus comparison.</strong> At the same 5% bonus rate, repaying 50% of the initial $5,000 debt would produce a $125 bonus, compared with $62.50 for a 25% repayment. That is twice the bonus for twice the debt repaid. It is not a comparison of total losses or a claim about a particular protocol. This fixed-price example does not establish solvency through subsequent price shocks.</p>
+
+  <!-- 6 -->
+  <h2 id="open-questions"><span class="num">SECTION 06</span>Open questions and trade-offs we haven't resolved</h2>
+
+  <p>This is a draft spec. We are publishing it specifically because we don't have all the answers. Here are the open problems:</p>
+
+  <h3>Question 1 — What about positions where the borrower is provably unreachable?</h3>
+
+  <p>The grace-period mechanism assumes a borrower who can respond. If a borrower has clearly abandoned a position (no wallet activity for weeks, no response to multiple notifications), should the grace period still apply? Our current lean: yes, because the alternative is a heuristic that will be gamed. But this is a live debate.</p>
+
+  <h3>Question 2 — How do oracle outages interact with grace?</h3>
+
+  <p>An unavailable or unacceptable quote leaves current valuation uncertain. Research compares restarting grace, pausing it and retaining elapsed time, but no production policy has been selected. A fallback source also requires explicit acceptance rules. Preventing liquidation on invalid data does not prevent price exposure or settle who bears a resulting shortfall.</p>
+
+  <h3>Question 3 — Does the catastrophic-drop exception create a perverse incentive?</h3>
+
+  <p>Emergency triggers may create manipulation incentives. The relevant attack cost depends on valuation sources, market depth and execution rules; deep-market assumptions cannot be extended to every collateral type. Trigger design, authorization and adversarial testing remain open.</p>
+
+  <h3>Question 4 — What's the worst-case borrower loss per liquidation event?</h3>
+
+  <p>For one fill repaying 25% of pre-fill debt at a 5% bonus, the bonus equals <strong>1.25% of that pre-fill debt</strong>. This is not a limit on loss relative to original collateral or borrower equity, and it does not bound cumulative costs across repeated fills. Price movement and other execution costs can affect outcomes separately. A total worst-case borrower-loss bound remains unresolved.</p>
+
+  <h3>Question 5 — What's the impact on liquidator economics?</h3>
+
+  <p>A nominal bonus does not establish profitable execution. Sale discounts, fees, failed attempts and latency affect participation. Current synthetic models test some of those sensitivities; they do not establish live-market participation or validate the proposed reward-sharing mechanism.</p>
+
+  <!-- 7 — non-standard collateral (added v0.2) -->
+  <h2 id="non-standard-collateral"><span class="num">SECTION 07</span>Research toward broader on-chain collateral</h2>
+
+  <p>Bringing more financial activity on-chain requires more than tokenizing assets. Lending markets also need defensible valuation, executable liquidity and clear treatment of default and loss. The Federation is exploring whether borrower-focused liquidation design can contribute to that infrastructure. Support for any particular asset remains unproven.</p>
+
+  <h3>Event-dependent collateral</h3>
+
+  <p>Consider a hypothetical binary claim that pays either one unit or zero at resolution. Its marked value before resolution does not guarantee that a large position can be sold at that price. Resolution can remove collateral value before liquidation can recover debt.</p>
+
+  <p>Research questions include time-to-resolution limits, disputed outcomes, valuation interruptions and shortfall handling. A partial repayment cap does not insure the borrower or lender against the underlying payoff. No prediction-market collateral product is committed by this specification.</p>
+
+  <h3>Assets with limited liquidity</h3>
+
+  <p>Tokenized real-world assets, locked staking claims and vested allocations may have transfer restrictions, delayed redemption or limited secondary liquidity. Those conditions must be assessed asset by asset. Smaller sales may reduce immediate sale size, but extending execution also leaves exposure to further price changes.</p>
+
+  <p>Any proposed market needs evidence about executable proceeds, settlement timing, relevant rights and failure handling. The current model does not establish suitable limits or a launch-ready market for these assets.</p>
+
+  <h3>Credit-based lending</h3>
+
+  <p>Lending against less collateral introduces requirements beyond liquidation: underwriting, privacy-preserving verification where appropriate, default recovery and explicit loss allocation. A roadmap interest in privacy does not establish that those capabilities exist or that the same liquidation engine can support them.</p>
+
+  <p>Credit-based lending remains a separate research direction. Its feasibility cannot be inferred from a partial-liquidation example.</p>
+
+  <h3>What progress must demonstrate</h3>
+
+  <p>The objective is financial infrastructure that builders and businesses can evaluate through clear rules and observable evidence. For each proposed market, progress means establishing valuation, executable liquidity, borrower and lender outcomes, implementation security and accountable control of changes.</p>
+
+  <p>These are research directions, not supported collateral listings or delivery commitments. We will distinguish design intent, simulated findings and demonstrated capabilities as the work develops.</p>
+
+  <!-- 8 -->
+  <h2 id="versions"><span class="num">SECTION 08</span>Revision history</h2>
+
+  <div class="versions">
+    <h3>REVISION LOG</h3>
+    <div class="v-row"><span class="ver">v0.2.2</span><span class="dt">2026-09-19</span><span class="ch">Claims clarification: borrower protection, execution incentives and broader collateral are research objectives, not demonstrated capabilities. Removes unsupported comparative and market-size assertions. No lending rules adopted.</span></div>
+    <div class="v-row">
+      <span class="ver">v0.2.1</span>
+      <span class="dt">2026-09-19</span>
+      <span class="ch">Arithmetic correction: exact worked-example accounting, matched 5% bonus comparison, pre-fill-debt denominator and explicit eligibility conflict. No mechanism change adopted. Earlier published versions remain in source history.</span>
+    </div>
+    <div class="v-row">
+      <span class="ver">v0.1</span>
+      <span class="dt">2026-04-20</span>
+      <span class="ch">Initial public draft. Sections 1–6 as published. Open for public comment.</span>
+    </div>
+    <div class="v-row">
+      <span class="ver">v0.2</span>
+      <span class="dt">2026-04-21</span>
+      <span class="ch">Added Section 7 — non-standard collateral types the design enables (discontinuous-payoff, illiquid, partially-collateralized). Connects existing mechanism to broader DeFi capital-efficiency conversation. No mechanism changes from v0.1; framing addition only.</span>
+    </div>
+    <div class="v-row">
+      <span class="ver">v0.3</span>
+      <span class="dt">planned</span>
+      <span class="ch">Formal modeling of batched-reward mechanism (4.4). Quantified parameters for grace window, partial cap, and catastrophic threshold. Response to received public comments.</span>
+    </div>
+    <div class="v-row">
+      <span class="ver">v0.4</span>
+      <span class="dt">planned</span>
+      <span class="ch">Simulated stress tests against historical oracle outages and flash crashes. Parameter recommendations for initial launch markets.</span>
+    </div>
+    <div class="v-row">
+      <span class="ver">v1.0</span>
+      <span class="dt">pre-audit</span>
+      <span class="ch">Production-ready spec, frozen for smart contract development. Third-party security review before any code ships.</span>
+    </div>
+  </div>
+
+  <div class="callout green">
+    <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;display:inline-block;flex-shrink:0"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg> HOW TO COMMENT</div>
+    <p>This spec is live for public criticism. If you see a flaw — a game-theoretic attack we missed, a parameter choice that won't survive contact with real markets, a scenario we haven't considered — we want to know. Send feedback to <strong>@WelksCrypto</strong> on X or to the admins in t.me/GFOF_SOL. All substantive public comments will be acknowledged in the revision log of the next version, with attribution unless the author requests otherwise.</p>
+  </div>
+
+</div>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/treasury">Treasury</a>
+  <span class="sep">·</span>
+  <a href="/security">Security</a>
+  <span class="sep">·</span>
+  <a href="/corrections">Corrections</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version" id="footer-version">v0.2.2 · liquidation-spec · revised 2026-09-19</span>
+</div>
+
+<script>
+try {
+  console.log('%c⬡ GFOF Liquidation Spec v0.2.2 · Design Doc', 'color:#A78BFA;font-family:monospace;font-weight:700;font-size:13px;padding:3px 8px;border:1px solid #A78BFA;border-radius:2px;');
+  console.log('%c📖 Open for public criticism. See section 7.', 'color:#3DFFA0;font-family:monospace;font-size:11px;');
+} catch(e) {}
+(function(){
+  var el = document.getElementById('footer-version');
+  if(el){ el.textContent = 'v0.2.2 · liquidation-spec · revised 2026-09-19'; }
+})();
+</script>
+</body>
+</html>

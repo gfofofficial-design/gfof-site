@@ -1,0 +1,34 @@
+{
+  "record_type": "adjudication_selection_attempt",
+  "method_version": "v0.5",
+  "result": "method_conflict_no_entries_filed",
+  "capture_started_utc": "2026-09-25T04:57:15Z",
+  "capture_finished_utc": "2026-09-25T04:58:45Z",
+  "window_end_utc": "2026-11-09T04:57:15Z",
+  "source_manifest_sha256": "8137B4DF8F69762378332733E8F684397C7023BB48BDA13A1FF0E08C8ABF6D0E",
+  "polymarket": {
+    "source": "https://gamma-api.polymarket.com/markets/keyset",
+    "event": "https://polymarket.com/event/brazil-presidential-election",
+    "first_page_markets": 100,
+    "first_page_response_sha256": "eaf3e90cea386329cc4fa5289f8f36f17f351465ba09a489316044307fd3ac79",
+    "lowest_individual_volume_usd_on_first_page": "1076284.818598",
+    "top_six_market_ids_and_individual_usd_volume": [
+      {"id": "601825", "volume_usd": "14396482.264520999"},
+      {"id": "601818", "volume_usd": "14096657.713295998"},
+      {"id": "601819", "volume_usd": "12180413.457176998"},
+      {"id": "601826", "volume_usd": "11810405.823416997"},
+      {"id": "601824", "volume_usd": "10465753.546619"},
+      {"id": "601823", "volume_usd": "10457679.345772002"}
+    ]
+  },
+  "kalshi": {
+    "source": "https://external-api.kalshi.com/trade-api/v2/markets?status=open&limit=1000&mve_filter=exclude",
+    "pages_preserved": 133,
+    "open_noncomposite_contracts_seen": 132378,
+    "in_window_expected_expiration_count": 63161,
+    "final_cursor_present": false,
+    "highest_in_window_contract_notional_usd_upper_bound": "5771592.590000",
+    "highest_in_window_contract_ticker": "KXMLB-26-LAD"
+  },
+  "interpretation": "The five highest individual-volume eligible contracts were person-outcome contracts. Section 06 of the published method prohibited claims about identified people. No probabilities, entries, scores, or substitute contracts were filed from this capture. The original archived API responses remain in the Federation's private evidence store and are not included in this summary."
+}

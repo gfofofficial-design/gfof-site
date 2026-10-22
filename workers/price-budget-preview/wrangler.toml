@@ -1,0 +1,15 @@
+name = "gfof-price-budget-preview"
+main = "worker.mjs"
+compatibility_date = "2026-10-09"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "PRICE_BUDGET"
+class_name = "PriceBudget"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PriceBudget"]
+
+[observability]
+enabled = false

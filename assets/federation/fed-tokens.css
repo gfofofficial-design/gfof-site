@@ -1,0 +1,283 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FEDERATION OS — CANONICAL DESIGN TOKENS
+   fed-tokens.css · BUILD 01 · branch federation-os-v2
+   ═══════════════════════════════════════════════════════════════════════════
+   This file is the single canonical token source for FEDERATION OS
+   (GalacticFederation.co · DossierTrack.co · future FCC).
+
+   BUILD 01 rule: this file is NOT yet attached to any production page.
+   It defines the system; adoption happens in later approved builds.
+
+   Inheritance model (documented, not yet implemented):
+   - GFOF / COMMAND  uses the full palette below.
+   - DOSSIER inherits space, text, typography, motion, accessibility, and
+     shell behavior; its accents prioritize command cyan + verified green
+     over subdued graphite surfaces, with restrained authority gold.
+     Dossier is an extension of this system, never a competing one.
+   - FCC inherits FEDERATION OS and emphasizes --fed-authority with
+     restrained gold/bronze illumination, deep-space surfaces, and
+     white/readable data with minimal glow. FCC status: DESIGN PHASE.
+     Nothing here implies FCC operation.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ── 1. CORE FEDERATION COLORS (canonical, approved) ─────────────────────
+     Semantics — color must NEVER be the only carrier of a status;
+     always pair with a text label and/or icon/shape.
+
+     --fed-command   Command, active navigation, technology, communication.
+     --fed-authority Federation heritage, institutional authority, history,
+                     commitments.
+     --fed-verified  Verified, confirmed, operational state.
+     --fed-danger    Failure, missed, offline, critical warning.
+     --fed-warning   Caution, pending attention.
+     --fed-neutral   Neutral / inactive / unknown.                          */
+
+  --fed-space:        #020818;
+  --fed-command:      #40C0FF;
+  --fed-authority:    #F0C040;
+  --fed-verified:     #3DFFA0;
+  --fed-text:         #C8D8F0;
+  --fed-text-display: #EEF5FF;
+  --fed-muted:        #8896BC;
+
+  /* Derived — surfaces */
+  --fed-space-raised: #061022;
+  --fed-space-panel:  #081429;
+  --fed-space-active: #0B1A32;
+
+  /* Derived — borders */
+  --fed-border-soft:    rgba(200, 216, 240, 0.10);
+  --fed-border-default: rgba(200, 216, 240, 0.16);
+  --fed-border-strong:  rgba(200, 216, 240, 0.28);
+
+  /* Derived — accent fields & glows.
+     Glow is LIGHTING, not decoration — see lighting semantics below. */
+  --fed-command-soft:   rgba(64, 192, 255, 0.12);
+  --fed-command-glow:   rgba(64, 192, 255, 0.24);
+  --fed-authority-soft: rgba(240, 192, 64, 0.12);
+  --fed-authority-glow: rgba(240, 192, 64, 0.22);
+  --fed-verified-soft:  rgba(61, 255, 160, 0.10);
+
+  /* Derived — state colors */
+  --fed-danger:  #E96767;
+  --fed-warning: #E8B85C;
+  --fed-neutral: #8796AA;
+
+  /* Contrast notes (reviewed BUILD 01, dark surfaces #020818–#0B1A32):
+     - --fed-text, --fed-text-display: comfortably ≥ AA at all sizes.
+     - --fed-muted / --fed-neutral: pass AA for normal text on space
+       surfaces, but MUST NOT be used below --text-xs (12px). The legacy
+       8–9px metadata problem is not to be recreated.
+     - --fed-danger / --fed-warning on space surfaces: AA at body sizes;
+       pair with a label per the no-color-only rule.
+     No canonical core color was altered. */
+
+
+  /* ── 2. LIGHTING SEMANTICS (documentation) ───────────────────────────────
+     Cyan illumination  → system activity / communication.
+     Green illumination → verification / confirmed state.
+     Gold illumination  → Federation authority / historical significance.
+     Red illumination   → failure / critical.
+     No glow for decoration alone.                                          */
+
+
+  /* ── 3. TYPOGRAPHY — canonical roles (locked) ────────────────────────────
+     display   Command headings, hero, ceremonial type      → Orbitron
+     interface UI labels, navigation, controls              → Rajdhani
+     body      Long-form reading, specs, records            → Inter
+     system    Technical metadata, telemetry, mono readouts → Share Tech Mono
+
+     JetBrains Mono is NOT part of the canonical FEDERATION OS language.
+     It remains on legacy pages until progressive migration retires it.
+     Font DELIVERY (self-hosting, weights, display strategy) is explicitly
+     out of scope for BUILD 01 — see BUILD 01 §29.                          */
+
+  --font-fed-display:   "Orbitron", sans-serif;
+  --font-fed-interface: "Rajdhani", sans-serif;
+  --font-fed-body:      "Inter", sans-serif;
+  --font-fed-system:    "Share Tech Mono", monospace;
+
+  /* Type scale */
+  --text-xs:   0.75rem;   /* 12px — FLOOR for production metadata */
+  --text-sm:   0.875rem;
+  --text-base: 1rem;      /* 16px — body target */
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+
+  --heading-sm: 1.5rem;
+  --heading-md: 2rem;
+  --heading-lg: 2.75rem;
+
+  --display-sm: clamp(2.75rem, 6vw, 4.5rem);
+  --display-lg: clamp(4rem, 8vw, 7.375rem);
+
+  /* Line heights */
+  --line-body:    1.65;
+  --line-heading: 1.1;
+  --line-display: 0.95;
+  --line-system:  1.3;
+
+  /* System-metadata typography.
+     Minimum production metadata size: --text-xs (12px); ~11px tolerated
+     only in rare decorative contexts. Never 8–9px.                         */
+  --system-letter-spacing:      0.10em;
+  --system-letter-spacing-wide: 0.14em;
+
+
+  /* ── 4. SPACING — 8px primary rhythm ─────────────────────────────────── */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.5rem;
+  --space-6:  2rem;
+  --space-7:  3rem;
+  --space-8:  4rem;
+  --space-9:  6rem;
+  --space-10: 8rem;
+
+
+  /* ── 5. PAGE LAYOUT ──────────────────────────────────────────────────── */
+  --fed-content-max: 1280px;
+  --fed-reading-max: 760px;   /* ≈65–75ch at body size */
+
+  --fed-gutter-desktop: 64px;
+  --fed-gutter-tablet:  32px;
+  --fed-gutter-mobile:  20px;
+
+  --fed-nav-height-desktop: 72px;
+
+  /* Grid system (documentation — column counts live in future shared CSS,
+     not in awkward custom properties):
+       Desktop ≥1024px : 12 columns
+       Tablet 640–1023 :  8 columns
+       Mobile ≤639px   :  4 columns                                         */
+  --fed-grid-gap: 24px;
+
+
+  /* ── 6. GEOMETRY ─────────────────────────────────────────────────────────
+     FEDERATION OS is not a highly rounded interface.
+     Pill shapes are reserved for: statuses, compact filters, small
+     metadata tags — nothing else.                                          */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Federation angular geometry — SIGNATURE, not universal decoration.
+     A restrained clipped corner for select major panels only.
+     Documented in BUILD 01; broad implementation deferred.                 */
+  --fed-corner-cut: 12px;
+
+
+  /* ── 7. MOTION ───────────────────────────────────────────────────────────
+     micro      hover / focus / buttons
+     interface  tabs / drawers / panels
+     structural network relationships / major module state
+     cinematic  Federation Seal activation ONLY — no routine UI action
+                may use cinematic timing.
+
+     Reduced-motion convention (to be applied by the future shared base
+     layer, not by this file): under prefers-reduced-motion: reduce —
+       · remove non-essential reveal animation
+       · disable seal activation animation
+       · disable network-line drawing
+       · remove smooth decorative motion
+       · preserve functional transitions where necessary                    */
+  --motion-micro:      140ms;
+  --motion-interface:  250ms;
+  --motion-structural: 450ms;
+  --motion-cinematic:  1000ms;
+
+  --ease-fed: cubic-bezier(0.22, 1, 0.36, 1);
+
+
+  /* ── 8. Z-INDEX — controlled stacking, no magic 999999 ───────────────── */
+  --z-base:            0;
+  --z-content:         10;
+  --z-sticky:          100;
+  --z-nav:             200;
+  --z-drawer:          400;
+  --z-modal:           500;
+  --z-command-palette: 600;
+  --z-toast:           700;
+
+
+  /* ── 9. SURFACE HIERARCHY — exactly four levels ──────────────────────────
+     SPACE  base universe                  → --surface-space
+     SYSTEM large structural section       → --surface-system
+     PANEL  information containment        → --surface-panel
+     ACTIVE selected / interactive state   → --surface-active
+     Do not introduce further surface variants.                             */
+  --surface-space:  var(--fed-space);
+  --surface-system: var(--fed-space-raised);
+  --surface-panel:  var(--fed-space-panel);
+  --surface-active: var(--fed-space-active);
+
+
+  /* ── 10. STATUS DESIGN TOKENS ────────────────────────────────────────────
+     CSS provides semantic STATE TYPES only. Actual project status values
+     (ONLINE, ACTIVE, LIVE, BETA, VERIFIED, PENDING, DESIGN PHASE,
+     SPECIFICATION, RESEARCH, DEVELOPMENT, UNAVAILABLE, DEGRADED, OFFLINE,
+     MISSED) belong in content/data/config — never hardcoded in CSS.
+     Mapping guidance (label + color, never color alone):
+       operational  (ONLINE·ACTIVE·LIVE·VERIFIED)          → verified
+       provisional  (BETA·PENDING·DESIGN PHASE·SPECIFICATION·RESEARCH·
+                     DEVELOPMENT)                          → warning/authority
+       impaired     (DEGRADED)                             → warning
+       failed       (UNAVAILABLE·OFFLINE·MISSED)           → danger
+       unknown / inactive                                  → neutral        */
+  --status-operational: var(--fed-verified);
+  --status-operational-soft: var(--fed-verified-soft);
+  --status-provisional: var(--fed-warning);
+  --status-impaired:    var(--fed-warning);
+  --status-failed:      var(--fed-danger);
+  --status-unknown:     var(--fed-neutral);
+
+
+  /* ── 11. ACCESSIBILITY — canonical conventions (WCAG 2.2 AA target) ──────
+     · minimum touch target: 44px
+     · body text target: 16px (--text-base)
+     · readable line length: ~65–75 characters (--fed-reading-max)
+     · no color-only state communication
+     Not forced globally in BUILD 01; enforced by future shared base layer. */
+  --focus-color:  #40C0FF;
+  --focus-width:  2px;
+  --focus-offset: 3px;
+  --touch-target-min: 44px;
+}
+
+/* ── 12. BREAKPOINTS (documentation) ─────────────────────────────────────
+   CSS custom properties cannot be used inside media queries in the
+   supported browser model, so canonical breakpoints are documented here
+   and written as explicit values in future shared CSS. Do not write
+   invalid CSS for token completeness.
+
+     mobile   ≤ 639px
+     tablet   640–1023px
+     desktop  ≥ 1024px
+     wide     ≥ 1440px
+
+   Reference tokens (for JS/readout use only, never in @media):            */
+:root {
+  --bp-mobile-max:  639px;
+  --bp-tablet-min:  640px;
+  --bp-tablet-max:  1023px;
+  --bp-desktop-min: 1024px;
+  --bp-wide-min:    1440px;
+}
+
+/* ── 13. FEDERATION COORDINATES (documentation) ──────────────────────────
+   Approved UI/lore identifiers. These are FICTIONAL/INTERNAL UI
+   identifiers only. They are NOT blockchain addresses, NOT physical
+   coordinates, NOT legal IDs, NOT technical network addresses.
+   Not displayed on production pages yet.
+
+     COMMAND  // GF-00
+     DOSSIER  // GF-I01
+     ARCHIVE  // GF-A01
+     FCC      // GF-C01
+     RESEARCH // GF-R01
+     COUNCIL  // GF-G01                                                    */

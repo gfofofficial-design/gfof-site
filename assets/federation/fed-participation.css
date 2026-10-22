@@ -1,0 +1,25 @@
+.builder-shortcut{font-size:14px;margin-top:20px}
+.participate{padding:0 0 64px;scroll-margin-top:24px}
+.participate-intro{max-width:400px;margin:0;color:#c8d8f0}
+.participation-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start}
+.participation-path{min-width:0;border:1px solid #314766;border-top:2px solid #f0c040;background:#061022;padding:26px}
+.participation-path h3{font-size:24px}
+.participation-path>.eyebrow{margin-bottom:18px}
+.starting-point{display:grid;gap:9px;border-top:1px solid #26354d;padding-top:20px;font-size:14px}
+.starting-point>strong{font:12px/1.6 'Share Tech Mono',monospace;text-transform:uppercase;letter-spacing:1px;color:#f0cf68}
+.starting-point>span{color:#a2b1cf;font-size:13px}
+.participation-path details{border-top:1px solid #314766;margin-top:22px;padding-top:16px}
+.participation-path summary{cursor:pointer;color:#eef5ff;font-size:14px;font-weight:600;min-height:44px;padding:7px 0}
+.participation-path summary:hover{color:#72d1ff}
+.participation-path summary:focus-visible{outline:3px solid #f0c040;outline-offset:4px}
+.review-prompt{font-size:14px;border-top:1px solid #26354d;padding-top:8px}
+.review-prompt ol{padding-left:22px;margin-bottom:0}
+.review-prompt li{padding-left:3px;margin-top:14px}
+.review-prompt strong{color:#eef5ff}
+.discussion{display:flex;gap:40px;align-items:center;justify-content:space-between;padding:32px 0;border-bottom:1px solid #314766}
+.discussion>div{max-width:730px}
+.discussion .button{flex-shrink:0}
+.discussion h3{font-size:22px}
+.discussion p:last-child{margin-bottom:0}
+@media(max-width:1000px){.participation-paths{grid-template-columns:1fr}.participation-path{padding:28px}.discussion{align-items:start;flex-direction:column;gap:24px}.participate .section-head{align-items:start;flex-direction:column}.participate-intro{max-width:650px}}
+@media(max-width:680px){.participation-path{padding:22px}.participate{padding-bottom:40px}.participation-path h3{font-size:23px}}

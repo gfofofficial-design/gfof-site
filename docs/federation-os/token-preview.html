@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FEDERATION OS — Token Preview (internal)</title>
+<!-- INTERNAL VALIDATION DOCUMENT — BUILD 01.
+     Not linked from production. Not a production component.
+     Displays canonical tokens only; contains no project data. -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/federation/fed-tokens.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--surface-space); color:var(--fed-text); font-family:var(--font-fed-body); line-height:var(--line-body); padding:var(--space-7) var(--space-5); }
+  main { max-width:var(--fed-content-max); margin:0 auto; display:grid; gap:var(--space-8); }
+  .head { display:flex; align-items:center; gap:var(--space-4); border-bottom:1px solid var(--fed-border-default); padding-bottom:var(--space-5); }
+  .head img { width:56px; height:56px; }
+  h1 { font-family:var(--font-fed-display); color:var(--fed-text-display); font-size:var(--heading-md); line-height:var(--line-heading); }
+  .tag { font-family:var(--font-fed-system); font-size:var(--text-xs); letter-spacing:var(--system-letter-spacing-wide); color:var(--fed-muted); }
+  h2 { font-family:var(--font-fed-display); font-size:var(--heading-sm); line-height:var(--line-heading); color:var(--fed-text-display); margin-bottom:var(--space-4); }
+  section { background:var(--surface-system); border:1px solid var(--fed-border-soft); border-radius:var(--radius-md); padding:var(--space-6); }
+  .row { display:flex; flex-wrap:wrap; gap:var(--space-4); }
+  .sw { width:150px; }
+  .sw i { display:block; height:56px; border-radius:var(--radius-xs); border:1px solid var(--fed-border-default); }
+  .sw code { font-family:var(--font-fed-system); font-size:var(--text-xs); letter-spacing:var(--system-letter-spacing); color:var(--fed-muted); display:block; margin-top:var(--space-2); line-height:var(--line-system); }
+  .type p { margin-bottom:var(--space-3); }
+  .t-display { font-family:var(--font-fed-display); font-size:var(--display-sm); line-height:var(--line-display); color:var(--fed-text-display); }
+  .t-heading { font-family:var(--font-fed-display); font-size:var(--heading-md); line-height:var(--line-heading); color:var(--fed-text-display); }
+  .t-interface { font-family:var(--font-fed-interface); font-size:var(--text-lg); font-weight:600; }
+  .t-body { max-width:var(--fed-reading-max); font-size:var(--text-base); }
+  .t-system { font-family:var(--font-fed-system); font-size:var(--text-xs); letter-spacing:var(--system-letter-spacing-wide); color:var(--fed-muted); }
+  .bars { display:grid; gap:var(--space-2); }
+  .bars div { background:var(--fed-command-soft); border-left:2px solid var(--fed-command); height:16px; }
+  .bars code { font-family:var(--font-fed-system); font-size:var(--text-xs); color:var(--fed-muted); }
+  .status { display:inline-flex; align-items:center; gap:var(--space-2); font-family:var(--font-fed-system); font-size:var(--text-xs); letter-spacing:var(--system-letter-spacing); padding:4px 12px; border-radius:999px; border:1px solid var(--fed-border-default); }
+  .status i { width:7px; height:7px; border-radius:50%; }
+  .st-op { color:var(--status-operational); background:var(--status-operational-soft); } .st-op i { background:var(--status-operational); }
+  .st-pr { color:var(--status-provisional); background:var(--fed-authority-soft); } .st-pr i { background:var(--status-provisional); }
+  .st-fa { color:var(--status-failed); background:rgba(233,103,103,.10); } .st-fa i { background:var(--status-failed); }
+  .st-un { color:var(--status-unknown); } .st-un i { background:var(--status-unknown); }
+  .btn { display:inline-block; font-family:var(--font-fed-interface); font-weight:600; font-size:var(--text-sm); letter-spacing:.06em; padding:12px 24px; min-height:var(--touch-target-min); border-radius:var(--radius-xs); border:1px solid var(--fed-border-strong); background:var(--surface-panel); color:var(--fed-text-display); cursor:pointer; transition:border-color var(--motion-micro) var(--ease-fed); }
+  .btn.primary { background:var(--fed-command-soft); border-color:var(--fed-command); color:var(--fed-command); }
+  .btn.authority { background:var(--fed-authority-soft); border-color:var(--fed-authority); color:var(--fed-authority); }
+  .btn:focus-visible { outline:var(--focus-width) solid var(--focus-color); outline-offset:var(--focus-offset); }
+  .cut { background:var(--surface-panel); border:1px solid var(--fed-border-default); padding:var(--space-5); clip-path:polygon(var(--fed-corner-cut) 0, 100% 0, 100% calc(100% - var(--fed-corner-cut)), calc(100% - var(--fed-corner-cut)) 100%, 0 100%, 0 var(--fed-corner-cut)); max-width:420px; }
+  .note { font-size:var(--text-sm); color:var(--fed-muted); margin-top:var(--space-3); }
+</style>
+</head>
+<body>
+<main>
+  <div class="head">
+    <img src="../../logo-circle.png" alt="Galactic Federation — exact canonical circular mark">
+    <div>
+      <h1>FEDERATION OS — TOKEN PREVIEW</h1>
+      <span class="tag">BUILD 01 · INTERNAL VALIDATION · NOT A PRODUCTION PAGE</span>
+    </div>
+  </div>
+
+  <section>
+    <h2>Core colors</h2>
+    <div class="row">
+      <div class="sw"><i style="background:var(--fed-space)"></i><code>--fed-space #020818</code></div>
+      <div class="sw"><i style="background:var(--fed-command)"></i><code>--fed-command #40C0FF</code></div>
+      <div class="sw"><i style="background:var(--fed-authority)"></i><code>--fed-authority #F0C040</code></div>
+      <div class="sw"><i style="background:var(--fed-verified)"></i><code>--fed-verified #3DFFA0</code></div>
+      <div class="sw"><i style="background:var(--fed-text)"></i><code>--fed-text #C8D8F0</code></div>
+      <div class="sw"><i style="background:var(--fed-text-display)"></i><code>--fed-text-display #EEF5FF</code></div>
+      <div class="sw"><i style="background:var(--fed-muted)"></i><code>--fed-muted #8896BC</code></div>
+      <div class="sw"><i style="background:var(--fed-danger)"></i><code>--fed-danger #E96767</code></div>
+      <div class="sw"><i style="background:var(--fed-warning)"></i><code>--fed-warning #E8B85C</code></div>
+      <div class="sw"><i style="background:var(--fed-neutral)"></i><code>--fed-neutral #8796AA</code></div>
+    </div>
+    <h2 style="margin-top:var(--space-6)">Surface hierarchy</h2>
+    <div class="row">
+      <div class="sw"><i style="background:var(--surface-space)"></i><code>SPACE</code></div>
+      <div class="sw"><i style="background:var(--surface-system)"></i><code>SYSTEM</code></div>
+      <div class="sw"><i style="background:var(--surface-panel)"></i><code>PANEL</code></div>
+      <div class="sw"><i style="background:var(--surface-active)"></i><code>ACTIVE</code></div>
+    </div>
+  </section>
+
+  <section class="type">
+    <h2>Typography roles</h2>
+    <p class="t-display">COMMAND DISPLAY</p>
+    <p class="t-heading">Heading — Orbitron</p>
+    <p class="t-interface">Interface label — Rajdhani 600</p>
+    <p class="t-body">Body — Inter at 16px with 1.65 line height, constrained to the reading measure of roughly sixty-five to seventy-five characters so that long-form Federation records, specifications, and corrections remain comfortable to read.</p>
+    <p class="t-system">SYSTEM METADATA — SHARE TECH MONO · 12PX FLOOR · 0.14EM</p>
+  </section>
+
+  <section>
+    <h2>Spacing rhythm (8px)</h2>
+    <div class="bars">
+      <div style="width:var(--space-2)"></div><code>--space-2</code>
+      <div style="width:var(--space-4)"></div><code>--space-4</code>
+      <div style="width:var(--space-6)"></div><code>--space-6</code>
+      <div style="width:var(--space-8)"></div><code>--space-8</code>
+      <div style="width:var(--space-10)"></div><code>--space-10</code>
+    </div>
+  </section>
+
+  <section>
+    <h2>Status state types (examples of visual types only — not project claims)</h2>
+    <div class="row">
+      <span class="status st-op"><i></i>OPERATIONAL TYPE</span>
+      <span class="status st-pr"><i></i>PROVISIONAL TYPE</span>
+      <span class="status st-fa"><i></i>FAILED TYPE</span>
+      <span class="status st-un"><i></i>UNKNOWN TYPE</span>
+    </div>
+    <p class="note">Every status renders label + color; color is never the only carrier.</p>
+  </section>
+
+  <section>
+    <h2>Buttons (static examples) &amp; focus ring</h2>
+    <div class="row">
+      <button class="btn primary">COMMAND ACTION</button>
+      <button class="btn authority">AUTHORITY ACTION</button>
+      <button class="btn">NEUTRAL ACTION</button>
+    </div>
+    <p class="note">Tab to a button to inspect the canonical focus ring (2px #40C0FF, 3px offset). Touch target ≥ 44px.</p>
+    <h2 style="margin-top:var(--space-6)">Federation corner cut (signature — select panels only)</h2>
+    <div class="cut"><span class="t-system">--fed-corner-cut: 12px</span><p class="note">A restrained clipped corner. Never applied to every card.</p></div>
+  </section>
+</main>
+</body>
+</html>

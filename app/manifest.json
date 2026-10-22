@@ -1,0 +1,39 @@
+{
+  "name": "Galactic Federation of Finance",
+  "short_name": "$GFOF",
+  "description": "The $GFOF Federation App — current Solana mint, migration record and Federation research",
+  "start_url": "/app",
+  "scope": "/app",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020818",
+  "theme_color": "#020818",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Current GFOF",
+      "url": "https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV",
+      "description": "View current $GFOF on TebFun"
+    },
+    {
+      "name": "Join Telegram",
+      "url": "https://t.me/GFOF_SOL",
+      "description": "Join the federation on Telegram"
+    }
+  ]
+}

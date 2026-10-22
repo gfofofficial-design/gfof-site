@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Take a short, wallet-free mission with Admiral Voss. Choose a signal, test a claim, and find the real Federation work behind the story.">
+  <link rel="canonical" href="https://galacticfederation.co/journey/voss-briefing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://galacticfederation.co/journey/voss-briefing.html">
+  <meta property="og:title" content="Voss: The First Briefing · Federation Journey">
+  <meta property="og:description" content="Three signals. One choice at a time. Find out what is playable, what is verifiable, and what is still being built.">
+  <meta property="og:image" content="https://galacticfederation.co/assets/social/social-journey-v1.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@GFOF_Offcial">
+  <meta name="twitter:title" content="Voss: The First Briefing · Federation Journey">
+  <meta name="twitter:description" content="Three signals. One choice at a time. Find out what is playable, what is verifiable, and what is still being built.">
+  <meta name="twitter:image" content="https://galacticfederation.co/assets/social/social-journey-v1.png">
+  <title>Voss: The First Briefing · Federation Journey</title>
+  <link rel="stylesheet" href="voss-briefing.css">
+</head>
+<body>
+  <a class="skip" href="#mission-title">Skip to the briefing</a>
+  <header class="masthead"><a class="brand" href="./">GALACTIC FEDERATION <span>JOURNEY / VOSS BRIEFING</span></a><a href="./#voss-arrival">← Journey hub</a></header>
+  <main>
+    <div class="scene">
+      <div class="scene-art" aria-hidden="true"></div>
+      <div class="scene-copy">
+        <p class="eyebrow">A short, interactive transmission · 2–3 minutes</p>
+        <h1 id="mission-title">The first briefing<span>.</span></h1>
+        <p class="lead">Three signals reach Command. Each asks you to decide what the Federation can honestly say today.</p>
+        <p class="scene-note">Choose a transmission, make a call, and see what the evidence supports. Then follow the real work behind the story.</p>
+      </div>
+      <img class="voss" src="../assets/voss/voss-starborn-2026-09-27.webp" alt="Fictional Admiral Voss aboard a starship" width="1024" height="1536" fetchpriority="high">
+      <span class="scene-coordinate" aria-hidden="true">COMMAND DECK · SIGNAL 004</span>
+    </div>
+    <div class="mission-grid">
+      <aside class="briefing-sidebar" aria-label="Briefing status">
+        <div class="portrait"><img src="../assets/voss/voss-starborn-avatar-2026-09-27.webp" alt="" width="480" height="480"><div><strong>ADMIRAL VOSS</strong><span>Story guide</span></div></div>
+        <div class="status"><span class="status-light" aria-hidden="true"></span><span id="stage-label">Awaiting your signal</span></div>
+        <ol class="mission-steps" aria-label="Mission steps"><li id="step-one" class="active">Choose a signal</li><li id="step-two">Make a call</li><li id="step-three">Check the record</li></ol>
+        <p class="aside-note">This is a prewritten Journey mission. It does not use AI, connect a wallet, or send your choices to the Federation.</p>
+      </aside>
+      <div class="mission-content">
+        <section id="intro" aria-labelledby="intro-title">
+          <p class="eyebrow">Incoming · Three transmissions</p>
+          <h2 id="intro-title" tabindex="-1">“A good answer starts with a clear boundary.”</h2>
+          <p>Voss opens the command table. One signal concerns a token, one a lending market, and one the Journey itself. Each has a tempting shortcut. Your job is to separate the live tool, the learning experience, and the work in progress.</p>
+          <button id="start" class="primary" type="button">Open the signal deck →</button>
+        </section>
+        <section id="routes" aria-labelledby="routes-title" hidden>
+          <p class="eyebrow">Step 1 / Choose a signal</p>
+          <h2 id="routes-title" tabindex="-1">Which transmission will you answer?</h2>
+          <div class="route-grid">
+            <button type="button" data-route="structure"><small>01 · TOKEN STRUCTURE</small><strong>“The biggest account must be the team.”</strong><span>Inspect a claim before giving it a name. →</span></button>
+            <button type="button" data-route="lending"><small>02 · REAL FINANCE BUILD</small><strong>“The Lending Lab takes deposits, right?”</strong><span>Decide what a visitor can actually use. →</span></button>
+            <button type="button" data-route="journey"><small>03 · THE JOURNEY</small><strong>“Will finishing a mission earn GFOF?”</strong><span>Keep play and financial rights distinct. →</span></button>
+          </div>
+        </section>
+        <section id="decision" aria-labelledby="decision-title" hidden>
+          <p class="eyebrow" id="decision-kicker"></p>
+          <h2 id="decision-title" tabindex="-1"></h2>
+          <p id="decision-context"></p>
+          <p class="voss-line"><strong>Voss</strong><span id="decision-voss"></span></p>
+          <div id="choices" class="choices" role="group" aria-label="Choose your response"></div>
+          <button id="back-to-routes" class="text-button" type="button">← Choose another signal</button>
+        </section>
+        <section id="result" aria-labelledby="result-title" hidden>
+          <p class="eyebrow">Step 3 / Check the record</p>
+          <h2 id="result-title" tabindex="-1"></h2>
+          <p id="result-feedback" class="feedback"></p>
+          <div class="truth-card"><small>WHAT THE FEDERATION CAN SAY</small><p id="result-truth"></p></div>
+          <p class="voss-line"><strong>Voss</strong><span id="result-voss"></span></p>
+          <div id="result-links" class="result-links"></div>
+          <div class="result-actions"><button id="retry" type="button">Try another answer</button><button id="another" class="primary" type="button">Take another signal →</button></div>
+        </section>
+        <noscript><p class="noscript">Enable JavaScript to play, or visit the <a href="./">Journey hub</a>, <a href="/building#lending-progress">real build record</a>, and <a href="https://dossiertrack.co/token-structure">Dossier Lens</a> directly.</p></noscript>
+      </div>
+    </div>
+    <section class="afterword" aria-labelledby="afterword-title"><p class="eyebrow">Outside the story</p><h2 id="afterword-title">The map is not the territory.</h2><p>The Journey is fiction and financial education. Dossier’s Lens is a read-only beta for inspecting limited Solana mint and account facts. Federation lending is a separate private prototype, with no public deposit market. The linked project pages carry the latest status.</p><div class="afterword-links"><a href="./">Explore every Journey mission →</a><a href="/building#lending-progress">Follow the real lending build →</a></div></section>
+    <footer>No wallet, purchase, account, token reward, or financial right. Choices are handled in this browser only and are not saved. This story does not offer investment advice or a safety verdict on any token.</footer>
+  </main>
+  <script src="voss-briefing.js" defer></script>
+</body>
+</html>

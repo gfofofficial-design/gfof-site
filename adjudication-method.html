@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>The Adjudication Record — method — $GFOF</title>
+<meta name="description" content="Method document for the Adjudication Record: a public, timestamped log measuring how often a prediction market's written rule and its resolution mechanism disagree. Pre-registered selection, scored both ways, never edited.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galacticfederation.co/adjudication-method">
+<meta property="og:title" content="The Adjudication Record — method">
+<meta property="og:description" content="Measuring how often a market's written rule and its resolution mechanism disagree. Pre-registered selection, published before resolution, never edited.">
+<meta property="og:image" content="https://galacticfederation.co/assets/social/social-record-v1.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Federation public record: commitments, corrections, and evidence.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GFOF_Offcial">
+<meta name="twitter:title" content="The Adjudication Record — method">
+<meta name="twitter:description" content="Measuring how often a market's written rule and its resolution mechanism disagree. Published before resolution, never edited.">
+<meta name="twitter:image" content="https://galacticfederation.co/assets/social/social-record-v1.png">
+<meta name="twitter:image:alt" content="The Federation public record: commitments, corrections, and evidence.">
+<link rel="canonical" href="https://galacticfederation.co/adjudication-method">
+<link rel="icon" href="https://galacticfederation.co/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040818;--bg-2:#020510;
+  --gold:#F0C040;--gold-2:#FFE880;--gold-3:#C08020;
+  --green:#3DFFA0;--cyan:#40C0FF;--purple:#A78BFA;--red:#FF5E7B;
+  --text:#DEE2F5;--text-dim:#A9B0CC;--muted:#8896BC;
+  --line:rgba(255,255,255,0.08);
+  --orb:'Orbitron',sans-serif;--raj:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
+  --font-read:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--raj);
+  font-weight:400;font-size:16.5px;line-height:1.7;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 10%,rgba(167,139,250,0.04),transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(64,192,255,0.035),transparent 55%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1000;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:0.88em;background:rgba(255,255,255,0.04);padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--purple)}
+strong{color:var(--text)}
+
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(4,8,24,0.85);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.top-nav-brand{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--orb);font-size:16px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  text-shadow:0 0 14px rgba(240,192,64,0.3);
+}
+.top-nav-brand-icon{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#040818;font-weight:900;
+}
+.top-nav-links{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;flex-wrap:wrap}
+.top-nav-links a{
+  padding:6px 12px;color:var(--text-dim);
+  border:1px solid var(--line);transition:all .2s;border-radius:2px;
+}
+.top-nav-links a:hover{color:var(--gold);border-color:rgba(240,192,64,0.3);background:rgba(240,192,64,0.05)}
+.top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+
+.container{max-width:800px;margin:0 auto;padding:0 24px}
+
+.doc-header{padding:60px 0 30px}
+.doc-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--purple);margin-bottom:18px;
+  padding:6px 16px;
+  border:1px solid rgba(167,139,250,0.3);
+  background:rgba(167,139,250,0.04);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+h1.doc-title{
+  font-family:var(--orb);font-size:clamp(30px,5vw,48px);
+  font-weight:900;letter-spacing:-1px;line-height:1.1;
+  margin-bottom:14px;color:var(--text);
+}
+h1.doc-title .grad{
+  background:linear-gradient(135deg,var(--gold-2),var(--gold),var(--gold-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.doc-sub{font-family:var(--font-read);font-size:17px;color:var(--text-dim);max-width:720px;line-height:1.6;margin-bottom:12px}
+.doc-meta{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:1.5px;padding:14px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  margin-top:24px;display:flex;gap:22px;flex-wrap:wrap;
+}
+.doc-meta span strong{color:var(--cyan);font-weight:500}
+
+.toc{
+  margin:30px 0;padding:20px 24px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.toc-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-bottom:10px}
+.toc ol{list-style:none;counter-reset:toc;padding:0}
+.toc li{counter-increment:toc;padding:4px 0;font-family:var(--mono);font-size:13px;color:var(--text-dim)}
+.toc li::before{content:counter(toc,decimal-leading-zero) '  ';color:var(--muted);margin-right:8px}
+.toc a{color:var(--text-dim);transition:color .15s}
+.toc a:hover{color:var(--cyan)}
+
+h2{
+  font-family:var(--orb);font-size:24px;font-weight:800;
+  letter-spacing:-0.3px;line-height:1.2;color:var(--text);
+  margin:50px 0 8px;padding-top:20px;border-top:1px solid var(--line);
+}
+h2 .num{
+  font-family:var(--mono);font-size:11px;color:var(--purple);
+  letter-spacing:2.5px;display:block;margin-bottom:6px;font-weight:600;
+}
+h3{font-family:var(--orb);font-size:17px;font-weight:700;color:var(--text);letter-spacing:0.1px;line-height:1.3;margin:28px 0 8px}
+p{margin-bottom:14px;color:var(--text-dim);font-family:var(--font-read);font-size:16.5px;line-height:1.64;letter-spacing:0}
+p strong{color:var(--text)}
+ul,ol{margin:10px 0 16px 20px;color:var(--text-dim)}
+ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
+
+.callout{margin:20px 0;padding:18px 22px;background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.2);border-left:3px solid var(--purple)}
+.callout .k{font-family:var(--mono);font-size:10px;color:var(--purple);letter-spacing:2px;margin-bottom:6px;font-weight:700}
+.callout p{color:var(--text);font-family:var(--font-read);font-size:15.5px;margin:0}
+.callout.amber{background:rgba(240,192,64,0.04);border-color:rgba(240,192,64,0.22);border-left-color:var(--gold)}
+.callout.amber .k{color:var(--gold)}
+.callout.red{background:rgba(255,94,123,0.04);border-color:rgba(255,94,123,0.22);border-left-color:var(--red)}
+.callout.red .k{color:var(--red)}
+.callout.green{background:rgba(61,255,160,0.04);border-color:rgba(61,255,160,0.22);border-left-color:var(--green)}
+.callout.green .k{color:var(--green)}
+
+.rule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:22px 0}
+.rule{padding:16px 18px;background:rgba(255,255,255,0.02);border:1px solid var(--line);border-left:2px solid var(--cyan)}
+.rule .rk{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:6px}
+.rule .rv{font-family:var(--font-read);font-size:14.5px;color:var(--text-dim);line-height:1.55}
+.rule.no{border-left-color:var(--red)}
+.rule.no .rk{color:var(--red)}
+
+.entry-card{
+  margin:14px 0;padding:18px 22px;
+  background:rgba(255,255,255,0.02);border:1px solid var(--line);
+}
+.entry-card.open{border-left:3px solid var(--cyan)}
+.entry-card.correct{border-left:3px solid var(--green)}
+.entry-card.wrong{border-left:3px solid var(--red)}
+.ec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.ec-id{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:1px}
+.ec-badge{font-family:var(--mono);font-size:10px;letter-spacing:2px;padding:4px 10px;border:1px solid var(--line)}
+.ec-badge.open{color:var(--cyan);border-color:rgba(64,192,255,0.3);background:rgba(64,192,255,0.05)}
+.ec-badge.correct{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
+.ec-badge.wrong{color:var(--red);border-color:rgba(255,94,123,0.3);background:rgba(255,94,123,0.05)}
+.ec-claim{font-family:var(--font-read);font-size:16px;color:var(--text);line-height:1.55;margin-bottom:12px}
+.ec-meta{display:flex;flex-wrap:wrap;gap:18px;padding-top:10px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:0.5px}
+.ec-meta strong{color:var(--text-dim);font-weight:500}
+
+.empty{
+  margin:20px 0;padding:34px 24px;text-align:center;
+  border:1px dashed var(--line);background:rgba(255,255,255,0.015);
+}
+.empty .et{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--muted);margin-bottom:10px}
+.empty p{margin:0 auto;max-width:460px;font-size:15px;color:var(--text-dim)}
+
+.standings{margin:22px 0;width:100%;border:1px solid var(--line);border-collapse:collapse}
+.standings th,.standings td{padding:11px 14px;text-align:left;font-family:var(--mono);font-size:12px;border-bottom:1px solid var(--line)}
+.standings th{color:var(--muted);letter-spacing:2px;font-size:10px;font-weight:500;background:rgba(255,255,255,0.02)}
+.standings td{color:var(--text-dim)}
+.standings tr:last-child td{border-bottom:0}
+
+.formwrap{margin:24px 0;padding:24px;background:rgba(255,255,255,0.02);border:1px solid var(--line)}
+.fld{margin-bottom:16px}
+.fld label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:6px}
+.fld .hint{font-family:var(--font-read);font-size:13px;color:var(--muted);margin-top:5px;line-height:1.5}
+.fld input,.fld textarea,.fld select{
+  width:100%;padding:10px 12px;
+  background:rgba(0,0,0,0.3);border:1px solid var(--line);border-radius:2px;
+  color:var(--text);font-family:var(--font-read);font-size:15px;
+}
+.fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:rgba(64,192,255,0.45)}
+.fld textarea{min-height:88px;resize:vertical}
+.hp{position:absolute;left:-9999px}
+.submit-btn{
+  padding:12px 26px;background:rgba(240,192,64,0.08);
+  border:1px solid rgba(240,192,64,0.4);color:var(--gold);
+  font-family:var(--mono);font-size:12px;letter-spacing:2px;
+  cursor:pointer;transition:all .2s;border-radius:2px;
+}
+.submit-btn:hover{background:rgba(240,192,64,0.16);border-color:var(--gold)}
+
+.foot{
+  margin-top:80px;padding:32px 24px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:2;
+}
+.foot a{color:var(--text-dim);transition:color .15s}
+.foot a:hover{color:var(--gold)}
+.foot .sep{margin:0 8px;color:var(--line)}
+.foot .version{display:block;margin-top:14px;color:var(--muted);font-size:10px;letter-spacing:1px}
+
+@media print{
+  .top-nav,.foot,nav,.toc,.formwrap,body::before,body::after{display:none !important}
+  body{background:#fff;color:#000}
+  h1.doc-title,h2,h3,strong,p strong{color:#000}
+  p,li{color:#222}
+}
+@media(max-width:520px){
+  p{font-size:15.5px}.callout p{font-size:15px}.ec-claim{font-size:15px}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">
+    <span class="top-nav-brand-icon">GF</span>
+    <span>$GFOF</span>
+  </a>
+  <div class="top-nav-links">
+    <a href="/" class="primary">← BACK TO SITE</a>
+    <a href="/research">RESEARCH ↗</a>
+    <a href="/corrections">CORRECTIONS ↗</a>
+    <a href="https://dossiertrack.co/forecasts" target="_blank" rel="noopener">DOSSIER RECORD ↗</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <header class="doc-header">
+    <div class="doc-tag">THE ADJUDICATION RECORD &middot; METHOD &middot; NO ENTRIES FILED</div>
+    <h1 class="doc-title">The Adjudication <span class="grad">Record</span></h1>
+    <p class="doc-sub">A prediction market price is read as a probability about an event. It pays out on whatever the resolution mechanism certifies. Those are two different things. This is a public, timestamped log of how often they disagree &mdash; filed before resolution, scored both ways, and never edited.</p>
+    <div class="doc-meta">
+      <span>VERSION <strong>v0.6</strong></span>
+      <span>PUBLISHED <strong>2026-08-10</strong></span>
+      <span>AMENDED <strong>2026-09-25</strong></span>
+      <span>ENTRIES FILED <strong>0</strong></span>
+      <span>STATUS <strong>METHOD ONLY</strong></span>
+    </div>
+  </header>
+
+  <div class="callout amber">
+    <div class="k">READ THIS FIRST</div>
+    <p>No entries exist yet. This document is published before the first one deliberately, so that the rules governing what gets filed were fixed in public before anybody knew what the results would look like. If the selection rule were written afterwards, none of the numbers this record eventually produces would be worth reading.</p>
+    <p><strong>First selection attempt:</strong> the first v0.5 capture selected five election-winner contracts about identified people. Section 06 forbids claims about identified people, so no entry or probability was filed. We have <a href="/corrections#c036">logged the missed filing</a>, retained the older boundary, and amended the selection rule only for a new capture. No probability will be backdated.</p>
+    <p><strong>Second selection attempt:</strong> after v0.6 was published, a fresh capture could not prove the required top five across both venues because Kalshi did not show individual-contract USD volume comparable to Polymarket's figure. We <a href="/corrections#c037">logged that failure</a> and filed no substitute entries. The first valid filing remains open.</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">CONTENTS</div>
+    <ol>
+      <li><a href="#what">What this measures</a></li>
+      <li><a href="#not">What this is not</a></li>
+      <li><a href="#selection">Which markets get filed</a></li>
+      <li><a href="#entry">What an entry contains</a></li>
+      <li><a href="#scoring">How it is scored</a></li>
+      <li><a href="#excluded">Hard exclusions</a></li>
+      <li><a href="#anchor">Anchoring</a></li>
+      <li><a href="#wrong">What would show this was a bad idea</a></li>
+    </ol>
+  </div>
+
+  <h2 id="what"><span class="num">SECTION 01</span>What this measures</h2>
+  <p>When a market asks whether something will happen, two questions are hiding inside it. The first is whether the thing happens. The second is whether the mechanism that settles the contract decides that it happened. Most of the time those give the same answer, which is why the distinction goes unnoticed.</p>
+  <p>Sometimes they do not. A market can settle against the plain reading of its own written rule &mdash; because the rule was ambiguous, because the named source reported after the deadline, because the wording admitted an interpretation nobody intended, or because whoever adjudicated had a position in the outcome.</p>
+  <p>Nobody publishes a running measure of how often that happens, and the parties best placed to measure it are the ones being measured. This record does three things and nothing else:</p>
+
+  <div class="rule-grid">
+    <div class="rule">
+      <div class="rk">01 &middot; DIVERGENCE RATE</div>
+      <div class="rv">How often the outcome implied by a market&rsquo;s own written rule differs from the outcome certified.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">02 &middot; CALIBRATION</div>
+      <div class="rv">Brier scores on our own two predictions, published separately, including when they are bad.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">03 &middot; BY MECHANISM</div>
+      <div class="rv">The same figures broken out by how the market settles &mdash; token vote, attested oracle, exchange staff, automated engine &mdash; once the sample supports it.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">04 &middot; NOTHING ELSE</div>
+      <div class="rv">No trade signals, no returns, no portfolio. If a number cannot be shown wrong, it does not get published here.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="k">WHY IT IS BUILT THIS WAY</div>
+    <p>Anyone can say a resolution was wrong after it lands. Saying so beforehand, with a probability attached, against a rule you have to publish first, is a claim that can fail in public. That is the only version worth keeping.</p>
+  </div>
+
+  <h2 id="not"><span class="num">SECTION 02</span>What this is not</h2>
+  <p><strong>Not a resolver.</strong> We do not propose outcomes, stake bonds, vote in disputes, or operate an oracle. Several well-funded efforts are building resolution infrastructure and they are better placed to do it. This record measures the results; it does not compete to produce them.</p>
+  <p><strong>Not a rating.</strong> There is no trust score, no letter grade, no composite index of any platform or mechanism. A composite score cannot be wrong, which is exactly why it is worthless as evidence.</p>
+  <p><strong>Not about people.</strong> Entries concern markets, rule text, and mechanisms. No named trader, proposer, voter, or founder appears in an entry, even where their conduct is publicly visible and even where it is the interesting part of the story.</p>
+  <p><strong>Not trading advice.</strong> A divergence finding is not a position. Nothing here says what anyone should do with money.</p>
+
+  <h2 id="selection"><span class="num">SECTION 03</span>Which markets get filed</h2>
+  <p>This is the section that decides whether the rest of the page is worth anything. Every accuracy claim in this industry founders on the same thing: the results are real, and the selection was not. Filing only the markets that later proved interesting produces a flawless record and tells the reader nothing.</p>
+  <p>So the rule is fixed in advance, published here, and applied without exception. It is deliberately <strong>mechanical</strong>: nothing in it requires a judgement call by us.</p>
+
+  <div class="rule-grid">
+    <div class="rule">
+      <div class="rk">01 &middot; COVERED VENUE</div>
+      <div class="rv">An individually resolving contract on Polymarket or Kalshi that the venue marks open for trading and unresolved at the filing capture. A multi-leg, parlay or composite contract whose payout depends on two or more separately listed markets is excluded; separate yes/no contracts grouped on one event page remain individual contracts.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">02 &middot; FORWARD WINDOW</div>
+      <div class="rv">The venue's contract-level end or expected-expiration timestamp falls within 45 days after the filing capture. Use Polymarket's market <code>endDate</code> and Kalshi's market <code>expected_expiration_time</code>, preserving the value and its source. This is a selection horizon, not a promise that certification occurs within 45 days. An entry must state any later outcome or fallback deadline in the written rule.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">03 &middot; NOT AN ASSET-PRICE CONTRACT</div>
+      <div class="rv">Excluded: any contract whose written rule resolves on the traded price, level, or yield of a financial instrument or index &mdash; a cryptocurrency price, an equity or index level, a Treasury yield, a commodity price. An economic statistic (CPI, payrolls) or a policy decision (a Fed rate decision) is not an asset price and is not excluded.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">04 &middot; NOT A PERSON-OUTCOME CONTRACT</div>
+      <div class="rv">Excluded: a contract whose written YES/NO condition turns on an outcome for a named or uniquely identified natural person, including election, appointment, officeholding, conduct or personal status. A team, organization or institution is not excluded solely because people belong to it. If the condition cannot be classified without discretion, log a selection failure rather than silently skip or file it. This makes Section 06's existing no-identified-person boundary explicit in selection.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">05 &middot; TOP FIVE BY VOLUME</div>
+      <div class="rv">Of the contracts meeting 01 through 04 across both venues, the five largest by the USD volume the venue displays for each individual contract at the filing capture. All five are filed. Every week. Event or group volume ranks no contract. Equal displayed volumes are ordered by venue name, then stable contract ID, both ascending. Preserve the venue queries, all pages needed to prove that no omitted contract outranks fifth place, the capture times, and dated evidence of each selected contract's displayed USD volume. If the universe or fifth-place boundary cannot be verified, publish a dated selection failure rather than substitute five contracts.</div>
+    </div>
+  </div>
+
+  <p>There is no discretion at any point. We do not read the rule text and decide whether it looks interesting before choosing to file &mdash; the five markets are determined by venue, date, and size alone. Most will show no divergence at all. Those entries are the majority and they are what makes a divergence rate mean anything.</p>
+
+  <div class="callout red">
+    <div class="k">THE RULE THAT MAKES THE REST CREDIBLE</div>
+    <p>Declining to file a market that the rule selects is a failure, not an editorial decision, and it is logged in the <a href="/corrections">corrections log</a> as one. Changes to this section happen by dated amendment published here, never by quietly filing a different set.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-08-10 &middot; v0.1 &rarr; v0.2 &middot; ORIGINAL TEXT RETAINED</div>
+    <p><strong>v0.1 of this section, published earlier today, read:</strong> a market was filed if it met all four of &mdash; listed on a covered venue; at least $250,000 in reported volume at filing; a resolution date within 45 days; and the rule text showing at least one ambiguity marker, being no named settling source, an undefined qualitative term, a compound condition, or a named source able to publish after the stated deadline.</p>
+    <p><strong>Why it changed.</strong> Before filing any entry we tested the rule against live markets. Four were assessed and none qualified. The largest markets inside the window turned out to be carefully drafted from templates &mdash; one named its settling source, linked the official calendar, defined rounding for off-bracket outcomes, and specified what happens if the source publishes late. The loosely worded markets were novelty contracts carrying four-figure volume, which the floor excluded. On this venue, ambiguity and size run in opposite directions, so the v0.1 rule selected for the markets least likely to produce the thing this record exists to measure.</p>
+    <p><strong>The deeper problem.</strong> The ambiguity criterion required <em>us</em> to judge whether wording was loose before deciding to file. That is the discretion this section exists to remove, and a reader would have been right to ask what we chose not to see. Ambiguity assessment now happens inside the entry, as the divergence thesis, where it can be scored and shown wrong &mdash; rather than in the selection, where it cannot.</p>
+    <p>The cost is stated plainly: a mechanical top-five rule is duller, and it makes a null result more likely. That is the correct direction for the trade to run.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-08-11 &middot; v0.2 &rarr; v0.3 &middot; ORIGINAL TEXT RETAINED</div>
+    <p><strong>v0.2 of criterion 03 read:</strong> Of the markets meeting 01 and 02, the five largest by reported volume at the moment of filing. All five are filed. Every week.</p>
+    <p><strong>What changed.</strong> Two definitions were added. No criterion was added, removed, or reweighted. Whether the selection differs from what v0.2 would have produced cannot be stated, because v0.2 did not determine one &mdash; which is the defect.</p>
+    <p><strong>Why.</strong> Preparing the first filing exposed that v0.2 left two words undefined at the venues where they must be applied. Polymarket groups several individually-settling contracts under a single event page &mdash; a rate-decision event, for example, is one contract per outcome bracket, each with its own rule text &mdash; and the venues display volume at more than one level. Left undefined, both words would have required a choice at filing time, which is exactly the discretion this section exists to remove. So: a <em>market</em> is the individually-resolving contract, the unit carrying its own rule text and settling on its own terms; <em>volume</em> is the USD figure the venue displays for that contract at the moment of filing, evidenced by a dated capture. A figure displayed only for a grouping of contracts ranks no single contract.</p>
+    <p>This amendment is published before the first selection is made under it, for the same reason the whole document was published before the first entry.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-08-11 &middot; v0.3 &rarr; v0.4 &middot; ORIGINAL TEXT RETAINED</div>
+    <p><strong>What changed.</strong> A third selection criterion was added, excluding contracts that resolve on the traded price, level, or yield of a financial instrument or index. The remaining criteria are unchanged and were renumbered.</p>
+    <p><strong>Why.</strong> Capturing the venues for the first filing showed that the highest-volume contracts inside the 45-day window are hourly and daily asset-price brackets &mdash; a cryptocurrency&rsquo;s price at 11am, an index level at the close, a Treasury yield today. Under v0.3 the mechanical top-five would have been dominated by them every week. But an entry&rsquo;s rule-implied reading carries a mandatory probability on the observable the rule names, and when that observable is an asset price, the number is an asset-price forecast &mdash; which Section 06 of this document forbids, and has forbidden since v0.1. Section 03 as written selected what Section 06 prohibits. The exclusion was always implied by the hard exclusions; the selection rule simply failed to encode it, and the failure only became visible on contact with the venue. This is the third amendment this section has needed in two days, each found the same way. That is stated here rather than smoothed over, because a selection rule that survives its author&rsquo;s imagination and fails at the venue is the expected order of events, and the record of the repairs is part of the record.</p>
+    <p><strong>The judgement-call check.</strong> A criterion is only admissible in this section if applying it requires no discretion. The test for this one: does the contract&rsquo;s written rule name, as its deciding observable, the traded price, level, or yield of a financial instrument or index? A Fed rate decision resolves on a policy announcement, not a traded price &mdash; included. CPI resolves on a published statistic &mdash; included. &ldquo;Bitcoin above $65,000&rdquo; resolves on a traded price &mdash; excluded. If a contract ever genuinely straddles this line, it will be filed rather than skipped, with the ambiguity stated in the entry, since filing is the non-discretionary default.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-09-24 &middot; v0.4 &rarr; v0.5 &middot; BEFORE FIRST ENTRY</div>
+    <p><strong>The changed v0.4 criteria read:</strong> 01: &ldquo;Listed on a venue named in this document. At v0.4: Polymarket and Kalshi.&rdquo; 02: &ldquo;A stated resolution date falling within 45 days of the filing date.&rdquo; 04: &ldquo;Of the markets meeting 01, 02 and 03, the five largest by reported volume at the moment of filing. All five are filed. Every week. A <em>market</em> is the individually-resolving contract &mdash; the unit carrying its own rule text and settling on its own terms &mdash; not a grouping of contracts a venue displays together. <em>Volume</em> is the USD figure the venue itself displays for that contract, evidenced by a dated capture at filing; a figure displayed only for a grouping ranks no single contract.&rdquo;</p>
+    <p><strong>Why it changed.</strong> A first-filing dry run found that an election contract carried an October venue end date while its written rule allowed a result as late as June of the following year. The phrase &ldquo;stated resolution date&rdquo; did not say which date controlled. The same dry run found a very large class of multi-leg contracts, and v0.4 did not say whether those or listed-but-closed contracts belonged in the selection universe. This amendment makes the status, date field, composite exclusion and tie rule explicit before the first five are chosen. The composite exclusion is a new limit on the sample, not a claim that those contracts do not resolve.</p>
+    <p><strong>Consequence.</strong> The 45-day test now measures the venue's expected timing, while the written rule and actual certification may run longer. Several contracts from one event may occupy all five places if their individual volumes warrant it. We do not swap them for a more varied or interesting sample. If a complete ranking cannot be evidenced, the failure is reported rather than hidden.</p>
+  </div>
+
+  <div class="callout amber">
+    <div class="k">AMENDED 2026-09-25 &middot; v0.5 &rarr; v0.6 &middot; BEFORE FIRST ENTRY</div>
+    <p><strong>The v0.5 top-five rule read:</strong> &ldquo;Of the contracts meeting 01, 02 and 03 across both venues, the five largest by the USD volume the venue displays for each individual contract at the filing capture. All five are filed. Every week. Event or group volume ranks no contract. Equal displayed volumes are ordered by venue name, then stable contract ID, both ascending. Preserve the venue queries, all pages needed to prove that no omitted contract outranks fifth place, the capture times, and dated evidence of each selected contract's displayed USD volume. If the universe or fifth-place boundary cannot be verified, publish a dated selection failure rather than substitute five contracts.&rdquo;</p>
+    <p><strong>What the first capture exposed.</strong> A v0.5 capture with a complete top-five ranking boundary selected five contracts about named election candidates. Section 06 has prohibited claims about identified people since the original method, yet v0.5 selection did not encode that boundary. No probability or entry was filed from that capture, and none will be backdated. This is a selection-method failure, not a market-resolution finding. The dated failure is recorded in the <a href="/corrections#c036">corrections log</a>.</p>
+    <p><strong>What changed.</strong> Criterion 04 excludes person-outcome contracts prospectively. The previous volume criterion is now 05 and applies to 01 through 04. This changes the sample and is not a claim that person-outcome contracts cannot resolve. Section 06 remains unchanged. A fresh venue capture is required after this publication before any first entry.</p>
+  </div>
+
+  <p>Amendments to this section are versioned, dated, and published here with the old text retained. Any entry filed under a previous version keeps that version stamped on it.</p>
+
+  <h2 id="entry"><span class="num">SECTION 04</span>What an entry contains</h2>
+  <p>Every entry is filed <em>before</em> the market resolves. An entry filed afterwards is worthless and publishing one would discredit everything above it.</p>
+
+  <div class="rule-grid">
+    <div class="rule">
+      <div class="rk">RULE TEXT</div>
+      <div class="rv">The market&rsquo;s written resolution criteria, quoted verbatim, plus the settling source it names &mdash; or a note that it names none, which is itself a finding.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">RULE-IMPLIED READING</div>
+      <div class="rv">What the rule, read literally, requires &mdash; naming the observable that decides it. With a stated probability.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">EXPECTED CERTIFICATION</div>
+      <div class="rv">What the mechanism is expected to certify, and why it might differ. With its own separate probability.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">DIVERGENCE THESIS</div>
+      <div class="rv">One sentence on why the two numbers differ &mdash; or a plain statement that they do not.</div>
+    </div>
+  </div>
+
+  <p>Both probabilities are mandatory. The gap between them is the entire contribution of this record; an entry carrying only one number is not an entry.</p>
+
+  <h2 id="scoring"><span class="num">SECTION 05</span>How it is scored</h2>
+  <p>On resolution the entry is <strong>appended to, never edited</strong>. The original text stands exactly as filed.</p>
+  <p>Both probabilities are scored independently by Brier score. Reading rules well while predicting adjudication badly is a real and interesting result, and it will be published as one rather than averaged away.</p>
+  <p>Resolution is on the entry&rsquo;s own terms. Where a generous reading would make us correct and a literal reading would not, the literal reading governs, and the resolution note says so. The <a href="/record">Federation Record</a> has already had to apply that rule against itself once, in FR-001, and this record inherits it.</p>
+
+  <h2 id="excluded"><span class="num">SECTION 06</span>Hard exclusions</h2>
+  <div class="rule-grid">
+    <div class="rule">
+      <div class="rk">NO PRICE TALK</div>
+      <div class="rv">No forecast of any asset&rsquo;s price. No $GFOF claims of any kind. No &ldquo;what you would have made&rdquo;.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">NO NAMED INDIVIDUALS</div>
+      <div class="rv">No claims about identified people, in entries or in analysis.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">NO RETROACTIVE ENTRIES</div>
+      <div class="rv">Nothing filed after the outcome is knowable. Ever, for any reason.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">NO DELETION</div>
+      <div class="rv">Append-only. A wrong call stays exactly where it was published.</div>
+    </div>
+  </div>
+  <p>Participation and standing convert to nothing &mdash; no tokens, no airdrop eligibility, no governance weight, no discounts &mdash; permanently. That rule is carried over unchanged from the Federation Record and is not subject to amendment.</p>
+
+  <h2 id="anchor"><span class="num">SECTION 07</span>Anchoring</h2>
+  <p>Saying a log is append-only is easy; proving it is not. Every ten entries, or monthly &mdash; whichever comes first &mdash; the full record is exported as plain text and its fingerprint anchored to the Bitcoin blockchain via OpenTimestamps. Old snapshots are never removed, because the chain of dated exports is what proves nothing changed in between.</p>
+  <p>Before any snapshot is stamped, the regenerated export is diffed against the previous one. Prior entries must come back byte-identical; if they do not, that is investigated and disclosed before anything is published.</p>
+
+  <h2 id="wrong"><span class="num">SECTION 08</span>What would show this was a bad idea</h2>
+  <p>Stated now, while it is still cheap to say, so that it cannot be quietly dropped later.</p>
+  <div class="rule-grid">
+    <div class="rule">
+      <div class="rk">NO GAP EXISTS</div>
+      <div class="rv">If after twenty resolved entries rule and certification agree essentially every time, there is nothing here worth measuring. That gets published and this stops.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">WE READ RULES BADLY</div>
+      <div class="rv">If our rule-implied Brier is worse than the mechanisms&rsquo; own realised accuracy, we are not a useful scorekeeper and should say so.</div>
+    </div>
+    <div class="rule">
+      <div class="rk">NOBODY NEEDS IT</div>
+      <div class="rv">Twelve months of entries with no use by anyone is an answer too, and it will be reported rather than absorbed.</div>
+    </div>
+  </div>
+
+  <div class="callout green">
+    <div class="k">HOW TO READ THIS PAGE IN SIX MONTHS</div>
+    <p>If the record is full of divergences and every one of them was called correctly, be suspicious &mdash; ask what was excluded, and check it against the selection rule in Section 03. If it contains entries where we predicted a divergence and none occurred, still published, still scored, then it is doing what it was built for.</p>
+  </div>
+
+</div>
+
+<div class="foot">
+  <a href="/">galacticfederation.co</a>
+  <span class="sep">·</span>
+  <a href="/record">Federation Record</a>
+  <span class="sep">·</span>
+  <a href="/research">Research</a>
+  <span class="sep">·</span>
+  <a href="/corrections">Corrections</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/GFOF_Offcial" target="_blank" rel="noopener">X / Twitter</a>
+  <span class="sep">·</span>
+  <a href="https://t.me/GFOF_SOL" target="_blank" rel="noopener">Telegram</a>
+  <br>
+  Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
+  <br>
+  <span class="version">v17.33 · adjudication-method · v0.6 amended 2026-09-25</span>
+</div>
+
+</body>
+</html>
