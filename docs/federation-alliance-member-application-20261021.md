@@ -127,8 +127,8 @@ The native journey also composes this factory with the actual three managed-role
 TLS databases. Two fictional peers create profiles, invite, consent, contribute,
 acknowledge, replay, hide/unhide and read through the protected HTTP paths. Real
 SQL session revocation and signed serving closure withhold access. Auth HTTP and
-signing transport are still fictional; the actual browser collaboration controls
-and reviewed hosted runtime mount remain separate acceptance requirements.
+signing transport are still fictional; the reviewed hosted runtime mount remains
+a separate acceptance requirement.
 
 The opt-in `createAllianceCollaborationClient` uses only these same-origin cookie
 routes, with no token/actor input, browser storage, startup request or polling.
@@ -137,17 +137,44 @@ keeps its original intention in memory and pauses new writes even after a later
 read. `checkOrFinishPrevious` explicitly resubmits that exact command: it can finish
 the original change, so it must never be described as a read-only check or run
 automatically. A later-revision conflict requires reading that exact challenge
-before another intention. Cancellation retains the actual flight latch until
+before another change to it. Cancellation retains the actual flight latch until
 ignored work settles, and late private data cannot be emitted after disposal.
 
 The native two-peer journey also runs the actual collaboration browser client
 through this HTTP/application/SQL stack. This proves transport composition with
-fictional Auth/signing, not visible controls, keyboard or assistive-device access.
-The eventual controls must provide plain status text, explicit cancellation and
-an accurately labelled earlier-save action without timing or gesture demands.
+fictional Auth/signing, not actual provider or assistive-device access.
 
-Existing accessible member controls, comparison, confirmation and uncertainty
-messages are reused. No new user timing/gesture task, telemetry or UI is added.
-No screen-reader, physical-device or conformance acceptance follows from these
-server tests. Remaining durable community features, recovery/privacy/operating,
-runtime maintenance, mail/Google and publication gates remain.
+## Closed browser workspace
+
+`mountAllianceAccountMemberPage` and `mountAllianceMemberPage` accept a separate
+`collaborationEnabled` option, false by default. A verified account generation
+must explicitly attach before constructing the workspace. The normal static
+entry point still enables nothing and its CSP still forbids connections. No
+query string, browser storage or automatic feature discovery can opt it in.
+
+The workspace offers native labelled selectors, invitation and contribution
+forms, consent/cancellation, peer acknowledgement, hide/show and explicit bounded
+pagination. Member names are choices; raw account/session/operation IDs are not
+rendered. Remote notes use textContent. Briefs remain drafts until submitted.
+Reads never silently submit them. The interface distinguishes participant access
+from operator/provider access and says peer acknowledgement proves no independent
+truth, project authority, League score or publication right.
+
+An unknown save preserves its original intention and pauses new writes, with an
+accurately labelled, explicit check-or-finish action. Conflict requires a fresh
+read. Account changes, sign-out, disposal and dispatched profile removal close
+the workspace and clear private drafts/content; late responses cannot refill it.
+Combined profile-removal confirmation explicitly describes removing private
+invitations, contributions and acknowledgements for both participants, while
+retaining the sign-in account and possible backups.
+
+Accessibility decisions use familiar controls, persistent text status, polite
+announcements, bounded manual loading and no timing or gesture task. Confirmation
+focus moves to the updated detail; an uncertain save focuses its explicit next
+action. Fictional local Chrome checks observed acceptance, lost-reply recovery
+using Enter, and account-close content clearing. At360 CSS pixels, measured page
+width stayed within the viewport, all eight inputs/selectors had labels and
+visible button heights were at least46.6 CSS pixels. These are limited interface
+observations, not screen-reader, physical mobile or WCAG conformance acceptance.
+Remaining durable community features, coordinated recovery/privacy/operating,
+runtime maintenance/custody, real account/mail/Google and publication gates remain.

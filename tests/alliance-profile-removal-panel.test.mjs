@@ -39,3 +39,9 @@ test('bound panel carries read identity only as a precondition and does not ask 
 test('bound panel refuses a version-only read before displaying confirmation',async()=>{
  const f=fixture();const p=mountProfileRemovalPanel(f.root,{enabled:true,profileBinding:true,readVersion:async()=>({version:0}),createClient:()=>({confirm(){throw Error('No removal');},reconcile(){},cancel(){},dispose(){}})});await f.find('Review profile removal').emit('click');assert.equal(f.root.children[3].hidden,true);assert.match(f.root.children[4].textContent,/No removal was started/);p.dispose();
 });
+
+
+test('combined workspace removal explicitly describes both participants records and retained account/backups',()=>{
+ const f=fixture(),panel=mountProfileRemovalPanel(f.root,{collaborationEnabled:true});
+ try{assert.match(f.root.children[1].textContent,/private invitations, contributions and acknowledgements for both participants/);assert.match(f.root.children[1].textContent,/does not delete your sign-in account or erase stored backups/);assert.match(f.root.children[3].children[0].children[1].textContent,/private collaboration records for both participants/);}finally{panel.dispose();}
+});
