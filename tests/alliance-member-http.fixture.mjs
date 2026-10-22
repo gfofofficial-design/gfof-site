@@ -78,7 +78,7 @@ export function memberHttpFixture({authWork,afterFinish,timeoutMs}={}){
     assert.equal(new URL(endpoint).origin,origin);
     return http.handle(new Request(endpoint,{...init,headers:{...init.headers,origin,'sec-fetch-site':'same-origin',cookie:'__Host-gf-access='+token}}));
   };
-  return {http,options,request,fetcher,token,calls,journal,get profile(){return structuredClone(profile);},get revision(){return revision;},get anchor(){return structuredClone(anchor);},get dependencyCloses(){return closed;},
+  return {http,options,request,fetcher,token,calls,journal,anchorStore,get profile(){return structuredClone(profile);},get revision(){return revision;},get anchor(){return structuredClone(anchor);},get dependencyCloses(){return closed;},
     set activeSession(v){activeSession=v;},set permitted(v){permit=v;},set authStatus(v){authStatus=v;},
     another(){const router=createAllianceMemberHttp(options);routers.push(router);return router;},
     close(){for(const r of routers)r.close();creation.close();removal.close();signed.client.close();}};

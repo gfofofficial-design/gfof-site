@@ -8,6 +8,7 @@ on:
       - 'sql/alliance-profile-bound-removal-candidate.sql'
       - 'lib/alliance-profile-store.mjs'
       - 'lib/alliance-member-http.mjs'
+      - 'lib/alliance-member-application.mjs'
       - 'lib/alliance-profile-api.mjs'
       - 'lib/alliance-profile-removal-api.mjs'
       - 'lib/alliance-profile-removal-status-api.mjs'
@@ -21,6 +22,8 @@ on:
       - 'lib/alliance-avatar-server/profile-write-receipt.mjs'
       - 'lib/alliance-avatar-server/deletion-journal.mjs'
       - 'lib/alliance-avatar-server/deletion-journal.fixture.mjs'
+      - 'lib/alliance-avatar-server/startup-gate.mjs'
+      - 'lib/alliance-avatar-server/netlify-signing-runtime.mjs'
       - 'assets/federation/fed-alliance-profile-contract.mjs'
       - 'assets/federation/fed-alliance-profile-revision-contract.mjs'
       - 'assets/federation/fed-alliance-member-client.mjs'
@@ -34,6 +37,7 @@ on:
       - 'netlify/lib/read-json-bounded.cjs'
       - 'tests/alliance-profile*'
       - 'tests/alliance-member-http*'
+      - 'tests/alliance-member-application*'
       - '.github/workflows/alliance-profile.yml'
 permissions:
   contents: read
@@ -51,6 +55,7 @@ jobs:
       - run: node --check lib/alliance-profile-store.mjs
       - run: node --check lib/alliance-member-http.mjs
       - run: node --test tests/alliance-member-http.test.mjs
+      - run: node --test tests/alliance-member-application.test.mjs
       - run: node --check lib/alliance-profile-api.mjs
       - run: node --check assets/federation/fed-alliance-member-client.mjs
       - run: node --test tests/alliance-profile-store.test.mjs tests/alliance-profile-api.test.mjs tests/alliance-profile-client.test.mjs tests/alliance-profile-revisions.test.mjs
