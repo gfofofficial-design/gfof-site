@@ -76,7 +76,7 @@
    }
    providers=cfg.enabled&&Array.isArray(cfg.providers)?cfg.providers:[];emailEnabled=!emailNeedsReload&&cfg.enabled===true&&cfg.emailEnabled===true;passwordEnabled=!passwordNeedsReload&&cfg.enabled===true&&cfg.passwordEnabled===true;hideIdentity();
    if(!cfg.enabled){message.textContent='Accounts are being prepared. Google and Apple sign-in are not open yet.';return;}
-   message.textContent=emailNeedsReload?'Reload this page before starting another sign-in.':failedSignin?'Sign-in did not complete. Try again.':emailEnabled?'Enter your email to request a one-time sign-in code.':passwordEnabled?'Enter your existing Federation email and password.':providers.length?'Choose an available sign-in option.':'Provider setup is in progress. Sign-in is not open yet.';
+   message.textContent=passwordNeedsReload?'Sign-in could not be confirmed. Reload before trying again, or use an email code.':emailNeedsReload?'Reload this page before starting another sign-in.':failedSignin?'Sign-in did not complete. Try again.':emailEnabled?'Enter your email to request a one-time sign-in code.':passwordEnabled?'Enter your existing Federation email and password.':providers.length?'Choose an available sign-in option.':'Provider setup is in progress. Sign-in is not open yet.';
    if(cfg.hasSessionCookie===false)return;
    try{
     let session;
