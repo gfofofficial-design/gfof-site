@@ -8,6 +8,7 @@ import {createProfileRemovalStatusClient} from '../assets/federation/fed-allianc
 import {createProfileRemovalClient} from '../assets/federation/fed-alliance-profile-removal-client.mjs';
 import {profileDocument} from './alliance-profile-document.fixture.mjs';
 import {memberHttpFixture,origin,fields,operation} from './alliance-member-http.fixture.mjs';
+import {removalEvents} from '../lib/alliance-avatar-server/removal.mjs';
 const tick=()=>new Promise(r=>setImmediate(r));
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const body=r=>r.json();
@@ -43,6 +44,24 @@ test('dashboard acceptance alone cannot authorize a SQL-revoked session',async()
   const page=mountAllianceAccountMemberPage(d.doc,{enabled:true,origin,events:new EventTarget(),createChannel:()=>{throw Error();},fetcher:f.fetcher});
   try{assert.equal(await page.check(),true);await d.get('read').emit('click');assert.equal(f.profile,null);assert.ok(f.calls.includes('current-session'));assert.ok(!f.calls.includes('finish-profile'));assert.doesNotMatch(d.get('current-body').textContent,/Synthetic member/);}
   finally{page.dispose();f.close();}
+});
+
+test('directory uses the private session path, respects unlisting and filters a restored tombstoned profile',async()=>{
+  const f=memberHttpFixture();let revision=0;
+  const save=async listed=>{const response=await f.http.handle(f.request('/me',{method:'POST',body:{operationId:operation(revision+1),revision,profile:{...fields(),listed}}}));assert.equal(response.status,200);revision++;};
+  const directory=async()=>{const response=await f.http.handle(f.request('/directory?limit=1'));assert.equal(response.status,200);return response.json();};
+  try{
+    await save(false);assert.deepEqual(await directory(),{items:[],next:null});
+    await save(true);const profile=f.profile,page=await directory();assert.equal(page.items[0].id,profile.id);assert.deepEqual(Object.keys(page.items[0]).sort(),['bio','community','id','name','role']);
+    await save(false);assert.deepEqual(await directory(),{items:[],next:null});await save(true);
+    const [event]=removalEvents({format:1,kind:'profile',operationId:operation(99),profileId:profile.id,version:0,objectIds:[]});
+    await f.journal.append({event,expected:await f.journal.tip()});
+    // Simulate an old member backup: SQL still has text, the independent journal
+    // has already accepted its removal. The HTTP path must not expose that text.
+    assert.equal(f.profile.name,fields().name);assert.deepEqual(await directory(),{items:[],next:null});
+    assert.ok(f.calls.includes('private-directory'));
+    f.activeSession=false;const before=f.calls.filter(v=>v==='private-directory').length;assert.equal((await f.http.handle(f.request('/directory'))).status,503);assert.equal(f.calls.filter(v=>v==='private-directory').length,before);
+  }finally{f.close();}
 });
 test('revocation after a dispatched write withholds the profile and preserves uncertainty',async()=>{
   let f;f=memberHttpFixture({afterFinish:()=>{f.activeSession=false;}});

@@ -31,6 +31,7 @@ export function memberHttpFixture({authWork,afterFinish,timeoutMs}={}){
     authorizeAccountSession:async(a,s)=>{calls.push('current-session');context(a,s);return {actorId:a,sessionId:s};},
     authorizeSession:async(a,s)=>{context(a,s);own();return {actorId:a,sessionId:s,profileId:profile.id};},
     profileRevisionReadSession:async(a,s)=>{context(a,s);return structuredClone({profile,revision});},
+    directorySession:async(a,s,after,limit)=>{context(a,s);calls.push('private-directory');return {items:profile?.listed&&(!after||profile.id>after)?[{id:profile.id,name:profile.name,community:profile.community,bio:profile.bio,role:profile.role}].slice(0,limit):[],next:null};},
     mineSession:async(a,s)=>{context(a,s);own();return {version,objectId:null,pending:[]};},
     prepareProfileSession:async(a,s)=>{context(a,s);return {kind:'profile',profileId:profile?.id||id(),objectId:null,operationId:null,version:0};},
     prepareImageSession:reject,creationStatusSession:reject,finishProfileSession:reject,finishImageSession:reject,
