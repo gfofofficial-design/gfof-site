@@ -31,9 +31,9 @@ The existing administrator receives a temporary owner SET grant only during inst
 
 ## Recovery and activation gate
 
-The existing format-2 member checkpoint does **not** inventory these five tables. `alliance_community.recovery_inventory()` supplies a separate complete, closed count/hash inventory with no row contents. It is not an encrypted archive, restore proof or accepted startup checkpoint.
+The existing format-2 member checkpoint does **not** inventory these five tables. `alliance_community.recovery_inventory()` supplies a separate complete, closed count/hash inventory with no row contents. It is not an encrypted archive or restore proof. The [combined recovery candidate](federation-alliance-community-recovery-20261021.md) now binds member, journal and community inventories in explicit checkpoint format3 and a nine-component encrypted package format2.
 
-Before serving, extend the coordinated recovery package, restore comparison and signed startup/serving authority to bind both member and community inventories. The service explicitly requires `authorizeCommunity`; the existing profile-only `authorize` is insufficient. An injected fictional permission in a disposable test does not satisfy that production requirement. Browser/account transport, consent/error/reconciliation controls, operating/abuse limits and a combined real-hosted journey also remain integration work. No activation decision is requested by this source candidate.
+The dedicated combined startup gate can supply `authorizeCommunity`; the existing profile-only `authorize` is insufficient. Actual archive capture/restoration of community records, real hosted authority/custody and the combined browser/account transport remain required before serving. An injected fictional permission or a synthetic encryption fixture does not satisfy those production requirements. Consent/error/reconciliation controls, operating/abuse limits and a combined real-hosted journey also remain integration work. No activation decision is requested by this source candidate.
 
 ## Accessibility decisions
 
