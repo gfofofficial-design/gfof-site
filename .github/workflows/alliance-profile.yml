@@ -15,6 +15,7 @@ on:
       - 'lib/alliance-avatar-server/community-service.mjs'
       - 'lib/alliance-avatar-server/community-store.mjs'
       - 'assets/federation/fed-alliance-collaboration-contract.mjs'
+      - 'assets/federation/fed-alliance-collaboration-client.mjs'
       - 'lib/alliance-member-application.mjs'
       - 'lib/alliance-profile-api.mjs'
       - 'lib/alliance-profile-removal-api.mjs'
@@ -45,6 +46,7 @@ on:
       - 'tests/alliance-profile*'
       - 'tests/alliance-member-http*'
       - 'tests/alliance-community-http*'
+      - 'tests/alliance-collaboration-client*'
       - 'tests/alliance-member-application*'
       - '.github/workflows/alliance-profile.yml'
 permissions:
@@ -62,7 +64,7 @@ jobs:
           node-version: '24.22.1'
       - run: node --check lib/alliance-profile-store.mjs
       - run: node --check lib/alliance-member-http.mjs
-      - run: node --test tests/alliance-member-http.test.mjs tests/alliance-community-http.test.mjs
+      - run: node --test tests/alliance-member-http.test.mjs tests/alliance-community-http.test.mjs tests/alliance-collaboration-client.test.mjs
       - run: node --test tests/alliance-member-application.test.mjs
       - run: node --check lib/alliance-profile-api.mjs
       - run: node --check assets/federation/fed-alliance-member-client.mjs

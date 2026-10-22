@@ -130,6 +130,22 @@ SQL session revocation and signed serving closure withhold access. Auth HTTP and
 signing transport are still fictional; the actual browser collaboration controls
 and reviewed hosted runtime mount remain separate acceptance requirements.
 
+The opt-in `createAllianceCollaborationClient` uses only these same-origin cookie
+routes, with no token/actor input, browser storage, startup request or polling.
+Replies must be bounded, exact, nonredirected JSON marked no-store. A lost save
+keeps its original intention in memory and pauses new writes even after a later
+read. `checkOrFinishPrevious` explicitly resubmits that exact command: it can finish
+the original change, so it must never be described as a read-only check or run
+automatically. A later-revision conflict requires reading that exact challenge
+before another intention. Cancellation retains the actual flight latch until
+ignored work settles, and late private data cannot be emitted after disposal.
+
+The native two-peer journey also runs the actual collaboration browser client
+through this HTTP/application/SQL stack. This proves transport composition with
+fictional Auth/signing, not visible controls, keyboard or assistive-device access.
+The eventual controls must provide plain status text, explicit cancellation and
+an accurately labelled earlier-save action without timing or gesture demands.
+
 Existing accessible member controls, comparison, confirmation and uncertainty
 messages are reused. No new user timing/gesture task, telemetry or UI is added.
 No screen-reader, physical-device or conformance acceptance follows from these
