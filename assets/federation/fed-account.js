@@ -6,6 +6,8 @@
  const emailForm=document.getElementById('email-form'),codeForm=document.getElementById('email-code-form');
  const emailInput=document.getElementById('email-address'),codeInput=document.getElementById('email-code');
  const emailSend=document.getElementById('email-send'),emailVerify=document.getElementById('email-verify');
+ const passwordForm=document.getElementById('password-form'),passwordEmail=document.getElementById('password-email'),passwordInput=document.getElementById('account-password'),passwordSubmit=document.getElementById('password-signin');
+ let passwordEnabled=false,passwordNeedsReload=false;
  let emailEnabled=false,emailChallenge=null,emailNeedsReload=false;
  let busy=false, generation=0, signedOut=false, providers=[], channel=null;
  const sensitiveFragment=/(?:^#|&)(?:access_token|refresh_token|token_hash|provider_token|provider_refresh_token|error_code)=/i.test(location.hash||'');
@@ -25,8 +27,8 @@
  const locks=globalThis.navigator?.locks;
  const coordinated=typeof locks?.request==='function';
  const current=turn=>turn===generation&&!signedOut;
- function buttonState(){buttons.forEach(b=>{b.disabled=busy||emailNeedsReload||!providers.includes(b.id);});if(emailSend)emailSend.disabled=busy||!emailEnabled;if(emailVerify)emailVerify.disabled=busy||!emailEnabled||!emailChallenge;}
- function hideIdentity(checking=false){document.getElementById('identity').hidden=true;document.getElementById('member-email').textContent='';logout.hidden=true;buttons.forEach(b=>{b.hidden=checking;});if(emailForm)emailForm.hidden=checking||!emailEnabled;if(codeForm)codeForm.hidden=checking||!emailEnabled||!emailChallenge;buttonState();}
+ function buttonState(){if(passwordSubmit)passwordSubmit.disabled=busy||!passwordEnabled;buttons.forEach(b=>{b.disabled=busy||emailNeedsReload||!providers.includes(b.id);});if(emailSend)emailSend.disabled=busy||!emailEnabled;if(emailVerify)emailVerify.disabled=busy||!emailEnabled||!emailChallenge;}
+ function hideIdentity(checking=false){if(passwordInput)passwordInput.value='';if(passwordForm)passwordForm.hidden=checking||!passwordEnabled;document.getElementById('identity').hidden=true;document.getElementById('member-email').textContent='';logout.hidden=true;buttons.forEach(b=>{b.hidden=checking;});if(emailForm)emailForm.hidden=checking||!emailEnabled;if(codeForm)codeForm.hidden=checking||!emailEnabled||!emailChallenge;buttonState();}
  function signedOutMessage(revoked){return revoked?'Signed out.':'Signed out of this browser. Remote session revocation could not be confirmed.';}
  // Keep all account-page operations that can update cookies in one same-origin
  // browser lock. A waiting tab reads the current cookies only after acquiring it.
@@ -41,7 +43,7 @@
   const controller=new AbortController();
   // The server can perform two 8-second provider reads for refresh and three
   // for logout. Leave room for those existing paths without adding any retry.
-  const timeoutMs=action==='logout'?30000:['refresh','email-verify'].includes(action)?20000:12000;
+  const timeoutMs=action==='logout'?30000:['refresh','email-verify','password-signin'].includes(action)?20000:12000;
   let onAbort;
   const interrupted=new Promise((_,reject)=>{
    onAbort=()=>reject(Error('Account request took too long. Please try again later.'));
@@ -59,7 +61,7 @@
    })(),interrupted]);
   }finally{clearTimeout(timer);controller.signal.removeEventListener('abort',onAbort);}
  }
- function signedIn(user){emailChallenge=null;if(codeInput)codeInput.value='';if(emailForm)emailForm.hidden=true;if(codeForm)codeForm.hidden=true;buttons.forEach(b=>{b.hidden=true;});logout.hidden=false;document.getElementById('identity').hidden=false;document.getElementById('member-email').textContent=user.email||'Signed-in member';message.textContent='You are signed in. Staking and lending remain in preparation.';}
+ function signedIn(user){if(passwordInput)passwordInput.value='';if(passwordForm)passwordForm.hidden=true;emailChallenge=null;if(codeInput)codeInput.value='';if(emailForm)emailForm.hidden=true;if(codeForm)codeForm.hidden=true;buttons.forEach(b=>{b.hidden=true;});logout.hidden=false;document.getElementById('identity').hidden=false;document.getElementById('member-email').textContent=user.email||'Signed-in member';message.textContent='You are signed in. Staking and lending remain in preparation.';}
  async function start(){
   if(busy||signedOut)return;
   const turn=++generation;hideIdentity(true);message.textContent='Checking your account status…';
@@ -72,7 +74,7 @@
     if(signedOut&&!providers.length){providers=cfg.enabled&&Array.isArray(cfg.providers)?cfg.providers:[];buttonState();}
     return;
    }
-   providers=cfg.enabled&&Array.isArray(cfg.providers)?cfg.providers:[];emailEnabled=!emailNeedsReload&&cfg.enabled===true&&cfg.emailEnabled===true;hideIdentity();
+   providers=cfg.enabled&&Array.isArray(cfg.providers)?cfg.providers:[];emailEnabled=!emailNeedsReload&&cfg.enabled===true&&cfg.emailEnabled===true;passwordEnabled=!passwordNeedsReload&&cfg.enabled===true&&cfg.passwordEnabled===true;hideIdentity();
    if(!cfg.enabled){message.textContent='Accounts are being prepared. Google and Apple sign-in are not open yet.';return;}
    message.textContent=emailNeedsReload?'Reload this page before starting another sign-in.':failedSignin?'Sign-in did not complete. Try again.':emailEnabled?'Enter your email to request a one-time sign-in code.':providers.length?'Choose an available sign-in option.':'Provider setup is in progress. Sign-in is not open yet.';
    if(cfg.hasSessionCookie===false)return;
@@ -138,6 +140,19 @@
    const session=await api('session');if(current(turn))signedIn(session.user);
   });}catch{if(current(turn)){codeForm.hidden=true;message.textContent='Sign-in could not be confirmed. Reload this page before requesting a new code.';emailEnabled=false;emailNeedsReload=true;}}
   finally{busy=false;buttonState();}
+ });
+ passwordForm?.addEventListener('submit',async event=>{
+  event.preventDefault();if(busy||!passwordEnabled)return;
+  const email=passwordEmail.value.trim();let password=passwordInput.value;
+  passwordInput.value='';busy=true;signedOut=false;const turn=++generation;
+  emailChallenge=null;if(codeInput)codeInput.value='';hideIdentity();message.textContent='Checking your sign-in…';
+  try{await withSessionLock(async()=>{
+   if(!current(turn))return;
+   const pending=api('password-signin',{email,password});password='';
+   const r=await pending;if(!current(turn))return;if(r.ok!==true)throw Error('signin');
+   const session=await api('session');if(current(turn))signedIn(session.user);
+  });}catch{if(current(turn)){message.textContent='Sign-in could not be confirmed. Reload before trying again, or use an email code.';passwordEnabled=false;passwordNeedsReload=true;hideIdentity();}}
+  finally{password='';busy=false;buttonState();}
  });
  buttons.forEach(b=>b.addEventListener('click',async()=>{
   if(busy||emailNeedsReload||!providers.includes(b.id))return;
