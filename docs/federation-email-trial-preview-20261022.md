@@ -6,8 +6,12 @@ Existing account UI, handler, response bounds and cookie handling are reused.
 
 The preview routes account requests through `federation-email-trial.cjs`. It is
 disabled by default and ignores the production account configuration. It uses
-only the existing isolated signup-acceptance project, disables OAuth and always
-requests email with `create_user:false`. It cannot open new-user registration.
+only the existing isolated signup-acceptance project, disables OAuth and requests email with `create_user:false` by default. A separate
+`FEDERATION_EMAIL_TRIAL_SIGNUP_ENABLED=true` flag permits only the exact designated
+test address through the preview. Leave it unset until the isolated Auth hook
+also enforces the exact recipient and a fixed twenty-minute deadline, and the
+owner approves the temporary registration window. The preview flag alone does
+not restrict direct Auth API requests.
 
 Before enabling a bounded trial, configure only this exact Deploy Preview's
 Function environment, never shared production or all-preview values:

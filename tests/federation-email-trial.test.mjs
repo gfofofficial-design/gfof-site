@@ -29,3 +29,10 @@ test('foreign origin, OAuth and direct function routes make no provider call',as
  assert.equal((await h(event('oauth',{provider:'google'}))).statusCode,400);
  assert.equal((await h({...event('email-start',{email:'owner@example.invalid'}),path:'/.netlify/functions/federation-email-trial/email-start'})).statusCode,404);assert.equal(calls,0);
 });
+
+test('new-user trial requires its own flag and exact designated recipient',async()=>{
+ const calls=[];const h=createTrialHandler({env:{...env,FEDERATION_EMAIL_TRIAL_SIGNUP_ENABLED:'true'},fetchImpl:async(url,opts)=>{calls.push({url,opts});return new Response('{}');}});
+ assert.equal((await h(event('email-start',{email:'other@example.invalid'}))).statusCode,403);assert.equal(calls.length,0);
+ assert.equal((await h(event('email-start',{email:'gfofofficial+alliance-test-20261022@gmail.com'}))).statusCode,202);
+ assert.equal(calls.length,1);assert.equal(JSON.parse(calls[0].opts.body).create_user,true);
+});
