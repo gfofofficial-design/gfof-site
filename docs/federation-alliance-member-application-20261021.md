@@ -91,6 +91,45 @@ registration or public feature activation in this change.
 Remaining hosted acceptance includes runtime keys/current authority, credential
 custody, provider billing bounds, durable fleet fencing and coordinated recovery.
 
+## Explicit combined profile and collaboration application
+
+`createAllianceCommunityApplication` is a separate opt-in factory. It requires
+the complete format3 checkpoint and the community store, and maps one combined
+current startup permission to both profile operations and `authorizeCommunity`.
+The existing profile-only factory never admits the new routes or upgrades its
+checkpoint. Neither factory mounts a Function or discovers configuration.
+
+The combined application adds four exact same-origin, cookie-only paths under
+`/api/alliance-members/community`:
+
+| Path | Method | Request |
+| --- | --- | --- |
+| `/challenges` | GET | Optional unique `after` UUID and `limit` from 1 to 5 |
+| `/challenge` | GET | Exactly one `id` UUID |
+| `/change` | POST | The exact shared collaboration command; no caller identity |
+| `/visibility` | POST | Exactly `target` and boolean `hidden` |
+
+The adapter refuses bearer headers, cross-site requests, duplicate cookies,
+unknown query/body fields and oversized bodies before Auth. It verifies the
+cookie at the pinned Auth server before checking its subject, issuer, audience,
+session and expiry binding. The injected collaboration service independently
+checks the current SQL session, both participants' deletion evidence and the
+combined serving permission before and after access. Every response is private
+and noncacheable. No public list or shared publication path is introduced.
+
+Cancellation retires the HTTP instance. Late Auth cannot start service work;
+an interrupted dispatched mutation remains explicitly unknown. Reply shape and
+operation/challenge bindings are checked before returning private content.
+An old command replay after a later revision is a conflict requiring a fresh
+read, rather than a stale success. There is no automatic retry or service repair.
+
+The native journey also composes this factory with the actual three managed-role
+TLS databases. Two fictional peers create profiles, invite, consent, contribute,
+acknowledge, replay, hide/unhide and read through the protected HTTP paths. Real
+SQL session revocation and signed serving closure withhold access. Auth HTTP and
+signing transport are still fictional; the actual browser collaboration controls
+and reviewed hosted runtime mount remain separate acceptance requirements.
+
 Existing accessible member controls, comparison, confirmation and uncertainty
 messages are reused. No new user timing/gesture task, telemetry or UI is added.
 No screen-reader, physical-device or conformance acceptance follows from these

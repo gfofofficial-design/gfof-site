@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {generateKeyPairSync,createHash,sign} from 'node:crypto';
-import {createAllianceMemberApplication} from '../lib/alliance-member-application.mjs';
+import {createAllianceMemberApplication,createAllianceCommunityApplication} from '../lib/alliance-member-application.mjs';
 import {createNetlifyGatewaySigningRuntime} from '../lib/alliance-avatar-server/netlify-signing-runtime.mjs';
 import {RECOVERY_TABLES} from '../lib/alliance-avatar-server/recovery-pair.mjs';
 import {startupCheckpointSha256,startupDecisionBytes} from '../lib/alliance-avatar-server/startup-gate.mjs';
@@ -10,11 +10,12 @@ import {createMemberProfileClient} from '../assets/federation/fed-alliance-membe
 import {createProfileRemovalClient} from '../assets/federation/fed-alliance-profile-removal-client.mjs';
 import {createProfileRemovalStatusClient} from '../assets/federation/fed-alliance-profile-removal-status-client.mjs';
 import {memberHttpFixture,origin,fields,operation} from './alliance-member-http.fixture.mjs';
+import {communityCheckpointSha256} from '../lib/alliance-avatar-server/community-recovery.mjs';
 const zero='0'.repeat(64),tick=()=>new Promise(r=>setImmediate(r));
 const deferred=()=>{let resolve;return {promise:new Promise(r=>resolve=r),resolve:v=>resolve(v)};};
 // Three ephemeral signing roles, synthetic inventory/SQL/Auth. No private key is
 // exported to a file, logged or used against a provider. Transport stays memory-only.
-function fixture({readDecisionWork,drift=false}={}){
+function fixture({readDecisionWork,drift=false,withCommunity=false}={}){
   const f=memberHttpFixture(),root=generateKeyPairSync('ed25519'),witness=generateKeyPairSync('ed25519'),caller=generateKeyPairSync('ed25519');
   const publicHex=pair=>Buffer.from(pair.publicKey.export({format:'jwk'}).x,'base64url').toString('hex');
   const scope={memberProjectRef:'abcdefghijklmnopqrst',journalProjectRef:'uvwxyzabcdefghijklmn',epoch:'11111111-1111-4111-8111-111111111111'};
@@ -22,9 +23,10 @@ function fixture({readDecisionWork,drift=false}={}){
   const context={site:{id:expected.siteId},deploy:{id:expected.deployId,context:expected.context}};
   const inventory=domain=>({format:2,domain,closed:true,tables:RECOVERY_TABLES[domain].map(table=>({table,rows:table.endsWith('.control')?1:0,sha256:zero})),...(domain==='journal'?{projectRef:scope.memberProjectRef,epoch:scope.epoch,sequence:0,sha256:zero}:{})});
   const checkpoint={format:2,...scope,freezeId:'66666666-6666-4666-8666-666666666666',capturedAt:new Date().toISOString(),member:inventory('member'),journal:inventory('journal')};
+  if(withCommunity){checkpoint.format=3;checkpoint.community={format:1,domain:'community',closed:true,tables:['control','challenges','contributions','operations','blocks'].map(t=>({table:'alliance_community.'+t,rows:t==='control'?1:0,sha256:zero}))};}
   f.options.ledger.recoveryInventory=()=>{const v=structuredClone(checkpoint.member);if(drift)v.tables[0].sha256='f'.repeat(64);return v;};
   f.journal.recoveryInventory=()=>structuredClone(checkpoint.journal);
-  const control={state:'review',revision:1,freezeId:checkpoint.freezeId,frozenAt:new Date(Date.now()-1000).toISOString(),checkpointSha256:startupCheckpointSha256(checkpoint),floor:{sequence:0,sha256:zero}};
+  const control={state:'review',revision:1,freezeId:checkpoint.freezeId,frozenAt:new Date(Date.now()-1000).toISOString(),checkpointSha256:(withCommunity?communityCheckpointSha256:startupCheckpointSha256)(checkpoint),floor:{sequence:0,sha256:zero}};
   const spki=caller.publicKey.export({format:'der',type:'spki'}),callerKey={keyId:createHash('sha256').update(spki).digest('hex'),spki:spki.toString('base64'),notBeforeUtc:new Date(Date.now()-10000).toISOString(),notAfterUtc:new Date(Date.now()+3600000).toISOString()};
   let keyReads=0,decisions=0,witnesses=0;
   const signing=createNetlifyGatewaySigningRuntime({enabled:true,expectedInstallation:expected,callerKey,readSecret:()=>{keyReads++;return caller.privateKey.export({format:'der',type:'pkcs8'}).toString('base64');}});
@@ -33,7 +35,8 @@ function fixture({readDecisionWork,drift=false}={}){
     readDecision:async request=>{decisions++;await readDecisionWork?.();await signing.signingKey();const decision={...request,...structuredClone(control),issuedAt:new Date().toISOString()};return Buffer.from(JSON.stringify({decision,signature:sign(null,startupDecisionBytes(decision),root.privateKey).toString('hex')}));},
     readWitness:async input=>{witnesses++;await signing.signingKey();const anchor={format:1,projectRef:scope.memberProjectRef,epoch:scope.epoch,sequence:f.journal.rows.length,sha256:f.journal.rows.at(-1)?.sha256||zero,challenge:input.challenge,issuedAt:new Date().toISOString()};return Buffer.from(JSON.stringify({anchor,signature:sign(null,deletionWitnessBytes(anchor),witness.privateKey).toString('hex')}));},
   };
-  const app=createAllianceMemberApplication(options);
+  if(withCommunity)options.communityStore={inventory:async()=>structuredClone(checkpoint.community),list:async()=>({items:[],next:null}),read:async()=>{throw Error('No fixture challenge');},change:async(a,s,input)=>({state:'conflict',revision:1}),block:async(a,s,input)=>({...input})};
+  const app=(withCommunity?createAllianceCommunityApplication:createAllianceMemberApplication)(options);
   const fetcher=(endpoint,init)=>app.handle(new Request(endpoint,{...init,headers:{...init.headers,origin,'sec-fetch-site':'same-origin',cookie:'__Host-gf-access='+f.token}}),context);
   return {f,app,options,context,checkpoint,control,fetcher,get counts(){return {keyReads,decisions,witnesses};},serve(){control.state='serve';control.revision++;},close(){app.close();signing.close();f.close();}};
 }
@@ -70,4 +73,24 @@ test('unsupported/cross-site input cannot spend a signed authority exchange afte
 });
 test('shutdown during an uncooperative startup reply prevents late preparation and closes owned components',async()=>{
   const wait=deferred(),f=fixture({readDecisionWork:()=>wait.promise});try{const preparing=f.app.prepare(f.checkpoint,f.context);await tick();f.app.close();assert.deepEqual(await preparing,{state:'quarantine',access:'closed'});wait.resolve();await tick();assert.equal((await f.app.handle(f.f.request(),f.context)).status,503);assert.equal(f.f.dependencyCloses,0);}finally{wait.resolve();f.close();}
+});
+
+
+test('combined application binds format3 startup to both profile and verified-cookie community paths',async()=>{
+ const f=fixture({withCommunity:true}),client=createMemberProfileClient({enabled:true,profileRevisions:true,origin,newOperationId:()=>operation(80),fetcher:f.fetcher});
+ try{
+  assert.deepEqual(await f.app.prepare(f.checkpoint,f.context),{state:'prepared',access:'closed'});f.serve();
+  await client.load();await client.save({...fields(),listed:true});assert.ok(f.f.profile);
+  const list=await f.app.handle(f.f.request('/community/challenges'),f.context);assert.equal(list.status,200);assert.deepEqual(await list.json(),{state:'ready',page:{items:[],next:null}});
+  const target='99999999-9999-4999-8999-999999999999';
+  const hidden=await f.app.handle(f.f.request('/community/visibility',{method:'POST',body:{target,hidden:true}}),f.context);assert.equal(hidden.status,200);assert.deepEqual(await hidden.json(),{state:'set',target,hidden:true});
+  f.f.activeSession=false;assert.equal((await f.app.handle(f.f.request('/community/challenges'),f.context)).status,403);
+ }finally{client.dispose();f.close();}
+});
+test('combined application rejects legacy checkpoint and cannot borrow a prepared profile gate',async()=>{
+ const f=fixture({withCommunity:true});try{const legacy={...f.checkpoint,format:2};delete legacy.community;assert.deepEqual(await f.app.prepare(legacy,f.context),{state:'quarantine',access:'closed'});assert.equal((await f.app.handle(f.f.request('/community/challenges'),f.context)).status,503);}finally{f.close();}
+ const old=fixture();try{await old.app.prepare(old.checkpoint,old.context);old.serve();const before=old.counts;assert.equal((await old.app.handle(old.f.request('/community/challenges'),old.context)).status,404);assert.deepEqual(old.counts,before);}finally{old.close();}
+});
+test('combined serving withdrawal closes both profile and community routes before Auth',async()=>{
+ const f=fixture({withCommunity:true});try{await f.app.prepare(f.checkpoint,f.context);f.serve();f.control.state='closed';f.control.revision++;const before=f.f.calls.length;assert.equal((await f.app.handle(f.f.request('/community/challenges'),f.context)).status,503);assert.equal(f.f.calls.length,before);f.serve();assert.equal((await f.app.handle(f.f.request(),f.context)).status,503);}finally{f.close();}
 });
