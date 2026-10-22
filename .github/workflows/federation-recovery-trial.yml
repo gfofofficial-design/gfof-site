@@ -1,0 +1,23 @@
+name: Isolated recovery trial contracts
+on:
+  pull_request:
+    paths:
+      - 'recovery-trial.html'
+      - 'assets/federation/fed-recovery-trial*.mjs'
+      - 'netlify/functions/federation-recovery-trial-config.cjs'
+      - 'tests/federation-recovery-trial*.test.mjs'
+      - '.github/workflows/federation-recovery-trial.yml'
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.22.1'
+      - run: node --test tests/federation-recovery-trial*.test.mjs
