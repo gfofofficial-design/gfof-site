@@ -9,13 +9,16 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const output = join(root, "assets", "social");
 const chrome = process.env.CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const profile = join(root, ".social-card-render-profile");
-if (!existsSync(chrome)) throw new Error("Set CHROME_PATH to a local Chrome binary.");
+const svgOnly = process.argv.includes("--svg-only");
+const only = process.argv.find(value => value.startsWith("--only="))?.slice(7);
+if (!svgOnly && !existsSync(chrome)) throw new Error("Set CHROME_PATH to a local Chrome binary.");
 if (!resolve(profile).startsWith(root + sep)) throw new Error("Render profile escaped the workspace.");
 mkdirSync(output, { recursive: true });
 
 const logo = `data:image/png;base64,${readFileSync(join(root, "logo-circle.png")).toString("base64")}`;
 const journeyPhoto = `data:image/webp;base64,${readFileSync(join(root, "journey", "assets", "federation-crew-pier-wide.webp")).toString("base64")}`;
 const cards = [
+  { key: "alliance", label: "FEDERATION ALLIANCE  /  COMMUNITY PILOT", lines: ["A galaxy of memes.", "One Federation."], titleSize: 61, copy: ["Public tools. Independent communities.", "Useful work, together."], status: "PILOT  ·  COMPETITIONS NOT OPEN", accent: "#40c0ff", art: "orbital", brandTag: "COMMUNITIES  /  ALLIANCE", urlLabel: "galacticfederation.co/alliance" },
   { key: "command", label: "FEDERATION OS  /  COMMAND", lines: ["THE FEDERATION", "IS BUILDING."], copy: ["On-chain finance, with the work", "and the record in public."], status: "BUILDING ON SOLANA", accent: "#eec77d", art: "orbital" },
   { key: "staking", label: "GFOF  /  HOLDER PROGRAM", lines: ["STAKING", "IN DESIGN."], copy: ["Three proposed term lengths.", "No pool is open."], status: "PREPARATION  ·  NO DEPOSITS", accent: "#f5cb80", art: "staking" },
   { key: "journey", label: "FIRST CONTACT  /  THE JOURNEY", lines: ["ENTER THE", "FEDERATION."], copy: ["Meet the crew. Play the story", "behind the build."], status: "FREE TO PLAY  ·  NO WALLET", accent: "#f5d293", art: "journey" },
@@ -94,12 +97,14 @@ function art(card) {
 }
 
 function cardSvg(card) {
-  const titleSize = card.key === "roadmap" || card.key === "command" ? 66 : 73;
+  const titleSize = card.titleSize ?? (card.key === "roadmap" || card.key === "command" ? 66 : 73);
   const journey = card.art === "journey";
   const title = card.lines.map((line, i) => `<text x="74" y="${266 + i * 78}" class="title" font-size="${titleSize}">${xml(line)}</text>`).join("");
   const copy = card.copy.map((line, i) => `<text x="78" y="${421 + i * 35}" class="copy">${xml(line)}</text>`).join("");
   return `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630">
+<title>${xml(card.lines.join(" "))}</title>
+<desc>${xml(card.label + ". " + card.copy.join(" ") + " " + card.status)}</desc>
 <defs>
   <radialGradient id="background" cx="78%" cy="47%" r="78%"><stop offset="0" stop-color="#143947"/><stop offset=".48" stop-color="#091b2c"/><stop offset="1" stop-color="#030916"/></radialGradient>
   <radialGradient id="halo"><stop offset="0" stop-color="${card.accent}" stop-opacity=".20"/><stop offset=".55" stop-color="#367f88" stop-opacity=".13"/><stop offset="1" stop-color="#367f88" stop-opacity="0"/></radialGradient>
@@ -121,20 +126,26 @@ ${journey ? '<rect x="30" y="558" width="1140" height="42" fill="#061322" opacit
 <path d="M56 125H1144" stroke="${card.accent}" stroke-opacity=".23"/>
 <image href="${logo}" x="72" y="55" width="48" height="48"/>
 <text x="137" y="83" class="brand">GALACTIC FEDERATION</text>
-<text x="1134" y="83" text-anchor="end" class="label" style="font-size:13px">SOLANA  /  GFOF</text>
+<text x="1134" y="83" text-anchor="end" class="label" style="font-size:13px">${xml(card.brandTag ?? "SOLANA  /  GFOF")}</text>
 <text x="77" y="182" class="label">${xml(card.label)}</text>
 ${title}
 ${copy}
 <rect x="76" y="507" width="${Math.min(545, 34 + card.status.length * 11.5)}" height="37" rx="5" fill="#0c2430" stroke="${card.accent}" stroke-opacity=".62"/>
 <text x="94" y="532" class="status" style="font-size:14px;letter-spacing:1.5px">${xml(card.status)}</text>
 <path d="M56 560H1144" stroke="${card.accent}" stroke-opacity=".22"/>
-<text x="77" y="585" class="footer">galacticfederation.co</text>
+<text x="77" y="585" class="footer">${xml(card.urlLabel ?? "galacticfederation.co")}</text>
 <text x="1133" y="585" text-anchor="end" class="footer">FOLLOW THE EVIDENCE  /  GF-00</text>
 </svg>`;
 }
 
 try {
-  for (const card of cards) {
+  if (only && !cards.some(card => card.key === only)) throw new Error("Unknown social card key.");
+  for (const card of cards.filter(card => !only || card.key === only)) {
+    if (svgOnly) {
+      writeFileSync(join(output, `social-${card.key}-v1.svg`), cardSvg(card), "utf8");
+      console.log(`${card.key}: self-contained SVG prepared; no browser launched.`);
+      continue;
+    }
     const svgPath = join(output, `.render-${card.key}.svg`);
     const pngPath = join(output, `social-${card.key}-v1.png`);
     writeFileSync(svgPath, cardSvg(card), "utf8");
@@ -156,7 +167,7 @@ try {
     console.log(`${card.key}: ${Math.round(png.length / 1024)} KiB`);
   }
 } finally {
-  if (resolve(profile).startsWith(root + sep) && existsSync(profile)) {
+  if (!svgOnly && resolve(profile).startsWith(root + sep) && existsSync(profile)) {
     rmSync(profile, { recursive: true, force: true });
   }
 }

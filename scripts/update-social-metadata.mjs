@@ -7,7 +7,9 @@ import { dirname, join, resolve } from "node:path";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const origin = "https://galacticfederation.co";
 const write = process.argv.includes("--write");
+const only = process.argv.find(value => value.startsWith("--only="))?.slice(7);
 const fixed = new Map([
+  ["alliance.html", "alliance"],
   ["command-preview.html", "command"], ["index.html", "command"],
   ["staking.html", "staking"], ["roadmap.html", "roadmap"],
   ["building.html", "building"], ["corrections.html", "record"],
@@ -28,6 +30,7 @@ for (const page of journeyPages) fixed.set(`journey/${page}.html`,
   page === "lending-lab" ? "lending-lab" : page === "holder-passport" ? "passport" : "journey");
 
 const alt = {
+  alliance: "A galaxy of memes. One Federation. Federation Alliance pilot: public tools and independent communities; competitions are not open.",
   command: "Galactic Federation: on-chain finance with the work and record in public.",
   staking: "GFOF staking in design: three proposed terms; no pool open or deposits available.",
   journey: "First Contact Journey: five Federation guides approach a lantern-lit harbor.",
@@ -57,11 +60,14 @@ const readTag = (html, name) => {
 };
 const line = (kind, name, value) => `<meta ${kind}="${name}" content="${escapeAttr(value)}">`;
 let problems = 0;
-for (const [relative, key] of fixed) {
+if (only && !fixed.has(only)) throw new Error("Unknown social-metadata page.");
+const selected = [...fixed].filter(([relative]) => !only || relative === only);
+for (const [relative, key] of selected) {
   const path = join(root, ...relative.split("/"));
   const imagePath = join(root, "assets", "social", `social-${key}-v1.png`);
   if (!existsSync(path) || !existsSync(imagePath)) throw new Error(`Missing page/card for ${relative}`);
-  const old = readFileSync(path, "utf8");
+  // Normalize Windows checkouts before composing/checking a deterministic block.
+  const old = readFileSync(path, "utf8").replace(/\r\n/g, "\n");
   const title = readTag(old, "og:title") ?? old.match(/<title>([^<]+)<\/title>/i)?.[1];
   const description = readTag(old, "og:description") ?? readTag(old, "description") ??
     fallbackDescription[key] ?? "Explore the Galactic Federation's public work on Solana.";
@@ -100,4 +106,4 @@ for (const [relative, key] of fixed) {
   else if (updated !== old) { console.error(`Social metadata differs: ${relative}`); problems++; }
 }
 if (problems) process.exit(1);
-console.log(`${fixed.size} public pages ${write ? "updated" : "verified"} with page-relevant social images.`);
+console.log(`${selected.length} public pages ${write ? "updated" : "verified"} with page-relevant social images.`);
