@@ -66,3 +66,22 @@ gesture, countdown or secret transcription task is introduced. This server work
 does not establish screen-reader/device acceptance or WCAG conformance. Real
 runtime custody/connections, journal extensions, authority/recovery/privacy,
 durable community features, mail/Google and publication remain release work.
+
+## Unapplied rollback-only diagnostic
+
+`managedMemberDiagnosticSql()` is an offline proposal for isolating a managed
+compatibility refusal. It reuses the exact installation prefix with every login
+and mode closed. The final block reports fifteen fixed boundary predicates, four
+cleanup/count booleans and the proposed roles' creator edges. It never reports
+account rows, tokens, passwords or credential hashes. An unconditional exception
+aborts the entire transaction even when every predicate passes; there is no success
+or COMMIT path. It is not an alternate installer or authority to retry a failed
+hosted installation.
+
+Native fixtures now model the provider's observed public table/function default
+grants. They verify that the diagnostic always removes its new objects, that an
+injected API grant isolates the corresponding false predicate, and that normal
+installation/session/visibility checks still pass. This does not identify a real
+provider refusal's cause or authorize changing its grants. Hosted use requires a
+separate bounded decision and independent absent-object readback after the expected
+diagnostic refusal; missing details or rollback uncertainty stop the attempt.
