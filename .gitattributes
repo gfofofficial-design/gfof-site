@@ -1,0 +1,6 @@
+# Reviewed SQL bodies and packaged modules must have identical checkout bytes.
+lib/alliance-avatar-server/*.mjs text eol=lf
+lib/alliance-avatar-server/*.json text eol=lf
+lib/alliance-member-application.mjs text eol=lf
+sql/alliance-*.sql text eol=lf
+assets/federation/fed-alliance-*.mjs text eol=lf
