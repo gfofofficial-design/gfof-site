@@ -1,6 +1,10 @@
 # Galactic Federation of Finance — Netlify configuration
 # Security headers, API redirects, clean-URL rewrites.
 
+[build.environment]
+  # Exact security-patched build runtime. Managed Functions patching is separate.
+  NODE_VERSION = "24.22.1"
+
 # Review the restricted static output on previews before adopting it for production.
 [context.deploy-preview]
   command = "node scripts/build-static-publish.mjs"

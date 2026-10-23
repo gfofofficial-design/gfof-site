@@ -1,0 +1,42 @@
+name: Alliance image ownership and quota candidate
+on:
+  pull_request:
+    paths:
+      - 'sql/alliance-avatar-ledger-candidate.sql'
+      - 'sql/alliance-profile-candidate.sql'
+      - 'lib/alliance-avatar-storage.mjs'
+      - 'lib/alliance-avatar-runtime/limits.mjs'
+      - 'tests/alliance-avatar-ledger*'
+      - 'tests/alliance-avatar-receipts-native.sql'
+      - 'tests/alliance-profile-native*'
+      - '.github/workflows/alliance-avatar-ledger.yml'
+permissions:
+  contents: read
+jobs:
+  ledger-native:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:17.11-bookworm
+        env:
+          POSTGRES_DB: federation_alliance_avatar_test
+          POSTGRES_PASSWORD: alliance_disposable_fixture_only
+        options: >-
+          --health-cmd "pg_isready -U postgres -d federation_alliance_avatar_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.22.1'
+      - name: Test ownership, durable limits, stale uploads and concurrent reservations
+        run: node tests/alliance-avatar-ledger-native.mjs
+        env:
+          ALLIANCE_AVATAR_TEST_CONFIRM: disposable_avatar_fixture
+          ALLIANCE_AVATAR_TEST_CONTAINER: ${{ job.services.postgres.id }}
