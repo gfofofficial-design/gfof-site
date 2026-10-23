@@ -4,6 +4,8 @@ on:
     paths:
       - 'alliance*.html'
       - 'assets/federation/fed-alliance*'
+      - 'lib/alliance-constellation-projection.mjs'
+      - 'tests/alliance-constellation-projection.test.mjs'
       - 'assets/federation/fed-community-league*'
       - 'netlify/lib/community-league.cjs'
       - 'command-deck-privacy.html'
@@ -22,6 +24,8 @@ on:
     paths:
       - 'alliance*.html'
       - 'assets/federation/fed-alliance*'
+      - 'lib/alliance-constellation-projection.mjs'
+      - 'tests/alliance-constellation-projection.test.mjs'
       - 'assets/federation/fed-community-league*'
       - 'netlify/lib/community-league.cjs'
       - 'command-deck-privacy.html'
@@ -48,10 +52,11 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '24.22.1'
+      - run: node --check lib/alliance-constellation-projection.mjs
       - run: node --check assets/federation/fed-alliance-registry.mjs
       - run: node --check assets/federation/fed-alliance.mjs
       - run: node --check assets/federation/fed-alliance-launchpad-core.mjs
       - run: node --check assets/federation/fed-alliance-launchpad.mjs
       - run: node --check assets/federation/fed-community-league.mjs
       - run: node --check netlify/lib/community-league.cjs
-      - run: node --test tests/federation-alliance-member-form.test.mjs tests/federation-alliance-community.test.mjs tests/federation-alliance-challenges.test.mjs tests/federation-alliance.test.mjs tests/federation-community-league.test.mjs tests/federation-alliance-launchpad.test.mjs
+      - run: node --test tests/alliance-constellation-projection.test.mjs tests/federation-alliance-member-form.test.mjs tests/federation-alliance-community.test.mjs tests/federation-alliance-challenges.test.mjs tests/federation-alliance.test.mjs tests/federation-community-league.test.mjs tests/federation-alliance-launchpad.test.mjs
