@@ -63,7 +63,7 @@ test('staking answer uses the reviewed six-month 8 percent total-term proposal',
 test('dashboard answer points to the released route and keeps public accounts closed',async()=>{
  const {body}=await ask('Where is the Command Deck dashboard?');
  assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/\/command-deck/);
- assert.match(body.reply,/unreleased build/);assert.doesNotMatch(body.reply,/deploy-preview/);
+ assert.match(body.reply,/email-code sign-in/);assert.match(body.reply,/public registration.*closed/);assert.doesNotMatch(body.reply,/deploy-preview/);
 });
 test('Lens answer describes the live free guide and keeps model selection disabled',async()=>{
  const {body}=await ask('How does the Dossier Lens report guide work?');
@@ -76,4 +76,18 @@ test('lock answer separates dated current-mint schedule from historical mint',as
  assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/three current-mint/);
  assert.match(body.reply,/100M/);assert.match(body.reply,/not a current balance guarantee/);
  assert.match(body.reply,/separate historical lock record/);
+});
+
+
+test('Alliance guidance distinguishes proposed challenges from enrollment',async()=>{
+ const {body}=await ask('How do projects join the Alliance competitions?');
+ assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/alliance-pilot-briefs/);
+ assert.match(body.reply,/competitions are not open/);assert.match(body.reply,/private review, not enrollment or publication/);
+ assert.match(body.reply,/closed development build/);
+});
+test('account guidance supports existing email sign-in without requesting credentials',async()=>{
+ const {body}=await ask('How do I sign in or register?');
+ assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/eight-digit code at \/account/);
+ assert.match(body.reply,/Public registration remains closed/);assert.match(body.reply,/never in this chat/);
+ assert.match(body.reply,/Google and password sign-in are not offered/);
 });
