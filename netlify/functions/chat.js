@@ -9,7 +9,7 @@
 // in a `code` field the widget does not display. The visitor still sees one clean
 // message. No secret, key fragment, or upstream body is ever returned to the client.
 
-const SYSTEM_PROMPT = `You are the Federation AI for $GFOF — the Galactic Federation of Finance, a research-first DeFi project on Solana. You speak in the voice of the Federation: measured, analytical, warm but not hype. This is a reviewed briefing as of 13 October 2026, not a live retrieval of site pages or blockchain state. Do not claim you just checked a page, transaction, balance, or current status. For changing facts, direct visitors to the linked public page.
+const SYSTEM_PROMPT = `You are the Federation AI for $GFOF — the Galactic Federation of Finance, a research-first DeFi project on Solana. You speak in the voice of the Federation: measured, analytical, warm but not hype. This is a reviewed briefing as of 23 October 2026, not a live retrieval of site pages or blockchain state. Do not claim you just checked a page, transaction, balance, or current status. For changing facts, direct visitors to the linked public page.
 
 PROJECT FACTS (the only facts you may state as fact):
 - Token: $GFOF on Solana (SPL). Total supply 1,000,000,000, fixed.
@@ -17,7 +17,8 @@ PROJECT FACTS (the only facts you may state as fact):
 - Former GFOF mint: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon. Its on-chain name has the "Galatic" typo, its Meteora DBC pair was 3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE, and correction #018's old-mint-only verification rule is superseded by #041. Never use the former mint as the current buy address.
 - Holder migration: /migration documents a planned 1:1-by-token-count old-to-new exchange with separate old-token deposit wallet and deadlines. The new mint trading does not mean accepted old deposits have been reconciled or replacement tokens distributed. Never instruct anyone to transfer without reading /migration and independently verifying both addresses.
 - Current-mint locks: the October 8 dated verification records three Streamflow contracts scheduling 100,000,000 current-mint GFOF, 10% of minted supply. /treasury provides contract addresses, cliff dates and live read controls. This dated schedule is not a current escrow-balance guarantee or funding for staking. Do not add it to former-mint units.
-- Command Deck: /command-deck is publicly released with read-only Solana public-address balances, supported reference prices, current-mint lock views and device-local missions. It does not sign transactions, prove wallet ownership or provide live staking or lending. Google account entry remains a separate unreleased build; do not send visitors to an account preview or claim public registration is open.
+- Command Deck: /command-deck is publicly released with read-only Solana public-address balances, supported reference prices, current-mint lock views and device-local missions. It does not sign transactions, prove wallet ownership or provide live staking or lending. Existing-account email-code sign-in is verified at /account. Public registration remains closed; Google and password sign-in are not offered on the production site. Sign-in does not sync Journey progress, establish wallet ownership or activate Alliance membership.
+- Federation Alliance: /alliance offers public tools, a local community preview and project-introduction preparation. /alliance-pilot-briefs explains proposed Creative Clash, Research Showdown and Builder Battle formats. Entries, partner enrollment, live scores and prizes are not open or confirmed. A project request starts a private review; only mutually agreed briefs and reviewed results can be published. Real member profiles and collaborations remain a closed development build. Do not infer a partnership from a project mention or illustrative banner.
 - Historical locks: 130,000,000 units of the FORMER mint are held across four Streamflow contracts. The original 40M Lock 3 matured 2026-08-18 and the scheduled allocation was re-locked through 2028-08-18. These contracts do not prove any new-mint lock. See /treasury and correction #041.
 - Designated-wallet disclosure: /treasury lists seven public addresses with owner-supplied purposes and historical old-mint holdings. Do not present those balances or purposes as verified new-mint allocations. W-002, W-003 and W-007 are retired and must not be attributed to the Federation. Unlocked-wallet balances are dated snapshots, not live guarantees. Never infer wallet ownership, custody, purpose, contents or control beyond the exact public record.
 - Tokenomics: the previously published 77% community/liquidity, 10% rewards/reserve, 13% dev locked breakdown describes the former mint. It is not verified distribution of the new mint. Apart from the dated three-contract current-mint lock record, do not infer a complete new-token allocation from this briefing.
@@ -36,7 +37,10 @@ PROJECT FACTS (the only facts you may state as fact):
 
 PAGES YOU SHOULD REDIRECT PEOPLE TO:
 - /treasury — dated three-contract current-mint schedule, live lock reads, separate former-mint archive and wallet disclosures
-- /command-deck — released read-only public wallet and lock dashboard; no financial execution or public accounts
+- /command-deck — released read-only public wallet and lock dashboard; no financial execution
+- /account — email-code sign-in for existing accounts; public registration closed
+- /alliance — public Alliance tools, local previews and project introductions
+- /alliance-pilot-briefs — proposed challenge briefs and founder checklist; competitions not open
 - /migration — current and former mint addresses, old-holder exchange and deadlines
 - /corrections — public commitments log, never deleted, with RSS feed
 - /liquidation-spec — lending protocol design spec
@@ -120,8 +124,14 @@ const reviewedBrief = (question) => {
   if (/\b(staking|stake|reward targets?|six.month|6.month)\b/.test(q)) {
     return 'No GFOF staking pool is open. /staking lists proposed total-term targets of 1% for one month, 3% for three months, 8% for six months and 12% for twelve months. These are provisional token-reward designs, not APY or funded offers; current-mint funding, provider and legal review remain required.';
   }
+  if (/\b(alliance|creative clash|research showdown|builder battle|project competitions?|project challenges?)\b/.test(q)) {
+    return 'Explore the Federation Alliance at /alliance and proposed challenge formats at /alliance-pilot-briefs. Creative Clash, Research Showdown and Builder Battle have discussion briefs, but competitions are not open: no teams, dates, judges or prizes are confirmed. The project worksheet prepares a local draft; sending a request starts private review, not enrollment or publication. Member profiles and private collaboration remain a closed development build.';
+  }
+  if (/\b(sign[ -]?in|log[ -]?in|register|registration|create an account|email code)\b/.test(q)) {
+    return 'Existing Federation accounts can sign in with an emailed eight-digit code at /account. Public registration remains closed, and Google and password sign-in are not offered on the production site. Enter the code only on the Federation account page, never in this chat. Signing in does not connect a wallet, grant token permissions, sync Journey progress or enroll you in the Alliance. Public tools remain available without an account.';
+  }
   if (/\b(dashboard|command deck)\b/.test(q)) {
-    return 'The public read-only dashboard is at /command-deck. It reads public Solana wallet balances, supported reference prices and current-mint locks, alongside device-local missions. It does not sign transactions, prove wallet ownership or open staking or lending. Google account entry is still a separate unreleased build.';
+    return 'The public read-only dashboard is at /command-deck. It reads public Solana wallet balances, supported reference prices and current-mint locks, alongside device-local missions. It does not sign transactions, prove wallet ownership or open staking or lending. Existing accounts can use email-code sign-in at /account; public registration and account-backed Alliance membership remain closed.';
   }
   if (/\b(lens|dossier|report guide|explain (this|the|a) report)\b/.test(q)) {
     return 'Dossier’s read-only Lens beta is at https://dossiertrack.co/token-structure-preview.html. Its free plain-language guide now highlights missing evidence and partial coverage, with source fields and slots beside the explanations. It uses reviewed wording without an AI model, account, upload or additional chain read. A capture is not proof of token safety, sales, bundles or independent holders. Optional AI selection is prepared but disabled; Program 01 alerts and paid tiers remain closed.';

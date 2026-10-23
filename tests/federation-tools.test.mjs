@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import {setImmediate} from 'node:timers/promises';
 import {checkFederationTools} from '../scripts/check-federation-tools.mjs';
@@ -6,7 +7,7 @@ import {buildToolPageBrief} from '../lib/tool-page-brief-core.mjs';
 const at=Date.parse('2026-10-16T18:00:00.000Z');
 const titles=new Map([
  ['https://galacticfederation.co/command-deck','Command Deck · Galactic Federation'],
- ['https://galacticfederation.co/alliance','Federation Alliance · Communities, Connected'],
+ ['https://galacticfederation.co/alliance','Federation Alliance · A galaxy of memes. One Federation.'],
  ['https://galacticfederation.co/journey/','First Contact · Galactic Federation'],
  ['https://galacticfederation.co/staking','GFOF Staking Preparation · Galactic Federation of Finance'],
  ['https://galacticfederation.co/building',"What We're Building — Galactic Federation"],
@@ -101,4 +102,13 @@ test('availability precedes size review, and raw supplied fields never enter the
  check.results[1]={...check.results[1],titleMatches:false,healthy:false,status:503,reason:'unexpected_status',diagnostic:'private fixture'};
  const brief=buildToolPageBrief(check,{now:at});assert.deepEqual(brief.repairs.map(r=>r.priority),['P1','P2']);assert.ok(!JSON.stringify(brief).includes('private fixture'));
  assert.ok(brief.limitations.some(x=>x.includes('not full-file integrity')));
+});
+
+test('published Alliance source is recognized and its superseded title is rejected',async()=>{
+ const alliance='https://galacticfederation.co/alliance';
+ const html=readFileSync(new URL('../alliance.html',import.meta.url),'utf8');
+ const current=await checkFederationTools({now:()=>at,fetcher:async url=>url===alliance?new Response(html,{headers:{'content-type':'text/html'}}):good(url)});
+ assert.equal(current.healthy,true);
+ const old=await checkFederationTools({now:()=>at,fetcher:async url=>url===alliance?new Response('<title>Federation Alliance · Communities, Connected</title>',{headers:{'content-type':'text/html'}}):good(url)});
+ assert.equal(old.results.find(r=>r.id==='alliance').reason,'page_identity_missing');
 });
