@@ -37,3 +37,18 @@ Member images require authenticated ownership, bounded formats and sizes, server
 ## Release boundary
 
 Keep real membership, wallet verification and hosted image operations disconnected until their service contracts, access controls and recovery behavior have been implemented and accepted. Test consent withdrawal, cross-team access, unlisting, image replacement/removal, stale balances, logout and recovery suppression before opening a real member map. This preview is not evidence of those capabilities.
+
+## Proposed server projection
+
+`lib/alliance-constellation-projection.mjs` is an unmounted, default-closed data minimizer with no network, wallet, database, browser or storage operations. It is not called by the sample preview, a deployed route or the member service. It does not authorize an audience, verify a wallet, create a membership or record consent. A future server caller must obtain current, authorized decisions from trusted stores, bind image ownership to the project/member, and provide a trusted clock before using it. Never pass request-body flags into its trusted snapshot or activation option.
+
+When enabled in isolated tests, the proposed projection:
+
+- Requires a listed profile, separate map consent and at least one confirmed affiliation with an approved project. One person retains one display identity across multiple approved teams.
+- Emits approved, consented image IDs only, with no URLs or storage credentials. A future image service must still authorize every delivery and process removals.
+- Omits all holdings fields in the community view. The holdings view selects one token by its token identity, never ticker alone, and withholds undisclosed, unavailable, future-dated, stale or expired wallet-control observations.
+- Preserves exact atomic units as strings only for explicit exact sharing. Range sharing returns public lower/upper bounds and no exact quantity or hidden sizing weight. Small amounts, including zero, share the same coarse band. Token decimals are limited to 0–18 in this proposed display contract; unsupported values are refused.
+- Uses a proposed configurable freshness limit of five minutes by default, bounded to one second–one hour. Provider constraints and the actual refresh policy still require review; the module performs no refresh itself.
+- Refuses duplicate identities, affiliations or token rows, unexpected sensitive fields and malformed snapshots without returning their contents. Output order does not depend on hidden amounts.
+
+This is a bounded snapshot contract (up to 50 projects, 200 members, eight affiliations per member and 20 token choices per member), not a claim of complete Alliance counts or a pagination implementation. Server authorization, revocation, source reads, wallet verification, audit/recovery coverage and client cache clearing remain separate work. The synthetic projection tests do not establish hosted acceptance.
