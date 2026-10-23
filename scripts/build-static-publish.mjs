@@ -2,7 +2,7 @@ import {cp, lstat, mkdir, mkdtemp, readdir, rename, rm} from 'node:fs/promises';
 import {extname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
-const publicDirectories = new Set(['.well-known','adjudication','app','assets','config','docs','journey','lib','record']);
+const publicDirectories = new Set(['.well-known','adjudication','app','arena','assets','config','docs','journey','lib','record']);
 const publicExtensions = new Set(['.html','.css','.js','.mjs','.json','.png','.jpg','.jpeg','.svg','.webp','.gif','.ico','.pdf','.txt','.xml','.md','.webmanifest','.woff','.woff2','.mp4','.mp3','.webm','.ogg','.wav','.ots']);
 const rootExtensions = new Set(['.html','.png','.jpg','.jpeg','.svg','.webp','.ico','.pdf','.txt','.xml','.md','.webmanifest']);
 
@@ -18,6 +18,8 @@ export async function buildStaticPublish(root) {
   async function copyEntry(relative) {
     const source=join(root,relative),stat=await lstat(source);
     if(stat.isSymbolicLink())throw Error('Symbolic links are not allowed in static output: '+relative);
+    // Arena publishes only reviewed numbered rules/results HTML, never intake or drafts.
+    if(relative.startsWith('arena/')&&!/^arena\/arena-[0-9]{4}-(rules|results)\.html$/.test(relative))return;
     const name=relative.split('/').at(-1);
     if(name.startsWith('.')&&relative!=='.well-known')return;
     if(stat.isDirectory()) {

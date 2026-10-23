@@ -39,3 +39,10 @@ test('output symlink is never deleted or followed',async t=>{
   await assert.rejects(buildStaticPublish(root),/symbolic link/);
   assert.equal(await readFile(join(root,'outside/keep.txt'),'utf8'),'keep');
 });
+
+test('Arena publishes only numbered rules and results pages, excluding drafts and private records',async t=>{
+ const files={'arena/arena-0001-rules.html':'approved rules fixture','arena/arena-0001-results.html':'reviewed results fixture','arena/intake.json':'private intake fixture','arena/draft.html':'draft fixture','arena/arena-0001-rules.json':'private metadata fixture','arena/archive/arena-0002-rules.html':'nested draft fixture','arena/arena-001-rules.html':'wrong identity fixture'};
+ const root=await fixture(t,files),copied=await buildStaticPublish(root);
+ assert.deepEqual(copied,['arena/arena-0001-results.html','arena/arena-0001-rules.html']);
+ for(const path of copied)assert.equal(await readFile(join(root,'dist',path),'utf8'),files[path]);
+});
