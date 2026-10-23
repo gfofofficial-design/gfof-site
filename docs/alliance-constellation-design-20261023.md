@@ -4,13 +4,15 @@ Approved direction: a project-centered community map, with a project logo at eac
 
 ## Included preview
 
-`/alliance-constellation-preview.html` is a browser-only design demonstration. GFOF is the host concept; the other three crews, all people, contributions, token amounts and activity are fictional. The preview has no account integration, wallet connector, balance provider, membership writes or persistent storage. It is linked from the draft member page, not the production homepage or dashboard.
+`/alliance-constellation-preview.html` is a browser-only design demonstration. GFOF is the host concept; the other three crews, all people, contributions, token amounts and activity are fictional. The preview has no account integration, wallet connector, balance provider, membership writes or persistent storage. Map preview links are included in the member candidate's Alliance, Command Deck and profile pages. These candidate links have not been released to production.
 
 The original owner-private design is available separately. This source copy prepares integration into the existing Alliance experience; merging it into the member candidate does not open the member service.
 
 Supported interactions:
 
 - Filter by team, search members, select a profile, zoom and browse a keyboard-accessible member list.
+- An empty search clears the selected profile and map instead of retaining an unrelated person. A clear-filters action restores the crews and returns focus to search.
+- On initial loads at 600px or narrower, the member list opens before the profile with one column of larger controls and a bounded scroll area. Selecting a list entry focuses its profile. The list can still be hidden or opened explicitly, and reduced-motion preferences are respected.
 - Compare equal-sized community bubbles with bounded sizes for one selected token's shared sample units. Different tokens are not compared as equivalent value. Range disclosures use a common band rather than encode a hidden exact amount through size.
 - Add, move or hide the sample “You” profile. Appearing on the map and sharing a token amount require separate choices, both initially off.
 - Choose a PNG, JPEG or WebP image up to 2 MB. The browser validates the file signature, decodes the image, makes a centered circular display from a normalized 256px square and uses a local blob URL. The image is not uploaded. Initials are the fallback. Reload clears the sample profile and chosen image.
