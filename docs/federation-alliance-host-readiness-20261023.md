@@ -31,6 +31,33 @@ Current source bounds are:
 | Restricted journal reader | Up to 1500 ms | Account for all sequential reads, not just one query. |
 | KMS signer | Up to 1200 ms | Includes public-key checking, signing and local verification. |
 
+The default-off `createMemberAuthorityService` in
+`lib/alliance-avatar-server/member-authority-service.mjs` now composes the real
+anchored control and journal issuers with the member handler. Its explicit
+server plan is 5500 ms for the handler, 1500 ms for nonce admission, 3000 ms for
+the selected issuer and 1000 ms of handler reserve. A 1200 ms signer cap is nested
+inside the issuer budget. The factory refuses plans where nonce admission plus
+issuer work plus reserve exceeds the handler budget, or the signer cannot fit
+inside its issuer. Startup and witness operations select one issuer, not both.
+
+In this composition the anchored journal witness receives an explicit 3000 ms
+outer deadline instead of inheriting its generic eight-second default. The
+parent cancellation signal bounds the nested journal witness as well. The
+generic anchored witness default remains unchanged for its other callers.
+Nonce and signer callbacks receive their own cancellation signals and bounded
+waits. A timeout or uncertain nonce outcome cannot dispatch a late issuer or
+automatically retry through the same handler. Closing this composition closes
+its own handler/issuers; injected stores and signing capabilities remain owned
+by their caller.
+
+This is source composition, not measured hosted performance or a resource
+installation. It does not implement credential loading, nonce-store identity,
+database-reader setup, KMS ownership or effective IAM. The caller must still
+construct and bind those reviewed capabilities. The six-second transport budget
+also includes its caller-key read and network work: the server plan alone does
+not prove that the complete exchange fits. Measure that full path and choose
+shorter explicit budgets where needed before a closed hosted trial.
+
 These are ceilings, not measured latency or recommended production settings.
 Do not add a nested signer's deadline twice to an issuer deadline that already
 contains it. Conversely, sequential nonce admission and issuer work share the
