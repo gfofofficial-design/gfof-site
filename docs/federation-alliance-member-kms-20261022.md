@@ -72,7 +72,7 @@ The fixture preserves inner sanitized errors for assertions; production's outer
 invocation adapter still sanitizes rejected operations. No real private value,
 cloud KMS call, import or deployed signing acceptance is included.
 
-The complete host still needs durable nonce admission, actual narrow database
+The complete host still needs deployed durable nonce admission, actual narrow database
 secret loading, reviewed issuer budgets, current independently retained trust
 and first-checkpoint/recovery reconciliation, immutable version/IAM/ingress and
 fleet controls. KMS keeps private signing material out of that function's process
@@ -84,3 +84,33 @@ No member UI changes. Clear unavailable/help states outside sign-in remain.
 Operator approval names the cost/access/state in plain language; preparing empty
 containers needs no private-key copying or repeated key creation. Actual import
 and recovery must retain private entry and accessible, untimed instructions.
+
+## Separate member request admission
+
+`createDynamoMemberAuthorityNonceStore()` supplies a default-off capability for
+the member authority. Its table namespace is `alliance-member-nonce-*`, distinct
+from the existing `alliance-account-nonce-*` gateway. Only a provider branded for
+the exact numeric member-authority Lambda version can be wired to it; gateway
+providers, plain temporary credentials and foreign account/region bindings are
+refused before SDK work. The private shared algorithm keeps the existing account
+gateway interface and credential modes unchanged. These wiring checks are not
+independent AWS identity attestation or IAM enforcement.
+
+The reviewed manifest must pin the actual table UUID, account, region and caller
+key. Table checks require the exact active on-demand protected table, simple
+string primary key and enabled expiry cleanup. A conditional put consumes
+`callerKeyId#nonce`; changing the configured custody epoch never resets that
+namespace. A strongly consistent exact read and a second identity check are
+required before an issuer can proceed. Expired rows cannot be overwritten. An
+uncertain write closes that store without retry; a separate handler still refuses
+the retained request. TTL cleanup is asynchronous, not a request deadline.
+
+Tests join the real signed member transport and anchored issuers to this adapter
+with an injected in-memory Dynamo command backend. Separate handlers cannot
+reissue a consumed request, and a lost write response never reaches an issuer.
+These are local protocol checks, not actual Dynamo, IAM or deployed Lambda
+acceptance. No table, role, permission or runtime is created or enabled here.
+The complete host still needs reviewed resource provisioning, bounded retention,
+credential loading, latency acceptance, current checkpoint/recovery continuity
+and protected member journey acceptance. No member UI changes or new timed input
+steps are introduced; existing unavailable/help paths remain required.
