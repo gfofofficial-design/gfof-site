@@ -1,0 +1,1078 @@
+{
+  "format": 1,
+  "purpose": "finite-member-policy-review-only",
+  "window": {
+    "notBeforeUtc": "2026-10-24T12:00:00.000Z",
+    "notAfterUtc": "2026-10-24T12:10:00.000Z"
+  },
+  "installationSha256": "ccc16b635a3fd14c119b39f83335b793d81a760c63324e5349e066761a574bfa",
+  "trust": {
+    "sha256": "c2ea73102731d24f9f8b5b0553529d0f85db813201238eeed3aedd412dc64d00",
+    "minimumGeneration": 1
+  },
+  "binding": {
+    "gateway": {
+      "apiId": "abcdefghij",
+      "region": "us-east-2",
+      "stage": "preview"
+    },
+    "resource": {
+      "accountId": "123456789012",
+      "region": "us-east-2",
+      "functionName": "alliance-member-authority-synthetic",
+      "version": "2"
+    },
+    "scope": {
+      "memberProjectRef": "abcdefghijklmnopqrst",
+      "journalProjectRef": "uvwxyzabcdefghijklmn",
+      "controlProjectRef": "opqrstuvwxyzabcdefgh",
+      "epoch": "11111111-1111-4111-8111-111111111111"
+    },
+    "callerKey": {
+      "keyId": "251bf7c437375e21f34560cd7d2a1115f1ca5e3c023c495b1e91d0d12157ae7e",
+      "spki": "MCowBQYDK2VwAyEAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM=",
+      "notBeforeUtc": "2026-10-24T00:00:00.000Z",
+      "notAfterUtc": "2026-10-25T00:00:00.000Z"
+    },
+    "controlVerificationKey": "1111111111111111111111111111111111111111111111111111111111111111",
+    "journalVerificationKey": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "nonce": {
+    "accountId": "123456789012",
+    "region": "us-east-2",
+    "tableName": "alliance-member-nonce-synthetic",
+    "tableId": "44444444-4444-4444-8444-444444444444",
+    "epoch": "11111111-1111-4111-8111-111111111111"
+  },
+  "signing": {
+    "control": {
+      "accountId": "123456789012",
+      "region": "us-east-2",
+      "keyArn": "arn:aws:kms:us-east-2:123456789012:key/11111111-1111-4111-8111-111111111111"
+    },
+    "journal": {
+      "accountId": "123456789012",
+      "region": "us-east-2",
+      "keyArn": "arn:aws:kms:us-east-2:123456789012:key/22222222-1111-4111-8111-111111111111"
+    }
+  },
+  "secrets": {
+    "control": {
+      "secretArn": "arn:aws:secretsmanager:us-east-2:123456789012:secret:alliance-member-control-reader-synthetic-Ab12Cd",
+      "versionId": "11111111111111111111111111111111"
+    },
+    "journal": {
+      "secretArn": "arn:aws:secretsmanager:us-east-2:123456789012:secret:alliance-member-journal-reader-synthetic-Ab12Cd",
+      "versionId": "22222222222222222222222222222222"
+    }
+  },
+  "roleArn": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic",
+  "boundaryArn": "arn:aws:iam::123456789012:policy/federation-alliance-member-closed-synthetic-trial-boundary",
+  "executionTrust": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "LambdaServiceOnly",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "lambda.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "identity": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "InspectOnlyMemberNonce",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-member-nonce-synthetic",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "ClaimOnlyBoundCallerNonces",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-member-nonce-synthetic",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          },
+          "ForAllValues:StringLike": {
+            "dynamodb:LeadingKeys": [
+              "251bf7c437375e21f34560cd7d2a1115f1ca5e3c023c495b1e91d0d12157ae7e#*"
+            ]
+          },
+          "Null": {
+            "dynamodb:LeadingKeys": "false"
+          }
+        }
+      },
+      {
+        "Sid": "ReadControlPinnedVersion",
+        "Effect": "Allow",
+        "Action": [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "arn:aws:secretsmanager:us-east-2:123456789012:secret:alliance-member-control-reader-synthetic-Ab12Cd",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2",
+            "secretsmanager:VersionId": "11111111111111111111111111111111",
+            "secretsmanager:VersionStage": "AWSCURRENT"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "ReadJournalPinnedVersion",
+        "Effect": "Allow",
+        "Action": [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "arn:aws:secretsmanager:us-east-2:123456789012:secret:alliance-member-journal-reader-synthetic-Ab12Cd",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2",
+            "secretsmanager:VersionId": "22222222222222222222222222222222",
+            "secretsmanager:VersionStage": "AWSCURRENT"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "InspectOnlyPurposePublicKeys",
+        "Effect": "Allow",
+        "Action": [
+          "kms:GetPublicKey"
+        ],
+        "Resource": [
+          "arn:aws:kms:us-east-2:123456789012:key/11111111-1111-4111-8111-111111111111",
+          "arn:aws:kms:us-east-2:123456789012:key/22222222-1111-4111-8111-111111111111"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "SignOnlyRawEd25519",
+        "Effect": "Allow",
+        "Action": [
+          "kms:Sign"
+        ],
+        "Resource": [
+          "arn:aws:kms:us-east-2:123456789012:key/11111111-1111-4111-8111-111111111111",
+          "arn:aws:kms:us-east-2:123456789012:key/22222222-1111-4111-8111-111111111111"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2",
+            "kms:SigningAlgorithm": "ED25519_SHA_512",
+            "kms:MessageType": "RAW"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "TrialNotStarted",
+        "Effect": "Deny",
+        "Action": "*",
+        "Resource": "*",
+        "Condition": {
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          }
+        }
+      },
+      {
+        "Sid": "TrialExpired",
+        "Effect": "Deny",
+        "Action": "*",
+        "Resource": "*",
+        "Condition": {
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          }
+        }
+      },
+      {
+        "Sid": "TrialTimeRequired",
+        "Effect": "Deny",
+        "Action": "*",
+        "Resource": "*",
+        "Condition": {
+          "Null": {
+            "aws:CurrentTime": "true"
+          }
+        }
+      },
+      {
+        "Sid": "OnlyReviewedSourceFunction",
+        "Effect": "Deny",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "kms:GetPublicKey",
+          "kms:Sign",
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "*",
+        "Condition": {
+          "ArnNotEqualsIfExists": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "OnlyReviewedRegion",
+        "Effect": "Deny",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "kms:GetPublicKey",
+          "kms:Sign",
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "*",
+        "Condition": {
+          "StringNotEqualsIfExists": {
+            "aws:RequestedRegion": "us-east-2"
+          }
+        }
+      },
+      {
+        "Sid": "OnlySecureTransport",
+        "Effect": "Deny",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "kms:GetPublicKey",
+          "kms:Sign",
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "*",
+        "Condition": {
+          "BoolIfExists": {
+            "aws:SecureTransport": "false"
+          }
+        }
+      }
+    ]
+  },
+  "permissionsBoundary": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "InspectOnlyMemberNonce",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-member-nonce-synthetic",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "ClaimOnlyBoundCallerNonces",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:us-east-2:123456789012:table/alliance-member-nonce-synthetic",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          },
+          "ForAllValues:StringLike": {
+            "dynamodb:LeadingKeys": [
+              "251bf7c437375e21f34560cd7d2a1115f1ca5e3c023c495b1e91d0d12157ae7e#*"
+            ]
+          },
+          "Null": {
+            "dynamodb:LeadingKeys": "false"
+          }
+        }
+      },
+      {
+        "Sid": "ReadControlPinnedVersion",
+        "Effect": "Allow",
+        "Action": [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "arn:aws:secretsmanager:us-east-2:123456789012:secret:alliance-member-control-reader-synthetic-Ab12Cd",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2",
+            "secretsmanager:VersionId": "11111111111111111111111111111111",
+            "secretsmanager:VersionStage": "AWSCURRENT"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "ReadJournalPinnedVersion",
+        "Effect": "Allow",
+        "Action": [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "arn:aws:secretsmanager:us-east-2:123456789012:secret:alliance-member-journal-reader-synthetic-Ab12Cd",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2",
+            "secretsmanager:VersionId": "22222222222222222222222222222222",
+            "secretsmanager:VersionStage": "AWSCURRENT"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "InspectOnlyPurposePublicKeys",
+        "Effect": "Allow",
+        "Action": [
+          "kms:GetPublicKey"
+        ],
+        "Resource": [
+          "arn:aws:kms:us-east-2:123456789012:key/11111111-1111-4111-8111-111111111111",
+          "arn:aws:kms:us-east-2:123456789012:key/22222222-1111-4111-8111-111111111111"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "SignOnlyRawEd25519",
+        "Effect": "Allow",
+        "Action": [
+          "kms:Sign"
+        ],
+        "Resource": [
+          "arn:aws:kms:us-east-2:123456789012:key/11111111-1111-4111-8111-111111111111",
+          "arn:aws:kms:us-east-2:123456789012:key/22222222-1111-4111-8111-111111111111"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "us-east-2",
+            "kms:SigningAlgorithm": "ED25519_SHA_512",
+            "kms:MessageType": "RAW"
+          },
+          "Bool": {
+            "aws:SecureTransport": "true"
+          },
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          },
+          "ArnEquals": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "TrialNotStarted",
+        "Effect": "Deny",
+        "Action": "*",
+        "Resource": "*",
+        "Condition": {
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+          }
+        }
+      },
+      {
+        "Sid": "TrialExpired",
+        "Effect": "Deny",
+        "Action": "*",
+        "Resource": "*",
+        "Condition": {
+          "DateGreaterThanEquals": {
+            "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+          }
+        }
+      },
+      {
+        "Sid": "TrialTimeRequired",
+        "Effect": "Deny",
+        "Action": "*",
+        "Resource": "*",
+        "Condition": {
+          "Null": {
+            "aws:CurrentTime": "true"
+          }
+        }
+      },
+      {
+        "Sid": "OnlyReviewedSourceFunction",
+        "Effect": "Deny",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "kms:GetPublicKey",
+          "kms:Sign",
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "*",
+        "Condition": {
+          "ArnNotEqualsIfExists": {
+            "lambda:SourceFunctionArn": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic"
+          }
+        }
+      },
+      {
+        "Sid": "OnlyReviewedRegion",
+        "Effect": "Deny",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "kms:GetPublicKey",
+          "kms:Sign",
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "*",
+        "Condition": {
+          "StringNotEqualsIfExists": {
+            "aws:RequestedRegion": "us-east-2"
+          }
+        }
+      },
+      {
+        "Sid": "OnlySecureTransport",
+        "Effect": "Deny",
+        "Action": [
+          "dynamodb:DescribeTable",
+          "dynamodb:DescribeTimeToLive",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "kms:GetPublicKey",
+          "kms:Sign",
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": "*",
+        "Condition": {
+          "BoolIfExists": {
+            "aws:SecureTransport": "false"
+          }
+        }
+      }
+    ]
+  },
+  "keyPolicies": {
+    "control": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "ExistingAccountManagementOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:root"
+          },
+          "Action": [
+            "kms:DescribeKey",
+            "kms:GetKeyPolicy",
+            "kms:PutKeyPolicy",
+            "kms:ListKeyPolicies",
+            "kms:ListResourceTags",
+            "kms:TagResource",
+            "kms:UntagResource",
+            "kms:CreateAlias",
+            "kms:UpdateAlias",
+            "kms:DeleteAlias"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "NoOtherCryptographyImportOrRuntimeGrants",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+            "kms:Verify",
+            "kms:Encrypt",
+            "kms:Decrypt",
+            "kms:ReEncrypt*",
+            "kms:GenerateDataKey*",
+            "kms:GenerateMac",
+            "kms:VerifyMac",
+            "kms:DeriveSharedSecret",
+            "kms:CreateGrant",
+            "kms:ImportKeyMaterial",
+            "kms:GetParametersForImport",
+            "kms:EnableKey"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "FiniteMemberPublicKey",
+          "Effect": "Allow",
+          "Action": [
+            "kms:GetPublicKey"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "us-east-2"
+            },
+            "Bool": {
+              "aws:SecureTransport": "true"
+            },
+            "DateGreaterThanEquals": {
+              "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+            },
+            "DateLessThan": {
+              "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+            }
+          },
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          }
+        },
+        {
+          "Sid": "FiniteMemberRawSignature",
+          "Effect": "Allow",
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "us-east-2",
+              "kms:SigningAlgorithm": "ED25519_SHA_512",
+              "kms:MessageType": "RAW"
+            },
+            "Bool": {
+              "aws:SecureTransport": "true"
+            },
+            "DateGreaterThanEquals": {
+              "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+            },
+            "DateLessThan": {
+              "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+            }
+          },
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          }
+        },
+        {
+          "Sid": "NoOtherPrincipalMaySign",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "ArnNotEquals": {
+              "aws:PrincipalArn": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+            }
+          }
+        },
+        {
+          "Sid": "MemberSignNotStarted",
+          "Effect": "Deny",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          },
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "DateLessThan": {
+              "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+            }
+          }
+        },
+        {
+          "Sid": "MemberSignExpired",
+          "Effect": "Deny",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          },
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "DateGreaterThanEquals": {
+              "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+            }
+          }
+        },
+        {
+          "Sid": "MemberSignTimeRequired",
+          "Effect": "Deny",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          },
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "Null": {
+              "aws:CurrentTime": "true"
+            }
+          }
+        }
+      ]
+    },
+    "journal": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "ExistingAccountManagementOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:root"
+          },
+          "Action": [
+            "kms:DescribeKey",
+            "kms:GetKeyPolicy",
+            "kms:PutKeyPolicy",
+            "kms:ListKeyPolicies",
+            "kms:ListResourceTags",
+            "kms:TagResource",
+            "kms:UntagResource",
+            "kms:CreateAlias",
+            "kms:UpdateAlias",
+            "kms:DeleteAlias"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "NoOtherCryptographyImportOrRuntimeGrants",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+            "kms:Verify",
+            "kms:Encrypt",
+            "kms:Decrypt",
+            "kms:ReEncrypt*",
+            "kms:GenerateDataKey*",
+            "kms:GenerateMac",
+            "kms:VerifyMac",
+            "kms:DeriveSharedSecret",
+            "kms:CreateGrant",
+            "kms:ImportKeyMaterial",
+            "kms:GetParametersForImport",
+            "kms:EnableKey"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "FiniteMemberPublicKey",
+          "Effect": "Allow",
+          "Action": [
+            "kms:GetPublicKey"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "us-east-2"
+            },
+            "Bool": {
+              "aws:SecureTransport": "true"
+            },
+            "DateGreaterThanEquals": {
+              "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+            },
+            "DateLessThan": {
+              "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+            }
+          },
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          }
+        },
+        {
+          "Sid": "FiniteMemberRawSignature",
+          "Effect": "Allow",
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "us-east-2",
+              "kms:SigningAlgorithm": "ED25519_SHA_512",
+              "kms:MessageType": "RAW"
+            },
+            "Bool": {
+              "aws:SecureTransport": "true"
+            },
+            "DateGreaterThanEquals": {
+              "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+            },
+            "DateLessThan": {
+              "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+            }
+          },
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          }
+        },
+        {
+          "Sid": "NoOtherPrincipalMaySign",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "ArnNotEquals": {
+              "aws:PrincipalArn": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+            }
+          }
+        },
+        {
+          "Sid": "MemberSignNotStarted",
+          "Effect": "Deny",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          },
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "DateLessThan": {
+              "aws:CurrentTime": "2026-10-24T12:00:00.000Z"
+            }
+          }
+        },
+        {
+          "Sid": "MemberSignExpired",
+          "Effect": "Deny",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          },
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "DateGreaterThanEquals": {
+              "aws:CurrentTime": "2026-10-24T12:10:00.000Z"
+            }
+          }
+        },
+        {
+          "Sid": "MemberSignTimeRequired",
+          "Effect": "Deny",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:role/federation-alliance-member-closed-synthetic"
+          },
+          "Action": [
+            "kms:Sign"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "Null": {
+              "aws:CurrentTime": "true"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "canonicalOriginalKeyPolicySha256": "14386d04d79cf545e3016e21898d08db01d850ebb19c3035d79784676fde01fd",
+  "originalKeyPolicies": {
+    "control": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "ExistingAccountManagementOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:root"
+          },
+          "Action": [
+            "kms:DescribeKey",
+            "kms:GetKeyPolicy",
+            "kms:PutKeyPolicy",
+            "kms:ListKeyPolicies",
+            "kms:ListResourceTags",
+            "kms:TagResource",
+            "kms:UntagResource",
+            "kms:CreateAlias",
+            "kms:UpdateAlias",
+            "kms:DeleteAlias"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "PendingNoCryptographyImportOrRuntimeGrants",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+            "kms:Sign",
+            "kms:Verify",
+            "kms:Encrypt",
+            "kms:Decrypt",
+            "kms:ReEncrypt*",
+            "kms:GenerateDataKey*",
+            "kms:GenerateMac",
+            "kms:VerifyMac",
+            "kms:DeriveSharedSecret",
+            "kms:CreateGrant",
+            "kms:ImportKeyMaterial",
+            "kms:GetParametersForImport",
+            "kms:EnableKey"
+          ],
+          "Resource": "*"
+        }
+      ]
+    },
+    "journal": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "ExistingAccountManagementOnly",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::123456789012:root"
+          },
+          "Action": [
+            "kms:DescribeKey",
+            "kms:GetKeyPolicy",
+            "kms:PutKeyPolicy",
+            "kms:ListKeyPolicies",
+            "kms:ListResourceTags",
+            "kms:TagResource",
+            "kms:UntagResource",
+            "kms:CreateAlias",
+            "kms:UpdateAlias",
+            "kms:DeleteAlias"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "PendingNoCryptographyImportOrRuntimeGrants",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+            "kms:Sign",
+            "kms:Verify",
+            "kms:Encrypt",
+            "kms:Decrypt",
+            "kms:ReEncrypt*",
+            "kms:GenerateDataKey*",
+            "kms:GenerateMac",
+            "kms:VerifyMac",
+            "kms:DeriveSharedSecret",
+            "kms:CreateGrant",
+            "kms:ImportKeyMaterial",
+            "kms:GetParametersForImport",
+            "kms:EnableKey"
+          ],
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+  "addPermission": {
+    "FunctionName": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic",
+    "Qualifier": "2",
+    "StatementId": "AllianceExactMemberGateway",
+    "Action": "lambda:InvokeFunction",
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": "arn:aws:execute-api:us-east-2:123456789012:abcdefghij/preview/POST/member-authority",
+    "SourceAccount": "123456789012"
+  },
+  "resourcePolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "AllianceExactMemberGateway",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "apigateway.amazonaws.com"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Resource": "arn:aws:lambda:us-east-2:123456789012:function:alliance-member-authority-synthetic:2",
+        "Condition": {
+          "ArnLike": {
+            "AWS:SourceArn": "arn:aws:execute-api:us-east-2:123456789012:abcdefghij/preview/POST/member-authority"
+          },
+          "StringEquals": {
+            "AWS:SourceAccount": "123456789012"
+          }
+        }
+      }
+    ]
+  },
+  "expectedAbsent": {
+    "secretResourcePolicies": true,
+    "nonceResourcePolicy": true,
+    "kmsGrants": true,
+    "functionUrls": true,
+    "aliases": true
+  },
+  "limitations": {
+    "outboundSourcePinsVersion": false,
+    "iamLimitsRequestCount": false,
+    "iamLimitsSignedMessageContents": false,
+    "timeFenceDisablesInvocation": false,
+    "installedOrSimulated": false
+  }
+}
