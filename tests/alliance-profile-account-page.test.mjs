@@ -84,3 +84,27 @@ test('member session refusal closes editor without a cookie refresh or automatic
 test('exact origin and maximum deadline are explicit configuration boundaries',()=>{
  for(const options of [{origin:'https://other.example'},{origin:origin+'/path'},{timeoutMs:12001},{timeoutMs:0},{origin:'https://galacticfederation.co'}])assert.throws(()=>fixture(regular,options),/member_account_configuration/);
 });
+
+const feedbackIdea={id:'77777777-7777-4777-8777-777777777777',owner:'88888888-8888-4888-8888-888888888888',title:'A fictional durable idea',category:'research',detail:'A fictional evidence-backed idea with one limitation.',createdAt:'2026-10-24T12:00:00.000Z',supportCount:0,supported:false};
+const feedbackReply=url=>url.endsWith('/session')?json(account):url.includes('/feedback/ideas?')?json({state:'ready',page:{items:[feedbackIdea],next:null}}):json({profile,revision:1});
+const feedbackNode=(f,id)=>f.doc.getElementById('af-'+id);
+test('feedback needs explicit capability, starts no request on mount/attachment and clears drafts on sign-out',async()=>{
+ assert.throws(()=>fixture(regular,{feedbackEnabled:true}),/configuration/);
+ const f=fixture(feedbackReply,{collaborationEnabled:true,feedbackEnabled:true});
+ try{assert.equal(f.calls.length,0);await f.host.check();assert.equal(f.calls.length,1);await feedbackNode(f,'load').emit('click');assert.equal(f.calls.length,3);feedbackNode(f,'idea-title').value='A private idea draft';const old=feedbackNode(f,'form');
+  const before=f.calls.length;f.channel.dispatchEvent(new MessageEvent('message',{data:{type:'signed-out',remoteRevoked:false}}));assert.equal(feedbackNode(f,'idea-title').value,'');assert.match(f.get('feedback').textContent,/closed/);await old.emit('submit');assert.equal(f.calls.length,before);
+ }finally{f.host.dispose();}
+});
+test('old account feedback reads cannot populate replacement account controls',async()=>{
+ const gate=deferred();let reads=0;const f=fixture(url=>url.includes('/feedback/ideas?')&&++reads===1?gate.promise:feedbackReply(url),{collaborationEnabled:true,feedbackEnabled:true});
+ try{await f.host.check();const earlier=feedbackNode(f,'load').emit('click');while(!reads)await tick();f.channel.dispatchEvent(new MessageEvent('message',{data:{type:'signed-out'}}));await f.host.check();const current=feedbackNode(f,'selection');gate.resolve(json({state:'ready',page:{items:[feedbackIdea],next:null}}));await earlier;await tick();assert.equal(feedbackNode(f,'selection'),current);assert.doesNotMatch(f.get('feedback').textContent,/fictional durable idea/);assert.equal(feedbackNode(f,'fields').disabled,true);}finally{gate.resolve(json({state:'ready',page:{items:[],next:null}}));f.host.dispose();}
+});
+test('profile removal scope includes feedback and clears its controls before sending the removal',async()=>{
+ let f;const provider=(url,init)=>{
+  if(url.endsWith('/removal-status'))return json({state:'ready',profileId:profile.id,version:7});
+  if(init.method==='DELETE'){assert.match(f.get('feedback').textContent,/closed/);assert.equal(feedbackNode(f,'idea-title').value,'');return json({state:'committed',version:8});}
+  return feedbackReply(url);
+ };
+ f=fixture(provider,{collaborationEnabled:true,feedbackEnabled:true});const find=text=>{const walk=n=>n.textContent===text?n:n.children.map(walk).find(Boolean);return walk(f.get('removal'));};
+ try{await f.host.check();await feedbackNode(f,'load').emit('click');feedbackNode(f,'idea-title').value='An unsent private idea';assert.match(f.get('removal').textContent,/ideas, support and private reports/);await find('Review profile removal').emit('click');const check=f.get('removal').children[3].children[0].children[0];check.checked=true;await check.emit('change');await find('Remove my Alliance profile').emit('click');assert.equal(f.calls.filter(c=>c.init.method==='DELETE').length,1);}finally{f.host.dispose();}
+});
