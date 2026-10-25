@@ -13,7 +13,11 @@ action. It carries no actor selector, token, browser persistence or polling.
 The server remains responsible for authorization, ownership and current sessions.
 
 Native labelled inputs/selects, fieldsets, ordinary buttons and a polite status
-region provide the interface. Reading ideas keeps the posting draft. A selected
+region provide the interface. Draft fields accept text before the first read;
+posting stays disabled until an explicit load confirms the member profile. The
+form explains this prerequisite and keeps drafts in the tab. An in-flight request
+or uncertain action still locks the form until it ends or is reconciled.
+Reading ideas keeps the posting draft. A selected
 idea must be read before taking an action. Support receipts do not invent a new
 aggregate count; a fresh explicit read is needed. Own removal requires a checkbox
 and explains active records versus retained backups. Matching draft text and the

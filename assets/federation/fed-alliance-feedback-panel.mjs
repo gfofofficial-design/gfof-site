@@ -17,7 +17,7 @@ export function mountAllianceFeedbackPanel(root,{enabled=false,origin,fetcher=gl
  root.append(el('p','Share useful ideas with other members. Support is an expression of interest, not a vote, reward or promise to build. Service operators and hosting providers can access stored records. Keep private contact and account information out of ideas.'));
  const toolbar=el('div',undefined,{class:'profile-toolbar'}),load=button('load','Load member ideas'),cancel=button('cancel','Stop waiting');toolbar.append(load,cancel);root.append(toolbar,el('p','Loading reads your profile and one page of ideas. Drafts are not submitted. There is no automatic refresh.',{class:'profile-help'}));
  const previous=button('previous','Check or finish the earlier action'),previousNote=box('previous-note','p','This resubmits the exact earlier action. It may finish that action if the first attempt did not complete. Reading ideas does not resolve an uncertain save.',{class:'profile-help'});previous.setAttribute('aria-describedby','af-previous-note');root.append(previous,previousNote);
- const form=box('form','form',undefined,{'aria-label':'Post an idea'}),fields=box('fields','fieldset');fields.append(el('legend','Post an idea'));
+ const form=box('form','form',undefined,{'aria-label':'Post an idea','aria-describedby':'af-draft-help'}),fields=box('fields','fieldset');fields.append(el('legend','Post an idea'),box('draft-help','p','You can type a draft now. Choose Load member ideas to check your profile before posting. Your draft stays in this tab until you choose Post idea.',{class:'profile-help'}));
  const ideaTitle=box('idea-title','input',undefined,{type:'text',minlength:'5',maxlength:'80',required:''}),category=box('category','select'),detail=box('idea-detail','textarea',undefined,{rows:'5',minlength:'15',maxlength:'600',required:''});
  for(const [id,text]of categories)option(category,text,id);category.value='tools';
  fields.append(label('idea-title','Title (5–80 characters)'),ideaTitle,label('category','Category'),category,label('idea-detail','Detail (15–600 characters)'),detail);
@@ -35,7 +35,7 @@ export function mountAllianceFeedbackPanel(root,{enabled=false,origin,fetcher=gl
  function controls(){
   root.setAttribute('aria-busy',busy?'true':'false');load.disabled=disposed||busy;cancel.hidden=!busy;cancel.disabled=!busy;
   previous.hidden=previousNote.hidden=!unknown;previous.disabled=disposed||busy;
-  fields.disabled=!permitted();selection.disabled=disposed||busy||!rows.size;nodes.read.disabled=disposed||busy||!selection.value;nodes.more.disabled=disposed||busy||!cursor;
+  fields.disabled=disposed||busy||unknown;post.disabled=!permitted();selection.disabled=disposed||busy||!rows.size;nodes.read.disabled=disposed||busy||!selection.value;nodes.more.disabled=disposed||busy||!cursor;
   const r=selected(),fresh=r&&freshId===r.id,peer=fresh&&r.owner!==ownId;
   actions.disabled=!permitted()||!peer;nodes['support-on'].disabled=actions.disabled||r?.supported===true;nodes['support-off'].disabled=actions.disabled||r?.supported!==true;
   removal.disabled=!permitted()||!fresh||r.owner!==ownId;nodes.remove.disabled=removal.disabled||!removeCheck.checked;
@@ -62,7 +62,7 @@ export function mountAllianceFeedbackPanel(root,{enabled=false,origin,fetcher=gl
  }
  listen(load,'click',()=>run(async check=>{
   ownId=null;rows.clear();cursor=freshId=null;removeCheck.checked=reportCheck.checked=false;list();render();const mine=await profile.load();check();ownId=mine.profile?.id||null;
-  if(!ownId){say('Create and save your profile above before using member ideas. Your idea draft is kept.');return;}
+  if(!ownId){say('Create and save your profile above before posting or supporting ideas. Your idea draft is kept.');return;}
   const page=(await client.list()).page;check();for(const r of page.items)rows.set(r.id,r);cursor=page.next;list();render();say('Ideas read. Choose an idea to read, or post your draft.');
  }));
  listen(nodes.more,'click',()=>run(async check=>{const page=(await client.list({after:cursor,limit:5})).page;check();for(const r of page.items){if(rows.size>=128&&!rows.has(r.id))break;rows.set(r.id,r);}cursor=rows.size>=128?null:page.next;list();render();}));
@@ -78,6 +78,6 @@ export function mountAllianceFeedbackPanel(root,{enabled=false,origin,fetcher=gl
  listen(nodes.report,'click',()=>{const r=selected(),kind=reportKind.value,target=reportTarget();if(!permitted()||freshId!==r?.id||r.owner===ownId||!reportCheck.checked||reported.has(kind+':'+target))return;return run(async check=>{const result=await client.change({action:'report',id:globalThis.crypto.randomUUID(),kind,target});check();apply(result);});});
  listen(previous,'click',()=>run(async check=>{const result=await client.checkOrFinishPrevious();check();unknown=false;apply(result);}));
  listen(cancel,'click',()=>{epoch++;client.cancel();profile.cancel();busy=false;freshId=null;render();load.focus();});
- say('Load member ideas when ready. Nothing has been submitted.');list();render();
+ say('You can draft an idea now. Load member ideas to check your profile before posting. Nothing has been submitted.');list();render();
  return Object.freeze({dispose(){if(disposed)return;epoch++;client.dispose();profile.dispose();disposed=true;for(const off of events)off();rows.clear();reported.clear();ownId=null;ideaTitle.value=detail.value='';root.replaceChildren(el('h2','Member ideas'),el('p','Ideas closed. Private drafts and earlier reads were cleared.'));}});
 }

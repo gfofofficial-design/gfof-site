@@ -37,12 +37,22 @@ function fixture({enabled=true,work}={}){
 test('closed feedback panel has no client requests or enabled actions',()=>{
  const f=fixture({enabled:false});assert.equal(f.calls.length,0);assert.equal(f.get('load'),undefined);assert.match(f.root.textContent,/not open/);f.panel.dispose();
 });
-test('explicit reads preserve drafts; native labelled controls and polite status lead to a confirmed own post',async()=>{
+test('drafting is available before loading; only a checked profile can enable posting',async()=>{
  const f=fixture();try{
-  assert.equal(f.calls.length,0);assert.equal(f.get('fields').disabled,true);assert.equal(f.get('status').getAttribute('aria-live'),'polite');f.draft();
-  await f.get('load').emit('click');assert.equal(f.calls.length,2);assert.equal(f.get('fields').disabled,false);assert.equal(f.get('idea-title').value,'My practical idea');
+  assert.equal(f.calls.length,0);assert.equal(f.get('fields').disabled,false);assert.equal(f.get('post').disabled,true);assert.equal(f.get('status').getAttribute('aria-live'),'polite');
+  assert.equal(f.get('form').getAttribute('aria-describedby'),'af-draft-help');assert.match(f.get('draft-help').textContent,/type a draft now/);f.draft();
+  await f.get('form').emit('submit');assert.equal(f.calls.length,0);
+  await f.get('load').emit('click');assert.equal(f.calls.length,2);assert.equal(f.get('fields').disabled,false);assert.equal(f.get('post').disabled,false);assert.equal(f.get('idea-title').value,'My practical idea');
   await f.get('form').emit('submit');assert.equal(f.calls.length,3);assert.match(f.get('detail').textContent,/My practical idea/);assert.equal(f.doc.activeElement,f.get('detail'));assert.equal(f.get('removal').disabled,false);assert.equal(f.get('remove').disabled,true);
   assert.doesNotMatch(f.root.textContent,/11111111|22222222|operationId|actorId/);
+ }finally{f.panel.dispose();}
+});
+
+test('a missing profile keeps the draft editable and retained but cannot post',async()=>{
+ const f=fixture({work:async()=>new Response(JSON.stringify({profile:null,revision:0}),{headers:{'content-type':'application/json','cache-control':'private, no-store'}})});try{
+  f.draft();await f.get('load').emit('click');assert.equal(f.calls.length,1);assert.equal(f.get('fields').disabled,false);assert.equal(f.get('post').disabled,true);
+  assert.equal(f.get('idea-title').value,'My practical idea');assert.match(f.get('status').textContent,/before posting or supporting/);
+  await f.get('form').emit('submit');assert.equal(f.calls.length,1);
  }finally{f.panel.dispose();}
 });
 test('support is explicit on/off and its receipt does not invent a refreshed count or auto-read',async()=>{
@@ -71,12 +81,12 @@ test('only own removal is offered, needs a check, clears matching draft and disp
 test('lost post holds all changes, retains the draft and offers only exact intentional reconciliation',async()=>{
  const f=fixture();try{
   await f.get('load').emit('click');f.draft();f.lose=true;await f.get('form').emit('submit');const first=f.calls.at(-1).init.body,before=f.calls.length;
-  assert.equal(f.get('fields').disabled,true);assert.equal(f.get('previous').hidden,false);assert.equal(f.doc.activeElement,f.get('previous'));assert.match(f.get('previous-note').textContent,/may finish/);
+  assert.equal(f.get('fields').disabled,true);assert.equal(f.get('post').disabled,true);assert.equal(f.get('previous').hidden,false);assert.equal(f.doc.activeElement,f.get('previous'));assert.match(f.get('previous-note').textContent,/may finish/);
   await f.get('form').emit('submit');assert.equal(f.calls.length,before);assert.equal(f.get('idea-title').value,'My practical idea');
-  await f.get('previous').emit('click');assert.equal(f.calls.length,before+1);assert.equal(f.calls.at(-1).init.body,first);assert.equal(f.get('previous').hidden,true);assert.equal(f.get('fields').disabled,false);assert.equal(f.rows.size,2);
+  await f.get('previous').emit('click');assert.equal(f.calls.length,before+1);assert.equal(f.calls.at(-1).init.body,first);assert.equal(f.get('previous').hidden,true);assert.equal(f.get('fields').disabled,false);assert.equal(f.get('post').disabled,false);assert.equal(f.rows.size,2);
  }finally{f.panel.dispose();}
 });
 test('stopping a delayed read withholds late content and disposal removes stale handlers and private drafts',async()=>{
  let resume,started=false;const f=fixture({work:async()=>{started=true;return new Promise(r=>resume=r);}});
- const read=f.get('load').emit('click');while(!started)await tick();await f.get('cancel').emit('click');const old=f.get('form');f.draft();f.panel.dispose();resume(new Response(JSON.stringify({profile:null,revision:0}),{headers:{'content-type':'application/json'}}));await read;await tick();const before=f.calls.length;await old.emit('submit');assert.equal(f.calls.length,before);assert.doesNotMatch(f.root.textContent,/My practical idea/);assert.equal(f.get('idea-title').value,'');assert.match(f.root.textContent,/cleared/);
+ const read=f.get('load').emit('click');while(!started)await tick();assert.equal(f.get('fields').disabled,true);assert.equal(f.get('post').disabled,true);await f.get('cancel').emit('click');assert.equal(f.get('fields').disabled,false);assert.equal(f.get('post').disabled,true);const old=f.get('form');f.draft();f.panel.dispose();resume(new Response(JSON.stringify({profile:null,revision:0}),{headers:{'content-type':'application/json'}}));await read;await tick();const before=f.calls.length;await old.emit('submit');assert.equal(f.calls.length,before);assert.doesNotMatch(f.root.textContent,/My practical idea/);assert.equal(f.get('idea-title').value,'');assert.match(f.root.textContent,/cleared/);
 });
