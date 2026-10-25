@@ -12,6 +12,9 @@ on:
       - 'lib/alliance-profile-store.mjs'
       - 'lib/alliance-member-http.mjs'
       - 'lib/alliance-community-http.mjs'
+      - 'lib/alliance-feedback-http.mjs'
+      - 'assets/federation/fed-alliance-feedback-contract.mjs'
+      - 'tests/alliance-feedback-http*'
       - 'lib/alliance-avatar-server/community-service.mjs'
       - 'lib/alliance-avatar-server/community-store.mjs'
       - 'assets/federation/fed-alliance-collaboration-contract.mjs'
@@ -66,7 +69,7 @@ jobs:
           node-version: '24.22.1'
       - run: node --check lib/alliance-profile-store.mjs
       - run: node --check lib/alliance-member-http.mjs
-      - run: node --test tests/alliance-member-http.test.mjs tests/alliance-community-http.test.mjs tests/alliance-collaboration-client.test.mjs tests/alliance-collaboration-panel.test.mjs
+      - run: node --test tests/alliance-member-http.test.mjs tests/alliance-feedback-http.test.mjs tests/alliance-community-http.test.mjs tests/alliance-collaboration-client.test.mjs tests/alliance-collaboration-panel.test.mjs
       - run: node --test tests/alliance-member-application.test.mjs
       - run: node --check lib/alliance-profile-api.mjs
       - run: node --check assets/federation/fed-alliance-member-client.mjs

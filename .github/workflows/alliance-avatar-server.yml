@@ -9,6 +9,10 @@ on:
       - 'assets/federation/fed-alliance-profile-revision-contract.mjs'
       - 'assets/federation/fed-alliance-collaboration-contract.mjs'
       - 'assets/federation/fed-alliance-community-core.mjs'
+      - 'assets/federation/fed-alliance-feedback-contract.mjs'
+      - 'sql/alliance-feedback-candidate.sql'
+      - 'lib/alliance-feedback-http.mjs'
+      - 'tests/alliance-feedback-http.test.mjs'
       - 'sql/alliance-community-candidate.sql'
       - 'sql/alliance-avatar-ledger-candidate.sql'
       - 'sql/alliance-avatar-session-candidate.sql'
@@ -57,6 +61,7 @@ jobs:
       # The explicit mandatory audit below still blocks acceptance on failure.
       - run: npm ci --prefix lib/alliance-avatar-server --ignore-scripts --no-fund --no-audit
       - run: npm test --prefix lib/alliance-avatar-server
+      - run: node --test tests/alliance-feedback-http.test.mjs
       - run: node lib/alliance-avatar-server/recovery-package.native.mjs --download-age
         env:
           ALLIANCE_RECOVERY_PACKAGE_TEST_CONFIRM: synthetic_encrypted_package

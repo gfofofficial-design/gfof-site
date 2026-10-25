@@ -1,0 +1,59 @@
+{
+  "sourceSha256": "846844f9457ae980c055af68300b92fb3ef50f0befc4e4b88f2eafb1260ef047",
+  "functions": [
+    {
+      "name": "member",
+      "arguments": "uuid, uuid, boolean",
+      "result": "uuid",
+      "language": "plpgsql",
+      "definer": false,
+      "settings": 1,
+      "bodySha256": "8b8593d1402d033acba224d3396c25e1f97399cdf358ea53f78f51011680c757"
+    },
+    {
+      "name": "snapshot",
+      "arguments": "uuid, uuid",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": false,
+      "settings": 3,
+      "bodySha256": "9db455a402454b876df38f46bcf6d7259606d8300a6547f9b014c8dbd7052231"
+    },
+    {
+      "name": "read_session",
+      "arguments": "uuid, uuid, uuid",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 1,
+      "bodySha256": "dd509b914871bda7db72c65e04259b51fa95b4ac5d9dc70c1fa14596ee8f246b"
+    },
+    {
+      "name": "list_session",
+      "arguments": "uuid, uuid, uuid, integer",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 1,
+      "bodySha256": "c26122c05889a1f2650c8b848288672e1299bd0f8602a4385316c7c0d3c01634"
+    },
+    {
+      "name": "change_session",
+      "arguments": "uuid, uuid, jsonb",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 1,
+      "bodySha256": "cfe69527865b0f16961776eca86d2e4691df916e2648d1c4df1a59211a14cbe4"
+    },
+    {
+      "name": "recovery_inventory",
+      "arguments": "",
+      "result": "jsonb",
+      "language": "plpgsql",
+      "definer": true,
+      "settings": 3,
+      "bodySha256": "6f3a367047c0e6d964554eeac34b662d6bbc8a912c76c713ed8ee3ed590e17f5"
+    }
+  ]
+}
