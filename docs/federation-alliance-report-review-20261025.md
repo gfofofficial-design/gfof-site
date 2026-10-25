@@ -1,8 +1,10 @@
 # Disabled private-report review candidate
 
-This source adds the owner's explicit private-review workflow. It is not mounted,
-installed or serving. The host must supply an authenticated server client and
-dispose the panel on sign-out; no owner flag in a browser can authorize review.
+This source adds the owner's explicit private-review workflow. It is not mounted
+or serving. The prior disabled foundation is installed in the Account Pilot; the
+service-aware snapshot update in this source remains unapplied. The host must
+supply the authenticated client and dispose the panel on sign-out. A browser owner
+flag cannot authorize review.
 
 The existing member executor gets four fixed private entry points: a bounded
 metadata queue, one selected read, a review update and recovery inventory. A
@@ -11,9 +13,12 @@ review requires that actor's current database session. No new role is created;
 raw reports/review tables and the maintenance function are denied to the executor,
 anonymous users, authenticated users and the service role.
 
-The queue omits reporter identity and separate target-owner fields. A selected
-read can return bounded idea/profile text. Private challenge text stays excluded;
-existing participant access remains necessary. Remote text becomes text nodes.
+The browser queue omits reporter identity and separate target-owner fields. The
+private database envelope supplies two profile IDs only to the trusted server,
+which checks both against fresh signed removal evidence before and after the
+operation and strips them before responding. A selected read can return bounded
+idea/profile text. Private challenge text stays excluded; existing participant
+access remains necessary. Remote text becomes text nodes.
 
 Reports expire 90 elapsed days after receipt until reviewed, then 30 elapsed days
 after the first review. Repeated or changed outcomes never reset that timestamp.
@@ -42,11 +47,40 @@ review archive test restores inside a closed rollback transaction in one disposa
 database; it is not an independent-machine full encrypted recovery. Packaging tests
 use a deliberately synthetic carrier; earlier actual age evidence remains separate.
 
-Before hosted use: finish the authenticated HTTP/service binding using the new
-gate, complete canonical eleven-component capture and reconstruction, run required
-CI/provider checks and dependency audit, review the exact owner binding, prove
-ongoing cleanup and backup deletion behavior, and obtain installation/activation
-decisions. The candidate grants no authority for any of those operations.
+## Authenticated service increment
+
+`createAllianceReportReviewService` binds one explicitly configured reviewer to
+the current database account session and the dedicated review-aware signed gate.
+`createAllianceReportReviewApplication` combines the member/community/feedback
+routes with the review routes under checkpoint5. Legacy applications do not route
+review and cannot supply its permission. No default handler or mounted route is
+added. Caller-owned database stores and signing adapters retain their ownership.
+
+The cookie HTTP boundary accepts only same-origin requests, verifies the existing
+access cookie against Auth, bounds input/output and returns private/no-store
+responses. It rejects caller-supplied bearer/owner identity. Routes are explicit:
+GET `/api/alliance-members/report-review/reports`, GET `.../report?id=...`, and
+POST `.../review`. The browser client implements the panel's existing
+`list/read/review/close` interface without token access or polling. A lost write
+stays uncertain and is not resent; an explicit successful read of that same report
+can clear the client's write hold. The server faults closed after an uncertain
+database outcome; reconciliation may require a fresh verified server connection.
+
+The database change is one private `snapshot(uuid,boolean)` replacement. The two
+tables, eight functions, owners, function OID/ACLs, execute permissions, retention
+and existing roles remain unchanged. The source-only upgrade planner pins the
+exact previous SQL, requires an empty/default-off/unbound closed pilot, removes
+its one temporary owner grant before commit and supplies an independent old/new
+boundary comparison. It has no connection or apply method. The new store refuses
+the old envelope; an old host must be explicitly upgraded before this service can
+be used. The preserved v1 fixture is an upgrade baseline, not an installer.
+
+Before hosted use: apply and verify the reviewed disabled snapshot upgrade, run
+required CI/provider checks and dependency audit, review the exact reviewer/runtime
+binding, finish provider/independent recovery, prove ongoing cleanup and backup
+deletion behavior, and obtain activation decisions. This source grants no authority
+for those operations. The local canonical reconstruction and hosted checkpoint
+evidence remain dated to their accepted source versions.
 
 The fictional local panel has an owner-reported keyboard/focus/200% zoom check.
 Actual assistive-technology, physical mobile, network and authenticated hosted

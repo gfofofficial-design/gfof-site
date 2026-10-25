@@ -54,12 +54,15 @@ declare r alliance_feedback.reports;v alliance_report_review.reviews;expiry time
   elsif r.kind='idea' then select title,detail into title_text,summary_text from alliance_feedback.ideas where id=r.target and not removed;
   end if;
  end if;
- return jsonb_build_object('id',r.id,'kind',r.kind,'target',r.target,'contextState',coalesce(ctx,'unavailable'),
+ -- The trusted service checks both profiles against the signed removal journal.
+ -- It strips this private envelope before returning a record to the browser.
+ return jsonb_build_object('record',jsonb_build_object('id',r.id,'kind',r.kind,'target',r.target,'contextState',coalesce(ctx,'unavailable'),
   'contextLoaded',p_context is true,'targetTitle',title_text,'targetSummary',summary_text,
   'createdAt',to_char(r.created_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'),
   'reviewedAt',case when v.first_reviewed_at is null then null else to_char(v.first_reviewed_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') end,
   'disposition',coalesce(v.disposition,'unreviewed'),
-  'expiresAt',to_char(expiry at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'));
+  'expiresAt',to_char(expiry at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')),
+  'evidenceProfiles',jsonb_build_array(r.reporter,r.target_owner));
 end $$;
 create function alliance_report_review.queue_session(p_actor uuid,p_session uuid,p_after uuid,p_limit integer) returns jsonb
 language plpgsql security definer set search_path='' as $$
