@@ -1,11 +1,12 @@
 // Explicit private workspace. Not mounted by the tab-only community sandbox.
 // All remote content uses textContent; identities remain memory-only bindings.
 import {CHALLENGE_KITS} from './fed-alliance-community-core.mjs';
+import {createAllianceFeedbackClient} from './fed-alliance-feedback-client.mjs';
 import {createMemberProfileClient} from './fed-alliance-member-client.mjs';
 import {createAllianceCollaborationClient} from './fed-alliance-collaboration-client.mjs';
-export function mountAllianceCollaborationPanel(root,{enabled=false,origin,fetcher=globalThis.fetch,onSignInRequired=()=>{}}={}){
- if(typeof enabled!=='boolean'||!root?.ownerDocument)throw Error('collaboration_panel_configuration');
- const doc=root.ownerDocument,events=[],dynamicEvents=[],nodes={},members=new Map(),rows=new Map();let disposed=false,busy=false,epoch=0,ownId=null,cursor=null,directoryCursor=null,unknown=false,conflict=false,profileClient,client;
+export function mountAllianceCollaborationPanel(root,{enabled=false,feedbackEnabled=false,origin,fetcher=globalThis.fetch,onSignInRequired=()=>{}}={}){
+ if(typeof feedbackEnabled!=='boolean'||feedbackEnabled&&!enabled||typeof enabled!=='boolean'||!root?.ownerDocument)throw Error('collaboration_panel_configuration');
+ const doc=root.ownerDocument,events=[],dynamicEvents=[],nodes={},members=new Map(),rows=new Map();let disposed=false,busy=false,epoch=0,ownId=null,cursor=null,directoryCursor=null,unknown=false,conflict=false,profileClient,client,feedbackClient,feedbackPending=false;const reportedChallenges=new Set();
  const el=(tag,text,attrs={})=>{const n=doc.createElement(tag);if(text!==undefined)n.textContent=text;for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);return n;};
  const listen=(n,event,fn,dynamic=false)=>{n.addEventListener(event,fn);(dynamic?dynamicEvents:events).push(()=>n.removeEventListener(event,fn));};
  const box=(id,tag,text,attrs={})=>nodes[id]=el(tag,text,{id:'ac-'+id,...attrs});
@@ -29,6 +30,8 @@ export function mountAllianceCollaborationPanel(root,{enabled=false,origin,fetch
  const nav=el('div',undefined,{class:'profile-toolbar'});nav.append(button('read','Read selected collaboration'),button('more','Read more collaborations'));root.append(nav);
  const detail=box('detail','section',undefined,{'aria-label':'Last read collaboration',tabindex:'-1'});root.append(detail);
  const actions=box('actions','fieldset');actions.append(el('legend','Respond to the last read invitation'),button('accept','Accept invitation'),button('decline','Decline invitation'),button('withdraw','Cancel unanswered invitation'));root.append(actions);
+ const reports=feedbackEnabled?box('reports','fieldset'):null;let reportCheck;
+ if(reports){reportCheck=box('report-check','input',undefined,{type:'checkbox'});const label=el('label',undefined,{class:'profile-check',for:'ac-report-check'});label.append(reportCheck,el('span','I want to report this invitation or task privately'));reports.append(el('legend','Report this invitation or task'),el('p','Only the recipient can report this invitation or task. A private report does not automatically remove content, settle a dispute or confirm human review.'),label,button('report-challenge','Record private report'));root.append(reports);}
  const contribution=box('contribution','form',undefined,{'aria-label':'Add a contribution'}),contributionFields=box('contribution-fields','fieldset');contributionFields.append(el('legend','Add a contribution'),label('contribution-note','Contribution note (10–240 characters)'),box('contribution-note','textarea',undefined,{rows:'4',minlength:'10',maxlength:'240',required:''}));const contribute=button('contribute','Submit contribution');contribute.setAttribute('type','submit');contributionFields.append(contribute);contribution.append(contributionFields);root.append(contribution);
  const selected=()=>rows.get(selection.value),say=text=>{status.textContent=text;};
  const permitted=()=>!disposed&&!busy&&ownId!==null&&!unknown&&!conflict;
@@ -39,6 +42,7 @@ export function mountAllianceCollaborationPanel(root,{enabled=false,origin,fetch
   nodes['members-more'].disabled=disposed||busy||!ownId||!directoryCursor;
   selection.disabled=disposed||busy||!rows.size;nodes.read.disabled=disposed||busy||!selection.value;nodes.more.disabled=disposed||busy||!cursor;
   const r=selected();actions.disabled=!permitted()||!r||r.status!=='invited';nodes.accept.disabled=nodes.decline.disabled=actions.disabled||r?.to!==ownId;nodes.withdraw.disabled=actions.disabled||r?.from!==ownId;
+  if(reports){reports.disabled=!permitted()||!r||r.to!==ownId;nodes['report-challenge'].disabled=reports.disabled||!reportCheck.checked||reportedChallenges.has(r?.id);}
   contributionFields.disabled=!permitted()||r?.status!=='active';for(const b of detail.querySelectorAll('button'))b.disabled=!permitted();
  }
  function list(){const old=selection.value;selection.replaceChildren();option(selection,rows.size?'Choose a collaboration':'No collaboration loaded','');for(const r of rows.values())option(selection,(r.from===ownId?'Sent':'Received')+' · '+(CHALLENGE_KITS.find(k=>k.id===r.kit)?.title||'Shared task')+' · '+r.status,r.id);selection.value=rows.has(old)?old:'';}
@@ -51,6 +55,7 @@ export function mountAllianceCollaborationPanel(root,{enabled=false,origin,fetch
   }proofs.append(item);}detail.append(proofs);controls();
  }
  function state(s){if(disposed)return;if(s.status==='unknown')unknown=true;if(s.status==='conflict')conflict=true;if(s.status==='sign_in_required'){onSignInRequired();if(disposed)return;}say(s.message);controls();}
+ if(feedbackEnabled)feedbackClient=createAllianceFeedbackClient({enabled:true,origin,fetcher,onState:state});
  client=createAllianceCollaborationClient({enabled:true,origin,fetcher,onState:state});profileClient=createMemberProfileClient({enabled:true,profileRevisions:true,origin,fetcher,onState:s=>{if(s.status==='sign_in_required'&&!disposed)onSignInRequired();}});
  async function run(work){
   if(disposed||busy)return;busy=true;const turn=epoch;controls();
@@ -68,13 +73,17 @@ export function mountAllianceCollaborationPanel(root,{enabled=false,origin,fetch
  listen(nodes['members-more'],'click',()=>run(async check=>{const page=await profileClient.directory({after:directoryCursor,limit:20});check();for(const m of page.items){if(members.size>=128)break;members.set(m.id,m);}directoryCursor=members.size>=128?null:page.next;targetList();}));
  listen(nodes.more,'click',()=>run(async check=>{const page=(await client.list({after:cursor,limit:5})).page;check();for(const r of page.items)rows.set(r.id,r);cursor=page.next;list();render();}));
  listen(nodes.read,'click',()=>run(async check=>{const result=await client.read(selection.value);check();rows.set(result.challenge.id,result.challenge);conflict=false;list();render();}));
- listen(selection,'change',render);listen(target,'change',controls);listen(kit,'change',()=>{goal.value=String(CHALLENGE_KITS.find(k=>k.id===kit.value)?.goal||1);});
+ listen(selection,'change',()=>{if(reportCheck)reportCheck.checked=false;render();});listen(target,'change',controls);listen(kit,'change',()=>{goal.value=String(CHALLENGE_KITS.find(k=>k.id===kit.value)?.goal||1);});
  listen(invitation,'submit',e=>{e.preventDefault();if(!permitted()||!target.value)return;return run(async check=>{const id=globalThis.crypto.randomUUID(),r=await client.change({operationId:id,challengeId:id,revision:0,action:'invite',target:target.value,kit:kit.value,scope:scope.value,days:Number(days.value),goal:Number(goal.value),note:brief.value.trim(),format:1});check();if(r.state==='conflict'){conflict=true;return;}rows.set(r.challenge.id,r.challenge);list();selection.value=r.challenge.id;render();});});
  listen(contribution,'submit',e=>{e.preventDefault();return change({action:'contribute',note:nodes['contribution-note'].value.trim()});});
  for(const [id,action]of [['accept','accept'],['decline','decline'],['withdraw','cancel']])listen(nodes[id],'click',()=>change({action}));
  for(const [id,hidden]of [['hide',true],['show',false]])listen(nodes[id],'click',()=>{if(!permitted()||!target.value)return;return run(async check=>{await client.visibility({target:target.value,hidden});check();rows.clear();list();render();say(hidden?'Member hidden. Read the workspace to check remaining conversations.':'Member shown. Read the workspace to check available conversations.');});});
- listen(previous,'click',()=>run(async check=>{const r=await client.checkOrFinishPrevious();check();unknown=false;conflict=r.state==='conflict';if(r.state==='set'){rows.clear();list();}if(r.challenge){rows.set(r.challenge.id,r.challenge);list();selection.value=r.challenge.id;}render();if(r.challenge)detail.focus();else load.focus();}));
- listen(cancel,'click',()=>{epoch++;client.cancel();profileClient.cancel();busy=false;controls();load.focus();});
+ if(reports){
+  listen(reportCheck,'change',controls);
+  listen(nodes['report-challenge'],'click',()=>{const r=selected();if(!permitted()||!r||r.to!==ownId||!reportCheck.checked||reportedChallenges.has(r.id))return;return run(async check=>{feedbackPending=true;try{const result=await feedbackClient.change({action:'report',id:globalThis.crypto.randomUUID(),kind:'challenge',target:r.id});check();feedbackPending=false;reportedChallenges.add(result.target);reportCheck.checked=false;say('Report recorded privately. Removal and human review are not confirmed.');}catch(e){if(!['unknown','sign_in_required'].includes(e?.code))feedbackPending=false;throw e;}});});
+ }
+ listen(previous,'click',()=>run(async check=>{if(feedbackPending){const r=await feedbackClient.checkOrFinishPrevious();check();feedbackPending=false;unknown=false;reportedChallenges.add(r.target);reportCheck.checked=false;render();say('Report recorded privately. Removal and human review are not confirmed.');load.focus();return;}const r=await client.checkOrFinishPrevious();check();unknown=false;conflict=r.state==='conflict';if(r.state==='set'){rows.clear();list();}if(r.challenge){rows.set(r.challenge.id,r.challenge);list();selection.value=r.challenge.id;}render();if(r.challenge)detail.focus();else load.focus();}));
+ listen(cancel,'click',()=>{epoch++;client.cancel();feedbackClient?.cancel();profileClient.cancel();busy=false;controls();load.focus();});
  say('Load your private workspace when ready. Nothing has been submitted.');render();
- return Object.freeze({dispose(){if(disposed)return;epoch++;client.dispose();profileClient.dispose();disposed=true;for(const remove of [...events,...dynamicEvents])remove();members.clear();rows.clear();ownId=null;root.replaceChildren(el('h2','Private collaborations'),el('p','Private workspace closed. Unsaved private drafts were cleared.'));}});
+ return Object.freeze({dispose(){if(disposed)return;epoch++;client.dispose();feedbackClient?.dispose();profileClient.dispose();disposed=true;for(const remove of [...events,...dynamicEvents])remove();members.clear();rows.clear();reportedChallenges.clear();ownId=null;root.replaceChildren(el('h2','Private collaborations'),el('p','Private workspace closed. Unsaved private drafts were cleared.'));}});
 }
