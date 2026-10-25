@@ -1,8 +1,8 @@
 # Disabled private-report review candidate
 
 This source adds the owner's explicit private-review workflow. It is not mounted
-or serving. The prior disabled foundation is installed in the Account Pilot; the
-service-aware snapshot update in this source remains unapplied. The host must
+or serving. The disabled foundation and service-aware snapshot update have been
+independently verified in the Account Pilot with access still closed. The host must
 supply the authenticated client and dispose the panel on sign-out. A browser owner
 flag cannot authorize review.
 
@@ -75,8 +75,7 @@ boundary comparison. It has no connection or apply method. The new store refuses
 the old envelope; an old host must be explicitly upgraded before this service can
 be used. The preserved v1 fixture is an upgrade baseline, not an installer.
 
-Before hosted use: apply and verify the reviewed disabled snapshot upgrade, run
-required CI/provider checks and dependency audit, review the exact reviewer/runtime
+Before hosted use: run required CI/provider checks and dependency audit, review the exact reviewer/runtime
 binding, finish provider/independent recovery, prove ongoing cleanup and backup
 deletion behavior, and obtain activation decisions. This source grants no authority
 for those operations. The local canonical reconstruction and hosted checkpoint
@@ -85,3 +84,25 @@ evidence remain dated to their accepted source versions.
 The fictional local panel has an owner-reported keyboard/focus/200% zoom check.
 Actual assistive-technology, physical mobile, network and authenticated hosted
 journeys remain gates. No WCAG conformance or response-time promise is made.
+
+## Complete local member-to-owner journey
+
+The shared managed-application fixture now prepares checkpoint5 with all five
+data domains, then exercises the real combined application and restricted SQL
+stores over three disposable TLS databases. Two fictional members create their
+profiles, consent to a collaboration, post an idea, support it and report it
+privately. The configured owner uses the browser review client to load metadata,
+read selected context and save a review. Private profile identifiers never reach
+the review response, and recording a review does not remove the member's idea.
+
+The same journey checks that an ordinary member cannot use owner review, deleting
+the owner's real SQL session denies review despite an accepted Auth cookie, and
+withdrawn signed serving authority closes profile/community/feedback/review
+together. No additional UI layout, interaction pattern or manual acceptance is
+introduced. Existing owner keyboard/focus/zoom evidence remains separate.
+
+Auth HTTP, API/Lambda identity, DynamoDB, Secrets Manager and KMS responses remain
+explicit synthetic adapters with ephemeral test keys. Actual PostgreSQL/session
+and signed application interactions do not establish hosted-provider, independent
+machine or assistive-technology acceptance. All disposable services and scratch
+must be removed after the run. This fixture never contacts hosted services.
