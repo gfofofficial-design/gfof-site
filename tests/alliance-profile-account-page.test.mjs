@@ -16,6 +16,61 @@ function fixture(fetcher,options={}){
 }
 const regular=url=>url.endsWith('/session')?json(account):json({profile,revision:1});
 
+const reviewOptions={collaborationEnabled:true,feedbackEnabled:true,reportReviewEnabled:true};
+const reportId='99999999-9999-4999-8999-999999999999';
+function reviewRecord({loaded=true,reviewed=false}={}){
+ const created=Date.now()-10000,first=reviewed?Date.now()-1000:null;
+ return {id:reportId,kind:'idea',target:'88888888-8888-4888-8888-888888888888',contextState:'available',contextLoaded:loaded,targetTitle:loaded?'Private fictional context':null,targetSummary:loaded?'A private fictional report for lifecycle acceptance.':null,createdAt:new Date(created).toISOString(),reviewedAt:first===null?null:new Date(first).toISOString(),disposition:reviewed?'no_action':'unreviewed',expiresAt:new Date((first??created)+(reviewed?30:90)*86400000).toISOString()};
+}
+const reviewReply=(url,init)=>url.includes('/report-review/reports?')?json({state:'ready',page:{items:[reviewRecord({loaded:false})],next:null}}):url.includes('/report-review/report?')?json({state:'ready',report:reviewRecord()}):url.endsWith('/report-review/review')?json({state:'ready',report:reviewRecord({reviewed:true})}):regular(url,init);
+const reviewNode=(f,id)=>f.doc.getElementById('arr-'+id);
+async function readReview(f){await reviewNode(f,'load').emit('click');reviewNode(f,'selection').value=reportId;await reviewNode(f,'selection').emit('change');await reviewNode(f,'read').emit('click');}
+
+test('review capability stays explicit; owner controls load/read/save and sign-out clears private context',async()=>{
+ assert.throws(()=>fixture(regular,{reportReviewEnabled:true}),/configuration/);
+ const f=fixture(reviewReply,reviewOptions);
+ try{
+  assert.equal(f.calls.length,0);assert.equal(reviewNode(f,'load'),null);await f.host.check();assert.equal(f.calls.length,1);
+  await readReview(f);assert.equal(f.calls.length,3);assert.match(reviewNode(f,'detail').textContent,/Private fictional context/);
+  reviewNode(f,'checked').checked=true;await reviewNode(f,'checked').emit('change');await reviewNode(f,'save').emit('click');
+  assert.equal(f.calls.length,4);assert.deepEqual(JSON.parse(f.calls[3].init.body),{id:reportId,expected:'unreviewed',disposition:'no_action'});
+  assert.match(reviewNode(f,'status').textContent,/Review confirmed/);const old=reviewNode(f,'load');
+  f.channel.dispatchEvent(new MessageEvent('message',{data:{type:'signed-out',remoteRevoked:false}}));
+  assert.match(f.get('report-review').textContent,/closed/);assert.doesNotMatch(f.get('report-review').textContent,/Private fictional context/);await old.emit('click');assert.equal(f.calls.length,4);
+ }finally{f.host.dispose();}
+});
+
+test('late private review read cannot repopulate a replacement account panel',async()=>{
+ const gate=deferred();let reads=0,sessions=0;
+ const f=fixture((url,init)=>url.endsWith('/session')?json(++sessions===1?account:{...account,user:{...account.user,id:'77777777-7777-4777-8777-777777777777'}}):url.includes('/report-review/reports?')&&++reads===1?gate.promise:reviewReply(url,init),reviewOptions);
+ try{
+  await f.host.check();const earlier=reviewNode(f,'load').emit('click');while(!reads)await tick();
+  f.channel.dispatchEvent(new MessageEvent('message',{data:{type:'signed-out',remoteRevoked:false}}));await f.host.check();const current=reviewNode(f,'selection');
+  gate.resolve(json({state:'ready',page:{items:[reviewRecord({loaded:false})],next:null}}));await earlier;await tick();
+  assert.equal(reviewNode(f,'selection'),current);assert.equal(current.children.length,1);assert.doesNotMatch(f.get('report-review').textContent,/Private fictional context/);assert.equal(f.calls.length,3);
+ }finally{gate.resolve(json({state:'ready',page:{items:[],next:null}}));f.host.dispose();}
+});
+
+test('review sign-in refusal clears the page instead of retaining an earlier private report',async()=>{
+ let rejectRead=false;const f=fixture((url,init)=>rejectRead&&url.includes('/report-review/')?json({state:'sign_in_required'},401):reviewReply(url,init),reviewOptions);
+ try{
+  await f.host.check();await readReview(f);assert.match(f.get('report-review').textContent,/Private fictional context/);
+  rejectRead=true;await reviewNode(f,'read').emit('click');assert.match(f.get('report-review').textContent,/closed/);assert.doesNotMatch(f.get('report-review').textContent,/Private fictional context/);assert.equal(f.get('fields').disabled,true);
+ }finally{f.host.dispose();}
+});
+
+test('profile removal clears owner review before the removal request is sent',async()=>{
+ let f;f=fixture((url,init)=>{
+  if(url.endsWith('/removal-status'))return json({state:'ready',profileId:profile.id,version:7});
+  if(init.method==='DELETE'){assert.match(f.get('report-review').textContent,/closed/);assert.doesNotMatch(f.get('report-review').textContent,/Private fictional context/);return json({state:'committed',version:8});}
+  return reviewReply(url,init);
+ },reviewOptions);
+ const find=text=>{const walk=n=>n.textContent===text?n:n.children.map(walk).find(Boolean);return walk(f.get('removal'));};
+ try{
+  await f.host.check();await readReview(f);await find('Review profile removal').emit('click');const check=f.get('removal').children[3].children[0].children[0];check.checked=true;await check.emit('change');await find('Remove my Alliance profile').emit('click');assert.equal(f.calls.filter(c=>c.init.method==='DELETE').length,1);
+ }finally{f.host.dispose();}
+});
+
 test('normal entry stays closed with no request, listener-created channel or browser flag bypass',async()=>{
  let channels=0;const f=fixture(()=>{throw Error('No I/O');},{enabled:false,createChannel:()=>{channels++;throw Error('No channel');}});
  assert.equal(await f.host.check(),false);assert.equal(f.calls.length,0);assert.equal(channels,0);assert.equal(f.get('account-check').disabled,true);assert.equal(f.get('fields').disabled,true);

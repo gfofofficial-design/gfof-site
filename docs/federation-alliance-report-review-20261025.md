@@ -6,6 +6,16 @@ independently verified in the Account Pilot with access still closed. The host m
 supply the authenticated client and dispose the panel on sign-out. A browser owner
 flag cannot authorize review.
 
+The member/account page can now supply that lifecycle with the explicit
+`reportReviewEnabled` capability, requiring its existing member/collaboration/
+feedback capabilities. It mounts the cookie review client without reading any
+reports until the user chooses Load. Sign-out, account replacement, profile
+removal and disposal clear private context; a review-route sign-in refusal closes
+the page, and late reads cannot populate a replacement account. The normal page
+entry still supplies no enabled options and makes no requests. This capability
+controls presentation only: the configured server reviewer and current SQL
+session remain the actual authority. No reviewer identity comes from the browser.
+
 The existing member executor gets four fixed private entry points: a bounded
 metadata queue, one selected read, a review update and recovery inventory. A
 separate default-off control binds exactly one verified Auth actor. Each read or
