@@ -11,6 +11,13 @@ const MESSAGES = Object.freeze({idle: 'No quote requested. Trading is closed; wa
   unavailable: 'We could not verify a quote. The provider, route or browser connection may be unavailable. This does not prove GFOF cannot trade elsewhere.',
   rate: 'Please wait before checking again. Quotes are manual; this preview will not retry automatically.'});
 
+export function formatPriceImpact(value) {
+  if (value === null) return 'Not returned';
+  if (value !== 0 && Math.abs(value) < 0.0001) return value < 0 ? 'Between -0.0001% and 0%' : 'Between 0% and 0.0001%';
+  const rounded = Number(value.toFixed(4));
+  return (rounded !== value ? '≈ ' : '') + rounded + '%';
+}
+
 export function mountSwapPage(doc, options = {}) {
   const $ = id => doc.getElementById(id);
   if (!$('swap-form')) return null;
@@ -41,7 +48,7 @@ export function mountSwapPage(doc, options = {}) {
       $('swap-output').textContent = q.output + ' ' + q.outputSymbol;
       $('swap-router').textContent = ({metis: 'Metis', jupiterz: 'JupiterZ', dflow: 'Dflow', okx: 'OKX'})[q.router];
       $('swap-fee').textContent = q.feeBps === null ? 'Not returned · total costs not verified' : q.feeBps / 100 + '% · total costs not verified';
-      $('swap-impact').textContent = q.priceImpact === null ? 'Not returned' : q.priceImpact + '%';
+      $('swap-impact').textContent = formatPriceImpact(q.priceImpact);
       $('swap-minimum').textContent = q.minimumOutput === null ? 'Not returned' : q.minimumOutput + ' ' + q.outputSymbol + (q.minimumOutput === '0' ? ' · no positive minimum' : '');
       $('swap-slippage').textContent = q.slippageBps === null ? 'Not returned' : q.slippageBps / 100 + '%';
       $('swap-review-notes').textContent = q.reviewNotes.length ? q.reviewNotes.join(' ') + ' Trading remains closed.' : 'Provider details returned. No protection is enforced in a transaction here; trading remains closed.';

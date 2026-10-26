@@ -31,3 +31,13 @@ Owner screenshots show 0.01 SOL and 1 SOL quote checks unavailable. The browser 
 Independent server-side quote-only requests with the preview Origin returned HTTP 200 and matching CORS for 0.01 SOL and 1 SOL. This does not prove browser acceptance. No wallet, signature or funds were involved.
 
 Next Dev step: use the existing protected preview in a personal browser/network; inspect response headers and the exact blocked destination if quoting fails there. Test wallet permission separately. Do not alter corporate trust stores, bypass warnings, introduce a proxy to evade filtering, or replay Alliance recovery/Auth/KMS trials. No more work-PC retries are needed.
+
+## Owner phone quote evidence — 2026-10-26
+
+Owner-provided iPhone screenshots on a cellular connection show successful quote display in both directions:
+
+- IMG_1989.png: 0.01 SOL → 48,089.843267 GFOF, router OKX, displayed receipt time 12:18:22 PM.
+- IMG_1991.png: 1,000 GFOF → 0.000201929 SOL, router Dflow, displayed receipt time 12:20:59 PM.
+- IMG_1990.png: no compatible installed wallet detected; connection controls disabled and mobile handoff unavailable message shown.
+
+This is owner-observed mobile quote display, not agent-run browser validation. Quote values are historical examples, not prices to preload. No trade, signature, wallet connection or mobile wallet handoff is proved. Expiry, opposite-direction invalidation, wallet permission and execution acceptance remain separate checks. The successful phone quotes do not establish the exact cause of work-browser certificate failure.

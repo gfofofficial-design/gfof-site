@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {mountSwapPage} from '../assets/federation/swap/swap-page.mjs';
+import {mountSwapPage, formatPriceImpact} from '../assets/federation/swap/swap-page.mjs';
 import {GFOF, SOL} from '../assets/federation/swap/quote-core.mjs';
 
 const html = readFileSync(new URL('../swap.html', import.meta.url), 'utf8');
@@ -160,4 +160,13 @@ test('network failures explain uncertainty without asking users to weaken browse
   assert.match(f.get('swap-message').textContent, /Do not bypass security warnings/);
   assert.equal(f.get('swap-message').textContent.includes('certificate detail'), false);
   assert.equal(f.get('swap-trade').disabled, true); assert.equal(f.calls.length, 1); f.api.dispose();
+});
+
+test('price impact is readable without losing sign or presenting tiny values as zero', () => {
+  assert.equal(formatPriceImpact(-1.359343895885477), '≈ -1.3593%');
+  assert.equal(formatPriceImpact(1.2399722312336638), '≈ 1.24%');
+  assert.equal(formatPriceImpact(-0.000001), 'Between -0.0001% and 0%');
+  assert.equal(formatPriceImpact(0.000001), 'Between 0% and 0.0001%');
+  assert.equal(formatPriceImpact(0), '0%');
+  assert.equal(formatPriceImpact(null), 'Not returned');
 });
