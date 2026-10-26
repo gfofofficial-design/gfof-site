@@ -46,3 +46,8 @@ test('Arena publishes only numbered rules and results pages, excluding drafts an
  assert.deepEqual(copied,['arena/arena-0001-results.html','arena/arena-0001-rules.html']);
  for(const path of copied)assert.equal(await readFile(join(root,'dist',path),'utf8'),files[path]);
 });
+
+test('offline swap fee review tools never enter public output',async t=>{
+ const root=await fixture(t,{'swap.html':'public quote','tools/swap-review/fee-review.mjs':'offline helper','tools/swap-review/GALACTIC_SWAP_FEE_READINESS_20261026.md':'operator review'});
+ assert.deepEqual(await buildStaticPublish(root),['swap.html']);
+});
