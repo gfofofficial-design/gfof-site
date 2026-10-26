@@ -13,5 +13,8 @@
   #member-list{grid-template-columns:1fr;max-height:320px;overflow-y:auto;scrollbar-gutter:stable}
   .list-member{min-height:52px;font-size:13px}.list-member small{font-size:11px}
   .photo-editor>div:last-child{min-width:0;flex:1}
-  .profile:focus-visible{outline:2px solid var(--mint);outline-offset:-3px}
 }
+
+.map-start{max-width:78ch;margin:0 0 20px;color:var(--muted);font-size:12px;line-height:1.7}.map-start strong{color:var(--text);font-weight:500}
+
+.profile:focus-visible{outline:2px solid var(--mint);outline-offset:-3px}
