@@ -76,6 +76,14 @@ stays uncertain and is not resent; an explicit successful read of that same repo
 can clear the client's write hold. The server faults closed after an uncertain
 database outcome; reconciliation may require a fresh verified server connection.
 
+The explicit **Start a fresh queue read** action closes the old browser client
+and creates a fresh one before clearing the local uncertainty note. It makes no
+request and does not undo or resend the earlier review. Loading, reading a report
+and confirming another save still require separate user actions. If the client
+cannot be replaced, the panel closes and clears its private context; the member
+must check sign-in again. This local reset cannot reopen a faulted server or
+restore withdrawn serving authority.
+
 The database change is one private `snapshot(uuid,boolean)` replacement. The two
 tables, eight functions, owners, function OID/ACLs, execute permissions, retention
 and existing roles remain unchanged. The source-only upgrade planner pins the
