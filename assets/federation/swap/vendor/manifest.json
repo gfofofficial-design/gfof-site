@@ -1,0 +1,18 @@
+{
+  "packages": {
+    "@wallet-standard/app": "1.1.1",
+    "@wallet-standard/features": "1.1.1"
+  },
+  "license": "Apache-2.0",
+  "source": "https://github.com/wallet-standard/wallet-standard",
+  "notes": "Unmodified npm ESM runtime files. Source maps omitted. Registry discovery does not authenticate wallet metadata. Base 1.1.1 is a reviewed type-only dependency; no base runtime is shipped.",
+  "sha256": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "app/index.js": "26c8b6f40da3552f515a3f2787825679ee746ff8d61dfff599599aeb353e4ac0",
+    "app/wallets.js": "36155c770206ac029d5a86348281b721fb7aa7b0a572a8491ff74c095d17ed97",
+    "features/connect.js": "f5156a12782090b3ef676df93a3d77cd805c4f3f13e6dc2b002e2f531edc6f81",
+    "features/disconnect.js": "a6da7c754751a480942488b0bb6ebd67e4cae3789a23f6d99618c71aba8cf5e0",
+    "features/events.js": "604589560aac084887f07e32811b85137fc0a17cb256a07521e2f1d3ad458e62",
+    "features/index.js": "ef0e37143dadbbf84f43c6ed2bfe6c891cbc09f3a39d11f3bf12dc646d4e077e"
+  }
+}

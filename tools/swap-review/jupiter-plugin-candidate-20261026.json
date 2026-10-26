@@ -1,0 +1,108 @@
+{
+  "schema": "gfof-swap-plugin-candidate-review/v1",
+  "reviewedAtUtc": "2026-10-26T15:54:45.045947+00:00",
+  "state": "not_adopted",
+  "releaseApproval": false,
+  "scope": "Registry metadata and tarball-integrity verification, package-lock-only dependency resolution, npm production-dependency audit, and limited static inspection. No package code, install scripts, wallet integration or financial operation was executed.",
+  "candidate": {
+    "name": "@jup-ag/plugin",
+    "version": "1.0.16",
+    "registryIntegrity": "sha512-ZZrIDy9plBEHbrUHJ6anbIqb5CrdR/4srz2AR6Kj6gTT3YTfEMdHronpZUvsoGIa8gyVwDvjRCfpmK5eIsLxig==",
+    "integrityMatched": true,
+    "tarball": "https://registry.npmjs.org/@jup-ag/plugin/-/plugin-1.0.16.tgz",
+    "publishedGitHead": "071fabc2aeaa53bd0067442eb7ab3383bce1c2cf",
+    "licenseDeclared": "MIT"
+  },
+  "upstreamRepository": {
+    "url": "https://github.com/jup-ag/plugin",
+    "reviewedHead": "d699fde6ef0e443a0f879afc4ae334777f95140b",
+    "packageVersionAtHead": "1.0.17",
+    "note": "The published 1.0.16 artifact is not the same version as this repository head. Do not claim source/build parity."
+  },
+  "resolution": {
+    "initialAttempt": "Failed ETARGET metro-runtime@0.87.2; the registry metadata endpoint subsequently returned HTTP 200 for that version.",
+    "freshRegistryRetry": "Succeeded using the official npm registry, prefer-online, package-lock-only and ignore-scripts. No node_modules or lifecycle scripts installed/executed.",
+    "lockSha256": "5b7b584411f3bf5de728184ea1a81c953f6b382dcb3b5ca695a70bacaf49aadd",
+    "lockBytes": 889168
+  },
+  "audit": {
+    "command": "npm audit --omit=dev --package-lock-only --json --registry=https://registry.npmjs.org/",
+    "exitCode": 1,
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 13,
+        "moderate": 68,
+        "high": 33,
+        "critical": 2,
+        "total": 116
+      },
+      "dependencies": {
+        "prod": 1179,
+        "dev": 0,
+        "optional": 98,
+        "peer": 402,
+        "peerOptional": 0,
+        "total": 1596
+      }
+    },
+    "reportSha256": "149ef90663edc361b500a31f69fc978b3f684951e77e42ccff6f753db8dfa0fa",
+    "criticalPackages": [
+      {
+        "package": "next",
+        "range": "0.9.9 - 16.3.0-preview.10",
+        "advisories": [
+          {
+            "source": 1113690,
+            "title": "Authorization Bypass in Next.js Middleware",
+            "url": "https://github.com/advisories/GHSA-f82v-jwr5-mffw",
+            "severity": "critical"
+          },
+          {
+            "source": 1193677,
+            "title": "Next.js: Unauthenticated Remote Code Execution on windows-hosted servers",
+            "url": "https://github.com/advisories/GHSA-p293-qw3h-jr36",
+            "severity": "critical"
+          },
+          {
+            "source": 1193733,
+            "title": "Next.js: Unauthenticated Remote Code Execution in Image Optimization API when AVIF files are used",
+            "url": "https://github.com/advisories/GHSA-2xp9-vwfh-vxw4",
+            "severity": "critical"
+          },
+          {
+            "source": 1242817,
+            "title": "Next.js: Unauthenticated Remote Code Execution in Image Optimization API when SVG files are used",
+            "url": "https://github.com/advisories/GHSA-2464-fhr4-w9xw",
+            "severity": "critical"
+          }
+        ]
+      },
+      {
+        "package": "protobufjs",
+        "range": "<=7.6.4",
+        "advisories": [
+          {
+            "source": 1117571,
+            "title": "Arbitrary code execution in protobufjs",
+            "url": "https://github.com/advisories/GHSA-xq3m-2v4x-88gg",
+            "severity": "critical"
+          }
+        ]
+      }
+    ],
+    "scopeLimit": "These are candidate dependency-graph findings, not verified vulnerabilities in the deployed GFOF site or proof that every affected server/runtime feature ships in a browser widget. Full applicability and remediation remain unreviewed."
+  },
+  "staticFindings": [
+    "The NPM artifact declares next@13.5.6 and broad wallet-adapter dependencies.",
+    "The inspected artifact contains remote-script/style loading and defaults autoConnect to true when unspecified. A pinned wrapper alone is insufficient to approve its entire dynamic asset chain.",
+    "It references Ultra endpoints and several external data/image/font origins. Our V2 quote preview and its strict CSP are not a reviewed execution integration for that artifact."
+  ],
+  "decision": "Keep the candidate out of runtime dependencies, the public static bundle and page scripts. Do not broaden the current CSP, enable wallet connection or signing, or treat an integrity match as a security approval.",
+  "next": [
+    "Resolve a maintained candidate/version and exact source/build/dependency provenance.",
+    "Review advisory applicability and remediation with a reproducible release lock.",
+    "Review every dynamic asset and network origin; disable auto-connect explicitly.",
+    "Complete fixed-mint, fee/protection, transaction and desktop/mobile acceptance before proposing activation."
+  ]
+}
