@@ -23,3 +23,11 @@ Record only browser/device, preview commit, step results and nonsecret error tex
 ## Outstanding after this check
 
 Transaction decoding and validation, signing integration, mobile flow, transaction-cost review, and separately authorized bounded owner trade acceptance remain future work. Passing address-preview acceptance is not permission to open trading.
+
+## Work-browser observation — 2026-10-26
+
+Owner screenshots show 0.01 SOL and 1 SOL quote checks unavailable. The browser console shows `net::ERR_CERT_AUTHORITY_INVALID` for `api.jup.ag`, Phantom content-script connection errors, and additional CSP violations whose destinations were collapsed in the screenshot. The precise cause of the certificate trust failure and those separate CSP destinations is not established. Do not classify this as an unavailable token route or claim that all CSP issues are resolved.
+
+Independent server-side quote-only requests with the preview Origin returned HTTP 200 and matching CORS for 0.01 SOL and 1 SOL. This does not prove browser acceptance. No wallet, signature or funds were involved.
+
+Next Dev step: use the existing protected preview in a personal browser/network; inspect response headers and the exact blocked destination if quoting fails there. Test wallet permission separately. Do not alter corporate trust stores, bypass warnings, introduce a proxy to evade filtering, or replay Alliance recovery/Auth/KMS trials. No more work-PC retries are needed.

@@ -101,8 +101,15 @@ async function fetchQuote(request, {fetchImpl, signal, setTimer, clearTimer}) {
     timer = setTimer(() => { controller.abort(); stopReader(); reject(failure('timeout')); }, 8000);
   });
   const work = (async () => {
-    const response = await fetchImpl(request.url, {method: 'GET', credentials: 'omit', cache: 'no-store',
-      redirect: 'error', referrerPolicy: 'no-referrer', headers: {Accept: 'application/json'}, signal: controller.signal});
+    let response;
+    try { response = await fetchImpl(request.url, {method: 'GET', credentials: 'omit', cache: 'no-store',
+      redirect: 'error', referrerPolicy: 'no-referrer', headers: {Accept: 'application/json'}, signal: controller.signal}); }
+    catch (error) {
+      if (controller.signal.aborted) throw failure('cancelled');
+      // Fetch does not expose certificate, CORS, CSP or filtering details to page code.
+      if (error instanceof TypeError) throw failure('network');
+      throw error;
+    }
     reader = response.body?.getReader();
     if (controller.signal.aborted) { stopReader(); throw failure('cancelled'); }
     if (response.status === 429) throw failure('rate');
@@ -161,7 +168,7 @@ export function createQuoteController({fetchImpl = globalThis.fetch, onState, no
         emit({phase: 'ready', quote});
       } catch (error) {
         if (disposed || current !== version) return;
-        const phase = ['rate', 'timeout', 'cancelled'].includes(error?.code) ? error.code : 'unavailable';
+        const phase = ['rate', 'timeout', 'cancelled', 'network'].includes(error?.code) ? error.code : 'unavailable';
         if (phase === 'rate') nextAllowed = now() + 30000;
         emit({phase, ...(phase === 'rate' ? {retryAt: nextAllowed} : {})});
       } finally { if (current === version) active = undefined; }

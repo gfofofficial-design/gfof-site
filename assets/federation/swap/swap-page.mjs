@@ -7,6 +7,7 @@ const MESSAGES = Object.freeze({idle: 'No quote requested. Trading is closed; wa
   expired: 'The quote display expired after 30 seconds. Check again for a current indicative amount.',
   cancelled: 'Quote check cancelled. No trade was created.',
   timeout: 'The quote check timed out. No trade was created. You can try another check.',
+  network: 'Your browser could not reach the quote service. A network, certificate, browser security rule or service issue may be responsible. This page cannot identify which. Do not bypass security warnings; try later on your personal device or ask your IT team.',
   unavailable: 'We could not verify a quote. The provider, route or browser connection may be unavailable. This does not prove GFOF cannot trade elsewhere.',
   rate: 'Please wait before checking again. Quotes are manual; this preview will not retry automatically.'});
 

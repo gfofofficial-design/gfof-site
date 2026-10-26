@@ -151,3 +151,13 @@ test('broken optional wallet discovery cannot block manual quotes', async () => 
   f.get('swap-amount').value='0.01';f.get('swap-form').emit('submit');await flush();
   assert.equal(f.calls.length,1);assert.equal(f.get('swap-result').hidden,false);assert.equal(f.get('swap-trade').disabled,true);f.api.dispose();
 });
+
+test('network failures explain uncertainty without asking users to weaken browser security', async () => {
+  const f = fixture(async () => { throw new TypeError('certificate detail'); });
+  f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit'); await flush();
+  assert.match(f.get('swap-message').textContent, /could not reach the quote service/);
+  assert.match(f.get('swap-message').textContent, /cannot identify which/);
+  assert.match(f.get('swap-message').textContent, /Do not bypass security warnings/);
+  assert.equal(f.get('swap-message').textContent.includes('certificate detail'), false);
+  assert.equal(f.get('swap-trade').disabled, true); assert.equal(f.calls.length, 1); f.api.dispose();
+});

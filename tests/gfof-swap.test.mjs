@@ -175,3 +175,12 @@ test('malformed or impossible review details cannot become a usable quote projec
     assert.throws(() => projectQuote(response(change), request(), 0), {code: 'unavailable'});
   }
 });
+
+test('browser transport failure has a distinct safe state without inventing the cause', async () => {
+  const states = [];
+  const controller = createQuoteController({fetchImpl: async () => { throw new TypeError('private network detail'); }, onState: state => states.push(state)});
+  await controller.request('buy', '0.01');
+  assert.equal(states.at(-1).phase, 'network');
+  assert.equal(JSON.stringify(states).includes('private network detail'), false);
+  controller.dispose();
+});
