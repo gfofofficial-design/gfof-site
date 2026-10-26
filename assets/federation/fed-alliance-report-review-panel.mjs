@@ -15,7 +15,8 @@ export function mountAllianceReportReviewPanel(root,{enabled=false,clientFactory
  root.setAttribute('aria-labelledby','arr-title');root.replaceChildren(title,status);
  if(!enabled)return Object.freeze({dispose(){root.replaceChildren(title,el('p','Private review closed.'));}});
  if(typeof clientFactory!=='function')throw Error('report_review_panel_configuration');
- client=clientFactory();if(!client||!['list','read','review','close'].every(k=>typeof client[k]==='function'))throw Error('report_review_panel_configuration');
+ const validClient=value=>value&&['list','read','review','close'].every(k=>typeof value[k]==='function');
+ client=clientFactory();if(!validClient(client))throw Error('report_review_panel_configuration');
  root.append(el('p','Owner review is private. Loading reads one page of report records. It does not contact members or remove content.'),
   el('p','Reviewed reports expire 30 days after the first review; unreviewed reports expire 90 days after receipt. Encrypted recovery copies may retain them for up to 30 additional days. Earlier removal can delete records sooner.'));
  const load=button('load','Load private reports'),stop=button('stop','Stop waiting'),more=button('more','Read more reports');root.append(load,stop,more);
@@ -74,8 +75,21 @@ export function mountAllianceReportReviewPanel(root,{enabled=false,clientFactory
   const previous=unknown;if(!previous)return;const value=await client.read(previous.id,{signal});check();const r=reportReviewRecord(value);if(r.id!==previous.id)throw Error('mismatch');
   apply(r);unknown=undefined;freshId=null;render();say(r.disposition===previous.disposition?'The saved review now matches your requested outcome. Nothing was resubmitted.':'The saved state differs from your requested outcome. Nothing was resubmitted. Read the report before deciding again.');
  }));
- listen(nodes.fresh,'click',()=>{if(!unknown||busy)return;unknown=undefined;pending=undefined;freshRead();say('The local uncertainty note was cleared. The earlier review was not undone or repeated. Load reports to read the current state.');load.focus();controls();});
+ listen(nodes.fresh,'click',()=>{
+  if(!unknown||busy||disposed)return;
+  return run(async check=>{
+   let replacement;
+   try{
+    await client.close();check();replacement=clientFactory();if(!validClient(replacement))throw Error('reset');check();client=replacement;
+   }catch{
+    try{Promise.resolve(replacement?.close?.()).catch(()=>{});}catch{}
+    dispose('Private review reset could not be confirmed. Earlier reads were cleared. Check sign-in again to reopen review.');return;
+   }
+   unknown=undefined;pending=undefined;freshRead();say('The local uncertainty note was cleared. The earlier review was not undone or repeated. Load reports to read the current state.');
+  }).then(()=>{if(!disposed&&!unknown&&!busy)load.focus();});
+ });
  listen(stop,'click',()=>{if(!busy)return;epoch++;active?.abort();active=undefined;busy=false;freshId=null;checked.checked=false;if(pending){unknown=pending;pending=undefined;}render();say(unknown?'Waiting stopped. Review may have completed; check the saved result.':'Waiting stopped. Earlier reads are not current confirmation.');(unknown?nodes.check:load).focus();});
  choices();render();say('No reports have been read. Choose Load private reports when ready.');
- return Object.freeze({dispose(){if(disposed)return;disposed=true;epoch++;active?.abort();try{Promise.resolve(client.close()).catch(()=>{});}catch{}for(const off of events)off();rows.clear();pending=unknown=undefined;root.replaceChildren(title,el('p','Private review closed. Earlier reads were cleared.'));}});
+ function dispose(message='Private review closed. Earlier reads were cleared.'){if(disposed)return;disposed=true;epoch++;active?.abort();try{Promise.resolve(client.close()).catch(()=>{});}catch{}for(const off of events)off();rows.clear();pending=unknown=undefined;root.replaceChildren(title,el('p',message));}
+ return Object.freeze({dispose:()=>dispose()});
 }
