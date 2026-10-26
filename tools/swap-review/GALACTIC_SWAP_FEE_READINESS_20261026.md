@@ -22,7 +22,7 @@ match a 50-bps total or silently accept a larger rate.
 
 ## Prepared source
 
-`lib/galactic-swap/fee-review.mjs` is an offline metadata review helper, excluded
+`tools/swap-review/fee-review.mjs` is an offline metadata review helper, excluded
 from static output and not imported by the live page. It requires explicit public
 owner/referral/fee-token-account bindings, copies them, checks the fixed SOL/GFOF
 pair, the returned referral account, fee mint and exact 50-bps rate, and refuses
@@ -35,9 +35,9 @@ a signing gate by itself or change its fixed false states to activate a service.
 
 ## Next owner input and Dev work
 
-1. Owner selects the PUBLIC fee-receiving wallet address. Do not infer it from a
-   treasury label or use a token mint as a receiving wallet. No private key,
-   seed phrase, backup key, code or secret screenshot is needed in chat.
+1. Owner has selected the public receiving wallet; its exact address is retained
+   in the private continuity receipt. Verify control on Dev before account setup.
+   Do not request another wallet selection or any private key in chat.
 2. Reconcile any existing Jupiter referral account before creating one. Verify
    the referral program, account owner and partner/recipient, and corresponding
    fee-token accounts on-chain. Review exact fees/rent before an owner-signed

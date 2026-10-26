@@ -1,10 +1,10 @@
 name: GFOF swap quote preview
 on:
   pull_request:
-    paths: ['swap.html', 'assets/federation/swap/**', 'lib/galactic-swap/**', 'tests/gfof-swap*.mjs', 'netlify.toml', '.github/workflows/gfof-swap.yml']
+    paths: ['swap.html', 'assets/federation/swap/**', 'tools/swap-review/**', 'tests/gfof-swap*.mjs', 'netlify.toml', '.github/workflows/gfof-swap.yml']
   push:
     branches: [main]
-    paths: ['swap.html', 'assets/federation/swap/**', 'lib/galactic-swap/**', 'tests/gfof-swap*.mjs', 'netlify.toml', '.github/workflows/gfof-swap.yml']
+    paths: ['swap.html', 'assets/federation/swap/**', 'tools/swap-review/**', 'tests/gfof-swap*.mjs', 'netlify.toml', '.github/workflows/gfof-swap.yml']
 permissions:
   contents: read
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24.22.1'
-      - run: node --check lib/galactic-swap/fee-review.mjs
+      - run: node --check tools/swap-review/fee-review.mjs
       - run: node --check assets/federation/swap/quote-core.mjs
       - run: node --check assets/federation/swap/swap-page.mjs
       - run: node --check assets/federation/swap/wallet-preview.mjs

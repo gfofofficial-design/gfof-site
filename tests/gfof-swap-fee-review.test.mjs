@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {FEE_POLICY,createFeeMetadataReview} from '../lib/galactic-swap/fee-review.mjs';
+import {FEE_POLICY,createFeeMetadataReview} from '../tools/swap-review/fee-review.mjs';
 const SOL='So11111111111111111111111111111111111111112';
 const GFOF='Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV';
 // Syntax-only fixtures, never endorsed receiving accounts or on-chain setup.
