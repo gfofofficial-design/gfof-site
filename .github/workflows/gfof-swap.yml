@@ -24,3 +24,7 @@ jobs:
       - run: node --check assets/federation/swap/wallet-preview.mjs
       - run: node --test tests/gfof-swap.test.mjs tests/gfof-swap-page.test.mjs tests/gfof-swap-wallet.test.mjs tests/gfof-swap-fee-review.test.mjs tests/static-publish.test.mjs
       - run: node scripts/build-static-publish.mjs
+      - name: Keep offline fee review out of the deploy artifact
+        run: |
+          test ! -e dist/tools/swap-review
+          test ! -e dist/lib/galactic-swap
