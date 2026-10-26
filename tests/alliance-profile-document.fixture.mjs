@@ -19,5 +19,5 @@ export function profileDocument(){
  const target=new EventTarget();
  doc={activeElement:null,body:new Element('body'),visibilityState:'visible',location:{origin},getElementById:id=>nodes.get(id)||null,createElement:tag=>new Element(tag),
   addEventListener:target.addEventListener.bind(target),removeEventListener:target.removeEventListener.bind(target),emit:type=>target.dispatchEvent(new Event(type))};
- const get=id=>nodes.get('ap-'+id);get('role').value='explorer';get('member-surface').append(get('name'),get('feedback'),get('collaboration'));return {doc,get};
+ const get=id=>nodes.get('ap-'+id);get('role').value='explorer';get('member-surface').append(get('name'),get('feedback'),get('collaboration'),get('report-review'));return {doc,get};
 }

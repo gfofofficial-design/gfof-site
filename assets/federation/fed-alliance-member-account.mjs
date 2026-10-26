@@ -6,11 +6,11 @@ const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/;
 const SESSION = '/api/federation-account/session';
 
 export function mountAllianceAccountMemberPage(document, {
-  enabled = false, collaborationEnabled = false, feedbackEnabled = false, origin, fetcher = globalThis.fetch,
+  enabled = false, collaborationEnabled = false, feedbackEnabled = false, reportReviewEnabled = false, origin, fetcher = globalThis.fetch,
   locks = globalThis.navigator?.locks, events = globalThis,
   createChannel = name => new BroadcastChannel(name), timeoutMs = 12000,
 } = {}) {
-  if (typeof feedbackEnabled !== 'boolean' || feedbackEnabled && (!enabled || !collaborationEnabled) || typeof collaborationEnabled !== 'boolean' || collaborationEnabled && !enabled || typeof enabled !== 'boolean' || !Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 12000 ||
+  if (typeof reportReviewEnabled !== 'boolean' || reportReviewEnabled && (!enabled || !feedbackEnabled) || typeof feedbackEnabled !== 'boolean' || feedbackEnabled && (!enabled || !collaborationEnabled) || typeof collaborationEnabled !== 'boolean' || collaborationEnabled && !enabled || typeof enabled !== 'boolean' || !Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 12000 ||
       enabled && (!ORIGIN.test(origin) || typeof fetcher !== 'function' ||
         document.location?.origin !== origin || typeof document.addEventListener !== 'function')) {
     throw Error('member_account_configuration');
@@ -20,7 +20,7 @@ export function mountAllianceAccountMemberPage(document, {
   const surface = document.getElementById('ap-member-surface');
   const accountLink = document.getElementById('ap-account-link');
   if (!button || !status || !surface || !accountLink) throw Error('member_account_configuration');
-  const page = mountAllianceMemberPage(document, {enabled, collaborationEnabled, feedbackEnabled, origin, fetcher});
+  const page = mountAllianceMemberPage(document, {enabled, collaborationEnabled, feedbackEnabled, reportReviewEnabled, origin, fetcher});
   let disposed = false, epoch = 0, generation = 0, flight = null, channel = null, accountId = null, resumeFocus = null;
   const visible = () => document.visibilityState === 'visible';
   const buttons = () => { button.disabled = !enabled || disposed || !visible() || flight !== null; };

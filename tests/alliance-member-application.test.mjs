@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {generateKeyPairSync,createHash,sign} from 'node:crypto';
-import {createAllianceMemberApplication,createAllianceCommunityApplication,createAllianceFeedbackApplication} from '../lib/alliance-member-application.mjs';
+import {createAllianceMemberApplication,createAllianceCommunityApplication,createAllianceFeedbackApplication,createAllianceReportReviewApplication} from '../lib/alliance-member-application.mjs';
 import {createNetlifyGatewaySigningRuntime} from '../lib/alliance-avatar-server/netlify-signing-runtime.mjs';
 import {RECOVERY_TABLES} from '../lib/alliance-avatar-server/recovery-pair.mjs';
 import {startupCheckpointSha256,startupDecisionBytes} from '../lib/alliance-avatar-server/startup-gate.mjs';
@@ -12,12 +12,14 @@ import {createProfileRemovalStatusClient} from '../assets/federation/fed-allianc
 import {memberHttpFixture,origin,fields,operation} from './alliance-member-http.fixture.mjs';
 import {communityCheckpointSha256} from '../lib/alliance-avatar-server/community-recovery.mjs';
 import {feedbackCheckpointSha256} from '../lib/alliance-avatar-server/feedback-recovery.mjs';
+import {reportReviewCheckpointSha256} from '../lib/alliance-avatar-server/report-review-recovery.mjs';
+import {createAllianceReportReviewClient} from '../assets/federation/fed-alliance-report-review-client.mjs';
 const zero='0'.repeat(64),tick=()=>new Promise(r=>setImmediate(r));
 const deferred=()=>{let resolve;return {promise:new Promise(r=>resolve=r),resolve:v=>resolve(v)};};
 // Three ephemeral signing roles, synthetic inventory/SQL/Auth. No private key is
 // exported to a file, logged or used against a provider. Transport stays memory-only.
-function fixture({readDecisionWork,drift=false,withCommunity=false,withFeedback=false}={}){
-  withCommunity=withCommunity||withFeedback;
+function fixture({readDecisionWork,drift=false,withCommunity=false,withFeedback=false,withReview=false}={}){
+  withFeedback=withFeedback||withReview;withCommunity=withCommunity||withFeedback;
   const f=memberHttpFixture(),root=generateKeyPairSync('ed25519'),witness=generateKeyPairSync('ed25519'),caller=generateKeyPairSync('ed25519');
   const publicHex=pair=>Buffer.from(pair.publicKey.export({format:'jwk'}).x,'base64url').toString('hex');
   const scope={memberProjectRef:'abcdefghijklmnopqrst',journalProjectRef:'uvwxyzabcdefghijklmn',epoch:'11111111-1111-4111-8111-111111111111'};
@@ -27,9 +29,10 @@ function fixture({readDecisionWork,drift=false,withCommunity=false,withFeedback=
   const checkpoint={format:2,...scope,freezeId:'66666666-6666-4666-8666-666666666666',capturedAt:new Date().toISOString(),member:inventory('member'),journal:inventory('journal')};
   if(withCommunity){checkpoint.format=3;checkpoint.community={format:1,domain:'community',closed:true,tables:['control','challenges','contributions','operations','blocks'].map(t=>({table:'alliance_community.'+t,rows:t==='control'?1:0,sha256:zero}))};}
   if(withFeedback){checkpoint.format=4;checkpoint.feedback={format:1,domain:'feedback',closed:true,tables:['control','ideas','supports','reports'].map(t=>({table:'alliance_feedback.'+t,rows:t==='control'?1:0,sha256:zero}))};}
+  if(withReview){checkpoint.format=5;checkpoint.reportReview={format:1,closed:true,expiredReports:0,tables:[{table:'alliance_report_review.control',rows:1,sha256:zero},{table:'alliance_report_review.reviews',rows:0,sha256:zero}]};}
   f.options.ledger.recoveryInventory=()=>{const v=structuredClone(checkpoint.member);if(drift)v.tables[0].sha256='f'.repeat(64);return v;};
   f.journal.recoveryInventory=()=>structuredClone(checkpoint.journal);
-  const control={state:'review',revision:1,freezeId:checkpoint.freezeId,frozenAt:new Date(Date.now()-1000).toISOString(),checkpointSha256:(withFeedback?feedbackCheckpointSha256:withCommunity?communityCheckpointSha256:startupCheckpointSha256)(checkpoint),floor:{sequence:0,sha256:zero}};
+  const control={state:'review',revision:1,freezeId:checkpoint.freezeId,frozenAt:new Date(Date.now()-1000).toISOString(),checkpointSha256:(withReview?reportReviewCheckpointSha256:withFeedback?feedbackCheckpointSha256:withCommunity?communityCheckpointSha256:startupCheckpointSha256)(checkpoint),floor:{sequence:0,sha256:zero}};
   const spki=caller.publicKey.export({format:'der',type:'spki'}),callerKey={keyId:createHash('sha256').update(spki).digest('hex'),spki:spki.toString('base64'),notBeforeUtc:new Date(Date.now()-10000).toISOString(),notAfterUtc:new Date(Date.now()+3600000).toISOString()};
   let keyReads=0,decisions=0,witnesses=0;
   const signing=createNetlifyGatewaySigningRuntime({enabled:true,expectedInstallation:expected,callerKey,readSecret:()=>{keyReads++;return caller.privateKey.export({format:'der',type:'pkcs8'}).toString('base64');}});
@@ -40,7 +43,13 @@ function fixture({readDecisionWork,drift=false,withCommunity=false,withFeedback=
   };
   if(withCommunity)options.communityStore={inventory:async()=>structuredClone(checkpoint.community),list:async()=>({items:[],next:null}),read:async()=>{throw Error('No fixture challenge');},change:async(a,s,input)=>({state:'conflict',revision:1}),block:async(a,s,input)=>({...input})};
   if(withFeedback)options.feedbackStore={inventory:async()=>structuredClone(checkpoint.feedback),list:async()=>({items:[],next:null}),read:async()=>{throw Error('No fixture idea');},change:async(a,s,input)=>({state:'recorded',id:input.id,kind:input.kind,target:input.target,removed:false})};
-  const app=(withFeedback?createAllianceFeedbackApplication:withCommunity?createAllianceCommunityApplication:createAllianceMemberApplication)(options);
+  if(withReview){
+   options.reviewerActor='11111111-1111-4111-8111-111111111111';
+   const report={id:operation(85),kind:'member',target:'99999999-9999-4999-8999-999999999999',contextState:'available',contextLoaded:true,targetTitle:'Fictional member',targetSummary:'A fictional context served only during this local test.',createdAt:new Date(Date.now()-1000).toISOString(),reviewedAt:null,disposition:'unreviewed',expiresAt:new Date(Date.now()-1000+90*86400000).toISOString()};
+   const evidence=loaded=>({record:{...report,contextLoaded:loaded,...(!loaded?{targetTitle:null,targetSummary:null}:{})},evidenceProfiles:['88888888-8888-4888-8888-888888888888',report.target]});
+   options.reportReviewStore={inventory:async()=>structuredClone(checkpoint.reportReview),listEvidence:async()=>({items:[evidence(false)],next:null}),readEvidence:async()=>evidence(true),reviewEvidence:async(a,s,v)=>{report.disposition=v.disposition;report.reviewedAt??=new Date().toISOString();report.expiresAt=new Date(Date.parse(report.reviewedAt)+30*86400000).toISOString();return evidence(true);}};
+  }
+  const app=(withReview?createAllianceReportReviewApplication:withFeedback?createAllianceFeedbackApplication:withCommunity?createAllianceCommunityApplication:createAllianceMemberApplication)(options);
   const fetcher=(endpoint,init)=>app.handle(new Request(endpoint,{...init,headers:{...init.headers,origin,'sec-fetch-site':'same-origin',cookie:'__Host-gf-access='+f.token}}),context);
   return {f,app,options,context,checkpoint,control,fetcher,get counts(){return {keyReads,decisions,witnesses};},serve(){control.state='serve';control.revision++;},close(){app.close();signing.close();f.close();}};
 }
@@ -112,4 +121,19 @@ test('explicit feedback application binds all four recovery domains and protects
 test('old applications cannot route feedback and missing feedback coverage cannot prepare the expanded application',async()=>{
  for(const withCommunity of [false,true]){const f=fixture({withCommunity});try{await f.app.prepare(f.checkpoint,f.context);f.serve();const before=f.counts;assert.equal((await f.app.handle(f.f.request('/feedback/ideas'),f.context)).status,404);assert.deepEqual(f.counts,before);}finally{f.close();}}
  const f=fixture({withFeedback:true});try{const old={...f.checkpoint,format:3};delete old.feedback;assert.deepEqual(await f.app.prepare(old,f.context),{state:'quarantine',access:'closed'});assert.equal(f.counts.decisions,0);}finally{f.close();}
+});
+
+
+test('review-aware combined application serves the real cookie client under signed checkpoint5',async()=>{
+ const f=fixture({withReview:true}),c=createAllianceReportReviewClient({enabled:true,origin,fetcher:f.fetcher});
+ try{
+  assert.deepEqual(await f.app.prepare(f.checkpoint,f.context),{state:'prepared',access:'closed'});f.serve();
+  assert.equal((await c.list()).items.length,1);assert.equal((await c.read(operation(85))).targetTitle,'Fictional member');
+  assert.equal((await c.review({id:operation(85),expected:'unreviewed',disposition:'no_action'})).disposition,'no_action');
+  f.control.state='closed';f.control.revision++;const before=f.f.calls.length;assert.equal((await f.app.handle(f.f.request('/report-review/reports'),f.context)).status,503);assert.equal(f.f.calls.length,before);
+ }finally{c.close();f.close();}
+});
+test('review application rejects incomplete recovery; legacy apps do not route private review',async()=>{
+ const f=fixture({withReview:true});try{const old={...f.checkpoint,format:4};delete old.reportReview;assert.deepEqual(await f.app.prepare(old,f.context),{state:'quarantine',access:'closed'});assert.equal(f.counts.decisions,0);}finally{f.close();}
+ const old=fixture({withFeedback:true});try{await old.app.prepare(old.checkpoint,old.context);old.serve();const before=old.counts;assert.equal((await old.app.handle(old.f.request('/report-review/reports'),old.context)).status,404);assert.deepEqual(old.counts,before);}finally{old.close();}
 });
