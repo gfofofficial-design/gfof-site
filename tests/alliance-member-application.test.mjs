@@ -14,6 +14,7 @@ import {communityCheckpointSha256} from '../lib/alliance-avatar-server/community
 import {feedbackCheckpointSha256} from '../lib/alliance-avatar-server/feedback-recovery.mjs';
 import {reportReviewCheckpointSha256} from '../lib/alliance-avatar-server/report-review-recovery.mjs';
 import {createAllianceReportReviewClient} from '../assets/federation/fed-alliance-report-review-client.mjs';
+import {createFiniteAlliancePreviewHost} from '../lib/alliance-member-finite-host.mjs';
 const zero='0'.repeat(64),tick=()=>new Promise(r=>setImmediate(r));
 const deferred=()=>{let resolve;return {promise:new Promise(r=>resolve=r),resolve:v=>resolve(v)};};
 // Three ephemeral signing roles, synthetic inventory/SQL/Auth. No private key is
@@ -136,4 +137,22 @@ test('review-aware combined application serves the real cookie client under sign
 test('review application rejects incomplete recovery; legacy apps do not route private review',async()=>{
  const f=fixture({withReview:true});try{const old={...f.checkpoint,format:4};delete old.reportReview;assert.deepEqual(await f.app.prepare(old,f.context),{state:'quarantine',access:'closed'});assert.equal(f.counts.decisions,0);}finally{f.close();}
  const old=fixture({withFeedback:true});try{await old.app.prepare(old.checkpoint,old.context);old.serve();const before=old.counts;assert.equal((await old.app.handle(old.f.request('/report-review/reports'),old.context)).status,404);assert.deepEqual(old.counts,before);}finally{old.close();}
+});
+
+test('finite preview host carries the existing cookie profile and owner-review journey then closes without new work',async()=>{
+ const f=fixture({withReview:true}),now=Date.now();
+ const host=createFiniteAlliancePreviewHost({enabled:true,origin,expectedInstallation:f.options.expectedInstallation,
+  window:{notBeforeUtc:new Date(now-1000).toISOString(),notAfterUtc:new Date(now+120000).toISOString()},
+  openApplication:async()=>({application:f.app,close:()=>f.close()})});
+ const fetcher=(endpoint,init)=>host.handle(new Request(endpoint,{...init,headers:{...init.headers,origin,'sec-fetch-site':'same-origin',cookie:'__Host-gf-access='+f.f.token}}),f.context);
+ const profile=createMemberProfileClient({enabled:true,profileRevisions:true,origin,newOperationId:()=>operation(91),fetcher});
+ const review=createAllianceReportReviewClient({enabled:true,origin,fetcher});
+ try{
+  assert.deepEqual(await host.prepare(f.checkpoint,f.context),{state:'prepared',access:'closed'});f.serve();
+  await profile.load();assert.equal((await profile.save(fields())).revision,1);
+  assert.equal((await review.list()).items.length,1);await review.read(operation(85));
+  assert.equal((await review.review({id:operation(85),expected:'unreviewed',disposition:'no_action'})).disposition,'no_action');
+  await host.close();const before=f.counts;
+  assert.equal((await host.handle(f.f.request('/report-review/reports'),f.context)).status,503);assert.deepEqual(f.counts,before);
+ }finally{profile.dispose();review.close();await host.close();f.close();}
 });

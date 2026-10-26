@@ -1,0 +1,20 @@
+name: Alliance finite preview host
+on:
+  pull_request:
+    paths:
+      - 'lib/alliance-member-finite-host.mjs'
+      - 'tests/alliance-member-finite-host.test.mjs'
+      - 'tests/alliance-member-application.test.mjs'
+      - '.github/workflows/alliance-finite-preview.yml'
+jobs:
+  finite-preview-host:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - run: node --check lib/alliance-member-finite-host.mjs
+      - run: node --test tests/alliance-member-finite-host.test.mjs tests/alliance-member-application.test.mjs
