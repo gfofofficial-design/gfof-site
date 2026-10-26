@@ -6,7 +6,7 @@ import {GFOF, SOL} from '../assets/federation/swap/quote-core.mjs';
 
 const html = readFileSync(new URL('../swap.html', import.meta.url), 'utf8');
 const flush = async () => { for (let i = 0; i < 5; i++) await new Promise(r => setImmediate(r)); };
-const good = () => new Response(JSON.stringify({inputMint: SOL.mint, outputMint: GFOF.mint, inAmount: '10000000', outAmount: '47504969523', swapMode: 'ExactIn', router: 'okx', feeBps: 10, transaction: null}), {headers: {'content-type': 'application/json'}});
+const good = (change = {}) => new Response(JSON.stringify({inputMint: SOL.mint, outputMint: GFOF.mint, inAmount: '10000000', outAmount: '47504969523', swapMode: 'ExactIn', router: 'okx', feeBps: 10, transaction: null, ...change}), {headers: {'content-type': 'application/json'}});
 function fixture(fetchImpl = async () => good()) {
   const nodes = new Map(), calls = []; let doc;
   class Element {
@@ -100,4 +100,24 @@ test('the hosted swap policy permits only its quote origin and keeps mint links 
   assert.doesNotMatch(globalPolicy, /api\.jup\.ag/);
   for (const origin of ['https://solscan.io/token/', 'https://tebfun.xyz/token/']) assert.ok(html.includes('href="' + origin + GFOF.mint + '"'));
   assert.ok(html.includes('<code>' + GFOF.mint + '</code>'));
+});
+
+test('reported protections are labelled, cleared with edits and never enable trading', async () => {
+  const f = fixture(async () => good({priceImpact: -0.15, otherAmountThreshold: '47000000001', slippageBps: 75}));
+  f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit'); await flush();
+  assert.equal(f.get('swap-impact').textContent, '-0.15%');
+  assert.equal(f.get('swap-minimum').textContent, '47,000.000001 GFOF');
+  assert.equal(f.get('swap-slippage').textContent, '0.75%');
+  assert.match(f.get('swap-review-notes').textContent, /No protection is enforced/);
+  assert.equal(f.get('swap-trade').disabled, true);
+  f.get('swap-amount').emit('input');
+  for (const id of ['swap-impact', 'swap-minimum', 'swap-slippage', 'swap-review-notes']) assert.equal(f.get(id).textContent, '—');
+  f.api.dispose();
+});
+
+test('missing protection data is explained without inventing a minimum or slippage', async () => {
+  const f = fixture(); f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit'); await flush();
+  for (const id of ['swap-impact', 'swap-minimum', 'swap-slippage']) assert.equal(f.get(id).textContent, 'Not returned');
+  assert.match(f.get('swap-review-notes').textContent, /Minimum output was not returned/);
+  assert.equal(f.get('swap-trade').disabled, true); f.api.dispose();
 });

@@ -13,7 +13,7 @@ export function mountSwapPage(doc, options = {}) {
   const $ = id => doc.getElementById(id);
   if (!$('swap-form')) return null;
   let disposed = false;
-  const resultFields = ['swap-input', 'swap-output', 'swap-router', 'swap-fee', 'swap-time'];
+  const resultFields = ['swap-input', 'swap-output', 'swap-router', 'swap-fee', 'swap-time', 'swap-impact', 'swap-minimum', 'swap-slippage', 'swap-review-notes'];
   const updateLabels = () => {
     const {input} = pairFor($('swap-direction').value);
     $('swap-amount-label').textContent = input.symbol + ' amount to quote';
@@ -39,6 +39,10 @@ export function mountSwapPage(doc, options = {}) {
       $('swap-output').textContent = q.output + ' ' + q.outputSymbol;
       $('swap-router').textContent = ({metis: 'Metis', jupiterz: 'JupiterZ', dflow: 'Dflow', okx: 'OKX'})[q.router];
       $('swap-fee').textContent = q.feeBps === null ? 'Not returned · total costs not verified' : q.feeBps / 100 + '% · total costs not verified';
+      $('swap-impact').textContent = q.priceImpact === null ? 'Not returned' : q.priceImpact + '%';
+      $('swap-minimum').textContent = q.minimumOutput === null ? 'Not returned' : q.minimumOutput + ' ' + q.outputSymbol + (q.minimumOutput === '0' ? ' · no positive minimum' : '');
+      $('swap-slippage').textContent = q.slippageBps === null ? 'Not returned' : q.slippageBps / 100 + '%';
+      $('swap-review-notes').textContent = q.reviewNotes.length ? q.reviewNotes.join(' ') + ' Trading remains closed.' : 'Provider details returned. No protection is enforced in a transaction here; trading remains closed.';
       $('swap-time').textContent = new Date(q.receivedAt).toLocaleTimeString();
     }
   }});

@@ -61,10 +61,32 @@ export function projectQuote(data, request, receivedAt) {
     if (!Number.isInteger(data.feeBps) || data.feeBps < 0 || data.feeBps > 10000) throw failure('unavailable');
     feeBps = data.feeBps;
   }
+  let priceImpact = null, minimum = null, slippageBps = null;
+  if (data.priceImpact !== undefined && data.priceImpact !== null) {
+    // V2 uses percentage points; the deprecated priceImpactPct uses a ratio.
+    if (typeof data.priceImpact !== 'number' || !Number.isFinite(data.priceImpact) || Math.abs(data.priceImpact) > 100) throw failure('unavailable');
+    priceImpact = data.priceImpact;
+  }
+  if (data.otherAmountThreshold !== undefined && data.otherAmountThreshold !== null) {
+    minimum = units(data.otherAmountThreshold, true);
+    if (BigInt(minimum) > BigInt(output)) throw failure('unavailable');
+  }
+  if (data.slippageBps !== undefined && data.slippageBps !== null) {
+    if (!Number.isInteger(data.slippageBps) || data.slippageBps < 0 || data.slippageBps > 10000) throw failure('unavailable');
+    slippageBps = data.slippageBps;
+  }
+  const reviewNotes = [];
+  if (priceImpact === null) reviewNotes.push('Price impact was not returned.');
+  if (minimum === null) reviewNotes.push('Minimum output was not returned.');
+  else if (minimum === '0') reviewNotes.push('No positive minimum output was reported.');
+  if (slippageBps === null) reviewNotes.push('Slippage was not returned.');
+  if (feeBps === null) reviewNotes.push('Provider fee rate was not returned.');
   // Deliberately discard transactions, request IDs, raw routes, addresses and provider messages.
   return Object.freeze({direction: request.direction, inputSymbol: request.pair.input.symbol,
     outputSymbol: request.pair.output.symbol, input: formatUnits(request.atomic, request.pair.input.decimals),
-    output: formatUnits(output, request.pair.output.decimals), router: data.router, feeBps,
+    output: formatUnits(output, request.pair.output.decimals), router: data.router, feeBps, priceImpact,
+    minimumOutput: minimum === null ? null : formatUnits(minimum, request.pair.output.decimals),
+    slippageBps, reviewNotes: Object.freeze(reviewNotes),
     receivedAt, expiresAt: receivedAt + QUOTE_MAX_AGE_MS});
 }
 

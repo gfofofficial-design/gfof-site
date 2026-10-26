@@ -152,3 +152,26 @@ test('disposal prevents new checks and clears any outstanding quote freshness ti
   const count = f.states.length; await f.controller.request('sell', '1000');
   assert.equal(f.states.length, count); assert.equal(f.calls.length, 1); assert.equal(f.timers.size, 0);
 });
+
+test('V2 price impact is already in percentage points; minimum output keeps full precision', () => {
+  const q = projectQuote(response({priceImpact: -0.15, priceImpactPct: '-0.0015', otherAmountThreshold: '47000000001', slippageBps: 75}), request(), 0);
+  assert.equal(q.priceImpact, -0.15); assert.equal(q.minimumOutput, '47,000.000001'); assert.equal(q.slippageBps, 75);
+  assert.deepEqual(q.reviewNotes, []); assert.ok(Object.isFrozen(q.reviewNotes));
+});
+
+test('missing details stay unknown and zero details are not treated as missing', () => {
+  const missing = projectQuote(response({priceImpactPct: '0.1'}), request(), 0);
+  assert.equal(missing.priceImpact, null); assert.equal(missing.minimumOutput, null); assert.equal(missing.slippageBps, null);
+  assert.equal(missing.reviewNotes.length, 3);
+  const zero = projectQuote(response({priceImpact: 0, otherAmountThreshold: '0', slippageBps: 0, feeBps: 0}), request(), 0);
+  assert.equal(zero.priceImpact, 0); assert.equal(zero.slippageBps, 0); assert.equal(zero.feeBps, 0);
+  assert.deepEqual(zero.reviewNotes, ['No positive minimum output was reported.']);
+});
+
+test('malformed or impossible review details cannot become a usable quote projection', () => {
+  for (const change of [{priceImpact: '0.1'}, {priceImpact: NaN}, {priceImpact: Infinity}, {priceImpact: 101}, {priceImpact: -101},
+    {otherAmountThreshold: '47504969524'}, {otherAmountThreshold: '-1'}, {otherAmountThreshold: '00'},
+    {slippageBps: '75'}, {slippageBps: 0.5}, {slippageBps: -1}, {slippageBps: 10001}]) {
+    assert.throws(() => projectQuote(response(change), request(), 0), {code: 'unavailable'});
+  }
+});
