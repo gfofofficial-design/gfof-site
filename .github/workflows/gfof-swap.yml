@@ -1,10 +1,10 @@
 name: GFOF swap quote preview
 on:
   pull_request:
-    paths: ['swap.html', 'assets/federation/swap/**', 'tests/gfof-swap*.mjs', '.github/workflows/gfof-swap.yml']
+    paths: ['swap.html', 'assets/federation/swap/**', 'tests/gfof-swap*.mjs', 'netlify.toml', '.github/workflows/gfof-swap.yml']
   push:
     branches: [main]
-    paths: ['swap.html', 'assets/federation/swap/**', 'tests/gfof-swap*.mjs', '.github/workflows/gfof-swap.yml']
+    paths: ['swap.html', 'assets/federation/swap/**', 'tests/gfof-swap*.mjs', 'netlify.toml', '.github/workflows/gfof-swap.yml']
 permissions:
   contents: read
 jobs:

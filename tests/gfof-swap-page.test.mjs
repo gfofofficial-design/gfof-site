@@ -85,3 +85,19 @@ test('the preview has strict CSP, disabled trading and no wallet/plugin executio
     assert.doesNotMatch(source, /innerHTML|localStorage|sessionStorage|document\.cookie|signTransaction|signAllTransactions|sendTransaction|\/execute|Jupiter\.init|window\.solana/);
   }
 });
+
+test('the hosted swap policy permits only its quote origin and keeps mint links consistent', () => {
+  const config = readFileSync(new URL('../netlify.toml', import.meta.url), 'utf8');
+  const blocks = config.split('[[headers]]');
+  const swap = blocks.filter(block => /for = "\/swap\*"/.test(block));
+  assert.equal(swap.length, 1);
+  assert.match(swap[0], /connect-src https:\/\/api\.jup\.ag;/);
+  assert.match(swap[0], /frame-ancestors 'none'/);
+  assert.match(swap[0], /Cache-Control = "private, no-store"/);
+  assert.doesNotMatch(swap[0], /unsafe-inline|plugin\.jup\.ag/);
+  assert.match(config, /from = "\/swap"\s+to = "\/swap\.html"\s+status = 200/);
+  const globalPolicy = blocks.find(block => /for = "\/\*"/.test(block));
+  assert.doesNotMatch(globalPolicy, /api\.jup\.ag/);
+  for (const origin of ['https://solscan.io/token/', 'https://tebfun.xyz/token/']) assert.ok(html.includes('href="' + origin + GFOF.mint + '"'));
+  assert.ok(html.includes('<code>' + GFOF.mint + '</code>'));
+});
