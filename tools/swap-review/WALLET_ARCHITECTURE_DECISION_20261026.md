@@ -24,3 +24,6 @@ The published package and inspected repository head differ in version. Dependenc
 4. Review the eventual transaction components, order binding, fees and enforced protections separately. Complete hosted, browser/mobile, failure and owner-run small-trade acceptance before proposing live trading.
 
 The decision is whether to take on the leaner API-based integration or wait for the full widget. It does not approve deployment, financial transactions, new fees or a paid service plan. Trading remains closed through implementation and acceptance.
+
+
+Owner decision, 2026-10-26: Michael approved Option A (“proceed with A”). Implement the self-hosted Wallet Standard address-only preview; this does not authorize transaction execution or deployment.

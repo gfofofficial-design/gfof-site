@@ -154,5 +154,10 @@
     "https://registry.npmjs.org/@wallet-standard%2ffeatures/1.1.1",
     "https://registry.npmjs.org/@wallet-standard%2fbase/1.1.1",
     "https://developers.jup.ag/docs/swap"
-  ]
+  ],
+  "ownerAcceptance": {
+    "date": "2026-10-26",
+    "instruction": "proceed with A",
+    "scope": "Self-hosted Wallet Standard address-only preview. No signing, execution or deployment authorization."
+  }
 }

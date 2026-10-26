@@ -1,6 +1,7 @@
+import {createWalletPreview} from './wallet-preview.mjs';
 import {createQuoteController, pairFor} from './quote-core.mjs';
 
-const MESSAGES = Object.freeze({idle: 'No quote requested. Wallet connection and trading are closed.',
+const MESSAGES = Object.freeze({idle: 'No quote requested. Trading is closed; wallet address preview is optional.',
   loading: 'Checking an indicative quote with Jupiter. No wallet or transaction is involved.',
   ready: 'Indicative quote received for this amount. Trading remains closed; this is not a guaranteed final amount.',
   expired: 'The quote display expired after 30 seconds. Check again for a current indicative amount.',
@@ -46,6 +47,24 @@ export function mountSwapPage(doc, options = {}) {
       $('swap-time').textContent = new Date(q.receivedAt).toLocaleTimeString();
     }
   }});
+  let walletPreview = null;
+  if ($('swap-wallet-select') && doc.createElement) {
+    const messages = {idle: 'Optional: choose an installed wallet, then connect to display its address.', connecting: 'Check your wallet permission prompt. No signature is requested.', connected: 'Address shared with this page only. This is not proof of ownership or Federation sign-in.', disconnecting: 'Requesting wallet disconnect…', disconnected: 'Wallet confirmed disconnect. Trusted-app permission may remain in your wallet.', changed: 'Wallet or page context changed. Address cleared; disconnect before connecting again.', uncertain: 'Connection state is uncertain. Close any wallet prompt, revoke this site in your wallet if needed, and reload before reconnecting.'};
+    walletPreview = createWalletPreview({...options.walletOptions, onState(state) {
+      controller.invalidate();
+      const select = $('swap-wallet-select'), previous = select.value;
+      select.replaceChildren();
+      for (const wallet of state.wallets) { const option = doc.createElement('option'); option.value = String(wallet.index); option.textContent = wallet.name; select.append(option); }
+      if ([...select.options].some(option => option.value === previous)) select.value = previous;
+      select.disabled = state.busy || state.phase === 'connected';
+      $('swap-wallet-connect').disabled = state.busy || !state.wallets.length || !['idle', 'disconnected'].includes(state.phase);
+      $('swap-wallet-disconnect').disabled = state.busy || ['idle', 'disconnected'].includes(state.phase);
+      $('swap-wallet-address').textContent = state.address || 'No address displayed';
+      $('swap-wallet-message').textContent = !state.wallets.length && state.phase === 'idle' ? 'No compatible installed wallet detected. Quotes still work without a wallet. Mobile wallet handoff is not available in this preview.' : messages[state.phase];
+    }});
+  }
+  const onWalletConnect = () => void walletPreview?.connect(Number($('swap-wallet-select').value));
+  const onWalletDisconnect = () => void walletPreview?.disconnect();
   const onEdit = () => controller.invalidate();
   const onDirection = () => { controller.invalidate(); $('swap-amount').value = ''; updateLabels(); };
   const onSubmit = event => {
@@ -55,14 +74,16 @@ export function mountSwapPage(doc, options = {}) {
   };
   const onCancel = () => controller.invalidate('cancelled');
   const onClear = () => { controller.invalidate(); $('swap-amount').value = ''; $('swap-amount').focus(); };
-  const onVisibility = () => controller.invalidate();
+  const onVisibility = () => { controller.invalidate(); walletPreview?.invalidate(); };
   const bindings = [[$('swap-form'), 'submit', onSubmit], [$('swap-amount'), 'input', onEdit],
     [$('swap-direction'), 'change', onDirection], [$('swap-cancel'), 'click', onCancel], [$('swap-clear'), 'click', onClear],
     [doc, 'visibilitychange', onVisibility]];
+  if (walletPreview) bindings.push([$('swap-wallet-connect'), 'click', onWalletConnect], [$('swap-wallet-disconnect'), 'click', onWalletDisconnect]);
   if (doc.defaultView) bindings.push([doc.defaultView, 'pagehide', onVisibility], [doc.defaultView, 'pageshow', onVisibility]);
   bindings.forEach(([node, event, handler]) => node.addEventListener(event, handler));
   updateLabels();
-  return Object.freeze({dispose() { if (disposed) return; controller.dispose(); disposed = true;
+  return Object.freeze({dispose() { if (disposed) return; walletPreview?.dispose(); controller.dispose(); disposed = true;
+    if (walletPreview) { $('swap-wallet-address').textContent = 'No address displayed'; $('swap-wallet-connect').disabled = true; $('swap-wallet-disconnect').disabled = true; $('swap-wallet-select').disabled = true; }
     bindings.forEach(([node, event, handler]) => node.removeEventListener(event, handler)); $('swap-check').disabled = true; }});
 }
 

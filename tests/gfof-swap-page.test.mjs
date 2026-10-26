@@ -7,10 +7,12 @@ import {GFOF, SOL} from '../assets/federation/swap/quote-core.mjs';
 const html = readFileSync(new URL('../swap.html', import.meta.url), 'utf8');
 const flush = async () => { for (let i = 0; i < 5; i++) await new Promise(r => setImmediate(r)); };
 const good = (change = {}) => new Response(JSON.stringify({inputMint: SOL.mint, outputMint: GFOF.mint, inAmount: '10000000', outAmount: '47504969523', swapMode: 'ExactIn', router: 'okx', feeBps: 10, transaction: null, ...change}), {headers: {'content-type': 'application/json'}});
-function fixture(fetchImpl = async () => good()) {
+function fixture(fetchImpl = async () => good(), walletOptions) {
   const nodes = new Map(), calls = []; let doc;
   class Element {
     constructor() { this.events = new Map(); this.attributes = {}; this.value = ''; this.textContent = ''; }
+    replaceChildren() { this.options = []; this.value = ''; }
+    append(option) { this.options.push(option); if (this.options.length === 1) this.value = option.value; }
     setAttribute(k, v) { this.attributes[k] = String(v); } getAttribute(k) { return this.attributes[k] ?? null; }
     addEventListener(k, f) { this.events.set(k, f); } removeEventListener(k) { this.events.delete(k); }
     emit(k) { this.events.get(k)?.({preventDefault() {}}); } focus() { doc.activeElement = this; }
@@ -21,14 +23,15 @@ function fixture(fetchImpl = async () => good()) {
   }
   doc = new Element(); doc.getElementById = id => nodes.get(id); doc.defaultView = new Element();
   nodes.get('swap-direction').value = 'buy';
-  const api = mountSwapPage(doc, {fetchImpl: (...args) => { calls.push(args); return fetchImpl(...args); }});
+  if (walletOptions) doc.createElement = () => new Element();
+  const api = mountSwapPage(doc, {walletOptions, fetchImpl: (...args) => { calls.push(args); return fetchImpl(...args); }});
   return {doc, api, calls, get: id => nodes.get(id)};
 }
 
 test('page initialization enables quote checks only and requests nothing', () => {
   const f = fixture(); assert.equal(f.calls.length, 0); assert.equal(f.get('swap-check').disabled, false);
   assert.equal(f.get('swap-trade').disabled, true); assert.equal(f.get('swap-result').hidden, true);
-  assert.match(f.get('swap-message').textContent, /trading are closed/); f.api.dispose();
+  assert.match(f.get('swap-message').textContent, /Trading is closed/); f.api.dispose();
 });
 
 test('invalid input is explained and focused before any provider request', () => {
@@ -120,4 +123,22 @@ test('missing protection data is explained without inventing a minimum or slippa
   for (const id of ['swap-impact', 'swap-minimum', 'swap-slippage']) assert.equal(f.get(id).textContent, 'Not returned');
   assert.match(f.get('swap-review-notes').textContent, /Minimum output was not returned/);
   assert.equal(f.get('swap-trade').disabled, true); f.api.dispose();
+});
+
+ test('optional wallet connection clears quotes but never requests one or includes an address', async () => {
+  const address = '11111111111111111111111111111111'; let connections = 0, change;
+  const wallet = {name: '<fake wallet>', chains: ['solana:mainnet'], features: {
+    'standard:connect': {version: '1.0.0', connect: async () => { connections++; return {accounts: [{address, publicKey: new Uint8Array(32), chains: ['solana:mainnet']}]}; }},
+    'standard:disconnect': {version: '1.0.0', disconnect: async () => {}},
+    'standard:events': {version: '1.0.0', on: (_event, fn) => {change = fn; return () => {};}}
+  }};
+  const f = fixture(async () => good(), {registry: {get: () => [wallet], on: () => () => {}}});
+  assert.equal(connections, 0); assert.equal(f.calls.length, 0); assert.equal(f.get('swap-wallet-select').options[0].textContent, '<fake wallet>');
+  f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit'); await flush();
+  f.get('swap-wallet-connect').emit('click'); await flush();
+  assert.equal(connections, 1); assert.equal(f.calls.length, 1); assert.equal(f.get('swap-result').hidden, true);
+  assert.equal(f.get('swap-wallet-address').textContent, address); assert.equal(f.get('swap-trade').disabled, true);
+  assert.deepEqual([...new URL(f.calls[0][0]).searchParams.keys()].sort(), ['amount', 'inputMint', 'outputMint']);
+  change(); assert.equal(f.get('swap-wallet-address').textContent, 'No address displayed'); assert.equal(f.calls.length, 1);
+  f.api.dispose();
 });
