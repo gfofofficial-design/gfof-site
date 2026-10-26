@@ -16,11 +16,13 @@ export async function buildStaticPublish(root) {
   const stage=await mkdtemp(join(root,'.static-publish-'));
   const copied=[];
   async function copyEntry(relative) {
+    const name=relative.split('/').at(-1);
+    // Installed server/vendor dependencies are never browser publication inputs.
+    if(name==='node_modules')return;
     const source=join(root,relative),stat=await lstat(source);
     if(stat.isSymbolicLink())throw Error('Symbolic links are not allowed in static output: '+relative);
     // Arena publishes only reviewed numbered rules/results HTML, never intake or drafts.
     if(relative.startsWith('arena/')&&!/^arena\/arena-[0-9]{4}-(rules|results)\.html$/.test(relative))return;
-    const name=relative.split('/').at(-1);
     if(name.startsWith('.')&&relative!=='.well-known')return;
     if(stat.isDirectory()) {
       for(const child of (await readdir(source)).sort())await copyEntry(relative+'/'+child);

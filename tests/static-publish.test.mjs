@@ -17,8 +17,8 @@ test('public page, browser imports and public evidence survive byte-for-byte',as
   assert.deepEqual(new Set(copied),new Set(Object.keys(files)));
   for(const [path,content]of Object.entries(files))assert.equal(await readFile(join(root,'dist',path),'utf8'),content);
 });
-test('server, CI, test, migration, worker and unknown directory files are absent',async t=>{
-  const root=await fixture(t,{'account.html':'public','netlify/functions/account.cjs':'server','tests/fixture.json':'test','scripts/report.mjs':'operator','supabase/migrations/test.sql':'migration','workers/example/worker.mjs':'worker','.github/workflows/check.yml':'CI','private/export.json':'private','netlify.toml':'settings','.env':'fixture only','assets/.env':'fixture only','assets/key.pem':'fixture only'});
+test('server, dependencies, CI, test, migration, worker and unknown directory files are absent',async t=>{
+  const root=await fixture(t,{'account.html':'public','netlify/functions/account.cjs':'server','tests/fixture.json':'test','scripts/report.mjs':'operator','supabase/migrations/test.sql':'migration','workers/example/worker.mjs':'worker','.github/workflows/check.yml':'CI','private/export.json':'private','netlify.toml':'settings','.env':'fixture only','assets/.env':'fixture only','assets/key.pem':'fixture only','lib/alliance-avatar-server/node_modules/package/index.js':'server dependency','assets/vendor/node_modules/package/index.mjs':'nested dependency'});
   assert.deepEqual(await buildStaticPublish(root),['account.html']);
   assert.deepEqual(await readdir(join(root,'dist')),['account.html']);
 });
