@@ -133,12 +133,21 @@ test('missing protection data is explained without inventing a minimum or slippa
     'standard:events': {version: '1.0.0', on: (_event, fn) => {change = fn; return () => {};}}
   }};
   const f = fixture(async () => good(), {registry: {get: () => [wallet], on: () => () => {}}});
-  assert.equal(connections, 0); assert.equal(f.calls.length, 0); assert.equal(f.get('swap-wallet-select').options[0].textContent, '<fake wallet>');
+  assert.equal(connections, 0); assert.equal(f.calls.length, 0); assert.equal(f.get('swap-wallet-connect').disabled, true); assert.equal(f.get('swap-wallet-select').options[1].textContent, '<fake wallet>');
   f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit'); await flush();
+  f.get('swap-wallet-select').value = '1'; f.get('swap-wallet-select').onchange();
   f.get('swap-wallet-connect').emit('click'); await flush();
   assert.equal(connections, 1); assert.equal(f.calls.length, 1); assert.equal(f.get('swap-result').hidden, true);
   assert.equal(f.get('swap-wallet-address').textContent, address); assert.equal(f.get('swap-trade').disabled, true);
   assert.deepEqual([...new URL(f.calls[0][0]).searchParams.keys()].sort(), ['amount', 'inputMint', 'outputMint']);
   change(); assert.equal(f.get('swap-wallet-address').textContent, 'No address displayed'); assert.equal(f.calls.length, 1);
   f.api.dispose();
+});
+
+test('broken optional wallet discovery cannot block manual quotes', async () => {
+  const f=fixture(async()=>good(),{registry:{get:()=>[],on:()=>{throw Error('extension failure');}}});
+  assert.match(f.get('swap-wallet-message').textContent,/discovery is unavailable/);
+  assert.equal(f.get('swap-wallet-connect').disabled,true);
+  f.get('swap-amount').value='0.01';f.get('swap-form').emit('submit');await flush();
+  assert.equal(f.calls.length,1);assert.equal(f.get('swap-result').hidden,false);assert.equal(f.get('swap-trade').disabled,true);f.api.dispose();
 });

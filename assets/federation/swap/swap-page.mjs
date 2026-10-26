@@ -50,18 +50,23 @@ export function mountSwapPage(doc, options = {}) {
   let walletPreview = null;
   if ($('swap-wallet-select') && doc.createElement) {
     const messages = {idle: 'Optional: choose an installed wallet, then connect to display its address.', connecting: 'Check your wallet permission prompt. No signature is requested.', connected: 'Address shared with this page only. This is not proof of ownership or Federation sign-in.', disconnecting: 'Requesting wallet disconnect…', disconnected: 'Wallet confirmed disconnect. Trusted-app permission may remain in your wallet.', changed: 'Wallet or page context changed. Address cleared; disconnect before connecting again.', uncertain: 'Connection state is uncertain. Close any wallet prompt, revoke this site in your wallet if needed, and reload before reconnecting.'};
-    walletPreview = createWalletPreview({...options.walletOptions, onState(state) {
+    try { walletPreview = createWalletPreview({...options.walletOptions, onState(state) {
       controller.invalidate();
       const select = $('swap-wallet-select'), previous = select.value;
       select.replaceChildren();
+      const placeholder = doc.createElement('option'); placeholder.value = ''; placeholder.textContent = 'Choose your installed wallet'; select.append(placeholder);
       for (const wallet of state.wallets) { const option = doc.createElement('option'); option.value = String(wallet.index); option.textContent = wallet.name; select.append(option); }
       if ([...select.options].some(option => option.value === previous)) select.value = previous;
       select.disabled = state.busy || state.phase === 'connected';
-      $('swap-wallet-connect').disabled = state.busy || !state.wallets.length || !['idle', 'disconnected'].includes(state.phase);
+      $('swap-wallet-connect').disabled = state.busy || !select.value || !state.wallets.length || !['idle', 'disconnected'].includes(state.phase);
+      select.onchange = () => { $('swap-wallet-connect').disabled = state.busy || !select.value || !['idle', 'disconnected'].includes(state.phase); };
       $('swap-wallet-disconnect').disabled = state.busy || ['idle', 'disconnected'].includes(state.phase);
       $('swap-wallet-address').textContent = state.address || 'No address displayed';
       $('swap-wallet-message').textContent = !state.wallets.length && state.phase === 'idle' ? 'No compatible installed wallet detected. Quotes still work without a wallet. Mobile wallet handoff is not available in this preview.' : messages[state.phase];
-    }});
+    }}); } catch {
+      $('swap-wallet-message').textContent = 'Wallet discovery is unavailable. You can still check quotes without a wallet.';
+      $('swap-wallet-connect').disabled = true; $('swap-wallet-disconnect').disabled = true; $('swap-wallet-select').disabled = true;
+    }
   }
   const onWalletConnect = () => void walletPreview?.connect(Number($('swap-wallet-select').value));
   const onWalletDisconnect = () => void walletPreview?.disconnect();
@@ -83,7 +88,7 @@ export function mountSwapPage(doc, options = {}) {
   bindings.forEach(([node, event, handler]) => node.addEventListener(event, handler));
   updateLabels();
   return Object.freeze({dispose() { if (disposed) return; walletPreview?.dispose(); controller.dispose(); disposed = true;
-    if (walletPreview) { $('swap-wallet-address').textContent = 'No address displayed'; $('swap-wallet-connect').disabled = true; $('swap-wallet-disconnect').disabled = true; $('swap-wallet-select').disabled = true; }
+    if (walletPreview) { $('swap-wallet-address').textContent = 'No address displayed'; $('swap-wallet-connect').disabled = true; $('swap-wallet-disconnect').disabled = true; $('swap-wallet-select').disabled = true; $('swap-wallet-select').onchange = null; }
     bindings.forEach(([node, event, handler]) => node.removeEventListener(event, handler)); $('swap-check').disabled = true; }});
 }
 
