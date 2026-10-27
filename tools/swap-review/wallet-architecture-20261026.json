@@ -1,0 +1,163 @@
+{
+  "schema": "gfof-wallet-architecture-review/v1",
+  "reviewedAtUtc": "2026-10-26T16:09:38.407119+00:00",
+  "state": "awaiting_owner_architecture_decision",
+  "releaseApproval": false,
+  "recommendedOption": "A: retain the existing Jupiter V2 quote interface and build a small Wallet Standard connection layer; separately review the eventual transaction path.",
+  "decisionReason": "This changes the original prebuilt-widget plan and makes GFOF responsible for more wallet lifecycle, transaction review and failure handling. The dependency footprint is smaller, but maintenance/security responsibility grows.",
+  "candidateScope": "Only the wallet discovery/connect/disconnect/event layer. This is not a complete swap implementation, transaction codec review, audit of wallets or proof of safe execution.",
+  "packages": [
+    {
+      "name": "@wallet-standard/app",
+      "version": "1.1.1",
+      "license": "Apache-2.0",
+      "integrity": "sha512-WDGwoByhP5gwHH01r5EaLgQdLVkACPCdOMQhmhn8rsm10h/siSgTorShzBxrn0ExSPof+Lu+C3TfgqBrPa1xoQ==",
+      "integrityMatched": true,
+      "dependencies": {
+        "@wallet-standard/base": "^1.1.1"
+      },
+      "esm": [
+        {
+          "file": "package/lib/esm/index.js",
+          "bytes": 63
+        },
+        {
+          "file": "package/lib/esm/wallets.js",
+          "bytes": 6372
+        }
+      ]
+    },
+    {
+      "name": "@wallet-standard/base",
+      "version": "1.1.1",
+      "license": "Apache-2.0",
+      "integrity": "sha512-gggIHTtxicF9XFMQ12DkfS6NAG92Ak795JeSA7f2whAQ6Y3AkMWWuCMxSZXG2NIPN42kEaZSNVjqMsJRaJRxMQ==",
+      "integrityMatched": true,
+      "dependencies": {},
+      "esm": [
+        {
+          "file": "package/lib/esm/bytes.js",
+          "bytes": 44
+        },
+        {
+          "file": "package/lib/esm/identifier.js",
+          "bytes": 49
+        },
+        {
+          "file": "package/lib/esm/index.js",
+          "bytes": 152
+        },
+        {
+          "file": "package/lib/esm/wallet.js",
+          "bytes": 45
+        },
+        {
+          "file": "package/lib/esm/window.js",
+          "bytes": 45
+        }
+      ]
+    },
+    {
+      "name": "@wallet-standard/features",
+      "version": "1.1.1",
+      "license": "Apache-2.0",
+      "integrity": "sha512-aCWYmVeSCGViyEU5k7GMoW8zxE4Gs+C1s1Pp2XLesvSNlnZ4PMES9HUnTB3hl0b3RVj7C61yze3IWyrncqg4MA==",
+      "integrityMatched": true,
+      "dependencies": {
+        "@wallet-standard/base": "^1.1.1"
+      },
+      "esm": [
+        {
+          "file": "package/lib/esm/connect.js",
+          "bytes": 238
+        },
+        {
+          "file": "package/lib/esm/disconnect.js",
+          "bytes": 256
+        },
+        {
+          "file": "package/lib/esm/events.js",
+          "bytes": 232
+        },
+        {
+          "file": "package/lib/esm/index.js",
+          "bytes": 125
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "exitCode": 0,
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 4,
+        "dev": 0,
+        "optional": 0,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 3
+      }
+    },
+    "error": null,
+    "lockSha256": "e0507591c7a29ddd5a382479472e41b7f476ae4d976c19ad49b1e2b548217ed5",
+    "auditSha256": "b6712766ae51e2ff9780a9b422c95f36a54e179768d1cd70d640a5ad1b12c61d"
+  },
+  "staticReview": "Read the packaged ESM wallet registry, app-ready/register event handling and features/base exports without importing or executing the code. No network/signing implementation is present in those registry/feature files. A discovered wallet itself is not authenticated by the registry.",
+  "comparison": {
+    "A": {
+      "runtimeState": "Not added to the page",
+      "scope": "Three-package discovery/connection candidate only",
+      "knownAdvisoriesInThisCheck": 0,
+      "mainTradeoff": "GFOF owns more UI, wallet lifecycle, transaction review and failure logic."
+    },
+    "B": {
+      "runtimeState": "Plugin 1.0.16 not adopted",
+      "scope": "Full Plugin dependency graph; not directly comparable with a connection-only layer",
+      "knownAdvisoriesInPriorGraphCheck": 116,
+      "criticalInPriorGraphCheck": 2,
+      "mainTradeoff": "More prebuilt functionality; exact source/build parity, dependency remediation, dynamic assets, auto-connect and required origins remain unaccepted."
+    }
+  },
+  "proposedNextIncrement": [
+    "Opt-in discovery of compatible installed Solana Wallet Standard wallets, manual connect/disconnect and an address-only preview.",
+    "No eager connection, sign-in message, account linking, wallet address in quote requests or custody.",
+    "Account changes, disconnects, unregisters, navigation and uncertain/late connections clear stale quote and wallet display state.",
+    "No signing or execution in that first increment. A registered wallet name/icon is not a trust certification; treat metadata as untrusted."
+  ],
+  "laterTradeAcceptance": [
+    "Choose and review transaction serialization/validation components separately; the three-package audit does not cover them.",
+    "Bind an order to wallet, chain, fixed mint pair, amount and fresh approved terms; unknown or changed state must close the trade path.",
+    "Show and verify fees, minimum received, slippage and price impact against the actual transaction, not just an indicative quote.",
+    "Handle rejection, expiration, disconnect and unknown transaction outcomes without automatic repeat signing/submission.",
+    "Review provider/API budgets, production key handling and page-specific origins before public release.",
+    "Complete protected hosted, browser/mobile wallet and owner-run small-trade acceptance, followed by release approval."
+  ],
+  "workbench": {
+    "lockOnly": true,
+    "lifecycleScriptsDisabled": true,
+    "nodeModulesInstalled": false,
+    "lockSha256": "e0507591c7a29ddd5a382479472e41b7f476ae4d976c19ad49b1e2b548217ed5",
+    "lockRetainedInRepository": "tools/swap-review/wallet-standard-candidate/package-lock.json"
+  },
+  "boundaries": "Research and review artifacts only. No app runtime dependency, wallet registration/connection, CSP expansion, signature, trade, account, cloud permission, deployment, publication to the live site or financial commitment.",
+  "sources": [
+    "https://github.com/wallet-standard/wallet-standard",
+    "https://registry.npmjs.org/@wallet-standard%2fapp/1.1.1",
+    "https://registry.npmjs.org/@wallet-standard%2ffeatures/1.1.1",
+    "https://registry.npmjs.org/@wallet-standard%2fbase/1.1.1",
+    "https://developers.jup.ag/docs/swap"
+  ],
+  "ownerAcceptance": {
+    "date": "2026-10-26",
+    "instruction": "proceed with A",
+    "scope": "Self-hosted Wallet Standard address-only preview. No signing, execution or deployment authorization."
+  }
+}

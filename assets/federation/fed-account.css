@@ -3,3 +3,5 @@
 .signin form{max-width:480px;margin:20px 0;padding:18px 0;border-bottom:1px solid var(--fed-border-default,#293443)}.signin label{display:block;margin-bottom:8px;font-weight:600}.signin input{display:block;width:100%;min-height:48px;margin-bottom:12px;border:1px solid var(--fed-border-default,#293443);border-radius:6px;padding:12px;background:var(--fed-space,#050b19);color:var(--fed-text-display,#fff);font:inherit}.signin input:focus-visible{outline:3px solid var(--fed-command,#41bedd);outline-offset:3px}
 
 .account-destinations{display:grid;gap:10px;margin-top:16px}.account-destinations a{display:flex;align-items:center;min-height:44px;padding:10px 12px;border:1px solid var(--fed-border-default,#293443);border-radius:6px;text-decoration:none;font-weight:600}.account-help-link{display:inline-flex;align-items:center;min-height:44px;padding:8px 0}
+
+.skip-link{position:absolute;left:16px;top:0;z-index:10;transform:translateY(-150%);padding:12px 18px;border:2px solid var(--fed-command,#41bedd);border-radius:6px;background:var(--fed-space,#050b19);color:var(--fed-text-display,#fff);font-weight:700}.skip-link:focus{transform:translateY(12px)}
