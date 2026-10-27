@@ -1,0 +1,25 @@
+name: Alliance finite preview host
+on:
+  pull_request:
+    paths:
+      - 'lib/**'
+      - 'assets/federation/fed-alliance-*.mjs'
+      - 'tests/alliance-*.mjs'
+      - 'tests/alliance-member-finite-host.test.mjs'
+      - 'tests/alliance-member-application.test.mjs'
+      - '.github/workflows/alliance-finite-preview.yml'
+jobs:
+  finite-preview-host:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.22.1'
+      - run: node --check lib/alliance-member-finite-host.mjs
+      - run: node --test tests/alliance-member-finite-host.test.mjs tests/alliance-member-application.test.mjs
