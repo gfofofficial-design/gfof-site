@@ -190,6 +190,22 @@
   status = 200
   force = true
 
+# Quote-only GFOF swap preview. This permits no wallet/plugin scripts or frames.
+[[headers]]
+  for = "/swap*"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src https://api.jup.ag; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
+[[redirects]]
+  from = "/swap"
+  to = "/swap.html"
+  status = 200
+  force = true
+
 # Shared Federation account foundation (closed until provider setup).
 [[headers]]
   for = "/account*"
