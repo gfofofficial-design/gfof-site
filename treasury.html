@@ -641,6 +641,16 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .vs-body{font-size:14.5px; line-height:1.6;}
 @media(max-width:520px){.hero p{font-size:16px}.promise-body,.section-head p{font-size:15px}}
 
+
+.revenue-chart{margin:24px 0;padding:20px;border:1px solid var(--line);border-radius:10px;background:rgba(4,8,24,.55)}
+.revenue-chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.revenue-chart-head span{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.revenue-chart svg{display:block;width:100%;height:auto;margin:16px 0 0}
+.revenue-chart figcaption{font-size:14px;color:var(--text-dim);line-height:1.7}
+.revenue-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;margin:14px 0;color:var(--text-dim)}
+.revenue-legend span::before{content:'';display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--cyan);margin-right:7px}
+.revenue-legend span:last-child::before{background:var(--gold)}
+
 /* Revenue reporting remains explicit until reconciled receipts are published. */
 .treasury-jump{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px}
 .treasury-jump a,.revenue-panel a{text-decoration:underline;text-underline-offset:4px}
@@ -699,6 +709,20 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <article class="revenue-card"><h3>Other paid services</h3><strong>No sources listed yet</strong><p>Each new revenue source will identify the service, active pricing, collection method and reporting period.</p></article>
       <article class="revenue-card"><h3>Published revenue totals</h3><strong>Not yet reported</strong><p>No reconciled revenue statement is published here yet. This is not a verified zero balance or a live wallet feed.</p></article>
     </div>
+    <figure class="revenue-chart" aria-labelledby="revenue-chart-title" aria-describedby="revenue-chart-caption">
+      <div class="revenue-chart-head"><h3 id="revenue-chart-title">Monthly revenue</h3><span>NET RECEIPTS · BY SERVICE</span></div>
+      <div class="revenue-legend" aria-label="Planned revenue categories"><span>Galactic Swap</span><span>Other paid services</span></div>
+      <svg viewBox="0 0 840 220" role="img" aria-labelledby="revenue-plot-title revenue-plot-desc">
+        <title id="revenue-plot-title">Revenue chart — reporting has not started</title>
+        <desc id="revenue-plot-desc">No verified monthly data is available. No bars, amounts or zero-revenue trend are plotted.</desc>
+        <g stroke="#223248" stroke-width="1" stroke-dasharray="4 6" aria-hidden="true"><path d="M24 25H816M24 75H816M24 125H816M24 175H816"/><path d="M90 25V175M222 25V175M354 25V175M486 25V175M618 25V175M750 25V175"/></g>
+        <rect x="165" y="59" width="510" height="88" rx="12" fill="#081426" stroke="#29435b"/>
+        <text x="420" y="96" text-anchor="middle" fill="#dee2f5" font-family="Inter, sans-serif" font-size="20" font-weight="600">Awaiting verified revenue</text>
+        <text x="420" y="125" text-anchor="middle" fill="#a9b0cc" font-family="Inter, sans-serif" font-size="16">Monthly history will appear here</text>
+        <text x="420" y="207" text-anchor="middle" fill="#a9b0cc" font-family="Inter, sans-serif" font-size="14">Reporting periods will be dated after reconciliation</text>
+      </svg>
+      <figcaption id="revenue-chart-caption">Chart reporting has not started. Future monthly bars will separate Swap fees from other paid services, using verified net receipts. Assets will be shown separately unless a dated valuation source is provided. No sample earnings or projected growth are displayed.</figcaption>
+    </figure>
     <h3>Receipt log</h3>
     <p>No verified service-revenue receipts have been published in this log. When reporting starts, each statement will show its reporting dates, reconciliation date, amounts by asset, refunds and collection costs, net receipts, and supporting transaction or payment references.</p>
     <details><summary>How revenue will be counted</summary>
