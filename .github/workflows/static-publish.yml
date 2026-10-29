@@ -23,5 +23,11 @@ jobs:
           import assert from 'node:assert/strict';
           import {access} from 'node:fs/promises';
           for(const path of ['account.html','account-privacy.html','command-preview.html','command-deck.html','alliance.html','assets/federation/fed-account.js','assets/federation/fed-account.css','assets/federation/fed-tokens.css','journey/passport.js','logo-circle.png','robots.txt','sitemap.xml'])await access('dist/'+path);
-          for(const path of ['netlify','tests','scripts','supabase','workers','.github','netlify.toml','.env','dist'])await assert.rejects(access('dist/'+path));
+          for(const path of ['netlify','tests','scripts','supabase','workers','.github','netlify.toml','.env','dist',
+            'lib/alliance-avatar-server','lib/alliance-avatar-storage.mjs','lib/alliance-community-http.mjs',
+            'lib/alliance-feedback-http.mjs','lib/alliance-member-application.mjs','lib/alliance-member-finite-host.mjs',
+            'lib/alliance-member-http.mjs','lib/alliance-member-preview-bundle.mjs','lib/alliance-profile-api.mjs',
+            'lib/alliance-profile-removal-api.mjs','lib/alliance-profile-removal-status-api.mjs',
+            'lib/alliance-profile-store.mjs','lib/alliance-report-review-http.mjs'])await assert.rejects(access('dist/'+path));
+          await access('dist/lib/alliance-constellation-projection.mjs');
           JS

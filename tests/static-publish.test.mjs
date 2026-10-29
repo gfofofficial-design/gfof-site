@@ -22,6 +22,22 @@ test('server, dependencies, CI, test, migration, worker and unknown directory fi
   assert.deepEqual(await buildStaticPublish(root),['account.html']);
   assert.deepEqual(await readdir(join(root,'dist')),['account.html']);
 });
+
+test('Alliance backend sources stay private while its public projection remains available',async t=>{
+  const root=await fixture(t,{
+    'alliance.html':'public page',
+    'lib/alliance-constellation-projection.mjs':'public browser import',
+    'lib/alliance-avatar-server/member-aws-runtime.mjs':'server runtime',
+    'lib/alliance-avatar-server/deep/fixture.json':'server fixture',
+    'lib/alliance-member-http.mjs':'server cookie boundary',
+    'lib/alliance-member-preview-bundle.mjs':'server connection factory',
+    'lib/alliance-avatar-storage.mjs':'server media adapter',
+    'lib/alliance-profile-store.mjs':'server database adapter',
+    'lib/alliance-report-review-http.mjs':'server owner-review boundary'
+  });
+  assert.deepEqual(await buildStaticPublish(root),['alliance.html','lib/alliance-constellation-projection.mjs']);
+  assert.equal(await readFile(join(root,'dist/lib/alliance-constellation-projection.mjs'),'utf8'),'public browser import');
+});
 test('rebuild removes stale output without copying it back into itself',async t=>{
   const root=await fixture(t,{'account.html':'public','dist/stale.txt':'stale'});
   await buildStaticPublish(root);await buildStaticPublish(root);
