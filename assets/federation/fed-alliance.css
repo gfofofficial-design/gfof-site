@@ -79,3 +79,6 @@
 .alliance-menu-panel span{color:var(--fed-muted);font-size:12px;font-weight:400;line-height:1.45}
 @media(max-width:850px){.site-header .alliance-primary-nav{justify-content:flex-start}}
 @media(forced-colors:active){.alliance-menu summary,.alliance-menu-panel{border-color:CanvasText}}
+
+.site-header .alliance-account-shortcut{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.alliance-account-shortcut span{font-size:11px;color:var(--fed-muted);line-height:1.35}
