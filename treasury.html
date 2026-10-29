@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Transparency Report — $GFOF Galactic Federation of Finance</title>
-<meta name="description" content="Verify the dated 100M current-mint GFOF locks, historical Streamflow reads, wallet disclosures and direct on-chain sources.">
+<meta name="description" content="Verify current-mint GFOF locks, revenue reporting status, fee receipts and public on-chain evidence.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://galacticfederation.co/treasury">
 <meta property="og:title" content="$GFOF Transparency Report — Locks & Public Evidence">
@@ -640,6 +640,25 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .promise-body{font-size:16px; line-height:1.65;}
 .vs-body{font-size:14.5px; line-height:1.6;}
 @media(max-width:520px){.hero p{font-size:16px}.promise-body,.section-head p{font-size:15px}}
+
+/* Revenue reporting remains explicit until reconciled receipts are published. */
+.treasury-jump{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px}
+.treasury-jump a,.revenue-panel a{text-decoration:underline;text-underline-offset:4px}
+.revenue-panel{scroll-margin-top:88px;margin:32px 0 40px;padding:clamp(20px,4vw,32px);border:1px solid rgba(64,192,255,.3);border-radius:12px;background:linear-gradient(135deg,rgba(64,192,255,.06),rgba(61,255,160,.025));font-family:var(--font-read,Inter,sans-serif)}
+.revenue-panel h2{font-family:var(--orb);font-size:clamp(22px,4vw,30px);line-height:1.3;margin:8px 0 14px}
+.revenue-panel p{color:var(--text-dim);margin:12px 0;line-height:1.7}
+.revenue-panel .tag{color:var(--cyan);font-family:var(--mono);font-size:11px;letter-spacing:1px}
+.revenue-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:24px 0}
+.revenue-card{min-width:0;padding:18px;border:1px solid var(--line);border-radius:8px;background:rgba(4,8,24,.5)}
+.revenue-card h3{font-size:16px;color:var(--text);margin-bottom:8px}
+.revenue-card strong{display:block;color:var(--cyan);font-size:19px;line-height:1.4}
+.revenue-card p{font-size:14px;margin-bottom:0}
+.revenue-panel details{border-top:1px solid var(--line);padding-top:16px;margin-top:18px}
+.revenue-panel summary{cursor:pointer;font-weight:600;min-height:44px;display:list-item}
+.revenue-panel ul{padding-left:22px;color:var(--text-dim);line-height:1.8}
+.revenue-panel :focus-visible,.treasury-jump a:focus-visible{outline:3px solid var(--cyan);outline-offset:5px}
+@media(max-width:700px){.revenue-grid{grid-template-columns:1fr}.revenue-panel{padding:20px}}
+
 </style>
 <link rel="stylesheet" href="/assets/federation/fed-document-navigation.css">
 </head>
@@ -666,9 +685,33 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     <h1>Transparency <span class="grad">Report</span></h1>
     <p>Three verified Streamflow contracts hold the <strong>current GFOF mint</strong>. Check their scheduled amounts, unlock dates and live reads below. The former-token records are preserved in the <a href="/record/treasury-former-mint-20261008.html">historical archive</a>.</p>
     <p><strong>Current mint:</strong> <a href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener"><code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code></a>. See <a href="/migration">the holder migration process</a>.</p>
+    <nav class="treasury-jump" aria-label="Transparency sections"><a href="#revenue">Revenue &amp; fees</a><a href="#current-mint-lock">Token locks</a></nav>
   </section>
 
   <div class="promise"><div class="promise-title">CURRENT MINT · THREE VERIFIED LOCKS</div><div class="promise-body"><strong>100,000,000 GFOF scheduled · 10% of minted supply.</strong> All three contracts and their escrows were checked together with the mint at finalized slot 454550404 on October 8, 2026. The scheduled allocations are 30M, 30M and 40M; their unlock dates differ. This is the October 8 verification snapshot; the live reader below checks the same three current-mint contracts.</div></div>
+
+  <section class="revenue-panel" id="revenue" aria-labelledby="revenue-title">
+    <div class="tag">FEDERATION OPERATING REVENUE</div>
+    <h2 id="revenue-title">Revenue &amp; fees</h2>
+    <p>Follow what Federation services earn and the receipts behind it. Revenue reporting will start with Galactic Swap, with other paid tools added when their pricing and collection are live.</p>
+    <div class="revenue-grid">
+      <article class="revenue-card"><h3>Galactic Swap</h3><strong>Fee collection not live</strong><p>The <a href="/swap">quote preview</a> does not execute trades or collect Federation fees. A quote provider’s displayed fee is not Federation revenue.</p></article>
+      <article class="revenue-card"><h3>Other paid services</h3><strong>No sources listed yet</strong><p>Each new revenue source will identify the service, active pricing, collection method and reporting period.</p></article>
+      <article class="revenue-card"><h3>Published revenue totals</h3><strong>Not yet reported</strong><p>No reconciled revenue statement is published here yet. This is not a verified zero balance or a live wallet feed.</p></article>
+    </div>
+    <h3>Receipt log</h3>
+    <p>No verified service-revenue receipts have been published in this log. When reporting starts, each statement will show its reporting dates, reconciliation date, amounts by asset, refunds and collection costs, net receipts, and supporting transaction or payment references.</p>
+    <details><summary>How revenue will be counted</summary>
+      <ul>
+        <li>Count the Federation’s service fees once received and reconciled. Swap trading volume and the user’s full trade amount are not revenue.</li>
+        <li>Show gross fees, refunds and collection costs separately. Net receipts are not profit; operating expenses are separate.</li>
+        <li>Keep SOL, USDC and other assets separate. Any dollar equivalent must name its price source and valuation time.</li>
+        <li>Exclude internal wallet transfers, owner contributions, donations and changes in token value from service revenue. Avoid counting the same receipt twice.</li>
+        <li>Use public on-chain references where applicable. Keep customer identities and private billing information out of public payment records.</li>
+      </ul>
+      <p>Wallet balances alone do not establish revenue. This page does not imply a holder payout, revenue share or return.</p>
+    </details>
+  </section>
 
   <!-- CURRENT-MINT LOCK: DATED RPC EVIDENCE, NOT A LIVE READ -->
   <section class="promise" id="current-mint-lock" aria-labelledby="current-lock-title">
@@ -856,7 +899,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <br>
   Galactic Federation of Finance — $GFOF on Solana. Not financial advice. Always DYOR.
   <br>
-  <span class="version" id="footer-version">v19.0 · treasury · updated 2026-10-08</span>
+  <span class="version" id="footer-version">treasury · revenue section updated 2026-10-29 · lock evidence dated 2026-10-08</span>
 </div>
 
 <script>
@@ -1461,7 +1504,7 @@ try {
 /* Version stamp */
 (function(){
   var el = document.getElementById('footer-version');
-  if(el){ el.textContent = 'v19.0 · treasury · updated 2026-10-08'; }
+  if(el){ el.textContent = 'treasury · revenue section updated 2026-10-29 · lock evidence dated 2026-10-08'; }
 })();
 
 /* Initial render + fetch */
