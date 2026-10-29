@@ -1,0 +1,32 @@
+/* Keyboard entry for the legacy public documents. No script is required. */
+.fed-document-skip {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10000;
+  max-width: calc(100vw - 24px);
+  padding: 12px 18px;
+  border: 2px solid #07111e;
+  border-radius: 8px;
+  background: #f4d284;
+  color: #07111e;
+  font: 700 15px/1.5 system-ui, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transform: translateY(calc(-100% - 24px));
+}
+
+.fed-document-skip:focus {
+  transform: translateY(0);
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+#federation-document-content {
+  scroll-margin-top: 16px;
+}
+
+#federation-document-content:focus-visible {
+  outline: 2px solid #f4d284;
+  outline-offset: 6px;
+}

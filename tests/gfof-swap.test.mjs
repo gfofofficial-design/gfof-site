@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {GFOF, SOL, TRADING_ENABLED, parseAmount, formatUnits, makeQuoteRequest, projectQuote, createQuoteController} from '../assets/federation/swap/quote-core.mjs';
+import {USDC, QUOTE_TOKENS, QUOTE_PAIRS} from '../assets/federation/swap/token-registry.mjs';
 
 const request = () => makeQuoteRequest('buy', '0.01');
 const response = (change = {}) => ({inputMint: SOL.mint, outputMint: GFOF.mint, inAmount: '10000000',
@@ -183,4 +184,45 @@ test('browser transport failure has a distinct safe state without inventing the 
   assert.equal(states.at(-1).phase, 'network');
   assert.equal(JSON.stringify(states).includes('private network detail'), false);
   controller.dispose();
+});
+
+test('the reviewed starting list contains only fixed mainnet SOL, GFOF and native USDC', () => {
+  assert.deepEqual(QUOTE_TOKENS.map(t => t.id), ['SOL', 'GFOF', 'USDC']);
+  assert.equal(USDC.mint, 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+  assert.equal(USDC.decimals, 6);
+  assert.equal(new Set(QUOTE_TOKENS.map(t => t.mint)).size, 3);
+  for (const value of [...QUOTE_TOKENS, ...QUOTE_PAIRS, QUOTE_TOKENS, QUOTE_PAIRS]) assert.ok(Object.isFrozen(value));
+  assert.equal(QUOTE_PAIRS.length, 6); assert.equal(TRADING_ENABLED, false);
+});
+
+test('all six reviewed pairs bind exact mints and integer amounts without wallet or fee parameters', () => {
+  for (const pair of QUOTE_PAIRS) {
+    const r = makeQuoteRequest(pair.id, '1.234567'), u = new URL(r.url);
+    assert.deepEqual([...u.searchParams.keys()], ['inputMint', 'outputMint', 'amount']);
+    assert.equal(u.searchParams.get('inputMint'), pair.input.mint);
+    assert.equal(u.searchParams.get('outputMint'), pair.output.mint);
+    assert.equal(r.atomic, pair.input.decimals === 9 ? '1234567000' : '1234567');
+    const q = projectQuote(response({inputMint: pair.input.mint, outputMint: pair.output.mint,
+      inAmount: r.atomic, outAmount: pair.output.decimals === 9 ? '123456789' : '1234567'}), r, 0);
+    assert.equal(q.output, pair.output.decimals === 9 ? '0.123456789' : '1.234567');
+    assert.equal(q.inputSymbol, pair.input.symbol); assert.equal(q.outputSymbol, pair.output.symbol);
+  }
+});
+
+test('unlisted tokens, same-token pairs and pair injection never reach a provider', async () => {
+  const f = fixture();
+  for (const pair of ['SOL:SOL', 'USDC:USDC', 'GFOF:GFOF', 'SOL:BTC', 'ETH:USDC', 'SOL:USDC&payer=x',
+    'SOL:' + USDC.mint, '__proto__', 'constructor', {input: SOL, output: USDC}, null]) {
+    await f.controller.request(pair, '1');
+    assert.equal(f.state().phase, 'invalidPair'); assert.equal(f.calls.length, 0);
+  }
+  f.controller.dispose();
+});
+
+test('USDC precision and mismatched response mints fail closed', () => {
+  assert.throws(() => makeQuoteRequest('USDC:SOL', '0.0000001'), {code: 'amount'});
+  const r = makeQuoteRequest('SOL:USDC', '0.01');
+  for (const data of [response(), response({outputMint: 'USDC', symbol: 'USDC'}), response({outputMint: USDC.mint, transaction: 'not-permitted'})]) {
+    assert.throws(() => projectQuote(data, r, 0), {code: 'unavailable'});
+  }
 });

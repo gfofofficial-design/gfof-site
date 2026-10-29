@@ -1,6 +1,9 @@
 // Reviewed public copy only. These records do not control runtime permissions,
 // indicate provider health or establish the freshness of any financial data.
+import {QUOTE_PAIRS} from '../../assets/federation/swap/token-registry.mjs';
+
 export const TOOL_COPY_REVIEWED = '2026-10-29';
+const quoteSymbols = [...new Set(QUOTE_PAIRS.flatMap(({input, output}) => [input.symbol, output.symbol]))].join(', ');
 
 export const FEDERATION_TOOLS = Object.freeze(Object.fromEntries(Object.entries({
   wallet: {
@@ -12,8 +15,8 @@ export const FEDERATION_TOOLS = Object.freeze(Object.fromEntries(Object.entries(
     description: 'Find project tools and proposed challenges. Public membership and competition enrollment remain closed.',
   },
   swap: {
-    title: 'Galactic Swap', action: 'Check a GFOF quote', href: '/swap', state: 'quote-only', status: 'Quote preview · trading closed',
-    description: 'Compare SOL and GFOF quotes. No wallet is needed and no transaction is created.',
+    title: 'Galactic Swap', action: 'Check a token quote', href: '/swap', state: 'quote-only', status: 'Quote preview · trading closed',
+    description: 'Compare quotes for ' + quoteSymbols + ' on Solana. Routes vary. No wallet is needed and no transaction is created.',
   },
   lens: {
     title: 'Dossier Lens', action: 'Research a Solana mint', href: 'https://dossiertrack.co/token-structure', state: 'read-only-beta', status: 'Public beta · read only',
