@@ -28,6 +28,10 @@ To deliberately update the copy:
 4. Review the HTML diff and run the focused catalog test and `--check` mode.
 
 The existing Alliance CI workflow checks the catalog and all marked regions.
+The swap description derives its token symbols from the explicitly declared
+quote pairs at authoring time. Updating that registry triggers the same checks;
+it does not add a browser request or imply that every route is available. The
+current list describes SOL, GFOF and native USDC on Solana; trading remains closed.
 Drift fails the check. Missing, duplicated or reversed markers refuse before the
 tool rewrites either source page. Refreshing marked regions preserves surrounding
 content; it does not rewrite account forms or member controls.

@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {FEDERATION_TOOLS, renderToolSlot} from '../scripts/_shared/federation-tools.mjs';
 import {syncToolPages} from '../scripts/sync-federation-tools.mjs';
 import {TRADING_ENABLED} from '../assets/federation/swap/quote-core.mjs';
+import {QUOTE_PAIRS} from '../assets/federation/swap/token-registry.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const filenames = ['command-deck.html', 'alliance.html'];
@@ -75,4 +76,13 @@ test('catalog entries are immutable public metadata with fixed destinations', ()
     assert.ok(['https://galacticfederation.co','https://dossiertrack.co'].includes(url.origin));
     assert.equal(url.username, ''); assert.equal(url.password, ''); assert.equal(url.search, '');
   }
+});
+
+test('dashboard quote copy follows the explicitly supported token pairs while trading stays closed', () => {
+  const symbols = [...new Set(QUOTE_PAIRS.flatMap(({input, output}) => [input.symbol, output.symbol]))];
+  assert.deepEqual(symbols, ['SOL', 'GFOF', 'USDC']);
+  for (const symbol of symbols) assert.ok(FEDERATION_TOOLS.swap.description.includes(symbol));
+  assert.match(FEDERATION_TOOLS.swap.description, /on Solana.*Routes vary/);
+  assert.match(renderToolSlot('deck'), /Check a token quote/);
+  assert.equal(TRADING_ENABLED, false);
 });

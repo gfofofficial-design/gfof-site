@@ -1,5 +1,6 @@
 import {createWalletPreview} from './wallet-preview.mjs';
 import {createQuoteController, pairFor} from './quote-core.mjs';
+import {QUOTE_PAIRS} from './token-registry.mjs';
 
 const MESSAGES = Object.freeze({idle: 'No quote requested. Trading is closed; wallet address preview is optional.',
   loading: 'Checking an indicative quote with Jupiter. No wallet or transaction is involved.',
@@ -23,25 +24,43 @@ export function mountSwapPage(doc, options = {}) {
   if (!$('swap-form')) return null;
   let disposed = false;
   const resultFields = ['swap-input', 'swap-output', 'swap-router', 'swap-fee', 'swap-time', 'swap-impact', 'swap-minimum', 'swap-slippage', 'swap-review-notes'];
+  const selection = () => $('swap-from').value + ':' + $('swap-to').value;
   const updateLabels = () => {
-    const {input} = pairFor($('swap-direction').value);
+    let pair;
+    try { pair = pairFor(selection()); } catch { return false; }
+    const {input, output} = pair;
+    $('quote-title').textContent = input.symbol + ' → ' + output.symbol;
     $('swap-amount-label').textContent = input.symbol + ' amount to quote';
     $('swap-amount-help').textContent = 'Enter a positive ' + input.symbol + ' amount with up to ' + input.decimals + ' decimal places.';
     $('swap-amount').placeholder = input.symbol === 'SOL' ? 'For example, 0.01' : 'For example, 1000';
+    for (const option of $('swap-from').options) option.disabled = !QUOTE_PAIRS.some(p => p.input.id === option.value && p.output.id === output.id);
+    for (const option of $('swap-to').options) option.disabled = !QUOTE_PAIRS.some(p => p.input.id === input.id && p.output.id === option.value);
+    $('swap-reverse').disabled = !QUOTE_PAIRS.some(p => p.input.id === output.id && p.output.id === input.id);
+    for (const [side, token] of [['from', input], ['to', output]]) {
+      $('swap-' + side + '-name').textContent = token.symbol + ' · ' + token.name;
+      $('swap-' + side + '-mint').textContent = token.mint;
+      $('swap-' + side + '-explorer').textContent = 'View ' + token.symbol + ' routing mint on Solscan ↗';
+      $('swap-' + side + '-explorer').setAttribute('href', 'https://solscan.io/token/' + token.mint);
+    }
+    $('swap-research').setAttribute('href', 'https://dossiertrack.co/token-structure?mint=' + output.mint);
+    $('swap-research-label').textContent = 'Research ' + output.symbol;
+    return true;
   };
   const controller = createQuoteController({...options, onState(state) {
     if (disposed) return;
     const loading = state.phase === 'loading';
-    $('swap-check').disabled = loading;
+    $('swap-check').disabled = loading || state.phase === 'invalidPair';
     $('swap-cancel').hidden = !loading;
     $('swap-result').setAttribute('aria-busy', String(loading));
     $('swap-result').hidden = state.phase !== 'ready';
     resultFields.forEach(id => { $(id).textContent = '—'; });
     $('swap-amount').setAttribute('aria-invalid', String(state.phase === 'invalid'));
+    for (const id of ['swap-from', 'swap-to']) $(id).setAttribute('aria-invalid', String(state.phase === 'invalidPair'));
     if (state.phase === 'invalid') {
-      const {input} = pairFor($('swap-direction').value);
+      const {input} = pairFor(selection());
       $('swap-message').textContent = 'Enter a positive ' + input.symbol + ' amount using digits and up to ' + input.decimals + ' decimal places. No commas or exponent notation.';
-    } else $('swap-message').textContent = MESSAGES[state.phase] || MESSAGES.unavailable;
+    } else if (state.phase === 'invalidPair') $('swap-message').textContent = 'Choose two different tokens from the reviewed list. No quote was requested.';
+    else $('swap-message').textContent = MESSAGES[state.phase] || MESSAGES.unavailable;
     if (state.phase === 'ready') {
       const q = state.quote;
       $('swap-input').textContent = q.input + ' ' + q.inputSymbol;
@@ -79,17 +98,29 @@ export function mountSwapPage(doc, options = {}) {
   const onWalletConnect = () => void walletPreview?.connect(Number($('swap-wallet-select').value));
   const onWalletDisconnect = () => void walletPreview?.disconnect();
   const onEdit = () => controller.invalidate();
-  const onDirection = () => { controller.invalidate(); $('swap-amount').value = ''; updateLabels(); };
+  const onPairChange = () => {
+    controller.invalidate(); $('swap-amount').value = '';
+    if (!updateLabels()) { controller.invalidate('invalidPair'); return; }
+    const {input, output} = pairFor(selection());
+    $('swap-message').textContent = 'Quote pair changed to ' + input.symbol + ' → ' + output.symbol + '. Amount and previous quote cleared. Enter a new amount to check.';
+  };
+  const onReverse = () => {
+    const from = $('swap-from').value;
+    $('swap-from').value = $('swap-to').value; $('swap-to').value = from;
+    onPairChange();
+  };
   const onSubmit = event => {
     event.preventDefault();
-    void controller.request($('swap-direction').value, $('swap-amount').value);
+    void controller.request(selection(), $('swap-amount').value);
     if ($('swap-amount').getAttribute('aria-invalid') === 'true') $('swap-amount').focus();
+    else if ($('swap-from').getAttribute('aria-invalid') === 'true') $('swap-from').focus();
   };
   const onCancel = () => controller.invalidate('cancelled');
   const onClear = () => { controller.invalidate(); $('swap-amount').value = ''; $('swap-amount').focus(); };
   const onVisibility = () => { controller.invalidate(); walletPreview?.invalidate(); };
   const bindings = [[$('swap-form'), 'submit', onSubmit], [$('swap-amount'), 'input', onEdit],
-    [$('swap-direction'), 'change', onDirection], [$('swap-cancel'), 'click', onCancel], [$('swap-clear'), 'click', onClear],
+    [$('swap-from'), 'change', onPairChange], [$('swap-to'), 'change', onPairChange], [$('swap-reverse'), 'click', onReverse],
+    [$('swap-cancel'), 'click', onCancel], [$('swap-clear'), 'click', onClear],
     [doc, 'visibilitychange', onVisibility]];
   if (walletPreview) bindings.push([$('swap-wallet-connect'), 'click', onWalletConnect], [$('swap-wallet-disconnect'), 'click', onWalletDisconnect]);
   if (doc.defaultView) bindings.push([doc.defaultView, 'pagehide', onVisibility], [doc.defaultView, 'pageshow', onVisibility]);
