@@ -1,6 +1,6 @@
 // Quote-only foundation. There is deliberately no wallet, signing or submission path.
-export const GFOF = Object.freeze({symbol: 'GFOF', mint: 'Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV', decimals: 6});
-export const SOL = Object.freeze({symbol: 'SOL', mint: 'So11111111111111111111111111111111111111112', decimals: 9});
+import {QUOTE_PAIRS} from './token-registry.mjs';
+export {GFOF, SOL, USDC} from './token-registry.mjs';
 export const TRADING_ENABLED = false;
 export const QUOTE_MAX_AGE_MS = 30000;
 const ENDPOINT = 'https://api.jup.ag/swap/v2/order';
@@ -9,9 +9,11 @@ const ROUTERS = new Set(['metis', 'jupiterz', 'dflow', 'okx']);
 const failure = code => Object.assign(new Error(code), {code});
 
 export function pairFor(direction) {
-  if (direction === 'buy') return Object.freeze({input: SOL, output: GFOF});
-  if (direction === 'sell') return Object.freeze({input: GFOF, output: SOL});
-  throw failure('amount');
+  // Preserve the two original identifiers for existing offline review callers.
+  const id = direction === 'buy' ? 'SOL:GFOF' : direction === 'sell' ? 'GFOF:SOL' : direction;
+  const pair = QUOTE_PAIRS.find(pair => pair.id === id);
+  if (!pair) throw failure('pair');
+  return pair;
 }
 
 export function parseAmount(value, decimals) {
@@ -152,7 +154,7 @@ export function createQuoteController({fetchImpl = globalThis.fetch, onState, no
       if (active) return;
       let request;
       try { request = makeQuoteRequest(direction, amount); }
-      catch { invalidate('invalid'); return; }
+      catch (error) { invalidate(error.code === 'pair' ? 'invalidPair' : 'invalid'); return; }
       if (now() < nextAllowed) { invalidate(); emit({phase: 'rate', retryAt: nextAllowed}); return; }
       invalidate(); const current = version;
       const startedAt = now(); nextAllowed = startedAt + 5000;
