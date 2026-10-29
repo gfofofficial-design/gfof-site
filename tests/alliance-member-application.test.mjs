@@ -85,6 +85,44 @@ test('a different deployment cannot use an already prepared application',async()
 test('unsupported/cross-site input cannot spend a signed authority exchange after preparation',async()=>{
   const f=fixture();try{await f.app.prepare(f.checkpoint,f.context);f.serve();const before=f.counts;assert.equal((await f.app.handle(f.f.request('/me/image'),f.context)).status,404);assert.equal((await f.app.handle(f.f.request('/me',{headers:{origin:'https://other.example'}}),f.context)).status,403);assert.deepEqual(f.counts,before);}finally{f.close();}
 });
+test('malformed member queries are refused before any signed authority, Auth or profile work',async()=>{
+  const f=fixture();try{
+    await f.app.prepare(f.checkpoint,f.context);f.serve();const before=f.counts;
+    for(const [path,method]of [
+      ['/me?ignored=1','GET'],['/me?actorId=fixture','POST'],
+      ['/me/profile?ignored=1','DELETE'],['/me/profile/removal-status?ignored=1','GET'],
+      ['/directory?ignored=1','GET'],['/directory?limit=0','GET'],['/directory?limit=21','GET'],
+      ['/directory?limit=1&limit=2','GET'],['/directory?after=invalid','GET'],
+      ['/directory?after=11111111-1111-4111-8111-111111111111&after=22222222-2222-4222-8222-222222222222','GET']
+    ]){
+      const response=await f.app.handle(f.f.request(path,{method}),f.context);
+      assert.deepEqual(f.counts,before,'malformed query spent an authority exchange: '+path);
+      assert.equal(response.status,404,path);assert.equal(f.f.calls.length,0,path);
+    }
+    assert.equal((await f.app.handle(f.f.request('/directory?limit=1&after=11111111-1111-4111-8111-111111111111'),f.context)).status,200);
+    assert.ok(f.counts.decisions>before.decisions);
+  }finally{f.close();}
+});
+test('malformed collaboration, feedback and owner-review queries cannot spend an authority exchange',async()=>{
+  const f=fixture({withReview:true}),client=createMemberProfileClient({enabled:true,profileRevisions:true,origin,newOperationId:()=>operation(86),fetcher:f.fetcher});try{
+    await f.app.prepare(f.checkpoint,f.context);f.serve();const before=f.counts;
+    for(const [path,method]of [
+      ['/community/challenges?limit=0','GET'],['/community/challenge','GET'],['/community/challenge?id=invalid','GET'],
+      ['/community/change?ignored=1','POST'],['/community/visibility?ignored=1','POST'],
+      ['/feedback/ideas?limit=6','GET'],['/feedback/idea?id=invalid','GET'],['/feedback/change?ignored=1','POST'],
+      ['/report-review/reports?limit=1&limit=2','GET'],['/report-review/report?id=invalid','GET'],['/report-review/review?ignored=1','POST']
+    ]){
+      const response=await f.app.handle(f.f.request(path,{method}),f.context);
+      assert.deepEqual(f.counts,before,'malformed query spent an authority exchange: '+path);
+      assert.equal(response.status,404,path);assert.equal(f.f.calls.length,0,path);
+    }
+    await client.load();await client.save({...fields(),listed:true});
+    for(const path of ['/community/challenges?limit=1','/feedback/ideas?limit=1','/report-review/reports?limit=1']){
+      assert.equal((await f.app.handle(f.f.request(path),f.context)).status,200,path);
+    }
+    assert.ok(f.counts.decisions>before.decisions);
+  }finally{client.dispose();f.close();}
+});
 test('shutdown during an uncooperative startup reply prevents late preparation and closes owned components',async()=>{
   const wait=deferred(),f=fixture({readDecisionWork:()=>wait.promise});try{const preparing=f.app.prepare(f.checkpoint,f.context);await tick();f.app.close();assert.deepEqual(await preparing,{state:'quarantine',access:'closed'});wait.resolve();await tick();assert.equal((await f.app.handle(f.f.request(),f.context)).status,503);assert.equal(f.f.dependencyCloses,0);}finally{wait.resolve();f.close();}
 });
