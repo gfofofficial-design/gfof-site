@@ -55,3 +55,11 @@
 .deck .alliance-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin:28px 0;border-color:var(--fed-command);background:linear-gradient(115deg,var(--fed-command-soft),transparent 75%),var(--fed-space-panel)}.deck .alliance-entry h2{margin:8px 0 12px}.deck .alliance-entry p{max-width:800px}.deck .alliance-entry>a{border:1px solid var(--fed-border-strong);padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:700;white-space:nowrap}@media(max-width:760px){.deck .alliance-entry{grid-template-columns:minmax(0,1fr)}.deck .alliance-entry>a{width:fit-content;max-width:100%;white-space:normal}}
 
 .dashboard-help{margin:28px 0}.dashboard-help summary{min-height:44px;padding:10px 0;cursor:pointer;font-weight:600}.dashboard-help details{border-top:1px solid var(--fed-border-default);padding-top:4px}.dashboard-help details p{max-width:75ch;line-height:1.7}
+
+/* Compact public choices; the shared tool catalog supplies their copy. */
+.brief-options{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.brief-option{gap:8px;padding:16px}
+.brief-option strong{font-size:19px}
+.brief-option .status{line-height:1.45;white-space:normal}
+.brief-mission{font-size:14px;margin:16px 0 0}
+@media(max-width:680px){.brief-options{grid-template-columns:1fr}}
