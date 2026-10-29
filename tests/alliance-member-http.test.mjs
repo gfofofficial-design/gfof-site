@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
-import {createAllianceMemberHttp} from '../lib/alliance-member-http.mjs';
+import {createAllianceMemberHttp,allianceMemberRoute} from '../lib/alliance-member-http.mjs';
 import {mountAllianceAccountMemberPage} from '../assets/federation/fed-alliance-member-account.mjs';
 import {createMemberProfileClient} from '../assets/federation/fed-alliance-member-client.mjs';
 import {createProfileRemovalStatusClient} from '../assets/federation/fed-alliance-profile-removal-status-client.mjs';
@@ -12,6 +12,16 @@ import {removalEvents} from '../lib/alliance-avatar-server/removal.mjs';
 const tick=()=>new Promise(r=>setImmediate(r));
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const body=r=>r.json();
+
+test('route admission preserves valid directory pagination and rejects malformed query variants',()=>{
+  for(const path of ['/directory','/directory?limit=1','/directory?limit=20&after=11111111-1111-4111-8111-111111111111']){
+    assert.equal(allianceMemberRoute(new Request(origin+'/api/alliance-members'+path),origin),'profile',path);
+  }
+  for(const path of ['/me?limit=1','/me/profile/removal-status?limit=1','/directory?limit=','/directory?limit=01',
+    '/directory?limit=1&%6cimit=2','/directory?%61fter=invalid','/directory?unknown=1']){
+    assert.equal(allianceMemberRoute(new Request(origin+'/api/alliance-members'+path),origin),null,path);
+  }
+});
 
 test('default-closed composition has no dependency access or automatically mounted function',async()=>{
   const trap=new Proxy({},{get(){throw Error('No dependency lookup');}});

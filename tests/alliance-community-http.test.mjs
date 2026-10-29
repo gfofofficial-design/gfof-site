@@ -32,8 +32,8 @@ test('cookie-bound community reads, private pages, commands and visibility valid
 });
 for(const [name,path,options,status]of [
  ['cross site','/challenges',{headers:{origin:'https://evil.example'}},403],['bearer supplied','/challenges',{headers:{authorization:'Bearer supplied'}},403],
- ['unknown route','/admin',{},404],['duplicate cursor','/challenges?limit=1&limit=2',{},400],['invalid limit','/challenges?limit=20',{},400],['caller actor','/challenges?actor='+actor,{},400],
- ['missing id','/challenge',{},400],['extra fields','/change',{method:'POST',body:{...command(),actor}},400],['oversize body','/change',{method:'POST',body:' '.repeat(4097)},400],
+ ['unknown route','/admin',{},404],['duplicate cursor','/challenges?limit=1&limit=2',{},404],['invalid limit','/challenges?limit=20',{},404],['caller actor','/challenges?actor='+actor,{},404],
+ ['missing id','/challenge',{},404],['extra fields','/change',{method:'POST',body:{...command(),actor}},400],['oversize body','/change',{method:'POST',body:' '.repeat(4097)},400],
  ['missing cookie','/challenges',{cookie:false},401],['duplicate cookie','/challenges',{headers:{cookie:'__Host-gf-access=a.b.c; __Host-gf-access=d.e.f'}},401],
  ['mutation lacks origin','/visibility',{method:'POST',body:{target,hidden:true},headers:{origin:''}},403],
 ])test(name+' refuses before Auth or service',async()=>{const f=fixture();try{assert.equal((await f.api.handle(f.request(path,options))).status,status);assert.deepEqual(f.calls,[]);}finally{f.api.close();}});
