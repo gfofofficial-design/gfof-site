@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {mountSwapPage, formatPriceImpact} from '../assets/federation/swap/swap-page.mjs';
-import {GFOF, SOL} from '../assets/federation/swap/quote-core.mjs';
+import {GFOF, SOL, USDC} from '../assets/federation/swap/quote-core.mjs';
+import {QUOTE_TOKENS} from '../assets/federation/swap/token-registry.mjs';
 
 const html = readFileSync(new URL('../swap.html', import.meta.url), 'utf8');
 const flush = async () => { for (let i = 0; i < 5; i++) await new Promise(r => setImmediate(r)); };
@@ -22,7 +23,14 @@ function fixture(fetchImpl = async () => good(), walletOptions) {
     n.hidden = /\shidden(?:\s|>)/.test(match[0]); n.disabled = /\sdisabled(?:\s|>)/.test(match[0]); nodes.set(match[1], n);
   }
   doc = new Element(); doc.getElementById = id => nodes.get(id); doc.defaultView = new Element();
-  nodes.get('swap-direction').value = 'buy';
+  for (const id of ['swap-from', 'swap-to']) {
+    const block = html.match(new RegExp('<select id="' + id + '"[^>]*>([\\s\\S]*?)</select>'))[1];
+    const select = nodes.get(id); select.options = [];
+    for (const match of block.matchAll(/<option value="([^"]+)"([^>]*)>([^<]+)<\/option>/g)) {
+      const option = new Element(); option.value = match[1]; option.textContent = match[3]; option.disabled = match[2].includes('disabled');
+      select.options.push(option); if (match[2].includes('selected')) select.value = option.value;
+    }
+  }
   if (walletOptions) doc.createElement = () => new Element();
   const api = mountSwapPage(doc, {walletOptions, fetchImpl: (...args) => { calls.push(args); return fetchImpl(...args); }});
   return {doc, api, calls, get: id => nodes.get(id)};
@@ -49,8 +57,8 @@ test('a valid quote renders exact units without opening trading; an edit clears 
   assert.equal(f.calls.length, 1); f.api.dispose();
 });
 
-test('direction change clears the old amount and explains the correct unit precision', () => {
-  const f = fixture(); f.get('swap-amount').value = '0.01'; f.get('swap-direction').value = 'sell'; f.get('swap-direction').emit('change');
+test('reversing tokens clears the old amount and explains the correct unit precision', () => {
+  const f = fixture(); f.get('swap-amount').value = '0.01'; f.get('swap-reverse').emit('click');
   assert.equal(f.get('swap-amount').value, ''); assert.equal(f.get('swap-amount-label').textContent, 'GFOF amount to quote');
   assert.match(f.get('swap-amount-help').textContent, /6 decimal places/); assert.equal(f.calls.length, 0); f.api.dispose();
 });
@@ -83,7 +91,7 @@ test('the preview has strict CSP, disabled trading and no wallet/plugin executio
   assert.match(html, /form-action 'none'/); assert.match(html, /script-src 'self'/);
   assert.match(html, /id="swap-trade" disabled/);
   assert.doesNotMatch(html, /<script[^>]*src="https:|unsafe-inline|iframe|window\.solana/i);
-  for (const file of ['quote-core.mjs', 'swap-page.mjs']) {
+  for (const file of ['token-registry.mjs', 'quote-core.mjs', 'swap-page.mjs']) {
     const source = readFileSync(new URL('../assets/federation/swap/' + file, import.meta.url), 'utf8');
     assert.doesNotMatch(source, /innerHTML|localStorage|sessionStorage|document\.cookie|signTransaction|signAllTransactions|sendTransaction|\/execute|Jupiter\.init|window\.solana/);
   }
@@ -169,4 +177,57 @@ test('price impact is readable without losing sign or presenting tiny values as 
   assert.equal(formatPriceImpact(0.000001), 'Between 0% and 0.0001%');
   assert.equal(formatPriceImpact(0), '0%');
   assert.equal(formatPriceImpact(null), 'Not returned');
+});
+
+test('both native selectors match the reviewed list; same-token choices are disabled', () => {
+  const f = fixture();
+  for (const id of ['swap-from', 'swap-to']) assert.deepEqual(f.get(id).options.map(o => o.value), QUOTE_TOKENS.map(t => t.id));
+  assert.equal(f.get('swap-from').options.find(o => o.value === 'GFOF').disabled, true);
+  assert.equal(f.get('swap-to').options.find(o => o.value === 'SOL').disabled, true);
+  assert.equal(f.calls.length, 0); f.api.dispose();
+});
+
+test('selecting USDC updates quote units, mint verification and research without fetching', async () => {
+  const f = fixture(async () => good({outputMint: USDC.mint, outAmount: '1234567'}));
+  f.get('swap-to').value = 'USDC'; f.get('swap-to').emit('change');
+  assert.equal(f.get('quote-title').textContent, 'SOL → USDC');
+  assert.equal(f.get('swap-to-mint').textContent, USDC.mint);
+  assert.equal(f.get('swap-to-explorer').getAttribute('href'), 'https://solscan.io/token/' + USDC.mint);
+  assert.equal(f.get('swap-research').getAttribute('href'), 'https://dossiertrack.co/token-structure?mint=' + USDC.mint);
+  assert.equal(f.get('swap-research-label').textContent, 'Research USDC'); assert.equal(f.calls.length, 0);
+  f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit'); await flush();
+  assert.equal(f.get('swap-output').textContent, '1.234567 USDC');
+  assert.equal(f.get('swap-trade').disabled, true); f.api.dispose();
+});
+
+test('reversing USDC clears amount and result, retains precision and makes no automatic request', async () => {
+  const f = fixture(async () => good({outputMint: USDC.mint, outAmount: '1234567'}));
+  f.get('swap-to').value = 'USDC'; f.get('swap-to').emit('change');
+  f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit'); await flush();
+  f.get('swap-reverse').emit('click');
+  assert.equal(f.get('swap-from').value, 'USDC'); assert.equal(f.get('swap-to').value, 'SOL');
+  assert.equal(f.get('swap-amount').value, ''); assert.equal(f.get('swap-result').hidden, true);
+  assert.equal(f.get('swap-output').textContent, '—');
+  assert.equal(f.get('swap-amount-label').textContent, 'USDC amount to quote');
+  assert.match(f.get('swap-amount-help').textContent, /6 decimal places/);
+  assert.equal(f.get('swap-from-mint').textContent, USDC.mint);
+  assert.equal(f.calls.length, 1); f.api.dispose();
+});
+
+test('a pair change cancels the outstanding quote and suppresses its late response', async () => {
+  let resolve;
+  const f = fixture(() => new Promise(r => { resolve = r; }));
+  f.get('swap-amount').value = '0.01'; f.get('swap-form').emit('submit');
+  f.get('swap-to').value = 'USDC'; f.get('swap-to').emit('change'); await flush();
+  resolve(good()); await flush();
+  assert.equal(f.get('quote-title').textContent, 'SOL → USDC');
+  assert.equal(f.get('swap-result').hidden, true); assert.equal(f.get('swap-output').textContent, '—');
+  assert.equal(f.get('swap-check').disabled, false); assert.equal(f.calls.length, 1); f.api.dispose();
+});
+
+test('an invalid pair is explained and focused without a provider call', () => {
+  const f = fixture(); f.get('swap-to').value = 'BTC'; f.get('swap-amount').value = '1'; f.get('swap-form').emit('submit');
+  assert.match(f.get('swap-message').textContent, /Choose two different tokens/);
+  assert.equal(f.doc.activeElement, f.get('swap-from')); assert.equal(f.calls.length, 0);
+  assert.equal(f.get('swap-check').disabled, true); f.api.dispose();
 });
