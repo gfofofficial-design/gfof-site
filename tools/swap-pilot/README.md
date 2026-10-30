@@ -75,11 +75,12 @@ isolated harness branch; that configuration is not serving the quote-only site.
 Production remained deploy `6ae3397d7ecdd326770140d6`, source
 `4238bee2c9e64bf91bf2b59f365230659f1c0e28` at the verification point.
 
-Owner accepted the layout and reported the requested connection/disconnect check
-worked. This is owner-reported acceptance on one tested device; the wallet name
-and a separate desktop/mobile matrix were not recorded. No financial transaction
-was requested or observed. Do not repeat this passed connection check as if it
-were still entirely untested; confirm additional devices only where needed.
+Owner accepted the layout. The initial brief connection report was premature: a
+later screenshot showed zero wallets in the ordinary mobile browser. A subsequent
+Jupiter wallet-browser screenshot did show a connected account. Connection is
+therefore evidenced in that wallet-browser context, not general mobile Safari or
+Chrome. A separate desktop/device matrix and disconnect acceptance remain unproved.
+See the current release hold below before doing any further financial acceptance.
 
 Owner's screenshot identified the two JupShield warnings as Not verified and Low
 organic activity. Keep them visible. Verification is a separate identity/listing
@@ -90,9 +91,34 @@ in its verification record; website, X and Telegram matched the public site.
 No verification approval or removal of either warning has been established.
 
 The next financial acceptance is one owner-executed trade only after an explicit
-spending limit (including fees) is selected. No such limit or transaction is yet
-authorized. Until that acceptance, do not claim quote-to-settlement success or
-open public trading. Referral fees remain unconfigured. A production hosting
+spending limit (including fees) is selected. A bounded owner-run test is not general trading or release authorization.
+Do not open public trading while the warning investigation below remains open. Referral fees remain unconfigured. A production hosting
 and isolation decision, exact release configuration and release approval remain.
 The custom decoder work is parked unless a specific managed-flow defect makes
 it necessary; avoid expanding it instead of completing the user journey.
+
+
+## Current release hold — wallet warning investigation
+
+A later owner-supplied Jupiter wallet review displayed the explicit warning
+"This transaction has been flagged as malicious". This is distinct from the
+previous Not verified / Low organic activity token warnings. Treat the wallet
+warning as unresolved; no cause or false-positive finding is established.
+
+A transaction was subsequently owner-confirmed accidentally. Read-only finalized
+mainnet RPC evidence is consistent with the intended small swap and did not show
+parsed token approval or authority-change instructions. That observation does not
+clear the wallet warning, audit the router programs or establish whole-wallet
+safety. The detailed transaction evidence and user screenshots are intentionally
+not published in this source note.
+
+Further funded testing and public Swap release are paused pending explanation
+from Jupiter/security review. No warnings should be suppressed and no alternative
+wallet/browser should be used to evade this warning. No fee activation is authorized.
+The protected pilot remains available for source/layout investigation; its ability
+to render is not acceptance to submit another transaction. Do not ask the owner to
+repeat the funded test merely to reproduce this already-observed warning.
+
+Next useful support question: was the flag caused by the preview origin, token
+classification, route/program, transaction behavior or failed simulation? Request
+the specific reason and remediation. A successful swap alone is not remediation.
