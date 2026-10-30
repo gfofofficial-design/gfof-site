@@ -10,7 +10,7 @@ import {TRADING_ENABLED} from '../assets/federation/swap/quote-core.mjs';
 import {QUOTE_PAIRS} from '../assets/federation/swap/token-registry.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const filenames = ['command-deck.html', 'alliance.html'];
+const filenames = ['command-deck.html', 'alliance.html', 'account.html'];
 async function fixture(run) {
   const dir = await mkdtemp(join(tmpdir(), 'federation-tool-copy-'));
   try {
@@ -85,4 +85,15 @@ test('dashboard quote copy follows the explicitly supported token pairs while tr
   assert.match(FEDERATION_TOOLS.swap.description, /on Solana.*Routes vary/);
   assert.match(renderToolSlot('deck'), /Check a token quote/);
   assert.equal(TRADING_ENABLED, false);
+});
+
+
+test('account public tools use the same destinations and closed-trading status', () => {
+  const account = renderToolSlot('account-tools');
+  for (const key of ['wallet', 'swap', 'lens', 'treasury']) {
+    assert.ok(account.includes(FEDERATION_TOOLS[key].href));
+    assert.ok(account.includes(FEDERATION_TOOLS[key].status));
+  }
+  assert.match(account, /Quote preview · trading closed/);
+  assert.doesNotMatch(account, /Connect wallet|Sign in/);
 });

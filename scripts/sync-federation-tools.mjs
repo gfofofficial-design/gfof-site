@@ -3,7 +3,7 @@ import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {renderToolSlot} from './_shared/federation-tools.mjs';
 
-const pages = Object.freeze({'command-deck.html': ['deck', 'deck-account'], 'alliance.html': ['alliance', 'alliance-account']});
+const pages = Object.freeze({'command-deck.html': ['deck', 'deck-account'], 'alliance.html': ['alliance', 'alliance-account'], 'account.html': ['account-tools']});
 
 export async function syncToolPages(root, {write = false} = {}) {
   const prepared = [];

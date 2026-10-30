@@ -2,7 +2,7 @@
 // indicate provider health or establish the freshness of any financial data.
 import {QUOTE_PAIRS} from '../../assets/federation/swap/token-registry.mjs';
 
-export const TOOL_COPY_REVIEWED = '2026-10-29';
+export const TOOL_COPY_REVIEWED = '2026-10-30';
 const quoteSymbols = [...new Set(QUOTE_PAIRS.flatMap(({input, output}) => [input.symbol, output.symbol]))].join(', ');
 
 export const FEDERATION_TOOLS = Object.freeze(Object.fromEntries(Object.entries({
@@ -40,6 +40,13 @@ export function renderToolSlot(slot) {
     return `<a class="alliance-account-shortcut" href="${tool.href}">Sign in<span>${escape(tool.status)}</span></a>`;
   }
   if (slot === 'deck-account') return escape(FEDERATION_TOOLS.account.description);
+  if (slot === 'account-tools') {
+    return '<ul>' + ['wallet', 'swap', 'lens', 'treasury'].map(id => {
+      const tool = FEDERATION_TOOLS[id];
+      return `<li><a href="${escape(tool.href)}">${escape(tool.title)}</a> · ${escape(tool.status)}<p>${escape(tool.description)}</p></li>`;
+    }).join('\n') + '</ul>';
+  }
+
   if (!['deck', 'alliance'].includes(slot)) throw Error('Unknown Federation tool slot');
   const ids = slot === 'deck' ? ['wallet', 'alliance', 'swap', 'lens'] : ['wallet', 'swap', 'lens', 'treasury'];
   return ids.map(id => {
