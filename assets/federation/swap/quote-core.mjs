@@ -137,9 +137,9 @@ async function fetchQuote(request, {fetchImpl, signal, setTimer, clearTimer}) {
   finally { clearTimer(timer); signal.removeEventListener('abort', abort); controller.abort(); stopReader(); }
 }
 
-export function createQuoteController({fetchImpl = globalThis.fetch, onState, now = Date.now,
+export function createQuoteController({fetchImpl = globalThis.fetch, onState, now = Date.now, monotonic = () => performance.now(),
   setTimer = setTimeout, clearTimer = clearTimeout} = {}) {
-  if (typeof fetchImpl !== 'function' || typeof onState !== 'function') throw failure('configuration');
+  if (![fetchImpl, onState, now, monotonic].every(value => typeof value === 'function')) throw failure('configuration');
   let active, expiry, version = 0, nextAllowed = 0, disposed = false;
   const emit = state => { if (!disposed) onState(Object.freeze(state)); };
   function invalidate(phase = 'idle') {
@@ -157,15 +157,19 @@ export function createQuoteController({fetchImpl = globalThis.fetch, onState, no
       catch (error) { invalidate(error.code === 'pair' ? 'invalidPair' : 'invalid'); return; }
       if (now() < nextAllowed) { invalidate(); emit({phase: 'rate', retryAt: nextAllowed}); return; }
       invalidate(); const current = version;
-      const startedAt = now(); nextAllowed = startedAt + 5000;
+      const startedAt = now(), startedElapsed = monotonic(); nextAllowed = startedAt + 5000;
       active = new AbortController();
       const signal = active.signal;
       emit({phase: 'loading'});
       try {
         const data = await fetchQuote(request, {fetchImpl, signal, setTimer, clearTimer});
         if (disposed || current !== version) return;
-        if (now() - startedAt >= 8000) throw failure('timeout');
-        const quote = projectQuote(data, request, now());
+        // Device wall time can freeze or move backward. It cannot extend admission.
+        const receivedAt = now(), elapsed = monotonic() - startedElapsed;
+        if (!Number.isFinite(startedElapsed) || !Number.isFinite(elapsed) || elapsed < 0 ||
+            !Number.isSafeInteger(startedAt) || !Number.isSafeInteger(receivedAt) || receivedAt < startedAt) throw failure('unavailable');
+        if (elapsed >= 8000 || receivedAt - startedAt >= 8000) throw failure('timeout');
+        const quote = projectQuote(data, request, receivedAt);
         expiry = setTimer(() => { if (current === version) invalidate('expired'); }, QUOTE_MAX_AGE_MS);
         emit({phase: 'ready', quote});
       } catch (error) {
