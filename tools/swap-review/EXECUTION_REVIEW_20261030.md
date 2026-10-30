@@ -30,4 +30,4 @@ Jupiter documents the taker/order/execute flow, aggregator blockheight versus RF
 
 ## Validation
 
-13 focused new cases cover envelope framing, unsupported versions, signatures, message mutation, signer isolation, metadata binding, fee fallback, spend caps, minimum-output weakening, overflow and expiry. They do not establish an independent Solana codec audit, program acceptance, live-route availability or hosted recovery. Synthetic valid metadata can still accompany malicious instructions: that is why neither module authorizes trading.
+14 focused new cases cover envelope framing, unsupported versions, signatures, message mutation, signer isolation, metadata binding, fee fallback, spend caps, minimum-output weakening, overflow and expiry. They do not establish an independent Solana codec audit, program acceptance, live-route availability or hosted recovery. Synthetic valid metadata can still accompany malicious instructions: that is why neither module authorizes trading.
