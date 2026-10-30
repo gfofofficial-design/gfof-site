@@ -31,3 +31,14 @@ Jupiter documents the taker/order/execute flow, aggregator blockheight versus RF
 ## Validation
 
 14 focused new cases cover envelope framing, unsupported versions, signatures, message mutation, signer isolation, metadata binding, fee fallback, spend caps, minimum-output weakening, overflow and expiry. They do not establish an independent Solana codec audit, program acceptance, live-route availability or hosted recovery. Synthetic valid metadata can still accompany malicious instructions: that is why neither module authorizes trading.
+
+
+## Offline account snapshot increment — October30
+
+`account-review.mjs` resolves supplied raw v0 lookup snapshots in global writable-then-readonly order. It requires exact lookup address/program owner, non-executable state, coherent context slots within an explicit bounded lag, active tables and a fully warmed observation. Same-slot extended and deactivating tables are conservatively refused even where some chain uses may be valid. It checks bounds/aliases and exposes per-account signer/writable flags for instruction review.
+
+The standard165-byte SPL Token snapshot check binds token-account address, mint and token authority separately from the program owner; it checks initialized/not-frozen state, minimum integer units, absence of delegates and unexpected close authority. Token2022/extension layouts are refused. A native flag requires the fixed wrapped-SOL mint. This does not prove ATA derivation, mint decimals, referral-account ownership, rent funding or any permission to spend.
+
+All snapshots are caller-supplied and untrusted until an independent coherent RPC adapter establishes cluster/provenance/freshness. Slot limits do not authenticate an RPC. No raw account requests were made. Result objects always retain tradeAllowed:false. Chain lookup resolution and instruction-program decoding are still release gates; offline consistency is not an on-chain audit.
+
+Six new synthetic account cases bring the focused new suite to20cases, plus7existing packaging cases. Source references: https://github.com/solana-program/token/blob/main/interface/src/state.rs ; https://github.com/solana-program/address-lookup-table ; https://solana.com/docs/core/transactions/versioned-transactions . Account semantics were reviewed against the primary program layouts; independent codec parity remains required before production use.

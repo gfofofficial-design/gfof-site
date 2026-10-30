@@ -36,7 +36,7 @@ function decode(value){
  }
  if(m.offset!==message.length||keyCount+loaded>256||new Set(lookups.map(l=>l.key.toString('hex'))).size!==lookups.length)throw fail();
  for(const ix of instructions)if(ix.programIndex>=keyCount||ix.accounts.some(i=>i>=keyCount+loaded))throw fail();
- return {bytes,signatures,message,keys,blockhash,instructions,lookups,requiredSignatures};
+ return {bytes,signatures,message,keys,blockhash,instructions,lookups,requiredSignatures,readonlySigned,readonlyUnsigned};
 }
 function validSignature(signature,message,key){
  return verify(null,message,createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),key]),format:'der',type:'spki'}),signature);
@@ -50,6 +50,8 @@ export function inspectTransactionEnvelope(base64){
   signerPublicKeys:Object.freeze(tx.keys.slice(0,tx.requiredSignatures).map(k=>k.toString('hex'))),
   feePayerPublicKey:tx.keys[0].toString('hex'),recentBlockhash:tx.blockhash.toString('hex'),
   instructions:Object.freeze(tx.instructions.map(ix=>Object.freeze({programPublicKey:tx.keys[ix.programIndex].toString('hex'),accountIndices:Object.freeze([...ix.accounts]),dataHex:ix.data.toString('hex')}))),
+  staticAccounts:Object.freeze(tx.keys.map((k,i)=>Object.freeze({publicKeyHex:k.toString('hex'),signer:i<tx.requiredSignatures,writable:i<tx.requiredSignatures?i<tx.requiredSignatures-tx.readonlySigned:i<tx.keys.length-tx.readonlyUnsigned}))),
+  lookupTables:Object.freeze(tx.lookups.map(l=>Object.freeze({publicKeyHex:l.key.toString('hex'),writableIndices:Object.freeze([...l.writable]),readonlyIndices:Object.freeze([...l.readonly])}))),
   unresolvedLookupTables:tx.lookups.length,
   limitation:'Requires resolved accounts, instruction and intent/fee/expiry validation, simulation and explicit owner acceptance. Envelope checks alone never permit signing.'});
 }
