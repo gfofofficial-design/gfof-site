@@ -54,3 +54,45 @@ Primary references:
 - https://developers.jup.ag/docs/tool-kits/plugin/customization
 - https://developers.jup.ag/docs/tool-kits/plugin/html-app-example
 - https://developers.jup.ag/docs/tool-kits/plugin/faq
+
+
+## Accepted pilot progress — October 30
+
+The isolated preview is deployed at
+https://deploy-preview-181--gfof.netlify.app/ . Netlify deploy
+`6ae4919fea488c57e38ff6e8` serves commit
+`0dcd854ea16050b0e34df00e638762bee272eb64` from preview-only PR181.
+The later PR181 commit `32ab906a5b7e39be53d375383a7ee908ff9a09f7`
+changes CI scope only and was marked to skip Netlify; it does not change the
+served pilot. The temporary PR181 root configuration must not be merged.
+
+Verified via connected Netlify/browser review: deploy-preview context, no
+functions or edge functions, six-file static build, team-protection gate and
+private badge, then Jupiter panel with GFOF locked and wallet disconnected.
+The dedicated managed-pilot, static-output and stations CI checks passed.
+The legacy public quote-site workflow is explicitly skipped only for this
+isolated harness branch; that configuration is not serving the quote-only site.
+Production remained deploy `6ae3397d7ecdd326770140d6`, source
+`4238bee2c9e64bf91bf2b59f365230659f1c0e28` at the verification point.
+
+Owner accepted the layout and reported the requested connection/disconnect check
+worked. This is owner-reported acceptance on one tested device; the wallet name
+and a separate desktop/mobile matrix were not recorded. No financial transaction
+was requested or observed. Do not repeat this passed connection check as if it
+were still entirely untested; confirm additional devices only where needed.
+
+Owner's screenshot identified the two JupShield warnings as Not verified and Low
+organic activity. Keep them visible. Verification is a separate identity/listing
+process, not proof of safety or a prerequisite imposed by this implementation.
+Jupiter's FAQ says unverified tokens can trade when integrated pools have
+sufficient liquidity: https://verified.jup.ag/faq . GFOF's description was missing
+in its verification record; website, X and Telegram matched the public site.
+No verification approval or removal of either warning has been established.
+
+The next financial acceptance is one owner-executed trade only after an explicit
+spending limit (including fees) is selected. No such limit or transaction is yet
+authorized. Until that acceptance, do not claim quote-to-settlement success or
+open public trading. Referral fees remain unconfigured. A production hosting
+and isolation decision, exact release configuration and release approval remain.
+The custom decoder work is parked unless a specific managed-flow defect makes
+it necessary; avoid expanding it instead of completing the user journey.
