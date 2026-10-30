@@ -27,7 +27,7 @@ export async function buildStaticPublish(root) {
   const copied=[];
   async function copyEntry(relative) {
     const name=relative.split('/').at(-1);
-    if(relative==='lib/alliance-avatar-server'||serverLibraryFiles.has(relative))return;
+    if(relative==='lib/alliance-avatar-server'||relative==='lib/alliance-avatar-runtime'||serverLibraryFiles.has(relative))return;
     // Installed server/vendor dependencies are never browser publication inputs.
     if(name==='node_modules')return;
     const source=join(root,relative),stat=await lstat(source);
