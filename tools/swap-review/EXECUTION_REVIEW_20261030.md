@@ -42,3 +42,26 @@ The standard165-byte SPL Token snapshot check binds token-account address, mint 
 All snapshots are caller-supplied and untrusted until an independent coherent RPC adapter establishes cluster/provenance/freshness. Slot limits do not authenticate an RPC. No raw account requests were made. Result objects always retain tradeAllowed:false. Chain lookup resolution and instruction-program decoding are still release gates; offline consistency is not an on-chain audit.
 
 Six new synthetic account cases bring the focused new suite to20cases, plus7existing packaging cases. Source references: https://github.com/solana-program/token/blob/main/interface/src/state.rs ; https://github.com/solana-program/address-lookup-table ; https://solana.com/docs/core/transactions/versioned-transactions . Account semantics were reviewed against the primary program layouts; independent codec parity remains required before production use.
+
+
+## Blockhash observation binding
+
+Preflight now requires `context.blockhashValidity` containing `blockhashHex`
+(the requested hash decoded to 32-byte lowercase hex), `contextSlot` (canonical
+u64 string), `commitment` (`confirmed` or `finalized`) and boolean `value:true`.
+It must match the envelope's recent blockhash exactly. `context.currentSlot`
+and explicit integer `maxSlotLag` (0..32) bound the observation's slot lag;
+future observations refuse. The existing height expiry check remains required.
+The slot bound is a local review policy, not a Solana protocol constant.
+
+A future trusted RPC adapter must bind the request hash to the corresponding
+`isBlockhashValid` response, establish mainnet endpoint identity and compatible
+commitments, obtain fresh height/slot observations and refresh before signing
+and submission. Never accept this context from an order response or browser
+claim as independently verified evidence. Slot lag does not establish elapsed
+wall-clock freshness or continued validity after this review. This pure helper
+makes no RPC request and authenticates no supplied observation. It still returns
+`tradeAllowed:false`; durable nonce flows and unknown router instructions remain
+unsupported.
+
+Primary method reference: https://solana.com/docs/rpc/http/isblockhashvalid
