@@ -10,12 +10,14 @@ const response = (change = {}) => ({inputMint: SOL.mint, outputMint: GFOF.mint, 
 const json = data => new Response(JSON.stringify(data), {headers: {'content-type': 'application/json'}});
 const tick = () => new Promise(resolve => setImmediate(resolve));
 function fixture(fetchImpl = async () => json(response())) {
-  let time = 100000, id = 0; const timers = new Map(), states = [], calls = [];
+  let time = 100000, elapsed = 100000, id = 0; const timers = new Map(), states = [], calls = [];
   const controller = createQuoteController({fetchImpl: (...args) => { calls.push(args); return fetchImpl(...args); },
-    onState: state => states.push(state), now: () => time,
+    onState: state => states.push(state), now: () => time, monotonic: () => elapsed,
     setTimer: (fn, ms) => { timers.set(++id, {fn, at: time + ms, ms}); return id; }, clearTimer: id => timers.delete(id)});
   return {controller, states, calls, timers, state: () => states.at(-1),
-    advance(ms) { time += ms; },
+    advance(ms) { time += ms; elapsed += ms; },
+    moveWall(ms) { time += ms; },
+    elapse(ms) { elapsed += ms; },
     fire(ms) { const entry = [...timers].find(([, t]) => t.ms === ms); assert.ok(entry, 'expected timer'); timers.delete(entry[0]); entry[1].fn(); }};
 }
 
@@ -41,7 +43,8 @@ test('invalid, zero, excessive-precision and overflow amounts never become reque
     assert.throws(() => parseAmount(value, 9), {code: 'amount'});
   }
   assert.throws(() => parseAmount('0.0000001', 6));
-  assert.throws(() => parseAmount('1', 18));
+  assert.throws(() => parseAmount('1', 37));
+  assert.equal(parseAmount('1',18),'1000000000000000000');
 });
 
 test('both directions use only fixed mints, integer amount and the quote-only endpoint', () => {
@@ -224,5 +227,16 @@ test('USDC precision and mismatched response mints fail closed', () => {
   const r = makeQuoteRequest('SOL:USDC', '0.01');
   for (const data of [response(), response({outputMint: 'USDC', symbol: 'USDC'}), response({outputMint: USDC.mint, transaction: 'not-permitted'})]) {
     assert.throws(() => projectQuote(data, r, 0), {code: 'unavailable'});
+  }
+});
+
+
+test('a frozen or backward device clock cannot admit a late provider reply', async () => {
+  for (const mode of ['frozen', 'backward']) {
+    let resolve;const f=fixture(()=>new Promise(r=>{resolve=r;}));
+    const pending=f.controller.request('buy','0.01');
+    f.elapse(8001);if(mode==='backward')f.moveWall(-60000);
+    resolve(json(response()));await pending;
+    assert.notEqual(f.state().phase,'ready');assert.equal(f.calls.length,1);assert.equal(f.timers.size,0);f.controller.dispose();
   }
 });

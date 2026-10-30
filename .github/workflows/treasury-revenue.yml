@@ -1,10 +1,10 @@
 name: Treasury revenue reporting
 on:
   pull_request:
-    paths: ['treasury.html', 'assets/federation/treasury-revenue-*.mjs', 'tests/treasury-revenue.test.mjs', '.github/workflows/treasury-revenue.yml']
+    paths: ['treasury.html', 'assets/federation/treasury-revenue-*.mjs', 'tests/treasury-revenue.test.mjs', 'tests/treasury-revenue-publication.test.mjs', 'tools/treasury-review/check-publication.mjs', 'record/**', '.github/workflows/treasury-revenue.yml']
   push:
     branches: [main]
-    paths: ['treasury.html', 'assets/federation/treasury-revenue-*.mjs', 'tests/treasury-revenue.test.mjs', '.github/workflows/treasury-revenue.yml']
+    paths: ['treasury.html', 'assets/federation/treasury-revenue-*.mjs', 'tests/treasury-revenue.test.mjs', 'tests/treasury-revenue-publication.test.mjs', 'tools/treasury-review/check-publication.mjs', 'record/**', '.github/workflows/treasury-revenue.yml']
 permissions:
   contents: read
 jobs:
@@ -19,5 +19,6 @@ jobs:
         with:
           node-version: '24.22.1'
       - run: node --check assets/federation/treasury-revenue-page.mjs
-      - run: node --test tests/treasury-revenue.test.mjs tests/static-publish.test.mjs
+      - run: node --test tests/treasury-revenue-publication.test.mjs tests/treasury-revenue.test.mjs tests/static-publish.test.mjs
       - run: node scripts/build-static-publish.mjs
+      - run: node tools/treasury-review/check-publication.mjs

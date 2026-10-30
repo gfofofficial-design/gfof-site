@@ -5,6 +5,17 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {buildStaticPublish} from '../scripts/build-static-publish.mjs';
 
+test('production and branch deploys inherit the same restricted output as previews',async()=>{
+  const config=await readFile(new URL('../netlify.toml',import.meta.url),'utf8');
+  const sections=config.split(/(?=^\[)/m),build=sections.find(section=>section.startsWith('[build]'));
+  assert.ok(build,'The default build must own the publication boundary');
+  assert.match(build,/^\s*command\s*=\s*"node scripts\/build-static-publish\.mjs"\s*$/m);
+  assert.match(build,/^\s*publish\s*=\s*"dist"\s*$/m);
+  for(const context of sections.filter(section=>section.startsWith('[context.'))){
+    assert.doesNotMatch(context,/^\s*(?:command|publish)\s*=/m,'A context must not bypass the default boundary');
+  }
+});
+
 async function fixture(t,files) {
   const root=await mkdtemp(join(tmpdir(),'federation-static-'));
   t.after(()=>rm(root,{recursive:true,force:true}));
@@ -17,10 +28,32 @@ test('public page, browser imports and public evidence survive byte-for-byte',as
   assert.deepEqual(new Set(copied),new Set(Object.keys(files)));
   for(const [path,content]of Object.entries(files))assert.equal(await readFile(join(root,'dist',path),'utf8'),content);
 });
-test('server, CI, test, migration, worker and unknown directory files are absent',async t=>{
-  const root=await fixture(t,{'account.html':'public','netlify/functions/account.cjs':'server','tests/fixture.json':'test','scripts/report.mjs':'operator','supabase/migrations/test.sql':'migration','workers/example/worker.mjs':'worker','.github/workflows/check.yml':'CI','private/export.json':'private','netlify.toml':'settings','.env':'fixture only','assets/.env':'fixture only','assets/key.pem':'fixture only'});
+test('server, dependencies, CI, test, migration, worker and unknown directory files are absent',async t=>{
+  const root=await fixture(t,{'account.html':'public','netlify/functions/account.cjs':'server','tests/fixture.json':'test','scripts/report.mjs':'operator','supabase/migrations/test.sql':'migration','workers/example/worker.mjs':'worker','.github/workflows/check.yml':'CI','private/export.json':'private','netlify.toml':'settings','.env':'fixture only','assets/.env':'fixture only','assets/key.pem':'fixture only','lib/alliance-avatar-server/node_modules/package/index.js':'server dependency','assets/vendor/node_modules/package/index.mjs':'nested dependency'});
   assert.deepEqual(await buildStaticPublish(root),['account.html']);
   assert.deepEqual(await readdir(join(root,'dist')),['account.html']);
+});
+
+test('Alliance backend sources stay private while its public projection remains available',async t=>{
+  const root=await fixture(t,{
+    'alliance.html':'public page',
+    'lib/alliance-constellation-projection.mjs':'public browser import',
+    'lib/alliance-avatar-server/member-aws-runtime.mjs':'server runtime',
+    'lib/alliance-avatar-server/deep/fixture.json':'server fixture',
+    'lib/alliance-avatar-runtime/processor.mjs':'node child processor',
+    'lib/alliance-avatar-runtime/worker.mjs':'native image worker',
+    'lib/alliance-avatar-runtime/limits.mjs':'server limits',
+    'lib/alliance-avatar-runtime/test.mjs':'server tests',
+    'lib/alliance-avatar-runtime/package.json':'server package',
+    'lib/alliance-avatar-runtime/package-lock.json':'server lock',
+    'lib/alliance-member-http.mjs':'server cookie boundary',
+    'lib/alliance-member-preview-bundle.mjs':'server connection factory',
+    'lib/alliance-avatar-storage.mjs':'server media adapter',
+    'lib/alliance-profile-store.mjs':'server database adapter',
+    'lib/alliance-report-review-http.mjs':'server owner-review boundary'
+  });
+  assert.deepEqual(await buildStaticPublish(root),['alliance.html','lib/alliance-constellation-projection.mjs']);
+  assert.equal(await readFile(join(root,'dist/lib/alliance-constellation-projection.mjs'),'utf8'),'public browser import');
 });
 test('rebuild removes stale output without copying it back into itself',async t=>{
   const root=await fixture(t,{'account.html':'public','dist/stale.txt':'stale'});

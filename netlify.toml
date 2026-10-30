@@ -1,10 +1,14 @@
 # Galactic Federation of Finance — Netlify configuration
 # Security headers, API redirects, clean-URL rewrites.
 
-# Review the restricted static output on previews before adopting it for production.
-[context.deploy-preview]
+[build]
+  # Every deployment publishes the reviewed static output, never the checkout.
   command = "node scripts/build-static-publish.mjs"
   publish = "dist"
+
+[build.environment]
+  # Exact security-patched build runtime. Managed Functions patching is separate.
+  NODE_VERSION = "24.22.1"
 
 # ─── Security headers (applied to every response) ───
 [[headers]]

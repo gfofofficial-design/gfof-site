@@ -1,0 +1,113 @@
+name: Alliance profile data candidate
+on:
+  pull_request:
+    paths:
+      - 'sql/alliance-profile-candidate.sql'
+      - 'sql/alliance-profile-write-fence-candidate.sql'
+      - 'sql/alliance-profile-revision-candidate.sql'
+      - 'sql/alliance-profile-directory-candidate.sql'
+      - 'lib/alliance-avatar-server/ledger.mjs'
+      - 'lib/alliance-avatar-server/member-managed*.mjs'
+      - 'sql/alliance-profile-bound-removal-candidate.sql'
+      - 'lib/alliance-profile-store.mjs'
+      - 'lib/alliance-member-http.mjs'
+      - 'lib/alliance-community-http.mjs'
+      - 'lib/alliance-feedback-http.mjs'
+      - 'assets/federation/fed-alliance-feedback-contract.mjs'
+      - 'tests/alliance-feedback-http*'
+      - 'lib/alliance-avatar-server/community-service.mjs'
+      - 'lib/alliance-avatar-server/community-store.mjs'
+      - 'assets/federation/fed-alliance-collaboration-contract.mjs'
+      - 'assets/federation/fed-alliance-collaboration-client.mjs'
+      - 'assets/federation/fed-alliance-feedback-client.mjs'
+      - 'assets/federation/fed-alliance-feedback-panel.mjs'
+      - 'assets/federation/fed-alliance-report-review-client.mjs'
+      - 'assets/federation/fed-alliance-report-review-panel.mjs'
+      - 'assets/federation/fed-alliance-report-review-contract.mjs'
+      - 'tests/alliance-feedback-client*'
+      - 'tests/alliance-feedback-panel*'
+      - 'assets/federation/fed-alliance-collaboration-panel.mjs'
+      - 'lib/alliance-member-application.mjs'
+      - 'lib/alliance-profile-api.mjs'
+      - 'lib/alliance-profile-removal-api.mjs'
+      - 'lib/alliance-profile-removal-status-api.mjs'
+      - 'lib/alliance-avatar-server/profile-removal-version.mjs'
+      - 'lib/alliance-avatar-server/removal.mjs'
+      - 'lib/alliance-avatar-server/anchored-removal.mjs'
+      - 'lib/alliance-avatar-server/removal.fixture.mjs'
+      - 'lib/alliance-avatar-server/profile-view.mjs'
+      - 'lib/alliance-avatar-server/member.mjs'
+      - 'lib/alliance-avatar-server/creation.mjs'
+      - 'lib/alliance-avatar-server/profile-write-receipt.mjs'
+      - 'lib/alliance-avatar-server/deletion-journal.mjs'
+      - 'lib/alliance-avatar-server/deletion-journal.fixture.mjs'
+      - 'lib/alliance-avatar-server/startup-gate.mjs'
+      - 'lib/alliance-avatar-server/netlify-signing-runtime.mjs'
+      - 'assets/federation/fed-alliance-profile-contract.mjs'
+      - 'assets/federation/fed-alliance-profile-revision-contract.mjs'
+      - 'assets/federation/fed-alliance-member-client.mjs'
+      - 'assets/federation/fed-alliance-member-page.mjs'
+      - 'assets/federation/fed-alliance-member-account.mjs'
+      - 'assets/federation/fed-alliance-member-form.mjs'
+      - 'assets/federation/fed-alliance-profile-page.mjs'
+      - 'alliance-profile.html'
+      - 'netlify/functions/federation-account.cjs'
+      - 'assets/federation/fed-alliance-profile-removal-*.mjs'
+      - 'netlify/lib/read-json-bounded.cjs'
+      - 'tests/alliance-profile*'
+      - 'tests/alliance-member-http*'
+      - 'tests/alliance-community-http*'
+      - 'tests/alliance-collaboration-client*'
+      - 'tests/alliance-collaboration-panel*'
+      - 'tests/alliance-member-application*'
+      - '.github/workflows/alliance-profile.yml'
+permissions:
+  contents: read
+jobs:
+  profile-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.22.1'
+      - run: node --check lib/alliance-profile-store.mjs
+      - run: node --check lib/alliance-member-http.mjs
+      - run: node --test tests/alliance-feedback-client.test.mjs tests/alliance-feedback-panel.test.mjs tests/alliance-member-http.test.mjs tests/alliance-feedback-http.test.mjs tests/alliance-community-http.test.mjs tests/alliance-collaboration-client.test.mjs tests/alliance-collaboration-panel.test.mjs
+      - run: node --test tests/alliance-member-application.test.mjs
+      - run: node --check lib/alliance-profile-api.mjs
+      - run: node --check assets/federation/fed-alliance-member-client.mjs
+      - run: node --test tests/alliance-profile-store.test.mjs tests/alliance-profile-api.test.mjs tests/alliance-profile-client.test.mjs tests/alliance-profile-revisions.test.mjs
+      - run: node --test tests/alliance-profile-removal.test.mjs tests/alliance-profile-removal-composed.test.mjs tests/alliance-profile-removal-panel.test.mjs tests/alliance-profile-removal-version.test.mjs tests/alliance-profile-removal-binding.test.mjs
+      - run: node --test tests/alliance-profile-account-contract.test.mjs tests/alliance-profile-member-page.test.mjs tests/alliance-profile-account-page.test.mjs tests/federation-alliance-member-form.test.mjs
+  profile-native:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:17.11-bookworm
+        env:
+          POSTGRES_DB: federation_alliance_profile_test
+          POSTGRES_PASSWORD: alliance_disposable_fixture_only
+        options: >-
+          --health-cmd "pg_isready -U postgres -d federation_alliance_profile_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.22.1'
+      - name: Verify native grants, row ownership and publication visibility
+        run: node tests/alliance-profile-native.mjs
+        env:
+          ALLIANCE_PROFILE_TEST_CONFIRM: disposable_profile_fixture
+          ALLIANCE_PROFILE_TEST_CONTAINER: ${{ job.services.postgres.id }}
+

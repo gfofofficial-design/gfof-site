@@ -30,6 +30,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '24.22.1'
       - name: Check synthetic fixtures without service credentials
         run: node --test tests/voss-chat.test.mjs tests/voss-timeout.test.mjs tests/federation-pages.test.mjs tests/federation-tools.test.mjs tests/federation-automation-core.test.mjs tests/federation-automation-lab.test.mjs tests/mission-help.test.mjs tests/operations-brief.test.mjs tests/release-evidence.test.mjs tests/operations-report.test.mjs
