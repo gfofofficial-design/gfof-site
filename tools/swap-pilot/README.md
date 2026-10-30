@@ -4,14 +4,29 @@ Owner approved October 30: use Jupiter's maintained interface, fix GFOF on one
 side and permit Jupiter's broader selection on the other. This selection is not
 Alliance membership or Federation endorsement. SOL is the initial other token.
 
-## Implemented and checked
+## Current browser entry
+
+Testing is paused. The current `page.mjs` disables the controls and does not load
+Jupiter. The retained provider module and earlier panel checks below describe
+implementation history, not an enabled entry or permission to test.
+
+## Isolated build
+
+`build.mjs` refuses contexts other than `deploy-preview`, removes stale generated
+output only from its fixed local `dist` directory and refuses an output symlink.
+It copies four pilot files and generates robots/header files: exactly six outputs.
+The cached-output regression and paused-entry test run in CI. No preview-only root
+Netlify configuration is included here, and this source addition triggers no pilot
+deployment or production integration.
+
+## Earlier implementation checks
 
 `index.html`, `page.mjs`, `provider.mjs` and `style.css` form a standalone pilot.
 Copy only these four files to an isolated preview's static directory. The normal
 site build excludes all `tools/` files, including this pilot; no production route,
 CSP, auth setting, wallet integration or Federation fee is changed.
 
-The panel loads the official `https://plugin.jup.ag/plugin-v1.js` only after a
+When explicitly enabled in a separately reviewed entry, the retained provider module loads the official `https://plugin.jup.ag/plugin-v1.js` only after a
 button click. Jupiter owns token selection, wallet connection, order construction,
 wallet signing prompts and submission. `autoConnect:false`; no wallet passthrough,
 Federation account linkage, private key handling or referral settings. The existing

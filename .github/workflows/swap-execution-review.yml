@@ -1,10 +1,10 @@
 name: Swap execution offline review
 on:
   pull_request:
-    paths: ['tools/swap-pilot/**', 'tests/gfof-swap-managed-pilot.test.mjs', 'assets/federation/swap/**', 'tools/swap-review/transaction-envelope.mjs', 'tools/swap-review/order-preflight.mjs', 'tools/swap-review/account-review.mjs', 'tools/swap-review/instruction-review.mjs', 'tests/gfof-swap-instruction-review.test.mjs', 'tools/swap-review/SUPPORTING_INSTRUCTION_REVIEW_20261030.md', 'tests/gfof-swap-account-review.test.mjs', 'tools/swap-review/EXECUTION_REVIEW_20261030.md', 'tests/gfof-swap-envelope.test.mjs', 'tests/gfof-swap-order-preflight.test.mjs', '.github/workflows/swap-execution-review.yml']
+    paths: ['tools/swap-pilot/**', 'tests/gfof-swap-managed-pilot.test.mjs', 'tests/gfof-swap-pilot-hold.test.mjs', 'assets/federation/swap/**', 'tools/swap-review/transaction-envelope.mjs', 'tools/swap-review/order-preflight.mjs', 'tools/swap-review/account-review.mjs', 'tools/swap-review/instruction-review.mjs', 'tests/gfof-swap-instruction-review.test.mjs', 'tools/swap-review/SUPPORTING_INSTRUCTION_REVIEW_20261030.md', 'tests/gfof-swap-account-review.test.mjs', 'tools/swap-review/EXECUTION_REVIEW_20261030.md', 'tests/gfof-swap-envelope.test.mjs', 'tests/gfof-swap-order-preflight.test.mjs', '.github/workflows/swap-execution-review.yml']
   push:
     branches: [main]
-    paths: ['tools/swap-pilot/**', 'tests/gfof-swap-managed-pilot.test.mjs', 'assets/federation/swap/**', 'tools/swap-review/transaction-envelope.mjs', 'tools/swap-review/order-preflight.mjs', 'tools/swap-review/account-review.mjs', 'tools/swap-review/instruction-review.mjs', 'tests/gfof-swap-instruction-review.test.mjs', 'tools/swap-review/SUPPORTING_INSTRUCTION_REVIEW_20261030.md', 'tests/gfof-swap-account-review.test.mjs', 'tests/gfof-swap-envelope.test.mjs', 'tests/gfof-swap-order-preflight.test.mjs', '.github/workflows/swap-execution-review.yml']
+    paths: ['tools/swap-pilot/**', 'tests/gfof-swap-managed-pilot.test.mjs', 'tests/gfof-swap-pilot-hold.test.mjs', 'assets/federation/swap/**', 'tools/swap-review/transaction-envelope.mjs', 'tools/swap-review/order-preflight.mjs', 'tools/swap-review/account-review.mjs', 'tools/swap-review/instruction-review.mjs', 'tests/gfof-swap-instruction-review.test.mjs', 'tools/swap-review/SUPPORTING_INSTRUCTION_REVIEW_20261030.md', 'tests/gfof-swap-account-review.test.mjs', 'tests/gfof-swap-envelope.test.mjs', 'tests/gfof-swap-order-preflight.test.mjs', '.github/workflows/swap-execution-review.yml']
 permissions:
   contents: read
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24.22.1'
-      - run: node --test tests/gfof-swap-managed-pilot.test.mjs tests/gfof-swap-instruction-review.test.mjs tests/gfof-swap-account-review.test.mjs tests/gfof-swap-envelope.test.mjs tests/gfof-swap-order-preflight.test.mjs tests/static-publish.test.mjs
+      - run: node --test tests/gfof-swap-pilot-hold.test.mjs tests/gfof-swap-managed-pilot.test.mjs tests/gfof-swap-instruction-review.test.mjs tests/gfof-swap-account-review.test.mjs tests/gfof-swap-envelope.test.mjs tests/gfof-swap-order-preflight.test.mjs tests/static-publish.test.mjs
       - run: node scripts/build-static-publish.mjs
       - name: Offline review tools must not ship in the public artifact
         run: node --input-type=module -e "import {access} from 'node:fs/promises'; import assert from 'node:assert/strict'; await assert.rejects(access('dist/tools/swap-review')); await assert.rejects(access('dist/tools/swap-pilot'));"
