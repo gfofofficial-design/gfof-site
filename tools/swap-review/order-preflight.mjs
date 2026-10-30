@@ -23,12 +23,19 @@ export function reviewOrderPreflight(order,intent,context){
   }
   if(fees>BigInt(intent.maxNetworkLamports))throw deny();
   const envelope=inspectTransactionEnvelope(order.transaction);
+  // Caller supplies an independently obtained RPC observation for THIS hash.
+  // This pure checker binds evidence; it cannot authenticate its provenance.
+  const validity=context.blockhashValidity;
+  if(!validity||validity.value!==true||!['confirmed','finalized'].includes(validity.commitment)||validity.blockhashHex!==envelope.recentBlockhash||!uint(validity.contextSlot)||!uint(context.currentSlot)||!Number.isInteger(context.maxSlotLag)||context.maxSlotLag<0||context.maxSlotLag>32)throw deny();
+  const lag=BigInt(context.currentSlot)-BigInt(validity.contextSlot);
+  if(lag<0n||lag>BigInt(context.maxSlotLag))throw deny();
   if(envelope.signerPublicKeys.length!==1||envelope.signerPublicKeys[0]!==taker||envelope.feePayerPublicKey!==taker)throw deny();
   return Object.freeze({state:'requires-instruction-review',tradeAllowed:false,collectionConfirmed:false,
    messageSha256:envelope.messageSha256,requestId:order.requestId,minimumOutput:intent.minimumOutput,
+   blockhashHex:envelope.recentBlockhash,blockhashObservationSlot:validity.contextSlot,
    inputMint:request.pair.input.mint,outputMint:request.pair.output.mint,inputUnits:request.atomic,
    referralTokenAccount:intent.referralTokenAccount,networkLamports:fees.toString(),
    unresolvedLookupTables:envelope.unresolvedLookupTables,
-   limitation:'Metadata and wire envelope only. Independently resolve accounts and decode/verify instructions, minimum output, fees, recipient, blockhash, simulation and current expiry before any signing. Referral ownership and collection are unproved.'});
+   limitation:'Metadata, wire envelope and caller-supplied blockhash observation only; RPC provenance is unverified. Independently resolve accounts and decode/verify instructions, minimum output, fees, recipient, blockhash, simulation and current expiry before any signing. Referral ownership and collection are unproved.'});
  }catch{throw deny();}
 }
