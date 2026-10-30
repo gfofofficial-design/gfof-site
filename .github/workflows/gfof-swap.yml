@@ -9,6 +9,9 @@ permissions:
   contents: read
 jobs:
   swap-preview:
+    # This exact temporary branch serves only the managed pilot, not swap.html.
+    # Its dedicated managed-pilot job tests the integration and six-file artifact.
+    if: github.head_ref != 'preview/galactic-swap-managed-20261030'
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
