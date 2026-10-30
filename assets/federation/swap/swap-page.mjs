@@ -1,6 +1,6 @@
 import {createWalletPreview} from './wallet-preview.mjs';
 import {createQuoteController, pairFor} from './quote-core.mjs';
-import {QUOTE_PAIRS} from './token-registry.mjs';
+import {QUOTE_PAIRS,QUOTE_TOKENS} from './token-registry.mjs';
 
 const MESSAGES = Object.freeze({idle: 'No quote requested. Trading is closed; wallet address preview is optional.',
   loading: 'Checking an indicative quote with Jupiter. No wallet or transaction is involved.',
@@ -22,6 +22,12 @@ export function formatPriceImpact(value) {
 export function mountSwapPage(doc, options = {}) {
   const $ = id => doc.getElementById(id);
   if (!$('swap-form')) return null;
+  // The reviewed registry drives both selectors; no per-token markup edit is needed.
+  for(const id of ['swap-from','swap-to']){
+    const select=$(id),previous=select.value;select.replaceChildren();
+    for(const token of QUOTE_TOKENS){const option=doc.createElement('option');option.value=token.id;option.textContent=token.symbol+' · '+token.name;select.append(option);}
+    if(QUOTE_TOKENS.some(t=>t.id===previous))select.value=previous;
+  }
   let disposed = false;
   const resultFields = ['swap-input', 'swap-output', 'swap-router', 'swap-fee', 'swap-time', 'swap-impact', 'swap-minimum', 'swap-slippage', 'swap-review-notes'];
   const selection = () => $('swap-from').value + ':' + $('swap-to').value;

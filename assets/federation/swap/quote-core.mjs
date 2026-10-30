@@ -1,9 +1,9 @@
 // Quote-only foundation. There is deliberately no wallet, signing or submission path.
-import {QUOTE_PAIRS} from './token-registry.mjs';
+import {QUOTE_PAIRS, SWAP_CATALOG} from './token-registry.mjs';
+import {parseDecimalUnits,formatDecimalUnits} from './decimal-units.mjs';
 export {GFOF, SOL, USDC} from './token-registry.mjs';
 export const TRADING_ENABLED = false;
 export const QUOTE_MAX_AGE_MS = 30000;
-const ENDPOINT = 'https://api.jup.ag/swap/v2/order';
 const MAX_UNITS = 18446744073709551615n;
 const ROUTERS = new Set(['metis', 'jupiterz', 'dflow', 'okx']);
 const failure = code => Object.assign(new Error(code), {code});
@@ -17,14 +17,8 @@ export function pairFor(direction) {
 }
 
 export function parseAmount(value, decimals) {
-  if (typeof value !== 'string' || value.length > 40 || ![6, 9].includes(decimals)) throw failure('amount');
-  const text = value.trim();
-  if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(text)) throw failure('amount');
-  const [whole = '', fraction = ''] = text.split('.');
-  if (fraction.length > decimals) throw failure('amount');
-  const units = BigInt(whole || '0') * 10n ** BigInt(decimals) + BigInt(fraction.padEnd(decimals, '0'));
-  if (units < 1n || units > MAX_UNITS) throw failure('amount');
-  return units.toString();
+  if(typeof value!=='string'||value.length>40)throw failure('amount');
+  try{return parseDecimalUnits(value,decimals,MAX_UNITS);}catch{throw failure('amount');}
 }
 
 function units(value, allowZero = false) {
@@ -35,19 +29,13 @@ function units(value, allowZero = false) {
 }
 
 export function formatUnits(value, decimals) {
-  if (![6, 9].includes(decimals)) throw failure('unavailable');
-  const raw = units(value, true).padStart(decimals + 1, '0');
-  const whole = raw.slice(0, -decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  const fraction = raw.slice(-decimals).replace(/0+$/, '');
-  return whole + (fraction ? '.' + fraction : '');
+  try{return formatDecimalUnits(value,decimals,MAX_UNITS);}catch{throw failure('unavailable');}
 }
 
 export function makeQuoteRequest(direction, amount) {
   const pair = pairFor(direction), atomic = parseAmount(amount, pair.input.decimals);
-  const url = new URL(ENDPOINT);
-  // No taker, receiver, payer, referral, wallet or arbitrary query parameters.
-  url.search = new URLSearchParams({inputMint: pair.input.mint, outputMint: pair.output.mint, amount: atomic}).toString();
-  return Object.freeze({direction, pair, atomic, url: url.href});
+  const route=SWAP_CATALOG.quoteRequest(pair.id,amount);
+  return Object.freeze({direction,pair,atomic,url:route.url});
 }
 
 export function projectQuote(data, request, receivedAt) {

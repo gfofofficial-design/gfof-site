@@ -22,5 +22,5 @@ jobs:
       - run: node --check assets/federation/swap/quote-core.mjs
       - run: node --check assets/federation/swap/swap-page.mjs
       - run: node --check assets/federation/swap/wallet-preview.mjs
-      - run: node --test tests/gfof-swap.test.mjs tests/gfof-swap-page.test.mjs tests/gfof-swap-wallet.test.mjs tests/static-publish.test.mjs
+      - run: node --test tests/gfof-swap-catalog.test.mjs tests/gfof-swap.test.mjs tests/gfof-swap-page.test.mjs tests/gfof-swap-wallet.test.mjs tests/static-publish.test.mjs
       - run: node scripts/build-static-publish.mjs
