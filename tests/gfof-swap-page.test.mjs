@@ -31,7 +31,7 @@ function fixture(fetchImpl = async () => good(), walletOptions) {
       select.options.push(option); if (match[2].includes('selected')) select.value = option.value;
     }
   }
-  if (walletOptions) doc.createElement = () => new Element();
+  doc.createElement = () => new Element();
   const api = mountSwapPage(doc, {walletOptions, fetchImpl: (...args) => { calls.push(args); return fetchImpl(...args); }});
   return {doc, api, calls, get: id => nodes.get(id)};
 }

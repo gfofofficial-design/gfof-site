@@ -43,7 +43,8 @@ test('invalid, zero, excessive-precision and overflow amounts never become reque
     assert.throws(() => parseAmount(value, 9), {code: 'amount'});
   }
   assert.throws(() => parseAmount('0.0000001', 6));
-  assert.throws(() => parseAmount('1', 18));
+  assert.throws(() => parseAmount('1', 37));
+  assert.equal(parseAmount('1',18),'1000000000000000000');
 });
 
 test('both directions use only fixed mints, integer amount and the quote-only endpoint', () => {
