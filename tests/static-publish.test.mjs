@@ -5,6 +5,17 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {buildStaticPublish} from '../scripts/build-static-publish.mjs';
 
+test('production and branch deploys inherit the same restricted output as previews',async()=>{
+  const config=await readFile(new URL('../netlify.toml',import.meta.url),'utf8');
+  const sections=config.split(/(?=^\[)/m),build=sections.find(section=>section.startsWith('[build]'));
+  assert.ok(build,'The default build must own the publication boundary');
+  assert.match(build,/^\s*command\s*=\s*"node scripts\/build-static-publish\.mjs"\s*$/m);
+  assert.match(build,/^\s*publish\s*=\s*"dist"\s*$/m);
+  for(const context of sections.filter(section=>section.startsWith('[context.'))){
+    assert.doesNotMatch(context,/^\s*(?:command|publish)\s*=/m,'A context must not bypass the default boundary');
+  }
+});
+
 async function fixture(t,files) {
   const root=await mkdtemp(join(tmpdir(),'federation-static-'));
   t.after(()=>rm(root,{recursive:true,force:true}));
