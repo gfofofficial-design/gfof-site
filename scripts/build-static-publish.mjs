@@ -5,6 +5,16 @@ import {fileURLToPath} from 'node:url';
 const publicDirectories = new Set(['.well-known','adjudication','app','arena','assets','config','docs','journey','lib','record']);
 const publicExtensions = new Set(['.html','.css','.js','.mjs','.json','.png','.jpg','.jpeg','.svg','.webp','.gif','.ico','.pdf','.txt','.xml','.md','.webmanifest','.woff','.woff2','.mp4','.mp3','.webm','.ogg','.wav','.ots']);
 const rootExtensions = new Set(['.html','.png','.jpg','.jpeg','.svg','.webp','.ico','.pdf','.txt','.xml','.md','.webmanifest']);
+// These modules own server cookies, database connections or protected runtime
+// construction. Browser modules in lib/ (including the constellation) remain.
+const serverLibraryFiles = new Set([
+  'lib/alliance-avatar-storage.mjs','lib/alliance-community-http.mjs',
+  'lib/alliance-feedback-http.mjs','lib/alliance-member-application.mjs',
+  'lib/alliance-member-finite-host.mjs','lib/alliance-member-http.mjs',
+  'lib/alliance-member-preview-bundle.mjs','lib/alliance-profile-api.mjs',
+  'lib/alliance-profile-removal-api.mjs','lib/alliance-profile-removal-status-api.mjs',
+  'lib/alliance-profile-store.mjs','lib/alliance-report-review-http.mjs'
+]);
 
 // An explicit static output keeps Netlify's server bundle outside the publish
 // directory. Public docs and timestamp evidence remain intentionally available.
@@ -17,6 +27,7 @@ export async function buildStaticPublish(root) {
   const copied=[];
   async function copyEntry(relative) {
     const name=relative.split('/').at(-1);
+    if(relative==='lib/alliance-avatar-server'||relative==='lib/alliance-avatar-runtime'||serverLibraryFiles.has(relative))return;
     // Installed server/vendor dependencies are never browser publication inputs.
     if(name==='node_modules')return;
     const source=join(root,relative),stat=await lstat(source);
