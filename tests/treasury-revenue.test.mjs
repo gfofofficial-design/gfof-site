@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {validateRevenue,revenueSeries,formatRevenue} from '../assets/federation/treasury-revenue-core.mjs';
+import {REVENUE} from '../assets/federation/treasury-revenue-data.mjs';
+const row=(overrides={})=>({month:'2026-09',source:'swap',asset:'USDC',gross:'10000000',refunds:'2000000',costs:'500000',reconciledOn:'2026-10-02',evidence:'/record/fictional-revenue-test.json',...overrides});
+const read=statements=>validateRevenue({version:1,statements});
+test('published dataset remains empty; reporting does not invent zero months',()=>{assert.deepEqual(validateRevenue(REVENUE),[]);assert.deepEqual(revenueSeries([]),[]);});
+test('net receipts use exact integer arithmetic and preserve negative results',()=>{const rows=read([row(),row({month:'2026-10',reconciledOn:'2026-11-02',gross:'0',refunds:'3000000'})]);assert.equal(rows[0].net,7500000n);assert.equal(rows[1].net,-3500000n);assert.equal(formatRevenue(rows[1].net,'USDC'),'-3.5 USDC');});
+test('assets and services are isolated and unreported months are absent',()=>{const rows=read([row(),row({source:'other'}),row({asset:'SOL',gross:'123456789'}),row({month:'2026-11',reconciledOn:'2026-12-01'})]);assert.deepEqual(revenueSeries(rows).map(r=>[r.month,r.net]),[['2026-09',15000000n],['2026-11',7500000n]]);assert.equal(revenueSeries(rows,{source:'swap'})[0].net,7500000n);assert.equal(revenueSeries(rows,{asset:'SOL'})[0].rows.length,1);});
+test('formatting preserves native precision beyond floating point safe integer',()=>{assert.equal(formatRevenue(999999999999999999n,'SOL'),'999,999,999.999999999 SOL');assert.equal(formatRevenue(1n,'USDC'),'0.000001 USDC');});
+test('duplicate statements and unsupported valuation inputs are refused',()=>{assert.throws(()=>read([row(),row()]));for(const change of [{asset:'USD'},{source:'transfer'},{gross:'1.2'},{costs:'-1'},{gross:'1e9'},{gross:'1000000000000000000'},{month:'2026-13'},{reconciledOn:'2026-09-30'},{reconciledOn:'2026-02-30'},{evidence:'https://example.com'},{evidence:'/record/../private.json'},{customer:'private'}])assert.throws(()=>read([row(change)]));});
+test('unknown filters refuse rather than combine unrelated assets',()=>{assert.throws(()=>revenueSeries([],{asset:'USD'}));assert.throws(()=>revenueSeries([],{source:'unknown'}));});
