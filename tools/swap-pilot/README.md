@@ -18,8 +18,8 @@ Federation account linkage, private key handling or referral settings. The exist
 custom offline transaction-review tools are not in this managed execution path
 and are no longer its launch prerequisite. They confer no authorization here.
 
-Four focused tests cover configuration, result/error handling, initialization and
-loader behavior with a stub provider. Seven existing packaging tests passed.
+Five focused tests cover configuration, result/error handling, initialization and
+loader behavior with a stub provider, including asynchronous init failure. Seven existing packaging tests passed.
 Browser check loaded the real provider panel with SOL input and locked GFOF output;
 no wallet connection, entered amount, signature or trade. Jupiter displayed token
 warnings for GFOF; their contents were not established during the layout check.

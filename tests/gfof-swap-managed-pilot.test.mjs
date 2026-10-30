@@ -5,3 +5,9 @@ test('managed buy/sell flow fixes GFOF, disables auto-connect and configures no 
 test('provider result remains reported rather than independently confirmed; errors stay generic',async()=>{const f=fixture();await f.flow.start();f.config.onSuccess({txid:'2'.repeat(88)});assert.deepEqual(f.states.at(-1),{phase:'reported',txid:'2'.repeat(88)});f.config.onSuccess({txid:'https://untrusted.example'});assert.equal(f.states.at(-1).phase,'unverified');f.config.onSwapError({error:'sensitive provider detail'});assert.deepEqual(f.states.at(-1),{phase:'error'});});
 test('failed loader refuses duplicate initialization and invalid direction does not load',async()=>{const f=fixture(async()=>{throw Error('network');});assert.equal(await f.flow.start(),false);assert.equal(f.states.at(-1).phase,'unavailable');assert.equal(await f.flow.start(),false);const g=fixture();await assert.rejects(g.flow.start('unknown'));assert.equal(g.states.length,0);});
 test('browser loader adds only the official script on explicit invocation and handles failure',async()=>{let script;const doc={createElement:()=>({}),head:{append:s=>{script=s;}}};const plugin={init(){}};const loading=loadJupiter(doc,{Jupiter:plugin});assert.equal(script.src,PLUGIN_URL);assert.equal(script.referrerPolicy,'no-referrer');script.onload();assert.equal(await loading,plugin);const failed=loadJupiter(doc,{});script.onerror();await assert.rejects(failed);});
+
+test('asynchronous provider initialization failure is caught before ready',async()=>{
+ const f=fixture(async()=>({init:async()=>{throw Error('provider init detail');}}));
+ assert.equal(await f.flow.start(),false);
+ assert.deepEqual(f.states.map(s=>s.phase),['loading','unavailable']);
+});

@@ -13,7 +13,7 @@ export function createManagedSwap({loadPlugin,onState}){
   try{
    const plugin=await loadPlugin();
    if(typeof plugin?.init!=='function')throw Error('swap_provider_unavailable');
-   plugin.init({displayMode:'integrated',integratedTargetId:'jupiter-plugin',autoConnect:false,
+   await plugin.init({displayMode:'integrated',integratedTargetId:'jupiter-plugin',autoConnect:false,
     enableWalletPassthrough:false,localStoragePrefix:'galactic-swap-pilot',
     containerStyles:{width:'100%',height:'580px'},branding:{name:'Galactic Swap'},
     formProps:{swapMode:'ExactIn',fixedMint:GFOF_MINT,
