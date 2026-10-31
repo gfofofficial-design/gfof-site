@@ -7,17 +7,18 @@ import {execFileSync} from 'node:child_process';
 import {request} from 'node:https';
 import {createClosedAllianceHttpsServer,allianceMemberBackendHostname as hostname} from '../lib/alliance-member-closed-https.mjs';
 
-let directory,tls;
+let directory,tls,renewed;
 before(async()=>{
  directory=await mkdtemp(join(tmpdir(),'alliance-closed-https-'));
  const openssl=process.platform==='win32'?'C:/Program Files/Git/usr/bin/openssl.exe':'openssl';
- execFileSync(openssl,['req','-x509','-newkey','ed25519','-nodes','-days','1','-subj','/CN='+hostname,'-addext','subjectAltName=DNS:'+hostname,'-keyout',join(directory,'fictional.key'),'-out',join(directory,'fictional.crt')],{stdio:'ignore',timeout:20000});
+ for(const name of ['fictional','renewed'])execFileSync(openssl,['req','-x509','-newkey','ed25519','-nodes','-days','1','-subj','/CN='+hostname,'-addext','subjectAltName=DNS:'+hostname,'-keyout',join(directory,name+'.key'),'-out',join(directory,name+'.crt')],{stdio:'ignore',timeout:20000});
  tls={key:await readFile(join(directory,'fictional.key')),cert:await readFile(join(directory,'fictional.crt'))};
+ renewed={key:await readFile(join(directory,'renewed.key')),cert:await readFile(join(directory,'renewed.crt'))};
 });
 after(async()=>{if(directory){assert.ok(resolve(directory).startsWith(resolve(tmpdir())+sep+'alliance-closed-https-'));await rm(directory,{recursive:true,force:true});}});
 function call(port,{path='/healthz',method='GET',headers={},body}={}){
  return new Promise((resolve,reject)=>{
-  const r=request({host:'127.0.0.1',port,servername:hostname,ca:tls.cert,path,method,headers:{Host:hostname,...headers},agent:false,timeout:5000},response=>{let text='';response.setEncoding('utf8');response.on('data',v=>text+=v);response.on('end',()=>resolve({status:response.statusCode,headers:response.headers,text}));});
+  const r=request({host:'127.0.0.1',port,servername:hostname,ca:[tls.cert,renewed.cert],path,method,headers:{Host:hostname,...headers},agent:false,timeout:5000},response=>{let text='';const fingerprint=response.socket.getPeerCertificate().fingerprint256;response.setEncoding('utf8');response.on('data',v=>text+=v);response.on('end',()=>resolve({status:response.statusCode,headers:response.headers,text,fingerprint}));});
   r.on('timeout',()=>r.destroy(Error('test_timeout')));r.on('error',reject);r.end(body);
  });
 }
@@ -38,9 +39,9 @@ test('actual verified TLS serves only closed health and refuses member/control p
  }finally{await host.close();}
 });
 test('TLS reload stays closed; failed key read is sanitized and leaves existing listener working',async()=>{
- let fail=false;const host=createClosedAllianceHttpsServer({enabled:true,port:0,readTlsMaterial:async()=>{if(fail)throw Error('PRIVATE_VALUE_CANARY');return tls;}});
+ let fail=false,next=tls;const host=createClosedAllianceHttpsServer({enabled:true,port:0,readTlsMaterial:async()=>{if(fail)throw Error('PRIVATE_VALUE_CANARY');return next;}});
  const {port}=await host.listen();
- try{assert.equal(await host.reloadTls(),true);fail=true;assert.equal(await host.reloadTls(),false);assert.equal((await call(port)).status,200);}finally{await host.close();}
+ try{const before=(await call(port)).fingerprint;next=renewed;assert.equal(await host.reloadTls(),true);const after=await call(port);assert.notEqual(after.fingerprint,before);fail=true;assert.equal(await host.reloadTls(),false);const kept=await call(port);assert.equal(kept.status,200);assert.equal(kept.fingerprint,after.fingerprint);}finally{await host.close();}
  assert.equal(await host.reloadTls(),false);await assert.rejects(call(port));
 });
 test('private reader failure never reaches logs or caller and cannot reopen',async()=>{
