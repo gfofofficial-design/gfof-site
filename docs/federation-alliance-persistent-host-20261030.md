@@ -259,3 +259,43 @@ outside the repository. No real credential file, hosted query, private delivery 
 member activation is proved. Current source/CI and hosted OS lifecycle evidence
 remain distinct; installation, generation entry and operating authority still need
 review. No browser control or accepted accessibility interaction changes.
+
+## Explicit generation OS entry (uninstalled)
+
+`alliance-member-generation-process-entry.mjs` is a separate explicit entry;
+the closed-bootstrap command remains unpromotable. No arguments keep it disabled.
+Only `--generation --config <absolute path>` enables this entry. Its bounded,
+single-link public configuration fixes deployment identity, the maintenance
+window, owned TLS/control paths and the private delivery directory/owner.
+Production installation must pin root ownership and the existing service group.
+The process creates its own fresh UUID; configuration cannot supply one.
+
+Startup opens only TLS and the protected local control socket. It does not read
+the private runtime file, construct pools, prepare the application, open provider
+roles or request SERVE. A matching local prepare command invokes the existing
+deferred private bundle and signed startup. A separately newer SERVE transition
+remains required. Preparation is single-use within the existing bounded host
+window; this entry has no automatic restart/replacement or maintenance controller.
+
+Generation certificate acknowledgement is `member_tls_ready` with
+`transportOnly: true`, public fingerprint and expiry. It makes no member-admission
+claim. Reload messages similarly say authority is not certified. The old
+`closed_tls_ready`/`memberServing: false` acknowledgement remains unchanged for
+closed bootstrap. The installed renewal hook must be upgraded and reviewed to
+accept the transport-only generation acknowledgement before this entry is deployed.
+Certificate-expiry/failure alert integration is still required.
+
+SIGTERM/SIGINT close both the process and the deferred delivery owner, waiting
+for both local results under a ten-second deadline. Status never certifies remote
+provider closure. Failed preparation remains closed and cannot be retried in the
+same generation. Errors never expose private configuration or raw filesystem text.
+
+Three focused generation child-process cases cover disabled/unknown commands,
+real TLS and Unix control, startup with absent private delivery, foreign and
+matching failed preparation, occupied sockets, certificate reload and transport-only
+acknowledgement, shutdown cleanup, and writable/extra-field refusal. They use
+disposable certificates and no real caller key or provider. All three plus the
+three existing closed-entry compatibility cases pass locally on Linux Node22.22.1;
+target Node24.22.1 CI remains separately required. This does not prove a successful
+real private startup, hosting, fleet closure, maintenance coordination or release.
+Browser controls and accepted phone/keyboard/zoom behavior are unchanged.
