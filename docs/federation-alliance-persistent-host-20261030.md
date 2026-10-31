@@ -227,3 +227,35 @@ still need review; the current server and accepted renewal service are unchanged
 This adds no browser interaction, keeping accepted phone, keyboard and200% zoom
 behavior intact. Hosted member/owner/sign-in and assistive-technology acceptance
 remain pending; no WCAG-conformance claim is added.
+
+## Deferred private bundle delivery (uninstalled)
+
+`createPersistentAlliancePrivateBundle` supplies the existing persistent process's
+explicit `openApplication` callback. It defaults off. Construction reads no private
+file and opens no pool, listener or authority request. The trusted local preparation
+path must call it; no OS entry, startup loop, role grant or SERVE transition is added.
+
+The sole file is `runtime.json` under an explicit canonical0750 directory owned by
+the configured administrator and current service group. Production pins owner UID0.
+The bounded64KiB regular file must have one hard link, the same owner/group and
+0600/0640 permissions. Symlinked files/directories and writable delivery are refused.
+Its private configuration binds the instance/release/purpose; the current process
+UUID comes only from trusted composition. The existing six-pool bundle validates
+the remaining configuration, direct TLS connections and purpose-specific roles.
+Only the fixed persistent caller-key name can be read; there is no environment,
+metadata-service, browser or ambient AWS credential fallback.
+
+The real complete application stays unprepared/closed after construction. Its
+existing signed REVIEW/startup and separately newer SERVE gate remain unchanged.
+This first release continues to refuse image processing/storage. Cancellation and
+closure retire owned pools and deny later secret callbacks; late construction is
+retired separately. Read buffers are cleared and references dropped, without a
+claim of complete erasure of immutable JavaScript strings or remote provider drain.
+
+Four focused cases cover default-off behavior, a real closed six-pool composition
+with zero SQL/Auth/signing requests, delivery permissions/symlinks/deployment drift,
+and cancellation of a late bundle. Fixtures use fictional data and disposable keys
+outside the repository. No real credential file, hosted query, private delivery or
+member activation is proved. Current source/CI and hosted OS lifecycle evidence
+remain distinct; installation, generation entry and operating authority still need
+review. No browser control or accepted accessibility interaction changes.
