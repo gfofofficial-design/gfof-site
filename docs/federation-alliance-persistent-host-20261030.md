@@ -160,6 +160,18 @@ late readiness disposal, occupied targets and refusal to label remote providers
 closed. Linux CI uses the target Node24 version; local Linux verification used
 Node22.22.1. Windows executes the default-off case and skips Unix-only cases.
 
+`createPersistentAllianceProcess` composes the existing host, local control and
+TLS transport. It defaults off and never prepares automatically. The explicit
+closed-bootstrap mode accepts no application-opening callback and cannot be
+promoted through local control. Preparation remains unavailable in that mode.
+Only separately enabled generation mode can call the supplied application factory
+after a matching local prepare command. That mode still uses the existing signed
+startup and newer SERVE requirements; composition itself grants no permissions.
+Shutdown closes local control, TLS and the application, without certifying remote
+provider closure. Three Linux process tests use real TLS/Unix-socket requests for
+default-off, unpromotable closed bootstrap and explicit preparation/closure. The
+application fixture is fictional; real Auth/SQL/startup acceptance remains pending.
+
 `alliance-member-fixed-proxy.candidate.toml` is an unconsumed configuration
 candidate. It names one fixed HTTPS backend and only `/api/alliance-members/*`;
 it excludes management paths and goes before the catch-all404 if later approved.
