@@ -72,3 +72,47 @@ health response, member/control refusal, host/body refusal, occupied-target
 refusal, reload/failure and shutdown. No public CA request or hosted deployment
 was made. Proposed DNS/TLS setup, certificate renewal and monitoring need their
 own reviewed installation; this source adds no Netlify route or environment value.
+
+## Unmounted Node application request bridge
+
+`createPersistentAllianceNodeHttp` adapts real Node HTTP requests to the existing
+persistent host's Web Request interface. It opens no socket and performs no
+startup, credential lookup or permission transition. It defaults off. Trusted
+composition supplies the fixed site origin and a copied/frozen instance, release
+and process identity; client headers cannot choose those values. The installed
+closed HTTPS shell is unchanged and does not import this bridge.
+
+Only existing member/profile/community/feedback/owner-review route predicates
+can dispatch. Management paths are refused. Exact backend Host, duplicate
+security-header rejection, bounded JSON body/response and fixed private/no-store
+response headers apply. Existing same-origin and cookie/Auth checks remain in
+the application. No forwarded deployment/host identity, CORS grant, auth refresh,
+Set-Cookie, redirect or raw exception is forwarded to the browser. A future Node
+HTTPS entry must additionally set a32KiB parser header limit (to admit the
+existing bounded account cookies), bounded connections and header/socket limits;
+the bridge's own total header check cannot override Node's earlier parser limit.
+
+The outer request budget is at most20seconds, inside Netlify's documented
+[26second proxy timeout](https://docs.netlify.com/manage/routing/redirects/rewrites-proxies/).
+Disconnect/deadline aborts reach the existing host. A dispatched mutation that
+cannot be confirmed retains the existing unknown-outcome contract and retires
+that process generation. Slow uploads stopped before dispatch retire no unused
+application. Late work retains occupancy and cannot return success or reopen
+the generation. Callers still need the host's actual local drain and independent
+provider closure; closing this adapter proves neither remote SQL closure nor a
+safe maintenance/reopen transition.
+
+Eight focused tests use an actual loopback Node HTTP server and fictional
+application responses: cookie/context binding, JSON transfer, refused routes/
+headers/oversized requests, slow body, timed-out write/late-result refusal,
+oversized response and client disconnect. This proves the request bridge, not
+hosted Netlify cookie forwarding or signed member acceptance.
+
+`alliance-member-fixed-proxy.candidate.toml` is an unconsumed configuration
+candidate. It names one fixed HTTPS backend and only `/api/alliance-members/*`;
+it excludes management paths and goes before the catch-all404 if later approved.
+The active `netlify.toml`, public site and installed server remain unchanged.
+This keeps the browser's existing site origin and account-cookie boundary, with
+no cross-site sign-in or new browser interaction. Current keyboard/phone/zoom
+acceptance is preserved; protected hosted member and assistive-technology checks
+remain outstanding. No accessibility-conformance claim follows from these tests.
