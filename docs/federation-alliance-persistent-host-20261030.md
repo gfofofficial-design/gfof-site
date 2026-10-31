@@ -1,8 +1,9 @@
 # Explicit persistent member-host candidate
 
-This source increment prepares one long-lived member process. It adds no
-listener, proxy, environment value, credential, installed server or activation.
-All factories default off. The existing Netlify factories keep their deployment
+This source increment prepares one long-lived member process. Importing it opens
+no listener, reads no credential and performs no activation. Factories default
+off; the OS entry requires an explicit closed-bootstrap flag. It installs no
+server, proxy or environment value. The existing Netlify factories keep their deployment
 identity and ten-minute preview limit.
 
 The separate persistent factories bind a pinned Ohio Lightsail instance ARN,
@@ -180,3 +181,49 @@ This keeps the browser's existing site origin and account-cookie boundary, with
 no cross-site sign-in or new browser interaction. Current keyboard/phone/zoom
 acceptance is preserved; protected hosted member and assistive-technology checks
 remain outstanding. No accessibility-conformance claim follows from these tests.
+
+## Uninstalled closed OS entry and certificate-hook compatibility
+
+`alliance-member-closed-process-entry.mjs` defaults to a zero-input disabled
+result. Its only enabled command is `--closed-bootstrap --config <absolute path>`.
+The bounded, non-writable-by-other-users configuration supplies public deployment
+identity and explicit filesystem paths. It contains no database, signing or Auth
+credential. The entry creates a fresh process UUID and composes the closed process
+with `generationEnabled: false`; there is no application factory, environment
+fallback, generation flag or automatic preparation. The trusted configuration
+binds an instance/release identity; this is not hardware/code attestation.
+
+SIGTERM/SIGINT stop local admission and await owned TLS/control closure, with a
+ten-second shutdown deadline. Status explicitly does not certify remote provider
+closure. SIGHUP reloads TLS without changing member authority. The listener's
+health is only `transport_ready`, not a verified startup or SERVE state. Browser
+and owner routes remain unavailable and management stays on the protected socket.
+
+`alliance-member-closed-tls-files.mjs` preserves the installed renewal hook's
+contract: read one atomically selected `generation-*` directory under an explicit
+owned root; require the configured owner, current service group and0640 regular
+certificate/key files; refuse symlinked files and oversized reads. The deployed
+configuration must pin owner UID0 and the existing root-controlled TLS paths.
+Tests use only the test account's UID and disposable generated certificates.
+
+Only after the listener accepts the material does the entry atomically publish
+the existing0600 `closed_tls_ready` acknowledgement with public fingerprint and
+expiry. Successful rotation updates the acknowledgement; a rejected reload keeps
+the previous TLS context and acknowledgement. An acknowledgement I/O failure
+stops the process rather than claiming renewal success. No certificate/key bytes,
+raw configuration or filesystem errors enter status output. This compatibility
+does not implement the still-required certificate-expiry/failure email alerts.
+
+Three real Linux child-process cases cover default-off/unknown flags, closed
+routes and refused preparation, occupied-target refusal, successful certificate
+rotation with the existing acknowledgement shape, failed-reload retention,
+SIGTERM closure/socket removal, and sanitized invalid configuration. Local Ubuntu
+Node22.22.1 passes; target Node24.22.1 CI is required separately. Existing accepted
+component tests and restores are not repeated locally. The workflow now includes
+these entry tests. No hosting, provider connection or public/member deployment
+is proved by the local result. Installation/service configuration/private delivery
+still need review; the current server and accepted renewal service are unchanged.
+
+This adds no browser interaction, keeping accepted phone, keyboard and200% zoom
+behavior intact. Hosted member/owner/sign-in and assistive-technology acceptance
+remain pending; no WCAG-conformance claim is added.
