@@ -108,6 +108,32 @@ headers/oversized requests, slow body, timed-out write/late-result refusal,
 oversized response and client disconnect. This proves the request bridge, not
 hosted Netlify cookie forwarding or signed member acceptance.
 
+## Uninstalled member HTTPS composition
+
+`createPersistentAllianceHttpsServer` explicitly composes the bounded Node bridge
+with a TLS listener. It defaults off and neither prepares a generation nor loads
+application credentials. Trusted composition provides the existing application
+host and installation identity. The32KiB parser admits the existing bounded
+account cookies; body, response and20second operation limits remain in the bridge.
+Connections, header/socket timeouts and requests per connection are bounded.
+Member routes retain their cookie/origin contracts; management paths cannot
+dispatch through this listener. Health says only `transport_ready`, which makes
+no claim about account readiness, SERVE authority or provider drain.
+
+An explicit server-side reader supplies TLS material at listen/reload. A failed
+reload preserves the current context. Shutdown stops socket admission/connections
+before awaiting host closure; occupied sockets and failed private readers cannot
+reopen or return raw errors. Five actual verified-TLS tests cover cookie/JSON and
+trusted identity transfer, closed host/management refusal, renewal, reader failure
+and occupied-target shutdown. They use fictional data and disposable test keys;
+they do not certify real Auth, sign-in, private service startup or hosted proxies.
+
+The installed closed HTTPS shell and active Netlify configuration are unchanged.
+This is source-only. Authenticated management/private delivery and coordinated
+maintenance/startup remain required before installation or member opening. No
+new browser control or authentication interaction is introduced, preserving the
+accepted keyboard/phone/zoom behavior; hosted accessibility acceptance is pending.
+
 `alliance-member-fixed-proxy.candidate.toml` is an unconsumed configuration
 candidate. It names one fixed HTTPS backend and only `/api/alliance-members/*`;
 it excludes management paths and goes before the catch-all404 if later approved.
