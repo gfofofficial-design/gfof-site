@@ -53,3 +53,22 @@ ID for REVIEW. Do not weaken that transition rule or reuse an old prepared proce
 
 Public Alliance/dashboard remains separate. No UI control, cookie policy, report
 retention, accessibility claim, public release or trading authority changes here.
+
+## Closed HTTPS transport increment
+
+`createClosedAllianceHttpsServer` is a separate default-off transport shell. It
+does not import or dispatch the member application. Only GET/HEAD `/healthz` at
+the exact proposed backend hostname can report `{state: 'closed', memberServing:
+false}`; member, management and other paths stay unavailable. It ignores forwarded
+host headers, refuses request bodies, bounds headers/connections/timeouts, emits
+no request/access log and uses TLS1.2 or newer. Importing/constructing it opens no
+socket and reads no key. An explicit reader supplies certificate material only
+when listening/reloading. A failed reload retains the previous TLS context;
+close removes all connections and prevents reopening the same object.
+
+Five focused cases use a disposable, locally generated certificate and an actual
+TLS client that verifies that certificate and hostname. They cover the closed
+health response, member/control refusal, host/body refusal, occupied-target
+refusal, reload/failure and shutdown. No public CA request or hosted deployment
+was made. Proposed DNS/TLS setup, certificate renewal and monitoring need their
+own reviewed installation; this source adds no Netlify route or environment value.
