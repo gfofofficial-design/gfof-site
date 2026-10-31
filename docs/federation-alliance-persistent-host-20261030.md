@@ -134,6 +134,32 @@ maintenance/startup remain required before installation or member opening. No
 new browser control or authentication interaction is introduced, preserving the
 accepted keyboard/phone/zoom behavior; hosted accessibility acceptance is pending.
 
+## Local maintenance control boundary
+
+`createPersistentAllianceLocalControl` is an uninstalled, default-off Unix-socket
+administrative interface. The existing service account/root authenticate through
+OS file permissions: a real, current-user-owned0700 directory and0600 socket,
+without a symlinked parent or occupied target. There is no TCP listener, browser
+endpoint, token or ambient credential lookup. This protects against other local
+users, not the service account itself or a compromised administrator. Production
+composition uses `/run/alliance-member-control/control.sock` in a systemd-owned
+runtime directory; enabling it requires a separately reviewed service setup.
+
+Bounded JSON commands must match the exact immutable release/process identity.
+Prepare invokes the existing signed startup under REVIEW and never changes
+provider permissions or SERVE. It is one-attempt per process. Close can interrupt
+preparation and discard its late result; drain observes the existing host's real
+local jobs. Neither close nor drain claims provider/fleet closure. Independent
+database closure and the durable maintenance hold are still required before
+capture; a fresh signed REVIEW/startup followed by newer SERVE is still required
+to reopen. No command on this socket opens a role or creates another generation.
+
+Five Linux tests use actual Unix-socket permissions and requests, covering the
+closed preparation result, fixed identity, foreign requests, priority closure,
+late readiness disposal, occupied targets and refusal to label remote providers
+closed. Linux CI uses the target Node24 version; local Linux verification used
+Node22.22.1. Windows executes the default-off case and skips Unix-only cases.
+
 `alliance-member-fixed-proxy.candidate.toml` is an unconsumed configuration
 candidate. It names one fixed HTTPS backend and only `/api/alliance-members/*`;
 it excludes management paths and goes before the catch-all404 if later approved.

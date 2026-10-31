@@ -22,4 +22,4 @@ jobs:
         with:
           node-version: '24.22.1'
       - run: node --check lib/alliance-member-finite-host.mjs
-    - run: node --test tests/alliance-member-finite-host.test.mjs tests/alliance-member-application.test.mjs tests/alliance-member-preview-bundle.test.mjs tests/alliance-persistent-runtime.test.mjs tests/alliance-member-closed-https.test.mjs tests/alliance-member-node-http.test.mjs tests/alliance-member-persistent-https.test.mjs
+    - run: node --test tests/alliance-member-finite-host.test.mjs tests/alliance-member-application.test.mjs tests/alliance-member-preview-bundle.test.mjs tests/alliance-persistent-runtime.test.mjs tests/alliance-member-closed-https.test.mjs tests/alliance-member-node-http.test.mjs tests/alliance-member-persistent-https.test.mjs tests/alliance-member-local-control.test.mjs
