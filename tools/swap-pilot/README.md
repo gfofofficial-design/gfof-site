@@ -6,6 +6,13 @@ Alliance membership or Federation endorsement. SOL is the initial other token.
 
 ## Implemented and checked
 
+November 1 review candidate: Blockaid's October 30 reply approved the exact
+deploy-preview-181--gfof.netlify.app origin. This branch prepares resuming the
+explicit provider button for non-funded acceptance only. It is not yet deployed
+and does not establish the current wallet warning state, any fee receipt, a
+funded-test allowance or public trading approval. The provider module is unchanged.
+The root Netlify configuration remains a preview harness and must never merge.
+
 `index.html`, `page.mjs`, `provider.mjs` and `style.css` form a standalone pilot.
 Copy only these four files to an isolated preview's static directory. The normal
 site build excludes all `tools/` files, including this pilot; no production route,
