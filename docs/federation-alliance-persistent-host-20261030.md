@@ -247,6 +247,12 @@ metadata-service, browser or ambient AWS credential fallback.
 
 The real complete application stays unprepared/closed after construction. Its
 existing signed REVIEW/startup and separately newer SERVE gate remain unchanged.
+On explicit deferred opening, production loads the pinned `pg` driver before
+reading the private file and supplies one pool factory to all six purpose-bound
+stores. This closes the missing-factory path in the collaboration/review adapters;
+it adds no ambient credential lookup. A focused Linux case constructs and closes
+six real driver pools with connection attempts blocked and zero Auth/authority
+requests. Importing or constructing the private opener still loads no driver.
 This first release continues to refuse image processing/storage. Cancellation and
 closure retire owned pools and deny later secret callbacks; late construction is
 retired separately. Read buffers are cleared and references dropped, without a

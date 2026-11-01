@@ -5,6 +5,7 @@ import {join,resolve,sep} from 'node:path';
 import {tmpdir} from 'node:os';
 import {generateKeyPairSync,createHash} from 'node:crypto';
 import {rootCertificates} from 'node:tls';
+import {createRequire} from 'node:module';
 import {createPersistentAlliancePrivateBundle} from '../lib/alliance-member-private-bundle.mjs';
 import {PERSISTENT_GATEWAY_SIGNING_SECRET} from '../lib/alliance-avatar-server/netlify-signing-runtime.mjs';
 const linux={skip:process.platform==='win32'};
@@ -37,6 +38,19 @@ test('owned private file opens the real closed six-pool bundle only on explicit 
   await Promise.all([b.application.close(),b.close(),opener.close()]);assert.ok(f.pools.every(p=>p.ends===1));
   await assert.rejects(opener.openApplication(),/^Error: alliance_private_bundle_unavailable$/);
  }finally{await opener.close();await f.cleanup();}
+});
+test('production default constructs and closes six real pg pools without provider work',linux,async()=>{
+ const f=await fixture(),{openPool,...options}=f.options;
+ const {Pool}=createRequire(new URL('../lib/alliance-avatar-server/package.json',import.meta.url))('pg');
+ const originalConnect=Pool.prototype.connect,originalEnd=Pool.prototype.end;let connects=0,ends=0;
+ Pool.prototype.connect=function(){connects++;throw Error('no provider connection permitted');};
+ Pool.prototype.end=function(...args){ends++;return originalEnd.apply(this,args);};
+ const opener=createPersistentAlliancePrivateBundle(options);
+ try{
+  const b=await opener.openApplication();
+  assert.equal((await b.application.handle(new Request('https://galacticfederation.co/api/alliance-members/me'),{server:installation})).status,503);
+  await b.close();await opener.close();assert.equal(ends,6);assert.equal(connects,0);assert.deepEqual(f.counts,{network:0,queries:0});
+ }finally{await opener.close();Pool.prototype.connect=originalConnect;Pool.prototype.end=originalEnd;await f.cleanup();}
 });
 test('writable/symlinked private files, deployment drift and extra fields refuse before pools with fixed errors',linux,async()=>{
  for(const change of [async f=>chmod(f.file,0o660),async f=>{await writeFile(join(f.directory,'other.json'),await readFile(f.file));await rm(f.file);await symlink(join(f.directory,'other.json'),f.file);},async f=>{f.payload.installation.releaseSha256='c'.repeat(64);await writeFile(f.file,JSON.stringify(f.payload));},async f=>{f.payload.extra='FICTIONAL_DO_NOT_LOG';await writeFile(f.file,JSON.stringify(f.payload));}]){
