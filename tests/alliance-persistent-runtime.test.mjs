@@ -4,6 +4,7 @@ import {generateKeyPairSync,createHash,sign,verify} from 'node:crypto';
 import {AsyncResource} from 'node:async_hooks';
 import {createPersistentGatewaySigningRuntime,PERSISTENT_GATEWAY_SIGNING_SECRET} from '../lib/alliance-avatar-server/netlify-signing-runtime.mjs';
 import {createPersistentAllianceHost,createFiniteAlliancePreviewHost} from '../lib/alliance-member-finite-host.mjs';
+import {ingressCheckpoint,ingressPolicy} from './alliance-member-ingress.fixture.mjs';
 const origin='https://deploy-preview-166--gfof.netlify.app';
 const identity={format:1,instanceArn:'arn:aws:lightsail:us-east-2:123456789012:Instance/11111111-2222-4333-8444-555555555555',releaseSha256:'a'.repeat(64),processId:'22222222-2222-4222-8222-222222222222',environment:'preview'};
 function signer(){
@@ -32,7 +33,8 @@ test('persistent host admits one bounded daily generation; preview cannot borrow
  assert.throws(()=>createFiniteAlliancePreviewHost(options));
  assert.throws(()=>createPersistentAllianceHost({...options,window:{...options.window,notAfterUtc:new Date(now+27*3600000).toISOString()}}));
  const h=createPersistentAllianceHost(options),context={server:identity},request=()=>new Request(origin+'/api/alliance-members/me');
- try{assert.deepEqual(await h.prepare({},context),{state:'prepared',access:'closed'});now+=12*3600000;mono+=12*3600000;
+ try{const cp=ingressCheckpoint();assert.deepEqual(await h.prepare(cp,context),{state:'prepared',access:'closed'});assert.equal((await h.handle(request(),context)).status,503);
+  assert.equal((await h.release(ingressPolicy(cp),context)).state,'local_ingress_released');now+=12*3600000;mono+=12*3600000;
   assert.equal((await h.handle(request(),context)).status,200);now+=13*3600000;mono+=13*3600000;
   assert.equal((await h.handle(request(),context)).status,503);assert.equal((await h.drain()).state,'local_work_settled');
   assert.deepEqual(await h.prepare({},context),{state:'quarantine',access:'closed'});assert.equal(opened,1);assert.equal(closed,1);
