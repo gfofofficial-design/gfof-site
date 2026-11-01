@@ -48,3 +48,13 @@ test('actual host closure waits for late work, while status stays metadata-only 
  release();assert.deepEqual(await closing,{installation:identity,...settled});await rejection;assert.equal(retiredLate,true);
  assert.equal((await control.status()).applicationCloseRequested,true);
 });
+
+test('maintenance can pin the exact process; a foreign generation is neither closed nor prepared',linux,async t=>{
+ let prepared=0,closed=0;
+ const f=await fixture(t,{prepare:async()=>{prepared++;return {state:'prepared',access:'closed'};},close:async()=>{closed++;},drain:async()=>settled});
+ await assert.rejects(f.client.closeAndDrain({installation:retired}));assert.equal(closed,0);
+ const other=createAllianceLocalControlClient(f.options);t.after(()=>other.close());
+ await assert.rejects(other.prepare(checkpoint(),{retiredInstallation:retired,installation:{...identity,processId:'c0814845-b8cb-445a-a60f-111111111111'}}));assert.equal(prepared,0);assert.equal(closed,0);
+ const matched=createAllianceLocalControlClient(f.options);t.after(()=>matched.close());
+ assert.deepEqual(await matched.closeAndDrain({installation:identity}),{installation:identity,...settled});assert.equal(closed,1);
+});
