@@ -1,0 +1,14 @@
+# SOURCE CANDIDATE ONLY. This is not loaded by netlify.toml or a build script.
+# Install only with the accepted private backend and a separate release decision.
+# Place before the catch-all 404. Never proxy /maintenance or management paths.
+# Responses must supply their own no-store/privacy headers at the backend.
+# The Node bridge finishes within20seconds; Netlify's proxy limit is26seconds.
+[[redirects]]
+  from = "/api/alliance-members/*"
+  to = "https://alliance-members.galacticfederation.co/api/alliance-members/:splat"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    window_limit = 60
+    window_size = 60
+    aggregate_by = ["ip", "domain"]
