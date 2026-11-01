@@ -21,5 +21,8 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24.22.1'
+      - name: Install the locked server driver for the production-path check
+        run: npm ci --ignore-scripts --no-audit --no-fund
+        working-directory: lib/alliance-avatar-server
       - run: node --check lib/alliance-member-finite-host.mjs
       - run: node --test tests/alliance-member-finite-host.test.mjs tests/alliance-member-application.test.mjs tests/alliance-member-preview-bundle.test.mjs tests/alliance-persistent-runtime.test.mjs tests/alliance-member-closed-https.test.mjs tests/alliance-member-node-http.test.mjs tests/alliance-member-persistent-https.test.mjs tests/alliance-member-local-control.test.mjs tests/alliance-member-persistent-process.test.mjs tests/alliance-member-closed-process-entry.test.mjs tests/alliance-member-private-bundle.test.mjs tests/alliance-member-generation-process-entry.test.mjs
