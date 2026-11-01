@@ -55,6 +55,34 @@ ID for REVIEW. Do not weaken that transition rule or reuse an old prepared proce
 Public Alliance/dashboard remains separate. No UI control, cookie policy, report
 retention, accessibility claim, public release or trading authority changes here.
 
+## Private process discovery and maintenance client
+
+The existing OS-protected local socket now accepts POST `/v1/status` with an
+empty JSON object. It returns only the trusted process installation and whether
+preparation or application closure has been requested. It performs no application
+work and certifies neither admission nor provider closure. Discovery remains
+available while preparation is running, so a separate local controller can close
+and drain an interrupted startup. No TCP management route is added.
+
+`createAllianceLocalControlClient` defaults off and checks the socket's real
+directory, owner and0700/0600 modes before each request. Its expected instance,
+release and purpose are fixed constructor inputs. It discovers the process,
+closes and drains it using that exact identity, or prepares only a different
+fresh process. Checkpoints are validated before preparation; already-attempted
+or closed processes cannot be reused. Timeouts, cancellation, changed identities
+and malformed replies fail without an automatic retry. A successful drain proves
+only local work settled; the operating controller must separately verify remote
+database/session closure and the durable maintenance hold. Preparation still
+requires REVIEW and a separately newer signed SERVE decision before member work.
+
+Four new actual Unix-socket cases pass alongside the existing five control
+cases. They include a real persistent host whose delayed application construction
+must retire before drain returns. This source does not restart a service, roll
+its generation window forward, enable a database login or install a scheduled
+controller. Server/cloud coordination and protected hosted acceptance remain
+separate release gates. No browser interaction pattern or accessibility claim
+changes; existing keyboard/zoom evidence is preserved.
+
 ## Closed HTTPS transport increment
 
 `createClosedAllianceHttpsServer` is a separate default-off transport shell. It
