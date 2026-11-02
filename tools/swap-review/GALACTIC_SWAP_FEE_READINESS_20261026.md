@@ -1,3 +1,67 @@
+## November 2 clarification — managed Plugin is the selected execution path
+
+This draft's helper is historical, offline `/order` metadata preparation. The
+current selected execution path is Jupiter Plugin; the helper is not imported by
+that Plugin and is not its signing gate. Do not rebuild the custom transaction
+decoder or change the helper's fixed false results to activate Plugin fees.
+The retained implementation instructions below apply to the older custom path,
+not as new prerequisites for the managed integration.
+
+Source review: production-source checkpoint
+`9b3acc6cee2c8877f9b6f8efa4faa1e82837b163` and isolated PR181 candidate
+`e6b1d89c8e0a8bad6c164e6dd43312769fa14c3c` both retain a provider module without
+`referralAccount` or `referralFee` in Plugin formProps. This establishes no
+Federation fee configuration in those source files. It does not prove that no
+referral accounts or separately retained Dev fee candidate exist. PR181 remains
+a preview harness that must not merge into production; source state is not proof
+of the currently deployed preview.
+
+### Smallest next managed-fee increment
+
+First reconcile the exact existing Dev fee candidate and its nonsecret receipt.
+Do not duplicate setup or ask the owner to choose the receiving wallet again.
+Before adding any fee settings, retain the reviewed public referral-account
+address, actual program/project and recipient binding, relevant fee mint and
+referral-token-account identities, and the exact candidate artifact/configuration.
+A receiving wallet alone is not a referral account. No private key belongs in
+this source or a web page.
+
+Jupiter Plugin documents `formProps.referralAccount` and `referralFee`.
+Its FAQ requires referral and fee-token accounts. The current `/order`
+documentation shows 50 basis points as 0.50%, describes Jupiter's 20% integrator
+share and warns that a missing fee-token account may fall back to a swap without
+the integrator fee. Those API documents do not independently establish what a
+particular Plugin request charged, what the wallet displayed, or what arrived.
+
+For the exact managed candidate, verify:
+1. The configured account, fee basis/rate and fee mint match reviewed bindings.
+   Do not silently substitute a recipient, auto-create token accounts or raise a
+   rate to accommodate an unexpected provider charge.
+2. Displayed user costs and minimum output remain understandable. Total
+   `feeBps` can include additional charges; it is not automatically equivalent
+   to the Federation's referral rate.
+3. The known review warning is resolved for the exact configuration before any
+   separately approved owner-run funded check. Domain classification, token
+   verification and fee/transaction acceptance are different evidence.
+4. A bounded receipt demonstrates the actual fee transfer, recipient, asset,
+   amount, provider share and any claim/access requirements. A callback, matching
+   metadata or projected 40-bps equivalent is not reconciled revenue.
+5. The accepted source/origin and production isolation/disable plan are reviewed
+   before release. Existing account sessions and signing material must not be
+   passed into the provider interface by accident.
+
+New token support requires the relevant fee-mint/account and route evidence.
+Do not treat a token catalog entry, Alliance membership or a different chain
+adapter as permission to create accounts, charge fees or execute transactions.
+This note creates no setup, signing, spending, testing or activation authority.
+
+Primary references rechecked November 2, 2026:
+- https://developers.jup.ag/docs/tool-kits/plugin/customization
+- https://developers.jup.ag/docs/tool-kits/plugin/faq
+- https://developers.jup.ag/docs/swap/order-and-execute
+
+### Retained October 26 custom-path preparation — historical scope
+
 # Galactic Swap — approved fee direction, collection still closed
 
 Owner instruction on 2026-10-26: continue with the recommended 0.50% fee design.
