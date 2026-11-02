@@ -45,6 +45,28 @@
     # X-XSS-Protection is deprecated in modern browsers; omitted.
 
 # ─── Function redirects ───
+[[headers]]
+  for = "/member-workspace.html"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
+# Reviewed production-only member connection. Preview hosts do not forward
+# member cookies to this production backend. The backend owns session checks,
+# authorization and private/no-store response headers; this rule grants none.
+[[redirects]]
+  from = "https://galacticfederation.co/api/alliance-members/*"
+  to = "https://alliance-members.galacticfederation.co/api/alliance-members/:splat"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    aggregate_by = ["ip", "domain"]
+    window_limit = 30
+    window_size = 60
+
 [[redirects]]
   from = "/api/price"
   to = "/.netlify/functions/price"
