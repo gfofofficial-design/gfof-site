@@ -61,3 +61,16 @@ test('new workspace keeps existing accessible control IDs and the old preview re
  const config=readFileSync(new URL('../netlify.toml',import.meta.url),'utf8');assert.match(config,/from = "https:\/\/galacticfederation\.co\/api\/alliance-members\/\*"/);
  assert.doesNotMatch(config,/from = "\/api\/alliance-members/);
 });
+
+
+test('sign-in, dashboard and Alliance entry points lead to the connected workspace',()=>{
+ const account=readFileSync(new URL('../account.html',import.meta.url),'utf8');
+ const destinations=account.match(/<nav class="account-destinations"[^>]*>(.*?)<\/nav>/s)?.[1];
+ assert.ok(destinations);assert.match(destinations,/href="\/member-workspace\.html"/);
+ assert.doesNotMatch(destinations,/alliance-profile/);
+ for(const file of ['command-deck.html','alliance.html']) {
+  const html=readFileSync(new URL('../'+file,import.meta.url),'utf8');
+  assert.match(html,/href="\/member-workspace\.html"/);
+ }
+ assert.match(account,/Competition enrollment remains closed/);
+});
