@@ -7,6 +7,8 @@ const publicExtensions = new Set(['.html','.css','.js','.mjs','.json','.png','.j
 const rootExtensions = new Set(['.html','.png','.jpg','.jpeg','.svg','.webp','.ico','.pdf','.txt','.xml','.md','.webmanifest']);
 // These modules own server cookies, database connections or protected runtime
 // construction. Browser modules in lib/ (including the constellation) remain.
+// lib/alliance-member-* is reserved for server host/application composition;
+// member browser modules live under assets/federation instead.
 const serverLibraryFiles = new Set([
   'lib/alliance-avatar-storage.mjs','lib/alliance-community-http.mjs',
   'lib/alliance-feedback-http.mjs','lib/alliance-member-application.mjs',
@@ -27,7 +29,7 @@ export async function buildStaticPublish(root) {
   const copied=[];
   async function copyEntry(relative) {
     const name=relative.split('/').at(-1);
-    if(relative==='lib/alliance-avatar-server'||relative==='lib/alliance-avatar-runtime'||serverLibraryFiles.has(relative))return;
+    if(relative==='lib/alliance-avatar-server'||relative==='lib/alliance-avatar-runtime'||relative.startsWith('lib/alliance-member-')||serverLibraryFiles.has(relative))return;
     // Installed server/vendor dependencies are never browser publication inputs.
     if(name==='node_modules')return;
     const source=join(root,relative),stat=await lstat(source);
