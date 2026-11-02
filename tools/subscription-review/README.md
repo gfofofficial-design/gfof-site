@@ -4,8 +4,9 @@ Updated November 2, 2026. Design preparation only; billing and access enforcemen
 ## Owner decisions
 Operator: Welks 8 LLC. Owner handles legal review.
 Products release independently after their own acceptance.
-90-day owner-invited project beta; no beta start date recorded.
+90-day owner-invited project beta; no beta start date recorded. No automatic conversion to paid billing.
 After beta: individual member USD 8.88/month; project USD 29.99/month.
+Project plan includes THREE named seats: project owner plus two collaborators. Covered seats do not also need an individual subscription; wider project communities are not automatically covered. These seats confer no Federation owner/reviewer authority.
 Both paid plans include all released subscription tools, linked to authenticated dashboard identity. No tool-by-tool tiers approved. Unreleased tools are not entitlements.
 100,000 GFOF TOTAL must be maintained by each project, not each member.
 Project holdings remain in project-controlled wallets; no deposit/staking requirement.
@@ -20,7 +21,7 @@ Use the existing Federation account ID as the member principal. Associate projec
 Billing identity is distinct from wallet identity. Wallet connection cannot establish account sign-in or project authority.
 Use existing hosted member admission and maintenance controls. Active billing is necessary for paid access after activation, never sufficient to bypass closed service, account/role checks or safety gates.
 Use server-verified provider subscription state. Never grant access from return URLs, query parameters, local storage, client plan labels, screenshots or receipts supplied by the browser.
-No new billing provider selected or credentials created. Source only, no hosted integration.
+Selected payment direction: Stripe for cards and MoonPay Commerce for crypto, sharing one server-verified entitlement without duplicate billing. Eligibility for the complete business model remains unconfirmed with both providers. Do not assume automatic crypto renewal. No checkout, provider credentials or live charging is enabled by this source preparation.
 
 ## Minimal records (logical fields; reconcile actual schema on Dev)
 Plan: code member/project, currency USD, monthly amount in minor units 888/2999, version, enabled=false.
@@ -35,10 +36,10 @@ States: inactive, checkout_pending, active, cancel_scheduled, payment_issue, end
 2. Checkout return says payment is being verified. Only authenticated, signature-verified provider events or reconciled provider reads can grant a bounded paid-through entitlement.
 3. Apply each event idempotently. Resolve out-of-order/conflicting events by current verified provider state; no client-controlled timestamp or old event can extend access.
 4. Verify subscription on each protected request using bounded server-side state. Uncertain, expired or disabled subscription does not enable paid tools; public navigation/help remain reachable.
-5. Recommended cancellation: authorized account/project administrator can stop renewal; access continues through verified paid-through time. Show end date and retain confirmation. Do not treat cancellation as a request to delete data.
+5. Approved cancellation behavior: stop renewal; access continues through verified paid-through time. Implement for the authorized account/project administrator, show the end date and retain confirmation. Do not treat cancellation as a request to delete data.
 6. Failed renewal: show payment issue and a provider-managed billing link. Any access grace period needs owner approval; do not invent one.
 7. Refund/dispute reversals: reconcile current provider state; keep audit history. Refund policy remains to be defined; do not promise refunds or silently issue one.
-8. Account/project ownership changes must not silently transfer billing authority. Project member-seat coverage is unresolved; no unlimited seats or double-billing assumptions.
+8. Account/project ownership changes must not silently transfer billing authority. Enforce the three named project seats without an additional individual fee for those seats. Wider community access is separate. Seat reassignment rules still require review; no unlimited seats or automatic authority transfer.
 9. Maintenance closure overrides paid entitlement and must remain explained. Do not sell a service that remains operationally closed.
 10. Revenue display separates test receipts, gross fees/revenue, provider costs, refunds, claimable referral amounts and actual treasury receipts. Never infer treasury income from trade volume or provider success callbacks.
 
@@ -63,9 +64,9 @@ Cancel screen: plain-language effective date and confirmation; support route for
 Use a provider sandbox first; any real payment needs a specific bounded owner decision. No automatic test charge.
 
 ## Still needing owner decision later
-Project seats: number included and whether a project seat also needs an individual subscription.
+Project seats: reassignment procedure and authorized seat management; the three-seat count and no additional individual fee for covered seats are already approved.
 Beta clock: common cohort start/end versus per-project; do not start it from a page visit.
-Billing provider, payment methods, sales tax handling, renewal authorization, refund policy, failed-payment grace and cancellation terms.
+Provider eligibility and the complete disclosure review, sales tax handling, renewal authorization, refund policy and failed-payment grace. Cancellation stops renewal with paid-through access; detailed implementation and terms remain to be finalized. Do not state that payments are nonrefundable.
 Holdings: single designated project wallet versus aggregate project-controlled wallets; cadence and proof acceptance; response deadline.
 These do not require another general architecture. Complete existing hosted member acceptance and recover tested Swap source first.
 
@@ -74,5 +75,5 @@ PR187 frontend head 1ea6f6d; runtime PR185 head1512cc8 and PR186 head3af4c87 rem
 Operating backups/hourly alerts/cleanup restored per Nov2 Dev handoff. Next normal Nov3 1am CST backup not yet verified.
 Independent/same-PC restore results accepted; do not repeat.
 Separate Swap tx 45TFDBRyNydSbgaFCZL6QEofhnMzji6gJwBwtwo9uKPRzHSLF8c1PjMWuWF9xJoY4Qjf5PaWwViB89SeeSqY1s6s finalized; 658917.268117 GFOF received, 0.0005 wrapped SOL gross referral credit. Claim/payout not established.
-Fee candidate origin fee-review--galactic-swap-review-20261101.netlify.app; exact tested source still needs Dev reconciliation. No further trade needed.
-Earlier Blockaid approval names PR181 origin only. Separate fee-origin warning unresolved. Owner has response draft; sending not verified.
+Fee candidate origin fee-review--galactic-swap-review-20261101.netlify.app; exact source/build receipt is maintained in private Dev operations records, outside this public repository. No further trade is needed to recreate the existing evidence. A gross referral credit is not a settled payout or an accepted release trial.
+Earlier Blockaid approval names PR181 origin only. Separate fee-origin warning remains unresolved. Support correspondence and disclosure receipts belong in the private operations records, not this repository.
