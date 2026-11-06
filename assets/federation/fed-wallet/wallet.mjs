@@ -1,5 +1,5 @@
 const productionOrigin = 'https://galacticfederation.co';
-const release = Object.freeze({enabled: false, appId: null});
+const release = Object.freeze({enabled: true, appId: 'cmw561qcd00gb0hjy44exxg8s'});
 
 export function bindWalletRoute({
   page, location, secureContext, config,
@@ -31,7 +31,7 @@ export function bindWalletRoute({
     status.textContent = 'Opening Privy.';
     try {
       const {mountWalletService} = await loadWallet();
-      mountWalletService(service, appId);
+      mountWalletService(service, appId, {allowCreation: false});
       service.hidden = false;
       status.textContent = 'Privy opened. Continue in the wallet controls.';
       service.focus();
