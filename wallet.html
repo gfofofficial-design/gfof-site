@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Federation Wallet</title>
+  <link rel="icon" href="/logo-circle.png">
+  <link rel="stylesheet" href="/assets/federation/fed-wallet/wallet.css">
+  <script type="module" src="/assets/federation/fed-wallet/wallet.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to wallet</a>
+  <header class="wrap topbar">
+    <a class="brand" href="/"><img src="/logo-circle.png" width="36" height="36" alt="">Galactic Federation</a>
+    <nav aria-label="Federation">
+      <a href="/command-deck">Command Deck</a>
+      <a href="/account">Account</a>
+    </nav>
+  </header>
+  <main class="wrap" id="main" tabindex="-1">
+    <section class="hero" aria-labelledby="wallet-title">
+      <img class="atlas" src="/assets/federation/fed-wallet/atlas.svg" width="780" height="390" alt="">
+      <div class="intro">
+        <p class="eyebrow">Federation Finance</p>
+        <h1 id="wallet-title">Federation Wallet</h1>
+        <p>A dedicated place for Solana wallet access and private recovery.</p>
+      </div>
+    </section>
+    <div class="wallet-grid">
+      <section class="card" aria-labelledby="connection-title">
+        <h2 id="connection-title">Privy wallet service</h2>
+        <p id="wallet-privacy">Opening the service connects your browser to Privy. Signing in shares the email you enter with Privy. Your Federation account and wallet sign-in use separate sessions.</p>
+        <p id="wallet-status" class="status" role="status" aria-atomic="true">Wallet access is closed for review.</p>
+        <fieldset id="wallet-controls" disabled hidden>
+          <legend>Open the wallet service</legend>
+          <label><input id="wallet-consent" type="checkbox"> I want to connect to Privy.</label>
+          <button id="wallet-open" type="button" aria-describedby="wallet-privacy">Open Privy</button>
+        </fieldset>
+        <section id="wallet-service" aria-label="Privy wallet controls" tabindex="-1" hidden></section>
+        <noscript><p>Wallet access requires JavaScript.</p></noscript>
+      </section>
+      <section class="card" aria-labelledby="recovery-title">
+        <h2 id="recovery-title">Private recovery</h2>
+        <p>Use your wallet’s private export screen when you need to recover or move a wallet. Keep any exported key in your own secure storage.</p>
+        <details>
+          <summary>How the recovery check works</summary>
+          <ol>
+            <li>Sign in to Privy and verify the wallet address you expect.</li>
+            <li>Open the private export screen. Close it when finished.</li>
+            <li>Sign out of Privy to clear the wallet from this page.</li>
+          </ol>
+        </details>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

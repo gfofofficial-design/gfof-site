@@ -44,6 +44,25 @@
 
     # X-XSS-Protection is deprecated in modern browsers; omitted.
 
+# The wallet candidate stays closed while its separately scoped launch is reviewed.
+[[headers]]
+  for = "/wallet"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://auth.privy.io; frame-src https://auth.privy.io https://challenges.cloudflare.com; frame-ancestors 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'"
+
+[[headers]]
+  for = "/wallet.html"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://auth.privy.io; frame-src https://auth.privy.io https://challenges.cloudflare.com; frame-ancestors 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'"
+
 # ─── Function redirects ───
 [[redirects]]
   from = "/api/price"
