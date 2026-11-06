@@ -37,7 +37,7 @@ test('closed, insecure, wrong-origin and wrong-path visits leave the wallet disa
   }
 });
 
-test('explicit consent allows one provider mount and focuses the wallet controls', async () => {
+test('explicit consent mounts existing-wallet access once and focuses the wallet controls', async () => {
   const ui = fixture();
   const mounts = [];
   let imports = 0;
@@ -52,7 +52,7 @@ test('explicit consent allows one provider mount and focuses the wallet controls
   ui.consent.checked = true;
   await Promise.all([ui.click(), ui.click()]);
   assert.equal(imports, 1);
-  assert.deepEqual(mounts, [[ui.service, config.appId]]);
+  assert.deepEqual(mounts, [[ui.service, config.appId, {allowCreation: false}]]);
   assert.equal(ui.service.hidden, false);
   assert.equal(ui.service.focused, true);
 });
