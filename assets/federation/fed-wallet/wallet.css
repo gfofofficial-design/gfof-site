@@ -1,0 +1,45 @@
+:root {
+  color-scheme: dark;
+  font: 100%/1.55 system-ui, sans-serif;
+  background: #091220;
+  color: #eaf3ff;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #aeeff8; }
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 3px solid #f7df83;
+  outline-offset: 4px;
+}
+
+.wrap { width: min(68rem, calc(100% - 2rem)); margin-inline: auto; }
+.skip-link { position: absolute; top: .75rem; left: 1rem; transform: translateY(-180%); padding: .65rem 1rem; background: #162944; z-index: 2; }
+.skip-link:focus { transform: none; }
+.topbar, .brand, nav { display: flex; gap: .85rem; align-items: center; flex-wrap: wrap; }
+.topbar { padding-block: 1rem; justify-content: space-between; }
+.brand { font-weight: 700; text-decoration: none; }
+nav a { min-height: 44px; display: inline-flex; align-items: center; }
+
+.hero { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #365170; border-radius: 1.25rem; background: #12243b; }
+.atlas { position: absolute; z-index: -2; width: min(100%, 49rem); height: auto; right: 0; top: 50%; transform: translateY(-50%); opacity: .7; }
+.hero::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, #12243b 25%, #12243bc9 63%, #12243b42); }
+.intro { padding: clamp(1.5rem, 6vw, 4rem); max-width: 42rem; }
+.eyebrow { color: #aeeff8; margin: 0; letter-spacing: .08em; text-transform: uppercase; font-size: .82rem; font-weight: 700; }
+h1 { margin: .5rem 0; font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.12; overflow-wrap: anywhere; }
+h2 { margin: 0; font-size: 1.3rem; }
+.intro p:last-child { margin-bottom: 0; }
+.wallet-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block: 1rem 2rem; }
+.card { background: #102039; border: 1px solid #365170; border-radius: 1rem; padding: clamp(1rem, 3vw, 1.5rem); overflow-wrap: anywhere; }
+.status { border-left: 3px solid #99dbe8; padding-inline-start: .8rem; }
+fieldset { border: 1px solid #557696; border-radius: .65rem; padding: .75rem; }
+fieldset label { display: flex; align-items: center; gap: .6rem; min-height: 44px; }
+button { font: inherit; min-height: 44px; border: 0; border-radius: .6rem; padding: .6rem 1rem; background: #b6eff6; color: #0b2136; font-weight: 700; cursor: pointer; }
+button[aria-disabled="true"] { cursor: default; }
+summary { min-height: 44px; padding-block: .6rem; color: #aeeff8; cursor: pointer; }
+ol { padding-inline-start: 1.45rem; }
+
+@media (max-width: 42rem) {
+  .wallet-grid { grid-template-columns: 1fr; }
+  .atlas { opacity: .35; }
+}
