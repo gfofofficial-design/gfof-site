@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
   <meta name="referrer" content="no-referrer">
-  <meta name="description" content="What Federation account sign-in records, how public wallet reads work, and how to contact the individual operator. Account registration remains closed.">
+  <meta name="description" content="How Federation Account and Federation Wallet sign-in use data, how public wallet reads work, and how to contact the individual operator. Federation Account registration remains closed.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Federation Account Privacy · GFOF</title>
   <link rel="stylesheet" href="/assets/federation/fed-tokens.css">
@@ -17,7 +17,7 @@
   <p class="eyebrow">FEDERATION // ACCOUNT PRIVACY</p>
   <h1>What sign-in records.</h1>
   <p class="status">Existing-account email-code sign-in is available. Public account registration is not open.</p>
-  <p class="lead">This notice describes existing-account sign-in and the initial service being prepared for public launch. It covers Federation accounts and the Command Deck. Last updated October 22, 2026. The service is operated personally by the Federation’s founder, who can be contacted at <a href="mailto:gfofofficial@gmail.com">gfofofficial@gmail.com</a>.</p>
+  <p class="lead">This notice covers Federation Account, the Command Deck and the separate Federation Wallet beta. Last updated November 7, 2026. The service is operated personally by the Federation’s founder, who can be contacted at <a href="mailto:gfofofficial@gmail.com">gfofofficial@gmail.com</a>.</p>
   <section aria-labelledby="account-title">
     <h2 id="account-title">Your account</h2>
     <p>Supabase provides account authentication. Email sign-in sends a one-time code to your email address through the configured delivery provider and verifies that code before establishing a session. When password sign-in is offered, your Federation password passes through the Federation account service to Supabase for verification. Supabase stores a password hash. Do not enter your email-provider password here. If Google sign-in is offered, it shares your email and can share your name and profile picture with Supabase. Supabase retains the account identifier and linked sign-in identities; the Federation page displays your email. These records support sign-in, account recovery, and account administration.</p>
@@ -27,6 +27,12 @@
     <h2 id="device-title">Cookies and device storage</h2>
     <p>Sign-in uses secure session cookies that page scripts cannot read. The sign-in-flow cookie lasts up to ten minutes, the access cookie up to one hour, and the browser refresh cookie up to one day. These browser limits do not by themselves end every session held by the identity provider.</p>
     <p>Journey choices and opted-in Explorer Passport progress stay in this browser’s local storage. Sign-in does not synchronize them between devices. Wallet observations and their chart history last only for the current dashboard visit.</p>
+  </section>
+  <section aria-labelledby="privy-title">
+    <h2 id="privy-title">Federation Wallet and Privy</h2>
+    <p>Federation Wallet opens Privy only after you select the connection checkbox and choose Open Privy. Privy provides email-code sign-in, explicit Solana wallet creation and private wallet export. It stores your email, account identifier and linked wallet address. The Federation operator can see these account and wallet associations in Privy’s dashboard. This is a separate account and browser session from Federation Account; signing out of one does not sign out of the other.</p>
+    <p>Privy processes browser, device and network information to provide authentication and wallet services. Its invisible anti-bot check also uses Cloudflare Turnstile. Read the <a href="https://www.privy.io/privacy-policy" rel="noreferrer">Privy privacy policy</a> and <a href="https://www.cloudflare.com/privacypolicy/" rel="noreferrer">Cloudflare privacy policy</a> for their data practices.</p>
+    <p>Privy’s SDK keeps session data in your browser. Signing out clears the wallet display and ends that Privy browser session; it does not delete the provider’s user or wallet record. Private export runs in Privy’s own screen. Do not send an exported key or sign-in code to the Federation operator. Contact the operator about account closure before deleting wallet access, and keep your own secure recovery copy. Federation Account deletion does not automatically delete a Privy account, wallet or public blockchain record.</p>
   </section>
   <section aria-labelledby="wallet-title">
     <h2 id="wallet-title">Public wallet observations</h2>

@@ -13,7 +13,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
   outline-offset: 4px;
 }
 
-.wrap { width: min(68rem, calc(100% - 2rem)); margin-inline: auto; }
+.wrap { width: min(68rem, calc(100% - 32px)); margin-inline: auto; }
 .skip-link { position: absolute; top: .75rem; left: 1rem; transform: translateY(-180%); padding: .65rem 1rem; background: #162944; z-index: 2; }
 .skip-link:focus { transform: none; }
 .topbar, .brand, nav { display: flex; gap: .85rem; align-items: center; flex-wrap: wrap; }
@@ -30,9 +30,9 @@ h1 { margin: .5rem 0; font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.12; ov
 h2 { margin: 0; font-size: 1.3rem; }
 .intro p:last-child { margin-bottom: 0; }
 .wallet-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block: 1rem 2rem; }
-.card { background: #102039; border: 1px solid #365170; border-radius: 1rem; padding: clamp(1rem, 3vw, 1.5rem); overflow-wrap: anywhere; }
+.card { background: #102039; border: 1px solid #365170; border-radius: 1rem; padding: clamp(16px, 3vw, 24px); overflow-wrap: anywhere; }
 .status { border-left: 3px solid #99dbe8; padding-inline-start: .8rem; }
-fieldset { border: 1px solid #557696; border-radius: .65rem; padding: .75rem; }
+fieldset { border: 1px solid #557696; border-radius: .65rem; padding: 12px; }
 fieldset label { display: flex; align-items: center; gap: .6rem; min-height: 44px; }
 button { font: inherit; min-height: 44px; border: 0; border-radius: .6rem; padding: .6rem 1rem; background: #b6eff6; color: #0b2136; font-weight: 700; cursor: pointer; }
 button[aria-disabled="true"] { cursor: default; }
