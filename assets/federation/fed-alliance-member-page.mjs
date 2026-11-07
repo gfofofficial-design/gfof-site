@@ -59,7 +59,7 @@ export function mountAllianceMemberPage(document,{enabled=false,collaborationEna
    if(collaborationEnabled){const root=document.getElementById('ap-collaboration');if(!root)throw Error('member_page_configuration');collaboration=mountAllianceCollaborationPanel(root,{enabled:true,feedbackEnabled,origin,fetcher:transport,onSignInRequired:()=>detach()});}
    if(feedbackEnabled){const root=document.getElementById('ap-feedback');if(!root)throw Error('member_page_configuration');feedback=mountAllianceFeedbackPanel(root,{enabled:true,origin,fetcher:transport,onSignInRequired:()=>detach()});}
    if(reportReviewEnabled){const root=document.getElementById('ap-report-review');if(!root)throw Error('member_page_configuration');reportReview=mountAllianceReportReviewPanel(root,{enabled:true,clientFactory:()=>createAllianceReportReviewClient({enabled:true,origin,fetcher:transport})});}
-   heading('Member service preview');return true;
+   heading(origin==='https://galacticfederation.co'?'Member workspace':'Member service preview');return true;
   }catch{detach('Member page unavailable. No additional requests will start.');return false;}
  }
  return Object.freeze({attach,detach(generation){if(disposed||generation!==undefined&&generation!==current)return false;detach();return true;},dispose(){if(disposed)return;clear();closed('Member page closed. No further requests will start.');form?.dispose();panel?.dispose();disposed=true;}});
