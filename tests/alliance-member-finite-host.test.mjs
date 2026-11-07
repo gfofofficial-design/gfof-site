@@ -65,3 +65,39 @@ test('a delayed deadline timer cannot release an overdue response',async t=>{
  const result=await pending;assert.equal(result.status,503);assert.deepEqual(await result.json(),{state:'unknown'});
  assert.equal(response.bodyUsed,true);assert.ok(f.calls.includes('bundle-close'));
 });
+
+test('drain waits for ignored cancellation instead of trusting the early unavailable reply',async t=>{
+ const gate=deferred(),f=fixture(t,{handle:()=>gate.promise});await f.host.prepare({},context());
+ const pending=f.host.handle(f.request('/report-review/review','POST'),context());await tick();
+ let finished=false;const draining=f.host.drain().then(v=>{finished=true;return v;});
+ assert.deepEqual(await (await pending).json(),{state:'unknown'});await tick();assert.equal(finished,false);
+ assert.equal((await f.host.handle(f.request(),context())).status,503);
+ const late=Response.json({private:'fictional report'});gate.resolve(late);
+ assert.deepEqual(await draining,{state:'local_work_settled',access:'closed',providerClosureVerified:false});assert.equal(late.bodyUsed,true);
+ assert.deepEqual(await f.host.prepare({},context()),{state:'quarantine',access:'closed'});
+});
+
+test('drain timeout reports unknown, retains the real flight, and never reopens the host',async t=>{
+ const gate=deferred(),f=fixture(t,{handle:()=>gate.promise});await f.host.prepare({},context());
+ const pending=f.host.handle(f.request(),context());await tick();
+ const draining=f.host.drain({timeoutMs:50});await tick();t.mock.timers.tick(50);
+ assert.deepEqual(await draining,{state:'unknown',access:'closed',providerClosureVerified:false});await pending;
+ assert.equal((await f.host.handle(f.request(),context())).status,503);
+ gate.resolve(Response.json({state:'ready'}));await tick();
+ assert.equal((await f.host.drain()).state,'local_work_settled');assert.equal(f.calls.filter(x=>x==='prepare').length,1);
+});
+
+test('a late bundle must finish retirement before local drain can succeed',async t=>{
+ const opening=deferred(),retiring=deferred(),f=fixture(t,{open:()=>opening.promise});
+ f.bundle.close=()=>{f.calls.push('bundle-close');return retiring.promise;};
+ const pending=f.host.prepare({},context());await tick();let finished=false;
+ const draining=f.host.drain().then(v=>{finished=true;return v;});await pending;
+ opening.resolve(f.bundle);await tick();assert.ok(f.calls.includes('bundle-close'));assert.equal(finished,false);
+ retiring.resolve();assert.equal((await draining).state,'local_work_settled');assert.ok(!f.calls.includes('prepare'));
+});
+
+test('failed bundle retirement remains unknown with no private error disclosure',async t=>{
+ const f=fixture(t);f.bundle.close=()=>{throw Error('PRIVATE provider connection details');};await f.host.prepare({},context());
+ const result=await f.host.drain();assert.deepEqual(result,{state:'unknown',access:'closed',providerClosureVerified:false});
+ assert.doesNotMatch(JSON.stringify(result),/PRIVATE|provider connection/);assert.equal((await f.host.drain()).state,'unknown');
+});
