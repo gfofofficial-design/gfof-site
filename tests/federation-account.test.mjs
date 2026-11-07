@@ -10,6 +10,42 @@ const jar=r=>r.multiValueHeaders['Set-Cookie'].map(x=>x.split(';')[0]).join('; '
 const session={access_token:'synthetic-access',refresh_token:'synthetic-refresh',expires_in:3600};
 const user={id:'synthetic-user',email:'member@example.invalid',email_confirmed_at:'2026-10-06T00:00:00Z',is_anonymous:false};
 const response=(data,status=200)=>new Response(status===204?null:JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}});
+
+test('Privy cookies alone cannot establish a Federation Account session',async()=>{
+ let calls=0;
+ const h=createHandler({env,fetchImpl:async()=>{calls++;throw Error('unexpected provider call');}});
+ for(const jar of ['privy-token=privy_fixture','privy-token=privy_fixture; privy-session=other_fixture','__Host-privy-token=privy_fixture']){
+  const r=await h(event('session','GET',null,jar));
+  assert.equal(r.statusCode,401);
+  assert.ok(!r.body.includes('privy_fixture'));
+ }
+ assert.equal(calls,0);
+});
+
+test('a Federation session uses only its own credential when Privy cookies accompany it',async()=>{
+ let calls=0;
+ const h=createHandler({env,fetchImpl:async(url,options)=>{
+  calls++;
+  assert.equal(url,env.FEDERATION_AUTH_URL+'/auth/v1/user');
+  assert.equal(options.headers.Authorization,'Bearer federation_fixture');
+  assert.ok(!JSON.stringify(options).includes('privy_fixture'));
+  return response(user);
+ }});
+ const r=await h(event('session','GET',null,'privy-token=privy_fixture; __Host-gf-access=federation_fixture; privy-token=another_privy_fixture'));
+ assert.equal(r.statusCode,200);
+ assert.equal(parse(r).user.id,user.id);
+ assert.equal(calls,1);
+});
+
+test('Federation logout clears only Federation cookies and does not claim Privy revocation',async()=>{
+ let calls=0;
+ const h=createHandler({env,fetchImpl:async()=>{calls++;throw Error('unexpected provider call');}});
+ const r=await h(event('logout','POST',{},'privy-token=privy_fixture; privy-session=other_fixture'));
+ assert.deepEqual(parse(r),{signedOut:true,remoteRevoked:false});
+ assert.deepEqual(r.multiValueHeaders['Set-Cookie'].map(c=>c.split('=')[0]).sort(),['__Host-gf-access','__Host-gf-flow','__Host-gf-refresh']);
+ assert.ok(r.multiValueHeaders['Set-Cookie'].every(c=>c.includes('Max-Age=0')));
+ assert.equal(calls,0);
+});
 test('default is closed and never contacts provider',async()=>{let calls=0;const h=createHandler({env:{},fetchImpl:async()=>{calls++;}});assert.deepEqual(parse(await h(event('config'))),{enabled:false,providers:[],hasSessionCookie:false});assert.equal((await h(event('oauth','POST',{provider:'google'}))).statusCode,503);assert.equal(calls,0);});
 test('private/service keys and non-provider URL fail closed',async()=>{for(const changes of [{FEDERATION_AUTH_PUBLISHABLE_KEY:'sb_secret_private'},{FEDERATION_AUTH_URL:'https://attacker.invalid'},{FEDERATION_AUTH_URL:'http://syntheticfixture.supabase.co'},{FEDERATION_AUTH_URL:'https://syntheticfixture.supabase.co/path'},{FEDERATION_ACCOUNT_ORIGIN:origin+'/redirect'}])assert.equal((await createHandler({env:{...env,...changes}})(event('config'))).statusCode,503);});
 test('config exposes only enabled methods, not keys or endpoints',async()=>{const h=createHandler({env});const r=await h(event('config'));assert.deepEqual(parse(r),{enabled:true,providers:['google','apple'],hasSessionCookie:false});assert.deepEqual(parse(await h(event('config','GET',null,'__Host-gf-refresh=synthetic'))),{enabled:true,providers:['google','apple'],hasSessionCookie:true});assert.ok(!r.body.includes('syntheticfixture'));});
