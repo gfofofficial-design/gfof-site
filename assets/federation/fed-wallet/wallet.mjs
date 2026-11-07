@@ -31,7 +31,7 @@ export function bindWalletRoute({
     status.textContent = 'Opening Privy.';
     try {
       const {mountWalletService} = await loadWallet();
-      mountWalletService(service, appId, {allowCreation: false});
+      mountWalletService(service, appId, {allowCreation: true});
       service.hidden = false;
       status.textContent = 'Privy opened. Continue in the wallet controls.';
       service.focus();
