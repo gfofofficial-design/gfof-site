@@ -37,7 +37,12 @@ test('invalid text and a denied clipboard never report a copy',async()=>{
   assert.equal(status.textContent,'No contract address to copy.');
 });
 test('the homepage places the current address copy control in the hero',()=>{
-  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
-  assert.ok(html.includes('<code id="hero-gfof-mint" data-copy-mint>'+GFOF.mint+'</code>'));
-  assert.ok(html.indexOf('id="hero-gfof-mint"')<html.indexOf('class="hero-btns"'));
+  const config=readFileSync(new URL('../netlify.toml',import.meta.url),'utf8');
+  const home=config.match(/from = "\/"\s+to = "\/([^"]+\.html)"/)?.[1];
+  assert.equal(home,'command-preview.html');
+  for(const [page,actions] of [[home,'cmd-hero__actions'],['index.html','hero-btns']]){
+    const html=readFileSync(new URL('../'+page,import.meta.url),'utf8');
+    assert.ok(html.includes('<code id="hero-gfof-mint" data-copy-mint>'+GFOF.mint+'</code>'));
+    assert.ok(html.indexOf('id="hero-gfof-mint"')<html.indexOf('class="'+actions+'"'));
+  }
 });
