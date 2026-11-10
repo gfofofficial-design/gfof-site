@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Swap &amp; Bridge · Federation review</title>
+<link rel="stylesheet" href="/assets/federation/swap/bridge-preview.css">
+<script type="module" src="/assets/federation/swap/bridge-preview-page.mjs"></script>
+<link rel="stylesheet" href="/assets/federation/fed-copy-mint.css">
+<script defer src="/assets/federation/fed-copy-mint.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to Swap &amp; Bridge</a>
+<header><strong>GALACTIC FEDERATION / COMMAND DECK</strong><span>SAVED ROUTE DEMO</span></header>
+<main id="main" tabindex="-1">
+<p class="eyebrow">FEDERATION TOOLKIT</p>
+<h1>Swap &amp; Bridge</h1>
+<p class="intro">Choose an example pair and compare what the saved routes estimated for the destination network.</p>
+<div class="layout">
+<section class="panel" aria-labelledby="compare-heading">
+<h2 id="compare-heading">Compare routes</h2>
+<p class="muted" id="scope">Saved LI.FI estimates from November 10, 2026. Live quotes and trading are unavailable in this demo.</p>
+<label for="pair">Example pair</label>
+<select id="pair" aria-describedby="scope">
+<option value="bridge">USDC on Base → USDC on Solana</option>
+<option value="sol">SOL on Solana → GFOF on Solana</option>
+<option value="cross">USDC on Base → GFOF on Solana</option>
+</select>
+<p id="input"></p>
+<details>
+<summary>Check token identities</summary>
+<p id="source-token"></p><p><span id="destination-token-label"></span><code id="destination-token" data-copy-mint></code></p>
+</details>
+<button id="compare" type="button">Compare saved routes</button>
+<p class="status" id="status" role="status" aria-atomic="true">Choose a pair to compare.</p>
+<ol id="routes" class="routes" aria-label="Saved route options"></ol>
+<button type="button" disabled aria-describedby="scope">Trading paused</button>
+<noscript><p>Enable JavaScript to compare saved estimates.</p></noscript>
+</section>
+<aside class="panel" aria-labelledby="alliance-heading">
+<p class="tag">ALLIANCE PROJECT ENTRY</p>
+<h2 id="alliance-heading">Find a project token</h2>
+<p class="muted">A project profile can open Swap &amp; Bridge with its reviewed token already selected. Each chain and token address is reviewed before a project appears here.</p>
+<button id="project" type="button">Preview GFOF project route</button>
+<p><a href="/alliance#station-explorer">Back to Alliance stations</a></p>
+<p><a href="/command-deck#tool-directory">Back to Command Deck tools</a></p>
+</aside>
+</div>
+</main>
+</body>
+</html>

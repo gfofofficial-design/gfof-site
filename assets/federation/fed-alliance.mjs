@@ -1,3 +1,4 @@
+import {stationBridgePreview} from './swap/bridge-preview-projects.mjs';
 import {HOST_STATION, publishedStations, stationChoice, stationLinks, matchingStations} from './fed-alliance-registry.mjs';
 
 export function mountAlliance(document, location, history, stations = publishedStations()) {
@@ -44,6 +45,11 @@ export function mountAlliance(document, location, history, stations = publishedS
       ? 'Review the dated GFOF lock snapshot and its sources on Treasury.'
       : 'Review this project’s published source. A linked disclosure is not independently established by its inclusion here.';
     for (const name of ['lens','explorer','website','evidence']) byId(name === 'explorer' ? 'station-explorer-link' : 'station-' + name).href = links[name];
+    const bridge = byId('station-bridge-preview');
+    const bridgeHref = stationBridgePreview(station);
+    bridge.hidden = !bridgeHref;
+    if (bridgeHref) bridge.href = bridgeHref;
+    else bridge.removeAttribute('href');
     const website = byId('station-website');
     if (station.relationship === 'host') website.removeAttribute('target');
     else website.setAttribute('target','_blank');

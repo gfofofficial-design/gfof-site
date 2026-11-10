@@ -1,0 +1,35 @@
+:root{color-scheme:dark;font:100%/1.55 system-ui,sans-serif;background:#09111f;color:#ecf6ff;--muted:#b9ccdd;--line:#3b536b;--accent:#86e6dc;--gold:#ffd887}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 80% 0,#173650,transparent 55%)}
+main,header{width:min(70rem,100%);margin:auto;padding:1rem clamp(1rem,4vw,3rem)}
+header{display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+header strong,.eyebrow{color:var(--accent);font-size:.78rem;letter-spacing:.13em;font-weight:750}
+header span,.tag{color:var(--gold);font-size:.85rem}
+h1{font-size:clamp(2rem,6vw,4rem);line-height:1.1;margin:.25rem 0 .5rem}
+h2,h3,p{margin:0 0 .6rem}
+p,dd,li{overflow-wrap:anywhere}
+.intro,.muted,dt{color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:1.2rem;align-items:start;margin-top:1.4rem}
+.panel{padding:clamp(1rem,3vw,1.5rem);border:1px solid var(--line);border-top:2px solid var(--accent);border-radius:1rem;background:#111f31}
+label{display:block;font-weight:700}
+select,button{font:inherit;min-height:2.75rem;border-radius:.5rem;padding:.45rem .75rem;color:inherit;border:1px solid var(--line);background:#0a1727}
+select{display:block;width:100%;margin:.35rem 0 .7rem}
+button{background:var(--accent);color:#092123;font-weight:750}
+button:disabled{background:#182b3f;color:#bbcad7}
+button:not(:disabled),summary{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.skip{position:absolute;transform:translateY(-180%);padding:.6rem;background:#092123;color:#fff}
+.skip:focus{transform:none;z-index:1}
+.status{min-height:1.55rem;margin-top:.85rem;color:var(--gold)}
+details{margin:.75rem 0;border-top:1px solid var(--line);padding-top:.4rem}
+summary{min-height:2.75rem;padding:.45rem 0;font-weight:680}
+code{display:block;color:var(--accent);overflow-wrap:anywhere}
+.routes{list-style:none;padding:0;margin:.75rem 0}
+.route{border:1px solid var(--line);border-radius:.65rem;padding:.85rem;margin-bottom:.65rem;background:#0b1727}
+.route h3{font-size:1rem;color:var(--accent)}
+dl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.2rem .65rem;margin:.5rem 0}
+dd{margin:0}
+.fees{margin:.25rem 0;padding-left:1.2rem}
+@media(max-width:46rem){.layout{grid-template-columns:minmax(0,1fr)}}
+a{color:var(--accent)}
+aside a{display:inline-flex;align-items:center;min-height:2.75rem}

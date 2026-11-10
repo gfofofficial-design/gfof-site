@@ -4,14 +4,47 @@
 <p class="eyebrow">FEDERATION COMMAND // READ-ONLY PREVIEW</p><div class="seal-row"><img src="/logo-circle.png" alt=""><div><h1>Your Command Deck.</h1><p class="lead">Explore your assets. Learn with the crew. Find your next mission.</p></div></div>
 <p class="demo-banner"><strong>Working wallet viewer · design preview.</strong> Enter an address to read on-chain quantities. The priced holdings chart uses fetched balances and available reference prices. Community League rankings have not started. No wallet ownership is verified, no points are awarded, and no staking pool or lending service is open.</p>
 <noscript><p class="demo-banner"><strong>JavaScript is disabled.</strong> Wallet reads, live lock totals, charts, the planning calculator and saved mission progress need JavaScript. You can still <a href="/treasury">read the dated Treasury evidence</a>, <a href="/staking">review staking preparation</a>, or <a href="/building">follow the build</a>.</p></noscript>
-<section class="deck-brief" aria-labelledby="brief-title"><div class="panel-head"><h2 id="brief-title">Choose your next step.</h2><span class="status">PUBLIC TOOLS</span></div><p>Pick the question you want to answer. These public tools do not need a Federation account.</p><div class="brief-options">
+<section class="flight-plan" id="first-flight" tabindex="-1" aria-labelledby="flight-title">
+  <p class="eyebrow">FLIGHT PLAN // FIRST VISIT</p>
+  <h2 id="flight-title">Start here.</h2>
+  <p class="flight-intro">Explore the tools first. Your Federation account is the way into member features as they open.</p>
+  <ol class="flight-steps" role="list">
+    <li><span class="flight-step" aria-hidden="true">01</span><div><span class="status">OPEN TO EVERYONE</span><h3>Explore your tools</h3><p>Read public balances, research a token, or check a quote.</p><a href="#tool-directory">See Federation tools →</a></div></li>
+    <li><span class="flight-step" aria-hidden="true">02</span><div><span class="status">EXISTING ACCOUNTS</span><h3>Sign in with email</h3><p>Use the one-time code for your approved Federation account. New account registration is closed.</p><a href="/account#account-main">Go to account sign-in →</a></div></li>
+    <li><span class="flight-step" aria-hidden="true">03</span><div><span class="status">PUBLIC GUIDE · MEMBER ACCESS CLOSED</span><h3>Find your place in Alliance</h3><p>Explore projects and the map. The guide shows where to set up a member profile when access opens.</p><a href="/alliance#start-here">Open the Alliance guide →</a></div></li>
+  </ol>
+</section>
+<section class="deck-brief" id="tool-directory" tabindex="-1" aria-labelledby="brief-title"><div class="panel-head"><h2 id="brief-title">Federation tools</h2><span class="status">PUBLIC TOOLS</span></div><p>Pick the question you want to answer. These public tools do not need a Federation account.</p><div class="brief-options">
 <!-- federation-tools:deck -->
 <a class="brief-option" href="#wallet"><span class="status">Read only</span><strong>Read wallet quantities</strong><span>Read public Solana token quantities and available reference prices.</span></a>
 <a class="brief-option" href="/alliance#start-here"><span class="status">Public preview · joining closed</span><strong>Explore the Alliance</strong><span>Find project tools and proposed challenges. Public membership and competition enrollment remain closed.</span></a>
 <a class="brief-option" href="/swap"><span class="status">Quote preview · trading closed</span><strong>Check a token quote</strong><span>Compare quotes for SOL, GFOF, USDC on Solana. Routes vary. No wallet is needed and no transaction is created.</span></a>
 <a class="brief-option" href="https://dossiertrack.co/token-structure"><span class="status">Public beta · read only</span><strong>Research a Solana mint</strong><span>Inspect a Solana mint’s controls and token accounts, with sources and explicit unknowns.</span></a>
 <!-- /federation-tools:deck -->
-</div><p class="brief-mission">Prefer a learning mission? <a href="/journey/repair-the-shuttle">Repair the Shuttle with Sera →</a> uses fictional credits; saved progress stays on this device.</p></section>
+</div>
+<nav class="deck-tool-directory" aria-label="More Federation tools">
+  <section aria-labelledby="deck-tools-evidence"><h3 id="deck-tools-evidence">Wallet &amp; evidence</h3><ul>
+    <li><a href="/wallet">Federation Wallet</a><span>Public beta · separate Privy sign-in</span></li>
+    <li><a href="/bridge-preview.html">Swap &amp; Bridge</a><span>Saved route demo · trading closed</span></li>
+    <li><a href="https://dossiertrack.co/dossier-agent">Dossier Agent</a><span>Interactive demo · fictional data</span></li>
+    <li><a href="#locks">Token lock records</a><span>Read only</span></li>
+    <li><a href="/treasury">Treasury</a><span>Public disclosures</span></li>
+    <li><a href="https://fcc.galacticfederation.co/">Capital Command</a><span>Public record</span></li>
+  </ul></section>
+  <section aria-labelledby="deck-tools-community"><h3 id="deck-tools-community">Community &amp; learning</h3><ul>
+    <li><a href="/alliance-constellation-preview.html">Alliance map</a><span>Demo · sample data</span></li>
+    <li><a href="#missions">Missions &amp; Passport</a><span>Learning · progress stays on this device</span></li>
+    <li><a href="#leaderboard">Community League</a><span>Preview · enrollment closed</span></li>
+    <li><a href="/governance-spec.html">Federation Council</a><span>Advisory governance</span></li>
+  </ul></section>
+  <section aria-labelledby="deck-tools-planning"><h3 id="deck-tools-planning">Simulations &amp; planning</h3><ul>
+    <li><a href="#staking">Staking calculator</a><span>Planning · pools closed</span></li>
+    <li><a href="/journey/lending-lab">Lending Lab</a><span>Simulation · fictional funds</span></li>
+    <li><a href="/building#lending-progress">Lending Command</a><span>Private prototype</span></li>
+    <li><a href="/building">What we’re building</a><span>Product status and release evidence</span></li>
+  </ul></section>
+</nav>
+<p class="brief-mission">Prefer a learning mission? <a href="/journey/repair-the-shuttle">Repair the Shuttle with Sera →</a> uses fictional credits; saved progress stays on this device.</p></section>
 <nav class="deck-nav" aria-label="Dashboard sections"><a href="#wallet">Wallet</a><a href="#locks">Token locks</a><a href="#staking">Staking Bay</a><a href="#network">Federation stations</a><a href="#alliance">Alliance</a><a href="/alliance-constellation-preview.html">Map preview</a><a href="#missions">Missions</a><a href="#leaderboard">Community League</a><a href="#dashboard-help">Quick answers &amp; help</a></nav>
 <div class="metrics"><div class="metric"><span>WALLET VIEW</span><strong id="wallet-state">No address loaded</strong><span id="wallet-scope">Read-only address viewer</span></div><div class="metric"><span>STAKING STATUS</span><strong>In preparation</strong><span>No active positions</span></div><div class="metric"><span>EXPLORER PASSPORT</span><strong id="explorer-rank">Start exploring</strong><span id="explorer-note">Mission badges stay on this device</span></div></div>
 <aside class="panel wallet-service-shortcut" aria-labelledby="wallet-service-title">

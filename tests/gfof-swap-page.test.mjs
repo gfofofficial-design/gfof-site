@@ -110,7 +110,7 @@ test('the hosted swap policy permits only its quote origin and keeps mint links 
   const globalPolicy = blocks.find(block => /for = "\/\*"/.test(block));
   assert.doesNotMatch(globalPolicy, /api\.jup\.ag/);
   for (const origin of ['https://solscan.io/token/', 'https://tebfun.xyz/token/']) assert.ok(html.includes('href="' + origin + GFOF.mint + '"'));
-  assert.ok(html.includes('<code>' + GFOF.mint + '</code>'));
+  assert.ok(html.includes('<code data-copy-mint>' + GFOF.mint + '</code>'));
 });
 
 test('reported protections are labelled, cleared with edits and never enable trading', async () => {

@@ -18,6 +18,10 @@ export function bindWalletRoute({
 
   const appId = config.appId;
   let opened = false;
+  let consentWithdrawn = false;
+  consent.addEventListener('change', () => {
+    if (!consent.checked) consentWithdrawn = true;
+  });
   open.addEventListener('click', async () => {
     if (opened) return;
     if (!consent.checked) {
@@ -27,10 +31,17 @@ export function bindWalletRoute({
     }
 
     opened = true;
+    consentWithdrawn = false;
     open.setAttribute('aria-disabled', 'true');
     status.textContent = 'Opening Privy.';
     try {
       const {mountWalletService} = await loadWallet();
+      if (consentWithdrawn || !consent.checked) {
+        opened = false;
+        open.setAttribute('aria-disabled', 'false');
+        status.textContent = 'Opening cancelled. Review the checkbox and choose Open Privy again.';
+        return;
+      }
       mountWalletService(service, appId, {allowCreation: true});
       service.hidden = false;
       status.textContent = 'Privy opened. Continue in the wallet controls.';
