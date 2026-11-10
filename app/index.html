@@ -309,6 +309,8 @@ html,body{
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:14px 0;}
 a{color:inherit;text-decoration:none;}
 </style>
+<link rel="stylesheet" href="/assets/federation/fed-copy-mint.css">
+<script defer src="/assets/federation/fed-copy-mint.js"></script>
 </head>
 <body>
 
@@ -344,7 +346,7 @@ a{color:inherit;text-decoration:none;}
 
       <div class="bond-card">
         <div class="bond-hdr"><span class="bond-lbl">CURRENT GFOF MINT · OLD-HOLDER EXCHANGE SEPARATE</span></div>
-        <p>The current mint is <code style="overflow-wrap:anywhere">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code>. The old Meteora DBC token is a separate historical mint. Holders seeking the planned 1:1-by-count exchange should <a href="/migration">read the migration notice</a> before transferring anything. Old-token locks do not establish new-token locks.</p>
+        <p>The current mint is <code style="overflow-wrap:anywhere" data-copy-mint>Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code>. The old Meteora DBC token is a separate historical mint. Holders seeking the planned 1:1-by-count exchange should <a href="/migration">read the migration notice</a> before transferring anything. Old-token locks do not establish new-token locks.</p>
       </div>
 
       <div class="action-row">
@@ -385,8 +387,7 @@ a{color:inherit;text-decoration:none;}
       </div>
 
       <div class="ca-box">
-        <div class="ca-text">CA: Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</div>
-        <button class="ca-copy" onclick="copyCA()">COPY</button>
+        <div class="ca-text">CA: <span data-copy-mint>Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</span></div>
       </div>
     </div>
 
@@ -502,8 +503,7 @@ a{color:inherit;text-decoration:none;}
 
       <div class="ca-box">
         <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:4px;letter-spacing:2px">CONTRACT ADDRESS</div>
-        <div class="ca-text" style="font-size:9px">Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</div>
-        <button class="ca-copy" onclick="copyCA()">COPY</button>
+        <div class="ca-text" style="font-size:9px"><span data-copy-mint>Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</span></div>
       </div>
 
       <div class="card">
@@ -733,20 +733,6 @@ function askQ(q){
 document.getElementById('chat-input').addEventListener('keydown',function(e){
   if(e.key==='Enter') sendChat();
 });
-
-/* ── COPY CA ── */
-function copyCA(){
-  navigator.clipboard.writeText(CA).then(()=>{
-    var btns=document.querySelectorAll('.ca-copy');
-    btns.forEach(b=>{ b.textContent='✓ COPIED'; setTimeout(()=>b.textContent='COPY',2000); });
-  }).catch(()=>{
-    var ta=document.createElement('textarea');
-    ta.value=CA; document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-    var btns=document.querySelectorAll('.ca-copy');
-    btns.forEach(b=>{ b.textContent='✓ COPIED'; setTimeout(()=>b.textContent='COPY',2000); });
-  });
-}
 
 /* ── PWA INSTALL ── */
 var deferredPrompt=null;

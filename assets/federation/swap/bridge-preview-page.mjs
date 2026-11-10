@@ -12,9 +12,12 @@ function amount(value, decimals) {
   return raw.slice(0, -decimals) + (fraction ? '.' + fraction : '');
 }
 function updateIdentity(id, token) {
-  const address = document.createElement('code');
+  const label = byId(id + '-label');
+  const address = label ? byId(id) : document.createElement('code');
   address.textContent = token.chain === 'Solana' && token.symbol === 'SOL' ? 'Native SOL' : token.address;
-  byId(id).replaceChildren(token.symbol + ' on ' + token.chain, address);
+  const name = token.symbol + ' on ' + token.chain;
+  if (label) label.textContent = name;
+  else byId(id).replaceChildren(name, address);
 }
 function updateSelection() {
   const snapshot = snapshots[pair.value];

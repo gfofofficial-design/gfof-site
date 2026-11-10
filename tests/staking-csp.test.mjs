@@ -8,14 +8,18 @@ const policy = html.match(/<meta http-equiv="Content-Security-Policy" content="(
 const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
 const digest = value => createHash('sha256').update(value).digest('base64');
 
-test('only the exact calculator script is authorized', () => {
-  assert.equal(scripts.length, 1);
-  assert.equal(scripts[0][1], '');
-  assert.ok(policy.includes(`script-src 'sha256-${digest(scripts[0][2])}'`));
+test('only the exact calculator and integrity-pinned copy control are authorized', () => {
+  assert.equal(scripts.length, 2);
+  const calculator = scripts.find(script => script[1] === '');
+  const copy = scripts.find(script => script[1].includes('fed-copy-mint.js'));
+  const copyHash = 'sha256-' + digest(readFileSync(new URL('../assets/federation/fed-copy-mint.js', import.meta.url)));
+  assert.ok(copy[1].includes(`integrity="${copyHash}"`));
+  assert.equal(copy[2], '');
+  assert.ok(policy.includes(`script-src 'sha256-${digest(calculator[2])}' '${copyHash}'`));
   assert.ok(!policy.includes("'unsafe-inline'"));
   assert.ok(!policy.includes("'unsafe-eval'"));
   assert.ok(!policy.includes("script-src 'self'"));
-  assert.ok(!policy.includes(digest(scripts[0][2] + '\nalert(1)')));
+  assert.ok(!policy.includes(digest(calculator[2] + '\nalert(1)')));
 });
 
 test('policy is parsed before active content and blocks unused capabilities', () => {
