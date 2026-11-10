@@ -63,3 +63,50 @@
 .brief-option .status{line-height:1.45;white-space:normal}
 .brief-mission{font-size:14px;margin:16px 0 0}
 @media(max-width:680px){.brief-options{grid-template-columns:1fr}}
+
+/* First-visit orientation and tool directory. */
+.flight-plan {
+  margin: 24px 0;
+  padding: clamp(18px, 3vw, 36px);
+  border: 1px solid var(--fed-border-strong);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at 100% 0%, var(--fed-command-soft), transparent 55%),
+    var(--fed-space-panel);
+}
+.flight-plan h2 { margin: 8px 0; font-size: clamp(24px, 4vw, 40px); }
+.flight-intro { max-width: 55ch; }
+.flight-steps, .deck-tool-directory {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0 0;
+}
+.flight-steps { padding: 0; list-style: none; }
+.flight-steps li, .deck-tool-directory section {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--fed-border-default);
+  border-radius: 10px;
+  background: var(--fed-space-panel);
+}
+.flight-steps li { display: flex; align-items: flex-start; gap: 12px; }
+.flight-steps li > div { min-width: 0; }
+.flight-step { color: var(--fed-command); font-variant-numeric: tabular-nums; font-weight: 700; }
+.flight-steps .status { white-space: normal; }
+.flight-steps h3 { margin: 8px 0 0; }
+.flight-steps p { margin: 6px 0; }
+.flight-steps a, .deck-tool-directory a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  max-width: 100%;
+}
+.deck-tool-directory h3 { margin: 0 0 4px; }
+.deck-tool-directory ul { list-style: none; padding: 0; margin: 0; }
+.deck-tool-directory li + li { margin-top: 6px; }
+.deck-tool-directory li span { display: block; color: var(--fed-muted); font-size: .875rem; }
+#first-flight, #tool-directory { scroll-margin-top: 20px; }
+@media (max-width: 820px) {
+  .flight-steps, .deck-tool-directory { grid-template-columns: minmax(0, 1fr); }
+}
