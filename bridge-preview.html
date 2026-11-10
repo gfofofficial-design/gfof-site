@@ -8,6 +8,8 @@
 <title>Swap &amp; Bridge · Federation review</title>
 <link rel="stylesheet" href="/assets/federation/swap/bridge-preview.css">
 <script type="module" src="/assets/federation/swap/bridge-preview-page.mjs"></script>
+<link rel="stylesheet" href="/assets/federation/fed-copy-mint.css">
+<script defer src="/assets/federation/fed-copy-mint.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to Swap &amp; Bridge</a>
@@ -29,7 +31,7 @@
 <p id="input"></p>
 <details>
 <summary>Check token identities</summary>
-<p id="source-token"></p><p id="destination-token"></p>
+<p id="source-token"></p><p><span id="destination-token-label"></span><code id="destination-token" data-copy-mint></code></p>
 </details>
 <button id="compare" type="button">Compare saved routes</button>
 <p class="status" id="status" role="status" aria-atomic="true">Choose a pair to compare.</p>
