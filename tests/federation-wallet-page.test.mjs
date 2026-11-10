@@ -3,8 +3,12 @@ import assert from 'node:assert/strict';
 import {bindWalletRoute} from '../assets/federation/fed-wallet/wallet.mjs';
 
 function fixture() {
-  let click;
-  const consent = {checked: false, focus() { this.focused = true; }};
+  let click, change;
+  const consent = {
+    checked: false,
+    focus() { this.focused = true; },
+    addEventListener(_type, callback) { change = callback; },
+  };
   const controls = {hidden: true, disabled: true};
   const open = {
     addEventListener(_type, callback) { click = callback; },
@@ -14,7 +18,8 @@ function fixture() {
   const service = {hidden: true, focus() { this.focused = true; }};
   const elements = {'wallet-controls': controls, 'wallet-consent': consent, 'wallet-open': open,
     'wallet-status': status, 'wallet-service': service};
-  return {page: {getElementById: id => elements[id]}, consent, controls, status, service, open, click: () => click()};
+  return {page: {getElementById: id => elements[id]}, consent, controls, status, service, open, click: () => click(),
+    changeConsent(checked) { consent.checked = checked; change?.(); }};
 }
 
 const location = {origin: 'https://galacticfederation.co', pathname: '/wallet.html'};
@@ -71,4 +76,34 @@ test('an SDK failure stays closed and does not retry a partial start', async () 
   assert.equal(ui.service.hidden, true);
   assert.match(ui.status.textContent, /Reload this page/);
   assert.doesNotMatch(ui.status.textContent, /PRIVATE_CANARY/);
+});
+
+test('withdrawing consent during SDK load cancels that opening even if consent is restored', async () => {
+  const ui = fixture();
+  let finishLoading;
+  let mounts = 0;
+  let imports = 0;
+  const sdk = new Promise(resolve => { finishLoading = resolve; });
+  bindWalletRoute({page: ui.page, location, config, secureContext: true, loadWallet: () => {
+    imports++;
+    return sdk;
+  }});
+  ui.changeConsent(true);
+  const first = ui.click();
+  ui.changeConsent(false);
+  ui.changeConsent(true);
+  finishLoading({mountWalletService() { mounts++; }});
+  await first;
+
+  assert.equal(imports, 1);
+  assert.equal(mounts, 0);
+  assert.equal(ui.service.hidden, true);
+  assert.equal(ui.service.focused, undefined);
+  assert.equal(ui.open['aria-disabled'], 'false');
+  assert.match(ui.status.textContent, /cancelled/i);
+
+  await ui.click();
+  assert.equal(imports, 2);
+  assert.equal(mounts, 1);
+  assert.equal(ui.service.hidden, false);
 });
