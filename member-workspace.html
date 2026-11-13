@@ -6,51 +6,86 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
-  <title>Your Alliance workspace · Galactic Federation</title>
+  <title>Your member dashboard · Galactic Federation</title>
   <link rel="stylesheet" href="/assets/federation/fed-tokens.css">
   <link rel="stylesheet" href="/assets/federation/fed-alliance.css">
   <link rel="stylesheet" href="/assets/federation/fed-alliance-member-form.css">
+  <link rel="stylesheet" href="/assets/federation/fed-alliance-workspace.css">
   <script type="module" src="/assets/federation/fed-alliance-production-entry.mjs"></script>
 </head>
 <body>
-  <a class="skip-link" href="#profile-main">Skip to your profile</a>
-  <header class="site-header wrap"><a class="brand" href="/"><img src="/logo-circle.png" width="44" height="44" alt="">GALACTIC FEDERATION</a><nav aria-label="Profile navigation"><a href="/alliance.html">Back to the Alliance</a><a href="/alliance-constellation-preview.html">Map preview</a><a href="/command-deck">Command Deck</a></nav></header>
+  <a class="skip-link" href="#profile-main">Skip to your dashboard</a>
+  <header class="site-header wrap">
+    <a class="brand" href="/"><img src="/logo-circle.png" width="44" height="44" alt="">GALACTIC FEDERATION</a>
+    <nav aria-label="Dashboard navigation"><a href="#workspace-tools">Tools</a><a href="#workspace-setup">Alliance setup</a><a href="#member-help">Help</a></nav>
+  </header>
   <main id="profile-main" class="wrap member-profile" tabindex="-1">
-    <!-- local fixture hooks -->
-    <div class="profile-heading"><p class="eyebrow">FEDERATION ALLIANCE // YOUR PROFILE</p><h1>A place for your contribution.</h1><p>Choose what you share. Keep a draft while you compare changes.</p></div>
-    <aside class="profile-notice" aria-label="Service availability"><strong id="ap-service-title">Member service closed</strong><p id="ap-service-note">Use an existing approved Federation account, then check sign-in here. Each request checks your session and permissions. Daily maintenance can temporarily close the service. Opening this page sends no account or profile request.</p><p class="profile-toolbar"><a class="button secondary" href="/account">See account sign-in options →</a><a class="button secondary" href="#member-help">Member help →</a></p></aside>
-    <section class="profile-notice" aria-labelledby="constellation-preview-title"><p class="eyebrow">ALLIANCE MAP // SAMPLE DATA</p><h2 id="constellation-preview-title">Find your crew in the constellation.</h2><p>Explore project logos and member bubbles. Try your own image with the demo visibility controls. This preview does not create a real profile, join a team or share a wallet.</p><p><a class="button secondary" href="/alliance-constellation-preview.html">Open the map preview →</a></p></section>
-    <noscript><p>JavaScript is needed for member editing. Public Alliance pages, the dashboard and help links remain available.</p></noscript>
-    <div class="profile-toolbar"><button id="ap-account-check" type="button" aria-describedby="ap-account-help" disabled>Check sign-in and open editor</button><a id="ap-account-link" href="/account" hidden>Open account page</a></div>
-    <p id="ap-account-help" class="profile-help">This button clears your unsaved draft. After a tab switch, we show it only when the same account is confirmed. Signing out, leaving this page or an uncertain check clears it. Interrupted changes may still need reconciliation.</p>
-    <p id="ap-account-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true">Account connection is closed. No sign-in check has started.</p>
-    <div id="ap-member-surface">
-    <div class="profile-toolbar"><button id="ap-read" type="button" disabled>Read current profile</button><button id="ap-cancel" type="button" hidden>Cancel request</button></div>
-    <p id="ap-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true">Member profiles are not open yet. No account or profile request has started.</p>
-    <p id="ap-compare-jump" hidden><a href="#ap-current">Compare the last read profile with my draft</a></p>
-    <div class="profile-layout">
-      <form id="ap-form" novalidate aria-labelledby="draft-title" aria-describedby="ap-draft-note">
-        <fieldset id="ap-fields" disabled>
-          <legend id="draft-title">Your draft</legend>
-          <p id="ap-draft-note" class="profile-help">This draft stays in this page. Closing or reloading the page may lose unsaved text.</p>
-          <label for="ap-name">Display name</label><input id="ap-name" name="name" type="text" autocomplete="nickname" minlength="2" maxlength="40" required aria-describedby="ap-name-help"><p id="ap-name-help" class="profile-help">2–40 characters. This is the name other members would see.</p><p id="ap-name-error" class="profile-error" hidden></p>
-          <label for="ap-community">Project or community <span class="profile-help">(optional)</span></label><input id="ap-community" name="community" type="text" maxlength="70" autocomplete="off" aria-describedby="ap-community-help"><p id="ap-community-help" class="profile-help">Up to 70 characters. Self-described; this does not establish an official partnership.</p><p id="ap-community-error" class="profile-error" hidden></p>
-          <label for="ap-bio">Bio</label><textarea id="ap-bio" name="bio" rows="5" minlength="10" maxlength="280" required aria-describedby="ap-bio-help"></textarea><p id="ap-bio-help" class="profile-help">10–280 characters. Avoid private contact details, credentials and financial information.</p><p id="ap-bio-error" class="profile-error" hidden></p>
-          <label for="ap-role">Contribution role</label><select id="ap-role" name="role" aria-describedby="ap-role-help"><option value="explorer">Explorer</option><option value="builder">Builder</option><option value="researcher">Researcher</option><option value="connector">Community connector</option></select><p id="ap-role-help" class="profile-help">How you would like to contribute. This grants no authority or account privileges.</p><p id="ap-role-error" class="profile-error" hidden></p>
-          <label class="profile-check" for="ap-listed"><input id="ap-listed" name="listed" type="checkbox" aria-describedby="ap-listed-help"><span>List my profile in the member directory</span></label><p id="ap-listed-help" class="profile-help">Off by default. Unlisting hides the directory entry; it does not remove the profile.</p><p id="ap-listed-error" class="profile-error" hidden></p>
-          <button id="ap-save" type="submit" disabled>Save my profile</button>
-        </fieldset>
-      </form>
-      <div class="profile-reading">
-        <section id="ap-current" class="profile-current" aria-labelledby="current-title" tabindex="-1" hidden><h2 id="current-title">Recorded profile</h2><p class="profile-help">Details from the last successful profile response. This view does not replace your draft or establish the outcome of an interrupted save.</p><dl id="ap-current-body"></dl></section>
-        <section id="ap-comparison" class="profile-comparison" aria-labelledby="comparison-title" hidden><h2 id="comparison-title">Keep your draft. Check the current version.</h2><p>Compare the last read profile with your draft. Continuing keeps your text and uses that version for your next save. Nothing is submitted until you choose Save my profile.</p><button id="ap-accept" type="button">Keep my draft and continue</button></section>
-        <section id="ap-removal" class="profile-removal" aria-label="Profile removal"><h2 id="removal-title">Remove your profile</h2><p>Removal controls are still in preparation. This draft form cannot send a removal request. Unlisting and removal are different actions.</p><button type="button" disabled>Remove my profile</button></section>
+    <div class="profile-heading dashboard-heading">
+      <p class="eyebrow">FEDERATION ALLIANCE</p>
+      <h1>Your member dashboard</h1>
+      <p>Use Federation tools and set up your Alliance profile.</p>
+    </div>
+    <section class="workspace-tools" id="workspace-tools" aria-labelledby="workspace-tools-title" tabindex="-1">
+      <h2 id="workspace-tools-title">Federation tools</h2>
+      <p>Open these tools without a Federation account.</p>
+      <!-- federation-tools:workspace-tools -->
+      <ul class="workspace-tool-list" role="list">
+        <li><a href="/command-deck#wallet"><strong>Read wallet quantities</strong><span class="workspace-tool-state">Read only</span><span>Read public Solana token quantities and available reference prices.</span></a></li>
+        <li><a href="https://dossiertrack.co/token-structure"><strong>Dossier Lens</strong><span class="workspace-tool-state">Public beta · read only</span><span>Inspect a Solana mint’s controls and token accounts, with sources and explicit unknowns.</span></a></li>
+        <li><a href="/swap"><strong>Galactic Swap</strong><span class="workspace-tool-state">Quote preview · trading closed</span><span>Compare quotes for SOL, GFOF, USDC on Solana. Routes vary. No wallet is needed and no transaction is created.</span></a></li>
+        <li><a href="/wallet"><strong>Federation Wallet</strong><span class="workspace-tool-state">Public beta · separate Privy sign-in</span><span>Create or reopen a Solana wallet using Privy.</span></a></li>
+        <li><a href="/bridge-preview.html"><strong>Swap &amp; Bridge</strong><span class="workspace-tool-state">Saved route demo · trading closed</span><span>Explore examples of cross-chain routes.</span></a></li>
+        <li><a href="https://dossiertrack.co/dossier-agent"><strong>Dossier Agent</strong><span class="workspace-tool-state">Interactive demo · fictional data</span><span>Replay a signal and inspect the evidence behind it.</span></a></li>
+        <li><a href="/treasury"><strong>Treasury &amp; transparency</strong><span class="workspace-tool-state">Published token and lock evidence</span><span>Read the dated disclosures and source links behind the Federation’s token records.</span></a></li>
+        <li><a href="https://fcc.galacticfederation.co/"><strong>Capital Command</strong><span class="workspace-tool-state">Public record</span><span>Review commitments, results and corrections.</span></a></li>
+      </ul>
+      <!-- /federation-tools:workspace-tools -->
+      <p><a href="/command-deck#tool-directory">Browse all tools on Command Deck →</a></p>
+    </section>
+    <section class="workspace-setup" id="workspace-setup" aria-labelledby="workspace-setup-title" tabindex="-1">
+      <div class="profile-notice">
+        <h2 id="workspace-setup-title">Set up your Alliance profile</h2>
+        <p id="workspace-sign-in-help">Sign in with your approved Federation account, then return here and open your profile setup. Public registration remains closed.</p>
+        <p><strong id="ap-service-title" role="status">Member service closed</strong></p>
+        <p id="ap-service-note">Member setup requires an available service and a verified account.</p>
+        <div class="profile-toolbar"><a class="button secondary" id="ap-account-link" href="/account#signin-title">Sign in to Federation</a><button id="ap-account-check" type="button" aria-describedby="ap-account-help" hidden disabled>Open profile setup</button></div>
+        <p id="ap-account-help" class="profile-help">Opening setup checks your sign-in and clears any unsaved draft. Signing out, leaving this page or an uncertain sign-in check also clears the draft.</p>
+        <p id="ap-account-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        <noscript><p>Enable JavaScript to open your profile setup.</p></noscript>
       </div>
-    </div>
-    <section id="ap-feedback" class="profile-collaboration" aria-label="Member ideas availability"><h2>Member ideas</h2><p>Durable ideas, support and private reports are still in preparation. No request will start here.</p></section>
-    <section id="ap-report-review" class="profile-collaboration" aria-label="Owner report review availability"><h2>Owner report review</h2><p>Only the assigned owner can read private reports. The server checks permission for every request. No report is loaded automatically.</p></section>
-    <section id="ap-collaboration" class="profile-collaboration" aria-label="Private collaboration availability"><h2>Private collaborations</h2><p>This workspace is still in preparation. No invitation or contribution request will start.</p></section>
-    </div>
+      <div id="ap-member-surface" hidden>
+        <div class="profile-toolbar"><button id="ap-read" type="button" disabled>Load my profile</button><button id="ap-cancel" type="button" hidden>Cancel request</button></div>
+        <p id="ap-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true">Member profiles are not open yet. No account or profile request has started.</p>
+        <p id="ap-compare-jump" hidden><a href="#ap-current">Compare the last read profile with my draft</a></p>
+        <div class="profile-layout">
+          <form id="ap-form" novalidate aria-labelledby="draft-title" aria-describedby="ap-draft-note">
+            <fieldset id="ap-fields" disabled>
+              <legend id="draft-title">Your draft</legend>
+              <p id="ap-draft-note" class="profile-help">This draft stays in this page. Closing or reloading the page may lose unsaved text.</p>
+              <label for="ap-name">Display name</label><input id="ap-name" name="name" type="text" autocomplete="nickname" minlength="2" maxlength="40" required aria-describedby="ap-name-help"><p id="ap-name-help" class="profile-help">2–40 characters. This is the name other members would see.</p><p id="ap-name-error" class="profile-error" hidden></p>
+              <label for="ap-community">Project or community <span class="profile-help">(optional)</span></label><input id="ap-community" name="community" type="text" maxlength="70" autocomplete="off" aria-describedby="ap-community-help"><p id="ap-community-help" class="profile-help">Up to 70 characters. Self-described; this does not establish an official partnership.</p><p id="ap-community-error" class="profile-error" hidden></p>
+              <label for="ap-bio">Bio</label><textarea id="ap-bio" name="bio" rows="5" minlength="10" maxlength="280" required aria-describedby="ap-bio-help"></textarea><p id="ap-bio-help" class="profile-help">10–280 characters. Avoid private contact details, credentials and financial information.</p><p id="ap-bio-error" class="profile-error" hidden></p>
+              <label for="ap-role">Contribution role</label><select id="ap-role" name="role" aria-describedby="ap-role-help"><option value="explorer">Explorer</option><option value="builder">Builder</option><option value="researcher">Researcher</option><option value="connector">Community connector</option></select><p id="ap-role-help" class="profile-help">How you would like to contribute. This grants no authority or account privileges.</p><p id="ap-role-error" class="profile-error" hidden></p>
+              <label class="profile-check" for="ap-listed"><input id="ap-listed" name="listed" type="checkbox" aria-describedby="ap-listed-help"><span>List my profile in the member directory</span></label><p id="ap-listed-help" class="profile-help">Off by default. Unlisting hides the directory entry; it does not remove the profile.</p><p id="ap-listed-error" class="profile-error" hidden></p>
+              <button id="ap-save" type="submit" disabled>Save my profile</button>
+            </fieldset>
+          </form>
+          <div class="profile-reading">
+            <section id="ap-current" class="profile-current" aria-labelledby="current-title" tabindex="-1" hidden><h2 id="current-title">Recorded profile</h2><p class="profile-help">Details from the last successful profile response. This view does not replace your draft or establish the outcome of an interrupted save.</p><dl id="ap-current-body"></dl></section>
+            <section id="ap-comparison" class="profile-comparison" aria-labelledby="comparison-title" hidden><h2 id="comparison-title">Keep your draft. Check the current version.</h2><p>Compare the last read profile with your draft. Continuing keeps your text and uses that version for your next save. Nothing is submitted until you choose Save my profile.</p><button id="ap-accept" type="button">Keep my draft and continue</button></section>
+            <section id="ap-removal" class="profile-removal" aria-label="Profile removal"><h2 id="removal-title">Remove your profile</h2><p>Removal controls are still in preparation. This draft form cannot send a removal request. Unlisting and removal are different actions.</p><button type="button" disabled>Remove my profile</button></section>
+          </div>
+        </div>
+        <section id="ap-feedback" class="profile-collaboration" aria-label="Member ideas availability"><h2>Member ideas</h2><p>Durable ideas, support and private reports are still in preparation. No request will start here.</p></section>
+        <section id="ap-report-review" class="profile-collaboration" aria-label="Owner report review availability"><h2>Owner report review</h2><p>Only the assigned owner can read private reports. The server checks permission for every request. No report is loaded automatically.</p></section>
+        <section id="ap-collaboration" class="profile-collaboration" aria-label="Private collaboration availability"><h2>Private collaborations</h2><p>This workspace is still in preparation. No invitation or contribution request will start.</p></section>
+      </div>
+    </section>
+    <section class="profile-collaboration" aria-labelledby="constellation-preview-title">
+      <h2 id="constellation-preview-title">Explore the Alliance map</h2>
+      <p>See sample projects and member profiles. You can try an image in the demo.</p>
+      <p><a href="/alliance-constellation-preview.html">Open the map preview →</a></p>
+    </section>
     <section id="member-help" class="profile-collaboration" aria-labelledby="member-help-title">
       <h2 id="member-help-title">Help when you need it.</h2>
       <p>You can contact GFOF even when the member service is closed or you are signed out. These links open your email app; review and send the message there. Opening a link does not send a report or create a tracked ticket.</p>
@@ -62,6 +97,6 @@
       <p>Never send passwords, sign-in codes, recovery links, session tokens, seed phrases or private keys. Nothing in your profile or collaboration draft is attached automatically.</p>
     </section>
   </main>
-  <footer class="site-footer wrap"><a href="/alliance.html">Federation Alliance</a> <a href="/alliance-constellation-preview.html">Explore the constellation design — sample data only</a><p>For existing approved accounts. Opening this page creates no profile, invitation or public listing. Public registration remains closed.</p></footer>
+  <footer class="site-footer wrap"><a href="/alliance.html">Federation Alliance</a> <a href="/command-deck#tool-directory">Command Deck tools</a></footer>
 </body>
 </html>

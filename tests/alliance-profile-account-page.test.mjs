@@ -98,7 +98,7 @@ test('late account verification cannot reopen a page closed by sign-out',async()
 test('a normal tab switch hides the draft, then preserves it only after checking the same account',async()=>{
  const f=fixture(regular);await f.host.check();f.get('name').value='Private draft';f.doc.visibilityState='hidden';f.doc.emit('visibilitychange');assert.equal(f.get('member-surface').hidden,true);assert.equal(f.get('name').value,'Private draft');assert.equal(await f.host.check(),false);
  f.doc.visibilityState='visible';f.doc.emit('visibilitychange');await tick();assert.equal(f.calls.length,2);assert.equal(f.get('name').value,'Private draft');assert.equal(f.get('member-surface').hidden,false);
- f.events.dispatchEvent(new Event('pageshow'));assert.equal(f.get('name').value,'');assert.equal(f.get('fields').disabled,true);assert.equal(f.calls.length,2);f.host.dispose();
+ f.events.dispatchEvent(Object.assign(new Event('pageshow'),{persisted:true}));assert.equal(f.get('name').value,'');assert.equal(f.get('fields').disabled,true);assert.equal(f.calls.length,2);f.host.dispose();
 });
 test('a changed or unconfirmed account never reveals the earlier draft or automatically opens another editor',async t=>{
  for(const response of [()=>json({...account,user:{id:'22222222-2222-4222-8222-222222222222'}}),()=>json({},401),()=>json({},503)])await t.test('foreground identity refusal',async()=>{
@@ -119,8 +119,8 @@ test('same-account return restores an abandoned field focus but never steals a n
 });
 test('deadline returns safely but an uncooperative request keeps the overlap latch occupied',async()=>{
  const gate=deferred();let n=0;const f=fixture(()=>++n===1?gate.promise:json(account),{timeoutMs:10});
- assert.equal(await f.host.check(),false);assert.equal(await f.host.check(),false);assert.equal(f.calls.length,1);assert.equal(f.get('account-check').disabled,true);
- gate.resolve(json(account));await tick();assert.equal(f.get('fields').disabled,true);assert.equal(f.get('account-check').disabled,false);assert.equal(await f.host.check(),true);f.host.dispose();
+ assert.equal(await f.host.check(),false);assert.equal(await f.host.check(),false);assert.equal(f.calls.length,1);assert.equal(f.get('account-check').getAttribute('aria-disabled'),'true');
+ gate.resolve(json(account));await tick();assert.equal(f.get('fields').disabled,true);assert.equal(f.get('account-check').getAttribute('aria-disabled'),'false');assert.equal(await f.host.check(),true);f.host.dispose();
 });
 test('an expired queued browser lock cannot dispatch a late request',async()=>{
  const gate=deferred();const locks={request:async(_name,_options,work)=>{await gate.promise;return work();}};

@@ -18,17 +18,39 @@ export function mountAllianceAccountMemberPage(document, {
   const button = document.getElementById('ap-account-check');
   const status = document.getElementById('ap-account-status');
   const surface = document.getElementById('ap-member-surface');
+  const firstProfileAction = document.getElementById('ap-read');
   const accountLink = document.getElementById('ap-account-link');
-  if (!button || !status || !surface || !accountLink) throw Error('member_account_configuration');
-  const page = mountAllianceMemberPage(document, {enabled, collaborationEnabled, feedbackEnabled, reportReviewEnabled, origin, fetcher});
+  const signInHelp = document.getElementById('workspace-sign-in-help');
+  const draftHelp = document.getElementById('ap-account-help');
+  if (!button || !status || !surface || !firstProfileAction || !accountLink) throw Error('member_account_configuration');
+  const page = mountAllianceMemberPage(document, {
+    enabled, collaborationEnabled, feedbackEnabled, reportReviewEnabled, origin, fetcher,
+    onSignInRequired: () => close('Sign in again to reopen your profile setup. Earlier interrupted requests may still need reconciliation.'),
+  });
   let disposed = false, epoch = 0, generation = 0, flight = null, channel = null, accountId = null, resumeFocus = null;
   const visible = () => document.visibilityState === 'visible';
-  const buttons = () => { button.disabled = !enabled || disposed || !visible() || flight !== null; };
+  function updateAccountButton() {
+    button.disabled = !enabled || disposed || !visible() || accountId !== null;
+    button.setAttribute('aria-disabled', String(button.disabled || flight !== null));
+  }
   const say = text => { status.textContent = text; };
-  function close(message = 'Editor closed. Check sign-in to open it again. Earlier interrupted requests may still need reconciliation.') {
+  function setSignInPrompt(show) {
+    if (!enabled) return;
+    accountLink.hidden = !show && !signInHelp;
+    if (signInHelp) {
+      accountLink.textContent = show ? 'Sign in to Federation' : 'Manage account or sign out';
+      signInHelp.hidden = !show;
+      button.hidden = !show;
+      if (draftHelp) draftHelp.hidden = !show;
+    }
+  }
+  function close(message = 'Profile setup is closed. Open profile setup to check sign-in again. Earlier interrupted requests may still need reconciliation.') {
     if (disposed) return;
-    epoch++; accountId = null; resumeFocus = null; surface.hidden = enabled;
-    flight?.controller.abort(); page.detach(); say(message); buttons();
+    const focused = surface.contains(document.activeElement) || (resumeFocus && document.activeElement === document.body);
+    epoch++; accountId = null; resumeFocus = null; surface.hidden = true;
+    setSignInPrompt(true);
+    flight?.controller.abort(); page.detach(); say(message); updateAccountButton();
+    if (enabled && visible() && focused) accountLink.focus();
   }
   async function readSession(signal, turn) {
     const valid = () => {
@@ -76,7 +98,7 @@ export function mountAllianceAccountMemberPage(document, {
     const previous = preserve ? accountId : null;
     if (previous) { epoch++; surface.hidden = true; } else close();
     const turn = epoch, controller = new AbortController(), current = {controller};
-    flight = current; buttons(); say('Checking sign-in. The profile editor is closed.');
+    flight = current; updateAccountButton(); say('Checking your Federation sign-in.');
     const work = () => readSession(controller.signal, turn);
     const job = Promise.resolve().then(() => {
       if (controller.signal.aborted || turn !== epoch) throw Error('closed');
@@ -85,7 +107,7 @@ export function mountAllianceAccountMemberPage(document, {
         : work(); // Read only; never exchanges a rotating refresh token.
     });
     // Occupy the latch until actual work settles even if it ignores cancellation.
-    void job.finally(() => { if (flight === current) { flight = null; buttons(); } }).catch(() => {});
+    void job.finally(() => { if (flight === current) { flight = null; updateAccountButton(); } }).catch(() => {});
     let abort;
     const stopped = new Promise((_, reject) => {
       abort = () => reject(Error('closed'));
@@ -95,48 +117,48 @@ export function mountAllianceAccountMemberPage(document, {
     try {
       const verifiedId = await Promise.race([job, stopped]);
       if (disposed || turn !== epoch || !visible() || controller.signal.aborted) return false;
-      if (!verifiedId) { close('Sign in through the account page, then check sign-in here.'); return false; }
+      if (!verifiedId) { close('Sign in to Federation, then return and open profile setup.'); return false; }
       if (previous && verifiedId !== previous) {
-        close('The account changed. The earlier draft was cleared. Check sign-in to open this account’s editor.'); return false;
+        close('The account changed. The earlier draft was cleared. Open profile setup for this account.'); return false;
       }
       if (!previous && !page.attach(++generation)) throw Error('attach');
       accountId = verifiedId; surface.hidden = false;
+      if (!previous && (document.activeElement === button || document.activeElement === accountLink)) firstProfileAction.focus();
+      setSignInPrompt(false);
+      updateAccountButton();
       if (previous && document.activeElement === document.body && surface.contains?.(resumeFocus) && !resumeFocus.disabled) resumeFocus.focus();
       resumeFocus = null;
       say('Sign-in checked. Each member request still verifies your current session.'); return true;
     } catch {
-      if (!disposed && turn === epoch) close('Sign-in could not be checked. The editor stays closed. No automatic retry will start. If this button stays unavailable, reload the page.');
+      if (!disposed && turn === epoch) close('Could not check sign-in. Try Open profile setup again when it is available. If it stays unavailable, reload the page.');
       return false;
     } finally { clearTimeout(timer); controller.signal.removeEventListener('abort', abort); }
   }
-  const onCheck = () => verify();
+  const onCheck = () => accountId === null && verify();
   const onVisibility = () => {
     if (!visible()) {
       resumeFocus = surface.contains?.(document.activeElement) ? document.activeElement : null;
       surface.hidden = enabled;
       if (flight) close();
-      buttons();
+      updateAccountButton();
     } else if (accountId && surface.hidden) { void verify(true); }
-    else buttons();
+    else updateAccountButton();
   };
-  const onHide = () => close(), onShow = () => close();
+  const onHide = () => close();
+  const onShow = event => { if (event.persisted) close(); };
   const onMessage = event => {
     // A channel hint can only clear content, never establish a session.
     if (event.data?.type === 'signed-out' && typeof event.data.remoteRevoked === 'boolean') close();
   };
-  say('Account connection is closed. No sign-in check has started.');
-  accountLink.hidden = !enabled;
-  surface.hidden = enabled;
+  setSignInPrompt(true);
+  surface.hidden = true;
   if (enabled) {
-    const note = document.getElementById('ap-service-note');
-    if (note) note.textContent = 'This editor requires a verified account and the reviewed member service. No profile change starts without your action.';
-    say('Check sign-in to open your profile editor. No account request has started.');
     button.addEventListener('click', onCheck);
     document.addEventListener('visibilitychange', onVisibility);
     events.addEventListener?.('pagehide', onHide); events.addEventListener?.('pageshow', onShow);
     try { channel = createChannel('gf-account-status'); channel.addEventListener('message', onMessage); } catch { channel = null; }
   }
-  buttons();
+  updateAccountButton();
   return Object.freeze({check: () => verify(), close, dispose() {
     if (disposed) return;
     close(); disposed = true;
@@ -144,6 +166,6 @@ export function mountAllianceAccountMemberPage(document, {
     document.removeEventListener?.('visibilitychange', onVisibility);
     events.removeEventListener?.('pagehide', onHide); events.removeEventListener?.('pageshow', onShow);
     try { channel?.removeEventListener('message', onMessage); channel?.close(); } catch {}
-    channel = null; page.dispose(); buttons();
+    channel = null; page.dispose(); updateAccountButton();
   }});
 }

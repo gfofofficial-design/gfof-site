@@ -10,7 +10,7 @@ import {TRADING_ENABLED} from '../assets/federation/swap/quote-core.mjs';
 import {QUOTE_PAIRS} from '../assets/federation/swap/token-registry.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const filenames = ['command-deck.html', 'alliance.html', 'account.html'];
+const filenames = ['command-deck.html', 'alliance.html', 'account.html', 'member-workspace.html'];
 async function fixture(run) {
   const dir = await mkdtemp(join(tmpdir(), 'federation-tool-copy-'));
   try {
@@ -19,7 +19,7 @@ async function fixture(run) {
   } finally { await rm(dir, {recursive:true, force:true}); }
 }
 
-test('the checked-in dashboard and Alliance agree with the reviewed tool catalog', async () => {
+test('the checked-in tool pages agree with the reviewed tool catalog', async () => {
   assert.deepEqual(await syncToolPages(root), {checked:filenames, updated:[]});
   assert.equal(TRADING_ENABLED, false);
   assert.equal(FEDERATION_TOOLS.swap.state, 'quote-only');
@@ -73,7 +73,7 @@ test('catalog entries are immutable public metadata with fixed destinations', ()
   for (const entry of Object.values(FEDERATION_TOOLS)) {
     assert.ok(Object.isFrozen(entry));
     const url = new URL(entry.href, 'https://galacticfederation.co');
-    assert.ok(['https://galacticfederation.co','https://dossiertrack.co'].includes(url.origin));
+    assert.ok(['https://galacticfederation.co','https://dossiertrack.co','https://fcc.galacticfederation.co'].includes(url.origin));
     assert.equal(url.username, ''); assert.equal(url.password, ''); assert.equal(url.search, '');
   }
 });
@@ -96,4 +96,23 @@ test('account public tools use the same destinations and closed-trading status',
   }
   assert.match(account, /Quote preview · trading closed/);
   assert.doesNotMatch(account, /Connect wallet|Sign in/);
+});
+
+test('member dashboard puts public tools before setup and the sample map', async () => {
+  const html = await readFile(join(root, 'member-workspace.html'), 'utf8');
+  const tools = html.indexOf('id="workspace-tools"');
+  const setup = html.indexOf('id="workspace-setup"');
+  const map = html.indexOf('aria-labelledby="constellation-preview-title"');
+  assert.ok(tools >= 0 && tools < setup && setup < map);
+  const cards = renderToolSlot('workspace-tools');
+  assert.equal((cards.match(/<li>/g) ?? []).length, 8);
+  assert.match(cards, /href="\/command-deck#wallet"/);
+  assert.match(cards, /Galactic Swap<\/strong><span[^>]*>Quote preview · trading closed/);
+  for (const key of ['federationWallet', 'bridge', 'dossierAgent']) {
+    const tool = FEDERATION_TOOLS[key];
+    for (const rendered of [cards, renderToolSlot('deck-evidence')]) {
+      assert.ok(rendered.includes(tool.href));
+      assert.ok(rendered.includes(tool.status));
+    }
+  }
 });
