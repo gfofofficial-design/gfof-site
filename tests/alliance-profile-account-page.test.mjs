@@ -119,8 +119,8 @@ test('same-account return restores an abandoned field focus but never steals a n
 });
 test('deadline returns safely but an uncooperative request keeps the overlap latch occupied',async()=>{
  const gate=deferred();let n=0;const f=fixture(()=>++n===1?gate.promise:json(account),{timeoutMs:10});
- assert.equal(await f.host.check(),false);assert.equal(await f.host.check(),false);assert.equal(f.calls.length,1);assert.equal(f.get('account-check').disabled,true);
- gate.resolve(json(account));await tick();assert.equal(f.get('fields').disabled,true);assert.equal(f.get('account-check').disabled,false);assert.equal(await f.host.check(),true);f.host.dispose();
+ assert.equal(await f.host.check(),false);assert.equal(await f.host.check(),false);assert.equal(f.calls.length,1);assert.equal(f.get('account-check').getAttribute('aria-disabled'),'true');
+ gate.resolve(json(account));await tick();assert.equal(f.get('fields').disabled,true);assert.equal(f.get('account-check').getAttribute('aria-disabled'),'false');assert.equal(await f.host.check(),true);f.host.dispose();
 });
 test('an expired queued browser lock cannot dispatch a late request',async()=>{
  const gate=deferred();const locks={request:async(_name,_options,work)=>{await gate.promise;return work();}};
