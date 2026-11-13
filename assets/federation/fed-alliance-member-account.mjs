@@ -36,8 +36,9 @@ export function mountAllianceAccountMemberPage(document, {
   const say = text => { status.textContent = text; };
   function setSignInPrompt(show) {
     if (!enabled) return;
-    accountLink.hidden = !show;
+    accountLink.hidden = !show && !signInHelp;
     if (signInHelp) {
+      accountLink.textContent = show ? 'Sign in to Federation' : 'Manage account or sign out';
       signInHelp.hidden = !show;
       button.hidden = !show;
       if (draftHelp) draftHelp.hidden = !show;
@@ -143,7 +144,8 @@ export function mountAllianceAccountMemberPage(document, {
     } else if (accountId && surface.hidden) { void verify(true); }
     else updateAccountButton();
   };
-  const onHide = () => close(), onShow = () => close();
+  const onHide = () => close();
+  const onShow = event => { if (event.persisted) close(); };
   const onMessage = event => {
     // A channel hint can only clear content, never establish a session.
     if (event.data?.type === 'signed-out' && typeof event.data.remoteRevoked === 'boolean') close();

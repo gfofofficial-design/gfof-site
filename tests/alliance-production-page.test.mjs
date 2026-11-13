@@ -7,22 +7,30 @@ import {profileDocument,profileHtml} from './alliance-profile-document.fixture.m
 const origin='https://galacticfederation.co';
 const json=(value,status=200)=>Response.json(value,{status,headers:{'cache-control':'private, no-store'}});
 const account={signedIn:true,user:{id:'11111111-1111-4111-8111-111111111111'}};
+const workspaceHtml=readFileSync(new URL('../member-workspace.html',import.meta.url),'utf8');
 function fixture(target,reply){
- const f=profileDocument();f.doc.location={origin:target,search:'?enabled=true',hash:'#member=on'};
+ const f=profileDocument(workspaceHtml);f.doc.location={origin:target,search:'?enabled=true',hash:'#member=on'};
  const calls=[],channel=new EventTarget();channel.close=()=>{};
- const page=mountProductionAlliancePage(f.doc,{events:new EventTarget(),createChannel:()=>channel,fetcher:async(url,init)=>{calls.push({url,init});return reply(url,init);}});
- return {...f,page,calls,channel};
+ const events=new EventTarget();
+ const page=mountProductionAlliancePage(f.doc,{events,createChannel:()=>channel,fetcher:async(url,init)=>{calls.push({url,init});return reply(url,init);}});
+ return {...f,page,calls,channel,events};
 }
 
 test('production page starts without a request; only the explicit session check can open controls',async()=>{
  const f=fixture(origin,()=>json(account));
  try{
+  f.events.dispatchEvent(new Event('pageshow'));
   assert.equal(f.calls.length,0);assert.equal(f.get('fields').disabled,true);assert.equal(f.get('member-surface').hidden,true);
+  assert.equal(f.get('account-status').textContent,'');
+  assert.equal(f.get('account-check').hidden,false);
   f.get('account-check').focus();
   await f.get('account-check').emit('click');assert.equal(f.calls.length,1);assert.equal(f.calls[0].url,origin+'/api/federation-account/session');
   assert.equal(f.calls[0].init.credentials,'same-origin');assert.equal(f.calls[0].init.redirect,'error');assert.equal(f.get('fields').disabled,false);
   assert.equal(f.get('service-title').textContent,'Member workspace');
   assert.equal(f.doc.activeElement,f.get('read'));
+  assert.equal(f.get('account-check').hidden,true);
+  assert.equal(f.get('account-link').hidden,false);
+  assert.equal(f.get('account-link').textContent,'Manage account or sign out');
   await f.get('account-check').emit('click');assert.equal(f.calls.length,1);
  }finally{f.page.dispose();}
 });
@@ -51,6 +59,7 @@ test('sign-out clears the enabled member surfaces and forged sign-in messages ca
   f.channel.dispatchEvent(new MessageEvent('message',{data:{type:'signed-out',remoteRevoked:true}}));
   assert.equal(f.get('name').value,'');assert.equal(f.get('fields').disabled,true);
   assert.equal(f.get('member-surface').hidden,true);assert.equal(f.doc.activeElement,f.get('account-link'));
+  assert.equal(f.get('account-link').textContent,'Sign in to Federation');
   f.channel.dispatchEvent(new MessageEvent('message',{data:{type:'signed-in',user:account.user}}));
   assert.equal(f.calls.length,1);assert.equal(f.get('fields').disabled,true);
  }finally{f.page.dispose();}
@@ -71,7 +80,7 @@ test('a member request requiring sign-in closes the whole workspace and returns 
 });
 
 test('workspace keeps the existing profile control IDs and the old preview remains closed',()=>{
- const html=readFileSync(new URL('../member-workspace.html',import.meta.url),'utf8');
+ const html=workspaceHtml;
  const ids=s=>[...s.matchAll(/\bid="([^"]+)"/g)].map(v=>v[1]);
  assert.equal(new Set(ids(html)).size,ids(html).length);
  for(const id of ids(profileHtml))assert.ok(ids(html).includes(id),id);
