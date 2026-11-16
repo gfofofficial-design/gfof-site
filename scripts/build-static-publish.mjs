@@ -46,6 +46,11 @@ export async function buildStaticPublish(root) {
     for(const entry of (await readdir(root,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))) {
       if(publicDirectories.has(entry.name)||(entry.isFile()&&!entry.name.startsWith('.')&&rootExtensions.has(extname(entry.name))))await copyEntry(entry.name);
     }
+    // Use the Command page for the default index and the configured root rewrite.
+    if(copied.includes('command-preview.html')) {
+      await cp(join(stage,'command-preview.html'),join(stage,'index.html'));
+      if(!copied.includes('index.html'))copied.push('index.html');
+    }
     await rm(output,{recursive:true,force:true});
     await rename(stage,output);
     return copied;
