@@ -73,6 +73,21 @@
           <div class="profile-reading">
             <section id="ap-current" class="profile-current" aria-labelledby="current-title" tabindex="-1" hidden><h2 id="current-title">Recorded profile</h2><p class="profile-help">Details from the last successful profile response. This view does not replace your draft or establish the outcome of an interrupted save.</p><dl id="ap-current-body"></dl></section>
             <section id="ap-comparison" class="profile-comparison" aria-labelledby="comparison-title" hidden><h2 id="comparison-title">Keep your draft. Check the current version.</h2><p>Compare the last read profile with your draft. Continuing keeps your text and uses that version for your next save. Nothing is submitted until you choose Save my profile.</p><button id="ap-accept" type="button">Keep my draft and continue</button></section>
+            <section id="ap-image" class="profile-current profile-image" aria-labelledby="profile-image-title" hidden>
+              <h2 id="profile-image-title">Profile image <span class="profile-help">(optional)</span></h2>
+              <p id="ap-image-help" class="profile-help">Your saved image is visible to you here. Choose a PNG, JPEG or WebP up to 2 MB.</p>
+              <canvas id="ap-image-preview" role="img" aria-label="Your saved profile image" width="1" height="1" hidden></canvas>
+              <div class="profile-toolbar">
+                <button id="ap-image-load" type="button" aria-disabled="true">Load my profile image</button>
+                <button id="ap-image-cancel" type="button" hidden>Cancel image request</button>
+              </div>
+              <label for="ap-image-file">Choose a profile image</label>
+              <input id="ap-image-file" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="ap-image-help" disabled>
+              <button id="ap-image-save" type="button" aria-disabled="true">Save image</button>
+              <label class="profile-check" for="ap-image-confirm"><input id="ap-image-confirm" type="checkbox" disabled> Remove my saved image</label>
+              <button id="ap-image-remove" type="button" aria-disabled="true">Remove image</button>
+              <p id="ap-image-status" class="profile-status" role="status" aria-live="polite" aria-atomic="true"></p>
+            </section>
             <section id="ap-removal" class="profile-removal" aria-label="Profile removal"><h2 id="removal-title">Remove your profile</h2><p>Removal controls are still in preparation. This draft form cannot send a removal request. Unlisting and removal are different actions.</p><button type="button" disabled>Remove my profile</button></section>
           </div>
         </div>

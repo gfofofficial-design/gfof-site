@@ -6,7 +6,8 @@ const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/;
 const SESSION = '/api/federation-account/session';
 
 export function mountAllianceAccountMemberPage(document, {
-  enabled = false, collaborationEnabled = false, feedbackEnabled = false, reportReviewEnabled = false, origin, fetcher = globalThis.fetch,
+  enabled = false, collaborationEnabled = false, feedbackEnabled = false, reportReviewEnabled = false,
+  imageEnabled = false, imageOptions, origin, fetcher = globalThis.fetch,
   locks = globalThis.navigator?.locks, events = globalThis,
   createChannel = name => new BroadcastChannel(name), timeoutMs = 12000,
 } = {}) {
@@ -24,7 +25,7 @@ export function mountAllianceAccountMemberPage(document, {
   const draftHelp = document.getElementById('ap-account-help');
   if (!button || !status || !surface || !firstProfileAction || !accountLink) throw Error('member_account_configuration');
   const page = mountAllianceMemberPage(document, {
-    enabled, collaborationEnabled, feedbackEnabled, reportReviewEnabled, origin, fetcher,
+    enabled, collaborationEnabled, feedbackEnabled, reportReviewEnabled, imageEnabled, imageOptions, origin, fetcher,
     onSignInRequired: () => close('Sign in again to reopen your profile setup. Earlier interrupted requests may still need reconciliation.'),
   });
   let disposed = false, epoch = 0, generation = 0, flight = null, channel = null, accountId = null, resumeFocus = null;

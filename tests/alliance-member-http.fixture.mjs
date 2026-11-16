@@ -6,6 +6,7 @@ import {createAllianceCreation} from '../lib/alliance-avatar-server/creation.mjs
 import {createAllianceAnchoredRemoval} from '../lib/alliance-avatar-server/anchored-removal.mjs';
 import {memoryRemovalJournal} from '../lib/alliance-avatar-server/removal.fixture.mjs';
 import {journalFixture,projectRef,epoch,zero} from '../lib/alliance-avatar-server/deletion-journal.fixture.mjs';
+import {createAllianceAvatarStorage} from '../lib/alliance-avatar-storage.mjs';
 const {createHandler}=createRequire(import.meta.url)('../netlify/functions/federation-account.cjs');
 export const origin='https://deploy-preview-124--gfof.netlify.app',url='https://abcdefghijklmnopqrst.supabase.co';
 export const actor='11111111-1111-4111-8111-111111111111',session='22222222-2222-4222-8222-222222222222';
@@ -13,9 +14,12 @@ export const operation=n=>`${String(n).padStart(8,'0')}-5555-4555-8555-555555555
 export const fields=()=>({name:'Synthetic member',community:'Example crew',bio:'A fictional member used only for source integration checks.',role:'builder',listed:false});
 const key='sb_publishable_synthetic_http_fixture_only';
 const reject=()=>{throw Object.assign(Error('Synthetic SQL refusal'),{outcome:'rejected'});};
-export function memberHttpFixture({authWork,afterFinish,timeoutMs}={}){
+export function memberHttpFixture({authWork,afterFinish,timeoutMs,imageEnabled=false,identity={actor,session,profileOffset:0}}={}){
+  const {actor,session,profileOffset}=identity;
   let profile=null,revision=0,version=0,incarnation=0,activeSession=true,permit=true,authStatus=200,closed=0;
+  let currentImage=null;
   const calls=[],operations=new Map(),saved=new Map(),routers=[];
+  const imageWrites=new Map(),storedImages=new Map();
   const signed=journalFixture({events:[]}),journal=memoryRemovalJournal();
   const append=journal.append.bind(journal);
   journal.append=async input=>{calls.push('journal-append');const result=await append(input);if(result.state==='recorded'&&!signed.history.some(r=>r.sequence===result.record.sequence))signed.history.push(result.record);return result;};
@@ -23,7 +27,7 @@ export function memberHttpFixture({authWork,afterFinish,timeoutMs}={}){
   journal.admit=async event=>{calls.push('admit');return {state:'admitted',event};};
   journal.admission=async event=>({state:'admitted',event});
   const serving={authorize:async()=>permit,close(){closed++;}};
-  const id=()=>`${String(30000000+incarnation).padStart(8,'0')}-3333-4333-8333-333333333333`;
+  const id=()=>`${String(30000000+profileOffset+incarnation).padStart(8,'0')}-3333-4333-8333-333333333333`;
   const context=(a,s)=>{assert.deepEqual([a,s],[actor,session]);if(!activeSession)reject();};
   const own=()=>{if(!profile)reject();};
   let anchor={format:1,memberProjectRef:projectRef,journalProjectRef:'uvwxyzabcdefghijklmn',epoch,sequence:0,sha256:zero};
@@ -32,7 +36,7 @@ export function memberHttpFixture({authWork,afterFinish,timeoutMs}={}){
     authorizeSession:async(a,s)=>{context(a,s);own();return {actorId:a,sessionId:s,profileId:profile.id};},
     profileRevisionReadSession:async(a,s)=>{context(a,s);return structuredClone({profile,revision});},
     directorySession:async(a,s,after,limit)=>{context(a,s);calls.push('private-directory');return {items:profile?.listed&&(!after||profile.id>after)?[{id:profile.id,name:profile.name,community:profile.community,bio:profile.bio,role:profile.role}].slice(0,limit):[],next:null};},
-    mineSession:async(a,s)=>{context(a,s);own();return {version,objectId:null,pending:[]};},
+    mineSession:async(a,s)=>{context(a,s);own();return {version,objectId:currentImage?.objectId??null,pending:[]};},
     prepareProfileSession:async(a,s)=>{context(a,s);return {kind:'profile',profileId:profile?.id||id(),objectId:null,operationId:null,version:0};},
     prepareImageSession:reject,creationStatusSession:reject,finishProfileSession:reject,finishImageSession:reject,
     finishProfileRevisionSession:async(a,s,plan,input,event,op,expected)=>{
@@ -52,20 +56,68 @@ export function memberHttpFixture({authWork,afterFinish,timeoutMs}={}){
     finishAnchoredRemovalSession:async(a,s,op,plan,receipt,proof)=>{
       context(a,s);assert.equal(proof.sha256,anchor.sha256);assert.equal(receipt.records[0].sha256,journal.rows.at(-1).sha256);
       const entry=operations.get(op);assert.deepEqual(entry.plan,plan);calls.push('finish-removal');
-      if(!entry.committed){own();assert.equal(profile.id,plan.profileId);profile=null;revision=0;version=0;incarnation++;entry.committed=true;}
+      if(!entry.committed){
+        own();assert.equal(profile.id,plan.profileId);currentImage=null;
+        if(plan.kind==='profile'){profile=null;revision=0;version=0;incarnation++;}else version++;
+        entry.committed=true;
+      }
       return {state:'committed',version:plan.version+1};
     },close(){closed++;},
   };
   for(const k of ['reserveSession','claimUploadSession','commitUploadSession','cancelReservedSession','operationReceiptSession','removeImageSession','settleUnpublished'])ledger[k]=reject;
+  const json=value=>Response.json(value);
+  const storage=imageEnabled?createAllianceAvatarStorage({enabled:true,origin:url,apiKey:key,bearerToken:'fictionalHeader.fictionalClaims.fictionalSignature',fetcher:async(endpoint,init)=>{
+    assert.equal(new URL(endpoint).origin,url);
+    const path=new URL(endpoint).pathname.split('/alliance-member-images-v1/').at(-1);
+    if(init.method==='POST'){
+      calls.push('image-upload');
+      storedImages.set(path,new Uint8Array(init.body));
+      return json({Key:'alliance-member-images-v1/'+path,Id:path.slice(-40,-4)});
+    }
+    assert.equal(init.method,'GET');calls.push('image-download');
+    const bytes=storedImages.get(path);
+    return bytes?new Response(bytes,{headers:{'Content-Type':'image/png'}}):new Response(null,{status:404});
+  }}):{upload:reject};
+  if(imageEnabled)Object.assign(ledger,{
+    async prepareProfileBoundImageSession(a,s,op,expectedVersion,expectedProfile){
+      context(a,s);own();if(profile.id!==expectedProfile||version!==expectedVersion)reject();
+      calls.push('prepare-image');
+      const plan={kind:'image',profileId:profile.id,objectId:op.replace(/-5555-4555-/,'-6666-4666-'),operationId:op,version};
+      imageWrites.set(op,{plan,state:'reserved'});return plan;
+    },
+    async finishImageSession(a,s,plan,event){
+      context(a,s);assert.equal(event.objectId,plan.objectId);assert.deepEqual(imageWrites.get(plan.operationId).plan,plan);
+      return {dispatch:true,state:'reserved',objectId:plan.objectId};
+    },
+    async cancelReservedSession(a,s,op){context(a,s);imageWrites.get(op).state='cancelled';return {state:'cancelled'};},
+    async claimUploadSession(a,s,op,descriptor){
+      context(a,s);const w=imageWrites.get(op);w.state='uploading';w.descriptor=descriptor;
+      return {dispatch:true,objectId:w.plan.objectId,key:`v1/${w.plan.profileId}/${w.plan.objectId}.png`};
+    },
+    async commitUploadSession(a,s,op,proof){
+      context(a,s);const w=imageWrites.get(op);w.state='committed';w.receipt=proof.receipt;
+      currentImage={state:'committed',profileId:profile.id,objectId:w.plan.objectId,key:w.receipt.key,writeSettled:true,
+        verified:true,receipt:w.receipt,descriptor:w.descriptor,deletionReceipt:null};
+      version++;calls.push('commit-image');return {state:'committed',version};
+    },
+    async operationReceiptSession(a,s,op){context(a,s);calls.push('image-status');return {state:imageWrites.get(op)?.state??'unknown'};},
+    async currentImageReceiptSession(a,s,objectId){context(a,s);if(currentImage?.objectId!==objectId)reject();return currentImage;},
+    async prepareProfileBoundImageRemovalSession(a,s,op,expectedVersion,expectedProfile){
+      context(a,s);own();if(profile.id!==expectedProfile||version!==expectedVersion||!currentImage)reject();
+      const plan={format:1,kind:'image',operationId:op,profileId:profile.id,version,objectIds:[currentImage.objectId]};
+      operations.set(op,{plan,committed:false});calls.push('prepare-image-removal');return {state:'prepared',plan};
+    },
+  });
   const creation=createAllianceCreation({enabled:true,profileRevisions:true,ledger,journal,serving});
   const anchorStore={read:async()=>structuredClone(anchor),advance:async value=>{anchor={...anchor,...value.through};return {state:'anchored',anchor:structuredClone(anchor)};}};
-  const removal=createAllianceAnchoredRemoval({enabled:true,profileBinding:true,projectRef,journalProjectRef:anchor.journalProjectRef,epoch,minimum:{sequence:0,sha256:zero},ledger,journal,serving,anchorStore});
+  const removal=createAllianceAnchoredRemoval({enabled:true,profileBinding:true,imageBinding:imageEnabled,projectRef,journalProjectRef:anchor.journalProjectRef,epoch,minimum:{sequence:0,sha256:zero},ledger,journal,serving,anchorStore});
   const token='fixtureHeader.'+Buffer.from(JSON.stringify({sub:actor,session_id:session,iss:url+'/auth/v1',role:'authenticated',aud:'authenticated',exp:Math.floor(Date.now()/1000)+300})).toString('base64url')+'.fixtureSignature';
   const provider=async(endpoint,init)=>{
     calls.push('auth');assert.equal(endpoint,url+'/auth/v1/user');assert.equal(init.headers.Authorization,'Bearer '+token);
     await authWork?.(init);return new Response(JSON.stringify({id:actor,email:'fixture@example.invalid',email_confirmed_at:'2026-10-21T12:00:00Z',is_anonymous:false,user_metadata:{admin:true}}),{status:authStatus});
   };
-  const options={enabled:true,origin,url,key,ledger,journal,serving,creation,removal,processor:{process:reject},storage:{upload:reject},fetcher:provider,...(timeoutMs?{timeoutMs}:{})};
+  const processor={process: imageEnabled?async bytes=>({bytes,mime:'image/png',width:1,height:1}):reject};
+  const options={enabled:true,imageEnabled,origin,url,key,ledger,journal,serving,creation,removal,processor,storage,fetcher:provider,...(timeoutMs?{timeoutMs}:{})};
   const http=createAllianceMemberHttp(options);routers.push(http);
   const account=createHandler({env:{FEDERATION_ACCOUNT_ENABLED:'true',FEDERATION_ACCOUNT_ORIGIN:origin,FEDERATION_AUTH_URL:url,FEDERATION_AUTH_PUBLISHABLE_KEY:key,CONTEXT:'deploy-preview',DEPLOY_PRIME_URL:origin},fetchImpl:provider});
   function request(path='/me',{method='GET',body,headers={},signal,cookie=true}={}){
@@ -82,5 +134,5 @@ export function memberHttpFixture({authWork,afterFinish,timeoutMs}={}){
   return {http,options,request,fetcher,token,calls,journal,anchorStore,get profile(){return structuredClone(profile);},get revision(){return revision;},get anchor(){return structuredClone(anchor);},get dependencyCloses(){return closed;},
     set activeSession(v){activeSession=v;},set permitted(v){permit=v;},set authStatus(v){authStatus=v;},
     another(){const router=createAllianceMemberHttp(options);routers.push(router);return router;},
-    close(){for(const r of routers)r.close();creation.close();removal.close();signed.client.close();}};
+    close(){for(const r of routers)r.close();creation.close();removal.close();storage.close?.();signed.client.close();}};
 }

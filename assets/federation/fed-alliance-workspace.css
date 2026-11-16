@@ -95,3 +95,32 @@
   border: 0;
   margin: 0;
 }
+
+.profile-image:not([hidden]) {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.profile-image canvas {
+  inline-size: min(100%, 128px);
+  block-size: auto;
+  border-radius: 8px;
+}
+
+.profile-image input[type="file"] {
+  max-inline-size: 100%;
+  min-height: 44px;
+  font: inherit;
+}
+
+.profile-image button {
+  max-inline-size: 100%;
+  min-height: 44px;
+}
+
+.profile-image :focus-visible {
+  outline: 2px solid var(--fed-command);
+  outline-offset: 3px;
+}
