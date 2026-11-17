@@ -44,7 +44,9 @@ export async function buildStaticPublish(root,{requireCanonicalHome=false}={}) {
   }
   try {
     for(const entry of (await readdir(root,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))) {
-      if(publicDirectories.has(entry.name)||(entry.isFile()&&!entry.name.startsWith('.')&&rootExtensions.has(extname(entry.name))))await copyEntry(entry.name);
+      const publicRootFile = entry.isFile() && !entry.name.startsWith('.') &&
+        (entry.name === 'sw.js' || rootExtensions.has(extname(entry.name)));
+      if (publicDirectories.has(entry.name) || publicRootFile) await copyEntry(entry.name);
     }
     // Deployed builds must never fall back to a legacy root index.
     if(requireCanonicalHome&&!copied.includes('command-preview.html')) {
