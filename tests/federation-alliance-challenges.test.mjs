@@ -12,12 +12,18 @@ test('the meme caption wraps words and preserves joined emoji in long captions',
   assert.deepEqual(captionLines('     ', measure, 10), []);
 });
 
-test('the meme download tracks the latest caption when encodes finish out of order or the visitor clears it', () => {
+const moonPage = 'https://galacticfederation.co/alliance-wrong-moon';
+
+function moonFixture() {
   const elements = new Map();
-  const document = {getElementById(id) {
+  const document = {querySelector(selector) {
+    assert.equal(selector, 'link[rel="canonical"]');
+    return {href: moonPage};
+  }, getElementById(id) {
     if (!elements.has(id)) elements.set(id, {
       value: '', setAttribute(key, value) { this[key] = value; },
       removeAttribute(key) { delete this[key]; },
+      focus() { document.activeElement = this; }, select() { this.selected = true; },
       addEventListener(type, fn) { this[type] = fn; }
     });
     return elements.get(id);
@@ -32,7 +38,12 @@ test('the meme download tracks the latest caption when encodes finish out of ord
   });
   canvas.toBlob = (callback, type) => { assert.equal(type, 'image/jpeg'); encoded.push(callback); };
   Object.assign(get('moon-art'), {complete: true, naturalHeight: 1024, naturalWidth: 1536, alt: 'Two space tugs.'});
-  document.defaultView = {getComputedStyle: () => ({direction: 'ltr'})};
+  document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}};
+  return {document, get, encoded, drawn, canvas};
+}
+
+test('the meme download tracks the latest caption when encodes finish out of order or the visitor clears it', () => {
+  const {document, get, encoded, drawn, canvas} = moonFixture();
   const caption = get('moon-caption');
   const save = get('moon-save');
   mountMoonEditor(document);
@@ -54,6 +65,64 @@ test('the meme download tracks the latest caption when encodes finish out of ord
   assert.equal(save.href, undefined);
   assert.equal(canvas.hidden, true);
   assert.equal(get('moon-art').hidden, false);
+});
+
+test('guests can share in plain text without waiting for art or posting their caption', async () => {
+  const {document, get, encoded} = moonFixture();
+  const art = get('moon-art');
+  art.complete = false;
+  const copies = [];
+  document.defaultView.navigator.clipboard = {writeText(text) { copies.push(text); }};
+  mountMoonEditor(document);
+  assert.equal(get('moon-controls').hidden, false);
+  assert.equal(get('moon-share').hidden, true);
+  const input = get('moon-caption');
+  input.value = '  Voss ordered the 🌕 & signed for it.  ';
+  input.input();
+  const expected = input.value.trim() + '\n\nThe Wrong Moon · Federation Alliance\n' + moonPage;
+  assert.equal(get('moon-share-text').value, expected);
+  assert.equal(get('moon-share').hidden, false);
+  assert.equal(get('moon-save')['aria-disabled'], 'true');
+  assert.equal(encoded.length, 0);
+  assert.deepEqual(copies, []);
+  await get('moon-copy').click();
+  assert.deepEqual(copies, [expected]);
+  assert.match(get('moon-copy-status').textContent, /Copied/);
+  art.complete = true;
+  art.load();
+  assert.equal(encoded.length, 1);
+  encoded[0](null);
+  assert.equal(get('moon-share-text').value, expected);
+  assert.match(get('moon-status').textContent, /as text/);
+  input.value = ' ';
+  input.input();
+  assert.equal(get('moon-share-text').value, '');
+  assert.equal(get('moon-share').hidden, true);
+  assert.equal(get('moon-share').open, false);
+});
+
+test('manual copy works without canvas or clipboard and a late rejection cannot select stale text', async () => {
+  const {document, get, canvas} = moonFixture();
+  canvas.getContext = () => null;
+  mountMoonEditor(document);
+  const input = get('moon-caption'), button = get('moon-copy'), text = get('moon-share-text');
+  input.value = 'Wrong orbit.';
+  input.input();
+  get('moon-share').open = true;
+  button.focus();
+  await button.click();
+  assert.equal(document.activeElement, text);
+  assert.equal(text.selected, true);
+  assert.match(get('moon-copy-status').textContent, /Copy command/);
+  let rejectWrite;
+  document.defaultView.navigator.clipboard = {writeText: () => new Promise((_, reject) => { rejectWrite = reject; })};
+  const pending = button.click();
+  input.value = 'New orbit.'; input.focus(); input.input();
+  rejectWrite(new Error('Clipboard denied'));
+  await pending;
+  assert.equal(document.activeElement, input);
+  assert.equal(get('moon-copy-status').textContent, '');
+  assert.ok(text.value.startsWith('New orbit.'));
 });
 const partner=()=>({id:'example',name:'Synthetic test community',symbol:'EX',badge:'EX',relationship:'partner',summary:'Synthetic fixture, not an actual partner.',mint:'So11111111111111111111111111111111111111112',website:'https://example.com/',evidence:'https://example.com/evidence',review:{consent:'confirmed',identity:'confirmed',publication:'approved',date:'2026-10-21',reference:'ALLIANCE-FIXTURE-0001'}});
 const record=()=>({id:'ARENA-0001',title:'Synthetic competition fixture',format:'creative',teams:['gfof','example'],status:'announced',startsAt:'2026-11-01T12:00:00.000Z',closesAt:'2026-11-15T12:00:00.000Z',updatedAt:'2026-10-21T18:00:00.000Z',rulesPath:'/arena/arena-0001-rules',resultsPath:null,review:{bothTeamsAccepted:true,publication:'approved',reviewedAt:'2026-10-21T17:00:00.000Z',publicReference:'ARENA-REVIEW-FIXTURE-0001'}});

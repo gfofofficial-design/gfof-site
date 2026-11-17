@@ -33,10 +33,13 @@ export function mountMoonEditor(document) {
   const controls = document.getElementById('moon-controls');
   const save = document.getElementById('moon-save');
   const status = document.getElementById('moon-status');
-  if (!context || typeof canvas.toBlob !== 'function') {
-    status.textContent = 'To add a caption, download the blank image and open it in your favorite meme editor.';
-    return;
-  }
+  const share = document.getElementById('moon-share');
+  const shareText = document.getElementById('moon-share-text');
+  const copyButton = document.getElementById('moon-copy');
+  const copyStatus = document.getElementById('moon-copy-status');
+  const publicLink = document.querySelector('link[rel="canonical"]').href;
+  const supportsExport = Boolean(context) && typeof canvas.toBlob === 'function';
+  let copyAttempt = 0;
   let fileUrl;
   let revision = 0;
 
@@ -48,9 +51,16 @@ export function mountMoonEditor(document) {
     save.setAttribute('aria-disabled', 'true');
     status.textContent = '';
     const text = caption.value.trim();
-    canvas.hidden = !text;
-    art.hidden = Boolean(text);
+    const canDraw = supportsExport && art.complete && art.naturalWidth > 0;
+    canvas.hidden = !text || !canDraw;
+    art.hidden = !canvas.hidden;
     if (!text) return;
+    if (!canDraw) {
+      if (!supportsExport || art.complete) {
+        status.textContent = 'Image export is unavailable. You can share your caption as text.';
+      }
+      return;
+    }
 
     const width = 1200;
     const artHeight = Math.round(width * art.naturalHeight / art.naturalWidth);
@@ -75,7 +85,7 @@ export function mountMoonEditor(document) {
     canvas.toBlob(blob => {
       if (current !== revision) return;
       if (!blob) {
-        status.textContent = 'The captioned image could not be saved. You can still download the blank image.';
+        status.textContent = 'The captioned image could not be saved. You can share your caption as text.';
         return;
       }
       fileUrl = URL.createObjectURL(blob);
@@ -84,13 +94,35 @@ export function mountMoonEditor(document) {
     }, 'image/jpeg', .9);
   }
 
-  function ready() {
-    controls.hidden = false;
-    caption.addEventListener('input', render);
+  function updateCaption() {
+    copyAttempt++;
+    copyStatus.textContent = '';
+    const text = caption.value.trim();
+    share.hidden = !text;
+    if (!text) share.open = false;
+    shareText.value = text ? text + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
     render();
   }
-  if (art.complete && art.naturalWidth > 0) ready();
-  else art.addEventListener('load', ready, {once: true});
+  copyButton.addEventListener('click', async () => {
+    if (!shareText.value) return;
+    const attempt = ++copyAttempt;
+    try {
+      await document.defaultView.navigator.clipboard.writeText(shareText.value);
+      if (attempt === copyAttempt) copyStatus.textContent = 'Copied. Paste it wherever you share with your crew.';
+    } catch {
+      if (attempt !== copyAttempt || !share.open) return;
+      copyStatus.textContent = 'Select the text above and use your device’s Copy command.';
+      if (document.activeElement === copyButton) {
+        shareText.focus();
+        shareText.select();
+      }
+    }
+  });
+  controls.hidden = false;
+  caption.addEventListener('input', updateCaption);
+  art.addEventListener('load', render, {once: true});
+  art.addEventListener('error', render, {once: true});
+  updateCaption();
 }
 
 if (typeof document !== 'undefined') mountMoonEditor(document);

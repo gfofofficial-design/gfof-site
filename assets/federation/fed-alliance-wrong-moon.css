@@ -28,7 +28,7 @@ h1 { max-width: 10ch; font-size: clamp(2.8rem, 5.2vw, 5rem); line-height: .96; l
 .frame img, .frame canvas { display: block; width: 100%; height: auto; }
 .editor { grid-area: editor; align-self: start; }
 label { display: block; font-weight: 700; }
-input {
+input, textarea {
   width: 100%; margin-top: .5rem; padding: .8rem .9rem; min-height: 48px;
   background: var(--fed-space-panel); color: var(--fed-text-display);
   border: 1px solid var(--fed-border-strong); border-radius: 6px; font: inherit;
@@ -43,6 +43,14 @@ input::placeholder { color: var(--fed-muted); }
   font: inherit; font-weight: 750; text-decoration: none;
 }
 .save[aria-disabled="true"] { background: var(--fed-space-panel); color: var(--fed-muted); box-shadow: inset 0 0 0 1px var(--fed-border-default); }
+.text-share { margin-top: .75rem; }
+.text-share summary { width: fit-content; min-height: 44px; padding-block: .55rem; color: var(--fed-command); cursor: pointer; }
+.text-share textarea { display: block; resize: vertical; }
+.text-share button {
+  margin-top: .65rem; min-height: 44px; padding: .5rem .9rem; border-radius: 6px;
+  background: var(--fed-space-panel); color: var(--fed-text-display); border: 1px solid var(--fed-border-strong);
+  font: inherit; font-weight: 650; cursor: pointer;
+}
 a { color: var(--fed-command); text-underline-offset: .18em; }
 .template, footer a { display: inline-flex; min-height: 44px; align-items: center; }
 .template { margin-top: .35rem; }
