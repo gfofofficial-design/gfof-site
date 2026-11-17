@@ -18,7 +18,7 @@ const serverLibraryFiles = new Set([
 
 // An explicit static output keeps Netlify's server bundle outside the publish
 // directory. Public docs and timestamp evidence remain intentionally available.
-export async function buildStaticPublish(root) {
+export async function buildStaticPublish(root,{requireCanonicalHome=false}={}) {
   root=resolve(root);
   const output=join(root,'dist');
   try { if((await lstat(output)).isSymbolicLink())throw Error('Publish output must not be a symbolic link.'); }
@@ -46,6 +46,10 @@ export async function buildStaticPublish(root) {
     for(const entry of (await readdir(root,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))) {
       if(publicDirectories.has(entry.name)||(entry.isFile()&&!entry.name.startsWith('.')&&rootExtensions.has(extname(entry.name))))await copyEntry(entry.name);
     }
+    // Deployed builds must never fall back to a legacy root index.
+    if(requireCanonicalHome&&!copied.includes('command-preview.html')) {
+      throw Error('command-preview.html is required for the site publish build.');
+    }
     // Use the Command page for the default index and the configured root rewrite.
     if(copied.includes('command-preview.html')) {
       await cp(join(stage,'command-preview.html'),join(stage,'index.html'));
@@ -58,6 +62,7 @@ export async function buildStaticPublish(root) {
 }
 
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
-  const files=await buildStaticPublish(resolve(fileURLToPath(new URL('..',import.meta.url))));
+  const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
+  const files=await buildStaticPublish(root,{requireCanonicalHome:true});
   console.log('Prepared '+files.length+' public files in dist/.');
 }

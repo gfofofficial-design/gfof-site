@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,readFile,readdir,rm,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
+import {spawnSync} from 'node:child_process';
 import {buildStaticPublish} from '../scripts/build-static-publish.mjs';
 
 test('production and branch deploys inherit the same restricted output as previews',async()=>{
@@ -78,4 +79,49 @@ test('Arena publishes only numbered rules and results pages, excluding drafts an
  const root=await fixture(t,files),copied=await buildStaticPublish(root);
  assert.deepEqual(copied,['arena/arena-0001-results.html','arena/arena-0001-rules.html']);
  for(const path of copied)assert.equal(await readFile(join(root,'dist',path),'utf8'),files[path]);
+});
+
+test('the canonical homepage replaces a legacy index byte-for-byte',async t=>{
+  const canonical='<!doctype html><title>Current Federation homepage</title>\n';
+  const root=await fixture(t,{'command-preview.html':canonical,'index.html':'legacy homepage'});
+  await buildStaticPublish(root,{requireCanonicalHome:true});
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),canonical);
+  assert.equal(await readFile(join(root,'dist/command-preview.html'),'utf8'),canonical);
+});
+
+test('requiring the canonical homepage refuses a legacy fallback and preserves previous output',async t=>{
+  const root=await fixture(t,{'index.html':'legacy homepage','dist/index.html':'previous published homepage'});
+  await assert.rejects(buildStaticPublish(root,{requireCanonicalHome:true}),/command-preview\.html.*required/);
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),'previous published homepage');
+  assert.ok(!(await readdir(root)).some(name=>name.startsWith('.static-publish-')));
+});
+
+async function cliFixture(t,files) {
+  const script=await readFile(new URL('../scripts/build-static-publish.mjs',import.meta.url),'utf8');
+  return fixture(t,{'scripts/build-static-publish.mjs':script,...files});
+}
+
+function publish(root) {
+  return spawnSync(process.execPath,['scripts/build-static-publish.mjs'],{cwd:root,encoding:'utf8',timeout:5000});
+}
+
+test('the configured publish command requires the canonical homepage by default',async t=>{
+  const root=await cliFixture(t,{'index.html':'legacy homepage','dist/index.html':'previous published homepage'});
+  const result=publish(root);
+  assert.equal(result.error,undefined);
+  assert.notEqual(result.status,0);
+  assert.match(result.stderr,/command-preview\.html.*required/);
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),'previous published homepage');
+  assert.ok(!(await readdir(root)).some(name=>name.startsWith('.static-publish-')));
+});
+
+test('the configured publish command stages the canonical homepage and its media unchanged',async t=>{
+  const files={'command-preview.html':'<video poster="/assets/poster.jpg" src="/assets/video.mp4"></video>\n',
+    'assets/poster.jpg':Buffer.from([0xff,0xd8,0xff,0xd9]),'assets/video.mp4':Buffer.from([0,0,0,8,102,116,121,112])};
+  const root=await cliFixture(t,{'index.html':'legacy homepage',...files});
+  const result=publish(root);
+  assert.equal(result.error,undefined);
+  assert.equal(result.status,0,result.stderr);
+  for(const path of Object.keys(files))assert.deepEqual(await readFile(join(root,'dist',path)),await readFile(join(root,path)));
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),files['command-preview.html']);
 });
