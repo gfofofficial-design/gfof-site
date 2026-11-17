@@ -40,8 +40,15 @@
         <div id="moon-controls" hidden>
           <label for="moon-caption">Your excuse to Admiral Voss</label>
           <input id="moon-caption" type="text" maxlength="90" dir="auto" placeholder="It followed us home, sir." aria-describedby="caption-help">
-          <p class="help" id="caption-help">Up to 90 characters. Your caption stays on this device.</p>
+          <p class="help" id="caption-help">Up to 90 characters. You choose what to share.</p>
           <a class="save" id="moon-save" role="link" aria-disabled="true" download="the-wrong-moon.jpg">Save my meme</a>
+          <details id="moon-share" class="text-share" hidden>
+            <summary>Share as text</summary>
+            <label for="moon-share-text">Your caption and the public activity link</label>
+            <textarea id="moon-share-text" rows="4" dir="auto" readonly></textarea>
+            <button type="button" id="moon-copy">Copy caption and link</button>
+            <p class="status" id="moon-copy-status" role="status"></p>
+          </details>
         </div>
         <a class="template" download="the-wrong-moon-template.jpg" href="/assets/federation/fed-alliance-wrong-moon.jpg">Download the blank image</a>
         <p id="moon-status" class="status" role="status"></p>
