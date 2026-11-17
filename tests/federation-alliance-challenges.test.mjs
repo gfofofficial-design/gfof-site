@@ -2,6 +2,59 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync} from 'node:fs';
 import {PUBLISHED_CHALLENGES,publishedChallenges,mountChallengeBoard} from '../assets/federation/fed-alliance-challenges.mjs';
+import {captionLines, mountMoonEditor} from '../assets/federation/fed-alliance-wrong-moon.mjs';
+
+test('the meme caption wraps words and preserves joined emoji in long captions', () => {
+  const glyphs = new Intl.Segmenter(undefined, {granularity: 'grapheme'});
+  const measure = value => Array.from(glyphs.segment(value)).length;
+  assert.deepEqual(captionLines('   It followed us home.  ', measure, 10), ['It', 'followed', 'us home.']);
+  assert.deepEqual(captionLines('🚀👩‍🚀🌕🛰️', measure, 2), ['🚀👩‍🚀', '🌕🛰️']);
+  assert.deepEqual(captionLines('     ', measure, 10), []);
+});
+
+test('the meme download tracks the latest caption when encodes finish out of order or the visitor clears it', () => {
+  const elements = new Map();
+  const document = {getElementById(id) {
+    if (!elements.has(id)) elements.set(id, {
+      value: '', setAttribute(key, value) { this[key] = value; },
+      removeAttribute(key) { delete this[key]; },
+      addEventListener(type, fn) { this[type] = fn; }
+    });
+    return elements.get(id);
+  }};
+  const get = document.getElementById.bind(document);
+  const encoded = [];
+  const drawn = [];
+  const canvas = get('moon-preview');
+  canvas.getContext = () => ({
+    measureText: text => ({width: text.length * 25}),
+    drawImage() {}, fillRect() {}, fillText(line) { drawn.push(line); }
+  });
+  canvas.toBlob = (callback, type) => { assert.equal(type, 'image/jpeg'); encoded.push(callback); };
+  Object.assign(get('moon-art'), {complete: true, naturalHeight: 1024, naturalWidth: 1536, alt: 'Two space tugs.'});
+  document.defaultView = {getComputedStyle: () => ({direction: 'ltr'})};
+  const caption = get('moon-caption');
+  const save = get('moon-save');
+  mountMoonEditor(document);
+  assert.equal(get('moon-controls').hidden, false);
+  assert.equal(save['aria-disabled'], 'true');
+  caption.value = 'Wrong address.'; caption.input();
+  caption.value = 'It followed us home.'; caption.input();
+  const file = new Blob(['image']);
+  encoded[1](file);
+  const currentUrl = save.href;
+  assert.match(currentUrl, /^blob:/);
+  assert.equal(drawn.at(-1), caption.value);
+  assert.match(canvas['aria-label'], /It followed us home/);
+  encoded[0](file);
+  assert.equal(save.href, currentUrl);
+  caption.value = 'Another draft.'; caption.input();
+  caption.value = ''; caption.input();
+  encoded[2](file);
+  assert.equal(save.href, undefined);
+  assert.equal(canvas.hidden, true);
+  assert.equal(get('moon-art').hidden, false);
+});
 const partner=()=>({id:'example',name:'Synthetic test community',symbol:'EX',badge:'EX',relationship:'partner',summary:'Synthetic fixture, not an actual partner.',mint:'So11111111111111111111111111111111111111112',website:'https://example.com/',evidence:'https://example.com/evidence',review:{consent:'confirmed',identity:'confirmed',publication:'approved',date:'2026-10-21',reference:'ALLIANCE-FIXTURE-0001'}});
 const record=()=>({id:'ARENA-0001',title:'Synthetic competition fixture',format:'creative',teams:['gfof','example'],status:'announced',startsAt:'2026-11-01T12:00:00.000Z',closesAt:'2026-11-15T12:00:00.000Z',updatedAt:'2026-10-21T18:00:00.000Z',rulesPath:'/arena/arena-0001-rules',resultsPath:null,review:{bothTeamsAccepted:true,publication:'approved',reviewedAt:'2026-10-21T17:00:00.000Z',publicReference:'ARENA-REVIEW-FIXTURE-0001'}});
 const pub=r=>publishedChallenges([r],[partner()]);
