@@ -4,6 +4,7 @@ import {mkdtemp,mkdir,writeFile,readFile,readdir,rm,symlink} from 'node:fs/promi
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
+import {runInNewContext} from 'node:vm';
 import {buildStaticPublish} from '../scripts/build-static-publish.mjs';
 
 test('production and branch deploys inherit the same restricted output as previews',async()=>{
@@ -124,4 +125,37 @@ test('the configured publish command stages the canonical homepage and its media
   assert.equal(result.status,0,result.stderr);
   for(const path of Object.keys(files))assert.deepEqual(await readFile(join(root,'dist',path)),await readFile(join(root,path)));
   assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),files['command-preview.html']);
+});
+
+test('the legacy root worker is published alongside the app worker while other root scripts stay private', async t => {
+  const root = await fixture(t, {
+    'sw.js': 'root recovery worker',
+    'app/sw.js': 'app offline worker',
+    'operator.js': 'private root script',
+    'operator.mjs': 'private root module'
+  });
+  const files = await buildStaticPublish(root);
+  assert.deepEqual(files.sort(), ['app/sw.js', 'sw.js']);
+  assert.equal(await readFile(join(root, 'dist/sw.js'), 'utf8'), 'root recovery worker');
+  assert.equal(await readFile(join(root, 'dist/app/sw.js'), 'utf8'), 'app offline worker');
+});
+
+test('the legacy worker retires its own registration and lets the browser load pages normally', async () => {
+  const script = await readFile(new URL('../sw.js', import.meta.url), 'utf8');
+  const handlers = new Map();
+  const calls = [];
+  const worker = {
+    addEventListener(type, handler) { handlers.set(type, handler); },
+    async skipWaiting() { calls.push('skipWaiting'); },
+    registration: { async unregister() { calls.push('unregister'); return true; } }
+  };
+  runInNewContext(script, {self: worker});
+  assert.deepEqual([...handlers.keys()].sort(), ['activate', 'install']);
+  for (const type of ['install', 'activate']) {
+    const pending = [];
+    handlers.get(type)({waitUntil(work) { pending.push(work); }});
+    assert.equal(pending.length, 1);
+    await Promise.all(pending);
+  }
+  assert.deepEqual(calls, ['skipWaiting', 'unregister']);
 });
