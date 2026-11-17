@@ -100,18 +100,6 @@
     outline: 3px solid var(--fed-command);
     outline-offset: -3px;
   }
-  .home-v2 .home-arrival-media figcaption {
-    margin: 0;
-    padding: 12px 14px;
-    border-top: 1px solid var(--fed-border-default);
-    color: var(--fed-text);
-    font: 14px/1.5 var(--font-fed-body);
-  }
-  .home-v2 .home-arrival-media figcaption strong {
-    display: block;
-    color: var(--fed-text-display);
-    font-weight: 600;
-  }
   .home-v2 .home-tool-card > .home-service-status { align-self: flex-start; margin-bottom: 14px; }
   .home-v2 .home-membership .home-build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .home-v2 #home-title, .home-v2 #start-title, .home-v2 #account-path-title { scroll-margin-top: 16px; }
@@ -221,17 +209,26 @@
       <p class="home-reassurance">The member Dashboard and public enrollment are closed. Public tools work without an account.</p>
     </div>
     <figure class="home-arrival-media">
-      <video controls loop muted playsinline preload="none" width="1232" height="736"
+      <video autoplay controls loop muted playsinline preload="metadata" width="1232" height="736"
         poster="/assets/federation/federation-arrival-20261117.jpg"
-        aria-label="Arrival at Federation Station"
-        aria-describedby="home-arrival-caption">
+        aria-label="Arrival at Federation Station">
         <source src="/assets/federation/federation-arrival-20261117.mp4" type="video/mp4">
         <a href="/assets/federation/federation-arrival-20261117.mp4">Play Arrival at Federation Station</a>.
       </video>
-      <figcaption id="home-arrival-caption">
-        <strong>Arrival at Federation Station</strong>
-        15-second silent film. Press Play to start; loops until paused.
-      </figcaption>
+      <script>
+      (function () {
+        var video = document.currentScript.previousElementSibling;
+        var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        function respectReducedMotion() {
+          if (motion.matches) {
+            video.autoplay = false;
+            video.pause();
+          }
+        }
+        respectReducedMotion();
+        motion.addEventListener('change', respectReducedMotion);
+      })();
+      </script>
     </figure>
   </div>
 </section>
