@@ -106,3 +106,11 @@ test('sign-in, dashboard and Alliance entry points lead to the connected workspa
  }
  assert.match(account,/Competition enrollment remains closed/);
 });
+
+test('the member help link focuses its named section without adding a tab stop', () => {
+  const html = readFileSync(new URL('../member-workspace.html', import.meta.url), 'utf8');
+  const helpSection = html.match(/<section\b[^>]*\bid="member-help"[^>]*>/)?.[0] ?? '';
+  assert.match(html, /href="#member-help"/);
+  assert.match(helpSection, /\baria-labelledby="member-help-title"/);
+  assert.match(helpSection, /\btabindex="-1"/);
+});

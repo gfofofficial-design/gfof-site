@@ -1,3 +1,5 @@
+"$schema" = "https://open-api.netlify.com/netlify.schema.json"
+
 # Galactic Federation of Finance — Netlify configuration
 # Security headers, API redirects, clean-URL rewrites.
 
@@ -25,7 +27,7 @@
 
     # Permissions-Policy — opt out of browser APIs the site does not use.
     # If any future feature needs one of these, remove from this list.
-    Permissions-Policy = "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), xr-spatial-tracking=()"
+    Permissions-Policy = "accelerometer=(), autoplay=(self), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), xr-spatial-tracking=()"
 
     # COOP — hardens against cross-origin window attacks (spectre class,
     # cross-origin window.opener abuse). "same-origin-allow-popups" keeps
