@@ -34,6 +34,7 @@
      trigger, scroll lock, aria semantics, reduced-motion handled in CSS. */
   function createDrawer(drawerEl, scrimEl) {
     var lastTrigger = null;
+    var returnFocus = null;
 
     function trap(e) {
       if (e.key === "Escape") { close(); return; }
@@ -50,8 +51,9 @@
       }
     }
 
-    function open(trigger) {
+    function open(trigger, returnTo) {
       lastTrigger = trigger || document.activeElement;
+      returnFocus = returnTo || lastTrigger;
       drawerEl.setAttribute("data-open", "true");
       if (scrimEl) scrimEl.setAttribute("data-open", "true");
       drawerEl.removeAttribute("aria-hidden");
@@ -71,9 +73,10 @@
       document.removeEventListener("keydown", trap);
       if (lastTrigger) {
         if (lastTrigger.setAttribute) lastTrigger.setAttribute("aria-expanded", "false");
-        if (lastTrigger.focus) lastTrigger.focus();
       }
+      if (returnFocus && returnFocus.focus) returnFocus.focus();
       lastTrigger = null;
+      returnFocus = null;
     }
 
     if (scrimEl) scrimEl.addEventListener("click", close);
@@ -122,8 +125,22 @@
     }
 
     wire("[data-fed-status-trigger]", "[data-fed-drawer='status']", "[data-fed-scrim='status']");
-    wire("[data-fed-voss-trigger]",   "[data-fed-drawer='voss']",   "[data-fed-scrim='voss']");
-    wire("[data-fed-more-trigger]",   "[data-fed-drawer='more']",   "[data-fed-scrim='more']");
+    var voss = wire("[data-fed-voss-trigger]", "[data-fed-drawer='voss']", "[data-fed-scrim='voss']");
+    var more = wire("[data-fed-more-trigger]", "[data-fed-drawer='more']", "[data-fed-scrim='more']");
+    if (voss) {
+      document.querySelectorAll("[data-fed-voss-trigger-2], [data-fed-voss-mobile-trigger]").forEach(function (trigger) {
+        trigger.setAttribute("aria-haspopup", "dialog");
+        trigger.setAttribute("aria-expanded", "false");
+        trigger.addEventListener("click", function () {
+          var returnTo = trigger;
+          if (more && trigger.closest("[data-fed-drawer='more'][data-open='true']")) {
+            more.close();
+            returnTo = document.activeElement;
+          }
+          voss.open(trigger, returnTo);
+        });
+      });
+    }
 
     /* Footer year — static markup should carry a real year as fallback */
     var yearEl = document.querySelector("[data-fed-year]");

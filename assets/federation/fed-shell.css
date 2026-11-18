@@ -575,6 +575,15 @@ body.fed-scroll-locked { overflow: hidden; }
   top: var(--voss-viewport-top, 0px);
   height: 100vh;
   height: var(--voss-viewport-height, 100dvh);
+  transform: none;
+  opacity: 0;
+  transition: none;
+}
+.fed-drawer[data-fed-drawer="voss"][data-open="true"] { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .fed-drawer[data-fed-drawer="voss"] {
+    transition: opacity var(--motion-interface) var(--ease-fed);
+  }
 }
 .fed-drawer[data-fed-drawer="voss"] .fed-drawer__body { min-height: 0; }
 .fed-voss-composer {

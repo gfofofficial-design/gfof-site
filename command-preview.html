@@ -745,18 +745,7 @@ window.FED_SHELL_CONFIG = {
 /* Voss communications: all triggers share one drawer and one bounded history. */
 (function(){
   var d = document.querySelector('[data-fed-drawer="voss"]');
-  var s = document.querySelector('[data-fed-scrim="voss"]');
   if (!d || !window.fedShell) return;
-
-  var drawer = window.fedShell.createDrawer(d, s);
-  document.querySelectorAll('[data-fed-voss-trigger-2], [data-fed-voss-mobile-trigger]').forEach(function(t){
-    t.setAttribute('aria-haspopup','dialog');
-    t.addEventListener('click', function(){
-      var more = document.querySelector('[data-fed-drawer="more"]');
-      if (more) more.querySelector('[data-drawer-close]').click();
-      window.setTimeout(function(){ drawer.open(t); }, more ? 180 : 0);
-    });
-  });
 
   var form = d.querySelector('[data-voss-form]');
   var input = d.querySelector('[data-voss-input]');
