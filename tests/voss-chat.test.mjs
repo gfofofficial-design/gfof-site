@@ -96,13 +96,20 @@ test('account guidance supports existing email sign-in without requesting creden
 test('guest questions return reviewed answers with the relevant public destination', async () => {
   for (const [question, page] of [
     ['How do I make a meme?', '/alliance-wrong-moon'],
-    ['How do I bring my project?', '/alliance-pilot-briefs']
+    ['How do I bring my project?', '/alliance-pilot-briefs'],
+    ['How do we submit our project?', '/alliance-pilot-briefs'],
+    ['How do I make a meme or bring my project?', '/alliance-wrong-moon']
   ]) {
     const {status, body} = await ask(question);
     assert.equal(status, 200);
     assert.equal(body.source, 'reviewed_brief');
     assert.equal(body.sourcePage, page);
     assert.match(body.reply, /as a guest/);
-    assert.match(body.reply, /still to be confirmed/);
+    assert.equal(body.reviewedOn, '2026-11-18');
+    if (page === '/alliance-pilot-briefs') {
+      assert.match(body.reply, /^Start with the project challenge briefs/);
+      assert.match(body.reply, /private review/);
+      assert.match(body.reply, /still to be confirmed/);
+    }
   }
 });
