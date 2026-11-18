@@ -57,18 +57,23 @@ function moonFixture() {
   }};
   const get = document.getElementById.bind(document);
   const encoded = [];
+  const pngEncodes = [];
   const drawn = [];
   const canvas = get('moon-preview');
   canvas.getContext = () => ({
     measureText: text => ({width: text.length * 25}),
     drawImage() { drawn.length = 0; }, fillRect() {}, fillText(line) { drawn.push(line); }
   });
-  canvas.toBlob = (callback, type) => { assert.equal(type, 'image/jpeg'); encoded.push(callback); };
+  canvas.toBlob = (callback, type) => {
+    if (type === 'image/png') pngEncodes.push(callback);
+    else { assert.equal(type, 'image/jpeg'); encoded.push(callback); }
+  };
   Object.assign(get('moon-art'), {complete: true, naturalHeight: 1024, naturalWidth: 1536, alt: 'Two space tugs.'});
   Object.assign(get('moon-address'), {checked: true, value: makerAddress});
   get('moon-save').download = 'the-wrong-moon.jpg';
-  document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}, File};
-  return {document, get, encoded, drawn, canvas};
+  class ClipboardItem { constructor(data) { this.data = data; } }
+  document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}, File, ClipboardItem};
+  return {document, get, encoded, pngEncodes, drawn, canvas};
 }
 
 test('the meme download tracks the latest caption when encodes finish out of order or the visitor clears it', () => {
@@ -256,8 +261,66 @@ test('cancel and retry work, concurrent choosers are blocked and an old result c
   assert.equal(status.textContent, '');
   const third = button.click();
   calls[2].reject(new DOMException('Denied', 'NotAllowedError')); await third;
-  assert.match(status.textContent, /Save my meme or Share as text/);
+  assert.match(status.textContent, /Save my meme.*Share as text/);
   assert.ok(resolveObjectURL(get('moon-save').href));
+});
+
+test('if the chooser is blocked, the same focused button offers to copy the picture on a second click', async () => {
+  const {document, get, encoded, pngEncodes} = moonFixture();
+  const button = get('moon-share-image'), caption = get('moon-caption');
+  let reason = 'AbortError', writes = 0, copied;
+  document.defaultView.navigator = {
+    canShare: () => true,
+    share() { throw new DOMException('Chooser closed', reason); },
+    clipboard: {async write([item]) {
+      writes++;
+      assert.deepEqual(Object.keys(item.data), ['image/png']);
+      copied = await item.data['image/png'];
+    }}
+  };
+  mountMoonEditor(document);
+  caption.value = 'This is our spare moon.'; caption.input();
+  encoded[0](new Blob(['jpeg'], {type: 'image/jpeg'}));
+  button.focus(); await button.click();
+  assert.equal(button.textContent, 'Share image');
+  reason = 'NotAllowedError'; await button.click();
+  assert.equal(button.textContent, 'Copy image');
+  assert.equal(document.activeElement, button);
+  assert.match(get('moon-status').textContent, /Choose Copy image/);
+  assert.equal(writes, 0);
+  assert.equal(pngEncodes.length, 0);
+  const pending = button.click();
+  assert.equal(writes, 1);
+  assert.equal(pngEncodes.length, 1);
+  const png = new Blob(['png'], {type: 'image/png'});
+  pngEncodes[0](png); await pending;
+  assert.equal(copied, png);
+  assert.match(get('moon-status').textContent, /Image copied/);
+  caption.value = 'Another moon.'; caption.input();
+  encoded[1](new Blob(['new JPEG'], {type: 'image/jpeg'}));
+  assert.equal(button.textContent, 'Copy image');
+});
+
+test('clipboard-only browsers can copy on demand, recover from a failed encode and ignore a stale completion', async () => {
+  const {document, get, encoded, pngEncodes} = moonFixture();
+  const button = get('moon-share-image'), caption = get('moon-caption'), status = get('moon-status');
+  document.defaultView.navigator.clipboard = {async write([item]) { await item.data['image/png']; }};
+  mountMoonEditor(document);
+  caption.value = 'Moon on loan.'; caption.input();
+  assert.equal(button.hidden, true);
+  const jpeg = new Blob(['jpeg'], {type: 'image/jpeg'});
+  encoded[0](jpeg);
+  assert.equal(button.hidden, false);
+  assert.equal(button.textContent, 'Copy image');
+  const first = button.click();
+  pngEncodes[0](null); await first;
+  assert.match(status.textContent, /Save my meme.*Share as text/);
+  const second = button.click();
+  caption.value = 'A borrowed moon.'; caption.input();
+  encoded[1](jpeg);
+  pngEncodes[1](new Blob(['png'], {type: 'image/png'})); await second;
+  assert.equal(status.textContent, '');
+  assert.equal(button['aria-disabled'], undefined);
 });
 
 test('manual copy works without canvas or clipboard and a late rejection cannot select stale text', async () => {

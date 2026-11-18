@@ -41,26 +41,41 @@ export function mountMoonEditor(document) {
   const copyButton = document.getElementById('moon-copy');
   const copyStatus = document.getElementById('moon-copy-status');
   const publicLink = document.querySelector('link[rel="canonical"]').href;
-  const {navigator, File} = document.defaultView;
+  const {navigator, File, ClipboardItem} = document.defaultView;
+  const canCopyImage = typeof ClipboardItem === 'function' && typeof navigator.clipboard?.write === 'function';
   const supportsExport = Boolean(context) && typeof canvas.toBlob === 'function';
   let copyAttempt = 0;
   let fileUrl;
   let shareData;
-  let sharePending = false;
+  let imageActionPending = false;
+  let preferCopy = false;
   let revision = 0;
 
-  function prepareImageShare(blob) {
-    if (!shareImage || blob.type !== 'image/jpeg' || typeof File !== 'function' ||
+  function fileShareData(blob) {
+    if (preferCopy || blob.type !== 'image/jpeg' || typeof File !== 'function' ||
         typeof navigator.canShare !== 'function' || typeof navigator.share !== 'function') return;
     try {
       const data = {files: [new File([blob], save.download, {type: blob.type})]};
-      if (navigator.canShare(data)) {
-        shareData = data;
-        shareImage.hidden = false;
-      }
+      if (navigator.canShare(data)) return data;
     } catch {
       // A browser can deny file sharing while still supporting downloads.
     }
+  }
+
+  function updateImageAction() {
+    if (!shareImage) return;
+    shareImage.hidden = !fileUrl || (!shareData && !canCopyImage);
+    shareImage.textContent = shareData ? 'Share image' : 'Copy image';
+  }
+
+  function copyImage() {
+    // Start the clipboard write during the click. Encode the canvas only when someone copies it.
+    const png = new Promise((resolve, reject) => canvas.toBlob(blob => {
+      if (blob) resolve(blob);
+      else reject(new Error('PNG export failed'));
+    }, 'image/png'));
+    const item = new ClipboardItem({'image/png': png});
+    return navigator.clipboard.write([item]);
   }
 
   function render() {
@@ -68,7 +83,7 @@ export function mountMoonEditor(document) {
     if (fileUrl) URL.revokeObjectURL(fileUrl);
     fileUrl = undefined;
     shareData = undefined;
-    if (shareImage) shareImage.hidden = true;
+    updateImageAction();
     save.removeAttribute('href');
     save.setAttribute('aria-disabled', 'true');
     status.textContent = '';
@@ -121,7 +136,8 @@ export function mountMoonEditor(document) {
       fileUrl = URL.createObjectURL(blob);
       save.href = fileUrl;
       save.removeAttribute('aria-disabled');
-      prepareImageShare(blob);
+      if (shareImage) shareData = fileShareData(blob);
+      updateImageAction();
     }, 'image/jpeg', .9);
   }
 
@@ -135,22 +151,30 @@ export function mountMoonEditor(document) {
     render();
   }
   shareImage?.addEventListener('click', async () => {
-    if (!shareData || sharePending) return;
+    if (!fileUrl || imageActionPending || (!shareData && !canCopyImage)) return;
+    const current = revision;
     const data = shareData;
-    sharePending = true;
+    imageActionPending = true;
     shareImage.setAttribute('aria-disabled', 'true');
     status.textContent = '';
     try {
-      // Open the chooser directly in the click so the browser retains user activation.
-      await navigator.share(data);
-      if (data === shareData) status.textContent = 'Sharing options opened.';
+      if (data) await navigator.share(data);
+      else await copyImage();
+      if (current === revision) status.textContent = data ? 'Sharing options opened.' : 'Image copied. Paste it into your chat.';
     } catch (error) {
-      if (data === shareData) {
-        status.textContent = error?.name === 'AbortError' ? 'Sharing canceled.' :
-          'Image sharing is unavailable. Use Save my meme or Share as text.';
+      if (current !== revision) return;
+      if (data && error?.name === 'AbortError') {
+        status.textContent = 'Sharing canceled.';
+      } else if (data && canCopyImage) {
+        preferCopy = true;
+        shareData = undefined;
+        updateImageAction();
+        status.textContent = 'Sharing is unavailable. Choose Copy image, then paste it into your chat.';
+      } else {
+        status.textContent = 'Use Save my meme to download your picture, or Share as text for the caption.';
       }
     } finally {
-      sharePending = false;
+      imageActionPending = false;
       shareImage.removeAttribute('aria-disabled');
     }
   });
