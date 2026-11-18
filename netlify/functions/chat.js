@@ -128,13 +128,13 @@ const reviewedBrief = (question) => {
     return {sourcePage: '/alliance-pilot-briefs', reply: 'Explore the Federation Alliance at /alliance and proposed challenge formats at /alliance-pilot-briefs. Creative Clash, Research Showdown and Builder Battle have discussion briefs, but competitions are not open: no teams, dates, judges or prizes are confirmed. The project worksheet prepares a local draft; sending a request starts private review, not enrollment or publication. Member profiles and private collaboration remain a closed development build.'};
   }
   if (/\b(sign[ -]?in|log[ -]?in|register|registration|create an account|email code)\b/.test(q)) {
-    return {sourcePage: '/account', reply: 'Existing Federation accounts can sign in with an emailed eight-digit code at /account. Public registration remains closed. The Account page shows the sign-in methods currently available. Enter the code only on the Federation account page, never in this chat. Signing in does not connect a wallet, grant token permissions, sync Journey progress or enroll you in the Alliance. Public tools remain available without an account.'};
+    return {sourcePage: '/account', reviewedOn: '2026-11-18', reply: 'Existing Federation accounts can sign in with an emailed eight-digit code at /account. Public registration remains closed. The Account page shows the sign-in methods currently available. Enter the code only on the Federation account page, never in this chat. Signing in does not connect a wallet, grant token permissions, sync Journey progress or enroll you in the Alliance. Public tools remain available without an account.'};
   }
   if (/\b(dashboard|command deck)\b/.test(q)) {
     return {sourcePage: '/command-deck', reply: 'The public read-only dashboard is at /command-deck. It reads public Solana wallet balances, supported reference prices and current-mint locks, alongside device-local missions. It does not sign transactions, prove wallet ownership or open staking or lending. Existing accounts can use email-code sign-in at /account; public registration and account-backed Alliance membership remain closed.'};
   }
   if (/\b(lens|dossier|report guide|explain (this|the|a) report)\b/.test(q)) {
-    return {sourcePage: 'https://dossiertrack.co/token-structure', reply: 'Dossier’s read-only Lens beta is at https://dossiertrack.co/token-structure. Its free plain-language guide now highlights missing evidence and partial coverage, with source fields and slots beside the explanations. It uses reviewed wording without an AI model, account, upload or additional chain read. A capture is not proof of token safety, sales, bundles or independent holders. Optional AI selection is prepared but disabled; Program 01 alerts and paid tiers remain closed.'};
+    return {sourcePage: 'https://dossiertrack.co/token-structure', reviewedOn: '2026-11-18', reply: 'Dossier’s read-only Lens beta is at https://dossiertrack.co/token-structure. Its free plain-language guide now highlights missing evidence and partial coverage, with source fields and slots beside the explanations. It uses reviewed wording without an AI model, account, upload or additional chain read. A capture is not proof of token safety, sales, bundles or independent holders. Optional AI selection is prepared but disabled; Program 01 alerts and paid tiers remain closed.'};
   }
   if (/\b(locks?|locked|streamflow)\b/.test(q) && !/\bwallets?\b/.test(q)) {
     return {sourcePage: '/treasury', reply: 'The October 8 verification recorded three current-mint Streamflow contracts scheduling 100M GFOF, 10% of minted supply. Check /treasury for contract links, dates and a fresh read; that dated schedule is not a current balance guarantee. The former mint has a separate historical lock record. Supply locks do not fund or activate staking.'};
@@ -224,12 +224,20 @@ export default async function (request, context) {
   }
 
   const question = safeMessages[safeMessages.length - 1].content;
-  if (/\b(wrong moon|make (?:a |my )?meme|bring my project)\b/i.test(question)) {
+  const memeQuestion = /\b(wrong moon|(?:make|create|share) (?:a |my )?meme)\b/i.test(question);
+  const projectQuestion = /\b(?:bring|submit) (?:my|our|a) project\b/i.test(question);
+  if (projectQuestion && !memeQuestion) {
     return jsonResponse({
-      code: 'OK',
-      source: 'reviewed_brief',
-      sourcePage: /bring my project/i.test(question) && !/meme|wrong moon/i.test(question) ? '/alliance-pilot-briefs' : '/alliance-wrong-moon',
-      reply: 'Make your own Wrong Moon meme at /alliance-wrong-moon. Add one line for Admiral Voss, then save the picture or copy the caption and link. You can do this as a guest. Project crews can read the proposed challenge formats at /alliance-pilot-briefs. Event hosts, dates and entries are still to be confirmed.',
+      code: 'OK', source: 'reviewed_brief', reviewedOn: '2026-11-18',
+      sourcePage: '/alliance-pilot-briefs',
+      reply: 'Start with the project challenge briefs at /alliance-pilot-briefs. Choose a creative, research or builder format and draft your idea as a guest. Sending a request starts a private review. Event hosts, dates and entries are still to be confirmed.',
+    });
+  }
+  if (memeQuestion) {
+    return jsonResponse({
+      code: 'OK', source: 'reviewed_brief', reviewedOn: '2026-11-18',
+      sourcePage: '/alliance-wrong-moon',
+      reply: 'Make your own Wrong Moon meme at /alliance-wrong-moon. Add one line for Admiral Voss, then save the picture or copy the caption and link. You can do this as a guest.' + (projectQuestion ? ' Project crews can explore the proposed challenge formats at /alliance-pilot-briefs.' : ''),
     });
   }
   const brief = reviewedBrief(question);
