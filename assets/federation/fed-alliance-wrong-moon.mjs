@@ -34,21 +34,41 @@ export function mountMoonEditor(document) {
   const addressChoice = document.getElementById('moon-address');
   const controls = document.getElementById('moon-controls');
   const save = document.getElementById('moon-save');
+  const shareImage = document.getElementById('moon-share-image');
   const status = document.getElementById('moon-status');
   const share = document.getElementById('moon-share');
   const shareText = document.getElementById('moon-share-text');
   const copyButton = document.getElementById('moon-copy');
   const copyStatus = document.getElementById('moon-copy-status');
   const publicLink = document.querySelector('link[rel="canonical"]').href;
+  const {navigator, File} = document.defaultView;
   const supportsExport = Boolean(context) && typeof canvas.toBlob === 'function';
   let copyAttempt = 0;
   let fileUrl;
+  let shareData;
+  let sharePending = false;
   let revision = 0;
+
+  function prepareImageShare(blob) {
+    if (!shareImage || blob.type !== 'image/jpeg' || typeof File !== 'function' ||
+        typeof navigator.canShare !== 'function' || typeof navigator.share !== 'function') return;
+    try {
+      const data = {files: [new File([blob], save.download, {type: blob.type})]};
+      if (navigator.canShare(data)) {
+        shareData = data;
+        shareImage.hidden = false;
+      }
+    } catch {
+      // A browser can deny file sharing while still supporting downloads.
+    }
+  }
 
   function render() {
     const current = ++revision;
     if (fileUrl) URL.revokeObjectURL(fileUrl);
     fileUrl = undefined;
+    shareData = undefined;
+    if (shareImage) shareImage.hidden = true;
     save.removeAttribute('href');
     save.setAttribute('aria-disabled', 'true');
     status.textContent = '';
@@ -101,6 +121,7 @@ export function mountMoonEditor(document) {
       fileUrl = URL.createObjectURL(blob);
       save.href = fileUrl;
       save.removeAttribute('aria-disabled');
+      prepareImageShare(blob);
     }, 'image/jpeg', .9);
   }
 
@@ -113,6 +134,26 @@ export function mountMoonEditor(document) {
     shareText.value = text ? text + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
     render();
   }
+  shareImage?.addEventListener('click', async () => {
+    if (!shareData || sharePending) return;
+    const data = shareData;
+    sharePending = true;
+    shareImage.setAttribute('aria-disabled', 'true');
+    status.textContent = '';
+    try {
+      // Open the chooser directly in the click so the browser retains user activation.
+      await navigator.share(data);
+      if (data === shareData) status.textContent = 'Sharing options opened.';
+    } catch (error) {
+      if (data === shareData) {
+        status.textContent = error?.name === 'AbortError' ? 'Sharing canceled.' :
+          'Image sharing is unavailable. Use Save my meme or Share as text.';
+      }
+    } finally {
+      sharePending = false;
+      shareImage.removeAttribute('aria-disabled');
+    }
+  });
   copyButton.addEventListener('click', async () => {
     if (!shareText.value) return;
     const attempt = ++copyAttempt;

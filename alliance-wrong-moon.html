@@ -45,7 +45,10 @@
             <input id="moon-address" type="checkbox" value="GalacticFederation.co/moon" checked>
             Include the meme maker’s web address
           </label>
-          <a class="save" id="moon-save" role="link" aria-disabled="true" download="the-wrong-moon.jpg">Save my meme</a>
+          <div class="image-actions">
+            <a class="save" id="moon-save" role="link" aria-disabled="true" download="the-wrong-moon.jpg">Save my meme</a>
+            <button type="button" id="moon-share-image" hidden>Share image</button>
+          </div>
           <details id="moon-share" class="text-share" hidden>
             <summary>Share as text</summary>
             <label for="moon-share-text">Your caption and the public activity link</label>
