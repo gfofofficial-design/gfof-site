@@ -57,7 +57,7 @@ a { color: var(--fed-command); text-underline-offset: .18em; }
 .event { border-top: 1px solid var(--fed-border-strong); padding-block: 1.5rem; }
 h2 { font-size: 1.25rem; }
 .event p { max-width: 70ch; margin-top: .35rem; color: var(--fed-text); }
-footer { padding: .6rem 0 2rem; }
+footer { display: flex; flex-wrap: wrap; column-gap: 1.5rem; padding: .6rem 0 2rem; }
 :focus-visible { outline: 3px solid var(--fed-command); outline-offset: 3px; }
 .skip { position: absolute; left: 1rem; top: -10rem; padding: .75rem; background: var(--fed-space); }
 .skip:focus { top: .5rem; }
