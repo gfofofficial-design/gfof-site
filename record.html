@@ -185,7 +185,9 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
 .empty .et{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--muted);margin-bottom:10px}
 .empty p{margin:0 auto;max-width:460px;font-size:15px;color:var(--text-dim)}
 
-.standings{margin:22px 0;width:100%;border:1px solid var(--line);border-collapse:collapse}
+.standings-scroll{max-width:100%;overflow-x:auto;margin:22px 0}
+.standings-scroll:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.standings{margin:0;width:100%;border:1px solid var(--line);border-collapse:collapse}
 .standings th,.standings td{padding:11px 14px;text-align:left;font-family:var(--mono);font-size:12px;border-bottom:1px solid var(--line)}
 .standings th{color:var(--muted);letter-spacing:2px;font-size:10px;font-weight:500;background:rgba(255,255,255,0.02)}
 .standings td{color:var(--text-dim)}
@@ -454,6 +456,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
     </div>
   </div>
 
+  <div class="standings-scroll" role="region" aria-label="Forecast standings" tabindex="0">
   <table class="standings">
     <thead>
       <tr><th>HANDLE</th><th>RESOLVED</th><th>BRIER</th><th>CALIBRATION</th></tr>
@@ -462,6 +465,7 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
       <tr><td colspan="4" style="color:var(--muted);text-align:center;padding:22px">Standings open when a participant reaches five resolved forecasts.</td></tr>
     </tbody>
   </table>
+  </div>
 
   <div class="callout green">
     <div class="k">HOW TO READ THIS PAGE IN SIX MONTHS</div>

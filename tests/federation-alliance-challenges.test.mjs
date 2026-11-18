@@ -330,9 +330,11 @@ test('manual copy works without canvas or clipboard and a late rejection cannot 
   const input = get('moon-caption'), button = get('moon-copy'), text = get('moon-share-text');
   input.value = 'Wrong orbit.';
   input.input();
-  get('moon-share').open = true;
+  assert.equal(get('moon-share').open, false);
+  assert.equal(button.hidden, false);
   button.focus();
   await button.click();
+  assert.equal(get('moon-share').open, true);
   assert.equal(document.activeElement, text);
   assert.equal(text.selected, true);
   assert.match(get('moon-copy-status').textContent, /Copy command/);

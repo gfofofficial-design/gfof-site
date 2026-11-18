@@ -17,7 +17,7 @@ PROJECT FACTS (the only facts you may state as fact):
 - Former GFOF mint: 2oQmHWoTZRmRLregHKjBSGJy3ueX3iRNzimy2iZCmoon. Its on-chain name has the "Galatic" typo, its Meteora DBC pair was 3y4NNTfU3y1KzCChAJyQUv5RmX3zuZNxVbXer2vjASGE, and correction #018's old-mint-only verification rule is superseded by #041. Never use the former mint as the current buy address.
 - Holder migration: /migration documents a planned 1:1-by-token-count old-to-new exchange with separate old-token deposit wallet and deadlines. The new mint trading does not mean accepted old deposits have been reconciled or replacement tokens distributed. Never instruct anyone to transfer without reading /migration and independently verifying both addresses.
 - Current-mint locks: the October 8 dated verification records three Streamflow contracts scheduling 100,000,000 current-mint GFOF, 10% of minted supply. /treasury provides contract addresses, cliff dates and live read controls. This dated schedule is not a current escrow-balance guarantee or funding for staking. Do not add it to former-mint units.
-- Command Deck: /command-deck is publicly released with read-only Solana public-address balances, supported reference prices, current-mint lock views and device-local missions. It does not sign transactions, prove wallet ownership or provide live staking or lending. Existing-account email-code sign-in is verified at /account. Public registration remains closed; Google and password sign-in are not offered on the production site. Sign-in does not sync Journey progress, establish wallet ownership or activate Alliance membership.
+- Command Deck: /command-deck is publicly released with read-only Solana public-address balances, supported reference prices, current-mint lock views and device-local missions. It does not sign transactions, prove wallet ownership or provide live staking or lending. Existing-account email-code sign-in is verified at /account. Public registration remains closed. Point visitors to /account for the sign-in methods currently available. Sign-in does not sync Journey progress, establish wallet ownership or activate Alliance membership.
 - Federation Alliance: /alliance offers public tools, a local community preview and project-introduction preparation. /alliance-pilot-briefs explains proposed Creative Clash, Research Showdown and Builder Battle formats. Entries, partner enrollment, live scores and prizes are not open or confirmed. A project request starts a private review; only mutually agreed briefs and reviewed results can be published. Real member profiles and collaborations remain a closed development build. Do not infer a partnership from a project mention or illustrative banner.
 - Historical locks: 130,000,000 units of the FORMER mint are held across four Streamflow contracts. The original 40M Lock 3 matured 2026-08-18 and the scheduled allocation was re-locked through 2028-08-18. These contracts do not prove any new-mint lock. See /treasury and correction #041.
 - Designated-wallet disclosure: /treasury lists seven public addresses with owner-supplied purposes and historical old-mint holdings. Do not present those balances or purposes as verified new-mint allocations. W-002, W-003 and W-007 are retired and must not be attributed to the Federation. Unlocked-wallet balances are dated snapshots, not live guarantees. Never infer wallet ownership, custody, purpose, contents or control beyond the exact public record.
@@ -122,34 +122,34 @@ const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payl
 const reviewedBrief = (question) => {
   const q = question.toLowerCase().replace(/[’]/g, "'").replace(/\s+/g, ' ').trim();
   if (/\b(staking|stake|reward targets?|six.month|6.month)\b/.test(q)) {
-    return 'No GFOF staking pool is open. /staking lists proposed total-term targets of 1% for one month, 3% for three months, 8% for six months and 12% for twelve months. These are provisional token-reward designs, not APY or funded offers; current-mint funding, provider and legal review remain required.';
+    return {sourcePage: '/staking', reply: 'No GFOF staking pool is open. /staking lists proposed total-term targets of 1% for one month, 3% for three months, 8% for six months and 12% for twelve months. These are provisional token-reward designs, not APY or funded offers; current-mint funding, provider and legal review remain required.'};
   }
   if (/\b(alliance|creative clash|research showdown|builder battle|project competitions?|project challenges?)\b/.test(q)) {
-    return 'Explore the Federation Alliance at /alliance and proposed challenge formats at /alliance-pilot-briefs. Creative Clash, Research Showdown and Builder Battle have discussion briefs, but competitions are not open: no teams, dates, judges or prizes are confirmed. The project worksheet prepares a local draft; sending a request starts private review, not enrollment or publication. Member profiles and private collaboration remain a closed development build.';
+    return {sourcePage: '/alliance-pilot-briefs', reply: 'Explore the Federation Alliance at /alliance and proposed challenge formats at /alliance-pilot-briefs. Creative Clash, Research Showdown and Builder Battle have discussion briefs, but competitions are not open: no teams, dates, judges or prizes are confirmed. The project worksheet prepares a local draft; sending a request starts private review, not enrollment or publication. Member profiles and private collaboration remain a closed development build.'};
   }
   if (/\b(sign[ -]?in|log[ -]?in|register|registration|create an account|email code)\b/.test(q)) {
-    return 'Existing Federation accounts can sign in with an emailed eight-digit code at /account. Public registration remains closed, and Google and password sign-in are not offered on the production site. Enter the code only on the Federation account page, never in this chat. Signing in does not connect a wallet, grant token permissions, sync Journey progress or enroll you in the Alliance. Public tools remain available without an account.';
+    return {sourcePage: '/account', reply: 'Existing Federation accounts can sign in with an emailed eight-digit code at /account. Public registration remains closed. The Account page shows the sign-in methods currently available. Enter the code only on the Federation account page, never in this chat. Signing in does not connect a wallet, grant token permissions, sync Journey progress or enroll you in the Alliance. Public tools remain available without an account.'};
   }
   if (/\b(dashboard|command deck)\b/.test(q)) {
-    return 'The public read-only dashboard is at /command-deck. It reads public Solana wallet balances, supported reference prices and current-mint locks, alongside device-local missions. It does not sign transactions, prove wallet ownership or open staking or lending. Existing accounts can use email-code sign-in at /account; public registration and account-backed Alliance membership remain closed.';
+    return {sourcePage: '/command-deck', reply: 'The public read-only dashboard is at /command-deck. It reads public Solana wallet balances, supported reference prices and current-mint locks, alongside device-local missions. It does not sign transactions, prove wallet ownership or open staking or lending. Existing accounts can use email-code sign-in at /account; public registration and account-backed Alliance membership remain closed.'};
   }
   if (/\b(lens|dossier|report guide|explain (this|the|a) report)\b/.test(q)) {
-    return 'Dossier’s read-only Lens beta is at https://dossiertrack.co/token-structure-preview.html. Its free plain-language guide now highlights missing evidence and partial coverage, with source fields and slots beside the explanations. It uses reviewed wording without an AI model, account, upload or additional chain read. A capture is not proof of token safety, sales, bundles or independent holders. Optional AI selection is prepared but disabled; Program 01 alerts and paid tiers remain closed.';
+    return {sourcePage: 'https://dossiertrack.co/token-structure', reply: 'Dossier’s read-only Lens beta is at https://dossiertrack.co/token-structure. Its free plain-language guide now highlights missing evidence and partial coverage, with source fields and slots beside the explanations. It uses reviewed wording without an AI model, account, upload or additional chain read. A capture is not proof of token safety, sales, bundles or independent holders. Optional AI selection is prepared but disabled; Program 01 alerts and paid tiers remain closed.'};
   }
   if (/\b(locks?|locked|streamflow)\b/.test(q) && !/\bwallets?\b/.test(q)) {
-    return 'The October 8 verification recorded three current-mint Streamflow contracts scheduling 100M GFOF, 10% of minted supply. Check /treasury for contract links, dates and a fresh read; that dated schedule is not a current balance guarantee. The former mint has a separate historical lock record. Supply locks do not fund or activate staking.';
+    return {sourcePage: '/treasury', reply: 'The October 8 verification recorded three current-mint Streamflow contracts scheduling 100M GFOF, 10% of minted supply. Check /treasury for contract links, dates and a fresh read; that dated schedule is not a current balance guarantee. The former mint has a separate historical lock record. Supply locks do not fund or activate staking.'};
   }
   if (/\b(reserve|bonding curve|migration)\b/.test(q) && /\b(progress|status|live|current|now|how much|remaining)\b/.test(q)) {
-    return 'The old mint had a Meteora DBC quote-reserve target. The current GFOF mint is a separate Solana token trading on TebFun, and old holders have a separately documented 1:1-by-count process at /migration. The old quote-reserve gauge does not describe current-token progress.';
+    return {sourcePage: '/migration', reply: 'The old mint had a Meteora DBC quote-reserve target. The current GFOF mint is a separate Solana token trading on TebFun, and old holders have a separately documented 1:1-by-count process at /migration. The old quote-reserve gauge does not describe current-token progress.'};
   }
   if (/\bwallets?\b/.test(q) && /\b(purposes?|owner|ownership|control)\b/.test(q)) {
-    return 'The lock balances at /treasury are read from Solana. Designated-wallet purposes and control statements are owner-supplied disclosures, not facts a blockchain address can prove. Use the explorer links there to inspect transactions, and read the stated limits before drawing conclusions about a wallet.';
+    return {sourcePage: '/treasury', reply: 'The lock balances at /treasury are read from Solana. Designated-wallet purposes and control statements are owner-supplied disclosures, not facts a blockchain address can prove. Use the explorer links there to inspect transactions, and read the stated limits before drawing conclusions about a wallet.'};
   }
   if (/\bjourney\b/.test(q) && /\blending\b/.test(q)) {
-    return 'The Journey is a fictional educational experience; its wallet-free Lending Lab does not move real money. The separate Solana lending program is a private synthetic-token prototype, with liquidation, loss handling and independent review still open. Play at /journey/lending-lab.html and follow the dated build record at /building#lending-progress.';
+    return {sourcePage: '/journey/lending-lab.html', reply: 'The Journey is a fictional educational experience; its wallet-free Lending Lab does not move real money. The separate Solana lending program is a private synthetic-token prototype, with liquidation, loss handling and independent review still open. Play at /journey/lending-lab.html and follow the dated build record at /building#lending-progress.'};
   }
   if (/^(what can (a visitor|i|we|people) use today|what('s| is) live\b|what('s| is) available today|what is still being built|what('s| is) the (project|federation) status)/.test(q)) {
-    return 'The read-only wallet and lock dashboard is live at /command-deck. You can play fictional missions at /journey/ and inspect a Solana mint with Dossier’s Lens beta at dossiertrack.co/token-structure. Real lending remains a private synthetic-token prototype; see /building#lending-progress. No public account registration, lending market or staking pool is open.';
+    return {sourcePage: '/command-deck', reply: 'The read-only wallet and lock dashboard is live at /command-deck. You can play fictional missions at /journey/ and inspect a Solana mint with Dossier’s Lens beta at dossiertrack.co/token-structure. Real lending remains a private synthetic-token prototype; see /building#lending-progress. No public account registration, lending market or staking pool is open.'};
   }
   return null;
 };
@@ -223,8 +223,17 @@ export default async function (request, context) {
     return fail('E_BAD_TURN_ORDER', 400);
   }
 
-  const brief = reviewedBrief(safeMessages[safeMessages.length - 1].content);
-  if (brief) return jsonResponse({ reply: brief, code: 'OK', source: 'reviewed_brief' });
+  const question = safeMessages[safeMessages.length - 1].content;
+  if (/\b(wrong moon|make (?:a |my )?meme|bring my project)\b/i.test(question)) {
+    return jsonResponse({
+      code: 'OK',
+      source: 'reviewed_brief',
+      sourcePage: /bring my project/i.test(question) && !/meme|wrong moon/i.test(question) ? '/alliance-pilot-briefs' : '/alliance-wrong-moon',
+      reply: 'Make your own Wrong Moon meme at /alliance-wrong-moon. Add one line for Admiral Voss, then save the picture or copy the caption and link. You can do this as a guest. Project crews can read the proposed challenge formats at /alliance-pilot-briefs. Event hosts, dates and entries are still to be confirmed.',
+    });
+  }
+  const brief = reviewedBrief(question);
+  if (brief) return jsonResponse({ ...brief, code: 'OK', source: 'reviewed_brief' });
 
   const apiKey = Netlify.env.get('ANTHROPIC_API_KEY');
   if (!apiKey) {

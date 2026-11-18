@@ -27,7 +27,7 @@
   "use strict";
 
   var FOCUSABLE =
-    'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])';
 
   /* ── Drawer engine ─────────────────────────────────────────────────────
      Accessible dialog: focus trap, Escape closes, focus returns to the
@@ -38,7 +38,9 @@
     function trap(e) {
       if (e.key === "Escape") { close(); return; }
       if (e.key !== "Tab") return;
-      var items = drawerEl.querySelectorAll(FOCUSABLE);
+      var items = Array.from(drawerEl.querySelectorAll(FOCUSABLE)).filter(function (item) {
+        return item.getClientRects().length > 0;
+      });
       if (!items.length) return;
       var first = items[0], last = items[items.length - 1];
       if (e.shiftKey && document.activeElement === first) {
