@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {existsSync} from 'node:fs';
+import {existsSync, readFileSync} from 'node:fs';
 import {PUBLISHED_CHALLENGES,publishedChallenges,mountChallengeBoard} from '../assets/federation/fed-alliance-challenges.mjs';
 import {captionLines, mountMoonEditor} from '../assets/federation/fed-alliance-wrong-moon.mjs';
 
@@ -13,6 +13,16 @@ test('the meme caption wraps words and preserves joined emoji in long captions',
 });
 
 const moonPage = 'https://galacticfederation.co/alliance-wrong-moon';
+
+test('the community directory opens the guest meme and its return link focuses the same entry', () => {
+  const deck = readFileSync(new URL('../command-deck.html', import.meta.url), 'utf8');
+  const meme = readFileSync(new URL('../alliance-wrong-moon.html', import.meta.url), 'utf8');
+  const community = deck.match(/<section aria-labelledby="deck-tools-community">([\s\S]*?)<\/section>/)?.[1] ?? '';
+  const link = community.match(/<a\b[^>]*href="\/alliance-wrong-moon"[^>]*>/)?.[0] ?? '';
+  const id = link.match(/\bid="([^"]+)"/)?.[1];
+  assert.ok(id, 'the direct guest link needs a return anchor');
+  assert.ok(meme.includes(`href="/command-deck#${id}"`));
+});
 
 function moonFixture() {
   const elements = new Map();
