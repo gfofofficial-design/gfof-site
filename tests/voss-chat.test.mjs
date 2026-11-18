@@ -67,7 +67,7 @@ test('dashboard answer points to the released route and keeps public accounts cl
 });
 test('Lens answer describes the live free guide and keeps model selection disabled',async()=>{
  const {body}=await ask('How does the Dossier Lens report guide work?');
- assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/https:\/\/dossiertrack.co\/token-structure-preview.html/);
+ assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/https:\/\/dossiertrack.co\/token-structure\b/);
  assert.match(body.reply,/without an AI model/);assert.match(body.reply,/prepared but disabled/);
  assert.match(body.reply,/not proof of token safety/);assert.match(body.reply,/paid tiers remain closed/);
 });
@@ -89,5 +89,20 @@ test('account guidance supports existing email sign-in without requesting creden
  const {body}=await ask('How do I sign in or register?');
  assert.equal(body.source,'reviewed_brief');assert.match(body.reply,/eight-digit code at \/account/);
  assert.match(body.reply,/Public registration remains closed/);assert.match(body.reply,/never in this chat/);
- assert.match(body.reply,/Google and password sign-in are not offered/);
+ assert.equal(body.sourcePage, '/account');
+ assert.match(body.reply,/Account page shows the sign-in methods currently available/);
+});
+
+test('guest questions return reviewed answers with the relevant public destination', async () => {
+  for (const [question, page] of [
+    ['How do I make a meme?', '/alliance-wrong-moon'],
+    ['How do I bring my project?', '/alliance-pilot-briefs']
+  ]) {
+    const {status, body} = await ask(question);
+    assert.equal(status, 200);
+    assert.equal(body.source, 'reviewed_brief');
+    assert.equal(body.sourcePage, page);
+    assert.match(body.reply, /as a guest/);
+    assert.match(body.reply, /still to be confirmed/);
+  }
 });

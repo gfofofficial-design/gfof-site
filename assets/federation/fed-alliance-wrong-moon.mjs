@@ -146,6 +146,7 @@ export function mountMoonEditor(document) {
     copyStatus.textContent = '';
     const text = caption.value.trim();
     share.hidden = !text;
+    copyButton.hidden = !text;
     if (!text) share.open = false;
     shareText.value = text ? text + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
     render();
@@ -185,9 +186,10 @@ export function mountMoonEditor(document) {
       await document.defaultView.navigator.clipboard.writeText(shareText.value);
       if (attempt === copyAttempt) copyStatus.textContent = 'Copied. Paste it wherever you share with your crew.';
     } catch {
-      if (attempt !== copyAttempt || !share.open) return;
-      copyStatus.textContent = 'Select the text above and use your device’s Copy command.';
+      if (attempt !== copyAttempt) return;
+      copyStatus.textContent = 'Open Share as text and use your device’s Copy command.';
       if (document.activeElement === copyButton) {
+        share.open = true;
         shareText.focus();
         shareText.select();
       }

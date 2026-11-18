@@ -70,15 +70,21 @@
     text-decoration: none;
   }
   .home-v2 .home-arrival .fed-btn--secondary { color: var(--fed-text-display); }
-  .home-v2 .home-public-lookups {
+  .home-v2 .home-arrival .cmd-hero {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    max-width: 540px;
-    margin-top: 12px;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    width: min(100%, 50rem);
+    margin-inline: auto;
+    min-height: 0;
+    gap: 1rem;
+    padding-block: clamp(1rem, 3vw, 2.25rem);
   }
-  .home-v2 .home-public-lookups .home-tool-action { padding: 0; margin: 0; }
+  .home-v2 .home-arrival .cmd-hero__actions { width: min(100%, 32rem); }
+  .home-v2 .home-arrival .home-tool-shortcut { margin: 0; }
   .home-v2 .home-arrival-media {
+    width: 100%;
     min-width: 0;
     margin: 0;
     overflow: hidden;
@@ -127,7 +133,6 @@
     .home-v2 .fed-shell-brand img { width: 32px; height: 32px; }
     .home-v2 .fed-shell-brand__primary { letter-spacing: .05em; }
     .home-v2 .home-signin { font-size: 14px; padding-inline: 8px; }
-    .home-v2 .home-arrival .cmd-hero__access::before { display: none; }
   }
   @media (max-width: 359px) {
     .home-v2 .home-arrival .cmd-hero__actions { grid-template-columns: minmax(0, 1fr); }
@@ -194,20 +199,7 @@
 <!-- ═══ HERO — ARRIVAL ═══ -->
 <section class="fed-container home-arrival" aria-labelledby="home-title">
   <div class="cmd-hero">
-    <div class="home-hero-copy">
-      <span class="cmd-hero__access">GALACTIC FEDERATION OF FINANCE</span>
-      <h1 class="cmd-hero__title" id="home-title" tabindex="-1">Federation <span>Alliance</span></h1>
-      <p class="cmd-hero__position">Explore Alliance projects, see what teams are building, and learn how to take part.</p>
-      <div class="cmd-hero__actions">
-        <a class="fed-btn fed-btn--command" href="/alliance">Explore Alliance</a>
-        <a class="fed-btn fed-btn--secondary" href="#account-path-title">How membership works</a>
-      </div>
-      <div class="home-public-lookups">
-        <a class="home-tool-action" href="/command-deck#wallet">Read a wallet</a>
-        <a class="home-tool-action" href="https://dossiertrack.co/token-structure#mintInput">Inspect a token</a>
-      </div>
-      <p class="home-reassurance">The member Dashboard and public enrollment are closed. Public tools work without an account.</p>
-    </div>
+    <h1 class="fed-visually-hidden" id="home-title" tabindex="-1">Federation Alliance</h1>
     <figure class="home-arrival-media">
       <video autoplay controls loop muted playsinline preload="metadata" width="1232" height="736"
         poster="/assets/federation/federation-arrival-20261117.jpg"
@@ -230,6 +222,11 @@
       })();
       </script>
     </figure>
+    <nav class="cmd-hero__actions" aria-label="Start exploring the Federation">
+      <a class="fed-btn fed-btn--command" href="/alliance-wrong-moon">Make a meme</a>
+      <a class="fed-btn fed-btn--secondary" href="/alliance-pilot-briefs">Bring your project</a>
+    </nav>
+    <a class="home-tool-action home-tool-shortcut" href="#start-title">Use the public tools</a>
   </div>
 </section>
 
@@ -669,13 +666,6 @@
       </div>
     </div>
     <p class="fed-system fed-system--wide">FEDERATION GUIDE // AI CHAT + DIRECT PATHS</p>
-    <nav class="fed-voss-paths" aria-label="Explore with Voss without using AI chat">
-      <p class="fed-voss-paths__label">Choose a path · no AI request needed</p>
-      <a href="/journey/voss-briefing.html"><strong>Play the First Briefing</strong><span>A short choice-based mission about claims and evidence →</span></a>
-      <a href="/journey/"><strong>Enter the Journey</strong><span>Play the fictional missions and meet the crew →</span></a>
-      <a href="https://dossiertrack.co/token-structure"><strong>Inspect a token</strong><span>Try Dossier's read-only Solana Lens beta →</span></a>
-      <a href="/building#lending-progress"><strong>Follow the real build</strong><span>See the private lending prototype and open gates →</span></a>
-    </nav>
     <div class="fed-voss-modes" role="group" aria-label="Communication mode">
       <button type="button" data-voss-mode="command" aria-pressed="true">Command</button>
       <button type="button" data-voss-mode="intelligence" aria-pressed="false">Intelligence</button>
@@ -683,19 +673,32 @@
     </div>
     <p class="fed-voss-mode-note" data-voss-mode-note>Common answers use reviewed copy; other questions may use AI. Open the linked pages for the latest status.</p>
     <div class="fed-voss-log" data-voss-log role="log" aria-live="polite" aria-label="Conversation with Admiral Voss">
-      <p class="fed-voss-message fed-voss-message--assistant">Welcome aboard. Choose a path above, or ask me what is playable, usable, and still under construction.</p>
+      <p class="fed-voss-message fed-voss-message--assistant">Welcome aboard. What would you like to make, explore or verify?</p>
     </div>
     <div class="fed-voss-suggestions" aria-label="Suggested questions">
       <button type="button" data-voss-suggestion="What is the verified $GFOF contract address?">Verify $GFOF</button>
       <button type="button" data-voss-suggestion="What can a visitor use today, and what is still being built?">What is live?</button>
-      <button type="button" data-voss-suggestion="How does the Journey relate to the real lending build?">Journey and lending</button>
+      <button type="button" data-voss-suggestion="How do I make a meme or bring my project?">Memes and projects</button>
     </div>
+    <details class="fed-voss-direct">
+      <summary>Explore without chat</summary>
+    <nav class="fed-voss-paths" aria-label="Explore with Voss without using AI chat">
+      <a href="/alliance-wrong-moon"><strong>Make a meme</strong><span>Caption The Wrong Moon as a guest.</span></a>
+      <a href="/alliance-pilot-briefs"><strong>Bring your project</strong><span>Read a creative, research or builder challenge brief.</span></a>
+      <a href="/journey/voss-briefing.html"><strong>Play the First Briefing</strong><span>A short choice-based mission about claims and evidence →</span></a>
+      <a href="/journey/"><strong>Enter the Journey</strong><span>Play the fictional missions and meet the crew →</span></a>
+      <a href="https://dossiertrack.co/token-structure"><strong>Inspect a token</strong><span>Try Dossier's read-only Solana Lens beta →</span></a>
+      <a href="/building#lending-progress"><strong>Follow the real build</strong><span>See the private lending prototype and open gates →</span></a>
+    </nav>
+    </details>
+  </div>
+  <div class="fed-voss-composer">
     <form class="fed-voss-form" data-voss-form>
       <label class="fed-visually-hidden" for="voss-message">Message Admiral Voss</label>
       <input id="voss-message" data-voss-input type="text" maxlength="500" autocomplete="off" placeholder="Transmit a question…" required>
       <button type="submit" data-voss-send>Send</button>
     </form>
-    <p class="fed-voss-disclaimer">Some questions receive a prewritten answer. Others may be sent to an external AI provider. The briefing was reviewed 23 October 2026 and is not a live site read. Never share wallet keys, recovery phrases, or personal information.</p>
+    <p class="fed-voss-disclaimer">Common questions use reviewed replies. Other questions may go to an external AI provider. Keep personal information and wallet secrets private.</p>
   </div>
 </aside>
 
@@ -759,6 +762,17 @@ window.FED_SHELL_CONFIG = {
   var input = d.querySelector('[data-voss-input]');
   var send = d.querySelector('[data-voss-send]');
   var log = d.querySelector('[data-voss-log]');
+  var viewport = window.visualViewport;
+  if (viewport) {
+    var panel = form.closest('[data-fed-drawer]');
+    function fitChat() {
+      panel.style.setProperty('--voss-viewport-height', viewport.height + 'px');
+      panel.style.setProperty('--voss-viewport-top', viewport.offsetTop + 'px');
+    }
+    fitChat();
+    viewport.addEventListener('resize', fitChat);
+    viewport.addEventListener('scroll', fitChat);
+  }
   var history = [];
   var mode = 'command';
   var loading = false;
@@ -794,6 +808,18 @@ window.FED_SHELL_CONFIG = {
     });
   });
 
+  var reviewedPages = new Map([
+    ['/alliance-wrong-moon', 'Open the guest meme maker'],
+    ['/alliance-pilot-briefs', 'Read the project challenge briefs'],
+    ['/staking', 'Read the staking proposal'],
+    ['/treasury', 'Inspect the treasury record'],
+    ['/account', 'See available sign-in methods'],
+    ['/migration', 'Read the migration instructions'],
+    ['/command-deck', 'Open Command Deck'],
+    ['/journey/lending-lab.html', 'Play the fictional Lending Lab'],
+    ['https://dossiertrack.co/token-structure', 'Open Dossier Lens']
+  ]);
+
   form.addEventListener('submit', async function(event){
     event.preventDefault();
     var text = input.value.trim();
@@ -820,6 +846,14 @@ window.FED_SHELL_CONFIG = {
         source.className = 'fed-voss-message__source';
         source.textContent = data.source === 'reviewed_brief' ? 'Reviewed briefing · 23 Oct 2026' : 'AI answer · check source pages';
         answer.prepend(source);
+        var reference = document.createElement('a');
+        var reviewedPage = data.source === 'reviewed_brief' && reviewedPages.has(data.sourcePage);
+        reference.href = reviewedPage ? data.sourcePage : '/building';
+        reference.textContent = reviewedPage ? reviewedPages.get(data.sourcePage) : 'Check public build status';
+        if (reviewedPage && (data.sourcePage === '/alliance-wrong-moon' || data.sourcePage === '/account')) {
+          source.textContent = 'Reviewed guide · 18 Nov 2026';
+        }
+        answer.appendChild(reference);
       }
       history.push({ role: 'assistant', content: reply });
       history = history.slice(-10);
@@ -830,7 +864,7 @@ window.FED_SHELL_CONFIG = {
       loading = false;
       input.disabled = false;
       send.disabled = false;
-      input.focus();
+      if (form.closest('[data-fed-drawer]').getAttribute('data-open') === 'true') input.focus();
     }
   });
 })();

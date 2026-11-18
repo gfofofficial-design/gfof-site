@@ -224,6 +224,7 @@ strong{color:var(--text)}
 .top-nav-links a.primary{color:var(--green);border-color:rgba(61,255,160,0.3);background:rgba(61,255,160,0.05)}
 
 .container{max-width:800px;margin:0 auto;padding:0 24px}
+.container :where(a, code) { overflow-wrap: anywhere; }
 
 .doc-header{padding:60px 0 30px}
 .doc-tag{
@@ -348,6 +349,11 @@ ul li,ol li{margin-bottom:6px;font-size:15px;line-height:1.65}
 .v-row .ver{color:var(--cyan);width:60px;flex-shrink:0}
 .v-row .dt{color:var(--muted);width:110px;flex-shrink:0}
 .v-row .ch{color:var(--text-dim);flex:1}
+@media (max-width: 480px) {
+  .v-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; }
+  .v-row .ver, .v-row .dt { width: auto; }
+  .v-row .ch { grid-column: 1 / -1; overflow-wrap: anywhere; }
+}
 
 .foot{
   margin-top:80px;padding:32px 24px;
