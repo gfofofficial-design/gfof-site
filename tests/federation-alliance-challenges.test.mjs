@@ -13,6 +13,22 @@ test('the meme caption wraps words and preserves joined emoji in long captions',
 });
 
 const moonPage = 'https://galacticfederation.co/alliance-wrong-moon';
+const makerAddress = 'GalacticFederation.co/moon';
+
+test('the printed meme address has a public route to the canonical guest editor', () => {
+  const html = readFileSync(new URL('../alliance-wrong-moon.html', import.meta.url), 'utf8');
+  const config = readFileSync(new URL('../netlify.toml', import.meta.url), 'utf8');
+  const choice = html.match(/<input\b[^>]*\bid="moon-address"[^>]*>/)?.[0] ?? '';
+  assert.match(choice, /\btype="checkbox"/);
+  assert.match(choice, /\bchecked\b/);
+  assert.ok(choice.includes(`value="${makerAddress}"`));
+  const short = new URL('https://' + makerAddress);
+  assert.equal(short.origin, new URL(moonPage).origin);
+  const routes = config.split('[[redirects]]');
+  const firstMatch = routes.find(rule => rule.includes(`from = "${short.pathname}"`) || rule.includes('from = "/*"'));
+  assert.ok(firstMatch?.includes(`to = "${new URL(moonPage).pathname}"`));
+  assert.match(firstMatch, /status = 302\b/);
+});
 
 test('the community directory opens the guest meme and its return link focuses the same entry', () => {
   const deck = readFileSync(new URL('../command-deck.html', import.meta.url), 'utf8');
@@ -44,10 +60,11 @@ function moonFixture() {
   const canvas = get('moon-preview');
   canvas.getContext = () => ({
     measureText: text => ({width: text.length * 25}),
-    drawImage() {}, fillRect() {}, fillText(line) { drawn.push(line); }
+    drawImage() { drawn.length = 0; }, fillRect() {}, fillText(line) { drawn.push(line); }
   });
   canvas.toBlob = (callback, type) => { assert.equal(type, 'image/jpeg'); encoded.push(callback); };
   Object.assign(get('moon-art'), {complete: true, naturalHeight: 1024, naturalWidth: 1536, alt: 'Two space tugs.'});
+  Object.assign(get('moon-address'), {checked: true, value: makerAddress});
   document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}};
   return {document, get, encoded, drawn, canvas};
 }
@@ -65,7 +82,7 @@ test('the meme download tracks the latest caption when encodes finish out of ord
   encoded[1](file);
   const currentUrl = save.href;
   assert.match(currentUrl, /^blob:/);
-  assert.equal(drawn.at(-1), caption.value);
+  assert.equal(drawn[0], caption.value);
   assert.match(canvas['aria-label'], /It followed us home/);
   encoded[0](file);
   assert.equal(save.href, currentUrl);
@@ -75,6 +92,39 @@ test('the meme download tracks the latest caption when encodes finish out of ord
   assert.equal(save.href, undefined);
   assert.equal(canvas.hidden, true);
   assert.equal(get('moon-art').hidden, false);
+});
+
+test('the image address can be removed and restored while an earlier JPEG is still encoding', () => {
+  const {document, get, encoded, drawn, canvas} = moonFixture();
+  const choice = get('moon-address');
+  const caption = get('moon-caption');
+  const save = get('moon-save');
+  mountMoonEditor(document);
+  assert.equal(get('moon-address-option').hidden, true);
+  caption.value = 'It followed us home.'; caption.input();
+  assert.equal(get('moon-address-option').hidden, false);
+  const linkedHeight = canvas.height;
+  const plainShare = get('moon-share-text').value;
+  assert.deepEqual(drawn, [caption.value, makerAddress]);
+  assert.ok(canvas['aria-label'].includes(makerAddress));
+  choice.checked = false; choice.change();
+  assert.deepEqual(drawn, [caption.value]);
+  assert.ok(canvas.height < linkedHeight);
+  assert.ok(!canvas['aria-label'].includes(makerAddress));
+  const jpeg = new Blob(['fixture'], {type:'image/jpeg'});
+  encoded[0](jpeg);
+  assert.equal(save.href, undefined);
+  encoded[1](jpeg);
+  assert.match(save.href, /^blob:/);
+  choice.checked = true; choice.change();
+  assert.deepEqual(drawn, [caption.value, makerAddress]);
+  assert.equal(canvas.height, linkedHeight);
+  assert.equal(save.href, undefined);
+  assert.equal(get('moon-share-text').value, plainShare);
+  caption.value = ''; caption.input();
+  encoded[2](jpeg);
+  assert.equal(save.href, undefined);
+  assert.equal(get('moon-address-option').hidden, true);
 });
 
 test('guests can share in plain text without waiting for art or posting their caption', async () => {
@@ -93,6 +143,7 @@ test('guests can share in plain text without waiting for art or posting their ca
   assert.equal(get('moon-share-text').value, expected);
   assert.equal(get('moon-share').hidden, false);
   assert.equal(get('moon-save')['aria-disabled'], 'true');
+  assert.equal(get('moon-address-option').hidden, true);
   assert.equal(encoded.length, 0);
   assert.deepEqual(copies, []);
   await get('moon-copy').click();
@@ -109,6 +160,17 @@ test('guests can share in plain text without waiting for art or posting their ca
   assert.equal(get('moon-share-text').value, '');
   assert.equal(get('moon-share').hidden, true);
   assert.equal(get('moon-share').open, false);
+});
+
+test('a cached editor page without the address choice still exports its caption', () => {
+  const {document, get, encoded, drawn} = moonFixture();
+  document.getElementById = id => ['moon-address-option', 'moon-address'].includes(id) ? null : get(id);
+  mountMoonEditor(document);
+  const caption = get('moon-caption');
+  caption.value = 'Old chart, new orbit.'; caption.input();
+  assert.deepEqual(drawn, [caption.value]);
+  encoded[0](new Blob(['fixture'], {type:'image/jpeg'}));
+  assert.match(get('moon-save').href, /^blob:/);
 });
 
 test('manual copy works without canvas or clipboard and a late rejection cannot select stale text', async () => {

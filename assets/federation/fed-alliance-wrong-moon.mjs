@@ -30,6 +30,8 @@ export function mountMoonEditor(document) {
   const canvas = document.getElementById('moon-preview');
   const context = canvas.getContext('2d');
   const caption = document.getElementById('moon-caption');
+  const addressOption = document.getElementById('moon-address-option');
+  const addressChoice = document.getElementById('moon-address');
   const controls = document.getElementById('moon-controls');
   const save = document.getElementById('moon-save');
   const status = document.getElementById('moon-status');
@@ -54,6 +56,7 @@ export function mountMoonEditor(document) {
     const canDraw = supportsExport && art.complete && art.naturalWidth > 0;
     canvas.hidden = !text || !canDraw;
     art.hidden = !canvas.hidden;
+    if (addressOption) addressOption.hidden = canvas.hidden;
     if (!text) return;
     if (!canDraw) {
       if (!supportsExport || art.complete) {
@@ -68,8 +71,9 @@ export function mountMoonEditor(document) {
     context.font = font;
     const lines = captionLines(text, value => context.measureText(value).width, width - 96);
     const lineHeight = 68;
+    const address = addressChoice?.checked ? addressChoice.value : '';
     canvas.width = width;
-    canvas.height = artHeight + lines.length * lineHeight + 56;
+    canvas.height = artHeight + lines.length * lineHeight + 56 + (address ? 48 : 0);
     context.drawImage(art, 0, 0, width, artHeight);
     context.fillStyle = '#f5f1e6';
     context.fillRect(0, artHeight, width, canvas.height - artHeight);
@@ -79,7 +83,13 @@ export function mountMoonEditor(document) {
     context.textBaseline = 'middle';
     context.direction = document.defaultView.getComputedStyle(caption).direction;
     lines.forEach((line, index) => context.fillText(line, width / 2, artHeight + 28 + (index + .5) * lineHeight));
-    canvas.setAttribute('aria-label', art.alt + ' Caption: ' + text);
+    if (address) {
+      context.direction = 'ltr';
+      context.font = '600 38px system-ui, sans-serif';
+      context.fillStyle = '#405465';
+      context.fillText(address, width / 2, canvas.height - 32);
+    }
+    canvas.setAttribute('aria-label', art.alt + ' Caption: ' + text + (address ? ' ' + address : ''));
 
     // Encoding may finish out of order when a visitor types quickly.
     canvas.toBlob(blob => {
@@ -120,6 +130,7 @@ export function mountMoonEditor(document) {
   });
   controls.hidden = false;
   caption.addEventListener('input', updateCaption);
+  addressChoice?.addEventListener('change', render);
   art.addEventListener('load', render, {once: true});
   art.addEventListener('error', render, {once: true});
   updateCaption();

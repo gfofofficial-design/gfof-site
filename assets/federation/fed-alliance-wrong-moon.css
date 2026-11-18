@@ -28,7 +28,7 @@ h1 { max-width: 10ch; font-size: clamp(2.8rem, 5.2vw, 5rem); line-height: .96; l
 .frame img, .frame canvas { display: block; width: 100%; height: auto; }
 .editor { grid-area: editor; align-self: start; }
 label { display: block; font-weight: 700; }
-input, textarea {
+input[type="text"], textarea {
   width: 100%; margin-top: .5rem; padding: .8rem .9rem; min-height: 48px;
   background: var(--fed-space-panel); color: var(--fed-text-display);
   border: 1px solid var(--fed-border-strong); border-radius: 6px; font: inherit;
@@ -36,6 +36,11 @@ input, textarea {
 input::placeholder { color: var(--fed-muted); }
 .help, .status { font-size: .875rem; line-height: 1.45; color: var(--fed-text); }
 .help { margin: .45rem 0 1rem; }
+.address-option {
+  display: flex; align-items: center; gap: .65rem; width: fit-content; min-height: 44px;
+  margin-bottom: .45rem; color: var(--fed-text); font-weight: 500; cursor: pointer;
+}
+.address-option input { flex: none; width: 1.2rem; height: 1.2rem; margin: 0; accent-color: var(--fed-command); }
 .status:not(:empty) { margin-top: .6rem; }
 .save {
   display: inline-flex; align-items: center; min-height: 46px; padding: .6rem 1.2rem; border-radius: 6px;

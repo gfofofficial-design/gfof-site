@@ -85,6 +85,12 @@
   status = 200
   force = true
 
+# Short address printed on guest-created Wrong Moon images.
+[[redirects]]
+  from = "/moon"
+  to = "/alliance-wrong-moon"
+  status = 302
+
 [[redirects]]
   from = "/staking"
   to = "/staking.html"
