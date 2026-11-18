@@ -42,6 +42,7 @@ input::placeholder { color: var(--fed-muted); }
 }
 .address-option input { flex: none; width: 1.2rem; height: 1.2rem; margin: 0; accent-color: var(--fed-command); }
 .status:not(:empty) { margin-top: .6rem; }
+.image-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }
 .save {
   display: inline-flex; align-items: center; min-height: 46px; padding: .6rem 1.2rem; border-radius: 6px;
   background: var(--fed-authority); color: var(--fed-space);
@@ -51,11 +52,13 @@ input::placeholder { color: var(--fed-muted); }
 .text-share { margin-top: .75rem; }
 .text-share summary { width: fit-content; min-height: 44px; padding-block: .55rem; color: var(--fed-command); cursor: pointer; }
 .text-share textarea { display: block; resize: vertical; }
-.text-share button {
-  margin-top: .65rem; min-height: 44px; padding: .5rem .9rem; border-radius: 6px;
+.text-share button, .image-actions button {
+  min-height: 46px; padding: .5rem .9rem; border-radius: 6px;
   background: var(--fed-space-panel); color: var(--fed-text-display); border: 1px solid var(--fed-border-strong);
   font: inherit; font-weight: 650; cursor: pointer;
 }
+.text-share button { min-height: 44px; margin-top: .65rem; }
+.image-actions button[aria-disabled="true"] { color: var(--fed-muted); cursor: default; }
 a { color: var(--fed-command); text-underline-offset: .18em; }
 .template, footer a { display: inline-flex; min-height: 44px; align-items: center; }
 .template { margin-top: .35rem; }

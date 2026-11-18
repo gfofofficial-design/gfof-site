@@ -34,21 +34,56 @@ export function mountMoonEditor(document) {
   const addressChoice = document.getElementById('moon-address');
   const controls = document.getElementById('moon-controls');
   const save = document.getElementById('moon-save');
+  const shareImage = document.getElementById('moon-share-image');
   const status = document.getElementById('moon-status');
   const share = document.getElementById('moon-share');
   const shareText = document.getElementById('moon-share-text');
   const copyButton = document.getElementById('moon-copy');
   const copyStatus = document.getElementById('moon-copy-status');
   const publicLink = document.querySelector('link[rel="canonical"]').href;
+  const {navigator, File, ClipboardItem} = document.defaultView;
+  const canCopyImage = typeof ClipboardItem === 'function' && typeof navigator.clipboard?.write === 'function';
   const supportsExport = Boolean(context) && typeof canvas.toBlob === 'function';
   let copyAttempt = 0;
   let fileUrl;
+  let shareData;
+  let imageActionPending = false;
+  let preferCopy = false;
   let revision = 0;
+
+  function fileShareData(blob) {
+    if (preferCopy || blob.type !== 'image/jpeg' || typeof File !== 'function' ||
+        typeof navigator.canShare !== 'function' || typeof navigator.share !== 'function') return;
+    try {
+      const data = {files: [new File([blob], save.download, {type: blob.type})]};
+      if (navigator.canShare(data)) return data;
+    } catch {
+      // A browser can deny file sharing while still supporting downloads.
+    }
+  }
+
+  function updateImageAction() {
+    if (!shareImage) return;
+    shareImage.hidden = !fileUrl || (!shareData && !canCopyImage);
+    shareImage.textContent = shareData ? 'Share image' : 'Copy image';
+  }
+
+  function copyImage() {
+    // Start the clipboard write during the click. Encode the canvas only when someone copies it.
+    const png = new Promise((resolve, reject) => canvas.toBlob(blob => {
+      if (blob) resolve(blob);
+      else reject(new Error('PNG export failed'));
+    }, 'image/png'));
+    const item = new ClipboardItem({'image/png': png});
+    return navigator.clipboard.write([item]);
+  }
 
   function render() {
     const current = ++revision;
     if (fileUrl) URL.revokeObjectURL(fileUrl);
     fileUrl = undefined;
+    shareData = undefined;
+    updateImageAction();
     save.removeAttribute('href');
     save.setAttribute('aria-disabled', 'true');
     status.textContent = '';
@@ -101,6 +136,8 @@ export function mountMoonEditor(document) {
       fileUrl = URL.createObjectURL(blob);
       save.href = fileUrl;
       save.removeAttribute('aria-disabled');
+      if (shareImage) shareData = fileShareData(blob);
+      updateImageAction();
     }, 'image/jpeg', .9);
   }
 
@@ -113,6 +150,34 @@ export function mountMoonEditor(document) {
     shareText.value = text ? text + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
     render();
   }
+  shareImage?.addEventListener('click', async () => {
+    if (!fileUrl || imageActionPending || (!shareData && !canCopyImage)) return;
+    const current = revision;
+    const data = shareData;
+    imageActionPending = true;
+    shareImage.setAttribute('aria-disabled', 'true');
+    status.textContent = '';
+    try {
+      if (data) await navigator.share(data);
+      else await copyImage();
+      if (current === revision) status.textContent = data ? 'Sharing options opened.' : 'Image copied. Paste it into your chat.';
+    } catch (error) {
+      if (current !== revision) return;
+      if (data && error?.name === 'AbortError') {
+        status.textContent = 'Sharing canceled.';
+      } else if (data && canCopyImage) {
+        preferCopy = true;
+        shareData = undefined;
+        updateImageAction();
+        status.textContent = 'Sharing is unavailable. Choose Copy image, then paste it into your chat.';
+      } else {
+        status.textContent = 'Use Save my meme to download your picture, or Share as text for the caption.';
+      }
+    } finally {
+      imageActionPending = false;
+      shareImage.removeAttribute('aria-disabled');
+    }
+  });
   copyButton.addEventListener('click', async () => {
     if (!shareText.value) return;
     const attempt = ++copyAttempt;

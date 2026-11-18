@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {resolveObjectURL} from 'node:buffer';
 import {existsSync, readFileSync} from 'node:fs';
 import {PUBLISHED_CHALLENGES,publishedChallenges,mountChallengeBoard} from '../assets/federation/fed-alliance-challenges.mjs';
 import {captionLines, mountMoonEditor} from '../assets/federation/fed-alliance-wrong-moon.mjs';
@@ -56,17 +57,23 @@ function moonFixture() {
   }};
   const get = document.getElementById.bind(document);
   const encoded = [];
+  const pngEncodes = [];
   const drawn = [];
   const canvas = get('moon-preview');
   canvas.getContext = () => ({
     measureText: text => ({width: text.length * 25}),
     drawImage() { drawn.length = 0; }, fillRect() {}, fillText(line) { drawn.push(line); }
   });
-  canvas.toBlob = (callback, type) => { assert.equal(type, 'image/jpeg'); encoded.push(callback); };
+  canvas.toBlob = (callback, type) => {
+    if (type === 'image/png') pngEncodes.push(callback);
+    else { assert.equal(type, 'image/jpeg'); encoded.push(callback); }
+  };
   Object.assign(get('moon-art'), {complete: true, naturalHeight: 1024, naturalWidth: 1536, alt: 'Two space tugs.'});
   Object.assign(get('moon-address'), {checked: true, value: makerAddress});
-  document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}};
-  return {document, get, encoded, drawn, canvas};
+  get('moon-save').download = 'the-wrong-moon.jpg';
+  class ClipboardItem { constructor(data) { this.data = data; } }
+  document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}, File, ClipboardItem};
+  return {document, get, encoded, pngEncodes, drawn, canvas};
 }
 
 test('the meme download tracks the latest caption when encodes finish out of order or the visitor clears it', () => {
@@ -162,15 +169,158 @@ test('guests can share in plain text without waiting for art or posting their ca
   assert.equal(get('moon-share').open, false);
 });
 
-test('a cached editor page without the address choice still exports its caption', () => {
+test('a cached editor page without the newer image controls still exports its caption', () => {
   const {document, get, encoded, drawn} = moonFixture();
-  document.getElementById = id => ['moon-address-option', 'moon-address'].includes(id) ? null : get(id);
+  document.getElementById = id => ['moon-address-option', 'moon-address', 'moon-share-image'].includes(id) ? null : get(id);
   mountMoonEditor(document);
   const caption = get('moon-caption');
   caption.value = 'Old chart, new orbit.'; caption.input();
   assert.deepEqual(drawn, [caption.value]);
   encoded[0](new Blob(['fixture'], {type:'image/jpeg'}));
   assert.match(get('moon-save').href, /^blob:/);
+});
+
+test('Share image opens only on click and uses the same JPEG as the latest download', async () => {
+  const {document, get, encoded} = moonFixture();
+  const button = get('moon-share-image'), caption = get('moon-caption'), choice = get('moon-address');
+  let checked, sent;
+  document.defaultView.navigator = {
+    canShare(data) { checked = data; return true; },
+    share(data) { sent = data; }
+  };
+  mountMoonEditor(document);
+  assert.equal(button.hidden, true);
+  caption.value = 'Wrong moon, right crew.'; caption.input();
+  choice.checked = false; choice.change();
+  const jpeg = new Blob([Uint8Array.of(0xff, 0xd8, 1, 0xff, 0xd9)], {type: 'image/jpeg'});
+  encoded[1](jpeg);
+  encoded[0](new Blob(['stale'], {type: 'image/jpeg'}));
+  assert.equal(button.hidden, false);
+  assert.equal(sent, undefined);
+  const pending = button.click();
+  assert.equal(sent, checked);
+  assert.deepEqual(Object.keys(sent), ['files']);
+  assert.equal(sent.files.length, 1);
+  const [file] = sent.files;
+  assert.ok(file instanceof File);
+  assert.equal(file.name, 'the-wrong-moon.jpg');
+  assert.equal(file.type, 'image/jpeg');
+  assert.deepEqual(await file.arrayBuffer(), await jpeg.arrayBuffer());
+  assert.deepEqual(await file.arrayBuffer(), await resolveObjectURL(get('moon-save').href).arrayBuffer());
+  await pending;
+  assert.match(get('moon-status').textContent, /options opened/);
+  caption.value = 'New orbit.'; caption.input();
+  caption.value = ' '; caption.input();
+  encoded[2](jpeg);
+  assert.equal(button.hidden, true);
+  sent = undefined;
+  await button.click();
+  assert.equal(sent, undefined);
+});
+
+test('missing or declined file sharing preserves the JPEG download and caption link', () => {
+  const blocked = () => { throw new Error('Sharing blocked'); };
+  for (const navigator of [{}, {share: blocked}, {canShare: () => true},
+    {canShare: () => false, share: blocked}, {canShare: blocked, share: blocked}]) {
+    const {document, get, encoded} = moonFixture();
+    document.defaultView.navigator = navigator;
+    mountMoonEditor(document);
+    const caption = get('moon-caption');
+    caption.value = 'Lunar mix-up.'; caption.input();
+    encoded[0](new Blob(['image'], {type: 'image/jpeg'}));
+    assert.equal(get('moon-share-image').hidden, true);
+    assert.ok(resolveObjectURL(get('moon-save').href));
+    assert.ok(get('moon-share-text').value.includes(moonPage));
+  }
+});
+
+test('cancel and retry work, concurrent choosers are blocked and an old result cannot replace a new caption’s status', async () => {
+  const {document, get, encoded} = moonFixture();
+  const button = get('moon-share-image'), caption = get('moon-caption'), status = get('moon-status');
+  const calls = [];
+  document.defaultView.navigator = {canShare: () => true, share() {
+    const call = Promise.withResolvers();
+    calls.push(call); return call.promise;
+  }};
+  mountMoonEditor(document);
+  caption.value = 'First moon.'; caption.input();
+  const jpeg = new Blob(['image'], {type: 'image/jpeg'});
+  encoded[0](jpeg);
+  const first = button.click(); await button.click();
+  assert.equal(calls.length, 1);
+  assert.equal(button['aria-disabled'], 'true');
+  calls[0].reject(new DOMException('Canceled', 'AbortError')); await first;
+  assert.match(status.textContent, /canceled/);
+  assert.equal(button['aria-disabled'], undefined);
+  const second = button.click();
+  caption.value = 'Different moon.'; caption.input();
+  encoded[1](jpeg);
+  await button.click();
+  assert.equal(calls.length, 2);
+  calls[1].resolve(); await second;
+  assert.equal(status.textContent, '');
+  const third = button.click();
+  calls[2].reject(new DOMException('Denied', 'NotAllowedError')); await third;
+  assert.match(status.textContent, /Save my meme.*Share as text/);
+  assert.ok(resolveObjectURL(get('moon-save').href));
+});
+
+test('if the chooser is blocked, the same focused button offers to copy the picture on a second click', async () => {
+  const {document, get, encoded, pngEncodes} = moonFixture();
+  const button = get('moon-share-image'), caption = get('moon-caption');
+  let reason = 'AbortError', writes = 0, copied;
+  document.defaultView.navigator = {
+    canShare: () => true,
+    share() { throw new DOMException('Chooser closed', reason); },
+    clipboard: {async write([item]) {
+      writes++;
+      assert.deepEqual(Object.keys(item.data), ['image/png']);
+      copied = await item.data['image/png'];
+    }}
+  };
+  mountMoonEditor(document);
+  caption.value = 'This is our spare moon.'; caption.input();
+  encoded[0](new Blob(['jpeg'], {type: 'image/jpeg'}));
+  button.focus(); await button.click();
+  assert.equal(button.textContent, 'Share image');
+  reason = 'NotAllowedError'; await button.click();
+  assert.equal(button.textContent, 'Copy image');
+  assert.equal(document.activeElement, button);
+  assert.match(get('moon-status').textContent, /Choose Copy image/);
+  assert.equal(writes, 0);
+  assert.equal(pngEncodes.length, 0);
+  const pending = button.click();
+  assert.equal(writes, 1);
+  assert.equal(pngEncodes.length, 1);
+  const png = new Blob(['png'], {type: 'image/png'});
+  pngEncodes[0](png); await pending;
+  assert.equal(copied, png);
+  assert.match(get('moon-status').textContent, /Image copied/);
+  caption.value = 'Another moon.'; caption.input();
+  encoded[1](new Blob(['new JPEG'], {type: 'image/jpeg'}));
+  assert.equal(button.textContent, 'Copy image');
+});
+
+test('clipboard-only browsers can copy on demand, recover from a failed encode and ignore a stale completion', async () => {
+  const {document, get, encoded, pngEncodes} = moonFixture();
+  const button = get('moon-share-image'), caption = get('moon-caption'), status = get('moon-status');
+  document.defaultView.navigator.clipboard = {async write([item]) { await item.data['image/png']; }};
+  mountMoonEditor(document);
+  caption.value = 'Moon on loan.'; caption.input();
+  assert.equal(button.hidden, true);
+  const jpeg = new Blob(['jpeg'], {type: 'image/jpeg'});
+  encoded[0](jpeg);
+  assert.equal(button.hidden, false);
+  assert.equal(button.textContent, 'Copy image');
+  const first = button.click();
+  pngEncodes[0](null); await first;
+  assert.match(status.textContent, /Save my meme.*Share as text/);
+  const second = button.click();
+  caption.value = 'A borrowed moon.'; caption.input();
+  encoded[1](jpeg);
+  pngEncodes[1](new Blob(['png'], {type: 'image/png'})); await second;
+  assert.equal(status.textContent, '');
+  assert.equal(button['aria-disabled'], undefined);
 });
 
 test('manual copy works without canvas or clipboard and a late rejection cannot select stale text', async () => {
