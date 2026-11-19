@@ -35,6 +35,18 @@ export function captionLines(text, measure, limit) {
   return lines;
 }
 
+export async function checkMoonImage(file) {
+  if (!file || file.size === 0 || file.size > 10 * 1024 * 1024) {
+    throw new Error('Choose an image up to 10 MB.');
+  }
+  const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+  const jpeg = bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
+  const png = [137, 80, 78, 71, 13, 10, 26, 10].every((value, index) => bytes[index] === value);
+  const webp = String.fromCharCode(...bytes.slice(0, 4)) === 'RIFF'
+    && String.fromCharCode(...bytes.slice(8, 12)) === 'WEBP';
+  if (!(jpeg || png || webp)) throw new Error('Choose a JPG, PNG or WebP image.');
+}
+
 export function mountMoonEditor(document) {
   const art = document.getElementById('moon-art');
   const canvas = document.getElementById('moon-preview');
@@ -52,6 +64,10 @@ export function mountMoonEditor(document) {
   const shareText = document.getElementById('moon-share-text');
   const copyButton = document.getElementById('moon-copy');
   const copyStatus = document.getElementById('moon-copy-status');
+  const imageControls = document.getElementById('moon-image-controls');
+  const imagePicker = document.getElementById('moon-image');
+  const imageReset = document.getElementById('moon-image-reset');
+  const imageStatus = document.getElementById('moon-image-status');
   const publicLink = document.querySelector('link[rel="canonical"]').href;
   const {navigator, File, ClipboardItem} = document.defaultView;
   const canCopyImage = typeof ClipboardItem === 'function' && typeof navigator.clipboard?.write === 'function';
@@ -63,7 +79,10 @@ export function mountMoonEditor(document) {
   let preferCopy = false;
   let revision = 0;
   let composing = false;
+  let captionValid = true;
   let exportCaption = '';
+  let sourceImage = art;
+  let imageRevision = 0;
 
   function fileShareData(blob) {
     if (preferCopy || blob.type !== 'image/jpeg' || typeof File !== 'function' ||
@@ -102,11 +121,13 @@ export function mountMoonEditor(document) {
     save.setAttribute('aria-disabled', 'true');
     status.textContent = '';
     const text = exportCaption;
-    const canDraw = supportsExport && art.complete && art.naturalWidth > 0;
-    canvas.hidden = !text || !canDraw;
+    const customImage = sourceImage !== art;
+    const hasMeme = Boolean(text) || (customImage && captionValid && !composing);
+    const canDraw = supportsExport && sourceImage.complete && sourceImage.naturalWidth > 0;
+    canvas.hidden = !hasMeme || !canDraw;
     art.hidden = !canvas.hidden;
     if (addressOption) addressOption.hidden = canvas.hidden;
-    if (!text) {
+    if (!hasMeme) {
       canvas.removeAttribute('aria-label');
       return;
     }
@@ -117,16 +138,19 @@ export function mountMoonEditor(document) {
       return;
     }
 
-    const width = 1200;
-    const artHeight = Math.round(width * art.naturalHeight / art.naturalWidth);
-    const font = 'bold 54px system-ui, sans-serif';
+    const ratio = sourceImage.naturalWidth / sourceImage.naturalHeight;
+    const width = customImage ? Math.max(1, Math.round(Math.min(1200, 2400 * ratio))) : 1200;
+    const artHeight = Math.max(1, Math.round(width / ratio));
+    const scale = width / 1200;
+    const fontSize = Math.max(1, Math.round(54 * width / 1200));
+    const font = 'bold ' + fontSize + 'px system-ui, sans-serif';
     context.font = font;
-    const lines = captionLines(text, value => context.measureText(value).width, width - 96);
-    const lineHeight = 68;
+    const lines = captionLines(text, value => context.measureText(value).width, width * .92);
+    const lineHeight = fontSize * 68 / 54;
     const address = addressChoice?.checked ? addressChoice.value : '';
     canvas.width = width;
-    canvas.height = artHeight + lines.length * lineHeight + 56 + (address ? 48 : 0);
-    context.drawImage(art, 0, 0, width, artHeight);
+    canvas.height = artHeight + lines.length * lineHeight + (text || address ? 56 * scale : 0) + (address ? 48 * scale : 0);
+    context.drawImage(sourceImage, 0, 0, width, artHeight);
     context.fillStyle = '#f5f1e6';
     context.fillRect(0, artHeight, width, canvas.height - artHeight);
     context.fillStyle = '#101827';
@@ -134,14 +158,14 @@ export function mountMoonEditor(document) {
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     context.direction = document.defaultView.getComputedStyle(caption).direction;
-    lines.forEach((line, index) => context.fillText(line, width / 2, artHeight + 28 + (index + .5) * lineHeight));
+    lines.forEach((line, index) => context.fillText(line, width / 2, artHeight + 28 * scale + (index + .5) * lineHeight));
     if (address) {
       context.direction = 'ltr';
-      context.font = '600 38px system-ui, sans-serif';
+      context.font = '600 ' + 38 * scale + 'px system-ui, sans-serif';
       context.fillStyle = '#405465';
-      context.fillText(address, width / 2, canvas.height - 32);
+      context.fillText(address, width / 2, canvas.height - 32 * scale);
     }
-    canvas.setAttribute('aria-label', art.alt + ' Caption: ' + text + (address ? ' ' + address : ''));
+    canvas.setAttribute('aria-label', sourceImage.alt + (text ? ' Caption: ' + text : '') + (address ? ' ' + address : ''));
 
     // Encoding may finish out of order when a visitor types quickly.
     canvas.toBlob(blob => {
@@ -162,12 +186,14 @@ export function mountMoonEditor(document) {
     copyAttempt++;
     copyStatus.textContent = '';
     exportCaption = '';
+    captionValid = false;
     if (!composing) {
       let count = 0;
       for (const _ of captionCharacters(caption.value)) {
         if (++count > captionLimit) break;
       }
       const over = count > captionLimit;
+      captionValid = !over;
       let label = (over ? 'Over ' : count + ' of ') + captionLimit + ' characters.';
       if (!segmenter) label += ' This browser counts some emoji in parts.';
       const note = over ? 'Shorten your caption to save or share.' : 'You choose what to share.';
@@ -230,6 +256,52 @@ export function mountMoonEditor(document) {
       }
     }
   });
+  if (imageControls && imagePicker && imageReset && imageStatus && supportsExport && document.defaultView.Image) {
+    imageControls.hidden = false;
+    imagePicker.addEventListener('change', async () => {
+      const file = imagePicker.files?.[0];
+      if (!file) return;
+      const request = ++imageRevision;
+      imageStatus.textContent = 'Opening your image…';
+      let objectUrl;
+      try {
+        await checkMoonImage(file);
+        if (request !== imageRevision) return;
+        const image = new document.defaultView.Image();
+        objectUrl = URL.createObjectURL(file);
+        await new Promise((resolve, reject) => {
+          image.onload = resolve;
+          image.onerror = () => reject(new Error('This image could not be opened. Try a different JPG, PNG or WebP.'));
+          image.src = objectUrl;
+        });
+        if (request !== imageRevision) return;
+        if (!image.naturalWidth || !image.naturalHeight || image.naturalWidth > 12000
+          || image.naturalHeight > 12000 || image.naturalWidth * image.naturalHeight > 24000000) {
+          throw new Error('Choose an image up to 24 megapixels and 12,000 pixels on either side.');
+        }
+        image.alt = 'Your selected meme image.';
+        sourceImage = image;
+        imageReset.hidden = false;
+        imageStatus.textContent = 'Your image is ready. Add a caption or save it as it is.';
+        preferCopy = false;
+        render();
+      } catch (error) {
+        if (request === imageRevision) imageStatus.textContent = error.message;
+      } finally {
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        if (request === imageRevision) imagePicker.value = '';
+      }
+    });
+    imageReset.addEventListener('click', () => {
+      ++imageRevision;
+      sourceImage = art;
+      imagePicker.value = '';
+      imageReset.hidden = true;
+      imageStatus.textContent = 'The Wrong Moon image is selected.';
+      render();
+      imagePicker.focus();
+    });
+  }
   // Replace the native UTF-16 limit only once the guest editor handles complete characters.
   caption.removeAttribute('maxlength');
   caption.addEventListener('input', () => {

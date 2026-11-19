@@ -27,6 +27,14 @@ h1 { max-width: 10ch; font-size: clamp(2.8rem, 5.2vw, 5rem); line-height: .96; l
 .frame { grid-area: art; align-self: center; overflow: hidden; border: 1px solid var(--fed-border-strong); border-radius: 12px; background: var(--fed-space-panel); }
 .frame img, .frame canvas { display: block; width: 100%; height: auto; }
 .editor { grid-area: editor; align-self: start; }
+.image-picker { margin-bottom: 1.25rem; }
+input[type="file"] { display: block; width: 100%; min-height: 48px; margin-top: .5rem; font: inherit; color: var(--fed-text); }
+input[type="file"]::file-selector-button, .image-picker button {
+  min-height: 44px; padding: .5rem .75rem; margin-right: .5rem; border-radius: 6px;
+  border: 1px solid var(--fed-border-strong); background: var(--fed-space-panel); color: var(--fed-text-display); font: inherit; cursor: pointer;
+}
+.image-picker .help { margin-bottom: .4rem; }
+.image-picker button { margin-top: .5rem; }
 label { display: block; font-weight: 700; }
 input[type="text"], textarea {
   width: 100%; margin-top: .5rem; padding: .8rem .9rem; min-height: 48px;

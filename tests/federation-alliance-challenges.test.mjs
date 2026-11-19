@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {resolveObjectURL} from 'node:buffer';
 import {existsSync, readFileSync} from 'node:fs';
 import {PUBLISHED_CHALLENGES,publishedChallenges,mountChallengeBoard} from '../assets/federation/fed-alliance-challenges.mjs';
-import {captionLines, mountMoonEditor} from '../assets/federation/fed-alliance-wrong-moon.mjs';
+import {captionLines, checkMoonImage, mountMoonEditor} from '../assets/federation/fed-alliance-wrong-moon.mjs';
 
 test('the meme caption wraps words and preserves joined emoji in long captions', () => {
   const glyphs = new Intl.Segmenter(undefined, {granularity: 'grapheme'});
@@ -75,6 +75,117 @@ function moonFixture() {
   document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}, File, ClipboardItem};
   return {document, get, encoded, pngEncodes, drawn, canvas};
 }
+
+const jpegHeader = new Uint8Array([255, 216, 255, 224, 0, 1, 0, 0, 0, 0, 0, 0]);
+const ownImageFile = () => new File([jpegHeader], 'guest.jpg', {type:'image/jpeg'});
+
+function imageFixture() {
+  const fixture = moonFixture();
+  const pending = [];
+  fixture.document.defaultView.Image = class {
+    constructor() {
+      this.complete = true;
+      this.naturalWidth = 800;
+      this.naturalHeight = 600;
+      pending.push(this);
+    }
+  };
+  mountMoonEditor(fixture.document);
+  const choose = file => {
+    fixture.get('moon-image').files = [file];
+    return fixture.get('moon-image').change();
+  };
+  const opened = async () => {
+    await new Promise(resolve => setImmediate(resolve));
+    return pending.at(-1);
+  };
+  const encode = () => fixture.encoded.at(-1)(new Blob(['image'],{type:'image/jpeg'}));
+  return {...fixture,pending,choose,opened,encode};
+}
+
+test('guest images accept supported file headers and reject empty, oversized and disguised files', async () => {
+  for (const bytes of [jpegHeader,new Uint8Array([137,80,78,71,13,10,26,10]),new TextEncoder().encode('RIFF0000WEBP')]) {
+    await checkMoonImage(new File([bytes],'image'));
+  }
+  for (const file of [new File([],'empty.jpg'),new File(['<svg/>'],'fake.jpg',{type:'image/jpeg'})]) {
+    await assert.rejects(checkMoonImage(file), /Choose/);
+  }
+  await assert.rejects(checkMoonImage({size:10*1024*1024+1}), /10 MB/);
+});
+
+test('an original guest image can be exported without adding a caption', async () => {
+  const f=imageFixture();
+  const selection=f.choose(ownImageFile());
+  const image=await f.opened(); image.onload(); await selection;
+  assert.equal(f.canvas.hidden,false);
+  assert.equal(f.get('moon-art').hidden,true);
+  assert.equal(f.get('moon-image-reset').hidden,false);
+  assert.match(f.canvas['aria-label'],/Your selected meme image/);
+  assert.equal(f.canvas.width,1200);
+  f.encode();
+  assert.ok(f.get('moon-save').href);
+  assert.equal(f.get('moon-image').value,'');
+});
+
+test('a failed replacement retains the image, caption and prepared download', async () => {
+  const f=imageFixture();
+  f.get('moon-caption').value='The crew submitted this.';
+  f.get('moon-caption').input();
+  let selection=f.choose(ownImageFile());
+  const first=await f.opened(); first.onload(); await selection; f.encode();
+  const download=f.get('moon-save').href;
+  selection=f.choose(ownImageFile());
+  const broken=await f.opened(); broken.onerror(); await selection;
+  assert.equal(f.get('moon-save').href,download);
+  assert.equal(f.get('moon-caption').value,'The crew submitted this.');
+  assert.match(f.get('moon-image-status').textContent,/could not be opened/);
+});
+
+test('clearing the custom image cancels an in-flight replacement and preserves the caption', async () => {
+  const f=imageFixture();
+  f.get('moon-caption').value='Keep my caption.';
+  f.get('moon-caption').input();
+  let selection=f.choose(ownImageFile());
+  const first=await f.opened(); first.onload(); await selection;
+  selection=f.choose(ownImageFile());
+  const late=await f.opened();
+  f.get('moon-image-reset').click();
+  late.onload(); await selection;
+  assert.match(f.canvas['aria-label'],/^Two space tugs/);
+  assert.equal(f.get('moon-caption').value,'Keep my caption.');
+  assert.equal(f.document.activeElement,f.get('moon-image'));
+  assert.equal(f.get('moon-image-reset').hidden,true);
+});
+
+test('an older image selection cannot overwrite a newer selection', async () => {
+  const f=imageFixture();
+  const firstSelection=f.choose(ownImageFile()); const first=await f.opened();
+  const secondSelection=f.choose(ownImageFile()); const second=await f.opened();
+  second.naturalWidth=1600; second.naturalHeight=800;
+  second.onload(); await secondSelection;
+  const height=f.canvas.height;
+  first.onload(); await firstSelection;
+  assert.equal(f.canvas.height,height);
+  assert.equal(f.get('moon-image-status').textContent,'Your image is ready. Add a caption or save it as it is.');
+});
+
+test('custom images respect the caption limit and reject excessive dimensions', async () => {
+  const f=imageFixture();
+  let selection=f.choose(ownImageFile()); const image=await f.opened();
+  image.naturalWidth=200; image.naturalHeight=4000;
+  image.onload(); await selection;
+  assert.equal(f.canvas.width,120); assert.equal(f.canvas.height<2500,true);
+  f.get('moon-caption').value='a'.repeat(91); f.get('moon-caption').input();
+  assert.equal(f.canvas.hidden,true);
+  assert.equal(f.get('moon-save')['aria-disabled'],'true');
+  f.get('moon-caption').value='A tall tale.'; f.get('moon-caption').input(); f.encode();
+  assert.equal(f.canvas.hidden,false); assert.ok(f.get('moon-save').href);
+  const download=f.get('moon-save').href;
+  selection=f.choose(ownImageFile()); const enormous=await f.opened();
+  enormous.naturalWidth=13000; enormous.onload(); await selection;
+  assert.equal(f.get('moon-save').href,download);
+  assert.match(f.get('moon-image-status').textContent,/24 megapixels/);
+});
 
 test('the guest editor counts joined emoji and keeps the complete punchline in the preview and share text', () => {
   const {document, get, canvas} = moonFixture();
