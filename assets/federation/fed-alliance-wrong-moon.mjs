@@ -1,3 +1,16 @@
+const captionLimit = 90;
+const segmenter = typeof Intl.Segmenter === 'function'
+  ? new Intl.Segmenter(undefined, {granularity: 'grapheme'})
+  : null;
+
+function* captionCharacters(value) {
+  if (segmenter) {
+    for (const part of segmenter.segment(value)) yield part.segment;
+  } else {
+    yield* value;
+  }
+}
+
 // Measure on the export canvas so the live preview and JPEG wrap identically.
 export function captionLines(text, measure, limit) {
   const lines = [];
@@ -10,10 +23,7 @@ export function captionLines(text, measure, limit) {
     }
     if (line) lines.push(line);
     line = '';
-    const glyphs = typeof Intl.Segmenter === 'function'
-      ? Array.from(new Intl.Segmenter(undefined, {granularity: 'grapheme'}).segment(word), part => part.segment)
-      : Array.from(word);
-    for (const glyph of glyphs) {
+    for (const glyph of captionCharacters(word)) {
       if (line && measure(line + glyph) > limit) {
         lines.push(line);
         line = '';
@@ -30,6 +40,8 @@ export function mountMoonEditor(document) {
   const canvas = document.getElementById('moon-preview');
   const context = canvas.getContext('2d');
   const caption = document.getElementById('moon-caption');
+  const countLabel = document.getElementById('moon-caption-count') ?? document.getElementById('caption-help');
+  const limitNote = document.getElementById('moon-limit-note');
   const addressOption = document.getElementById('moon-address-option');
   const addressChoice = document.getElementById('moon-address');
   const controls = document.getElementById('moon-controls');
@@ -50,6 +62,8 @@ export function mountMoonEditor(document) {
   let imageActionPending = false;
   let preferCopy = false;
   let revision = 0;
+  let composing = false;
+  let exportCaption = '';
 
   function fileShareData(blob) {
     if (preferCopy || blob.type !== 'image/jpeg' || typeof File !== 'function' ||
@@ -87,12 +101,15 @@ export function mountMoonEditor(document) {
     save.removeAttribute('href');
     save.setAttribute('aria-disabled', 'true');
     status.textContent = '';
-    const text = caption.value.trim();
+    const text = exportCaption;
     const canDraw = supportsExport && art.complete && art.naturalWidth > 0;
     canvas.hidden = !text || !canDraw;
     art.hidden = !canvas.hidden;
     if (addressOption) addressOption.hidden = canvas.hidden;
-    if (!text) return;
+    if (!text) {
+      canvas.removeAttribute('aria-label');
+      return;
+    }
     if (!canDraw) {
       if (!supportsExport || art.complete) {
         status.textContent = 'Image export is unavailable. You can share your caption as text.';
@@ -144,11 +161,29 @@ export function mountMoonEditor(document) {
   function updateCaption() {
     copyAttempt++;
     copyStatus.textContent = '';
-    const text = caption.value.trim();
-    share.hidden = !text;
-    copyButton.hidden = !text;
-    if (!text) share.open = false;
-    shareText.value = text ? text + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
+    exportCaption = '';
+    if (!composing) {
+      let count = 0;
+      for (const _ of captionCharacters(caption.value)) {
+        if (++count > captionLimit) break;
+      }
+      const over = count > captionLimit;
+      let label = (over ? 'Over ' : count + ' of ') + captionLimit + ' characters.';
+      if (!segmenter) label += ' This browser counts some emoji in parts.';
+      const note = over ? 'Shorten your caption to save or share.' : 'You choose what to share.';
+      countLabel.textContent = limitNote ? label : label + ' ' + note;
+      if (limitNote && limitNote.textContent !== note) limitNote.textContent = note;
+      if (over) {
+        caption.setAttribute('aria-invalid', 'true');
+      } else {
+        caption.removeAttribute('aria-invalid');
+        exportCaption = caption.value.trim();
+      }
+    }
+    share.hidden = !exportCaption;
+    copyButton.hidden = !exportCaption;
+    if (!exportCaption) share.open = false;
+    shareText.value = exportCaption ? exportCaption + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
     render();
   }
   shareImage?.addEventListener('click', async () => {
@@ -195,12 +230,24 @@ export function mountMoonEditor(document) {
       }
     }
   });
-  controls.hidden = false;
-  caption.addEventListener('input', updateCaption);
+  // Replace the native UTF-16 limit only once the guest editor handles complete characters.
+  caption.removeAttribute('maxlength');
+  caption.addEventListener('input', () => {
+    if (!composing) updateCaption();
+  });
+  caption.addEventListener('compositionstart', () => {
+    composing = true;
+    updateCaption();
+  });
+  caption.addEventListener('compositionend', () => {
+    composing = false;
+    updateCaption();
+  });
   addressChoice?.addEventListener('change', render);
   art.addEventListener('load', render, {once: true});
   art.addEventListener('error', render, {once: true});
   updateCaption();
+  controls.hidden = false;
 }
 
 if (typeof document !== 'undefined') mountMoonEditor(document);

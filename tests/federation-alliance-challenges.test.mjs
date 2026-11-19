@@ -76,6 +76,120 @@ function moonFixture() {
   return {document, get, encoded, pngEncodes, drawn, canvas};
 }
 
+test('the guest editor counts joined emoji and keeps the complete punchline in the preview and share text', () => {
+  const {document, get, canvas} = moonFixture();
+  const input = get('moon-caption');
+  input.setAttribute('maxlength', '90');
+  mountMoonEditor(document);
+  assert.equal(input.maxlength, undefined);
+  const joke = 'Voss, the whole crew voted. 👩🏽‍🚀👨🏾‍🚀🧑‍🚀 The moon counts as carry-on if it has a handle.';
+  assert.equal(joke.length, 95);
+  input.value = joke; input.input();
+  assert.equal(get('moon-caption-count').textContent, '79 of 90 characters.');
+  assert.ok(canvas['aria-label'].includes(joke));
+  assert.ok(get('moon-share-text').value.startsWith(joke + '\n\n'));
+  const html = readFileSync(new URL('../alliance-wrong-moon.html', import.meta.url), 'utf8');
+  assert.match(html, /id="moon-caption"[^>]+aria-describedby="caption-help"/);
+  assert.match(html, /id="caption-help"[^>]*>[\s\S]*?id="moon-caption-count"[\s\S]*?id="moon-limit-note" role="status"[\s\S]*?<\/p>/);
+});
+
+test('the 91st character stays editable and invalidates older image and text shares until corrected', async () => {
+  const {document, get, canvas, encoded} = moonFixture();
+  const input = get('moon-caption'), save = get('moon-save'), share = get('moon-share');
+  const writes = [];
+  document.defaultView.navigator.clipboard = {writeText: text => writes.push(text)};
+  mountMoonEditor(document);
+  const boundary = 'a'.repeat(86) + '🇺🇸👩🏽‍🚀e\u0301👨‍👩‍👧‍👦';
+  input.value = boundary; input.input();
+  assert.equal(get('moon-caption-count').textContent, '90 of 90 characters.');
+  const jpeg = new Blob(['image'], {type:'image/jpeg'});
+  encoded[0](jpeg);
+  const oldUrl = save.href;
+  assert.ok(resolveObjectURL(oldUrl));
+  get('moon-address').change();
+  share.open = true;
+  input.focus();
+  input.value += '!'; input.input();
+  assert.equal(input.value, boundary + '!');
+  assert.equal(document.activeElement, input);
+  assert.equal(input['aria-invalid'], 'true');
+  assert.match(get('moon-limit-note').textContent, /Shorten your caption to save or share/);
+  assert.equal(share.open, false);
+  assert.equal(share.hidden, true);
+  assert.equal(get('moon-share-text').value, '');
+  await get('moon-copy').click();
+  assert.deepEqual(writes, []);
+  assert.equal(resolveObjectURL(oldUrl), undefined);
+  get('moon-art').load(); get('moon-address').change();
+  encoded[1](jpeg);
+  assert.equal(encoded.length, 2);
+  assert.equal(canvas.hidden, true);
+  assert.equal(save.href, undefined);
+  assert.equal(save['aria-disabled'], 'true');
+  assert.equal(get('moon-share-image').hidden, true);
+  input.value = boundary; input.input();
+  assert.equal(input['aria-invalid'], undefined);
+  assert.equal(share.hidden, false);
+  assert.ok(get('moon-share-text').value.startsWith(boundary + '\n\n'));
+  encoded[2](jpeg);
+  assert.ok(resolveObjectURL(save.href));
+});
+
+test('a long paste stays whole, and unfinished composition can only be shared after it is committed', () => {
+  const {document, get, encoded} = moonFixture();
+  const input = get('moon-caption');
+  mountMoonEditor(document);
+  const longDraft = '🌕'.repeat(10000) + ' keep this ending';
+  input.value = longDraft; input.input();
+  assert.equal(input.value, longDraft);
+  assert.equal(encoded.length, 0);
+  assert.equal(get('moon-caption-count').textContent, 'Over 90 characters.');
+  input.value = 'Moon '; input.input();
+  input.compositionstart();
+  input.value = 'Moon に'; input.input();
+  assert.equal(get('moon-share-text').value, '');
+  encoded[0](new Blob(['previous']));
+  assert.equal(get('moon-save').href, undefined);
+  input.value = 'Moon 日本'; input.compositionend();
+  assert.equal(get('moon-caption-count').textContent, '7 of 90 characters.');
+  assert.ok(get('moon-share-text').value.startsWith('Moon 日本\n'));
+  assert.equal(encoded.length, 2);
+});
+
+test('cached page markup still describes an over-limit draft and restores sharing when shortened', () => {
+  const {document, get} = moonFixture();
+  document.getElementById = id => ['moon-caption-count', 'moon-limit-note'].includes(id) ? null : get(id);
+  mountMoonEditor(document);
+  const input = get('moon-caption');
+  input.value = 'x'.repeat(91); input.input();
+  assert.match(get('caption-help').textContent, /Over 90 characters\. Shorten/);
+  assert.equal(get('moon-share-text').value, '');
+  input.value = 'Corrected.'; input.input();
+  assert.match(get('caption-help').textContent, /10 of 90/);
+  assert.ok(get('moon-share-text').value.startsWith(input.value));
+});
+
+test('older browsers preserve whole drafts and explain how they count emoji', async () => {
+  const descriptor = Object.getOwnPropertyDescriptor(Intl, 'Segmenter');
+  let legacy;
+  try {
+    Object.defineProperty(Intl, 'Segmenter', {...descriptor, value: undefined});
+    legacy = await import('../assets/federation/fed-alliance-wrong-moon.mjs?withoutSegmenter');
+  } finally {
+    Object.defineProperty(Intl, 'Segmenter', descriptor);
+  }
+  const {document, get} = moonFixture();
+  legacy.mountMoonEditor(document);
+  const input = get('moon-caption');
+  input.value = '🌕'.repeat(88) + '👩🏽‍🚀'; input.input();
+  assert.equal(input.value.endsWith('👩🏽‍🚀'), true);
+  assert.match(get('moon-caption-count').textContent, /Over 90.*some emoji in parts/i);
+  assert.equal(get('moon-share-text').value, '');
+  input.value = '🌕'.repeat(90); input.input();
+  assert.match(get('moon-caption-count').textContent, /90 of 90/);
+  assert.ok(get('moon-share-text').value.startsWith(input.value));
+});
+
 test('the meme download tracks the latest caption when encodes finish out of order or the visitor clears it', () => {
   const {document, get, encoded, drawn, canvas} = moonFixture();
   const caption = get('moon-caption');
