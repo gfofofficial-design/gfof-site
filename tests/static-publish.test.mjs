@@ -24,6 +24,33 @@ async function fixture(t,files) {
   for(const [path,content]of Object.entries(files)){await mkdir(join(root,path,'..'),{recursive:true});await writeFile(join(root,path),content);}
   return root;
 }
+
+test('member, wallet, account and quote pages declare their private browser policies', async t => {
+  const config = await readFile(new URL('../netlify.toml', import.meta.url), 'utf8');
+  const policies = new Map();
+  for (const section of config.split(/(?=^\[\[)/m)) {
+    if (!section.startsWith('[[headers]]')) continue;
+    const path = section.match(/^\s*for\s*=\s*"([^"]+)"/m)[1];
+    const values = section.split('[headers.values]')[1];
+    const lines = [...values.matchAll(/^[ \t]+([\w-]+)[ \t]*=[ \t]*"([^"\n]*)"[ \t]*$/gm)];
+    policies.set(path, Object.fromEntries(lines.map(([,name,value]) => [name.toLowerCase(),value])));
+  }
+  const groups = [
+    ['Dashboard', ['/member-workspace.html', '/member-workspace', '/member-workspace/']],
+    ['Wallet', ['/wallet.html', '/wallet', '/wallet/']],
+    ['Account', ['/account*']],
+    ['Swap quote preview', ['/swap*']],
+  ];
+  for (const [surface, paths] of groups) await t.test(surface, () => {
+    const canonical = policies.get(paths[0]);
+    assert.ok(canonical, paths[0]);
+    assert.equal(canonical['cache-control'], 'private, no-store');
+    assert.equal(canonical['referrer-policy'], 'no-referrer');
+    assert.equal(canonical['x-frame-options'], 'DENY');
+    assert.match(canonical['content-security-policy'], /(?:^|;\s*)frame-ancestors 'none'(?:;|$)/);
+    for (const path of paths.slice(1)) assert.deepEqual(policies.get(path),canonical,path);
+  });
+});
 test('public page, browser imports and public evidence survive byte-for-byte',async t=>{
   const files={'account.html':'<script src="/journey/passport.js"></script>','journey/passport.js':'public browser script','assets/federation/fed-account.js':'public account script','lib/mission-coach-core.mjs':'public imported module','config/public-availability.json':'{}','docs/public-evidence.md':'public report','record/evidence.json.ots':'timestamp proof','.well-known/security.txt':'security contact','whitepaper.pdf':'pdf fixture'};
   const root=await fixture(t,files),copied=await buildStaticPublish(root);
@@ -48,6 +75,16 @@ test('Alliance backend sources stay private while its public projection remains 
     'lib/alliance-avatar-runtime/test.mjs':'server tests',
     'lib/alliance-avatar-runtime/package.json':'server package',
     'lib/alliance-avatar-runtime/package-lock.json':'server lock',
+    'lib/alliance-member-closed-https.mjs':'server persistent host module',
+    'lib/alliance-member-closed-process-entry.mjs':'server persistent host module',
+    'lib/alliance-member-closed-tls-files.mjs':'server persistent host module',
+    'lib/alliance-member-generation-process-entry.mjs':'server persistent host module',
+    'lib/alliance-member-local-control-client.mjs':'server persistent host module',
+    'lib/alliance-member-local-control.mjs':'server persistent host module',
+    'lib/alliance-member-node-http.mjs':'server persistent host module',
+    'lib/alliance-member-persistent-https.mjs':'server persistent host module',
+    'lib/alliance-member-persistent-process.mjs':'server persistent host module',
+    'lib/alliance-member-private-bundle.mjs':'server persistent host module',
     'lib/alliance-member-http.mjs':'server cookie boundary',
     'lib/alliance-member-preview-bundle.mjs':'server connection factory',
     'lib/alliance-avatar-storage.mjs':'server media adapter',

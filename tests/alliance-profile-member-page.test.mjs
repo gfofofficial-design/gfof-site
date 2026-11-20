@@ -31,7 +31,29 @@ test('removal uses bound identity, closes editor before dispatch and makes no au
  const f=fixture((url,init)=>url.endsWith('/removal-status')?json({state:'ready',profileId,version:7}):init.method==='DELETE'?json({state:'committed',version:8}):json({profile:p(),revision:1}));f.controller.attach(1);await f.get('read').emit('click');await f.review();await f.find('Remove my Alliance profile').emit('click');assert.equal(f.get('fields').disabled,true);assert.equal(f.get('name').value,'');const writes=f.calls.filter(c=>c.init.method==='DELETE');assert.equal(writes.length,1);assert.equal(writes[0].body.profileId,profileId);assert.equal(writes[0].body.version,7);assert.equal(writes[0].body.confirm,'remove_my_profile');assert.equal(Object.hasOwn(writes[0].body,'actorId'),false);await tick();assert.equal(f.calls.length,3);assert.match(f.get('removal').textContent,/profile was removed/);f.controller.dispose();
 });
 test('active profile save blocks confirmation before any removal intention or request starts',async()=>{
- const gate=deferred();const f=fixture((url,init)=>url.endsWith('/removal-status')?json({state:'ready',profileId,version:7}):init.method==='POST'?gate.promise:init.method==='DELETE'?json({state:'committed',version:8}):json({profile:p(),revision:1}));f.controller.attach(1);await f.get('read').emit('click');await f.review();const saving=f.get('form').emit('submit');await tick();await f.find('Remove my Alliance profile').emit('click');assert.equal(f.calls.filter(c=>c.init.method==='DELETE').length,0);assert.match(f.get('removal').textContent,/No removal was started/);const save=f.calls.find(c=>c.init.method==='POST').body;gate.resolve(json({state:'saved',revision:2,operationId:save.operationId,profile:p()}));await saving;await f.find('Remove my Alliance profile').emit('click');assert.equal(f.calls.filter(c=>c.init.method==='DELETE').length,1);f.controller.dispose();
+ const gate=deferred();
+ const f=fixture((url,init)=>url.endsWith('/removal-status')?json({state:'ready',profileId,version:7}):
+  init.method==='POST'?gate.promise:init.method==='DELETE'?json({state:'committed',version:8}):json({profile:p(),revision:1}));
+ try {
+  f.controller.attach(1);
+  await f.get('read').emit('click');
+  await f.review();
+  const name='Updated fixture member';
+  f.get('name').value=name;
+  await f.get('name').emit('input');
+  const saving=f.get('form').emit('submit');
+  await tick();
+  const saves=f.calls.filter(c=>c.init.method==='POST');
+  assert.equal(saves.length,1);
+  assert.equal(saves[0].body.profile.name,name);
+  await f.find('Remove my Alliance profile').emit('click');
+  assert.equal(f.calls.filter(c=>c.init.method==='DELETE').length,0);
+  assert.match(f.get('removal').textContent,/No removal was started/);
+  gate.resolve(json({state:'saved',revision:2,operationId:saves[0].body.operationId,profile:p(name)}));
+  await saving;
+  await f.find('Remove my Alliance profile').emit('click');
+  assert.equal(f.calls.filter(c=>c.init.method==='DELETE').length,1);
+ } finally {gate.resolve(json({},503));f.controller.dispose();}
 });
 test('unknown removal keeps editor closed and only explicit check reuses the same operation',async()=>{
  let writes=0;const f=fixture((url,init)=>init.method==='GET'?json({state:'ready',profileId,version:7}):++writes===1?Promise.reject(Error('Synthetic lost reply')):json({state:'committed',version:8}));f.controller.attach(1);await f.review();await f.find('Remove my Alliance profile').emit('click');assert.equal(f.get('fields').disabled,true);assert.equal(writes,1);await tick();assert.equal(writes,1);await f.find('Check the same removal request').emit('click');const requests=f.calls.filter(c=>c.init.method==='DELETE');assert.deepEqual(requests[0].body,requests[1].body);assert.equal(writes,2);f.controller.dispose();
