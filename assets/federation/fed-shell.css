@@ -568,3 +568,38 @@ body.fed-scroll-locked { overflow: hidden; }
   gap: var(--space-3);
   flex-wrap: wrap;
 }
+
+/* Keep the active conversation above the keyboard while its history can scroll. */
+.fed-drawer[data-fed-drawer="voss"] {
+  bottom: auto;
+  top: var(--voss-viewport-top, 0px);
+  height: 100vh;
+  height: var(--voss-viewport-height, 100dvh);
+  transform: none;
+  opacity: 0;
+  transition: none;
+}
+.fed-drawer[data-fed-drawer="voss"][data-open="true"] { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .fed-drawer[data-fed-drawer="voss"] {
+    transition: opacity var(--motion-interface) var(--ease-fed);
+  }
+}
+.fed-drawer[data-fed-drawer="voss"] .fed-drawer__body { min-height: 0; }
+.fed-voss-composer {
+  flex: none;
+  border-top: 1px solid var(--fed-border-default);
+  padding: .65rem var(--space-5) max(.65rem, env(safe-area-inset-bottom));
+  background: var(--surface-system);
+}
+.fed-voss-composer .fed-voss-form { margin: 0; }
+.fed-voss-composer input { font-size: max(1rem, 16px); }
+.fed-voss-composer p { margin: .375rem 0 0; }
+.fed-voss-direct { margin-top: var(--space-3); }
+.fed-voss-direct summary { min-height: 44px; padding-block: .65rem; color: var(--fed-command); cursor: pointer; }
+.fed-voss-message > a { display: block; margin-top: .4rem; color: var(--fed-command); }
+@media (max-height: 460px) {
+  .fed-drawer[data-fed-drawer="voss"] .fed-drawer__head { padding-block: .25rem; }
+  .fed-voss-composer { padding-block: .25rem; }
+}
+.fed-voss-composer:focus-within { border-top-color: var(--fed-command); }

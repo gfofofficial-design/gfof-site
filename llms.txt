@@ -26,6 +26,13 @@ The Federation's three stated pillars are transparency (on-chain, not rhetorical
 
 - [Treasury](https://galacticfederation.co/treasury): Solana RPC reads of four historical old-mint Streamflow lock contracts and dated wallet disclosures. These are not replacement-mint locks. The expired predecessor to the re-locked 40M old-token allocation is preserved as lineage.
 
+## Public guest tools
+
+- [Make a meme](https://galacticfederation.co/alliance-wrong-moon) lets a guest caption, save and share The Wrong Moon. A member profile is optional for exploring the Federation.
+- [Command Deck](https://galacticfederation.co/command-deck) offers read-only wallet balances and links to token research and indicative quotes.
+- [Dossier Structure Lens](https://dossiertrack.co/token-structure) inspects a Solana mint on request. Reports distinguish sourced observations from unknowns.
+- [Federation Alliance](https://galacticfederation.co/alliance) lists public project activities and participation information. Proposed challenges open when the hosts publish arrangements.
+
 ## Project pages
 
 - [Home](https://galacticfederation.co/): Project overview, token data, Federation pillars, roadmap phases, and Admiral Voss briefing room.
