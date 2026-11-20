@@ -48,7 +48,10 @@ export function mountAllianceAccountMemberPage(document, {
   function close(message = 'Profile setup is closed. Open profile setup to check sign-in again. Earlier interrupted requests may still need reconciliation.') {
     if (disposed) return;
     const focused = surface.contains(document.activeElement) || (resumeFocus && document.activeElement === document.body);
-    epoch++; accountId = null; resumeFocus = null; surface.hidden = true;
+    epoch++; accountId = null;
+    // A hidden tab can return focus only after it becomes visible again.
+    resumeFocus = focused && !visible() ? accountLink : null;
+    surface.hidden = true;
     setSignInPrompt(true);
     flight?.controller.abort(); page.detach(); say(message); updateAccountButton();
     if (enabled && visible() && focused) accountLink.focus();
@@ -143,13 +146,21 @@ export function mountAllianceAccountMemberPage(document, {
       if (flight) close();
       updateAccountButton();
     } else if (accountId && surface.hidden) { void verify(true); }
-    else updateAccountButton();
+    else {
+      updateAccountButton();
+      if (resumeFocus === accountLink) {
+        resumeFocus = null;
+        if (document.activeElement === document.body || surface.contains(document.activeElement)) accountLink.focus();
+      }
+    }
   };
   const onHide = () => close();
   const onShow = event => { if (event.persisted) close(); };
   const onMessage = event => {
     // A channel hint can only clear content, never establish a session.
-    if (event.data?.type === 'signed-out' && typeof event.data.remoteRevoked === 'boolean') close();
+    if (event.data?.type === 'signed-out' && typeof event.data.remoteRevoked === 'boolean') {
+      close('You signed out in another tab. Sign in again to reopen your profile. Check any interrupted changes before retrying.');
+    }
   };
   setSignInPrompt(true);
   surface.hidden = true;

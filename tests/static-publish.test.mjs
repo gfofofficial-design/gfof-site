@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile,readFile,readdir,rm,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {runInNewContext} from 'node:vm';
 import {buildStaticPublish} from '../scripts/build-static-publish.mjs';
 
 test('production and branch deploys inherit the same restricted output as previews',async()=>{
@@ -22,6 +24,33 @@ async function fixture(t,files) {
   for(const [path,content]of Object.entries(files)){await mkdir(join(root,path,'..'),{recursive:true});await writeFile(join(root,path),content);}
   return root;
 }
+
+test('member, wallet, account and quote pages declare their private browser policies', async t => {
+  const config = await readFile(new URL('../netlify.toml', import.meta.url), 'utf8');
+  const policies = new Map();
+  for (const section of config.split(/(?=^\[\[)/m)) {
+    if (!section.startsWith('[[headers]]')) continue;
+    const path = section.match(/^\s*for\s*=\s*"([^"]+)"/m)[1];
+    const values = section.split('[headers.values]')[1];
+    const lines = [...values.matchAll(/^[ \t]+([\w-]+)[ \t]*=[ \t]*"([^"\n]*)"[ \t]*$/gm)];
+    policies.set(path, Object.fromEntries(lines.map(([,name,value]) => [name.toLowerCase(),value])));
+  }
+  const groups = [
+    ['Dashboard', ['/member-workspace.html', '/member-workspace', '/member-workspace/']],
+    ['Wallet', ['/wallet.html', '/wallet', '/wallet/']],
+    ['Account', ['/account*']],
+    ['Swap quote preview', ['/swap*']],
+  ];
+  for (const [surface, paths] of groups) await t.test(surface, () => {
+    const canonical = policies.get(paths[0]);
+    assert.ok(canonical, paths[0]);
+    assert.equal(canonical['cache-control'], 'private, no-store');
+    assert.equal(canonical['referrer-policy'], 'no-referrer');
+    assert.equal(canonical['x-frame-options'], 'DENY');
+    assert.match(canonical['content-security-policy'], /(?:^|;\s*)frame-ancestors 'none'(?:;|$)/);
+    for (const path of paths.slice(1)) assert.deepEqual(policies.get(path),canonical,path);
+  });
+});
 test('public page, browser imports and public evidence survive byte-for-byte',async t=>{
   const files={'account.html':'<script src="/journey/passport.js"></script>','journey/passport.js':'public browser script','assets/federation/fed-account.js':'public account script','lib/mission-coach-core.mjs':'public imported module','config/public-availability.json':'{}','docs/public-evidence.md':'public report','record/evidence.json.ots':'timestamp proof','.well-known/security.txt':'security contact','whitepaper.pdf':'pdf fixture'};
   const root=await fixture(t,files),copied=await buildStaticPublish(root);
@@ -88,4 +117,82 @@ test('Arena publishes only numbered rules and results pages, excluding drafts an
  const root=await fixture(t,files),copied=await buildStaticPublish(root);
  assert.deepEqual(copied,['arena/arena-0001-results.html','arena/arena-0001-rules.html']);
  for(const path of copied)assert.equal(await readFile(join(root,'dist',path),'utf8'),files[path]);
+});
+
+test('the canonical homepage replaces a legacy index byte-for-byte',async t=>{
+  const canonical='<!doctype html><title>Current Federation homepage</title>\n';
+  const root=await fixture(t,{'command-preview.html':canonical,'index.html':'legacy homepage'});
+  await buildStaticPublish(root,{requireCanonicalHome:true});
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),canonical);
+  assert.equal(await readFile(join(root,'dist/command-preview.html'),'utf8'),canonical);
+});
+
+test('requiring the canonical homepage refuses a legacy fallback and preserves previous output',async t=>{
+  const root=await fixture(t,{'index.html':'legacy homepage','dist/index.html':'previous published homepage'});
+  await assert.rejects(buildStaticPublish(root,{requireCanonicalHome:true}),/command-preview\.html.*required/);
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),'previous published homepage');
+  assert.ok(!(await readdir(root)).some(name=>name.startsWith('.static-publish-')));
+});
+
+async function cliFixture(t,files) {
+  const script=await readFile(new URL('../scripts/build-static-publish.mjs',import.meta.url),'utf8');
+  return fixture(t,{'scripts/build-static-publish.mjs':script,...files});
+}
+
+function publish(root) {
+  return spawnSync(process.execPath,['scripts/build-static-publish.mjs'],{cwd:root,encoding:'utf8',timeout:5000});
+}
+
+test('the configured publish command requires the canonical homepage by default',async t=>{
+  const root=await cliFixture(t,{'index.html':'legacy homepage','dist/index.html':'previous published homepage'});
+  const result=publish(root);
+  assert.equal(result.error,undefined);
+  assert.notEqual(result.status,0);
+  assert.match(result.stderr,/command-preview\.html.*required/);
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),'previous published homepage');
+  assert.ok(!(await readdir(root)).some(name=>name.startsWith('.static-publish-')));
+});
+
+test('the configured publish command stages the canonical homepage and its media unchanged',async t=>{
+  const files={'command-preview.html':'<video poster="/assets/poster.jpg" src="/assets/video.mp4"></video>\n',
+    'assets/poster.jpg':Buffer.from([0xff,0xd8,0xff,0xd9]),'assets/video.mp4':Buffer.from([0,0,0,8,102,116,121,112])};
+  const root=await cliFixture(t,{'index.html':'legacy homepage',...files});
+  const result=publish(root);
+  assert.equal(result.error,undefined);
+  assert.equal(result.status,0,result.stderr);
+  for(const path of Object.keys(files))assert.deepEqual(await readFile(join(root,'dist',path)),await readFile(join(root,path)));
+  assert.equal(await readFile(join(root,'dist/index.html'),'utf8'),files['command-preview.html']);
+});
+
+test('the legacy root worker is published alongside the app worker while other root scripts stay private', async t => {
+  const root = await fixture(t, {
+    'sw.js': 'root recovery worker',
+    'app/sw.js': 'app offline worker',
+    'operator.js': 'private root script',
+    'operator.mjs': 'private root module'
+  });
+  const files = await buildStaticPublish(root);
+  assert.deepEqual(files.sort(), ['app/sw.js', 'sw.js']);
+  assert.equal(await readFile(join(root, 'dist/sw.js'), 'utf8'), 'root recovery worker');
+  assert.equal(await readFile(join(root, 'dist/app/sw.js'), 'utf8'), 'app offline worker');
+});
+
+test('the legacy worker retires its own registration and lets the browser load pages normally', async () => {
+  const script = await readFile(new URL('../sw.js', import.meta.url), 'utf8');
+  const handlers = new Map();
+  const calls = [];
+  const worker = {
+    addEventListener(type, handler) { handlers.set(type, handler); },
+    async skipWaiting() { calls.push('skipWaiting'); },
+    registration: { async unregister() { calls.push('unregister'); return true; } }
+  };
+  runInNewContext(script, {self: worker});
+  assert.deepEqual([...handlers.keys()].sort(), ['activate', 'install']);
+  for (const type of ['install', 'activate']) {
+    const pending = [];
+    handlers.get(type)({waitUntil(work) { pending.push(work); }});
+    assert.equal(pending.length, 1);
+    await Promise.all(pending);
+  }
+  assert.deepEqual(calls, ['skipWaiting', 'unregister']);
 });

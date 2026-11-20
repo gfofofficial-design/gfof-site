@@ -7,23 +7,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://galacticfederation.co/">
-<title>Galactic Federation — Building for On-Chain Finance</title>
-<meta name="description" content="Inspect Solana tokens, view public wallet balances and explore financial missions. Follow Galactic Federation lending and staking builds through an open record.">
+<title>Galactic Federation of Finance — Alliance and Solana Tools</title>
+<meta name="description" content="Explore Alliance projects, see how membership works, and use public Solana wallet and token tools without an account.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://galacticfederation.co/">
-<meta property="og:title" content="Galactic Federation — Building for On-Chain Finance">
-<meta property="og:description" content="Inspect Solana tokens, view public wallet balances and explore financial missions. Follow Galactic Federation lending and staking builds through an open record.">
-<meta property="og:image" content="https://galacticfederation.co/assets/social/social-command-v1.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Galactic Federation: on-chain finance with the work and record in public.">
+<meta property="og:title" content="Galactic Federation of Finance — Alliance and Solana Tools">
+<meta property="og:description" content="Explore Alliance projects, see how membership works, and use public Solana wallet and token tools without an account.">
+<meta property="og:image" content="https://galacticfederation.co/assets/federation/federation-arrival-20261120.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="960">
+<meta property="og:image:height" content="960">
+<meta property="og:image:alt" content="Gold Galactic Federation crest with cyan circuitry against a star field.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GFOF_Offcial">
-<meta name="twitter:title" content="Galactic Federation — Building for On-Chain Finance">
-<meta name="twitter:description" content="Inspect Solana tokens, view public wallet balances and explore financial missions. Follow Galactic Federation lending and staking builds through an open record.">
-<meta name="twitter:image" content="https://galacticfederation.co/assets/social/social-command-v1.png">
-<meta name="twitter:image:alt" content="Galactic Federation: on-chain finance with the work and record in public.">
+<meta name="twitter:title" content="Galactic Federation of Finance — Alliance and Solana Tools">
+<meta name="twitter:description" content="Explore Alliance projects, see how membership works, and use public Solana wallet and token tools without an account.">
+<meta name="twitter:image" content="https://galacticfederation.co/assets/federation/federation-arrival-20261120.jpg">
+<meta name="twitter:image:alt" content="Gold Galactic Federation crest with cyan circuitry against a star field.">
 <!-- FEDERATION OS COMMAND · BUILD 08. All factual statements are sourced
      from existing repository content; nothing is invented. -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -35,9 +35,112 @@
 <link rel="stylesheet" href="assets/federation/fed-home.css">
 <link rel="stylesheet" href="/assets/federation/fed-copy-mint.css">
 <script defer src="/assets/federation/fed-copy-mint.js"></script>
+<style>
+  .home-v2 .fed-shell-bar {
+    position: relative;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    padding-block: 8px;
+  }
+  .home-v2 .fed-shell-controls { margin-inline-start: auto; gap: 8px; }
+  .home-v2 .fed-shell-nav { flex-wrap: wrap; }
+  .home-v2 .home-header-mint {
+    display: grid;
+    grid-template-areas: "label address copy status";
+    grid-template-columns: auto minmax(0, max-content) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0 12px;
+    flex: 1 0 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 4px 12px;
+    font: 14px/1.5 var(--font-fed-body);
+  }
+  .home-header-mint strong { grid-area: label; }
+  .home-header-mint code { grid-area: address; min-width: 0; }
+  .home-header-mint .mint-copy-button { grid-area: copy; justify-self: end; margin: 0; }
+  .home-header-mint .mint-copy-status { grid-area: status; }
+  .home-v2 .home-arrival .cmd-hero__actions .fed-btn {
+    font-family: var(--font-fed-body);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+  }
+  .home-v2 .home-arrival .fed-btn--secondary { color: var(--fed-text-display); }
+  .home-v2 .home-arrival .cmd-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    width: min(100%, 50rem);
+    margin-inline: auto;
+    min-height: 0;
+    gap: 1rem;
+    padding-block: clamp(1rem, 3vw, 2.25rem);
+  }
+  .home-v2 .home-arrival .cmd-hero__actions { width: min(100%, 32rem); }
+  .home-v2 .home-arrival .home-tool-shortcut { margin: 0; }
+  .home-v2 .home-arrival-media {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--fed-border-strong);
+    border-top-color: var(--fed-command);
+    border-radius: 18px;
+    background: var(--fed-space-panel);
+    box-shadow: 0 18px 44px color-mix(in srgb, var(--fed-space) 55%, transparent);
+  }
+  .home-v2 .home-arrival-media video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1232 / 736;
+    object-fit: contain;
+    background: var(--fed-space);
+  }
+  .home-v2 .home-arrival-media video:focus-visible {
+    outline: 3px solid var(--fed-command);
+    outline-offset: -3px;
+  }
+  .home-v2 .home-tool-card > .home-service-status { align-self: flex-start; margin-bottom: 14px; }
+  .home-v2 .home-membership .home-build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-v2 #home-title, .home-v2 #start-title, .home-v2 #account-path-title { scroll-margin-top: 16px; }
+
+  @media (max-width: 767px) {
+    .home-v2 .home-arrival .cmd-hero { padding-block: 24px; }
+  }
+  @media (max-width: 679px) {
+    .home-v2 .home-header-mint {
+      grid-template-areas: "label copy" "address address" "status status";
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding-bottom: 8px;
+    }
+  }
+  @media (max-width: 639px) {
+    .home-v2 .fed-shell-brand { flex: 1; }
+    .home-v2 .fed-shell-brand__primary { white-space: normal; overflow-wrap: anywhere; }
+  }
+  @media (max-width: 559px) {
+    .home-v2 .home-membership .home-build-grid { grid-template-columns: minmax(0, 1fr); }
+    .home-v2 .home-tool-card h3 { padding-right: 0; margin-top: 0; }
+  }
+  @media (max-width: 399px) {
+    .home-v2 .fed-shell-bar { padding-inline: 12px; }
+    .home-v2 .fed-shell-brand img { width: 32px; height: 32px; }
+    .home-v2 .fed-shell-brand__primary { letter-spacing: .05em; }
+    .home-v2 .home-signin { font-size: 14px; padding-inline: 8px; }
+  }
+  @media (max-width: 359px) {
+    .home-v2 .home-arrival .cmd-hero__actions { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
 </head>
 <body class="fed-body-root fed-scope home-v2">
-<a class="home-skip" href="#home-title">Skip to the welcome</a>
+<a class="home-skip" href="#home-title">Skip to main content</a>
 
 <!-- Atmosphere — decorative deep-space layer, hidden from AT -->
 <div class="cmd-atmos" aria-hidden="true">
@@ -51,31 +154,32 @@
 <!-- ═══ SHELL: COMMAND BAR ═══ -->
 <header class="fed-shell-bar">
   <a class="fed-shell-brand" href="/">
-    <img src="logo-circle.png" alt="Galactic Federation — canonical mark">
+    <img src="logo-circle.png" alt="" width="40" height="40">
     <span class="fed-shell-brand__names">
       <span class="fed-shell-brand__primary">GALACTIC FEDERATION</span>
       <span class="fed-shell-brand__system">FEDERATION OS</span>
     </span>
   </a>
-  <nav class="fed-shell-nav" aria-label="Federation systems">
-    <a class="fed-shell-nav__item" href="#start-title">Tools</a>
-    <a class="fed-shell-nav__item" href="/alliance">Alliance</a>
-    <a class="fed-shell-nav__item" href="/swap">Galactic Swap · preview</a>
-    <a class="fed-shell-nav__item" href="/building">Build status</a>
-    <a class="fed-shell-nav__item" data-fed-system="archive" href="/record">Transparency</a>
-    <a class="fed-shell-nav__item" href="#official-gfof">$GFOF</a>
-    <a class="fed-shell-nav__item" href="https://t.me/GFOF_SOL" rel="noopener">Community</a>
-    <details class="home-more-nav"><summary>More systems</summary><div><a href="https://fcc.galacticfederation.co/">FCC public experiment</a><a href="/research">Research</a><a href="/governance-spec">Advisory council</a><a href="/roadmap">Roadmap</a><a href="/migration">Former-holder migration</a><a href="/whitepaper.pdf">Whitepaper archive</a></div></details>
-  </nav>
   <div class="fed-shell-controls">
     <a class="home-signin" href="/account">Sign in</a>
-    <span class="fed-shell-coord">COMMAND // GF-00</span>
-    <button class="fed-shell-voss" data-fed-voss-trigger type="button">VOSS</button>
+    <button class="fed-shell-voss" data-fed-voss-trigger type="button">Chat</button>
     <button class="fed-shell-status" data-fed-status-trigger data-state="unknown" type="button">
       <span class="fed-shell-status__dot" aria-hidden="true"></span>
       <span data-fed-status-label>SYSTEM STATUS</span>
     </button>
   </div>
+  <div class="hero-ca home-header-mint" role="group" aria-labelledby="header-mint-label">
+    <strong id="header-mint-label">Official GFOF mint · Solana</strong>
+    <code id="hero-gfof-mint" data-copy-mint>Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code>
+  </div>
+  <nav class="fed-shell-nav" aria-label="Main navigation">
+    <a class="fed-shell-nav__item" href="/alliance">Alliance</a>
+    <a class="fed-shell-nav__item" href="#start-title">Tools</a>
+    <a class="fed-shell-nav__item" href="/building">Build status</a>
+    <a class="fed-shell-nav__item" data-fed-system="archive" href="/record">Public record</a>
+    <a class="fed-shell-nav__item" href="https://t.me/GFOF_SOL" rel="noopener">Community</a>
+    <details class="home-more-nav"><summary>More</summary><div><a href="/swap">Galactic Swap preview</a><a href="#official-gfof">GFOF token details</a><a href="https://fcc.galacticfederation.co/">FCC public experiment</a><a href="/research">Research</a><a href="/governance-spec">Advisory council</a><a href="/roadmap">Roadmap</a><a href="/migration">Former-holder migration</a><a href="/whitepaper.pdf">Whitepaper archive</a></div></details>
+  </nav>
 </header>
 
 <main class="cmd-main">
@@ -95,62 +199,82 @@
 <!-- ═══ HERO — ARRIVAL ═══ -->
 <section class="fed-container home-arrival" aria-labelledby="home-title">
   <div class="cmd-hero">
-    <div class="home-hero-copy">
-      <span class="cmd-hero__access">GALACTIC FEDERATION OF FINANCE</span>
-      <h1 class="cmd-hero__title" id="home-title" tabindex="-1">On-chain tools.<br><span>Progress you can verify.</span></h1>
-      <p class="cmd-hero__position">Read public Solana wallet balances, inspect a token, or explore Alliance projects. Find all Federation tools in Command Deck.</p>
-      <div class="hero-ca"><strong>Current GFOF contract address · Solana</strong><code id="hero-gfof-mint" data-copy-mint>Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code></div>
-      <div class="cmd-hero__actions">
-        <a class="fed-btn fed-btn--command" href="#start-here">Explore public tools <span aria-hidden="true">↗</span></a>
-        <a class="fed-btn fed-btn--secondary" href="/alliance">Explore the Alliance <span aria-hidden="true">↗</span></a>
-      </div>
-      <p class="home-reassurance">Public tools need no account. Alliance membership and project enrollment are currently closed.</p>
-      <a class="home-build-link" href="#account-path-title">How Federation accounts work →</a>
-      <div class="home-hero-tags"><span>SOLANA</span><span>$GFOF</span><span>INTELLIGENCE · ACCOUNTABILITY</span></div>
-    </div>
-    <aside class="home-command-visual" aria-label="Explore the public finance tools">
-      <div class="home-visual-header"><span>FEDERATION // FINANCE STATION</span><span>PUBLIC ACCESS</span></div>
-      <div class="home-visual-seal cmd-seal">
-        <span class="cmd-seal__orbit" aria-hidden="true"></span><span class="cmd-seal__orbit cmd-seal__orbit--mid" aria-hidden="true"></span>
-        <img class="cmd-seal__img" src="logo-circle.png" alt="Galactic Federation canonical seal" width="196" height="196">
-      </div>
-      <div class="home-visual-links">
-        <a class="home-visual-link" href="/command-deck"><strong>Wallet balances</strong><span>Read a public address ↗</span></a>
-        <a class="home-visual-link" href="https://dossiertrack.co/token-structure"><strong>Token structure</strong><span>Examine the evidence ↗</span></a>
-        <a class="home-visual-link" href="/treasury"><strong>Public token locks</strong><span>Check the contracts ↗</span></a>
-        <a class="home-visual-link" href="/command-deck#tool-directory"><strong>All Federation tools</strong><span>Browse Command Deck ↗</span></a>
-      </div>
-      <p class="home-visual-footer">YOUR STARTING POINT IN THE FEDERATION</p>
-    </aside>
+    <h1 class="fed-visually-hidden" id="home-title" tabindex="-1">Federation Alliance</h1>
+    <figure class="home-arrival-media">
+      <video autoplay controls loop muted playsinline preload="metadata" width="720" height="720"
+        poster="/assets/federation/federation-arrival-20261120.jpg"
+        aria-label="Galactic Federation introduction">
+        <source src="/assets/federation/federation-arrival-20261120.mp4" type="video/mp4">
+        <a href="/assets/federation/federation-arrival-20261120.mp4">Play the Galactic Federation introduction</a>.
+      </video>
+      <script>
+      (function () {
+        var video = document.currentScript.previousElementSibling;
+        var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        function respectReducedMotion() {
+          if (motion.matches) {
+            video.autoplay = false;
+            video.pause();
+          }
+        }
+        respectReducedMotion();
+        motion.addEventListener('change', respectReducedMotion);
+      })();
+      </script>
+    </figure>
+    <nav class="cmd-hero__actions" aria-label="Start exploring the Federation">
+      <a class="fed-btn fed-btn--command" href="/alliance-wrong-moon">Make a meme</a>
+      <a class="fed-btn fed-btn--secondary" href="/alliance-pilot-briefs">Bring your project</a>
+    </nav>
+    <a class="home-tool-action home-tool-shortcut" href="#start-title">Use the public tools</a>
   </div>
 </section>
 
 <section class="fed-container home-tools" id="start-here" aria-labelledby="start-title">
-  <div class="home-section-head"><span class="cmd-ident">PUBLIC ACCESS <b>//</b> CHOOSE YOUR TOOL</span><h2 id="start-title" tabindex="-1">Put the Federation to work.</h2><p>Choose what you want to do. Command Deck lists the tools and shows what is available now.</p></div>
+  <div class="home-section-head"><h2 id="start-title" tabindex="-1">Public tools</h2></div>
   <div class="home-tool-grid">
-    <article class="home-tool-card" aria-labelledby="tool-deck-title"><div class="home-tool-top"><span class="home-tool-code">01 / COMMAND</span><span class="home-service-status">Available · Read only</span></div><span class="home-tool-icon" aria-hidden="true">SOL</span><h3 id="tool-deck-title">Command Deck</h3><p>View public wallet balances, supported reference prices and GFOF lock records in one dashboard.</p><p class="home-card-limit">A public address lookup does not prove wallet ownership.</p><a class="home-tool-action" href="/command-deck">Read a wallet <span aria-hidden="true">↗</span></a></article>
-    <article class="home-tool-card" aria-labelledby="tool-lens-title"><div class="home-tool-top"><span class="home-tool-code">02 / INTELLIGENCE</span><span class="home-service-status">Public beta · Read only</span></div><span class="home-tool-icon" aria-hidden="true">LENS</span><h3 id="tool-lens-title">Dossier Structure Lens</h3><p>Inspect a Solana token's controls and up to 20 largest token accounts, with sources and explicit unknowns.</p><p class="home-card-limit">A structure report is not a token safety rating.</p><a class="home-tool-action" href="https://dossiertrack.co/token-structure">Inspect a token <span aria-hidden="true">↗</span></a></article>
-    <article class="home-tool-card" aria-labelledby="tool-alliance-title"><span class="home-service-status">Public guide · Joining closed</span><h3 id="tool-alliance-title">Alliance</h3><p>Explore project stations and see how members and project teams will participate when enrollment opens.</p><a class="home-tool-action" href="/alliance#start-here">Explore Alliance <span aria-hidden="true">↗</span></a></article>
-    <article class="home-tool-card" aria-labelledby="tool-quote-title"><span class="home-service-status">Quote preview · Trading closed</span><h3 id="tool-quote-title">Galactic Swap</h3><p>Check a supported Solana token quote without connecting a wallet.</p><a class="home-tool-action" href="/swap">Check a quote <span aria-hidden="true">↗</span></a></article>
+    <article class="home-tool-card" aria-labelledby="tool-deck-title">
+      <h3 id="tool-deck-title">Command Deck</h3>
+      <p>Read public Solana wallet balances and available reference prices.</p>
+      <p class="home-card-limit">A public address lookup does not prove wallet ownership.</p>
+      <a class="home-tool-action" href="/command-deck#wallet">Read a wallet</a>
+    </article>
+    <article class="home-tool-card" aria-labelledby="tool-lens-title">
+      <span class="home-service-status">Read-only beta</span>
+      <h3 id="tool-lens-title">Dossier Structure Lens</h3>
+      <p>Inspect a Solana token's controls and up to 20 largest token accounts, with sources and explicit unknowns.</p>
+      <p class="home-card-limit">A structure report is not a token safety rating.</p>
+      <a class="home-tool-action" href="https://dossiertrack.co/token-structure#mintInput">Inspect a token</a>
+    </article>
+    <article class="home-tool-card" aria-labelledby="tool-locks-title">
+      <h3 id="tool-locks-title">GFOF lock records</h3>
+      <p>Review the published lock schedules and check the contracts on Solana.</p>
+      <a class="home-tool-action" href="/treasury">Open lock records</a>
+    </article>
+    <article class="home-tool-card" aria-labelledby="tool-quote-title">
+      <span class="home-service-status">Quote preview · Trading closed</span>
+      <h3 id="tool-quote-title">Galactic Swap</h3>
+      <p>Check a supported Solana token quote without connecting a wallet.</p>
+      <a class="home-tool-action" href="/swap">Check a quote</a>
+    </article>
   </div>
   <a class="home-text-link" href="/command-deck#tool-directory">Browse all tools in Command Deck →</a>
 </section>
 
-<section class="fed-container home-build" aria-labelledby="account-path-title">
+<section class="fed-container home-build home-membership" aria-labelledby="account-path-title">
   <div class="home-section-head">
-    <h2 id="account-path-title" tabindex="-1">Your Federation account</h2>
-    <p>Public registration is currently closed. Use the public tools while member access is being prepared.</p>
+    <h2 id="account-path-title" tabindex="-1">How membership works</h2>
   </div>
   <div class="home-build-grid">
     <article class="home-build-card">
       <h3>Already have an account?</h3>
-      <p>Sign in with your approved email. On the Account page, you can open Command Deck to find your tools in one place.</p>
-      <a class="home-tool-action" href="/account">Sign in to Federation →</a>
+      <p>Use your approved email to sign in on the Account page.</p>
+      <a class="home-tool-action" href="/account">Sign in to Federation</a>
     </article>
     <article class="home-build-card">
       <h3>New member or project team?</h3>
-      <p>When enrollment opens, start with a Federation account, then use Alliance to set up your member profile or follow the project setup steps.</p>
-      <a class="home-tool-action" href="/alliance#start-here">See how Alliance works →</a>
+      <p>When enrollment opens, start with a Federation account, then follow the Alliance guide to set up your profile or project.</p>
+      <a class="home-tool-action" href="/alliance#start-here">Read the Alliance guide</a>
     </article>
   </div>
 </section>
@@ -355,12 +479,10 @@
       <div class="cmd-voss__meta">CHANNEL // COMMAND &nbsp;·&nbsp; SOURCE // GF-00</div>
     </div>
     <div class="cmd-voss__panel">
-      <span class="cmd-ident">FEDERATION <b>//</b> COMMUNICATIONS <span class="fed-shell-nav__flag" style="margin-left:var(--space-2)">FEDERATION LORE</span></span>
-      <h2 class="cmd-div-title" id="voss-h" style="font-size: var(--heading-lg)">Admiral Voss</h2>
-      <p class="cmd-div-line">Command Intelligence Liaison</p>
-      <p class="fed-body-text cmd-div-body">The Federation's communications persona and the interface between visitor and Command. When you open a channel, it is Voss who answers for the Federation — measured, on the record, and pointed at what can be verified.</p>
+      <h2 class="cmd-div-title" id="voss-h" style="font-size: var(--heading-lg)">Federation chat</h2>
+      <p class="fed-body-text cmd-div-body">Ask Admiral Voss, our chat persona, about public tools, research, and build status.</p>
       <div class="cmd-hero__actions">
-        <button class="fed-btn fed-btn--command" data-fed-voss-trigger-2 type="button">Open Communications</button>
+        <button class="fed-btn fed-btn--command" data-fed-voss-trigger-2 type="button">Open chat</button>
       </div>
       <div class="cmd-voss__discipline">
         <div class="fed-meta">
@@ -403,7 +525,7 @@
   <div class="cmd-final__actions">
     <a class="fed-btn fed-btn--command" href="/command-deck">Open Command Deck</a>
     <a class="fed-btn fed-btn--secondary" href="https://dossiertrack.co/token-structure">Inspect a Token</a>
-    <a class="fed-btn fed-btn--secondary" href="https://t.me/GFOF_SOL" rel="noopener">Join the Federation</a>
+    <a class="fed-btn fed-btn--secondary" href="https://t.me/GFOF_SOL" rel="noopener">Open Telegram community</a>
   </div>
 </section>
 
@@ -503,10 +625,10 @@
 </footer>
 
 <!-- ═══ SHELL: MOBILE BOTTOM NAV ═══ -->
-<nav class="fed-shell-bottom" aria-label="Federation systems (mobile)">
-  <a class="fed-shell-bottom__item" data-fed-system="command" href="/">Command</a>
-  <a class="fed-shell-bottom__item" data-fed-system="dossier" href="https://dossiertrack.co">Dossier</a>
-  <a class="fed-shell-bottom__item" data-fed-system="archive" href="/record">Archive</a>
+<nav class="fed-shell-bottom" aria-label="Mobile navigation">
+  <a class="fed-shell-bottom__item" href="/alliance">Alliance</a>
+  <a class="fed-shell-bottom__item" href="#start-title">Tools</a>
+  <a class="fed-shell-bottom__item" data-fed-system="archive" href="/record">Public record</a>
   <button class="fed-shell-bottom__item" data-fed-more-trigger type="button">More</button>
 </nav>
 
@@ -544,13 +666,6 @@
       </div>
     </div>
     <p class="fed-system fed-system--wide">FEDERATION GUIDE // AI CHAT + DIRECT PATHS</p>
-    <nav class="fed-voss-paths" aria-label="Explore with Voss without using AI chat">
-      <p class="fed-voss-paths__label">Choose a path · no AI request needed</p>
-      <a href="/journey/voss-briefing.html"><strong>Play the First Briefing</strong><span>A short choice-based mission about claims and evidence →</span></a>
-      <a href="/journey/"><strong>Enter the Journey</strong><span>Play the fictional missions and meet the crew →</span></a>
-      <a href="https://dossiertrack.co/token-structure"><strong>Inspect a token</strong><span>Try Dossier's read-only Solana Lens beta →</span></a>
-      <a href="/building#lending-progress"><strong>Follow the real build</strong><span>See the private lending prototype and open gates →</span></a>
-    </nav>
     <div class="fed-voss-modes" role="group" aria-label="Communication mode">
       <button type="button" data-voss-mode="command" aria-pressed="true">Command</button>
       <button type="button" data-voss-mode="intelligence" aria-pressed="false">Intelligence</button>
@@ -558,19 +673,32 @@
     </div>
     <p class="fed-voss-mode-note" data-voss-mode-note>Common answers use reviewed copy; other questions may use AI. Open the linked pages for the latest status.</p>
     <div class="fed-voss-log" data-voss-log role="log" aria-live="polite" aria-label="Conversation with Admiral Voss">
-      <p class="fed-voss-message fed-voss-message--assistant">Welcome aboard. Choose a path above, or ask me what is playable, usable, and still under construction.</p>
+      <p class="fed-voss-message fed-voss-message--assistant">Welcome aboard. What would you like to make, explore or verify?</p>
     </div>
     <div class="fed-voss-suggestions" aria-label="Suggested questions">
       <button type="button" data-voss-suggestion="What is the verified $GFOF contract address?">Verify $GFOF</button>
       <button type="button" data-voss-suggestion="What can a visitor use today, and what is still being built?">What is live?</button>
-      <button type="button" data-voss-suggestion="How does the Journey relate to the real lending build?">Journey and lending</button>
+      <button type="button" data-voss-suggestion="How do I make a meme or bring my project?">Memes and projects</button>
     </div>
+    <details class="fed-voss-direct">
+      <summary>Explore without chat</summary>
+    <nav class="fed-voss-paths" aria-label="Explore with Voss without using AI chat">
+      <a href="/alliance-wrong-moon"><strong>Make a meme</strong><span>Caption The Wrong Moon as a guest.</span></a>
+      <a href="/alliance-pilot-briefs"><strong>Bring your project</strong><span>Read a creative, research or builder challenge brief.</span></a>
+      <a href="/journey/voss-briefing.html"><strong>Play the First Briefing</strong><span>A short choice-based mission about claims and evidence →</span></a>
+      <a href="/journey/"><strong>Enter the Journey</strong><span>Play the fictional missions and meet the crew →</span></a>
+      <a href="https://dossiertrack.co/token-structure"><strong>Inspect a token</strong><span>Try Dossier's read-only Solana Lens beta →</span></a>
+      <a href="/building#lending-progress"><strong>Follow the real build</strong><span>See the private lending prototype and open gates →</span></a>
+    </nav>
+    </details>
+  </div>
+  <div class="fed-voss-composer">
     <form class="fed-voss-form" data-voss-form>
       <label class="fed-visually-hidden" for="voss-message">Message Admiral Voss</label>
       <input id="voss-message" data-voss-input type="text" maxlength="500" autocomplete="off" placeholder="Transmit a question…" required>
       <button type="submit" data-voss-send>Send</button>
     </form>
-    <p class="fed-voss-disclaimer">Some questions receive a prewritten answer. Others may be sent to an external AI provider. The briefing was reviewed 23 October 2026 and is not a live site read. Never share wallet keys, recovery phrases, or personal information.</p>
+    <p class="fed-voss-disclaimer">Common questions use reviewed replies. Other questions may go to an external AI provider. Keep personal information and wallet secrets private.</p>
   </div>
 </aside>
 
@@ -590,7 +718,7 @@
       <a href="/migration">GFOF migration plan</a>
       <a href="/staking">Staking preparation <span class="fed-shell-nav__flag">IN DESIGN</span></a>
       <a href="/whitepaper.pdf">Whitepaper (archive)</a>
-      <button class="fed-more-action" data-fed-voss-mobile-trigger type="button">Voss <span class="fed-shell-nav__flag">ONLINE</span></button>
+      <button class="fed-more-action" data-fed-voss-mobile-trigger type="button">Chat</button>
       <a href="https://t.me/GFOF_SOL" rel="noopener">Community</a>
       <a href="/faq">Knowledge Base</a>
     </div>
@@ -617,23 +745,23 @@ window.FED_SHELL_CONFIG = {
 /* Voss communications: all triggers share one drawer and one bounded history. */
 (function(){
   var d = document.querySelector('[data-fed-drawer="voss"]');
-  var s = document.querySelector('[data-fed-scrim="voss"]');
   if (!d || !window.fedShell) return;
-
-  var drawer = window.fedShell.createDrawer(d, s);
-  document.querySelectorAll('[data-fed-voss-trigger-2], [data-fed-voss-mobile-trigger]').forEach(function(t){
-    t.setAttribute('aria-haspopup','dialog');
-    t.addEventListener('click', function(){
-      var more = document.querySelector('[data-fed-drawer="more"]');
-      if (more) more.querySelector('[data-drawer-close]').click();
-      window.setTimeout(function(){ drawer.open(t); }, more ? 180 : 0);
-    });
-  });
 
   var form = d.querySelector('[data-voss-form]');
   var input = d.querySelector('[data-voss-input]');
   var send = d.querySelector('[data-voss-send]');
   var log = d.querySelector('[data-voss-log]');
+  var viewport = window.visualViewport;
+  if (viewport) {
+    var panel = form.closest('[data-fed-drawer]');
+    function fitChat() {
+      panel.style.setProperty('--voss-viewport-height', viewport.height + 'px');
+      panel.style.setProperty('--voss-viewport-top', viewport.offsetTop + 'px');
+    }
+    fitChat();
+    viewport.addEventListener('resize', fitChat);
+    viewport.addEventListener('scroll', fitChat);
+  }
   var history = [];
   var mode = 'command';
   var loading = false;
@@ -669,6 +797,18 @@ window.FED_SHELL_CONFIG = {
     });
   });
 
+  var reviewedPages = new Map([
+    ['/alliance-wrong-moon', 'Open the guest meme maker'],
+    ['/alliance-pilot-briefs', 'Read the project challenge briefs'],
+    ['/staking', 'Read the staking proposal'],
+    ['/treasury', 'Inspect the treasury record'],
+    ['/account', 'See available sign-in methods'],
+    ['/migration', 'Read the migration instructions'],
+    ['/command-deck', 'Open Command Deck'],
+    ['/journey/lending-lab.html', 'Play the fictional Lending Lab'],
+    ['https://dossiertrack.co/token-structure', 'Open Dossier Lens']
+  ]);
+
   form.addEventListener('submit', async function(event){
     event.preventDefault();
     var text = input.value.trim();
@@ -693,8 +833,22 @@ window.FED_SHELL_CONFIG = {
       if (data && (data.source === 'reviewed_brief' || data.source === 'ai')) {
         var source = document.createElement('small');
         source.className = 'fed-voss-message__source';
-        source.textContent = data.source === 'reviewed_brief' ? 'Reviewed briefing · 23 Oct 2026' : 'AI answer · check source pages';
+        source.textContent = data.source === 'reviewed_brief' ? 'Reviewed briefing' : 'AI answer · check source pages';
+        if (data.source === 'reviewed_brief' && /^\d{4}-\d{2}-\d{2}$/.test(data.reviewedOn)) {
+          var reviewDate = new Date(data.reviewedOn + 'T00:00:00Z');
+          if (Number.isFinite(reviewDate.getTime())) {
+            var stamp = document.createElement('time');
+            stamp.dateTime = data.reviewedOn;
+            stamp.textContent = reviewDate.toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric', timeZone:'UTC'});
+            source.append(' · ', stamp);
+          }
+        }
         answer.prepend(source);
+        var reference = document.createElement('a');
+        var reviewedPage = data.source === 'reviewed_brief' && reviewedPages.has(data.sourcePage);
+        reference.href = reviewedPage ? data.sourcePage : '/building';
+        reference.textContent = reviewedPage ? reviewedPages.get(data.sourcePage) : 'Check public build status';
+        answer.appendChild(reference);
       }
       history.push({ role: 'assistant', content: reply });
       history = history.slice(-10);
@@ -705,11 +859,12 @@ window.FED_SHELL_CONFIG = {
       loading = false;
       input.disabled = false;
       send.disabled = false;
-      input.focus();
+      if (form.closest('[data-fed-drawer]').getAttribute('data-open') === 'true') input.focus();
     }
   });
 })();
 </script>
 </body>
 </html>
+
 

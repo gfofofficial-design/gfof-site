@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import {rea
 import {missionHint} from '../lib/mission-coach-core.mjs';import {replayWatchtower} from '../lib/watchtower-core.mjs';import {inspectAgentRecord} from '../lib/agent-record-core.mjs';
 function lab(){
  const elements=new Map();
- function node(){return {children:[],textContent:'',value:'',listeners:{},append(x){this.children.push(x);if(!this.value&&x.value)this.value=x.value;},replaceChildren(){this.children=[];},addEventListener(t,f){this.listeners[t]=f;}};}
+ function node(){return {children:[],textContent:'',value:'',listeners:{},append(x){this.children.push(x);if(!this.value&&x.value)this.value=x.value;},replaceChildren(...children){this.children=children;},addEventListener(t,f){this.listeners[t]=f;}};}
  const element=id=>{if(!elements.has(id))elements.set(id,node());return elements.get(id);};element('level').value='0';
  const script=readFileSync(new URL('../assets/federation/fed-automation-lab.mjs',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');
  runInNewContext(script,{document:{getElementById:element,createElement:node},missionHint,replayWatchtower,inspectAgentRecord,fetch:()=>{throw Error('network forbidden');}});
@@ -15,6 +15,9 @@ test('mission controls offer existing IDs and update help without progress state
 test('fictional replay and permission viewer replace outputs and preserve limitations',()=>{
  const e=lab();e('replay').listeners.click();assert.match(e('watch-output').children[0].textContent,/1 duplicate; 1 awaiting finality/);
  const count=e('watch-output').children.length;e('replay').listeners.click();assert.equal(e('watch-output').children.length,count);
+ const timelines=e('watch-events').children;
+ assert.equal(timelines.length,1);
+ assert.deepEqual(timelines[0].children.map(row=>row.children.map(cell=>cell.textContent)),[['1','Finalized'],['1','Duplicate'],['1','Awaiting finality']]);
  e('audit').listeners.click();assert.match(e('audit-output').children[0].textContent,/1 attempt outside/);
  assert.match(e('audit-output').children.at(-1).textContent,/does not enforce/);
 });

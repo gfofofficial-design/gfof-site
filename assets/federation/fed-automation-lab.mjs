@@ -11,8 +11,25 @@ const event={schema:1,chain:'solana-mainnet',type:'transfer',slot:100,eventIndex
 document.getElementById('replay').addEventListener('click',()=>{
  const result=replayWatchtower([event,{...event},{...event,signature:'3'.repeat(64),slot:101,commitment:'confirmed'}]);
  output('watch-output',['Fictional replay: '+result.observations.length+' finalized observation; '+result.duplicates+' duplicate; '+result.pending+' awaiting finality.',...result.observations.map(x=>x.text),'Source authenticity is not verified. Event coverage is not established.']);
+ const timeline = document.createElement('ol');
+ timeline.className = 'watch-events';
+ for (const [state, count] of [
+   ['Finalized', result.observations.length],
+   ['Duplicate', result.duplicates],
+   ['Awaiting finality', result.pending]
+ ]) {
+   const row = document.createElement('li');
+   const value = document.createElement('strong');
+   value.textContent = String(count);
+   const label = document.createElement('span');
+   label.textContent = state;
+   row.append(value);
+   row.append(label);
+   timeline.append(row);
+ }
+ document.getElementById('watch-events').replaceChildren(timeline);
 });
 document.getElementById('audit').addEventListener('click',()=>{
  const result=inspectAgentRecord({schema:1,agentId:'fictional-reader',permissions:[{action:'read_public',resource:'federation/dashboard'}],attempts:[{action:'read_public',resource:'federation/dashboard',reportedOutcome:'completed'},{action:'sign_transaction',resource:'wallet/example',reportedOutcome:'unknown'}]});
- output('audit-output',['Fictional record: '+result.permissionViolations+' attempt outside declared permission.',...result.attempts.map(x=>x.action+': '+(x.permittedByDeclaredRecord?'within declared scope':'outside declared scope')+'; reported outcome '+x.reportedOutcome+'; not independently verified.'),result.limitation]);
+ output('audit-output',['Fictional record: '+result.permissionViolations+' attempt outside declared permission.',...result.attempts.map(x => (x.permittedByDeclaredRecord ? 'Within declared scope' : 'Outside declared scope') + ' · ' + x.action + ' on ' + x.resource + '. Reported outcome: ' + x.reportedOutcome + '. Verification unknown.'),result.limitation]);
 });

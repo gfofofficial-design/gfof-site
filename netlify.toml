@@ -1,3 +1,5 @@
+"$schema" = "https://open-api.netlify.com/netlify.schema.json"
+
 # Galactic Federation of Finance — Netlify configuration
 # Security headers, API redirects, clean-URL rewrites.
 
@@ -25,7 +27,7 @@
 
     # Permissions-Policy — opt out of browser APIs the site does not use.
     # If any future feature needs one of these, remove from this list.
-    Permissions-Policy = "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), xr-spatial-tracking=()"
+    Permissions-Policy = "accelerometer=(), autoplay=(self), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), xr-spatial-tracking=()"
 
     # COOP — hardens against cross-origin window attacks (spectre class,
     # cross-origin window.opener abuse). "same-origin-allow-popups" keeps
@@ -63,9 +65,36 @@
     X-Robots-Tag = "noindex, nofollow"
     Content-Security-Policy = "default-src 'none'; script-src 'self' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://auth.privy.io https://privy.galacticfederation.co; frame-src https://auth.privy.io https://privy.galacticfederation.co https://challenges.cloudflare.com; frame-ancestors 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'"
 
+[[headers]]
+  for = "/wallet/"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://auth.privy.io https://privy.galacticfederation.co; frame-src https://auth.privy.io https://privy.galacticfederation.co https://challenges.cloudflare.com; frame-ancestors 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'"
+
 # ─── Function redirects ───
 [[headers]]
   for = "/member-workspace.html"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
+[[headers]]
+  for = "/member-workspace"
+  [headers.values]
+    Cache-Control = "private, no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    X-Robots-Tag = "noindex, nofollow"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
+[[headers]]
+  for = "/member-workspace/"
   [headers.values]
     Cache-Control = "private, no-store"
     Referrer-Policy = "no-referrer"
@@ -104,6 +133,12 @@
   to = "/command-preview.html"
   status = 200
   force = true
+
+# Short address printed on guest-created Wrong Moon images.
+[[redirects]]
+  from = "/moon"
+  to = "/alliance-wrong-moon"
+  status = 302
 
 [[redirects]]
   from = "/staking"
