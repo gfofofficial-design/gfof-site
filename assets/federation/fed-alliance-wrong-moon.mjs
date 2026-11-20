@@ -1,3 +1,5 @@
+import {artworkDimensions, artworkSignature} from './fed-alliance-artwork.mjs';
+
 const captionLimit = 90;
 const segmenter = typeof Intl.Segmenter === 'function'
   ? new Intl.Segmenter(undefined, {granularity: 'grapheme'})
@@ -36,15 +38,20 @@ export function captionLines(text, measure, limit) {
 }
 
 export async function checkMoonImage(file) {
-  if (!file || file.size === 0 || file.size > 10 * 1024 * 1024) {
+  if (!file || !Number.isSafeInteger(file.size) || file.size < 1 || file.size > 10 * 1024 * 1024) {
     throw new Error('Choose an image up to 10 MB.');
   }
-  const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer());
-  const jpeg = bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
-  const png = [137, 80, 78, 71, 13, 10, 26, 10].every((value, index) => bytes[index] === value);
-  const webp = String.fromCharCode(...bytes.slice(0, 4)) === 'RIFF'
-    && String.fromCharCode(...bytes.slice(8, 12)) === 'WEBP';
-  if (!(jpeg || png || webp)) throw new Error('Choose a JPG, PNG or WebP image.');
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const type = artworkSignature(bytes);
+  if (!type || bytes.length !== file.size) throw new Error('Choose a JPG, PNG or WebP image.');
+  const size = artworkDimensions(bytes, type);
+  if (!size || size.width < 1 || size.height < 1) {
+    throw new Error('This image size could not be read. Try a different JPG, PNG or WebP.');
+  }
+  if (size.width > 12000 || size.height > 12000 || size.width * size.height > 24000000) {
+    throw new Error('Choose an image up to 24 megapixels and 12,000 pixels on either side.');
+  }
+  return size;
 }
 
 export function mountMoonEditor(document) {

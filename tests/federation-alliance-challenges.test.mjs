@@ -76,8 +76,20 @@ function moonFixture() {
   return {document, get, encoded, pngEncodes, drawn, canvas};
 }
 
-const jpegHeader = new Uint8Array([255, 216, 255, 224, 0, 1, 0, 0, 0, 0, 0, 0]);
+// A minimal SOF header supplies dimensions to the shared pre-decode parser.
+const jpegHeader = new Uint8Array([255,216,255,192,0,11,8,2,88,3,32,1,1,17,0,255,217]);
 const ownImageFile = () => new File([jpegHeader], 'guest.jpg', {type:'image/jpeg'});
+
+function pngImageFile(width, height) {
+  const bytes = new Uint8Array(24);
+  bytes.set([137,80,78,71,13,10,26,10]);
+  const view = new DataView(bytes.buffer);
+  view.setUint32(8, 13);
+  view.setUint32(12, 0x49484452);
+  view.setUint32(16, width);
+  view.setUint32(20, height);
+  return new File([bytes], 'example.png', {type:'image/png'});
+}
 
 function imageFixture() {
   const fixture = moonFixture();
@@ -104,13 +116,48 @@ function imageFixture() {
 }
 
 test('guest images accept supported file headers and reject empty, oversized and disguised files', async () => {
-  for (const bytes of [jpegHeader,new Uint8Array([137,80,78,71,13,10,26,10]),new TextEncoder().encode('RIFF0000WEBP')]) {
-    await checkMoonImage(new File([bytes],'image'));
-  }
+  assert.deepEqual(await checkMoonImage(ownImageFile()), {width:800, height:600});
+  assert.deepEqual(await checkMoonImage(pngImageFile(800, 600)), {width:800, height:600});
+  const webp = new Uint8Array(30);
+  webp.set(new TextEncoder().encode('RIFF'));
+  new DataView(webp.buffer).setUint32(4, 22, true);
+  webp.set(new TextEncoder().encode('WEBPVP8X'), 8);
+  new DataView(webp.buffer).setUint32(16, 10, true);
+  assert.deepEqual(await checkMoonImage(new File([webp], 'image.webp')), {width:1, height:1});
   for (const file of [new File([],'empty.jpg'),new File(['<svg/>'],'fake.jpg',{type:'image/jpeg'})]) {
     await assert.rejects(checkMoonImage(file), /Choose/);
   }
   await assert.rejects(checkMoonImage({size:10*1024*1024+1}), /10 MB/);
+});
+
+test('the pixel and side limits are checked from the file before constructing a decoder', async () => {
+  assert.deepEqual(await checkMoonImage(pngImageFile(6000, 4000)), {width:6000, height:4000});
+  assert.deepEqual(await checkMoonImage(pngImageFile(12000, 2000)), {width:12000, height:2000});
+  for (const [width, height] of [[6000,4001],[12001,1],[1,12001]]) {
+    const file = pngImageFile(width, height);
+    await assert.rejects(checkMoonImage(file), /24 megapixels/);
+    const f = imageFixture();
+    await f.choose(file);
+    assert.equal(f.pending.length, 0);
+    assert.match(f.get('moon-image-status').textContent, /24 megapixels/);
+  }
+});
+
+test('unreadable dimensions reject before decoding and preserve a prepared guest meme', async () => {
+  const f = imageFixture();
+  const selection = f.choose(ownImageFile());
+  const image = await f.opened();
+  image.onload();
+  await selection;
+  f.encode();
+  const download = f.get('moon-save').href;
+  const decoders = f.pending.length;
+  for (const file of [pngImageFile(0,800), new File([jpegHeader.slice(0,12)],'broken.jpg')]) {
+    await f.choose(file);
+    assert.equal(f.pending.length, decoders);
+    assert.equal(f.get('moon-save').href, download);
+    assert.match(f.get('moon-image-status').textContent, /size could not be read/);
+  }
 });
 
 test('an original guest image can be exported without adding a caption', async () => {
