@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; base-uri 'none'; form-action 'none'">
   <title>The Wrong Moon · Federation Alliance</title>
   <meta name="description" content="Two tug crews hauled the wrong moon to Federation Station. Write Admiral Voss your best excuse and save it as a meme.">
   <link rel="canonical" href="https://galacticfederation.co/alliance-wrong-moon">
@@ -38,9 +38,16 @@
       </figure>
       <div class="editor">
         <div id="moon-controls" hidden>
+          <div class="image-picker" id="moon-image-controls" hidden>
+            <label for="moon-image">Use your own image</label>
+            <input id="moon-image" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="moon-image-help moon-image-status">
+            <p class="help" id="moon-image-help">JPG, PNG or WebP, up to 10 MB. Your image stays in this browser until you choose to share it.</p>
+            <p class="status" id="moon-image-status" role="status"></p>
+            <button type="button" id="moon-image-reset" hidden>Use the Wrong Moon image</button>
+          </div>
           <label for="moon-caption">Your excuse to Admiral Voss</label>
           <input id="moon-caption" type="text" maxlength="90" dir="auto" placeholder="It followed us home, sir." aria-describedby="caption-help">
-          <p class="help" id="caption-help">Up to 90 characters. You choose what to share.</p>
+          <p class="help" id="caption-help"><span id="moon-caption-count">Up to 90 characters.</span> <span id="moon-limit-note" role="status">You choose what to share.</span></p>
           <label id="moon-address-option" class="address-option" hidden>
             <input id="moon-address" type="checkbox" value="GalacticFederation.co/moon" checked>
             Include the meme maker’s web address

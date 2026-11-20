@@ -1,3 +1,18 @@
+import {artworkDimensions, artworkSignature} from './fed-alliance-artwork.mjs';
+
+const captionLimit = 90;
+const segmenter = typeof Intl.Segmenter === 'function'
+  ? new Intl.Segmenter(undefined, {granularity: 'grapheme'})
+  : null;
+
+function* captionCharacters(value) {
+  if (segmenter) {
+    for (const part of segmenter.segment(value)) yield part.segment;
+  } else {
+    yield* value;
+  }
+}
+
 // Measure on the export canvas so the live preview and JPEG wrap identically.
 export function captionLines(text, measure, limit) {
   const lines = [];
@@ -10,10 +25,7 @@ export function captionLines(text, measure, limit) {
     }
     if (line) lines.push(line);
     line = '';
-    const glyphs = typeof Intl.Segmenter === 'function'
-      ? Array.from(new Intl.Segmenter(undefined, {granularity: 'grapheme'}).segment(word), part => part.segment)
-      : Array.from(word);
-    for (const glyph of glyphs) {
+    for (const glyph of captionCharacters(word)) {
       if (line && measure(line + glyph) > limit) {
         lines.push(line);
         line = '';
@@ -25,11 +37,30 @@ export function captionLines(text, measure, limit) {
   return lines;
 }
 
+export async function checkMoonImage(file) {
+  if (!file || !Number.isSafeInteger(file.size) || file.size < 1 || file.size > 10 * 1024 * 1024) {
+    throw new Error('Choose an image up to 10 MB.');
+  }
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const type = artworkSignature(bytes);
+  if (!type || bytes.length !== file.size) throw new Error('Choose a JPG, PNG or WebP image.');
+  const size = artworkDimensions(bytes, type);
+  if (!size || size.width < 1 || size.height < 1) {
+    throw new Error('This image size could not be read. Try a different JPG, PNG or WebP.');
+  }
+  if (size.width > 12000 || size.height > 12000 || size.width * size.height > 24000000) {
+    throw new Error('Choose an image up to 24 megapixels and 12,000 pixels on either side.');
+  }
+  return size;
+}
+
 export function mountMoonEditor(document) {
   const art = document.getElementById('moon-art');
   const canvas = document.getElementById('moon-preview');
   const context = canvas.getContext('2d');
   const caption = document.getElementById('moon-caption');
+  const countLabel = document.getElementById('moon-caption-count') ?? document.getElementById('caption-help');
+  const limitNote = document.getElementById('moon-limit-note');
   const addressOption = document.getElementById('moon-address-option');
   const addressChoice = document.getElementById('moon-address');
   const controls = document.getElementById('moon-controls');
@@ -40,6 +71,10 @@ export function mountMoonEditor(document) {
   const shareText = document.getElementById('moon-share-text');
   const copyButton = document.getElementById('moon-copy');
   const copyStatus = document.getElementById('moon-copy-status');
+  const imageControls = document.getElementById('moon-image-controls');
+  const imagePicker = document.getElementById('moon-image');
+  const imageReset = document.getElementById('moon-image-reset');
+  const imageStatus = document.getElementById('moon-image-status');
   const publicLink = document.querySelector('link[rel="canonical"]').href;
   const {navigator, File, ClipboardItem} = document.defaultView;
   const canCopyImage = typeof ClipboardItem === 'function' && typeof navigator.clipboard?.write === 'function';
@@ -50,6 +85,11 @@ export function mountMoonEditor(document) {
   let imageActionPending = false;
   let preferCopy = false;
   let revision = 0;
+  let composing = false;
+  let captionValid = true;
+  let exportCaption = '';
+  let sourceImage = art;
+  let imageRevision = 0;
 
   function fileShareData(blob) {
     if (preferCopy || blob.type !== 'image/jpeg' || typeof File !== 'function' ||
@@ -87,12 +127,17 @@ export function mountMoonEditor(document) {
     save.removeAttribute('href');
     save.setAttribute('aria-disabled', 'true');
     status.textContent = '';
-    const text = caption.value.trim();
-    const canDraw = supportsExport && art.complete && art.naturalWidth > 0;
-    canvas.hidden = !text || !canDraw;
+    const text = exportCaption;
+    const customImage = sourceImage !== art;
+    const hasMeme = Boolean(text) || (customImage && captionValid && !composing);
+    const canDraw = supportsExport && sourceImage.complete && sourceImage.naturalWidth > 0;
+    canvas.hidden = !hasMeme || !canDraw;
     art.hidden = !canvas.hidden;
     if (addressOption) addressOption.hidden = canvas.hidden;
-    if (!text) return;
+    if (!hasMeme) {
+      canvas.removeAttribute('aria-label');
+      return;
+    }
     if (!canDraw) {
       if (!supportsExport || art.complete) {
         status.textContent = 'Image export is unavailable. You can share your caption as text.';
@@ -100,16 +145,19 @@ export function mountMoonEditor(document) {
       return;
     }
 
-    const width = 1200;
-    const artHeight = Math.round(width * art.naturalHeight / art.naturalWidth);
-    const font = 'bold 54px system-ui, sans-serif';
+    const ratio = sourceImage.naturalWidth / sourceImage.naturalHeight;
+    const width = customImage ? Math.max(1, Math.round(Math.min(1200, 2400 * ratio))) : 1200;
+    const artHeight = Math.max(1, Math.round(width / ratio));
+    const scale = width / 1200;
+    const fontSize = Math.max(1, Math.round(54 * width / 1200));
+    const font = 'bold ' + fontSize + 'px system-ui, sans-serif';
     context.font = font;
-    const lines = captionLines(text, value => context.measureText(value).width, width - 96);
-    const lineHeight = 68;
+    const lines = captionLines(text, value => context.measureText(value).width, width * .92);
+    const lineHeight = fontSize * 68 / 54;
     const address = addressChoice?.checked ? addressChoice.value : '';
     canvas.width = width;
-    canvas.height = artHeight + lines.length * lineHeight + 56 + (address ? 48 : 0);
-    context.drawImage(art, 0, 0, width, artHeight);
+    canvas.height = artHeight + lines.length * lineHeight + (text || address ? 56 * scale : 0) + (address ? 48 * scale : 0);
+    context.drawImage(sourceImage, 0, 0, width, artHeight);
     context.fillStyle = '#f5f1e6';
     context.fillRect(0, artHeight, width, canvas.height - artHeight);
     context.fillStyle = '#101827';
@@ -117,14 +165,14 @@ export function mountMoonEditor(document) {
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     context.direction = document.defaultView.getComputedStyle(caption).direction;
-    lines.forEach((line, index) => context.fillText(line, width / 2, artHeight + 28 + (index + .5) * lineHeight));
+    lines.forEach((line, index) => context.fillText(line, width / 2, artHeight + 28 * scale + (index + .5) * lineHeight));
     if (address) {
       context.direction = 'ltr';
-      context.font = '600 38px system-ui, sans-serif';
+      context.font = '600 ' + 38 * scale + 'px system-ui, sans-serif';
       context.fillStyle = '#405465';
-      context.fillText(address, width / 2, canvas.height - 32);
+      context.fillText(address, width / 2, canvas.height - 32 * scale);
     }
-    canvas.setAttribute('aria-label', art.alt + ' Caption: ' + text + (address ? ' ' + address : ''));
+    canvas.setAttribute('aria-label', sourceImage.alt + (text ? ' Caption: ' + text : '') + (address ? ' ' + address : ''));
 
     // Encoding may finish out of order when a visitor types quickly.
     canvas.toBlob(blob => {
@@ -144,11 +192,31 @@ export function mountMoonEditor(document) {
   function updateCaption() {
     copyAttempt++;
     copyStatus.textContent = '';
-    const text = caption.value.trim();
-    share.hidden = !text;
-    copyButton.hidden = !text;
-    if (!text) share.open = false;
-    shareText.value = text ? text + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
+    exportCaption = '';
+    captionValid = false;
+    if (!composing) {
+      let count = 0;
+      for (const _ of captionCharacters(caption.value)) {
+        if (++count > captionLimit) break;
+      }
+      const over = count > captionLimit;
+      captionValid = !over;
+      let label = (over ? 'Over ' : count + ' of ') + captionLimit + ' characters.';
+      if (!segmenter) label += ' This browser counts some emoji in parts.';
+      const note = over ? 'Shorten your caption to save or share.' : 'You choose what to share.';
+      countLabel.textContent = limitNote ? label : label + ' ' + note;
+      if (limitNote && limitNote.textContent !== note) limitNote.textContent = note;
+      if (over) {
+        caption.setAttribute('aria-invalid', 'true');
+      } else {
+        caption.removeAttribute('aria-invalid');
+        exportCaption = caption.value.trim();
+      }
+    }
+    share.hidden = !exportCaption;
+    copyButton.hidden = !exportCaption;
+    if (!exportCaption) share.open = false;
+    shareText.value = exportCaption ? exportCaption + '\n\nThe Wrong Moon · Federation Alliance\n' + publicLink : '';
     render();
   }
   shareImage?.addEventListener('click', async () => {
@@ -195,12 +263,70 @@ export function mountMoonEditor(document) {
       }
     }
   });
-  controls.hidden = false;
-  caption.addEventListener('input', updateCaption);
+  if (imageControls && imagePicker && imageReset && imageStatus && supportsExport && document.defaultView.Image) {
+    imageControls.hidden = false;
+    imagePicker.addEventListener('change', async () => {
+      const file = imagePicker.files?.[0];
+      if (!file) return;
+      const request = ++imageRevision;
+      imageStatus.textContent = 'Opening your image…';
+      let objectUrl;
+      try {
+        await checkMoonImage(file);
+        if (request !== imageRevision) return;
+        const image = new document.defaultView.Image();
+        objectUrl = URL.createObjectURL(file);
+        await new Promise((resolve, reject) => {
+          image.onload = resolve;
+          image.onerror = () => reject(new Error('This image could not be opened. Try a different JPG, PNG or WebP.'));
+          image.src = objectUrl;
+        });
+        if (request !== imageRevision) return;
+        if (!image.naturalWidth || !image.naturalHeight || image.naturalWidth > 12000
+          || image.naturalHeight > 12000 || image.naturalWidth * image.naturalHeight > 24000000) {
+          throw new Error('Choose an image up to 24 megapixels and 12,000 pixels on either side.');
+        }
+        image.alt = 'Your selected meme image.';
+        sourceImage = image;
+        imageReset.hidden = false;
+        imageStatus.textContent = 'Your image is ready. Add a caption or save it as it is.';
+        preferCopy = false;
+        render();
+      } catch (error) {
+        if (request === imageRevision) imageStatus.textContent = error.message;
+      } finally {
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        if (request === imageRevision) imagePicker.value = '';
+      }
+    });
+    imageReset.addEventListener('click', () => {
+      ++imageRevision;
+      sourceImage = art;
+      imagePicker.value = '';
+      imageReset.hidden = true;
+      imageStatus.textContent = 'The Wrong Moon image is selected.';
+      render();
+      imagePicker.focus();
+    });
+  }
+  // Replace the native UTF-16 limit only once the guest editor handles complete characters.
+  caption.removeAttribute('maxlength');
+  caption.addEventListener('input', () => {
+    if (!composing) updateCaption();
+  });
+  caption.addEventListener('compositionstart', () => {
+    composing = true;
+    updateCaption();
+  });
+  caption.addEventListener('compositionend', () => {
+    composing = false;
+    updateCaption();
+  });
   addressChoice?.addEventListener('change', render);
   art.addEventListener('load', render, {once: true});
   art.addEventListener('error', render, {once: true});
   updateCaption();
+  controls.hidden = false;
 }
 
 if (typeof document !== 'undefined') mountMoonEditor(document);

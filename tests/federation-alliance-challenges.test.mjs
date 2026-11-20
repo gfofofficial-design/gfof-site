@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {resolveObjectURL} from 'node:buffer';
 import {existsSync, readFileSync} from 'node:fs';
 import {PUBLISHED_CHALLENGES,publishedChallenges,mountChallengeBoard} from '../assets/federation/fed-alliance-challenges.mjs';
-import {captionLines, mountMoonEditor} from '../assets/federation/fed-alliance-wrong-moon.mjs';
+import {captionLines, checkMoonImage, mountMoonEditor} from '../assets/federation/fed-alliance-wrong-moon.mjs';
 
 test('the meme caption wraps words and preserves joined emoji in long captions', () => {
   const glyphs = new Intl.Segmenter(undefined, {granularity: 'grapheme'});
@@ -75,6 +75,278 @@ function moonFixture() {
   document.defaultView = {getComputedStyle: () => ({direction: 'ltr'}), navigator: {}, File, ClipboardItem};
   return {document, get, encoded, pngEncodes, drawn, canvas};
 }
+
+// A minimal SOF header supplies dimensions to the shared pre-decode parser.
+const jpegHeader = new Uint8Array([255,216,255,192,0,11,8,2,88,3,32,1,1,17,0,255,217]);
+const ownImageFile = () => new File([jpegHeader], 'guest.jpg', {type:'image/jpeg'});
+
+function pngImageFile(width, height) {
+  const bytes = new Uint8Array(24);
+  bytes.set([137,80,78,71,13,10,26,10]);
+  const view = new DataView(bytes.buffer);
+  view.setUint32(8, 13);
+  view.setUint32(12, 0x49484452);
+  view.setUint32(16, width);
+  view.setUint32(20, height);
+  return new File([bytes], 'example.png', {type:'image/png'});
+}
+
+function imageFixture() {
+  const fixture = moonFixture();
+  const pending = [];
+  fixture.document.defaultView.Image = class {
+    constructor() {
+      this.complete = true;
+      this.naturalWidth = 800;
+      this.naturalHeight = 600;
+      pending.push(this);
+    }
+  };
+  mountMoonEditor(fixture.document);
+  const choose = file => {
+    fixture.get('moon-image').files = [file];
+    return fixture.get('moon-image').change();
+  };
+  const opened = async () => {
+    await new Promise(resolve => setImmediate(resolve));
+    return pending.at(-1);
+  };
+  const encode = () => fixture.encoded.at(-1)(new Blob(['image'],{type:'image/jpeg'}));
+  return {...fixture,pending,choose,opened,encode};
+}
+
+test('guest images accept supported file headers and reject empty, oversized and disguised files', async () => {
+  assert.deepEqual(await checkMoonImage(ownImageFile()), {width:800, height:600});
+  assert.deepEqual(await checkMoonImage(pngImageFile(800, 600)), {width:800, height:600});
+  const webp = new Uint8Array(30);
+  webp.set(new TextEncoder().encode('RIFF'));
+  new DataView(webp.buffer).setUint32(4, 22, true);
+  webp.set(new TextEncoder().encode('WEBPVP8X'), 8);
+  new DataView(webp.buffer).setUint32(16, 10, true);
+  assert.deepEqual(await checkMoonImage(new File([webp], 'image.webp')), {width:1, height:1});
+  for (const file of [new File([],'empty.jpg'),new File(['<svg/>'],'fake.jpg',{type:'image/jpeg'})]) {
+    await assert.rejects(checkMoonImage(file), /Choose/);
+  }
+  await assert.rejects(checkMoonImage({size:10*1024*1024+1}), /10 MB/);
+});
+
+test('the pixel and side limits are checked from the file before constructing a decoder', async () => {
+  assert.deepEqual(await checkMoonImage(pngImageFile(6000, 4000)), {width:6000, height:4000});
+  assert.deepEqual(await checkMoonImage(pngImageFile(12000, 2000)), {width:12000, height:2000});
+  for (const [width, height] of [[6000,4001],[12001,1],[1,12001]]) {
+    const file = pngImageFile(width, height);
+    await assert.rejects(checkMoonImage(file), /24 megapixels/);
+    const f = imageFixture();
+    await f.choose(file);
+    assert.equal(f.pending.length, 0);
+    assert.match(f.get('moon-image-status').textContent, /24 megapixels/);
+  }
+});
+
+test('unreadable dimensions reject before decoding and preserve a prepared guest meme', async () => {
+  const f = imageFixture();
+  const selection = f.choose(ownImageFile());
+  const image = await f.opened();
+  image.onload();
+  await selection;
+  f.encode();
+  const download = f.get('moon-save').href;
+  const decoders = f.pending.length;
+  for (const file of [pngImageFile(0,800), new File([jpegHeader.slice(0,12)],'broken.jpg')]) {
+    await f.choose(file);
+    assert.equal(f.pending.length, decoders);
+    assert.equal(f.get('moon-save').href, download);
+    assert.match(f.get('moon-image-status').textContent, /size could not be read/);
+  }
+});
+
+test('an original guest image can be exported without adding a caption', async () => {
+  const f=imageFixture();
+  const selection=f.choose(ownImageFile());
+  const image=await f.opened(); image.onload(); await selection;
+  assert.equal(f.canvas.hidden,false);
+  assert.equal(f.get('moon-art').hidden,true);
+  assert.equal(f.get('moon-image-reset').hidden,false);
+  assert.match(f.canvas['aria-label'],/Your selected meme image/);
+  assert.equal(f.canvas.width,1200);
+  f.encode();
+  assert.ok(f.get('moon-save').href);
+  assert.equal(f.get('moon-image').value,'');
+});
+
+test('a failed replacement retains the image, caption and prepared download', async () => {
+  const f=imageFixture();
+  f.get('moon-caption').value='The crew submitted this.';
+  f.get('moon-caption').input();
+  let selection=f.choose(ownImageFile());
+  const first=await f.opened(); first.onload(); await selection; f.encode();
+  const download=f.get('moon-save').href;
+  selection=f.choose(ownImageFile());
+  const broken=await f.opened(); broken.onerror(); await selection;
+  assert.equal(f.get('moon-save').href,download);
+  assert.equal(f.get('moon-caption').value,'The crew submitted this.');
+  assert.match(f.get('moon-image-status').textContent,/could not be opened/);
+});
+
+test('clearing the custom image cancels an in-flight replacement and preserves the caption', async () => {
+  const f=imageFixture();
+  f.get('moon-caption').value='Keep my caption.';
+  f.get('moon-caption').input();
+  let selection=f.choose(ownImageFile());
+  const first=await f.opened(); first.onload(); await selection;
+  selection=f.choose(ownImageFile());
+  const late=await f.opened();
+  f.get('moon-image-reset').click();
+  late.onload(); await selection;
+  assert.match(f.canvas['aria-label'],/^Two space tugs/);
+  assert.equal(f.get('moon-caption').value,'Keep my caption.');
+  assert.equal(f.document.activeElement,f.get('moon-image'));
+  assert.equal(f.get('moon-image-reset').hidden,true);
+});
+
+test('an older image selection cannot overwrite a newer selection', async () => {
+  const f=imageFixture();
+  const firstSelection=f.choose(ownImageFile()); const first=await f.opened();
+  const secondSelection=f.choose(ownImageFile()); const second=await f.opened();
+  second.naturalWidth=1600; second.naturalHeight=800;
+  second.onload(); await secondSelection;
+  const height=f.canvas.height;
+  first.onload(); await firstSelection;
+  assert.equal(f.canvas.height,height);
+  assert.equal(f.get('moon-image-status').textContent,'Your image is ready. Add a caption or save it as it is.');
+});
+
+test('custom images respect the caption limit and reject excessive dimensions', async () => {
+  const f=imageFixture();
+  let selection=f.choose(ownImageFile()); const image=await f.opened();
+  image.naturalWidth=200; image.naturalHeight=4000;
+  image.onload(); await selection;
+  assert.equal(f.canvas.width,120); assert.equal(f.canvas.height<2500,true);
+  f.get('moon-caption').value='a'.repeat(91); f.get('moon-caption').input();
+  assert.equal(f.canvas.hidden,true);
+  assert.equal(f.get('moon-save')['aria-disabled'],'true');
+  f.get('moon-caption').value='A tall tale.'; f.get('moon-caption').input(); f.encode();
+  assert.equal(f.canvas.hidden,false); assert.ok(f.get('moon-save').href);
+  const download=f.get('moon-save').href;
+  selection=f.choose(ownImageFile()); const enormous=await f.opened();
+  enormous.naturalWidth=13000; enormous.onload(); await selection;
+  assert.equal(f.get('moon-save').href,download);
+  assert.match(f.get('moon-image-status').textContent,/24 megapixels/);
+});
+
+test('the guest editor counts joined emoji and keeps the complete punchline in the preview and share text', () => {
+  const {document, get, canvas} = moonFixture();
+  const input = get('moon-caption');
+  input.setAttribute('maxlength', '90');
+  mountMoonEditor(document);
+  assert.equal(input.maxlength, undefined);
+  const joke = 'Voss, the whole crew voted. 👩🏽‍🚀👨🏾‍🚀🧑‍🚀 The moon counts as carry-on if it has a handle.';
+  assert.equal(joke.length, 95);
+  input.value = joke; input.input();
+  assert.equal(get('moon-caption-count').textContent, '79 of 90 characters.');
+  assert.ok(canvas['aria-label'].includes(joke));
+  assert.ok(get('moon-share-text').value.startsWith(joke + '\n\n'));
+  const html = readFileSync(new URL('../alliance-wrong-moon.html', import.meta.url), 'utf8');
+  assert.match(html, /id="moon-caption"[^>]+aria-describedby="caption-help"/);
+  assert.match(html, /id="caption-help"[^>]*>[\s\S]*?id="moon-caption-count"[\s\S]*?id="moon-limit-note" role="status"[\s\S]*?<\/p>/);
+});
+
+test('the 91st character stays editable and invalidates older image and text shares until corrected', async () => {
+  const {document, get, canvas, encoded} = moonFixture();
+  const input = get('moon-caption'), save = get('moon-save'), share = get('moon-share');
+  const writes = [];
+  document.defaultView.navigator.clipboard = {writeText: text => writes.push(text)};
+  mountMoonEditor(document);
+  const boundary = 'a'.repeat(86) + '🇺🇸👩🏽‍🚀e\u0301👨‍👩‍👧‍👦';
+  input.value = boundary; input.input();
+  assert.equal(get('moon-caption-count').textContent, '90 of 90 characters.');
+  const jpeg = new Blob(['image'], {type:'image/jpeg'});
+  encoded[0](jpeg);
+  const oldUrl = save.href;
+  assert.ok(resolveObjectURL(oldUrl));
+  get('moon-address').change();
+  share.open = true;
+  input.focus();
+  input.value += '!'; input.input();
+  assert.equal(input.value, boundary + '!');
+  assert.equal(document.activeElement, input);
+  assert.equal(input['aria-invalid'], 'true');
+  assert.match(get('moon-limit-note').textContent, /Shorten your caption to save or share/);
+  assert.equal(share.open, false);
+  assert.equal(share.hidden, true);
+  assert.equal(get('moon-share-text').value, '');
+  await get('moon-copy').click();
+  assert.deepEqual(writes, []);
+  assert.equal(resolveObjectURL(oldUrl), undefined);
+  get('moon-art').load(); get('moon-address').change();
+  encoded[1](jpeg);
+  assert.equal(encoded.length, 2);
+  assert.equal(canvas.hidden, true);
+  assert.equal(save.href, undefined);
+  assert.equal(save['aria-disabled'], 'true');
+  assert.equal(get('moon-share-image').hidden, true);
+  input.value = boundary; input.input();
+  assert.equal(input['aria-invalid'], undefined);
+  assert.equal(share.hidden, false);
+  assert.ok(get('moon-share-text').value.startsWith(boundary + '\n\n'));
+  encoded[2](jpeg);
+  assert.ok(resolveObjectURL(save.href));
+});
+
+test('a long paste stays whole, and unfinished composition can only be shared after it is committed', () => {
+  const {document, get, encoded} = moonFixture();
+  const input = get('moon-caption');
+  mountMoonEditor(document);
+  const longDraft = '🌕'.repeat(10000) + ' keep this ending';
+  input.value = longDraft; input.input();
+  assert.equal(input.value, longDraft);
+  assert.equal(encoded.length, 0);
+  assert.equal(get('moon-caption-count').textContent, 'Over 90 characters.');
+  input.value = 'Moon '; input.input();
+  input.compositionstart();
+  input.value = 'Moon に'; input.input();
+  assert.equal(get('moon-share-text').value, '');
+  encoded[0](new Blob(['previous']));
+  assert.equal(get('moon-save').href, undefined);
+  input.value = 'Moon 日本'; input.compositionend();
+  assert.equal(get('moon-caption-count').textContent, '7 of 90 characters.');
+  assert.ok(get('moon-share-text').value.startsWith('Moon 日本\n'));
+  assert.equal(encoded.length, 2);
+});
+
+test('cached page markup still describes an over-limit draft and restores sharing when shortened', () => {
+  const {document, get} = moonFixture();
+  document.getElementById = id => ['moon-caption-count', 'moon-limit-note'].includes(id) ? null : get(id);
+  mountMoonEditor(document);
+  const input = get('moon-caption');
+  input.value = 'x'.repeat(91); input.input();
+  assert.match(get('caption-help').textContent, /Over 90 characters\. Shorten/);
+  assert.equal(get('moon-share-text').value, '');
+  input.value = 'Corrected.'; input.input();
+  assert.match(get('caption-help').textContent, /10 of 90/);
+  assert.ok(get('moon-share-text').value.startsWith(input.value));
+});
+
+test('older browsers preserve whole drafts and explain how they count emoji', async () => {
+  const descriptor = Object.getOwnPropertyDescriptor(Intl, 'Segmenter');
+  let legacy;
+  try {
+    Object.defineProperty(Intl, 'Segmenter', {...descriptor, value: undefined});
+    legacy = await import('../assets/federation/fed-alliance-wrong-moon.mjs?withoutSegmenter');
+  } finally {
+    Object.defineProperty(Intl, 'Segmenter', descriptor);
+  }
+  const {document, get} = moonFixture();
+  legacy.mountMoonEditor(document);
+  const input = get('moon-caption');
+  input.value = '🌕'.repeat(88) + '👩🏽‍🚀'; input.input();
+  assert.equal(input.value.endsWith('👩🏽‍🚀'), true);
+  assert.match(get('moon-caption-count').textContent, /Over 90.*some emoji in parts/i);
+  assert.equal(get('moon-share-text').value, '');
+  input.value = '🌕'.repeat(90); input.input();
+  assert.match(get('moon-caption-count').textContent, /90 of 90/);
+  assert.ok(get('moon-share-text').value.startsWith(input.value));
+});
 
 test('the meme download tracks the latest caption when encodes finish out of order or the visitor clears it', () => {
   const {document, get, encoded, drawn, canvas} = moonFixture();
