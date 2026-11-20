@@ -27,8 +27,16 @@ h1 { max-width: 10ch; font-size: clamp(2.8rem, 5.2vw, 5rem); line-height: .96; l
 .frame { grid-area: art; align-self: center; overflow: hidden; border: 1px solid var(--fed-border-strong); border-radius: 12px; background: var(--fed-space-panel); }
 .frame img, .frame canvas { display: block; width: 100%; height: auto; }
 .editor { grid-area: editor; align-self: start; }
+.image-picker { margin-bottom: 1.25rem; }
+input[type="file"] { display: block; width: 100%; min-height: 48px; margin-top: .5rem; font: inherit; color: var(--fed-text); }
+input[type="file"]::file-selector-button, .image-picker button {
+  min-height: 44px; padding: .5rem .75rem; margin-right: .5rem; border-radius: 6px;
+  border: 1px solid var(--fed-border-strong); background: var(--fed-space-panel); color: var(--fed-text-display); font: inherit; cursor: pointer;
+}
+.image-picker .help { margin-bottom: .4rem; }
+.image-picker button { margin-top: .5rem; }
 label { display: block; font-weight: 700; }
-input, textarea {
+input[type="text"], textarea {
   width: 100%; margin-top: .5rem; padding: .8rem .9rem; min-height: 48px;
   background: var(--fed-space-panel); color: var(--fed-text-display);
   border: 1px solid var(--fed-border-strong); border-radius: 6px; font: inherit;
@@ -36,7 +44,15 @@ input, textarea {
 input::placeholder { color: var(--fed-muted); }
 .help, .status { font-size: .875rem; line-height: 1.45; color: var(--fed-text); }
 .help { margin: .45rem 0 1rem; }
+input[aria-invalid="true"] { border-color: var(--fed-warning); }
+input[aria-invalid="true"] + .help { color: var(--fed-warning); }
+.address-option {
+  display: flex; align-items: center; gap: .65rem; width: fit-content; min-height: 44px;
+  margin-bottom: .45rem; color: var(--fed-text); font-weight: 500; cursor: pointer;
+}
+.address-option input { flex: none; width: 1.2rem; height: 1.2rem; margin: 0; accent-color: var(--fed-command); }
 .status:not(:empty) { margin-top: .6rem; }
+.image-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }
 .save {
   display: inline-flex; align-items: center; min-height: 46px; padding: .6rem 1.2rem; border-radius: 6px;
   background: var(--fed-authority); color: var(--fed-space);
@@ -46,18 +62,20 @@ input::placeholder { color: var(--fed-muted); }
 .text-share { margin-top: .75rem; }
 .text-share summary { width: fit-content; min-height: 44px; padding-block: .55rem; color: var(--fed-command); cursor: pointer; }
 .text-share textarea { display: block; resize: vertical; }
-.text-share button {
-  margin-top: .65rem; min-height: 44px; padding: .5rem .9rem; border-radius: 6px;
+.text-share button, .image-actions button {
+  min-height: 46px; padding: .5rem .9rem; border-radius: 6px;
   background: var(--fed-space-panel); color: var(--fed-text-display); border: 1px solid var(--fed-border-strong);
   font: inherit; font-weight: 650; cursor: pointer;
 }
+.text-share button { min-height: 44px; margin-top: .65rem; }
+.image-actions button[aria-disabled="true"] { color: var(--fed-muted); cursor: default; }
 a { color: var(--fed-command); text-underline-offset: .18em; }
 .template, footer a { display: inline-flex; min-height: 44px; align-items: center; }
 .template { margin-top: .35rem; }
 .event { border-top: 1px solid var(--fed-border-strong); padding-block: 1.5rem; }
 h2 { font-size: 1.25rem; }
 .event p { max-width: 70ch; margin-top: .35rem; color: var(--fed-text); }
-footer { padding: .6rem 0 2rem; }
+footer { display: flex; flex-wrap: wrap; column-gap: 1.5rem; padding: .6rem 0 2rem; }
 :focus-visible { outline: 3px solid var(--fed-command); outline-offset: 3px; }
 .skip { position: absolute; left: 1rem; top: -10rem; padding: .75rem; background: var(--fed-space); }
 .skip:focus { top: .5rem; }
