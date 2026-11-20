@@ -36,6 +36,8 @@ input[type="text"], textarea {
 input::placeholder { color: var(--fed-muted); }
 .help, .status { font-size: .875rem; line-height: 1.45; color: var(--fed-text); }
 .help { margin: .45rem 0 1rem; }
+input[aria-invalid="true"] { border-color: var(--fed-warning); }
+input[aria-invalid="true"] + .help { color: var(--fed-warning); }
 .address-option {
   display: flex; align-items: center; gap: .65rem; width: fit-content; min-height: 44px;
   margin-bottom: .45rem; color: var(--fed-text); font-weight: 500; cursor: pointer;
