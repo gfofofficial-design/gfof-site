@@ -64,3 +64,18 @@
 .alliance-guide summary:focus-visible,.alliance-help summary:focus-visible{outline:3px solid var(--fed-command);outline-offset:4px}
 @media(max-width:600px){.start-choices,.alliance-guide ul,.alliance-help-grid{grid-template-columns:1fr}.alliance-guide{padding-inline:16px}.alliance-guide a{padding:14px}.site-header nav{gap:4px 18px;justify-content:flex-start}}
 @media(forced-colors:active){.alliance-guide,.alliance-guide a,.alliance-help details{border-color:CanvasText}}
+
+/* Keep the first visit short; native disclosures also work without scripts. */
+.site-header .alliance-primary-nav{gap:8px 16px;justify-content:flex-end}
+.site-header:has(.alliance-menu[open]){align-items:flex-start;padding-block:24px}
+.alliance-menu{min-width:0;font-size:14px}
+.alliance-menu summary{min-height:44px;padding:10px 12px;border:1px solid var(--fed-border-default);border-radius:8px;cursor:pointer;list-style-position:inside;color:var(--fed-command)}
+.alliance-menu summary:focus-visible{outline:3px solid var(--fed-command);outline-offset:5px}
+.alliance-menu[open]{flex-basis:100%}
+.alliance-menu[open] summary{border-color:var(--fed-command)}
+.alliance-menu-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px;padding:12px;margin-top:8px;border:1px solid var(--fed-border-default);border-radius:8px;background:var(--fed-space-panel)}
+.site-header .alliance-menu-panel a{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-width:0;padding:10px;font-weight:650;border-radius:6px}
+.alliance-menu-panel a:hover{background:var(--fed-space)}
+.alliance-menu-panel span{color:var(--fed-muted);font-size:12px;font-weight:400;line-height:1.45}
+@media(max-width:850px){.site-header .alliance-primary-nav{justify-content:flex-start}}
+@media(forced-colors:active){.alliance-menu summary,.alliance-menu-panel{border-color:CanvasText}}
