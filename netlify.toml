@@ -152,6 +152,12 @@
   force = true
 
 [[redirects]]
+  from = "/learn"
+  to = "/learn.html"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/record"
   to = "/record.html"
   status = 200
