@@ -48,3 +48,8 @@ No live tool was installed, paid query issued, wallet connected, infrastructure 
 Local Cloud Chrome verified the fictional calculator results 1.60 (0%), 1.28 (20%) and 0.96 (40%). Enter submits and retains button focus. Tab reaches the lending disclosure; Enter opens/closes it, and Shift+Tab returns to the calculator button. A visual check found unstyled calculator controls; the fix reuses the existing liquidity form styles, with a labelled/described form, grouped label/select and a separate result row. After the fix, select and button both measured 44px high with 16px text. Desktop document width 1348px fit the 1363px viewport. This is local development evidence, not hosted, narrow-screen, physical iPhone or spoken VoiceOver acceptance. Those gates remain open.
 
 The focused Gmail search after November 20 for Netlify/Dossier cleanup, the 62-call limit or eight submissions found handoff messages, not a matching completion receipt. This does not prove no receipt exists elsewhere; #92 stays held. No email was sent.
+
+## Enlarged text and narrow reflow
+
+Cloud Chrome local QA on November 23: 200% zoom measured viewport 681px/document 674px. At 400%, viewport 340px/document 337px. No horizontal overflow was present in either measurement. At 340px, selecting 40% and submitting with Enter produced 0.96 and retained button focus; Tab/Enter opened the lending disclosure with visible focus and wrapped text. Browser zoom was restored to 100%. Developer Tools were unavailable under browser policy; no policy was changed. These checks use ordinary page zoom, not mobile device emulation, and do not establish 320px, Safari, physical iPhone or spoken VoiceOver acceptance.
+
