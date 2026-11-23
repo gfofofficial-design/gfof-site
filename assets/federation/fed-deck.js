@@ -2,7 +2,31 @@
 (()=>{
  const form=document.getElementById('wallet-form'),input=document.getElementById('wallet-address'),status=document.getElementById('wallet-message'),rows=document.getElementById('wallet-rows'),clear=document.getElementById('wallet-clear'),button=document.getElementById('wallet-load');
  const walletResults=document.getElementById('wallet-table-scroll');
- let controller,sequence=0;
+ const walletEvidence=document.getElementById('wallet-read-evidence');
+ function clearReadEvidence(){
+  if(!walletEvidence?.hasAttribute?.('data-fed-evidence'))return;
+  walletEvidence.hidden=true;
+  walletEvidence.removeAttribute('data-fed-readout');
+ }
+ function setReadEvidence(data,coverage){
+  if(!walletEvidence?.hasAttribute?.('data-fed-evidence'))return;
+  walletEvidence.setAttribute('data-fed-readout',JSON.stringify({
+   commitment:data.network==='solana-mainnet'?data.commitment:null,
+   slots:Array.isArray(data.slots)&&data.slots.length===3?data.slots.map(number=>Number.isSafeInteger(number)?number:null):[],
+   observedAt:typeof data.observedAt==='string'?data.observedAt.slice(0,39):null,
+   ...coverage
+  }));
+ }
+ let activeRead,sequence=0;
+ function setReadPending(pending){
+  button.setAttribute('aria-disabled',String(pending));
+  walletResults.setAttribute('aria-busy',String(pending));
+ }
+ function cancelRead(){
+  activeRead?.controller.abort();
+  activeRead=undefined;
+  setReadPending(false);
+ }
  const assetFilter=document.getElementById('wallet-asset-filter'),filterPanel=document.getElementById('wallet-filter-panel'),filterStatus=document.getElementById('wallet-filter-status');let filterRows=[];
  function filterHoldings(){const query=assetFilter.value.trim().toLowerCase();let shown=0;for(const item of filterRows){item.row.hidden=!!query&&!item.search.includes(query);if(!item.row.hidden)shown++;}filterStatus.textContent=(shown?'Showing '+shown+' of '+filterRows.length+' assets.':'No matching assets in this balance read.')+' Filter changes this table only; totals and charts still use all returned holdings.';}
  assetFilter.addEventListener('input',filterHoldings);
@@ -25,7 +49,7 @@
   line.setAttribute('points',historySamples.map(s=>((s.time-start)/(end-start)*380+10).toFixed(2)+','+(high===low?70:120-(s.value-low)/(high-low)*100).toFixed(2)).join(' '));svg.append(line);plot.append(svg);
  }
 
- function reset(){walletResults.setAttribute('aria-busy','false');document.getElementById('wallet-unpriced-panel').hidden=true;document.getElementById('wallet-unpriced-list').replaceChildren();document.getElementById('wallet-unpriced-summary').textContent='';filterRows=[];assetFilter.value='';filterPanel.hidden=true;filterStatus.textContent='Read balances to filter returned assets.';document.getElementById('wallet-source-panel').hidden=true;document.getElementById('wallet-source-links').replaceChildren();document.getElementById('wallet-source-slots').replaceChildren();document.getElementById('wallet-source-message').textContent='No source details loaded.';document.getElementById('wallet-price-status').textContent='WAITING FOR BALANCES';document.getElementById('wallet-priced-count').textContent='—';document.getElementById('wallet-unpriced-count').textContent='—';document.getElementById('wallet-coverage-label').textContent='Price coverage will appear after a balance read.';document.getElementById('wallet-coverage-meter').hidden=true;rows.replaceChildren();document.getElementById('holdings-graph').replaceChildren();document.getElementById('priced-total').textContent='—';document.getElementById('price-coverage').textContent='Load an address to view priced holdings.';document.getElementById('wallet-count').textContent='—';document.getElementById('wallet-state').textContent='No address loaded';document.getElementById('wallet-scope').textContent='Read-only address viewer';document.getElementById('wallet-caption').textContent='No balances loaded';document.getElementById('wallet-data-status').textContent='READ ONLY';}
+ function reset(){clearReadEvidence();document.getElementById('wallet-unpriced-panel').hidden=true;document.getElementById('wallet-unpriced-list').replaceChildren();document.getElementById('wallet-unpriced-summary').textContent='';filterRows=[];assetFilter.value='';filterPanel.hidden=true;filterStatus.textContent='Read balances to filter returned assets.';document.getElementById('wallet-source-panel').hidden=true;document.getElementById('wallet-source-links').replaceChildren();document.getElementById('wallet-source-slots').replaceChildren();document.getElementById('wallet-source-message').textContent='No source details loaded.';document.getElementById('wallet-price-status').textContent='WAITING FOR BALANCES';document.getElementById('wallet-priced-count').textContent='—';document.getElementById('wallet-unpriced-count').textContent='—';document.getElementById('wallet-coverage-label').textContent='Price coverage will appear after a balance read.';document.getElementById('wallet-coverage-meter').hidden=true;rows.replaceChildren();document.getElementById('holdings-graph').replaceChildren();document.getElementById('priced-total').textContent='—';document.getElementById('price-coverage').textContent='Load an address to view priced holdings.';document.getElementById('wallet-count').textContent='—';document.getElementById('wallet-state').textContent='No address loaded';document.getElementById('wallet-scope').textContent='Read-only address viewer';document.getElementById('wallet-caption').textContent='No balances loaded';document.getElementById('wallet-data-status').textContent='READ ONLY';}
  const dollars=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2});
  function mintLinkOK(mint){if(typeof mint!=='string'||!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(mint))return false;let n=0n;const alphabet='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';for(const c of mint)n=n*58n+BigInt(alphabet.indexOf(c));let bytes=0;while(n){bytes++;n>>=8n;}return bytes+mint.match(/^1*/)[0].length===32;}
  function renderSources(data){
@@ -48,15 +72,20 @@
   document.getElementById('wallet-coverage-label').textContent=assetCount?priced.length+' of '+assetCount+' nonzero assets have a reference price. Coverage is by asset count, not token quantity or portfolio value.':'No nonzero assets were returned. There is no price coverage to calculate.';
   function shareLabel(value){const percent=100*value/total;return percent>0&&percent<0.1?'< 0.1%':percent>99.9&&priced.some(other=>other.value>0&&other.value!==value)?'> 99.9%':percent.toFixed(1)+'%';}
   const graph=document.getElementById('holdings-graph');if(total>0)for(const a of priced.sort((a,b)=>b.value-a.value)){const item=document.createElement('div');item.className='holding-bar';const label=document.createElement('span');label.textContent=(a.symbol||a.mint.slice(0,6)+'…'+a.mint.slice(-4))+' · '+shareLabel(a.value)+' · '+(a.value>0&&a.value<0.01?'< $0.01':dollars.format(a.value));const meter=document.createElement('meter');meter.min=0;meter.max=1;meter.value=a.value/total;meter.setAttribute('aria-label',label.textContent);meter.textContent=label.textContent;item.append(label);item.append(meter);graph.append(item);}else graph.textContent='No priced nonzero assets available. Unpriced quantities remain in Wallet radar.';
-  filterPanel.hidden=false;filterHoldings();
+  filterPanel.hidden=false;filterHoldings();return {priced:priced.length,total:assetCount};
  }
  form.addEventListener('submit',async e=>{
-  e.preventDefault();const address=input.value.trim();controller?.abort();const request=++sequence;reset();if(historyAddress&&historyAddress!==address)clearHistory();
+  e.preventDefault();const address=input.value.trim();
+  // Keep the submit button focusable while preventing a repeated read.
+  if(activeRead?.address===address)return;
+  const request=++sequence;cancelRead();reset();if(historyAddress&&historyAddress!==address)clearHistory();
   if(!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)){input.setAttribute('aria-invalid','true');status.textContent='Enter a public Solana address. Never enter a seed phrase or private key.';input.focus();return;}
   input.setAttribute('aria-invalid','false');
-  controller=new AbortController();const requestController=controller;let timedOut=false,onAbort;
+  const requestController=new AbortController();
+  activeRead={address,controller:requestController};
+  let timedOut=false,onAbort;
   const aborted=new Promise((_,reject)=>{onAbort=()=>reject(Object.assign(Error('Lookup cancelled.'),{name:'AbortError'}));requestController.signal.addEventListener('abort',onAbort,{once:true});});
-  const timeout=setTimeout(()=>{timedOut=true;requestController.abort();},20000);button.disabled=true;walletResults.setAttribute('aria-busy','true');status.textContent='Reading public Solana balances…';
+  const timeout=setTimeout(()=>{timedOut=true;requestController.abort();},20000);setReadPending(true);status.textContent='Reading public Solana balances…';
   try{
    const payload=await Promise.race([(async()=>{
     const res=await fetch('/api/federation-wallet',{method:'POST',credentials:'omit',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({address}),signal:requestController.signal});
@@ -65,12 +94,12 @@
     return {res,data};
    })(),aborted]);
    if(request!==sequence)return;const {res,data}=payload;if(!res.ok)throw Error(data.error||'Wallet service unavailable.');if(data.address!==address||!Array.isArray(data.tokens)||data.tokens.length>1000||typeof data.sol!=='string')throw Error('Balance response could not be verified.');
-   holdings(data);recordHistory(data);renderSources(data);
+   const coverage=holdings(data);recordHistory(data);renderSources(data);setReadEvidence(data,coverage);
    document.getElementById('wallet-count').textContent=String(data.tokens.length);document.getElementById('wallet-state').textContent='Address loaded';document.getElementById('wallet-scope').textContent=address.slice(0,6)+'…'+address.slice(-6)+' · ownership unverified';document.getElementById('wallet-caption').textContent='On-chain quantities · available reference values';document.getElementById('wallet-data-status').textContent='BALANCES LOADED';status.textContent='Observed '+new Date(data.observedAt).toLocaleString()+'. Source: '+(data.source==='Helius Solana RPC'?'Helius Solana RPC':'Solana public RPC')+'. '+data.tokenAccounts+' token accounts read. Zero-balance token accounts are omitted. These reads may come from different slots.';
-  }catch(e){if(request!==sequence)return;reset();clearHistory();status.textContent=e.name==='AbortError'?(timedOut?'Lookup timed out. Please try again later.':'Lookup cancelled.'):e.message;}finally{clearTimeout(timeout);requestController.signal.removeEventListener('abort',onAbort);if(request===sequence){button.disabled=false;walletResults.setAttribute('aria-busy','false');}}
+  }catch(e){if(request!==sequence)return;reset();clearHistory();status.textContent=e.name==='AbortError'?(timedOut?'Lookup timed out. Please try again later.':'Lookup cancelled.'):e.message;}finally{clearTimeout(timeout);requestController.signal.removeEventListener('abort',onAbort);if(request===sequence){activeRead=undefined;setReadPending(false);}}
  });
- input.addEventListener('input',()=>{input.setAttribute('aria-invalid','false');sequence++;controller?.abort();button.disabled=false;walletResults.setAttribute('aria-busy','false');reset();clearHistory();status.textContent='Address changed. Read balances to load the new address.';});
- clear.addEventListener('click',()=>{sequence++;controller?.abort();input.value='';input.setAttribute('aria-invalid','false');button.disabled=false;walletResults.setAttribute('aria-busy','false');reset();clearHistory();status.textContent='Cleared from this page. No wallet address is saved to your account or this device.';input.focus();});
+ input.addEventListener('input',()=>{input.setAttribute('aria-invalid','false');sequence++;cancelRead();reset();clearHistory();status.textContent='Address changed. Read balances to load the new address.';});
+ clear.addEventListener('click',()=>{sequence++;cancelRead();input.value='';input.setAttribute('aria-invalid','false');reset();clearHistory();status.textContent='Cleared from this page. No wallet address is saved to your account or this device.';input.focus();});
  const passport=globalThis.FederationPassport;
  const missionIDs=['repair-the-shuttle','the-signal','starport-market','observatory-journey','docking-request','long-way-home','borrowed-voice','after-the-crowd','changing-course','keys-to-the-gate','meridian-relay'];
  function renderPassport(){

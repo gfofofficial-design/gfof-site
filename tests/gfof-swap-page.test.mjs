@@ -2,25 +2,31 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {mountSwapPage, formatPriceImpact} from '../assets/federation/swap/swap-page.mjs';
-import {GFOF, SOL, USDC} from '../assets/federation/swap/quote-core.mjs';
+import {GFOF, SOL, USDC, QUOTE_MAX_AGE_MS} from '../assets/federation/swap/quote-core.mjs';
 import {QUOTE_TOKENS} from '../assets/federation/swap/token-registry.mjs';
 
 const html = readFileSync(new URL('../swap.html', import.meta.url), 'utf8');
 const flush = async () => { for (let i = 0; i < 5; i++) await new Promise(r => setImmediate(r)); };
 const good = (change = {}) => new Response(JSON.stringify({inputMint: SOL.mint, outputMint: GFOF.mint, inAmount: '10000000', outAmount: '47504969523', swapMode: 'ExactIn', router: 'okx', feeBps: 10, transaction: null, ...change}), {headers: {'content-type': 'application/json'}});
-function fixture(fetchImpl = async () => good(), walletOptions) {
+function fixture(fetchImpl = async () => good(), walletOptions, quoteOptions = {}) {
   const nodes = new Map(), calls = []; let doc;
   class Element {
     constructor() { this.events = new Map(); this.attributes = {}; this.value = ''; this.textContent = ''; }
     replaceChildren() { this.options = []; this.value = ''; }
     append(option) { this.options.push(option); if (this.options.length === 1) this.value = option.value; }
     setAttribute(k, v) { this.attributes[k] = String(v); } getAttribute(k) { return this.attributes[k] ?? null; }
+    removeAttribute(k) { delete this.attributes[k]; }
+    contains(node) { return node === this || node?.parentElement === this; }
     addEventListener(k, f) { this.events.set(k, f); } removeEventListener(k) { this.events.delete(k); }
     emit(k) { this.events.get(k)?.({preventDefault() {}}); } focus() { doc.activeElement = this; }
   }
   for (const match of html.matchAll(/<\w+\b[^>]*\bid="([^"]+)"[^>]*>/g)) {
     assert.equal(nodes.has(match[1]), false); const n = new Element();
     n.hidden = /\shidden(?:\s|>)/.test(match[0]); n.disabled = /\sdisabled(?:\s|>)/.test(match[0]); nodes.set(match[1], n);
+  }
+  const result = html.match(/<section id="swap-result"[^>]*>[\s\S]*?<\/section>/)[0];
+  for (const match of result.matchAll(/<\w+\b[^>]*\bid="([^"]+)"[^>]*>/g)) {
+    if (match[1] !== 'swap-result') nodes.get(match[1]).parentElement = nodes.get('swap-result');
   }
   doc = new Element(); doc.getElementById = id => nodes.get(id); doc.defaultView = new Element();
   for (const id of ['swap-from', 'swap-to']) {
@@ -32,7 +38,7 @@ function fixture(fetchImpl = async () => good(), walletOptions) {
     }
   }
   doc.createElement = () => new Element();
-  const api = mountSwapPage(doc, {walletOptions, fetchImpl: (...args) => { calls.push(args); return fetchImpl(...args); }});
+  const api = mountSwapPage(doc, {...quoteOptions, walletOptions, fetchImpl: (...args) => { calls.push(args); return fetchImpl(...args); }});
   return {doc, api, calls, get: id => nodes.get(id)};
 }
 
@@ -230,4 +236,75 @@ test('an invalid pair is explained and focused without a provider call', () => {
   assert.match(f.get('swap-message').textContent, /Choose two different tokens/);
   assert.equal(f.doc.activeElement, f.get('swap-from')); assert.equal(f.calls.length, 0);
   assert.equal(f.get('swap-check').disabled, true); f.api.dispose();
+});
+
+test('quote evidence distinguishes recorded, partial and unavailable provider fields', async () => {
+  const scenarios = [
+    [{feeBps: 0, priceImpact: 0, otherAmountThreshold: '0', slippageBps: 0}, 'Recorded', 4],
+    [{feeBps: 10}, 'Partial', 1],
+    [{feeBps: null}, 'Unavailable', 0],
+  ];
+  for (const [quoted, label, count] of scenarios) {
+    const f=fixture(async () => good(quoted));
+    f.get('swap-amount').value='0.01'; f.get('swap-form').emit('submit'); await flush();
+    assert.equal(f.get('swap-result').hidden, false);
+    assert.equal(f.get('swap-evidence-coverage').textContent, label);
+    assert.match(f.get('swap-evidence-description').textContent, new RegExp('^' + count + ' of 4 details returned'));
+    assert.match(f.get('swap-time').getAttribute('datetime'), /^\d{4}-\d\d-\d\dT/);
+    assert.match(f.get('swap-message').textContent, /Estimated output 47,504\.969523 GFOF\. Trading is closed/);
+    assert.equal(f.get('swap-trade').disabled, true);
+    f.api.dispose();
+  }
+});
+
+test('source details open and return to the evidence heading without another request', async () => {
+  const f=fixture();
+  f.get('swap-amount').value='0.01'; f.get('swap-form').emit('submit'); await flush();
+  f.get('swap-source-link').emit('click');
+  assert.equal(f.get('swap-source-details').open, true);
+  assert.equal(f.doc.activeElement, f.get('swap-source-summary'));
+  f.get('swap-source-return').emit('click');
+  assert.equal(f.get('swap-evidence').open, true);
+  assert.equal(f.doc.activeElement, f.get('swap-evidence-summary'));
+  assert.equal(f.calls.length, 1);
+  f.api.dispose();
+});
+
+test('duplicate quote activation is ignored while Check retains focus and cancellation returns it', async () => {
+  let resolve;
+  const f=fixture(() => new Promise(done => { resolve=done; }));
+  f.get('swap-amount').value='0.01'; f.get('swap-check').focus();
+  f.get('swap-form').emit('submit'); f.get('swap-form').emit('submit');
+  assert.equal(f.calls.length, 1);
+  assert.equal(f.get('swap-check').disabled, false);
+  assert.equal(f.get('swap-check').getAttribute('aria-disabled'), 'true');
+  assert.equal(f.doc.activeElement, f.get('swap-check'));
+  f.get('swap-cancel').focus(); f.get('swap-cancel').emit('click');
+  resolve(good()); await flush();
+  assert.equal(f.doc.activeElement, f.get('swap-check'));
+  assert.equal(f.get('swap-check').getAttribute('aria-disabled'), 'false');
+  assert.equal(f.get('swap-result').hidden, true);
+  assert.equal(f.get('swap-evidence-coverage').textContent, '—');
+  f.api.dispose();
+});
+
+test('expiry clears the details and timestamp and returns focus to Check', async () => {
+  let expire;
+  const f=fixture(async () => good(), undefined, {
+    setTimer(callback, milliseconds) { if (milliseconds === QUOTE_MAX_AGE_MS) expire=callback; return 1; },
+    clearTimer() {},
+  });
+  f.get('swap-amount').value='0.01'; f.get('swap-form').emit('submit'); await flush();
+  f.get('swap-source-link').emit('click');
+  assert.equal(f.doc.activeElement, f.get('swap-source-summary'));
+  expire();
+  assert.equal(f.get('swap-result').hidden, true);
+  assert.equal(f.get('swap-source-details').open, false);
+  assert.equal(f.get('swap-evidence').open, false);
+  assert.equal(f.get('swap-time').getAttribute('datetime'), null);
+  assert.equal(f.get('swap-evidence-coverage').textContent, '—');
+  assert.equal(f.doc.activeElement, f.get('swap-check'));
+  assert.match(f.get('swap-message').textContent, /expired after 30 seconds/);
+  assert.equal(f.calls.length, 1);
+  f.api.dispose();
 });

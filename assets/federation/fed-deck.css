@@ -114,3 +114,36 @@
 .deck-start-tools { display: flex; flex-wrap: wrap; gap: .5rem; margin-block: .8rem; }
 .deck-start-tools a { display: inline-flex; align-items: center; min-height: 44px; padding: .45rem .9rem; border: 1px solid var(--fed-border-strong); border-radius: .4rem; color: var(--fed-command); font-weight: 650; }
 .deck-start-tools a:hover, .deck-start-tools a:focus-visible { background: var(--fed-command-soft); }
+#wallet-load[aria-disabled="true"]{cursor:wait}
+
+/* Lock Records uses the same evidence surface as the wallet reader. */
+#locks.fed-reviewed-tool {
+  border-color: rgba(64, 192, 255, .34);
+  background: radial-gradient(ellipse at 85% 0%, rgba(64, 192, 255, .08), transparent 32rem), var(--fed-space-panel, #081429);
+}
+#locks { scroll-margin-block-start: 1rem; }
+#locks .lock-total-label { margin-bottom: .25rem; color: var(--fed-text-display); font-weight: 680; }
+#locks .lock-actions :where(button, a),
+#locks .lock-signal :where(summary, a) { min-height: 44px; }
+#locks .lock-signal summary { align-content: center; }
+#locks :where(.lock-actions, .lock-signal, .lock-source-technical) a { display: inline-flex; align-items: center; }
+#locks :where(a, button, summary):focus-visible,
+#locks:focus { outline: 3px solid var(--fed-command); outline-offset: 3px; }
+#deck-lock-refresh[aria-disabled="true"] { cursor: wait; }
+#deck-lock-message { min-height: 1.6em; }
+#locks .lock-signals:empty,
+#locks .lock-cliff-plot:empty { display: none; }
+#locks .lock-signal { background: var(--fed-space-panel, #081429); }
+#locks .lock-quantity { margin: .8rem 0 .2rem; }
+#locks .lock-facts { display: grid; gap: .75rem; margin: 1rem 0; }
+#locks .lock-facts dt { color: var(--fed-text-display); font-size: .85rem; }
+#locks .lock-facts dd { margin: .22rem 0 0; overflow-wrap: anywhere; }
+#locks .lock-source-technical { margin: .5rem 0 0; }
+#locks .lock-source-technical p { overflow-wrap: anywhere; }
+@media (max-width: 800px) {
+  #locks .lock-cliff-plot { display: none; }
+}
+@media (forced-colors: active) {
+  #locks :where(a, button, summary):focus-visible,
+  #locks:focus { outline-color: Highlight; }
+}
