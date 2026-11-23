@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn blockchain basics, liquidity and wallet safety with practical examples from the Galactic Federation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>Federation Learn · Galactic Federation</title>
+  <link rel="canonical" href="https://galacticfederation.co/learn">
+  <link rel="icon" href="/logo-circle.png" type="image/png">
+  <link rel="stylesheet" href="/assets/federation/fed-tokens.css">
+  <link rel="stylesheet" href="/assets/federation/fed-learn.css">
+  <script type="module" src="/assets/federation/fed-learn.mjs"></script>
+</head>
+<body>
+  <a class="learn-skip" href="#learn-main">Skip to lessons</a>
+  <header class="learn-top learn-wrap">
+    <a class="learn-brand" href="/">
+      <img src="/logo-circle.png" alt="" width="40" height="40">
+      <span>Galactic Federation</span>
+    </a>
+    <nav aria-label="Federation navigation">
+      <a href="/alliance#learning-paths">Alliance</a>
+      <a href="/command-deck#tool-directory">Command Deck</a>
+      <a href="/research">Research Log</a>
+    </nav>
+  </header>
+
+  <main id="learn-main" class="learn-wrap" tabindex="-1">
+    <header class="learn-hero">
+      <div>
+        <h1>Federation <span>Learn</span></h1>
+        <p>Read a blockchain, understand the cost of a trade, and know what to check before you sign.</p>
+        <p class="learn-access">Public lessons. No account or wallet needed.</p>
+      </div>
+      <nav class="learn-index" id="lesson-topics" tabindex="-1" aria-label="Lesson topics">
+        <a href="#blockchain"><strong>Blockchain basics</strong><span>Addresses, mints and transactions</span></a>
+        <a href="#liquidity"><strong>Liquidity</strong><span>Compare what the same order could cost</span></a>
+        <a href="#wallet-safety"><strong>Wallet safety</strong><span>Read permissions before approving</span></a>
+      </nav>
+    </header>
+
+    <div class="learn-lessons">
+      <article class="learn-lesson" id="blockchain" tabindex="-1" aria-labelledby="blockchain-title">
+        <h2 id="blockchain-title">Blockchain basics</h2>
+        <p>A blockchain records transactions on a shared network. On Solana, programs run the instructions in a transaction and read or update accounts. An explorer lets you look up those public records.</p>
+        <dl class="learn-terms">
+          <div><dt>Address</dt><dd>Identifies an account on the network. A public wallet address can be used for a balance lookup.</dd></div>
+          <div><dt>Token mint</dt><dd>Identifies a token. A name or symbol can appear on several mints.</dd></div>
+          <div><dt>Transaction signature</dt><dd>The lookup identifier for a signed transaction. It lets you check the status, accounts and fees in an explorer.</dd></div>
+        </dl>
+        <details>
+          <summary>How can I tell two tokens apart?</summary>
+          <p>Match the network and full token mint address to a source you trust. An explorer can confirm the account on the network. The project's official record helps establish which mint it says it uses.</p>
+        </details>
+        <div class="learn-links">
+          <a href="https://dossiertrack.co/token-structure">Inspect a Solana mint with Dossier</a>
+          <a href="https://solana.com/docs/core">Solana core concepts</a>
+        </div>
+      </article>
+
+      <article class="learn-lesson" id="liquidity" tabindex="-1" aria-labelledby="liquidity-title">
+        <h2 id="liquidity-title">Liquidity</h2>
+        <p>Liquidity is how much you can buy or sell within an acceptable price and cost. A small trade may move the price sharply in a thin pool. Trading volume tells you what changed hands over time. Depth tells you what a trade of a stated size could get now.</p>
+        <dl class="learn-terms">
+          <div><dt>Price impact</dt><dd>The price change caused by the size of your own trade.</dd></div>
+          <div><dt>Slippage</dt><dd>The difference between the quote and execution when conditions change.</dd></div>
+          <div><dt>Total cost</dt><dd>Check what you would spend and receive, the venue and network fees, and any amount needed to create an account on-chain.</dd></div>
+        </dl>
+        <section class="learn-example" aria-labelledby="example-title">
+          <h3 id="example-title">Try a fictional trade</h3>
+          <p id="example-model">USDC is a token designed to track the U.S. dollar. In this fictional pool, a 100 USDC buy pays 10% more per token than the starting price when the pool has 1,000 USDC. With 5,000 USDC in the pool, the average price is 2% higher. This simple constant-product example excludes fees.</p>
+          <form id="liquidity-example" hidden aria-labelledby="example-title" aria-describedby="example-model">
+            <div>
+              <label for="learn-trade-size">Buy size (USDC)</label>
+              <select id="learn-trade-size">
+                <option value="10">10 USDC</option>
+                <option value="50">50 USDC</option>
+                <option value="100" selected>100 USDC</option>
+              </select>
+            </div>
+            <div>
+              <label for="learn-quote-reserve">Quote reserve (USDC)</label>
+              <select id="learn-quote-reserve">
+                <option value="1000">1,000 USDC</option>
+                <option value="5000" selected>5,000 USDC</option>
+                <option value="10000">10,000 USDC</option>
+              </select>
+            </div>
+            <button type="submit">Calculate price impact</button>
+            <output id="learn-impact" for="learn-trade-size learn-quote-reserve" aria-live="polite" aria-atomic="true"></output>
+          </form>
+        </section>
+        <details>
+          <summary>What should I compare in a real market?</summary>
+          <p>Use the exact token and network. Compare both buy and sell quotes for your size. Check the route, fees, time, and minimum amount you could receive. Treat absent or stale quotes as an evidence gap.</p>
+        </details>
+        <div class="learn-links">
+          <a href="/swap">Explore the Galactic Swap quote preview</a>
+          <a href="https://developers.uniswap.org/docs/get-started/concepts/traders/swaps">Uniswap's guide to swap mechanics</a>
+        </div>
+      </article>
+
+      <article class="learn-lesson" id="wallet-safety" tabindex="-1" aria-labelledby="wallet-safety-title">
+        <h2 id="wallet-safety-title">Wallet safety</h2>
+        <p>A wallet uses a private key to sign. Keep your recovery phrase and private key private. A public address lets someone inspect visible activity and may link that activity to you if you share it with your name.</p>
+        <h3>Check before you approve</h3>
+        <ul class="learn-checks">
+          <li>Open the service from a trusted link and verify its exact domain.</li>
+          <li>Check the network, asset, recipient, amount, and the permission the signature would give.</li>
+          <li>Pause if the request differs from what you intended. Use a public address for a read-only balance check.</li>
+        </ul>
+        <details>
+          <summary>A stranger sends a wallet recovery link. What can I do?</summary>
+          <p>Close the message and open the wallet's official help page yourself. Keep your recovery phrase out of messages, support forms and chats.</p>
+        </details>
+        <div class="learn-links">
+          <a href="/command-deck#wallet">Read a public wallet address</a>
+          <a href="https://solana.com/learn/staying-safe-on-solana">Solana wallet safety guide</a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="learn-footer learn-wrap">
+    <a href="#lesson-topics">Back to lesson topics</a>
+    <a href="/alliance#learning-paths">Try an Alliance learning activity</a>
+  </footer>
+</body>
+</html>

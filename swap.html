@@ -7,6 +7,7 @@
   <title>Galactic Swap · Quote preview</title>
   <link rel="icon" href="/logo-circle.png"><link rel="stylesheet" href="/assets/federation/fed-tokens.css">
   <link rel="stylesheet" href="/assets/federation/swap/swap.css">
+  <link rel="stylesheet" href="/assets/federation/fed-tool-evidence.css">
   <script type="module" src="/assets/federation/swap/swap-page.mjs"></script>
 <link rel="stylesheet" href="/assets/federation/fed-copy-mint.css">
 <script defer src="/assets/federation/fed-copy-mint.js"></script>
@@ -24,13 +25,67 @@
 <p class="help-text" id="swap-token-help">Solana only · SOL, GFOF and native USDC. A listed pair may have no available quote.</p>
 <details class="selected-tokens"><summary>Check the selected token addresses</summary><div><strong id="swap-from-name">SOL · Solana</strong><code id="swap-from-mint" data-copy-mint>So11111111111111111111111111111111111111112</code><a id="swap-from-explorer" href="https://solscan.io/token/So11111111111111111111111111111111111111112" target="_blank" rel="noopener noreferrer">View SOL routing mint on Solscan ↗</a></div><div><strong id="swap-to-name">GFOF · Galactic Federation</strong><code id="swap-to-mint" data-copy-mint>Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV</code><a id="swap-to-explorer" href="https://solscan.io/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV" target="_blank" rel="noopener noreferrer">View GFOF routing mint on Solscan ↗</a></div><p>SOL uses the wrapped SOL mint for routing. USDC here is Circle’s native token on Solana. Listing is not a safety rating or a promise of liquidity.</p></details>
 <div class="amount-box"><label for="swap-amount" id="swap-amount-label">SOL amount to quote</label><input id="swap-amount" type="text" inputmode="decimal" maxlength="40" autocomplete="off" spellcheck="false" aria-describedby="swap-amount-help swap-message" aria-invalid="false" placeholder="For example, 0.01"><p class="help-text" id="swap-amount-help">Enter a positive SOL amount with up to 9 decimal places.</p></div>
-<div class="form-actions"><button class="primary" id="swap-check" type="submit" disabled>Check indicative quote</button><button id="swap-cancel" type="button" hidden>Cancel check</button><button id="swap-clear" type="button">Clear</button></div>
+<div class="form-actions"><button class="primary" id="swap-check" type="submit" aria-controls="swap-result" disabled>Check indicative quote</button><button id="swap-cancel" type="button" hidden>Cancel check</button><button id="swap-clear" type="button">Clear</button></div>
 <p class="help-text privacy-line">Manual checks only. The pair and amount go to Jupiter; your wallet address and Federation account do not. <a href="#swap-help">Data &amp; help ↓</a></p>
 </form>
 <noscript><p class="notice">JavaScript is needed to check quotes. Trading stays closed. The official trading link and Federation tools remain available.</p></noscript>
 <p class="message" id="swap-message" role="status" aria-live="polite" aria-atomic="true">No quote requested. Trading is closed; wallet address preview is optional.</p>
-<section id="swap-result" class="quote-result" aria-labelledby="result-title" aria-busy="false" hidden><h3 id="result-title">Indicative quote · not a trade</h3><p class="output-label">Estimated receive</p><p class="output-value" id="swap-output">—</p><p class="quote-caveat">Not a guaranteed amount. No balance check or transaction is created.</p><div class="impact-line"><span>Reported price impact</span><strong id="swap-impact">—</strong></div>
-<details class="quote-details"><summary>Fees, minimum output &amp; route</summary><dl><div><dt>Input amount</dt><dd id="swap-input">—</dd></div><div><dt>Routing engine</dt><dd id="swap-router">—</dd></div><div><dt>Reported provider fee rate</dt><dd id="swap-fee">—</dd></div><div><dt>Provider’s quoted minimum output</dt><dd id="swap-minimum">—</dd></div><div><dt>Reported slippage tolerance</dt><dd id="swap-slippage">—</dd></div><div><dt>Received on this device</dt><dd id="swap-time">—</dd></div><div><dt>Extra GFOF referral fee</dt><dd>None configured</dd></div></dl><p id="swap-review-notes" class="help-text">—</p></details><p class="help-text">No minimum or slippage protection is enforced here. Total network/account costs are not verified. Quote clears after 30 seconds, an edit or a tab switch.</p></section>
+<section id="swap-result" class="quote-result" aria-labelledby="result-title" aria-busy="false" hidden>
+  <h3 id="result-title">Indicative quote · trading closed</h3>
+  <p class="output-label">Estimated receive</p>
+  <p class="output-value" id="swap-output">—</p>
+  <p class="quote-caveat">The available route and output may change. Total wallet cost is unknown.</p>
+  <div class="impact-line"><span>Reported price impact</span><strong id="swap-impact">—</strong></div>
+  <div class="fed-tool-evidence">
+    <details id="swap-evidence">
+      <summary id="swap-evidence-summary">Quote evidence path</summary>
+      <div class="fed-evidence-body">
+        <ol class="source-path" role="list">
+          <li>
+            <span class="path-marker recorded" aria-hidden="true"></span>
+            <div>
+              <div class="source-heading"><strong>Jupiter quote response</strong><span class="state-label recorded">Recorded</span></div>
+              <p class="source-detail">The route label and estimated output came from Jupiter for the selected token pair and input amount.</p>
+            </div>
+          </li>
+          <li>
+            <span class="path-marker" id="swap-evidence-marker" aria-hidden="true"></span>
+            <div>
+              <div class="source-heading"><strong>Provider fee and quote limits</strong><span class="state-label" id="swap-evidence-coverage">—</span></div>
+              <p class="source-detail" id="swap-evidence-description">—</p>
+            </div>
+          </li>
+          <li>
+            <span class="path-marker" aria-hidden="true"></span>
+            <div>
+              <div class="source-heading"><strong>Total wallet cost</strong><span class="state-label">Unavailable</span></div>
+              <p class="source-detail">Network fees, account setup and the total wallet debit depend on the transaction and the wallet’s state.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="fed-evidence-footer">
+          <p class="preview-time">Received on this device <time id="swap-time">—</time></p>
+          <a href="#swap-source-summary" id="swap-source-link">Open source details</a>
+        </div>
+      </div>
+    </details>
+  </div>
+  <details class="quote-details" id="swap-source-details">
+    <summary id="swap-source-summary">Fees, minimum output &amp; route</summary>
+    <dl>
+      <div><dt>Input amount</dt><dd id="swap-input">—</dd></div>
+      <div><dt>Routing engine</dt><dd id="swap-router">—</dd></div>
+      <div><dt>Reported provider fee rate</dt><dd id="swap-fee">—</dd></div>
+      <div><dt>Provider’s quoted minimum output</dt><dd id="swap-minimum">—</dd></div>
+      <div><dt>Reported slippage tolerance</dt><dd id="swap-slippage">—</dd></div>
+      <div><dt>Extra GFOF referral fee</dt><dd>None configured</dd></div>
+    </dl>
+    <p id="swap-review-notes" class="help-text">—</p>
+    <p class="help-text">The time comes from this browser. A verified ledger slot is unavailable. Reported minimum output and slippage describe the quote only.</p>
+    <a href="#swap-evidence-summary" id="swap-source-return">Back to quote evidence path</a>
+  </details>
+  <p class="help-text">The quote clears after 30 seconds, an edit, or a tab switch.</p>
+</section>
 <div class="trading-gate"><button type="button" id="swap-trade" disabled aria-describedby="swap-gate">Trading · not open yet</button><p id="swap-gate">Wallet and transaction acceptance must pass before trading opens. An available quote does not open trading.</p></div>
 <details class="wallet-panel"><summary>Optional wallet address preview <span>Desktop wallet test</span></summary><p class="help-text">Choose a wallet you recognize. Names come from installed extensions and are not verified by GFOF. This displays an address only: no signature, balance request or trade. The address stays in page memory and is not sent with quotes or linked to your Federation account.</p><label for="swap-wallet-select">Installed compatible wallet</label><select id="swap-wallet-select" disabled></select><div class="form-actions"><button type="button" id="swap-wallet-connect" disabled>Connect to display address</button><button type="button" id="swap-wallet-disconnect" disabled>Disconnect wallet</button></div><p id="swap-wallet-message" role="status" aria-live="polite">JavaScript is needed for this optional preview.</p><code id="swap-wallet-address">No address displayed</code><p class="help-text">Connecting may save trusted-app permission; disconnecting may not revoke it. Manage permission in wallet settings. Never enter a seed phrase or private key. Mobile wallet handoff is not available yet.</p></details>
 </section>

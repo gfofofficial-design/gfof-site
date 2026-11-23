@@ -4,7 +4,6 @@ import {QUOTE_PAIRS,QUOTE_TOKENS} from './token-registry.mjs';
 
 const MESSAGES = Object.freeze({idle: 'No quote requested. Trading is closed; wallet address preview is optional.',
   loading: 'Checking an indicative quote with Jupiter. No wallet or transaction is involved.',
-  ready: 'Indicative quote received for this amount. Trading remains closed; this is not a guaranteed final amount.',
   expired: 'The quote display expired after 30 seconds. Check again for a current indicative amount.',
   cancelled: 'Quote check cancelled. No trade was created.',
   timeout: 'The quote check timed out. No trade was created. You can try another check.',
@@ -29,7 +28,13 @@ export function mountSwapPage(doc, options = {}) {
     if(QUOTE_TOKENS.some(t=>t.id===previous))select.value=previous;
   }
   let disposed = false;
-  const resultFields = ['swap-input', 'swap-output', 'swap-router', 'swap-fee', 'swap-time', 'swap-impact', 'swap-minimum', 'swap-slippage', 'swap-review-notes'];
+  const check = $('swap-check'), cancel = $('swap-cancel'), result = $('swap-result');
+  const message = $('swap-message'), receiptTime = $('swap-time');
+  const evidence = $('swap-evidence'), sourceDetails = $('swap-source-details');
+  const coverage = $('swap-evidence-coverage'), coverageMarker = $('swap-evidence-marker');
+  const resultFields = ['swap-input', 'swap-output', 'swap-router', 'swap-fee', 'swap-time',
+    'swap-impact', 'swap-minimum', 'swap-slippage', 'swap-review-notes',
+    'swap-evidence-coverage', 'swap-evidence-description'];
   const selection = () => $('swap-from').value + ':' + $('swap-to').value;
   const updateLabels = () => {
     let pair;
@@ -52,33 +57,58 @@ export function mountSwapPage(doc, options = {}) {
     $('swap-research-label').textContent = 'Research ' + output.symbol;
     return true;
   };
+  function renderQuote(q) {
+    const output = q.output + ' ' + q.outputSymbol;
+    $('swap-input').textContent = q.input + ' ' + q.inputSymbol;
+    $('swap-output').textContent = output;
+    $('swap-router').textContent = ({metis: 'Metis', jupiterz: 'JupiterZ', dflow: 'Dflow', okx: 'OKX'})[q.router];
+    $('swap-fee').textContent = q.feeBps === null ? 'Not returned · total costs not verified' : q.feeBps / 100 + '% · total costs not verified';
+    $('swap-impact').textContent = formatPriceImpact(q.priceImpact);
+    $('swap-minimum').textContent = q.minimumOutput === null ? 'Not returned' : q.minimumOutput + ' ' + q.outputSymbol + (q.minimumOutput === '0' ? ' · no positive minimum' : '');
+    $('swap-slippage').textContent = q.slippageBps === null ? 'Not returned' : q.slippageBps / 100 + '%';
+    $('swap-review-notes').textContent = q.reviewNotes.length ? q.reviewNotes.join(' ') + ' Trading is closed.' : 'Provider details returned. No protection is enforced in a transaction here; trading is closed.';
+    const received = new Date(q.receivedAt);
+    receiptTime.setAttribute('datetime', received.toISOString());
+    receiptTime.textContent = received.toLocaleString(undefined, {dateStyle: 'medium', timeStyle: 'long'});
+
+    const returned = [q.feeBps, q.priceImpact, q.minimumOutput, q.slippageBps].filter(value => value !== null).length;
+    const state = returned === 4 ? 'Recorded' : returned === 0 ? 'Unavailable' : 'Partial';
+    const style = state.toLowerCase();
+    coverage.className = 'state-label ' + style;
+    coverageMarker.className = 'path-marker ' + style;
+    coverage.textContent = state;
+    $('swap-evidence-description').textContent = returned + ' of 4 details returned for provider fee, price impact, minimum output and slippage.';
+    message.textContent = 'Indicative quote received. Estimated output ' + output + '. Trading is closed.';
+  }
+
   const controller = createQuoteController({...options, onState(state) {
     if (disposed) return;
     const loading = state.phase === 'loading';
-    $('swap-check').disabled = loading || state.phase === 'invalidPair';
-    $('swap-cancel').hidden = !loading;
-    $('swap-result').setAttribute('aria-busy', String(loading));
-    $('swap-result').hidden = state.phase !== 'ready';
-    resultFields.forEach(id => { $(id).textContent = '—'; });
+    const ready = state.phase === 'ready';
+    const moveFocus = (!loading && doc.activeElement === cancel) || (!ready && result.contains(doc.activeElement));
+    check.disabled = state.phase === 'invalidPair';
+    check.setAttribute('aria-disabled', String(loading || check.disabled));
+    cancel.hidden = !loading;
+    result.setAttribute('aria-busy', String(loading));
+    result.hidden = !ready;
     $('swap-amount').setAttribute('aria-invalid', String(state.phase === 'invalid'));
     for (const id of ['swap-from', 'swap-to']) $(id).setAttribute('aria-invalid', String(state.phase === 'invalidPair'));
-    if (state.phase === 'invalid') {
-      const {input} = pairFor(selection());
-      $('swap-message').textContent = 'Enter a positive ' + input.symbol + ' amount using digits and up to ' + input.decimals + ' decimal places. No commas or exponent notation.';
-    } else if (state.phase === 'invalidPair') $('swap-message').textContent = 'Choose two different tokens from the reviewed list. No quote was requested.';
-    else $('swap-message').textContent = MESSAGES[state.phase] || MESSAGES.unavailable;
-    if (state.phase === 'ready') {
-      const q = state.quote;
-      $('swap-input').textContent = q.input + ' ' + q.inputSymbol;
-      $('swap-output').textContent = q.output + ' ' + q.outputSymbol;
-      $('swap-router').textContent = ({metis: 'Metis', jupiterz: 'JupiterZ', dflow: 'Dflow', okx: 'OKX'})[q.router];
-      $('swap-fee').textContent = q.feeBps === null ? 'Not returned · total costs not verified' : q.feeBps / 100 + '% · total costs not verified';
-      $('swap-impact').textContent = formatPriceImpact(q.priceImpact);
-      $('swap-minimum').textContent = q.minimumOutput === null ? 'Not returned' : q.minimumOutput + ' ' + q.outputSymbol + (q.minimumOutput === '0' ? ' · no positive minimum' : '');
-      $('swap-slippage').textContent = q.slippageBps === null ? 'Not returned' : q.slippageBps / 100 + '%';
-      $('swap-review-notes').textContent = q.reviewNotes.length ? q.reviewNotes.join(' ') + ' Trading remains closed.' : 'Provider details returned. No protection is enforced in a transaction here; trading remains closed.';
-      $('swap-time').textContent = new Date(q.receivedAt).toLocaleTimeString();
+
+    if (ready) renderQuote(state.quote);
+    else {
+      evidence.open = false;
+      sourceDetails.open = false;
+      resultFields.forEach(id => { $(id).textContent = '—'; });
+      receiptTime.removeAttribute('datetime');
+      coverage.className = 'state-label';
+      coverageMarker.className = 'path-marker';
+      if (state.phase === 'invalid') {
+        const {input} = pairFor(selection());
+        message.textContent = 'Enter a positive ' + input.symbol + ' amount using digits and up to ' + input.decimals + ' decimal places. No commas or exponent notation.';
+      } else if (state.phase === 'invalidPair') message.textContent = 'Choose two different tokens from the reviewed list. No quote was requested.';
+      else message.textContent = MESSAGES[state.phase] || MESSAGES.unavailable;
     }
+    if (moveFocus) (check.disabled ? $('swap-from') : check).focus();
   }});
   let walletPreview = null;
   if ($('swap-wallet-select') && doc.createElement) {
@@ -124,9 +154,22 @@ export function mountSwapPage(doc, options = {}) {
   const onCancel = () => controller.invalidate('cancelled');
   const onClear = () => { controller.invalidate(); $('swap-amount').value = ''; $('swap-amount').focus(); };
   const onVisibility = () => { controller.invalidate(); walletPreview?.invalidate(); };
+  const onSourceDetails = event => {
+    if (result.hidden) return;
+    event.preventDefault();
+    sourceDetails.open = true;
+    $('swap-source-summary').focus();
+  };
+  const onSourceReturn = event => {
+    if (result.hidden) return;
+    event.preventDefault();
+    evidence.open = true;
+    $('swap-evidence-summary').focus();
+  };
   const bindings = [[$('swap-form'), 'submit', onSubmit], [$('swap-amount'), 'input', onEdit],
     [$('swap-from'), 'change', onPairChange], [$('swap-to'), 'change', onPairChange], [$('swap-reverse'), 'click', onReverse],
     [$('swap-cancel'), 'click', onCancel], [$('swap-clear'), 'click', onClear],
+    [$('swap-source-link'), 'click', onSourceDetails], [$('swap-source-return'), 'click', onSourceReturn],
     [doc, 'visibilitychange', onVisibility]];
   if (walletPreview) bindings.push([$('swap-wallet-connect'), 'click', onWalletConnect], [$('swap-wallet-disconnect'), 'click', onWalletDisconnect]);
   if (doc.defaultView) bindings.push([doc.defaultView, 'pagehide', onVisibility], [doc.defaultView, 'pageshow', onVisibility]);
