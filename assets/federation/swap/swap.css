@@ -10,3 +10,19 @@
 
 /* Reviewed token pair selection: native controls, compact at phone widths. */
 .token-pair{display:grid;grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);align-items:end;gap:8px}.token-pair>div{min-width:0}.token-pair label{font-size:12px;margin:0 0 6px}.token-pair select{font-size:13px;padding:10px 8px;min-height:48px;text-overflow:ellipsis}.token-pair button{width:44px;height:48px;padding:0;font-size:24px;line-height:1}.token-pair select[aria-invalid=true]{border-color:#eeac96}.selected-tokens{border-bottom:1px solid #293d4f;margin:8px 0 16px}.selected-tokens summary{cursor:pointer;min-height:44px;padding:10px 0;font-size:12px;font-weight:650}.selected-tokens>div{padding:10px 0;border-top:1px solid #293d4f}.selected-tokens strong,.selected-tokens code{display:block;font-size:11px}.selected-tokens code{overflow-wrap:anywhere;user-select:all;color:#c5d9e8;margin:5px 0}.selected-tokens a{display:inline-flex;align-items:center;min-height:44px;font-size:12px}.selected-tokens p{font-size:11px;color:#adbed1}.token-pair~.help-text{font-size:11px}
+
+/* Match the evidence disclosure in Command Deck and Token Structure Lens. */
+#swap-result .fed-tool-evidence { text-align: left; }
+#swap-result :where(.quote-details, .fed-tool-evidence) summary { min-height: 44px; }
+#swap-result .quote-details summary { align-content: center; }
+#swap-result .quote-details a { display: inline-flex; align-items: center; min-height: 44px; }
+#swap-result :where(a, summary):focus-visible {
+  outline: 3px solid var(--fed-command, #41bedd);
+  outline-offset: 3px;
+}
+#swap-result .fed-tool-evidence summary:focus-visible { outline-offset: -3px; }
+#swap-check[aria-disabled="true"]:not(:disabled) { cursor: wait; }
+#swap-result .output-value { overflow-wrap: anywhere; }
+@media (forced-colors: active) {
+  #swap-result :where(a, summary):focus-visible { outline-color: Highlight; }
+}
