@@ -40,6 +40,8 @@ For a private local review, serve the repository and open `/tools/community-pres
 
 ## Integration sequence
 
+The November 23 launchpad follow-up connects the private preview to three existing public activities: Federation Learn, Dossier Token Structure Lens and the Wrong Moon creator. Each card describes its actual scope. The section navigator uses native fragment links to the member card, challenge, contributors, fictional review controls and Voss guidance. The layout uses three equal columns on desktop and a single column below 800px, with wrapping navigation and 44px minimum section-link targets. No provider request, score, membership permission or new runtime is added. This follow-up has automated verification; its new layout still needs visual/narrow-width and physical iPhone acceptance.
+
 1. Complete independent Alliance acceptance and the existing #187, #202 and #203 hosted checks in order.
 2. Keep the saved profile and image API as the account-backed identity. Read it through an explicit adapter into the member card instead of creating another account or competing profile table.
 3. Add an authoritative XP service with reviewer authorization, versioned scoring rules, category limits and atomic event deduplication. Browser events and current device-only Passport progress cannot establish a verified score.
