@@ -42,3 +42,9 @@ For a later offline Swap/Agent fixture extension, include an expired quote, a un
 - LI.FI report (November 17; one standard sample per wallet, collected October 22–30): https://li.fi/knowledge-hub/testing-12-agentic-wallets-where-agent-payments-break-and-how-to-fix-them
 
 No live tool was installed, paid query issued, wallet connected, infrastructure changed, email sent or release gate cleared during this research.
+
+## Work browser verification follow-up
+
+Local Cloud Chrome verified the fictional calculator results 1.60 (0%), 1.28 (20%) and 0.96 (40%). Enter submits and retains button focus. Tab reaches the lending disclosure; Enter opens/closes it, and Shift+Tab returns to the calculator button. A visual check found unstyled calculator controls; the fix reuses the existing liquidity form styles, with a labelled/described form, grouped label/select and a separate result row. After the fix, select and button both measured 44px high with 16px text. Desktop document width 1348px fit the 1363px viewport. This is local development evidence, not hosted, narrow-screen, physical iPhone or spoken VoiceOver acceptance. Those gates remain open.
+
+The focused Gmail search after November 20 for Netlify/Dossier cleanup, the 62-call limit or eight submissions found handoff messages, not a matching completion receipt. This does not prove no receipt exists elsewhere; #92 stays held. No email was sent.

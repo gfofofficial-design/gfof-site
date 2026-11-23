@@ -220,24 +220,29 @@ summary {
   margin: 0 0 .5rem;
 }
 
-#liquidity-example {
+#liquidity-example ,
+#learn-shock-form {
   display: flex;
   align-items: end;
   flex-wrap: wrap;
   gap: .75rem;
 }
 
-#liquidity-example[hidden] {
+#liquidity-example[hidden] ,
+#learn-shock-form[hidden] {
   display: none;
 }
 
-#liquidity-example label {
+#liquidity-example label ,
+#learn-shock-form label {
   display: block;
   margin-block-end: .25rem;
 }
 
 #liquidity-example select,
-#liquidity-example button {
+#learn-shock-form select,
+#liquidity-example button ,
+#learn-shock-form button {
   min-block-size: 2.75rem;
   max-inline-size: 100%;
   border: 1px solid var(--fed-border-strong);
@@ -248,19 +253,22 @@ summary {
   font: inherit;
 }
 
-#liquidity-example button {
+#liquidity-example button ,
+#learn-shock-form button {
   border-color: var(--fed-command);
   color: var(--fed-command);
   font-weight: 700;
   cursor: pointer;
 }
 
-#learn-impact {
+#learn-impact,
+#learn-shock-result {
   flex-basis: 100%;
   color: var(--fed-text-display);
 }
 
-#learn-impact:empty {
+#learn-impact:empty,
+#learn-shock-result:empty {
   margin: 0;
   padding: 0;
 }
@@ -293,7 +301,8 @@ summary {
     color: LinkText;
   }
 
-  #liquidity-example button {
+  #liquidity-example button ,
+#learn-shock-form button {
     border-color: ButtonText;
   }
 }
