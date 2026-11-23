@@ -114,3 +114,4 @@
 .deck-start-tools { display: flex; flex-wrap: wrap; gap: .5rem; margin-block: .8rem; }
 .deck-start-tools a { display: inline-flex; align-items: center; min-height: 44px; padding: .45rem .9rem; border: 1px solid var(--fed-border-strong); border-radius: .4rem; color: var(--fed-command); font-weight: 650; }
 .deck-start-tools a:hover, .deck-start-tools a:focus-visible { background: var(--fed-command-soft); }
+#wallet-load[aria-disabled="true"]{cursor:wait}
