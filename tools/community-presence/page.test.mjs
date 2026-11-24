@@ -7,6 +7,7 @@ function fixture() {
   let document;
   function detach(node) {
     if (node.id && nodes.get(node.id) === node) nodes.delete(node.id);
+    if (document.activeElement === node) document.activeElement = null;
     for (const child of node.children ?? []) detach(child);
   }
   class Element {
@@ -41,13 +42,21 @@ function fixture() {
         await listener({target: this, preventDefault() {}, ...extra});
       }
     }
-    focus() { document.activeElement = this; }
+    focus() {
+      // Headings are only programmatically focusable when the page opts in.
+      if (/^H[1-6]$/.test(this.tagName) && this.getAttribute('tabindex') === null) return;
+      document.activeElement = this;
+    }
   }
   document = {activeElement: null, createElement: tag => new Element(tag), getElementById: id => nodes.get(id) ?? null};
   const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
-  for (const match of html.matchAll(/<([a-z][a-z0-9-]*)\b[^>]*\bid="([^"]+)"/gi)) {
-    const element = new Element(match[1]);
-    element.id = match[2];
+  for (const [,tag,attributes] of html.matchAll(/<([a-z][a-z0-9-]*)\b([^>]*)>/gi)) {
+    const id = attributes.match(/\sid="([^"]+)"/i)?.[1];
+    if (!id) continue;
+    const element = new Element(tag);
+    element.id = id;
+    const tabIndex = attributes.match(/\stabindex="(-?\d+)"/i)?.[1];
+    if (tabIndex !== undefined) element.setAttribute('tabindex', tabIndex);
   }
   const get = id => document.getElementById(id);
   async function select(name) {
@@ -58,10 +67,10 @@ function fixture() {
     control.value = option.value;
     await control.emit('change');
   }
-  return {document, get, select};
+  return {document, get, select, html};
 }
 
-test('switching or resetting examples clears the previous member validation and drafts', async t => {
+async function openPreview(t, caseName) {
   const f = fixture();
   const previous = Object.getOwnPropertyDescriptor(globalThis, 'document');
   Object.defineProperty(globalThis, 'document', {value: f.document, configurable: true});
@@ -69,8 +78,12 @@ test('switching or resetting examples clears the previous member validation and 
     if (previous) Object.defineProperty(globalThis, 'document', previous);
     else delete globalThis.document;
   });
-  await import(new URL('./page.mjs?validation-reset-test', import.meta.url));
+  await import(new URL('./page.mjs?' + caseName, import.meta.url));
+  return f;
+}
 
+test('switching or resetting examples clears the previous member validation and drafts', async t => {
+  const f = await openPreview(t, 'validation-reset-test');
   await f.select('Aster');
   const accept = f.get('challenge-actions').children.find(node => node.textContent === 'Accept example invitation');
   assert.ok(accept);
@@ -105,4 +118,33 @@ test('switching or resetting examples clears the previous member validation and 
   assert.equal(f.get('proof').getAttribute('aria-invalid'), null);
   assert.equal(f.get('name').getAttribute('aria-describedby'), null);
   assert.equal(f.document.activeElement, f.get('actor'));
+});
+
+test('each in-page shortcut has a focus destination outside the tab order', () => {
+  const f = fixture();
+  const targets = new Set([...f.html.matchAll(/<a\b[^>]*\shref="#([^"]+)"/g)].map(match => match[1]));
+  assert.ok(targets.size > 1);
+  for (const id of targets) {
+    const target = f.get(id);
+    assert.ok(target, 'Missing shortcut destination ' + id);
+    assert.equal(target.getAttribute('tabindex'), '-1', 'Focus destination ' + id);
+  }
+});
+
+test('saving an example profile and dismissing an invitation return focus to the changed content', async t => {
+  const f = await openPreview(t, 'heading-focus-test');
+  f.get('name').focus();
+  f.get('name').value = 'Example Navigator';
+  f.get('bio').value = 'A fictional member who helps the crew.';
+  await f.get('profile').emit('submit');
+  assert.equal(f.get('member-name').textContent, 'Example Navigator');
+  assert.equal(f.document.activeElement?.id, 'member-name');
+
+  await f.select('Aster');
+  const decline = f.get('challenge-actions').children.find(node => node.textContent === 'Decline example invitation');
+  assert.ok(decline);
+  decline.focus();
+  await decline.emit('click');
+  assert.equal(f.get('challenge-state').textContent, 'declined');
+  assert.equal(f.document.activeElement?.id, 'challenge-title');
 });

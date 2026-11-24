@@ -29,10 +29,11 @@ button,input,select,textarea {
 button,summary,select {
   cursor:pointer
 }
-button,a,input,select,textarea,summary {
+button,a,input,select,textarea,summary,h2[tabindex="-1"] {
   outline-offset:4px
 }
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible {
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,
+h2[tabindex="-1"]:focus-visible {
   outline:3px solid var(--gold)
 }
 button {
