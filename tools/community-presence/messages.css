@@ -1,0 +1,80 @@
+.messages-intro {
+  padding:clamp(1.6rem,5vw,3.5rem) 0 1.4rem;
+}
+.messages-intro h1 {
+  font-size:clamp(2.5rem,6vw,4.25rem);
+  letter-spacing:-.045em;
+  line-height:1.06;
+  margin:0;
+}
+.messages-intro .lead { max-width:40rem; }
+.messages-controls p {
+  margin:0;
+  padding-bottom:.5rem;
+  flex:1 1 16rem;
+}
+.message-status { margin:.65rem 0; min-height:1.6em; }
+.message-status[data-error] { color:var(--gold); }
+.messages-layout {
+  display:grid;
+  grid-template-columns:minmax(13rem,1fr) minmax(0,2fr);
+  gap:1rem;
+  align-items:start;
+  margin:0 0 1rem;
+}
+.messages-layout .card { min-width:0; }
+.messages-inbox-heading,.message-thread-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:.6rem;
+}
+.messages-inbox-heading h2,.message-thread-heading h2 { margin:0; }
+#message-threads,#message-transcript {
+  list-style:none;
+  margin:1rem 0 0;
+  padding:0;
+  display:grid;
+  gap:.65rem;
+}
+#message-threads:empty { margin:0; }
+#message-threads button {
+  width:100%;
+  display:grid;
+  text-align:left;
+  gap:.1rem;
+}
+#message-threads [aria-current="true"] {
+  border-color:var(--accent);
+  background:#14383e;
+}
+#message-threads .muted { font-size:.9rem; }
+#message-transcript li {
+  min-width:0;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:.65rem .85rem;
+  background:#0a1422;
+}
+#message-transcript li[data-outgoing] {
+  border-inline-start:3px solid var(--accent);
+  background:#102a36;
+}
+#message-transcript strong { color:var(--accent); font-size:.9rem; }
+#message-transcript p {
+  margin:.15rem 0 0;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.message-content form,.message-content details { margin-top:1rem; }
+.message-content #message-request { margin-top:0; }
+.message-content form h2 { margin-top:0; }
+.message-content form .muted { margin:.35rem 0 .75rem; }
+.message-content :is(button,summary,select) { min-height:44px; }
+.message-content summary { align-content:center; }
+
+@media (max-width:700px) {
+  .messages-layout { grid-template-columns:minmax(0,1fr); }
+  .messages-controls p { flex-basis:100%; padding:0; }
+}
