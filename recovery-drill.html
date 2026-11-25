@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Practice three wallet recovery decisions and download a blank checklist for your family or project team.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; worker-src 'none'">
+  <title>Wallet Recovery Drill · Federation Learn</title>
+  <link rel="canonical" href="https://galacticfederation.co/recovery-drill">
+  <link rel="icon" href="/logo-circle.png" type="image/png">
+  <link rel="stylesheet" href="/assets/federation/fed-tokens.css">
+  <link rel="stylesheet" href="/assets/federation/fed-learn.css">
+  <link rel="stylesheet" href="/assets/federation/fed-tool-workbench.css">
+  <link rel="stylesheet" href="/assets/federation/fed-recovery-drill.css">
+  <script type="module" src="/assets/federation/fed-recovery-drill.mjs"></script>
+</head>
+<body class="recovery-page">
+  <a class="learn-skip" href="#recovery-main">Skip to the recovery drill</a>
+  <header class="learn-top learn-wrap">
+    <a class="learn-brand" href="/"><img src="/logo-circle.png" alt="" width="40" height="40">Galactic Federation</a>
+    <nav aria-label="Federation navigation">
+      <a href="/learn#wallet-safety">Federation Learn</a>
+      <a href="/command-deck#tool-directory">Command Deck</a>
+    </nav>
+  </header>
+
+  <main class="learn-wrap" id="recovery-main" tabindex="-1">
+    <header class="recovery-intro">
+      <p class="recovery-eyebrow">FEDERATION LEARN // WALLET SAFETY</p>
+      <h1>Wallet Recovery <span>Drill</span></h1>
+      <p class="recovery-lede">Practice what to do after a lost phone, a missed check-in, or the death of a wallet owner.</p>
+      <p class="recovery-caption">Fictional cases. Practice runs in this tab.</p>
+      <a class="recovery-link" href="#recovery-checklist">Get the planning checklist</a>
+    </header>
+
+    <p class="fed-workbench-status" id="recovery-fallback">The interactive practice needs JavaScript. The checklist and official guides below also work on their own.</p>
+
+    <section id="recovery-app" hidden aria-label="Wallet recovery practice">
+      <nav class="recovery-cases" aria-label="Choose a practice case">
+        <button type="button" data-case="lost-phone" aria-pressed="true"><strong>Lost phone</strong><span>Restore wallet access</span></button>
+        <button type="button" data-case="missed-check-in" aria-pressed="false"><strong>Missed check-in</strong><span>Respond before a deadline</span></button>
+        <button type="button" data-case="family" aria-pressed="false"><strong>Helping family</strong><span>Find the official claim path</span></button>
+      </nav>
+
+      <article class="fed-workbench recovery-workbench" aria-labelledby="recovery-case-title">
+        <div class="recovery-context">
+          <p class="recovery-eyebrow">FICTIONAL CASE</p>
+          <h2 id="recovery-case-title" tabindex="-1"></h2>
+          <p id="recovery-story"></p>
+          <dl class="recovery-facts" id="recovery-facts"></dl>
+          <details class="recovery-source">
+            <summary>Sources and assumptions</summary>
+            <p id="recovery-source-note"></p>
+            <a class="recovery-link" id="recovery-source-link"></a>
+          </details>
+        </div>
+
+        <div class="recovery-task">
+          <p class="recovery-step" id="recovery-step"></p>
+          <form id="recovery-form" autocomplete="off" novalidate>
+            <p id="recovery-update" class="recovery-update" tabindex="-1" hidden></p>
+            <fieldset id="recovery-options">
+              <legend id="recovery-question" tabindex="-1"></legend>
+              <div class="recovery-choices" id="recovery-choices"></div>
+            </fieldset>
+            <p class="recovery-error" id="recovery-error" role="status"></p>
+            <button class="fed-workbench-primary recovery-button" type="submit" id="recovery-check">Check answer</button>
+          </form>
+
+          <section id="recovery-feedback" class="recovery-feedback" aria-labelledby="recovery-feedback-title" hidden>
+            <h3 id="recovery-feedback-title" tabindex="-1"></h3>
+            <p id="recovery-feedback-text"></p>
+            <button class="recovery-button" type="button" id="recovery-continue"></button>
+            <a class="recovery-link" href="#recovery-checklist" id="recovery-plan-link" hidden>Use the checklist</a>
+          </section>
+        </div>
+      </article>
+    </section>
+
+    <section class="fed-workbench recovery-checklist" id="recovery-checklist" tabindex="-1" aria-labelledby="recovery-checklist-title">
+      <div>
+        <h2 id="recovery-checklist-title">Make a private recovery plan</h2>
+        <p>Record the types of accounts involved, who can help, and when the plan was last rehearsed. Keep access secrets in their own secure backup.</p>
+      </div>
+      <a class="recovery-button" href="/assets/federation/wallet-recovery-checklist.txt" download>Download blank checklist <span class="recovery-format">TXT</span></a>
+    </section>
+
+    <section class="recovery-guides" aria-labelledby="recovery-guides-title">
+      <h2 id="recovery-guides-title">Official recovery guides</h2>
+      <p>Use the guide for the wallet, project account, or exchange involved.</p>
+      <ul>
+        <li class="fed-workbench">
+          <h3>Self-custody wallet</h3>
+          <p>Find the original sign-in method or the backup for the specific wallet or separately imported account.</p>
+          <a class="recovery-link" href="https://help.phantom.com/articles/what-if-i-lost-my-secret-recovery-phrase-seed-phrase-or-private-key-4406393755411">Phantom recovery options</a>
+        </li>
+        <li class="fed-workbench">
+          <h3>Project multisig</h3>
+          <p>Use the project’s signer and approval rules. Review any time lock before counting on a change to take effect.</p>
+          <a class="recovery-link" href="https://docs.squads.so/main/navigating-your-squad/settings/time-locks">Squads time locks</a>
+        </li>
+        <li class="fed-workbench">
+          <h3>Exchange account</h3>
+          <p>Have the authorized representative use the exchange’s estate process. The required records may vary by case and location.</p>
+          <a class="recovery-link" href="https://help.coinbase.com/en/coinbase/managing-my-account/other/how-do-i-gain-access-to-a-deceased-family-members-coinbase-account">Coinbase estate guidance</a>
+        </li>
+      </ul>
+      <p class="recovery-source-date">Guides checked <time datetime="2026-11-25">November 25, 2026</time>.</p>
+    </section>
+  </main>
+</body>
+</html>

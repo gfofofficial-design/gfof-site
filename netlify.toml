@@ -158,6 +158,20 @@
   force = true
 
 [[redirects]]
+  from = "/recovery-drill"
+  to = "/recovery-drill.html"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/recovery-drill*"
+  [headers.values]
+    Cache-Control = "no-store"
+    Referrer-Policy = "no-referrer"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'none'; frame-ancestors 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+
+[[redirects]]
   from = "/project-runway"
   to = "/project-runway.html"
   status = 200
