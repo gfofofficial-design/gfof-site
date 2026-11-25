@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseUsd, projectCash} from '../assets/federation/fed-project-runway-core.mjs';
+import {parseUsd, planFileLimit, projectCash, readPlanFile, writePlanFile} from '../assets/federation/fed-project-runway-core.mjs';
 
 test('manual USD input distinguishes an unknown amount, zero, and exact cents', () => {
   for (const [input, expected] of [
@@ -52,4 +52,42 @@ test('display rounding stays conservative and month-end balances keep cents', ()
   assert.deepEqual(projectCash({cash: 99999999999, receipts: 99999999999, spend: 0}).months, [
     199999999998, 399999999996, 699999999993
   ]);
+});
+
+const planAmounts = {cash: 99_999_999_999, receipts: 1, spend: 33, upfront: null, planned: 0};
+
+test('downloaded plan inputs round trip without rounding or losing blank fields and example provenance', () => {
+  for (const example of [false, true]) {
+    const text = writePlanFile(planAmounts, example);
+    assert.deepEqual(JSON.parse(text), {
+      tool: 'project-runway', version: 1, currency: 'USD', example, amounts: planAmounts
+    });
+    assert.deepEqual(readPlanFile('\uFEFF' + text), {amounts: planAmounts, example});
+  }
+});
+
+test('plan files reject unsupported tools, versions, currencies, example markers and saved results', () => {
+  const plan = JSON.parse(writePlanFile(planAmounts, false));
+  for (const overrides of [
+    {tool: 'other-tool'}, {version: 2}, {currency: 'EUR'}, {example: 'false'}, {results: {runway: 100}}
+  ]) assert.throws(() => readPlanFile(JSON.stringify({...plan, ...overrides})), /compatible Project Runway/);
+  for (const text of ['null', '[]', '{}', '{"amounts":']) assert.throws(() => readPlanFile(text));
+});
+
+test('both file directions reject malformed, missing or oversized cent amounts', () => {
+  const plan = JSON.parse(writePlanFile(planAmounts, true));
+  for (const delta of [{cash: -1}, {cash: null}, {cash: '999'}, {cash: 100_000_000_000}, {receipts: 0.01}, {upfront: true}, {extra: 0}]) {
+    const amounts = {...planAmounts, ...delta};
+    assert.throws(() => readPlanFile(JSON.stringify({...plan, amounts})), /compatible Project Runway/);
+    assert.throws(() => writePlanFile(amounts, true), /Calculate a valid plan/);
+  }
+  const {planned, ...partialAmounts} = planAmounts;
+  assert.throws(() => writePlanFile(partialAmounts, true), /Calculate a valid plan/);
+  assert.throws(() => writePlanFile(planAmounts, 'example'), /Calculate a valid plan/);
+});
+
+test('file intake rejects oversized text before parsing', () => {
+  const plan = writePlanFile(planAmounts, false);
+  assert.throws(() => readPlanFile(plan + ' '.repeat(planFileLimit)), /4 KB or less/);
+  assert.throws(() => readPlanFile('é'.repeat(planFileLimit / 2 + 1)), /4 KB or less/);
 });
