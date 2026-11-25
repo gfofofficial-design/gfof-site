@@ -1,4 +1,5 @@
 import {ACTIVITIES, ROUTES, PREP_CHECKS, COMPETITION_FORMATS, COMPETITION_STARTERS, matchingActivities, updateSelection, crewPlan, prepareProjectBrief} from './fed-alliance-launchpad-core.mjs';
+import {publishedStations} from './fed-alliance-registry.mjs';
 import {createArtworkSelection, artworkBrief} from './fed-alliance-artwork.mjs';
 
 export function mountAllianceLaunchpad(document, options={}) {
@@ -17,6 +18,13 @@ export function mountAllianceLaunchpad(document, options={}) {
   const revokeFile=options.revokeFile || (url=>globalThis.URL?.revokeObjectURL?.(url));
   const files=new Map(), copies=new Map();
   let selected=[...ROUTES.welcome.ids],disposed=false;
+  let profileTarget, requestProfile = false;
+  try {
+    const params = new URL(options.location?.href ?? document.location?.href).searchParams;
+    profileTarget = publishedStations().find(station => station.id === params.get('profile'));
+    requestProfile = params.get('intent') === 'project-profile';
+  } catch {}
+  const projectFields = ['name', 'website', 'mint', 'summary', 'socials'];
   const listeners=[];
   function guarded(handler){return (...args)=>{if(!disposed)return handler(...args);};}
   function listen(node,event,handler){const fn=guarded(handler);node.addEventListener(event,fn);listeners.push(()=>node.removeEventListener?.(event,fn));}
@@ -134,7 +142,28 @@ export function mountAllianceLaunchpad(document, options={}) {
   function clearProjectOutput() {
     invalidateCopy('project'); byId('project-output').hidden=true;
     byId('project-brief').value=''; download('project','');
-    for(const id of ['project-name','project-website','project-mint','project-interest','project-format','project-goal']) byId(id).removeAttribute('aria-invalid');
+    for(const name of [...projectFields,'interest','format','goal']) byId('project-'+name).removeAttribute('aria-invalid');
+    byId('project-preview-name').textContent = '';
+    byId('project-preview-summary').textContent = '';
+    byId('project-preview-links').replaceChildren();
+  }
+  function renderProjectPreview(preview) {
+    byId('project-preview-name').textContent = preview.name;
+    const summary = byId('project-preview-summary');
+    summary.textContent = preview.summary;
+    summary.hidden = !preview.summary;
+    const list = byId('project-preview-links');
+    const links = [{label:'Official website', href:preview.website}, ...preview.links];
+    list.replaceChildren(...links.map(link => {
+      const item = document.createElement('li');
+      const anchor = document.createElement('a');
+      anchor.textContent = link.label;
+      anchor.href = link.href;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      item.append(anchor);
+      return item;
+    }));
   }
   function syncCompetition(){
     const active=byId('project-interest').value==='competition';
@@ -190,17 +219,21 @@ export function mountAllianceLaunchpad(document, options={}) {
     if(artwork.pending) {
       byId('project-prep-status').textContent='Finish checking the image, or remove it to continue without one.';byId('project-artwork').focus();return;
     }
-    const result=prepareProjectBrief({name:byId('project-name').value,website:byId('project-website').value,mint:byId('project-mint').value,interest:byId('project-interest').value,format:byId('project-format').value,goal:byId('project-goal').value},prepCount());
+    const input = Object.fromEntries(projectFields.map(name => [name, byId('project-' + name).value]));
+    const result = prepareProjectBrief({...input, profileId:profileTarget?.id, interest:byId('project-interest').value,
+      format:byId('project-format').value, goal:byId('project-goal').value}, prepCount());
     if(!result.ok) {
       byId('project-prep-status').textContent=result.message;
       const field=byId(result.field);field.setAttribute('aria-invalid','true');field.focus();return;
     }
     const text=result.text+artworkBrief(artwork.current);
+    renderProjectPreview(result.preview);
     byId('project-brief').value=text;byId('project-output').hidden=false;
     download('project',text);
+    byId('project-preview-name').focus();
     byId('project-prep-status').textContent='Discussion draft prepared. '+result.prepared+' of 4 items self-reported; identity, consent and sources still need review. Nothing has been sent.';
   });
-  for(const id of ['project-name','project-website','project-mint','project-goal']) listen(byId(id),'input',changedProject);
+  for(const name of [...projectFields,'goal']) listen(byId('project-'+name),'input',changedProject);
   listen(byId('project-interest'),'change',()=>{syncCompetition();changedProject();});
   listen(byId('project-format'),'change',()=>{syncCompetition();changedProject();});
   const useStarter=()=>{
@@ -214,16 +247,25 @@ export function mountAllianceLaunchpad(document, options={}) {
   for(const key of Object.keys(PREP_CHECKS)) listen(byId('prep-'+key),'change',changedProject);
   listen(byId('project-clear'),'click',()=>{
     artwork.clear();byId('project-reply-email').value='';byId('project-send-consent').checked=false;
-    for(const id of ['project-name','project-website','project-mint']) byId(id).value='';
+    profileTarget = undefined;
+    for(const name of projectFields) byId('project-'+name).value='';
     byId('project-interest').value='education';byId('project-format').value='creative';byId('project-goal').value='';syncCompetition();for(const key of Object.keys(PREP_CHECKS))byId('prep-'+key).checked=false;
     clearProjectOutput();prepCount();byId('project-prep-status').textContent='Worksheet cleared from this tab. Copies or downloaded files are not deleted.';byId('project-name').focus();
   });
   bindCopy('crew'); bindCopy('project');
-  renderActivities();renderPlan();prepCount();syncCompetition();
+  renderActivities();renderPlan();prepCount();
   byId('crew-plan-title').setAttribute('tabindex','-1');
   for(const id of ['activity-controls','crew-controls','crew-output'])byId(id).hidden=false;
   byId('project-fields').disabled=false;
-  byId('project-prep-status').textContent='Use public project details only. The draft stays in this tab until you choose to copy or download it.';
+  if (profileTarget || requestProfile) byId('project-interest').value = 'profile';
+  if (profileTarget) {
+    for (const name of ['name','website','mint','summary']) byId('project-'+name).value = profileTarget[name];
+    byId('project-socials').value = (profileTarget.socials ?? []).join('\n');
+    byId('project-prep-status').textContent = 'Review the current public details and change what your team wants to submit.';
+  } else {
+    byId('project-prep-status').textContent = 'Use public project details. You can review, copy, or send your draft.';
+  }
+  syncCompetition();
   return {getSelection:()=>[...selected],dispose(){if(disposed)return;disposed=true;for(const removeListener of listeners)removeListener();listeners.length=0;byId('project-fields').disabled=true;byId('project-send').disabled=true;byId('project-reply-email').value='';byId('project-send-consent').checked=false;for(const key of ['crew','project']){byId(key+'-copy').disabled=true;byId(key+'-output').hidden=true;}byId('project-use-starter').disabled=true;byId('arena-prepare').disabled=true;artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
 }
 
