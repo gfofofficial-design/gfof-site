@@ -38,3 +38,11 @@ jobs:
           test -f dist/assets/federation/fed-project-runway.css
           test -f dist/assets/federation/fed-project-runway.mjs
           test -f dist/assets/federation/fed-project-runway-core.mjs
+      - name: Verify Wallet Recovery Drill
+        run: |
+          node --test tests/recovery-drill.test.mjs
+          test -f dist/recovery-drill.html
+          test -f dist/assets/federation/fed-recovery-drill.css
+          test -f dist/assets/federation/fed-recovery-drill.mjs
+          test -f dist/assets/federation/fed-recovery-drill-cases.mjs
+          test -f dist/assets/federation/wallet-recovery-checklist.txt

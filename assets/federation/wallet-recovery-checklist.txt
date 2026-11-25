@@ -1,0 +1,35 @@
+FEDERATION LEARN
+PRIVATE WALLET RECOVERY CHECKLIST
+
+Use a separate copy for your own records. Store it privately. Keep wallet
+recovery phrases, keys, passwords, PINs, and backup shares in their own secure
+storage.
+
+1. List account types.
+   For each record, note whether it is a self-custody wallet, exchange account,
+   or project multisig. Record the supported network and the official provider.
+
+2. Know who can act.
+   Record the relevant roles, such as wallet owner, project signer, or estate
+   representative, and how an authorized person can find the private plan.
+   Make sure that person knows which provider or adviser to contact.
+
+3. Record the recovery process.
+   Note the official recovery guide and where an authorized person can find
+   instructions. Check whether separately imported accounts need their own
+   backups. For project accounts, record approval thresholds and delays.
+
+4. Rehearse interruptions.
+   Walk through a lost device and a missed reminder using example data. If you
+   have a timed plan, check who can pause it, which channel they use, and how
+   they confirm the pause before a deadline.
+
+5. Keep it current.
+   Review the plan after changing a device, signer, provider, or backup.
+
+   Last rehearsal date          ____________________________________
+   Next review date              ____________________________________
+   Where authorized people can
+   find the private instructions ____________________________________
+
+Galactic Federation | https://galacticfederation.co/recovery-drill
