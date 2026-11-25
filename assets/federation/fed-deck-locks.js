@@ -216,6 +216,7 @@
     cards.replaceChildren(...locks.map(lock => renderCard(lock, scheduledTotal)));
     renderTimeline(locks);
     setEvidence('Recorded', { slot, observedAt });
+    message.setAttribute('data-state', 'ready');
     message.textContent = 'Three lock records verified. ' + quantity(scheduledTotal) + ' in scheduled escrow.';
   }
 
@@ -229,6 +230,7 @@
     cards.replaceChildren();
     plot.replaceChildren();
     setEvidence('Checking');
+    message.setAttribute('data-state', 'loading');
     message.textContent = 'Checking the three public lock records.';
 
     const controller = new AbortController();
@@ -252,6 +254,7 @@
       total.textContent = 'Unavailable';
       percent.textContent = 'Current read could not be verified.';
       setEvidence('Unavailable');
+      message.setAttribute('data-state', 'unavailable');
       message.textContent = 'Current lock records are unavailable. View the dated Treasury records or refresh to try again.';
     } finally {
       clearTimeout(timer);
