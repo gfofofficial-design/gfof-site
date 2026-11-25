@@ -173,6 +173,39 @@
 .runway-method ol { padding-inline-start: 1.3rem; }
 .runway-method p { margin: .55rem 0 1rem; }
 .runway-method a { display: inline-flex; align-items: center; min-height: 44px; }
+.runway-file-disclosure {
+  margin-block-end: 1rem;
+  padding-inline: .65rem;
+  border: 1px solid var(--fed-border-default);
+  border-radius: var(--radius-sm);
+  background: var(--fed-space-raised);
+}
+.runway-file-disclosure > div { padding-bottom: .7rem; }
+.runway-file-disclosure > div > p:first-child { margin-top: .25rem; }
+.runway-file-input {
+  display: block;
+  width: min(100%, 32rem);
+  min-height: 48px;
+  margin-top: .3rem;
+  padding: .45rem .65rem;
+  border: 1px solid var(--fed-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--fed-space-raised);
+  color: var(--fed-text);
+  font: inherit;
+}
+.runway-file-input::file-selector-button {
+  min-height: 36px;
+  margin-inline-end: .55rem;
+  border: 1px solid var(--fed-border-strong);
+  border-radius: var(--radius-xs);
+  background: var(--fed-space-panel);
+  color: var(--fed-command);
+  font: inherit;
+  cursor: pointer;
+}
+.runway-file-preview { max-width: 52ch; overflow-wrap: anywhere; }
+.runway-actions button:disabled { opacity: .65; cursor: default; }
 
 @media (max-width: 46rem) {
   .runway-grid { grid-template-columns: minmax(0, 1fr); }

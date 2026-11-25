@@ -1,7 +1,9 @@
-import {parseUsd, projectCash, projectionMonths} from './fed-project-runway-core.mjs';
+import {
+  parseUsd, planFields, planFileLimit, projectCash, projectionMonths, readPlanFile, writePlanFile
+} from './fed-project-runway-core.mjs';
 
 const byId = id => document.getElementById('runway-' + id);
-const fields = ['cash', 'receipts', 'spend', 'upfront', 'planned'].map(key => {
+const fields = planFields.map(key => {
   const input = byId(key);
   return {key, input, error: byId(key + '-error'), hint: input.getAttribute('aria-describedby')};
 });
@@ -16,7 +18,25 @@ const initialStatus = status.textContent;
 const example = {cash: '24,000', receipts: '6,000', spend: '10,000', upfront: '4,000', planned: '12,000'};
 const currency = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
 const duration = new Intl.NumberFormat('en-US', {maximumFractionDigits: 1});
+const sources = {
+  entered: {label: 'Your figures', example: false},
+  example: {label: 'Fictional example', example: true},
+  edited: {label: 'Edited example figures', example: true},
+  imported: {label: 'Imported plan file', example: false},
+  importedExample: {label: 'Imported plan file marked as example', example: true},
+  editedFile: {label: 'Edited imported plan', example: false},
+  editedExampleFile: {label: 'Edited imported example plan', example: true}
+};
+const editedSources = {example: 'edited', imported: 'editedFile', importedExample: 'editedExampleFile'};
+const fileInput = byId('file');
+const fileStatus = byId('file-status');
+const filePreview = byId('file-preview');
+const openPlanButton = byId('open-plan');
+const downloadStatus = byId('download-status');
 let inputSource = 'entered';
+let calculatedPlan;
+let selectedPlan;
+let fileSelection = 0;
 
 function usd(cents) {
   return currency.format(cents / 100).replace(/\.00$/, '');
@@ -84,6 +104,8 @@ function updateActions() {
 }
 
 function calculate() {
+  calculatedPlan = undefined;
+  downloadStatus.textContent = '';
   const amounts = {};
   let firstInvalid;
   for (const field of fields) {
@@ -113,15 +135,89 @@ function calculate() {
     })));
   }
 
-  byId('provenance').textContent = {
-    entered: 'Source · Your figures', example: 'Source · Fictional example',
-    edited: 'Source · Edited example figures'
-  }[inputSource];
+  const source = sources[inputSource];
+  calculatedPlan = {amounts, example: source.example};
+  byId('provenance').textContent = 'Source · ' + source.label;
   byId('scenarios').replaceChildren(...cards);
   status.textContent = '';
   result.hidden = false;
   byId('results-title').focus();
 }
+
+function clearFileSelection(message = '') {
+  fileSelection += 1;
+  fileInput.value = '';
+  selectedPlan = undefined;
+  openPlanButton.disabled = true;
+  filePreview.hidden = true;
+  filePreview.textContent = '';
+  fileStatus.textContent = message;
+}
+
+fileInput.addEventListener('change', async () => {
+  const [file] = fileInput.files;
+  const selection = ++fileSelection;
+  selectedPlan = undefined;
+  openPlanButton.disabled = true;
+  filePreview.hidden = true;
+  filePreview.textContent = '';
+  fileStatus.textContent = '';
+  if (!file) return;
+  if (file.size > planFileLimit) {
+    clearFileSelection('Choose a Project Runway JSON file of 4 KB or less.');
+    return;
+  }
+  fileStatus.textContent = 'Checking the selected plan…';
+  try {
+    const text = await file.text();
+    // An earlier read must never replace a newer selection or a cleared form.
+    if (selection !== fileSelection) return;
+    const plan = readPlanFile(text);
+    const {cash, receipts, spend} = plan.amounts;
+    filePreview.textContent = usd(cash) + ' available today. Monthly receipts ' + usd(receipts) +
+      ' and spending ' + usd(spend) + '.';
+    filePreview.hidden = false;
+    selectedPlan = plan;
+    openPlanButton.disabled = false;
+    fileStatus.textContent = plan.example ? 'The file is marked as an example. Ready to open.' : 'Ready to open.';
+  } catch (error) {
+    if (selection !== fileSelection) return;
+    clearFileSelection(error instanceof Error ? error.message : 'The plan could not be read. Choose the file again.');
+  }
+});
+
+openPlanButton.addEventListener('click', () => {
+  if (!selectedPlan) return;
+  const {amounts, example} = selectedPlan;
+  for (const {key, input} of fields) {
+    input.value = amounts[key] === null ? '' : usd(amounts[key]).slice(1);
+  }
+  inputSource = example ? 'importedExample' : 'imported';
+  change.open = amounts.upfront !== null || amounts.planned !== null;
+  clearFileSelection('Plan opened in this tab.');
+  updateActions();
+  calculate();
+});
+
+byId('download').addEventListener('click', () => {
+  if (!calculatedPlan || result.hidden) return;
+  const link = document.createElement('a');
+  let url;
+  try {
+    const text = writePlanFile(calculatedPlan.amounts, calculatedPlan.example);
+    url = URL.createObjectURL(new Blob([text], {type: 'application/json'}));
+    link.href = url;
+    link.download = 'project-runway-plan.json';
+    document.body.append(link);
+    link.click();
+    downloadStatus.textContent = 'Plan file prepared. It contains the amounts shown in this calculation.';
+  } catch {
+    downloadStatus.textContent = 'The download could not start. Try again in this browser.';
+  } finally {
+    link.remove();
+    if (url) window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+});
 
 form.addEventListener('submit', event => {
   event.preventDefault();
@@ -130,7 +226,8 @@ form.addEventListener('submit', event => {
 
 for (const field of fields) {
   field.input.addEventListener('input', () => {
-    if (inputSource === 'example') inputSource = 'edited';
+    inputSource = editedSources[inputSource] ?? inputSource;
+    calculatedPlan = undefined;
     showFieldError(field);
     if (!result.hidden) {
       result.hidden = true;
@@ -150,6 +247,8 @@ exampleButton.addEventListener('click', () => {
 
 clearButton.addEventListener('click', () => {
   form.reset();
+  clearFileSelection();
+  calculatedPlan = undefined;
   for (const field of fields) showFieldError(field);
   change.open = false;
   inputSource = 'entered';
@@ -161,5 +260,7 @@ clearButton.addEventListener('click', () => {
 });
 
 form.reset();
+clearFileSelection();
 byId('unavailable').hidden = true;
 form.hidden = false;
+byId('plan-files').hidden = false;

@@ -28,13 +28,26 @@
       <p class="runway-system">COMMAND DECK // PROJECT TOOLS</p>
       <h1>Project Runway</h1>
       <p class="runway-lede">See how long your operating cash could last. Compare today’s plan with a new expense before you commit to it.</p>
-      <p class="runway-privacy">Calculates in your browser. Figures are never sent or saved by this page.</p>
+      <p class="runway-privacy">Calculates in your browser. Your figures stay in this tab unless you download a plan file.</p>
     </header>
 
     <div class="runway-grid">
       <section class="fed-workbench runway-panel" aria-labelledby="runway-input-title">
         <h2 id="runway-input-title">Your amounts</h2>
         <p id="runway-input-help" class="runway-muted">Use U.S. dollars. Enter 0 when you know an amount is zero.</p>
+        <details class="runway-file-disclosure" id="runway-plan-files" hidden>
+          <summary>Open a saved plan</summary>
+          <div>
+            <p id="runway-file-help">Choose a Project Runway JSON file from your device. Opening a plan replaces the amounts in this tab.</p>
+            <label for="runway-file">Saved plan file (.json)</label>
+            <input class="runway-file-input" id="runway-file" type="file" accept=".json,application/json" aria-describedby="runway-file-help">
+            <p id="runway-file-status" class="runway-status" role="status"></p>
+            <p id="runway-file-preview" class="runway-file-preview" hidden></p>
+            <div class="runway-actions">
+              <button id="runway-open-plan" type="button" disabled>Open plan</button>
+            </div>
+          </div>
+        </details>
         <p id="runway-unavailable">If the calculator is unavailable, use the worked example below.</p>
         <form id="runway-form" autocomplete="off" novalidate hidden aria-describedby="runway-input-help">
           <div class="runway-fields">
@@ -87,6 +100,10 @@
         <div id="runway-results" hidden>
           <p id="runway-provenance" class="runway-source"></p>
           <div id="runway-scenarios"></div>
+          <div class="runway-actions">
+            <button id="runway-download" type="button">Download plan (.json)</button>
+          </div>
+          <p id="runway-download-status" class="runway-status" role="status"></p>
         </div>
       </section>
     </div>
