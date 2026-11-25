@@ -31,3 +31,10 @@ jobs:
             'lib/alliance-profile-store.mjs','lib/alliance-report-review-http.mjs'])await assert.rejects(access('dist/'+path));
           await access('dist/lib/alliance-constellation-projection.mjs');
           JS
+      - name: Verify Project Runway
+        run: |
+          node --test tests/project-runway.test.mjs
+          test -f dist/project-runway.html
+          test -f dist/assets/federation/fed-project-runway.css
+          test -f dist/assets/federation/fed-project-runway.mjs
+          test -f dist/assets/federation/fed-project-runway-core.mjs
