@@ -1,0 +1,85 @@
+/* Shared Federation tool surfaces. Keep interaction and data state in each tool. */
+.fed-workbench {
+  border: 1px solid var(--fed-border-default);
+  border-radius: 1rem;
+  background:
+    radial-gradient(ellipse at top right, var(--fed-command-soft), transparent 30rem),
+    var(--fed-space-panel);
+  box-shadow: 0 1.25rem 3rem #0003;
+}
+
+.fed-workbench-tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: .3rem .6rem;
+  border: 1px solid var(--fed-border-strong);
+  border-radius: .4rem;
+  background: var(--fed-space-raised);
+  color: var(--fed-command);
+  font: 650 .8125rem/1.45 var(--font-fed-system);
+  letter-spacing: .04em;
+  overflow-wrap: anywhere;
+}
+
+.fed-workbench-tag[data-state="limited"] {
+  color: var(--fed-authority);
+}
+
+.fed-workbench-primary {
+  min-height: 3rem;
+  border-color: var(--fed-command);
+  background: var(--fed-command);
+  color: var(--fed-space);
+  font-weight: 750;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.fed-workbench-primary:hover {
+  border-color: #9fddff;
+  background: #9fddff;
+}
+
+.fed-workbench-status {
+  margin: 1rem 0 0;
+  padding: .7rem .85rem;
+  border-inline-start: 2px solid var(--fed-border-strong);
+  border-radius: .35rem;
+  background: var(--fed-space-raised);
+  color: var(--fed-text);
+  font-size: .9375rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.fed-workbench-status:is([data-state="loading"], [data-state="ready"]) {
+  border-inline-start-color: var(--fed-command);
+}
+
+.fed-workbench-status:is([data-state="invalid"], [data-state="invalidPair"], [data-state="unavailable"],
+  [data-state="timeout"], [data-state="network"], [data-state="rate"], [data-state="expired"],
+  [data-state="example"]) {
+  border-inline-start-color: var(--fed-warning);
+}
+
+.fed-workbench-status:empty {
+  display: none;
+}
+
+.fed-workbench summary {
+  align-content: center;
+}
+
+.fed-workbench summary::marker {
+  color: var(--fed-command);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fed-workbench-primary { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .fed-workbench-primary { border: 2px solid ButtonText; }
+  .fed-workbench-status { border-inline-start-color: Highlight; }
+}

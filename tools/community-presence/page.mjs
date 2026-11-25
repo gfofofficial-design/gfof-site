@@ -166,7 +166,7 @@ function render() {
 
 function renderActorOptions() {
   get('actor').replaceChildren(...preview.memberIds.map(id => {
-    const option = element('option', memberName(id) + ' · fictional');
+    const option = element('option', memberName(id));
     option.value = id;
     return option;
   }));

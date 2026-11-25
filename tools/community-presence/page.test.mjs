@@ -61,7 +61,7 @@ function fixture() {
   const get = id => document.getElementById(id);
   async function select(name) {
     const control = get('actor');
-    const option = control.children.find(node => node.textContent === name + ' · fictional');
+    const option = control.children.find(node => node.textContent === name);
     assert.ok(option, 'The example member must be available in the actual page controls.');
     control.focus();
     control.value = option.value;
@@ -114,10 +114,13 @@ test('switching or resetting examples clears the previous member validation and 
   await f.get('profile').emit('submit');
   await f.get('reset').emit('click');
   assert.equal(f.get('member-name').textContent, 'Preview Explorer');
+  const control = f.get('actor');
+  const selected = control.children.find(option => option.value === control.value);
+  assert.equal(selected?.textContent, 'Preview Explorer');
   assert.equal(f.get('proof').value, '');
   assert.equal(f.get('proof').getAttribute('aria-invalid'), null);
   assert.equal(f.get('name').getAttribute('aria-describedby'), null);
-  assert.equal(f.document.activeElement, f.get('actor'));
+  assert.equal(f.document.activeElement, control);
 });
 
 test('each in-page shortcut has a focus destination outside the tab order', () => {
