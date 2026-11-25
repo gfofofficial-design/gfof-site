@@ -1,4 +1,5 @@
-import {validMint, safeWebsite} from './fed-alliance-registry.mjs';
+import {publishedStations, safeWebsite, validMint} from './fed-alliance-registry.mjs';
+import {projectSocialLinks} from './fed-alliance-socials.mjs';
 
 // Reviewed local activities. No clicks, plans or checkboxes are completion evidence.
 export const ACTIVITIES = Object.freeze([
@@ -117,7 +118,16 @@ export function prepareProjectBrief(fields, checks=[]) {
   if(!safeWebsite(website) || url.search || url.hash) return {ok:false,field:'project-website',message:'Use a public HTTPS website without a login, query string or fragment.'};
   const mint=typeof fields.mint === 'string' ? fields.mint.trim() : '';
   if(mint && !validMint(mint)) return {ok:false,field:'project-mint',message:'Enter the full Solana mint address, or leave it blank for the first discussion.'};
-  const interests={competition:'Project-versus-project competitions',education:'Financial education and crew missions', research:'Token structure and evidence', feedback:'Product feedback and useful guides', community:'Joint community activities'};
+  const summary = typeof fields.summary === 'string' ? fields.summary.trim() : '';
+  if (summary.length > 220 || /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(summary)) {
+    return {ok:false,field:'project-summary',message:'Use one line of up to 220 characters for the public description.'};
+  }
+  const socialUrls = typeof fields.socials === 'string'
+    ? fields.socials.split(/\r?\n/).map(line => line.trim()).filter(Boolean) : [];
+  const social = projectSocialLinks(socialUrls);
+  if (social.error) return {ok:false,field:'project-socials',message:social.error};
+  const profile = publishedStations().find(station => station.id === fields.profileId);
+  const interests={competition:'Project-versus-project competitions',education:'Financial education and crew missions', research:'Token structure and evidence', feedback:'Product feedback and useful guides', community:'Joint community activities', profile:'Publish or update a public project profile'};
   if(!Object.hasOwn(interests,fields.interest)) return {ok:false,field:'project-interest',message:'Choose a shared activity from the list.'};
   if(!Array.isArray(checks) || checks.length > 4 || new Set(checks).size !== checks.length || checks.some(key=>!Object.hasOwn(PREP_CHECKS,key))) return {ok:false,field:'project-prep-status',message:'Review the preparation checklist again.'};
   const competition=[];
@@ -127,12 +137,17 @@ export function prepareProjectBrief(fields, checks=[]) {
     if(goal.length<20||goal.length>240||/[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069<>]/.test(goal))return {ok:false,field:'project-goal',message:'Describe what teams would make in 20–240 characters on one line, without markup or hidden direction controls.'};
     competition.push(`Proposed format: ${COMPETITION_FORMATS[fields.format]}`,`Proposed shared deliverable: ${goal}`, 'Before a match: both authorized project representatives must agree on the brief, deadline/time zone, equal entry limits, eligibility, originality/tool disclosures, judging criteria, reviewer conflicts and dispute process.', 'This is an unsent discussion proposal, not an invitation, accepted match, scheduled event or prize commitment.', '');
   }
-  const text=['PROSPECTIVE ALLIANCE STATION — DISCUSSION DRAFT',`Project: ${name}`,`Public website: ${website}`,
+  const profileLines = [
+    ...(profile ? [`Existing published profile: https://galacticfederation.co/projects/${profile.id}/`] : []),
+    ...(summary ? [`Public description: ${summary}`] : []),
+    ...(social.links.length ? ['Public social links:', ...social.links.map(link => `- ${link.label}: ${link.href}`)] : []),
+  ];
+  const text=['ALLIANCE PROJECT — DISCUSSION DRAFT',`Project: ${name}`,`Public website: ${website}`, ...profileLines,
     mint ? `Chain/mint supplied for review: Solana / ${mint}` : 'Chain/mint: not supplied; confirm before any listing.',
     `Shared interest: ${interests[fields.interest]}`, '', ...competition, 'Preparation — self-reported, not independently verified:',
     ...Object.entries(PREP_CHECKS).map(([key,label])=>`${checks.includes(key) ? '[prepared]' : '[to discuss]'} ${label}`), '',
     'Please confirm identity, team consent, public sources, station scope and any commercial terms through official channels before publication. This worksheet does not approve a partner, create an account, enroll members or grant access.',
     'No wallet keys, private contact details or account credentials belong in this brief.',
     'Alliance: https://galacticfederation.co/alliance#bring-your-project'].join('\n');
-  return {ok:true,text,prepared:checks.length};
+  return {ok:true,text,prepared:checks.length,preview:{name,website,summary,links:social.links}};
 }

@@ -1,3 +1,5 @@
+import {projectSocialLinks} from './fed-alliance-socials.mjs';
+
 // Public, source-reviewed station data. Never store prospects or private agreements here.
 export const HOST_STATION = Object.freeze({
   id: 'gfof',
@@ -8,6 +10,7 @@ export const HOST_STATION = Object.freeze({
   summary: 'On-chain tools, financial missions and a public record of the work being built.',
   mint: 'Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV',
   website: 'https://galacticfederation.co/',
+  socials: Object.freeze(['https://x.com/GFOF_Offcial', 'https://t.me/GFOF_SOL']),
   evidence: 'https://galacticfederation.co/treasury#current-mint-lock',
 });
 
@@ -54,6 +57,7 @@ export function approvedPartner(station) {
     typeof station.symbol === 'string' && /^[A-Z0-9]{1,12}$/.test(station.symbol) &&
     typeof station.badge === 'string' && /^[A-Z0-9]{1,3}$/.test(station.badge) &&
     validMint(station.mint) && safeWebsite(station.website) && safeWebsite(station.evidence) &&
+    !projectSocialLinks(station.socials).error &&
     review?.consent === 'confirmed' && review?.identity === 'confirmed' &&
     review?.publication === 'approved' &&
     reviewDate(review?.date) &&
@@ -75,6 +79,8 @@ export function stationLinks(station) {
     lens: 'https://dossiertrack.co/token-structure?mint=' + encodeURIComponent(station.mint),
     explorer: 'https://solscan.io/token/' + encodeURIComponent(station.mint),
     website: station.website,
+    profile: '/projects/' + station.id + '/',
+    socials: Object.freeze(projectSocialLinks(station.socials).links),
     evidence: station.evidence,
   });
 }
