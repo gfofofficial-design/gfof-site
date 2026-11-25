@@ -59,6 +59,10 @@ export async function buildStaticPublish(root,{requireCanonicalHome=false}={}) {
       await cp(join(stage,'command-preview.html'),join(stage,'index.html'));
       if(!copied.includes('index.html'))copied.push('index.html');
     }
+    if (copied.includes('assets/federation/fed-alliance-registry.mjs')) {
+      const {stageAllianceProjectPages} = await import('./_shared/alliance-project-pages.mjs');
+      copied.push(...await stageAllianceProjectPages(stage));
+    }
     await rm(output,{recursive:true,force:true});
     await rename(stage,output);
     return copied;

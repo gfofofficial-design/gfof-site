@@ -177,3 +177,19 @@ test('host-only initialization performs no fetch and no storage access', () => {
     if(storage)Object.defineProperty(globalThis,'localStorage',storage); else delete globalThis.localStorage;
   }
 });
+
+test('approved social URLs are carried into the public profile link without implying domain ownership', () => {
+  const entry = {...partner(), socials:['https://x.com/example', 'https://t.me/example',
+    'https://discord.gg/example', 'https://x.com.example.com/community']};
+  assert.equal(approvedPartner(entry), true);
+  const links = stationLinks(entry);
+  assert.equal(links.profile, '/projects/example/');
+  assert.deepEqual(links.socials.map(link => link.label), ['X', 'Telegram', 'Discord', 'x.com.example.com']);
+  assert.equal(approvedPartner({...entry, socials:['https://someone@x.com/example']}), false);
+  assert.equal(approvedPartner({...entry, socials:['https://127.0.0.1/example']}), false);
+  assert.equal(approvedPartner({...entry, socials:Array(21).fill('https://x.com/example')}), false);
+
+  const app = fixture('https://preview.example/alliance?station=example');
+  mountAlliance(app.document, app.location, app.history, publishedStations([entry]));
+  assert.equal(app.get('station-profile').href, '/projects/example/');
+});
