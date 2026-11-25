@@ -321,3 +321,35 @@ test('clearing and closing project intake remove reply-email and consent state',
  const b=fixture();b.get('project-reply-email').value='owner@example.com';b.get('project-send-consent').checked=true;b.get('project-clear').emit('click');assert.equal(b.get('project-reply-email').value,'');assert.equal(b.get('project-send-consent').checked,false);
  b.get('project-reply-email').value='owner@example.com';b.get('project-send-consent').checked=true;b.api.dispose();assert.equal(b.get('project-reply-email').value,'');assert.equal(b.get('project-send-consent').checked,false);assert.equal(b.get('project-send').disabled,true);
 });
+
+test('the project draft previews public descriptions and multiple social platforms', () => {
+  const draft = fixture();
+  draft.setProject();
+  draft.get('project-summary').value = 'We make Solana research approachable.';
+  draft.get('project-socials').value = ['https://x.com/examplecrew', 'https://t.me/examplecrew',
+    'https://discord.gg/federation-example', 'https://community.example.com/examplecrew'].join('\n');
+  draft.get('project-form').emit('submit');
+
+  assert.equal(draft.get('project-output').hidden, false);
+  assert.equal(draft.get('project-preview-summary').textContent, 'We make Solana research approachable.');
+  assert.deepEqual(draft.get('project-preview-links').children.map(row => row.children[0].textContent),
+    ['Official website', 'X', 'Telegram', 'Discord', 'community.example.com']);
+  assert.match(draft.get('project-brief').value, /Public social links:\n- X: https:\/\/x\.com\/examplecrew/);
+  assert.equal(draft.document.activeElement, draft.get('project-preview-name'));
+
+  draft.get('project-socials').value = 'http://t.me/examplecrew';
+  draft.get('project-socials').emit('input');
+  assert.equal(draft.get('project-output').hidden, true);
+  draft.get('project-form').emit('submit');
+  assert.equal(draft.get('project-output').hidden, true);
+  assert.equal(draft.get('project-brief').value, '');
+  assert.equal(draft.document.activeElement, draft.get('project-socials'));
+  assert.equal(draft.get('project-socials').attributes['aria-invalid'], 'true');
+  draft.api.dispose();
+});
+
+test('a profile link targets only an already published project in the review draft', () => {
+  const proof = {...publicFields(), interest:'profile', profileId:'gfof'};
+  assert.match(prepareProjectBrief(proof).text, /Existing published profile: https:\/\/galacticfederation\.co\/projects\/gfof\//);
+  assert.doesNotMatch(prepareProjectBrief({...proof,profileId:'unpublished'}).text, /Existing published profile/);
+});
