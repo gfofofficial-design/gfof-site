@@ -44,7 +44,7 @@ export function mountAlliance(document, location, history, stations = publishedS
     byId('station-evidence-note').textContent = station.relationship === 'host'
       ? 'Review the dated GFOF lock snapshot and its sources on Treasury.'
       : 'Review this project’s published source. A linked disclosure is not independently established by its inclusion here.';
-    for (const name of ['lens','explorer','website','evidence']) byId(name === 'explorer' ? 'station-explorer-link' : 'station-' + name).href = links[name];
+    for (const name of ['lens','explorer','website','evidence','profile']) byId(name === 'explorer' ? 'station-explorer-link' : 'station-' + name).href = links[name];
     const bridge = byId('station-bridge-preview');
     const bridgeHref = stationBridgePreview(station);
     bridge.hidden = !bridgeHref;

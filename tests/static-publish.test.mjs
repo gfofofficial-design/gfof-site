@@ -196,3 +196,53 @@ test('the legacy worker retires its own registration and lets the browser load p
   }
   assert.deepEqual(calls, ['skipWaiting', 'unregister']);
 });
+
+test('the project directory and profiles are generated only from reviewed public stations', async t => {
+  const registryPath = 'assets/federation/fed-alliance-registry.mjs';
+  const socialsPath = 'assets/federation/fed-alliance-socials.mjs';
+  const [registry,socials] = await Promise.all([registryPath,socialsPath].map(path =>
+    readFile(new URL('../'+path,import.meta.url),'utf8')));
+  const partner = {
+    id:'example-crew', name:'Example & Crew', symbol:'EX', badge:'EX', relationship:'partner',
+    summary:'Public research notes and community projects.', mint:'So11111111111111111111111111111111111111112',
+    website:'https://example.com/', evidence:'https://example.com/record',
+    socials:['https://bsky.app/profile/example.com', 'https://community.example.com/posts?a=b&c=d'],
+    review:{identity:'confirmed', consent:'confirmed', publication:'approved', date:'2026-11-25', reference:'ALLIANCE-CREW123'},
+  };
+  const assemble = value => registry.replace('PARTNER_STATIONS = Object.freeze([])',
+    'PARTNER_STATIONS = Object.freeze('+JSON.stringify([value])+')');
+  const root = await fixture(t,{
+    [registryPath]:assemble(partner),[socialsPath]:socials,
+    'projects/pending/index.html':'Unpublished prospect',
+    'private/project-intake.json':'Private project-contact fixture',
+  });
+  const staged = await buildStaticPublish(root);
+  assert.equal(staged.includes('projects/index.html'),true);
+  assert.equal(staged.includes('projects/gfof/index.html'),true);
+  assert.equal(staged.includes('projects/example-crew/index.html'),true);
+  assert.equal(staged.includes('projects/pending/index.html'),false);
+  const directoryPath = join(root,'dist/projects/index.html');
+  const directory = await readFile(directoryPath,'utf8');
+  assert.match(directory, /rel="canonical" href="https:\/\/galacticfederation\.co\/projects\/"/);
+  assert.match(directory, /id="project-filter"[^>]* hidden>/);
+  assert.match(directory, /href="\/projects\/example-crew\/"[^>]*Example &amp; Crew/);
+  assert.match(directory, /Bluesky · community\.example\.com/);
+  assert.doesNotMatch(directory, /Unpublished prospect|Private project-contact|ALLIANCE-CREW123/);
+  const page = await readFile(join(root,'dist/projects/example-crew/index.html'),'utf8');
+  assert.match(page,/Example &amp; Crew/);
+  assert.match(page,/og:url" content="https:\/\/galacticfederation\.co\/projects\/example-crew\//);
+  assert.match(page,/href="https:\/\/community\.example\.com\/posts\?a=b&amp;c=d"/);
+  assert.doesNotMatch(page,/Private project-contact|ALLIANCE-CREW123/);
+
+  await writeFile(join(root,registryPath),assemble({...partner, review:{...partner.review,consent:'pending'}}));
+  await assert.rejects(buildStaticPublish(root),/invalid, unapproved, or duplicate station/);
+  assert.equal(await readFile(join(root,'dist/projects/example-crew/index.html'),'utf8'),page);
+  assert.equal(await readFile(directoryPath,'utf8'),directory);
+
+  await writeFile(join(root,registryPath),registry);
+  await buildStaticPublish(root);
+  const hostOnly = await readFile(directoryPath,'utf8');
+  assert.match(hostOnly,/href="\/projects\/gfof\/"/);
+  assert.doesNotMatch(hostOnly,/Example &amp; Crew|id="project-filter"|fed-project-directory\.mjs/);
+  await assert.rejects(readFile(join(root,'dist/projects/example-crew/index.html')), {code:'ENOENT'});
+});
