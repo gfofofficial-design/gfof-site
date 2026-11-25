@@ -85,6 +85,8 @@ export function mountSwapPage(doc, options = {}) {
     if (disposed) return;
     const loading = state.phase === 'loading';
     const ready = state.phase === 'ready';
+    message.setAttribute('data-state', state.phase);
+    check.textContent = loading ? 'Checking quote…' : 'Check indicative quote';
     const moveFocus = (!loading && doc.activeElement === cancel) || (!ready && result.contains(doc.activeElement));
     check.disabled = state.phase === 'invalidPair';
     check.setAttribute('aria-disabled', String(loading || check.disabled));

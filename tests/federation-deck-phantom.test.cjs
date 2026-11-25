@@ -10,3 +10,18 @@ test('late account events after disconnect cannot restore the address',async()=>
 test('account events before address approval cannot load an address',async()=>{const p=provider();let resolve;p.connect=()=>new Promise(r=>resolve=r);const app=setup(p);const pending=app.click('phantom-connect');p.events.accountChanged({toString:()=>mint});assert.equal(app.nodes.get('wallet-address').value,'');resolve({publicKey:{toString:()=>mint}});await pending;assert.equal(app.nodes.get('wallet-address').value,mint);assert.equal(app.submits(),1);});
 test('failed disconnect clears the source and ignores later account events while allowing retry',async()=>{const p=provider();const app=setup(p);await app.click('phantom-connect');p.disconnect=async()=>{throw Error('private provider detail');};await app.click('phantom-disconnect');assert.equal(app.nodes.get('wallet-address').value,'');p.events.accountChanged({toString:()=>mint});assert.equal(app.nodes.get('wallet-address').value,'');assert.match(app.nodes.get('phantom-message').textContent,/could not be confirmed/);assert.ok(!app.nodes.get('phantom-message').textContent.includes('private provider detail'));assert.equal(app.nodes.get('phantom-disconnect').hidden,false);p.disconnect=async()=>{};await app.click('phantom-disconnect');assert.equal(app.nodes.get('phantom-disconnect').hidden,true);});
 test('Clear prevents a late connection rejection from overwriting the clear status',async()=>{const p=provider();let reject;p.connect=()=>new Promise((_,r)=>reject=r);const app=setup(p);const pending=app.click('phantom-connect');await app.click('wallet-clear');reject({code:4001});await pending;assert.match(app.nodes.get('phantom-message').textContent,/cleared/);});
+
+test('switching to the fictional example prevents a pending Phantom approval from reading the wallet', async () => {
+  const wallet = provider();
+  let approve;
+  wallet.connect = () => new Promise(resolve => { approve = resolve; });
+  const app = setup(wallet);
+  const pending = app.click('phantom-connect');
+  await app.click('wallet-example');
+  approve({ publicKey: { toString: () => mint } });
+  await pending;
+
+  assert.equal(app.submits(), 0);
+  assert.equal(app.nodes.get('wallet-address').value, '');
+  assert.equal(wallet.counts().disconnects, 1);
+});
