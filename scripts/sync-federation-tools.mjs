@@ -3,7 +3,12 @@ import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {renderToolSlot} from './_shared/federation-tools.mjs';
 
-const pages = Object.freeze({'command-deck.html': ['deck', 'deck-account'], 'alliance.html': ['alliance', 'alliance-account'], 'account.html': ['account-tools']});
+const pages = Object.freeze({
+  'command-deck.html': ['deck', 'deck-account', 'deck-evidence', 'deck-records'],
+  'alliance.html': ['alliance', 'alliance-account'],
+  'account.html': ['account-tools'],
+  'member-workspace.html': ['workspace-tools'],
+});
 
 export async function syncToolPages(root, {write = false} = {}) {
   const prepared = [];
@@ -12,10 +17,12 @@ export async function syncToolPages(root, {write = false} = {}) {
     let next = original;
     for (const slot of slots) {
       const start = `<!-- federation-tools:${slot} -->`, end = `<!-- /federation-tools:${slot} -->`;
-      const from = next.indexOf(start), to = next.indexOf(end);
-      if (from < 0 || to < from || next.indexOf(start, from + start.length) !== -1 || next.indexOf(end, to + end.length) !== -1) {
+      const from = next.indexOf(start), endMarker = next.indexOf(end);
+      if (from < 0 || endMarker < from || next.indexOf(start, from + start.length) !== -1 || next.indexOf(end, endMarker + end.length) !== -1) {
         throw Error(`Review Federation tool markers in ${path}`);
       }
+      const lineStart = next.lastIndexOf('\n', endMarker) + 1;
+      const to = /^[ \t]*$/.test(next.slice(lineStart, endMarker)) ? lineStart : endMarker;
       next = next.slice(0, from + start.length) + '\n' + renderToolSlot(slot) + '\n' + next.slice(to);
     }
     prepared.push({path, file, original, next});

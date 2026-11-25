@@ -157,7 +157,7 @@ test('late account verification cannot reopen a page closed by sign-out',async()
 test('a normal tab switch hides the draft, then preserves it only after checking the same account',async()=>{
  const f=fixture(regular);await f.host.check();f.get('name').value='Private draft';f.doc.visibilityState='hidden';f.doc.emit('visibilitychange');assert.equal(f.get('member-surface').hidden,true);assert.equal(f.get('name').value,'Private draft');assert.equal(await f.host.check(),false);
  f.doc.visibilityState='visible';f.doc.emit('visibilitychange');await tick();assert.equal(f.calls.length,2);assert.equal(f.get('name').value,'Private draft');assert.equal(f.get('member-surface').hidden,false);
- f.events.dispatchEvent(new Event('pageshow'));assert.equal(f.get('name').value,'');assert.equal(f.get('fields').disabled,true);assert.equal(f.calls.length,2);f.host.dispose();
+ f.events.dispatchEvent(Object.assign(new Event('pageshow'),{persisted:true}));assert.equal(f.get('name').value,'');assert.equal(f.get('fields').disabled,true);assert.equal(f.calls.length,2);f.host.dispose();
 });
 test('a changed or unconfirmed account never reveals the earlier draft or automatically opens another editor',async t=>{
  for(const response of [()=>json({...account,user:{id:'22222222-2222-4222-8222-222222222222'}}),()=>json({},401),()=>json({},503)])await t.test('foreground identity refusal',async()=>{
@@ -176,10 +176,52 @@ test('same-account return restores an abandoned field focus but never steals a n
  const f=fixture(regular);await f.host.check();f.get('name').focus();f.doc.visibilityState='hidden';f.doc.emit('visibilitychange');f.doc.activeElement=f.doc.body;f.doc.visibilityState='visible';f.doc.emit('visibilitychange');await tick();assert.equal(f.doc.activeElement,f.get('name'));
  f.doc.visibilityState='hidden';f.doc.emit('visibilitychange');f.get('account-check').focus();f.doc.visibilityState='visible';f.doc.emit('visibilitychange');await tick();assert.equal(f.doc.activeElement,f.get('account-check'));f.host.dispose();
 });
+test('signing out in Account gives a focused Dashboard editor a clear way back to sign-in', async () => {
+ const f = fixture(regular);
+ try {
+  await f.host.check();
+  f.get('name').focus();
+  f.channel.dispatchEvent(new MessageEvent('message', {data: {type: 'signed-out', remoteRevoked: false}}));
+  assert.match(f.get('account-status').textContent, /signed out in another tab/i);
+  assert.equal(f.doc.activeElement, f.get('account-link'));
+  assert.equal(f.get('member-surface').hidden, true);
+  assert.equal(f.calls.length, 1);
+ } finally { f.host.dispose(); }
+});
+test('returning to a Dashboard after sign-out restores keyboard focus only when the editor lost it', async t => {
+ for (const target of ['body', 'old field', 'other link', 'outside before switch']) {
+  await t.test(target, async () => {
+   const f = fixture(regular);
+   try {
+    await f.host.check();
+    const outside = f.doc.createElement('a');
+    (target === 'outside before switch' ? outside : f.get('name')).focus();
+    f.get('name').value = 'Unsubmitted fixture';
+    f.doc.visibilityState = 'hidden';
+    f.doc.emit('visibilitychange');
+    if (target === 'body' || target === 'outside before switch') f.doc.body.focus();
+    f.channel.dispatchEvent(new MessageEvent('message', {data: {type: 'signed-out', remoteRevoked: true}}));
+    assert.equal(f.get('name').value, '');
+    assert.notEqual(f.doc.activeElement, f.get('account-link'));
+    if (target === 'other link') outside.focus();
+    f.doc.visibilityState = 'visible';
+    f.doc.emit('visibilitychange');
+    const expected = target === 'outside before switch' ? f.doc.body
+     : target === 'other link' ? outside : f.get('account-link');
+    assert.ok(f.doc.activeElement === expected, 'focus follows the member’s previous position');
+    assert.equal(f.get('member-surface').hidden, true);
+    assert.equal(f.calls.length, 1);
+    f.doc.body.focus();
+    f.doc.emit('visibilitychange');
+    assert.ok(f.doc.activeElement === f.doc.body, 'focus return is consumed once');
+   } finally { f.host.dispose(); }
+  });
+ }
+});
 test('deadline returns safely but an uncooperative request keeps the overlap latch occupied',async()=>{
  const gate=deferred();let n=0;const f=fixture(()=>++n===1?gate.promise:json(account),{timeoutMs:10});
- assert.equal(await f.host.check(),false);assert.equal(await f.host.check(),false);assert.equal(f.calls.length,1);assert.equal(f.get('account-check').disabled,true);
- gate.resolve(json(account));await tick();assert.equal(f.get('fields').disabled,true);assert.equal(f.get('account-check').disabled,false);assert.equal(await f.host.check(),true);f.host.dispose();
+ assert.equal(await f.host.check(),false);assert.equal(await f.host.check(),false);assert.equal(f.calls.length,1);assert.equal(f.get('account-check').getAttribute('aria-disabled'),'true');
+ gate.resolve(json(account));await tick();assert.equal(f.get('fields').disabled,true);assert.equal(f.get('account-check').getAttribute('aria-disabled'),'false');assert.equal(await f.host.check(),true);f.host.dispose();
 });
 test('an expired queued browser lock cannot dispatch a late request',async()=>{
  const gate=deferred();const locks={request:async(_name,_options,work)=>{await gate.promise;return work();}};
