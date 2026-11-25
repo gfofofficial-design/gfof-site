@@ -4,7 +4,7 @@ function setup(fetch,passport,timers={setTimeout,clearTimeout}){const nodes=new 
 test('invalid input never sends a lookup',async()=>{let calls=0;const app=setup(async()=>{calls++;});app.nodes.get('wallet-address').value='seed phrase is never a wallet address';await app.submit();assert.equal(calls,0);assert.equal(app.nodes.get('wallet-rows').children.length,0);});
 test('lookup omits credentials and clear prevents a late response restoring balances',async()=>{let resolve;const app=setup((url,options)=>{assert.equal(url,'/api/federation-wallet');assert.equal(options.credentials,'omit');return new Promise(r=>resolve=r);});app.nodes.get('wallet-address').value='11111111111111111111111111111111';const pending=app.submit();app.clear();resolve({ok:true,status:200,json:async()=>({address:'11111111111111111111111111111111',sol:'1',tokens:[],tokenAccounts:0,observedAt:new Date().toISOString()})});await pending;assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-address').value,'');assert.equal(app.nodes.get('wallet-state').textContent,'No address loaded');});
 test('upstream failures clear previous data and cannot masquerade as zero',async()=>{const app=setup(async()=>({ok:false,status:503,json:async()=>({error:'Service unavailable'})}));app.nodes.get('wallet-address').value='11111111111111111111111111111111';app.nodes.get('wallet-rows').children=[{}];await app.submit();assert.equal(app.nodes.get('wallet-rows').children.length,0);assert.equal(app.nodes.get('wallet-message').textContent,'Service unavailable');assert.equal(app.nodes.get('wallet-count').textContent,'—');});
-test('priced allocation excludes unpriced tokens but retains their quantities',async()=>{const address='11111111111111111111111111111111';const app=setup(async()=>({ok:true,status:200,json:async()=>({address,sol:'2',tokens:[{mint:'unpriced-mint',symbol:'GFOF',quantity:'500'}],tokenAccounts:1,observedAt:new Date().toISOString(),pricing:{status:'available',prices:{So11111111111111111111111111111111111111112:{usdPrice:100,blockId:123}}}})}));app.nodes.get('wallet-address').value=address;await app.submit();assert.equal(app.nodes.get('priced-total').textContent,'$200.00');assert.match(app.nodes.get('price-coverage').textContent,/1 assets priced; 1 nonzero assets excluded/);assert.equal(app.nodes.get('wallet-rows').children.length,2);assert.equal(app.nodes.get('wallet-rows').children[1].children[1].textContent,'500');assert.equal(app.nodes.get('holdings-graph').children.length,1);assert.equal(app.nodes.get('holdings-graph').children[0].children[1].value,1);});
+test('priced allocation excludes unpriced tokens but retains their quantities',async()=>{const address='11111111111111111111111111111111';const app=setup(async()=>({ok:true,status:200,json:async()=>({address,sol:'2',tokens:[{mint:'unpriced-mint',symbol:'GFOF',quantity:'500'}],tokenAccounts:1,observedAt:new Date().toISOString(),pricing:{status:'available',prices:{So11111111111111111111111111111111111111112:{usdPrice:100,blockId:123}}}})}));app.nodes.get('wallet-address').value=address;await app.submit();assert.equal(app.nodes.get('priced-total').textContent,'$200.00');assert.match(app.nodes.get('price-coverage').textContent,/1 asset priced; 1 nonzero asset excluded/);assert.equal(app.nodes.get('wallet-rows').children.length,2);assert.equal(app.nodes.get('wallet-rows').children[1].children[1].textContent,'500');assert.equal(app.nodes.get('holdings-graph').children.length,1);assert.equal(app.nodes.get('holdings-graph').children[0].children[1].value,1);});
 
 test('mission panel reads optional passport without writing or making network requests',()=>{let done=['repair-the-shuttle','repair-the-shuttle','unknown'];const passport={missions:[['repair-the-shuttle','Repair the Shuttle','Sera','Prepared explorer'],['the-signal','The Signal','Oryn','Signal seeker']],read:()=>({enabled:true,available:true,done}),write:()=>{throw Error('must not write');}};const app=setup(()=>{throw Error('must not fetch');},passport);assert.equal(app.nodes.get('explorer-rank').textContent,'1 / 2');assert.equal(app.nodes.get('mission-progress').value,1);assert.equal(app.nodes.get('next-mission').href,'/journey/the-signal.html');assert.equal(app.nodes.get('mission-collection').children.length,2);done.push('the-signal');app.nodes.get('mission-refresh').events.click();assert.equal(app.nodes.get('explorer-rank').textContent,'2 / 2');});
 test('unavailable passport storage is shown as unknown instead of completed or empty',()=>{const passport={missions:[['repair-the-shuttle','Repair','Sera','Prepared explorer']],read:()=>({enabled:false,available:false,done:[]})};const app=setup(()=>{throw Error('must not fetch');},passport);assert.equal(app.nodes.get('explorer-rank').textContent,'Progress unavailable');assert.match(app.nodes.get('mission-message').textContent,/storage is unavailable/);assert.equal(app.nodes.get('mission-collection').children[0].children[0].textContent,'STATUS UNAVAILABLE');});
@@ -154,4 +154,37 @@ test('an invalid replacement clears the cancelled lookup busy state without anot
  let calls=0;const app=setup(()=>{calls++;return new Promise(()=>{});});app.nodes.get('wallet-address').value='11111111111111111111111111111111';
  const pending=app.submit();app.nodes.get('wallet-address').value='invalid';await app.submit();await pending;
  assert.equal(calls,1);assert.equal(app.nodes.get('wallet-table-scroll').attributes['aria-busy'],'false');assert.equal(app.nodes.get('wallet-rows').children.length,0);
+});
+
+test('the fictional wallet view cancels a pending read and supplies no live provenance or history', async () => {
+  let finish;
+  let requests = 0;
+  const app = setup(() => {
+    requests++;
+    return new Promise(resolve => { finish = resolve; });
+  });
+  const get = id => app.nodes.get(id);
+  const address = '11111111111111111111111111111111';
+  get('wallet-address').value = address;
+  const pending = app.submit();
+  get('wallet-example').events.click();
+  await pending;
+  finish({ ok: true, status: 200, json: async () => ({
+    address, sol: '99', tokens: [], tokenAccounts: 0, observedAt: new Date().toISOString(),
+  }) });
+  await new Promise(setImmediate);
+
+  assert.equal(requests, 1);
+  assert.equal(get('wallet-results').hidden, false);
+  assert.equal(get('wallet-data-status').textContent, 'FICTIONAL EXAMPLE');
+  assert.equal(app.document.activeElement, get('wallet-state'));
+  assert.equal(get('wallet-rows').children[2].children[1].textContent, '45000.250001');
+  assert.match(get('price-coverage').textContent, /Fictional reference prices/);
+  assert.equal(get('wallet-source-panel').hidden, true);
+  assert.equal(get('wallet-history-link').hidden, true);
+  assert.equal(get('balance-history-rows').children.length, 0);
+
+  app.clear();
+  assert.equal(get('wallet-results').hidden, true);
+  assert.equal(get('wallet-rows').children.length, 0);
 });
