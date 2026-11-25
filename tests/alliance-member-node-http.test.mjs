@@ -4,6 +4,7 @@ import {createServer,request as httpRequest} from 'node:http';
 import {randomUUID} from 'node:crypto';
 import {createPersistentAllianceNodeHttp} from '../lib/alliance-member-node-http.mjs';
 import {allianceMemberBackendHostname as hostname} from '../lib/alliance-member-closed-https.mjs';
+import {profileImagePath,profileImageContentPath,profileImageHeaders,profileImageInputLimit} from '../assets/federation/fed-alliance-profile-image-contract.mjs';
 
 const origin='https://galacticfederation.co';
 const installation=()=>({format:1,instanceArn:'arn:aws:lightsail:us-east-2:759712674603:Instance/e6ee7e8c-38f8-4902-8ef8-69c3a022ebd3',releaseSha256:'a'.repeat(64),processId:randomUUID(),environment:'production'});
@@ -17,7 +18,7 @@ async function fixture(t,options={}){
 function call(port,{path='/api/alliance-members/me',method='GET',headers={},body,unfinished=false}={}){
  return new Promise((resolve,reject)=>{
   const q=httpRequest({hostname:'127.0.0.1',port,path,method,headers:{Host:hostname,Origin:origin,'Sec-Fetch-Site':'same-origin',...headers}},r=>{
-   const chunks=[];r.on('data',c=>chunks.push(c));r.on('end',()=>resolve({status:r.statusCode,headers:r.headers,text:Buffer.concat(chunks).toString()}));r.on('error',reject);
+   const chunks=[];r.on('data',c=>chunks.push(c));r.on('end',()=>{const bytes=Buffer.concat(chunks);resolve({status:r.statusCode,headers:r.headers,text:bytes.toString(),bytes});});r.on('error',reject);
   });q.on('error',reject);if(body!==undefined)q.write(body);if(!unfinished)q.end();
  });
 }
@@ -37,6 +38,29 @@ test('bounded JSON reaches the existing application without transport mutation',
  let seen;const f=await fixture(t,{applicationHost:{handle:async q=>{seen=await q.json();return Response.json({state:'ready'});},close:async()=>{}}});
  const r=await call(f.port,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Fictional member'})});
  assert.equal(r.status,200);assert.deepEqual(seen,{name:'Fictional member'});
+});
+test('explicit image transport forwards bounded binary bytes and the private profile binding only on image routes',async t=>{
+ const profile='11111111-1111-4111-8111-111111111111',op=randomUUID(),upload=Buffer.alloc(17000,2);
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAADUlEQVQImWMQjG34DwADXwHuQa7szAAAAABJRU5ErkJggg==','base64');
+ const headers={[profileImageHeaders.profile]:profile,[profileImageHeaders.version]:'1'};let calls=0;
+ const f=await fixture(t,{imageEnabled:true,applicationHost:{async handle(q){
+  calls++;assert.equal(q.headers.get(profileImageHeaders.profile),profile);
+  if(q.method==='PUT'){
+   assert.equal(q.headers.get(profileImageHeaders.operation),op);assert.deepEqual(Buffer.from(await q.arrayBuffer()),upload);
+   return Response.json({state:'committed',version:2});
+  }
+  assert.equal(new URL(q.url).pathname,profileImageContentPath);
+  return new Response(png,{headers:{'Content-Type':'image/png','Content-Length':String(png.length),'Set-Cookie':'private=refused'}});
+ },close:async()=>{}}});
+ const sent=await call(f.port,{path:profileImagePath,method:'PUT',headers:{...headers,[profileImageHeaders.operation]:op,'Content-Type':'image/png'},body:upload});
+ assert.equal(sent.status,200);assert.equal(JSON.parse(sent.text).state,'committed');
+ const content=await call(f.port,{path:profileImageContentPath,headers});
+ assert.equal(content.headers['content-type'],'image/png');assert.equal(content.headers['cache-control'],'private, no-store');
+ assert.equal(content.headers['set-cookie'],undefined);assert.deepEqual(content.bytes,png);
+ const over=await call(f.port,{path:profileImagePath,method:'PUT',headers:{...headers,'Content-Type':'image/png','Content-Length':String(profileImageInputLimit+1)}});
+ assert.equal(over.status,413);
+ const duplicate=await call(f.port,{path:profileImageContentPath,headers:{...headers,[profileImageHeaders.profile]:[profile,randomUUID()]}});
+ assert.equal(duplicate.status,400);assert.equal(calls,2);
 });
 test('wrong host, management path, duplicate origin, bearer auth and oversized body spend no application call',async t=>{
  let calls=0;const f=await fixture(t,{maxBodyBytes:8,applicationHost:{handle:async()=>{calls++;return Response.json({});},close:async()=>{}}});

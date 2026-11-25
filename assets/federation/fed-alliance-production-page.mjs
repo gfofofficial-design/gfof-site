@@ -7,6 +7,6 @@ export function mountProductionAlliancePage(document, dependencies = {}) {
   const enabled = origin === 'https://galacticfederation.co';
   return mountAllianceAccountMemberPage(document, {
     ...dependencies, origin, enabled, collaborationEnabled: enabled,
-    feedbackEnabled: enabled, reportReviewEnabled: enabled,
+    feedbackEnabled: enabled, reportReviewEnabled: enabled, imageEnabled: enabled && dependencies.imageEnabled === true,
   });
 }
