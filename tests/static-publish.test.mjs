@@ -160,7 +160,7 @@ test('the legacy worker retires its own registration and lets the browser load p
   assert.deepEqual(calls, ['skipWaiting', 'unregister']);
 });
 
-test('project profile pages are generated only from reviewed public stations', async t => {
+test('the project directory and profiles are generated only from reviewed public stations', async t => {
   const registryPath = 'assets/federation/fed-alliance-registry.mjs';
   const socialsPath = 'assets/federation/fed-alliance-socials.mjs';
   const [registry,socials] = await Promise.all([registryPath,socialsPath].map(path =>
@@ -180,9 +180,17 @@ test('project profile pages are generated only from reviewed public stations', a
     'private/project-intake.json':'Private project-contact fixture',
   });
   const staged = await buildStaticPublish(root);
+  assert.equal(staged.includes('projects/index.html'),true);
   assert.equal(staged.includes('projects/gfof/index.html'),true);
   assert.equal(staged.includes('projects/example-crew/index.html'),true);
   assert.equal(staged.includes('projects/pending/index.html'),false);
+  const directoryPath = join(root,'dist/projects/index.html');
+  const directory = await readFile(directoryPath,'utf8');
+  assert.match(directory, /rel="canonical" href="https:\/\/galacticfederation\.co\/projects\/"/);
+  assert.match(directory, /id="project-filter"[^>]* hidden>/);
+  assert.match(directory, /href="\/projects\/example-crew\/"[^>]*Example &amp; Crew/);
+  assert.match(directory, /Bluesky · community\.example\.com/);
+  assert.doesNotMatch(directory, /Unpublished prospect|Private project-contact|ALLIANCE-CREW123/);
   const page = await readFile(join(root,'dist/projects/example-crew/index.html'),'utf8');
   assert.match(page,/Example &amp; Crew/);
   assert.match(page,/og:url" content="https:\/\/galacticfederation\.co\/projects\/example-crew\//);
@@ -192,4 +200,12 @@ test('project profile pages are generated only from reviewed public stations', a
   await writeFile(join(root,registryPath),assemble({...partner, review:{...partner.review,consent:'pending'}}));
   await assert.rejects(buildStaticPublish(root),/invalid, unapproved, or duplicate station/);
   assert.equal(await readFile(join(root,'dist/projects/example-crew/index.html'),'utf8'),page);
+  assert.equal(await readFile(directoryPath,'utf8'),directory);
+
+  await writeFile(join(root,registryPath),registry);
+  await buildStaticPublish(root);
+  const hostOnly = await readFile(directoryPath,'utf8');
+  assert.match(hostOnly,/href="\/projects\/gfof\/"/);
+  assert.doesNotMatch(hostOnly,/Example &amp; Crew|id="project-filter"|fed-project-directory\.mjs/);
+  await assert.rejects(readFile(join(root,'dist/projects/example-crew/index.html')), {code:'ENOENT'});
 });
