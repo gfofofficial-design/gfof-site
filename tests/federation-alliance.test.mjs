@@ -43,6 +43,19 @@ test('shipping directory contains the host and no external partner or prospect',
   assert.equal(HOST_STATION.relationship,'host');
 });
 
+test('Alliance presents a free invited beta and requires a separate subscription choice', () => {
+  const html = readFileSync(new URL('../alliance.html', import.meta.url), 'utf8');
+  const membership = html.match(/<section\b[^>]*\bid="project-membership"[^>]*>[\s\S]*?<\/section>/)?.[0] ?? '';
+  const pricing = html.match(/<details><summary>What will membership cost after beta\?<\/summary>[\s\S]*?<\/details>/)?.[0] ?? '';
+  assert.match(membership, /free beta lasting 60 to 90 days/);
+  assert.match(membership, /beta starts when invited projects can use those tools/);
+  assert.match(membership, /paid plan starts only when the member or project owner chooses to subscribe/);
+  assert.match(membership, /Public joining remains closed/);
+  assert.match(pricing, /invited beta is free for 60 to 90 days/);
+  assert.match(pricing, /Paid subscriptions will be offered separately after the beta/);
+  assert.doesNotMatch(html, /90-day beta/);
+});
+
 test('partner publication needs all three recorded reviews', () => {
   assert.equal(approvedPartner(partner()),true);
   for(const key of ['consent','identity','publication']) {

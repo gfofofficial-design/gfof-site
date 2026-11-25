@@ -50,6 +50,12 @@ Show wallet quantities or mint controls as the first useful results. Add referen
 
 [Command Deck wallet reader](https://galacticfederation.co/command-deck#wallet) · [Dossier Structure Lens](https://dossiertrack.co/token-structure) · [Jupiter reference price method](https://developers.jup.ag/docs/price)
 
+## Free beta and subscription timing
+
+November 25, 2026 owner decision. Complete and verify the tools in the agreed scope before inviting projects to a free beta lasting 60 to 90 days. Record the beta start when invited participants can use the approved tools. Record actual access, completed tasks, issues and repeat use during the run.
+
+The membership offer follows the beta and a separate decision to open subscriptions. A member or project owner chooses a paid plan explicitly. The proposed post-beta project holding requirement and three-seat project plan apply to project membership after the free beta. Public tools remain available.
+
 ## Interface and acceptance
 
 Use the existing `logo.png` and `logo-circle.png` assets. Keep the dark mission-control identity in the framing and use conventional labels, navigation, and buttons. Use inline SVG for new icons. Voss is the chat persona. Product copy explains the action, what was observed, and what remains unknown.
