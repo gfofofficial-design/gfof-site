@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Estimate how long your operating cash will last and compare the effect of a planned cost. Free, browser-only planning tool from the Galactic Federation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; worker-src 'none'">
+  <title>Project Runway · Galactic Federation</title>
+  <link rel="canonical" href="https://galacticfederation.co/project-runway">
+  <link rel="icon" href="/logo-circle.png" type="image/png">
+  <link rel="stylesheet" href="/assets/federation/fed-tokens.css">
+  <link rel="stylesheet" href="/assets/federation/fed-tool-workbench.css">
+  <link rel="stylesheet" href="/assets/federation/fed-project-runway.css">
+  <script type="module" src="/assets/federation/fed-project-runway.mjs"></script>
+</head>
+<body class="runway-page">
+  <a class="runway-skip" href="#runway-main">Skip to project runway</a>
+  <header class="runway-top runway-width">
+    <a class="runway-brand" href="/"><img src="/logo-circle.png" alt="" width="40" height="40">Galactic Federation</a>
+    <nav aria-label="Federation navigation">
+      <a href="/command-deck#tool-directory">Command Deck</a>
+      <a href="/projects/">Alliance projects</a>
+    </nav>
+  </header>
+
+  <main class="runway-width" id="runway-main" tabindex="-1">
+    <header class="runway-hero">
+      <p class="runway-system">COMMAND DECK // PROJECT TOOLS</p>
+      <h1>Project Runway</h1>
+      <p class="runway-lede">See how long your operating cash could last. Compare today’s plan with a new expense before you commit to it.</p>
+      <p class="runway-privacy">Calculates in your browser. Figures are never sent or saved by this page.</p>
+    </header>
+
+    <div class="runway-grid">
+      <section class="fed-workbench runway-panel" aria-labelledby="runway-input-title">
+        <h2 id="runway-input-title">Your amounts</h2>
+        <p id="runway-input-help" class="runway-muted">Use U.S. dollars. Enter 0 when you know an amount is zero.</p>
+        <p id="runway-unavailable">If the calculator is unavailable, use the worked example below.</p>
+        <form id="runway-form" autocomplete="off" novalidate hidden aria-describedby="runway-input-help">
+          <div class="runway-fields">
+            <div>
+              <label for="runway-cash">Cash available today</label>
+              <p id="runway-cash-hint" class="runway-hint">Operating cash you can use now.</p>
+              <div class="runway-money"><span aria-hidden="true">$</span><input id="runway-cash" type="text" inputmode="decimal" spellcheck="false" required aria-describedby="runway-cash-hint"></div>
+              <p id="runway-cash-error" class="runway-error" hidden></p>
+            </div>
+            <div>
+              <label for="runway-receipts">Cash received each month</label>
+              <div class="runway-money"><span aria-hidden="true">$</span><input id="runway-receipts" type="text" inputmode="decimal" spellcheck="false" required></div>
+              <p id="runway-receipts-error" class="runway-error" hidden></p>
+            </div>
+            <div>
+              <label for="runway-spend">Cash spent each month</label>
+              <div class="runway-money"><span aria-hidden="true">$</span><input id="runway-spend" type="text" inputmode="decimal" spellcheck="false" required></div>
+              <p id="runway-spend-error" class="runway-error" hidden></p>
+            </div>
+          </div>
+
+          <details id="runway-change" class="runway-disclosure">
+            <summary>Compare a planned change</summary>
+            <div class="runway-fields">
+              <div>
+                <label for="runway-upfront">One-time cost today <span>Optional</span></label>
+                <div class="runway-money"><span aria-hidden="true">$</span><input id="runway-upfront" type="text" inputmode="decimal" spellcheck="false"></div>
+                <p id="runway-upfront-error" class="runway-error" hidden></p>
+              </div>
+              <div>
+                <label for="runway-planned">New total spent each month <span>Optional</span></label>
+                <p id="runway-planned-hint" class="runway-hint">Leave blank to keep your current monthly spending.</p>
+                <div class="runway-money"><span aria-hidden="true">$</span><input id="runway-planned" type="text" inputmode="decimal" spellcheck="false" aria-describedby="runway-planned-hint"></div>
+                <p id="runway-planned-error" class="runway-error" hidden></p>
+              </div>
+            </div>
+          </details>
+
+          <div class="runway-actions">
+            <button class="fed-workbench-primary" type="submit">Calculate runway</button>
+            <button id="runway-clear" type="button" hidden>Clear amounts</button>
+            <button id="runway-example" type="button">Load example</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="fed-workbench runway-panel runway-results" aria-labelledby="runway-results-title">
+        <h2 id="runway-results-title" tabindex="-1">Estimated runway</h2>
+        <p id="runway-status" class="runway-status" role="status">Your estimate appears here after you calculate. Start with three amounts or load the fictional example.</p>
+        <div id="runway-results" hidden>
+          <p id="runway-provenance" class="runway-source"></p>
+          <div id="runway-scenarios"></div>
+        </div>
+      </section>
+    </div>
+
+    <details class="fed-workbench runway-method">
+      <summary>Method, assumptions and worked example</summary>
+      <div>
+        <h2>How the estimate works</h2>
+        <ol>
+          <li>Deduct any one-time cost from available cash.</li>
+          <li>Subtract monthly spending from monthly receipts to find net cash per month.</li>
+          <li>When cash is falling, divide starting cash after costs by the monthly shortfall. The calculator rounds down to one decimal place.</li>
+        </ol>
+        <p>The projection applies the same receipts and spending each month. Paydays, late payments, taxes and irregular costs affect the result only through the amounts you enter. In practice, a bill can be due before receipts arrive. A projected funding gap shows how much extra cash the plan would require by that month-end.</p>
+        <h2>Worked example</h2>
+        <p>A small studio has $24,000, receives $6,000 per month and spends $10,000 per month. At a $4,000 monthly shortfall, its cash covers 6 months. With a $4,000 upfront expense and monthly spending of $12,000, it has $20,000 at the start and a $6,000 monthly shortfall. That covers about 3.3 months.</p>
+        <p><a href="https://www.sba.gov/counseling/manage-your-business/">U.S. Small Business Administration guide to managing business finances</a></p>
+      </div>
+    </details>
+  </main>
+
+  <template id="runway-scenario">
+    <article class="runway-scenario">
+      <h3 data-value="title"></h3>
+      <p class="runway-duration" data-value="duration"></p>
+      <p class="runway-meaning" data-value="meaning"></p>
+      <dl class="runway-metrics">
+        <div><dt>Cash after upfront costs</dt><dd data-value="opening"></dd></div>
+        <div><dt>Net cash per month</dt><dd data-value="net"></dd></div>
+      </dl>
+      <p class="runway-projection-label">Projected cash at month-end</p>
+      <dl class="runway-months">
+        <div><dt>Month 1</dt><dd data-value="month-1"></dd></div>
+        <div><dt>Month 3</dt><dd data-value="month-3"></dd></div>
+        <div><dt>Month 6</dt><dd data-value="month-6"></dd></div>
+      </dl>
+    </article>
+  </template>
+</body>
+</html>
