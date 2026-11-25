@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <title>Member presence · Federation private preview</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./page.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to member preview</a>
+  <header>
+    <a class="brand" href="/command-deck.html"><img src="/logo-circle.png" alt="" width="36" height="36"><span>GALACTIC<br>FEDERATION</span></a>
+    <nav aria-label="Federation tools">
+      <a href="/member-workspace.html">Member workspace</a>
+      <a href="/alliance.html#community-hub">Profiles &amp; challenges</a>
+      <a href="/command-deck.html">Command Deck</a>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+    <div class="intro">
+      <div class="intro-copy"><p class="eyebrow">MEMBER EXPERIENCE · PRIVATE PREVIEW</p><h1>Your place<br>in the <span>crew.</span></h1><p class="lead">Create something. Help someone.<br>Bring the crew along.</p><div class="intro-links"><a class="primary intro-action" href="#member-name">Explore your member card</a><a href="#challenge-title">Find a crew challenge</a></div></div>
+      <div class="intro-display"><div class="orbit" aria-hidden="true"><div class="orbit-crosshair"></div><div class="orbit-track orbit-track-outer"></div><div class="orbit-track orbit-track-inner"></div><div class="orbit-core"><img src="/logo-circle.png" alt="" width="144" height="144"></div></div><p class="orbit-caption">ONE FEDERATION. MANY WAYS TO CONTRIBUTE.</p><aside class="preview-note"><strong>FICTIONAL MEMBERS · PAGE MEMORY ONLY</strong><p>Try the proposed experience. Profiles, reviews and XP here are fictional. Reload or reset to start again.</p><p>The account-backed member workspace and existing Alliance tools have their own release work.</p></aside></div>
+    </div>
+    <section class="launchpad" aria-labelledby="launchpad-title">
+      <div class="launchpad-heading"><p class="eyebrow">EXPLORE THE FEDERATION</p><h2 id="launchpad-title">Choose your next flight.</h2><p>Start with a public activity. Come back with something worth sharing.</p></div>
+      <div class="flight-paths">
+        <a class="flight-path" href="/learn"><span class="path-kind">LEARN · PUBLIC LESSONS</span><strong>Understand the system.</strong><span>Explore blockchain basics, liquidity and wallet safety.</span></a>
+        <a class="flight-path" href="https://dossiertrack.co/token-structure"><span class="path-kind">RESEARCH · READ-ONLY BETA</span><strong>Examine the evidence.</strong><span>Inspect a Solana mint’s controls and token accounts, with sources and explicit unknowns.</span></a>
+        <a class="flight-path" href="/alliance-wrong-moon.html"><span class="path-kind">CREATE · GUEST ACTIVITY</span><strong>Bring your perspective.</strong><span>Make a Wrong Moon meme and give the crew a new ending.</span></a>
+      </div>
+    </section>
+    <nav class="crew-sections" aria-label="Member preview sections"><a href="#member-name">Your card</a><a href="#challenge-title">Crew challenge</a><a href="#board-title">Contributors</a><a href="#reviews-title">Example reviews</a><a href="#guide-title">Voss guidance</a></nav>
+    <div class="preview-controls">
+      <div><label for="actor">Example member</label><select id="actor"></select></div>
+      <button id="reset" type="button">Reset examples</button>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite" aria-atomic="true"></p>
+    <div class="layout">
+      <section class="card member-card" aria-labelledby="member-name">
+        <div class="member-top"><div id="initials" class="initials" aria-hidden="true"></div><div><p class="eyebrow">EXAMPLE MEMBER CARD</p><h2 id="member-name" tabindex="-1"></h2><p id="member-role" class="muted"></p></div></div>
+        <p id="member-bio"></p><p id="member-community" class="muted"></p>
+        <div class="score"><strong id="xp"></strong><span>example XP this week</span><span id="rank" class="rank"></span></div>
+        <progress id="xp-progress" max="100" value="0" aria-label="Example XP toward the weekly cap"></progress>
+        <p id="visibility" class="muted"></p>
+        <details id="edit-details"><summary>Edit example profile</summary>
+          <form id="profile" novalidate>
+            <label for="name">Display name</label><input id="name" maxlength="40" minlength="2" required>
+            <label for="community">Your community <span class="muted">(optional)</span></label><input id="community" maxlength="70">
+            <label for="bio">About you</label><textarea id="bio" rows="3" minlength="10" maxlength="280" required></textarea>
+            <label for="role">How you contribute</label><select id="role"><option value="explorer">Explorer</option><option value="builder">Builder</option><option value="researcher">Researcher</option><option value="connector">Community connector</option></select>
+            <label class="check" for="listed"><input id="listed" type="checkbox">Show this example profile on the crew board</label>
+            <button class="primary" type="submit">Save example profile</button>
+            <p id="profile-status" class="status" role="status" aria-live="polite"></p>
+          </form>
+        </details>
+        <a class="text-link" href="/member-workspace.html#ap-image">Open the existing profile image work</a>
+      </section>
+      <section class="card challenge" aria-labelledby="challenge-title">
+        <div class="section-top"><p class="eyebrow">CREW CHALLENGE · EXISTING ALLIANCE TEMPLATE</p><span id="challenge-state" class="tag"></span></div>
+        <h2 id="challenge-title" tabindex="-1">Rewrite the mission</h2>
+        <p id="challenge-pair"></p>
+        <p id="challenge-brief"></p>
+        <p class="muted">A 14-day plan after acceptance. The preview clock stays paused.</p>
+        <div id="challenge-actions" class="actions"></div>
+        <form id="proof-form" hidden novalidate><label for="proof">Your alternate ending or contribution</label><textarea id="proof" rows="3" minlength="10" maxlength="240" required></textarea><button type="submit">Add example contribution</button></form>
+        <div id="proofs"></div>
+        <p class="muted">Peer acknowledgement follows the existing challenge rules. Proposed XP needs its own independent review.</p>
+        <a class="text-link" href="/alliance-wrong-moon.html">Make a Wrong Moon meme</a>
+      </section>
+      <section class="card" aria-labelledby="board-title">
+        <div class="section-top"><div><p class="eyebrow">THIS WEEK · FICTIONAL STANDINGS</p><h2 id="board-title" tabindex="-1">Meet the contributors.</h2></div></div>
+        <div class="table-wrap"><table><caption>Listed example members. Your own progress is visible above.</caption><thead><tr><th scope="col">Member</th><th scope="col">Contribution</th><th scope="col">XP</th></tr></thead><tbody id="standings"></tbody></table></div>
+        <p class="muted">Tied XP shares a position. A member controls whether their card appears here.</p>
+        <a class="text-link" href="/alliance.html#community-league">Explore the existing Community League</a>
+      </section>
+      <section class="card" aria-labelledby="reviews-title">
+        <p class="eyebrow">TRY THE SCORING RULES</p><h2 id="reviews-title" tabindex="-1">See what counts.</h2>
+        <p>Load a fictional review for the selected example member. Each example can count once, up to the category limit and 100 XP this week.</p>
+        <div id="review-options" class="review-options"></div>
+        <details><summary>Why this member has these points</summary><ul id="awards"></ul></details>
+      </section>
+      <section class="card guide" aria-labelledby="guide-title">
+        <img src="/voss-avatar.png" alt="" width="64" height="64">
+        <div><p class="eyebrow">VOSS · SAMPLE GUIDANCE</p><h2 id="guide-title" tabindex="-1">Find your next activity.</h2><p>Choose an interest to see an existing Federation activity. These suggestions come from the approved challenge templates.</p><div class="actions" id="guide-options"></div><p id="guide-answer" role="status" aria-live="polite"></p><a id="guide-link" class="text-link" href="/alliance.html#community-hub">Explore the Alliance activities</a></div>
+      </section>
+      <section class="card holder" aria-labelledby="holder-title"><p class="eyebrow">PROPOSED GFOF ACCESS</p><h2 id="holder-title">A future holder milestone.</h2><p>Earned contribution plus verified GFOF eligibility could open an advanced workshop or creator tool. The holding threshold and benefit are still to be selected.</p><p class="muted">Holder access is in design review. This preview uses example XP and provides no wallet verification.</p></section>
+    </div>
+  </main>
+  <footer><a href="/alliance.html">Alliance</a><a href="/learn">Federation Learn</a><a href="/journey/index.html">Learning missions</a><a href="https://dossiertrack.co/token-structure">Dossier Lens</a><span>Private product preview · examples clear on reload</span></footer>
+</body>
+</html>
