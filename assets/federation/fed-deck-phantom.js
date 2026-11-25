@@ -4,10 +4,13 @@
  let provider,connectedAddress='',bound=false,busy=false,epoch=0,internal=false;
  function address(key){const s=key?.toString?.();if(typeof s!=='string'||!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(s))throw Error('invalid-address');return s;}
  function setAddress(s){internal=true;try{input.value=s;input.dispatchEvent(new Event('input',{bubbles:true}));}finally{internal=false;}}
- function detached(){epoch++;if(input.value.trim()===connectedAddress)setAddress('');connectedAddress='';disconnect.hidden=true;message.textContent='Phantom disconnected. You can still enter a public address.';}
- function bind(){if(bound)return;bound=true;provider.on('disconnect',detached);provider.on('accountChanged',key=>{if(!connectedAddress||busy)return;epoch++;const previous=connectedAddress;try{const next=address(key);connectedAddress=next;if(input.value.trim()===previous)setAddress(next);message.textContent='Phantom account changed. Press Read / refresh balances to view the selected address.';}catch{detached();}});}
+ function detached(){epoch++;if(connectedAddress&&input.value.trim()===connectedAddress)setAddress('');connectedAddress='';disconnect.hidden=true;message.textContent='Phantom disconnected. You can still enter a public address.';}
+ function bind(){if(bound)return;bound=true;provider.on('disconnect',detached);provider.on('accountChanged',key=>{if(!connectedAddress||busy)return;epoch++;const previous=connectedAddress;try{const next=address(key);connectedAddress=next;if(input.value.trim()===previous)setAddress(next);message.textContent='Phantom account changed. Press Read balances to view the selected address.';}catch{detached();}});}
  input.addEventListener('input',()=>{if(!internal){epoch++;message.textContent=connectedAddress?'Address edited. Phantom connection remains open; use Disconnect Phantom to end it.':'Public address entry is available without Phantom.';}});
  document.getElementById('wallet-clear').addEventListener('click',()=>{epoch++;message.textContent=connectedAddress?'Displayed data cleared. Use Disconnect Phantom to end the wallet connection.':'Wallet display cleared.';});
+ document.getElementById('wallet-example').addEventListener('click', () => {
+  if (busy && !connectedAddress) epoch++;
+ });
  connect.addEventListener('click',async()=>{
   if(busy)return;provider=globalThis.phantom?.solana;
   if(!provider?.isPhantom||typeof provider.connect!=='function'||typeof provider.disconnect!=='function'||typeof provider.on!=='function'){message.textContent='Phantom is not detected here. Use a browser with the Phantom extension or open this page in Phantom’s in-app browser. You can also enter a public address.';return;}

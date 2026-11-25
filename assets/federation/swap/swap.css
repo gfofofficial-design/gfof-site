@@ -26,3 +26,38 @@
 @media (forced-colors: active) {
   #swap-result :where(a, summary):focus-visible { outline-color: Highlight; }
 }
+
+/* Use the same task, state and evidence hierarchy as the other Federation tools. */
+.page-heading { flex-wrap: wrap; align-items: start; }
+.page-heading h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); }
+.page-heading p { max-width: 58ch; font-size: 1rem; }
+.page-heading .eyebrow { font-size: .8125rem; }
+
+.quote-card.fed-workbench, .toolkit.fed-workbench { padding: clamp(1rem, 3.5vw, 1.5rem); }
+.card-heading { flex-wrap: wrap; }
+.toolkit h2 { margin-block: 0 .5rem; }
+.toolkit .tool-links > a { grid-template-columns: minmax(0, 1fr); min-height: 44px; }
+.toolkit .tool-links strong, .quote-card :is(label, .help-text, summary, .quote-caveat) { font-size: .9375rem; }
+.toolkit .tool-links small, .toolkit p, .toolkit a { font-size: .875rem; }
+.quote-details :is(dt, dd), .quote-card .impact-line, .selected-tokens :is(strong, code, a, p) { font-size: .875rem; }
+.quote-result {
+  padding: 1rem;
+  border: 1px solid var(--fed-border-default);
+  border-radius: .7rem;
+  background: var(--fed-space-raised);
+}
+.quote-result h3 { margin-block-start: 0; font-size: .875rem; }
+.quote-result .output-label { font-size: .875rem; }
+.quote-result .output-value { font-size: clamp(1.6rem, 3.8vw, 2.5rem); }
+.quote-card .trading-gate p { font-size: .875rem; }
+
+@media (max-width: 760px) {
+  .site-header nav a { min-height: 44px; }
+  .token-pair select { font-size: 1rem; }
+  .quote-details dl > div { gap: .3rem .6rem; }
+}
+@media (max-width: 360px) {
+  .quote-result { padding: .7rem; }
+  .quote-details dl > div { grid-template-columns: minmax(0, 1fr); }
+  .quote-details dd { text-align: start; }
+}

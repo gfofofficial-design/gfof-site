@@ -1,21 +1,164 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="no-referrer"><title>Command Deck · Galactic Federation</title><link rel="stylesheet" href="/assets/federation/fed-tokens.css"><link rel="stylesheet" href="/assets/federation/fed-account.css"><link rel="stylesheet" href="/assets/federation/fed-deck.css"><link rel="stylesheet" href="/assets/federation/fed-tool-evidence.css"><script src="/journey/passport.js" defer></script><script src="/assets/federation/fed-deck.js" defer></script><script src="/assets/federation/fed-evidence-loader.js" defer></script><script src="/assets/federation/fed-deck-staking.js" defer></script><script src="/assets/federation/fed-deck-phantom.js" defer></script><script src="/assets/federation/fed-deck-locks.js" defer></script></head>
-<body class="deck"><a class="skip-link" href="#command-main">Skip to Command Deck</a><header><a class="brand" href="/"><img src="/logo-circle.png" alt="Galactic Federation">GALACTIC FEDERATION</a><a href="#wallet">Read a wallet →</a><a href="/account">Account &amp; sign-in →</a></header><main id="command-main" tabindex="-1">
-<p class="eyebrow">FEDERATION COMMAND // READ-ONLY PREVIEW</p><div class="seal-row"><img src="/logo-circle.png" alt=""><div><h1>Your Command Deck.</h1><p class="lead">Explore your assets. Learn with the crew. Find your next mission.</p></div></div>
-<nav class="deck-start-tools" aria-label="Start a public lookup"><a href="#wallet">Read a wallet</a><a href="https://dossiertrack.co/token-structure#mintInput">Inspect a token</a><a href="/swap">Check a quote</a></nav>
-<p class="demo-banner"><strong>Working wallet viewer · design preview.</strong> Enter an address to read on-chain quantities. The priced holdings chart uses fetched balances and available reference prices. Community League rankings have not started. No wallet ownership is verified, no points are awarded, and no staking pool or lending service is open.</p>
-<noscript><p class="demo-banner"><strong>JavaScript is disabled.</strong> Wallet reads, live lock totals, charts, the planning calculator and saved mission progress need JavaScript. You can still <a href="/treasury">read the dated Treasury evidence</a>, <a href="/staking">review staking preparation</a>, or <a href="/building">follow the build</a>.</p></noscript>
-<section class="flight-plan" id="first-flight" tabindex="-1" aria-labelledby="flight-title">
-  <p class="eyebrow">FLIGHT PLAN // FIRST VISIT</p>
-  <h2 id="flight-title">Start here.</h2>
-  <p class="flight-intro">Explore the tools first. Your Federation account is the way into member features as they open.</p>
-  <ol class="flight-steps" role="list">
-    <li><span class="flight-step" aria-hidden="true">01</span><div><span class="status">OPEN TO EVERYONE</span><h3>Explore your tools</h3><p>Read public balances, research a token, or check a quote.</p><a href="#tool-directory">See Federation tools →</a></div></li>
-    <li><span class="flight-step" aria-hidden="true">02</span><div><span class="status">EXISTING ACCOUNTS</span><h3>Sign in with email</h3><p>Use the one-time code for your approved Federation account. New account registration is closed.</p><a href="/account#account-main">Go to account sign-in →</a></div></li>
-    <li><span class="flight-step" aria-hidden="true">03</span><div><span class="status">PUBLIC GUIDE · MEMBER ACCESS CLOSED</span><h3>Find your place in Alliance</h3><p>Explore projects and the map. The guide shows where to set up a member profile when access opens.</p><a href="/alliance#start-here">Open the Alliance guide →</a></div></li>
-  </ol>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="no-referrer"><title>Command Deck · Galactic Federation</title><link rel="stylesheet" href="/assets/federation/fed-tokens.css"><link rel="stylesheet" href="/assets/federation/fed-account.css"><link rel="stylesheet" href="/assets/federation/fed-deck.css"><link rel="stylesheet" href="/assets/federation/fed-tool-evidence.css"><link rel="stylesheet" href="/assets/federation/fed-tool-workbench.css"><script src="/journey/passport.js" defer></script><script src="/assets/federation/fed-deck.js" defer></script><script src="/assets/federation/fed-evidence-loader.js" defer></script><script src="/assets/federation/fed-deck-staking.js" defer></script><script src="/assets/federation/fed-deck-phantom.js" defer></script><script src="/assets/federation/fed-deck-locks.js" defer></script></head>
+<body class="deck">
+<a class="skip-link" href="#command-main">Skip to Command Deck</a>
+<header class="deck-header">
+  <a class="brand" href="/"><img src="/logo-circle.png" alt="" width="40" height="40"><span>GALACTIC FEDERATION<small>FEDERATION OS</small></span></a>
+  <nav aria-label="Federation"><a href="/alliance#start-here">Alliance</a><a href="/account">Account &amp; sign-in</a></nav>
+</header>
+<main id="command-main" tabindex="-1">
+<section id="first-flight" class="deck-intro fed-workbench" tabindex="-1" aria-labelledby="deck-title">
+  <div class="deck-intro-copy">
+    <p class="eyebrow">FEDERATION COMMAND // PUBLIC TOOLS</p>
+    <h1 id="deck-title">Command Deck</h1>
+    <p class="lead">Read wallet balances, inspect a token’s controls, and trace the sources behind each result.</p>
+  </div>
+  <nav class="deck-tool-links" aria-label="Research and verification">
+    <a href="https://dossiertrack.co/token-structure#mintInput"><strong>Token Structure Lens</strong><span>Read-only beta</span></a>
+    <a href="/swap"><strong>Galactic Swap</strong><span>Quotes only</span></a>
+    <a href="#locks"><strong>Token lock records</strong><span>Public contracts</span></a>
+  </nav>
 </section>
-<section class="deck-brief" id="tool-directory" tabindex="-1" aria-labelledby="brief-title"><div class="panel-head"><h2 id="brief-title">Federation tools</h2><span class="status">PUBLIC TOOLS</span></div><p>Pick the question you want to answer. These public tools do not need a Federation account.</p><div class="brief-options">
+<noscript><p class="demo-banner"><strong>JavaScript is disabled.</strong> Wallet reads, live lock totals, charts, the planning calculator and saved mission progress need JavaScript. You can still <a href="/treasury">read the dated Treasury evidence</a>, <a href="/staking">review staking preparation</a>, or <a href="/building">follow the build</a>.</p></noscript>
+<section class="panel fed-reviewed-tool fed-workbench" id="wallet" tabindex="-1" aria-labelledby="wallet-title">
+  <div class="panel-head">
+    <div><h2 id="wallet-title">Read a Solana wallet</h2><p>Use any public Solana wallet address. No sign-in or wallet connection is needed.</p></div>
+    <span class="fed-workbench-tag" id="wallet-data-status">READ ONLY</span>
+  </div>
+  <form id="wallet-form" novalidate>
+    <label for="wallet-address">Public Solana wallet address</label>
+    <div class="wallet-input-row">
+      <input id="wallet-address" name="address" type="text" placeholder="Paste a wallet address" maxlength="44" autocomplete="off" autocapitalize="off" spellcheck="false" required aria-describedby="wallet-address-help wallet-message" aria-invalid="false">
+      <button id="wallet-load" class="fed-workbench-primary" type="submit" aria-controls="wallet-results">Read balances</button>
+    </div>
+    <p class="note" id="wallet-address-help">Copy the public address from your wallet’s Receive screen. Keep your recovery phrase and private key in your wallet.</p>
+  </form>
+  <div class="actions wallet-actions">
+    <button id="wallet-example" type="button" aria-controls="wallet-results" hidden>View fictional example</button>
+    <button id="wallet-clear" type="button" hidden>Clear</button>
+  </div>
+  <p id="wallet-message" class="fed-workbench-status" data-state="idle" role="status" aria-live="polite" aria-atomic="true">Ready to read a public address.</p>
+  <div id="wallet-results" class="wallet-results" hidden>
+    <div class="wallet-result-heading">
+      <div><h3 id="wallet-state" tabindex="-1">No address loaded</h3><p class="note" id="wallet-scope">Read-only address viewer</p></div>
+      <dl class="wallet-token-count"><div><dt>Token mints <span>Excluding SOL</span></dt><dd id="wallet-count">—</dd></div></dl>
+    </div>
+    <div id="wallet-read-evidence" class="fed-tool-evidence" data-fed-evidence="wallet" hidden></div>
+    <div class="wallet-result-grid">
+      <div>
+        <div class="wallet-filter" id="wallet-filter-panel" hidden>
+          <label for="wallet-asset-filter">Filter by asset or mint</label>
+          <div class="wallet-filter-controls"><input id="wallet-asset-filter" type="search" maxlength="64" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="wallet-filter-status"><button id="wallet-filter-clear" type="button">Show all assets</button></div>
+          <p id="wallet-filter-status" class="note" role="status" aria-live="polite">Read balances to filter returned assets.</p>
+        </div>
+        <div class="table-scroll" id="wallet-table-scroll" tabindex="0" role="region" aria-busy="false" aria-label="Wallet asset balances" aria-describedby="wallet-table-help">
+          <table><caption id="wallet-caption">No balances loaded</caption><thead><tr><th scope="col">Asset / mint</th><th scope="col">Quantity</th><th scope="col">Est. USD</th></tr></thead><tbody id="wallet-rows"></tbody></table>
+        </div>
+        <p class="note" id="wallet-table-help">Quantities retain their full precision. Reference prices can be unavailable.</p>
+      </div>
+      <section class="wallet-valuation" aria-labelledby="priced-holdings-title">
+        <h3 id="priced-holdings-title">Priced holdings</h3>
+        <strong id="priced-total" class="priced-total">—</strong>
+        <p id="price-coverage" class="note">Load an address to view priced holdings.</p>
+        <details id="wallet-price-details">
+          <summary>Pricing coverage and allocation</summary>
+          <div class="wallet-coverage" aria-labelledby="wallet-coverage-title">
+            <h4 id="wallet-coverage-title">Reference price coverage</h4>
+            <span class="status" id="wallet-price-status">WAITING FOR BALANCES</span>
+            <dl class="coverage-counts"><div><dt>Nonzero assets priced</dt><dd id="wallet-priced-count">—</dd></div><div><dt>Nonzero assets missing a price</dt><dd id="wallet-unpriced-count">—</dd></div></dl>
+            <label id="wallet-coverage-label" for="wallet-coverage-meter">Price coverage will appear after a balance read.</label>
+            <meter id="wallet-coverage-meter" min="0" max="1" value="0" hidden>Reference price coverage by nonzero asset count</meter>
+          </div>
+          <div id="wallet-unpriced-panel" class="wallet-unpriced" hidden aria-labelledby="wallet-unpriced-title">
+            <h4 id="wallet-unpriced-title">Excluded from the dollar subtotal</h4>
+            <p id="wallet-unpriced-summary" class="note"></p>
+            <ul id="wallet-unpriced-list"></ul>
+            <p class="note">A missing price leaves value unknown. Quantities remain available in the table.</p>
+          </div>
+          <div id="holdings-graph" class="holdings-graph" aria-label="Allocation among priced holdings"></div>
+          <p class="note">Bars show each share of the priced subtotal. Balances held by staking and lending services are outside this lookup.</p>
+        </details>
+      </section>
+    </div>
+    <a id="wallet-history-link" href="#balance-history-title" hidden>View this visit’s SOL readings</a>
+    <div id="wallet-source-panel" class="wallet-source-panel" role="region" aria-label="Wallet sources and ledger slots" tabindex="-1" hidden>
+      <div id="wallet-source-links"></div>
+      <details id="wallet-source-details"><summary>Ledger slots for this balance read</summary><p id="wallet-source-message" class="note">No source details loaded.</p><dl id="wallet-source-slots" class="wallet-source-slots"></dl></details>
+    </div>
+  </div>
+  <div class="wallet-options">
+    <details class="wallet-connection-option">
+      <summary>Use Phantom instead (optional)</summary>
+      <div class="actions"><button id="phantom-connect" type="button">Use Phantom address &amp; read balances</button><button id="phantom-disconnect" type="button" hidden>Disconnect Phantom</button></div>
+      <p id="phantom-message" class="note" role="status" aria-live="polite">Use Phantom to share a public address when its extension is available.</p>
+      <p class="note">Phantom asks to share your public address. Disconnecting ends the connection. Manage trusted-app permission in Phantom.</p>
+    </details>
+    <details>
+      <summary>Data handling and lookup limits</summary>
+      <p class="note" id="wallet-privacy">The address goes to our hosting service and the configured Solana RPC provider (Helius when enabled, otherwise Solana’s public RPC). Token mints go to Jupiter for reference prices. Choosing an asset’s Lens link opens a separate mint lookup. This page holds the response in memory. Service providers may retain operational logs.</p>
+      <p class="note">The lookup asks for no signature or transfer. It reads native SOL and token balances returned by the original Token Program and Token-2022. Ownership, spendability and eligibility require separate verification.</p>
+      <a href="/command-deck-privacy.html">Read data handling and clearing controls</a>
+    </details>
+  </div>
+</section>
+<section class="panel lock-panel wide fed-reviewed-tool fed-workbench" id="locks" tabindex="-1" aria-labelledby="deck-lock-title">
+  <div class="panel-head">
+    <div><h2 id="deck-lock-title">Federation token lock records</h2><p>Three disclosed Streamflow schedules for the current GFOF mint.</p></div>
+    <span class="fed-workbench-tag">PUBLIC CONTRACTS</span>
+  </div>
+  <div class="lock-readout">
+    <p id="deck-lock-total-label" class="lock-total-label">Scheduled tokens still in escrow</p>
+    <div id="deck-lock-results" aria-busy="false" aria-labelledby="deck-lock-total-label" role="group">
+      <strong class="priced-total" id="deck-lock-total">Unavailable</strong>
+      <p id="deck-lock-percent" class="note">A current reading is needed to show the total.</p>
+      <p class="note lock-verification" id="deck-lock-verification">No current verification available.</p>
+    </div>
+  </div>
+  <div class="actions lock-actions">
+    <button id="deck-lock-refresh" type="button" aria-controls="deck-lock-results deck-lock-cards" hidden>Refresh public locks</button>
+    <a href="/treasury#current-mint-lock">View dated Treasury records</a>
+  </div>
+  <p id="deck-lock-message" class="fed-workbench-status" data-state="idle" role="status" aria-live="polite" aria-atomic="true"></p>
+  <div class="fed-tool-evidence">
+    <details>
+      <summary id="deck-lock-evidence-summary">Lock evidence path</summary>
+      <div class="fed-evidence-body">
+        <ol class="source-path" role="list">
+        <li>
+          <span class="path-marker" data-lock-source-marker aria-hidden="true"></span>
+          <div><div class="source-heading"><strong>Mint account</strong><span class="state-label" data-lock-source-state>Waiting</span></div>
+          <p class="source-detail">Checks the token mint, its precision and the minted supply used for the percentage.</p></div>
+        </li>
+        <li>
+          <span class="path-marker" data-lock-source-marker aria-hidden="true"></span>
+          <div><div class="source-heading"><strong>Streamflow schedules</strong><span class="state-label" data-lock-source-state>Waiting</span></div>
+          <p class="source-detail">Checks three contract accounts for the original scheduled principal, withdrawals and full-cliff time.</p></div>
+        </li>
+        <li>
+          <span class="path-marker" data-lock-source-marker aria-hidden="true"></span>
+          <div><div class="source-heading"><strong>Escrow balances</strong><span class="state-label" data-lock-source-state>Waiting</span></div>
+          <p class="source-detail">Checks the three token accounts that hold funds for these schedules. Extra escrow tokens are excluded from the scheduled total.</p></div>
+        </li>
+        </ol>
+        <div class="fed-evidence-footer">
+          <a href="#deck-lock-source-details" id="deck-lock-source-link">Open source details</a>
+        </div>
+        <details class="lock-source-technical">
+          <summary id="deck-lock-source-details">Source fields and limits</summary>
+          <p>One finalized Solana <code>getMultipleAccounts</code> response supplies the same slot for all seven accounts. The read checks the mint, three Streamflow contracts and three escrows. The endpoint can serve a cached response for up to 30 seconds.</p>
+          <p>For each active schedule, the displayed amount is the lower of the observed escrow balance and the remaining principal after recorded withdrawals. Canceled schedules contribute zero. The percentage uses verified minted supply for this mint.</p>
+          <p>Coverage is limited to these three contracts. A full cliff is the time scheduled tokens become eligible for withdrawal. Withdrawal is recorded separately. This read does not establish staking rewards or a funded reward pool.</p>
+          <p><a href="/record/current-mint-locks-three-20261008.json">Open the saved October 8, 2026 account batch (JSON)</a></p>
+          <p><a href="#deck-lock-evidence-summary" id="deck-lock-evidence-return">Back to lock evidence path</a></p>
+        </details>
+      </div>
+    </details>
+  </div>
+  <div id="deck-lock-cards" class="lock-signals"></div>
+  <div id="deck-lock-timeline" class="lock-cliff-plot"></div>
+  <noscript><p class="note">Current balances need JavaScript. The dated Treasury records and source explanations are available here without it.</p></noscript>
+</section>
+<section class="deck-brief" id="tool-directory" tabindex="-1" aria-labelledby="brief-title"><div class="panel-head"><h2 id="brief-title">Federation tools</h2><span class="status">PUBLIC TOOLS</span></div><p>Public tools are available without a Federation account.</p><div class="brief-options">
 <!-- federation-tools:deck -->
 <a class="brief-option" href="#wallet"><span class="status">Read only</span><strong>Read wallet quantities</strong><span>Read public Solana token quantities and available reference prices.</span></a>
 <a class="brief-option" href="/alliance#start-here"><span class="status">Public preview · joining closed</span><strong>Explore the Alliance</strong><span>Find project tools and proposed challenges. Public membership and competition enrollment remain closed.</span></a>
@@ -49,7 +192,7 @@
 </nav>
 <p class="brief-mission">Prefer a learning mission? <a href="/journey/repair-the-shuttle">Repair the Shuttle with Sera →</a> uses fictional credits; saved progress stays on this device.</p></section>
 <nav class="deck-nav" aria-label="Dashboard sections"><a href="#wallet">Wallet</a><a href="#locks">Token locks</a><a href="#staking">Staking Bay</a><a href="#network">Federation stations</a><a href="#alliance">Alliance</a><a href="/alliance-constellation-preview.html">Map preview</a><a href="#missions">Missions</a><a href="#leaderboard">Community League</a><a href="#dashboard-help">Quick answers &amp; help</a></nav>
-<div class="metrics"><div class="metric"><span>WALLET VIEW</span><strong id="wallet-state">No address loaded</strong><span id="wallet-scope">Read-only address viewer</span></div><div class="metric"><span>STAKING STATUS</span><strong>In preparation</strong><span>No active positions</span></div><div class="metric"><span>EXPLORER PASSPORT</span><strong id="explorer-rank">Start exploring</strong><span id="explorer-note">Mission badges stay on this device</span></div></div>
+<div class="metrics"><div class="metric"><span>STAKING STATUS</span><strong>In preparation</strong><span>No active positions</span></div><div class="metric"><span>EXPLORER PASSPORT</span><strong id="explorer-rank">Start exploring</strong><span id="explorer-note">Mission badges stay on this device</span></div></div>
 <aside class="panel wallet-service-shortcut" aria-labelledby="wallet-service-title">
 <span class="status">PUBLIC BETA</span>
 <h2 id="wallet-service-title">Federation Wallet</h2>
@@ -57,61 +200,6 @@
 <a class="account-help-link" href="/wallet">Open Federation Wallet →</a>
 </aside>
 <div class="deck-grid">
-<section class="panel fed-reviewed-tool" id="wallet" tabindex="-1"><div class="panel-head"><h2>Read a Solana wallet</h2><span class="status" id="wallet-data-status">READ ONLY</span></div><p>Paste a public Solana address to read token quantities. No account or wallet connection is needed.</p><form id="wallet-form"><label for="wallet-address">Public Solana wallet address</label><input id="wallet-address" name="address" type="text" maxlength="44" autocomplete="off" autocapitalize="off" spellcheck="false" required aria-describedby="wallet-address-help wallet-privacy wallet-message" aria-invalid="false"><p class="note" id="wallet-address-help">Copy your public Solana address from your wallet’s Receive screen, then choose Read / refresh balances. Enter a wallet address here; use Dossier Lens to inspect a token mint.</p><div class="actions"><button id="wallet-load" type="submit">Read / refresh balances</button><button id="wallet-clear" type="button">Clear</button></div></form><details class="wallet-connection-option"><summary>Use Phantom instead (optional)</summary><div class="actions"><button id="phantom-connect" type="button">Use Phantom address &amp; read balances</button><button id="phantom-disconnect" type="button" hidden>Disconnect Phantom</button></div><p id="phantom-message" class="note" role="status" aria-live="polite">Optional Phantom connection. Manual public-address entry also works.</p><p class="note">Phantom will ask to share your public address with this site. This preview does not request message signing or transactions. Disconnecting ends the connection; manage this site’s trusted-app permission in Phantom.</p></details><p class="note" id="wallet-privacy">Viewing sends this public address to our hosting service and the configured Solana RPC provider (Helius when enabled, otherwise Solana's public RPC). Token mint addresses are sent to Jupiter for reference prices. Each token’s Lens link opens Dossier with that mint address for a separate structure lookup. This viewer does not save wallet data to browser storage or an account. Service providers may retain operational logs. <a href="/command-deck-privacy.html">Read data handling and clearing controls</a>. No signature or token transfer is requested. Never enter a seed phrase or private key.</p><p id="wallet-message" role="status" aria-live="polite">Enter a public address to begin. Some tokens may have no supported price.</p><div id="wallet-read-evidence" class="fed-tool-evidence" data-fed-evidence="wallet" hidden></div><div class="wallet-filter" id="wallet-filter-panel" hidden><label for="wallet-asset-filter">Find an asset or mint</label><input id="wallet-asset-filter" type="search" maxlength="64" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="wallet-filter-status"><button id="wallet-filter-clear" type="button">Show all assets</button><p id="wallet-filter-status" class="note" role="status" aria-live="polite">Read balances to filter returned assets.</p></div><div class="wallet-layout"><div class="orbit live-orbit" role="group" aria-label="Nonzero token mints returned, excluding native SOL. This is not an allocation chart."><span>Token mints<strong id="wallet-count">—</strong>Excluding SOL</span></div><div class="table-scroll" id="wallet-table-scroll" tabindex="0" role="region" aria-busy="false" aria-label="Wallet asset balances" aria-describedby="wallet-table-help"><table><caption id="wallet-caption">No balances loaded</caption><thead><tr><th scope="col">Asset / mint</th><th scope="col">Quantity</th><th scope="col">Value</th></tr></thead><tbody id="wallet-rows"></tbody></table></div></div><p class="note" id="wallet-table-help">Quantities keep their full precision. Scroll the table sideways if needed.</p><div id="wallet-source-panel" class="wallet-source-panel" role="region" aria-label="Wallet sources and ledger slots" tabindex="-1" hidden><div id="wallet-source-links"></div><details><summary>Source details for this balance read</summary><p id="wallet-source-message" class="note">No source details loaded.</p><dl id="wallet-source-slots" class="wallet-source-slots"></dl></details></div><details><summary>What this wallet view includes</summary><p>Native SOL and nonzero token balances, aggregated by mint across the original Token Program and Token-2022. Unknown tokens show their mint address; their names are not verified. This view does not establish ownership, spendability or staking eligibility. Provider-held, locked or staked positions are not included. Reference values cover supported prices only; historical charts remain unconnected.</p></details></section>
-<section class="panel"><div class="panel-head"><h2>Priced holdings</h2><span class="status">REFERENCE VALUES</span></div><p>Priced subtotal · estimated value of assets with an available reference price.</p><strong id="priced-total" class="priced-total">—</strong><p id="price-coverage" class="note">Load an address to view priced holdings.</p><div class="wallet-coverage" aria-labelledby="wallet-coverage-title"><h3 id="wallet-coverage-title">How much has a price?</h3><span class="status" id="wallet-price-status">WAITING FOR BALANCES</span><dl class="coverage-counts"><div><dt>Nonzero assets priced</dt><dd id="wallet-priced-count">—</dd></div><div><dt>Nonzero assets missing a price</dt><dd id="wallet-unpriced-count">—</dd></div></dl><label id="wallet-coverage-label" for="wallet-coverage-meter">Price coverage will appear after a balance read.</label><meter id="wallet-coverage-meter" min="0" max="1" value="0" hidden>Reference price coverage by nonzero asset count</meter><p class="note">A missing price does not mean a token is worth zero. Its quantity stays in the wallet table. This subtotal excludes assets held by staking or lending providers and accounts not returned by the balance read.</p></div><div id="wallet-unpriced-panel" class="wallet-unpriced" hidden aria-labelledby="wallet-unpriced-title"><h3 id="wallet-unpriced-title">Not included in this subtotal</h3><p id="wallet-unpriced-summary" class="note"></p><ul id="wallet-unpriced-list"></ul><p class="note">No usable reference price was returned for these holdings. This does not establish a zero value or whether a market exists.</p><a href="#wallet">See all exact quantities in Wallet radar →</a></div><div id="holdings-graph" class="holdings-graph" aria-label="Allocation among priced holdings"></div><p class="note">Bars show shares of the priced subtotal only. Unpriced assets are excluded, so this is not necessarily your entire portfolio. Historical performance is not connected yet.</p></section>
-<section class="panel lock-panel wide fed-reviewed-tool" id="locks" tabindex="-1" aria-labelledby="deck-lock-title">
-  <div class="panel-head"><h2 id="deck-lock-title">Federation token lock records</h2><span class="status">PUBLIC CONTRACTS · READ ONLY</span></div>
-  <p>See the three disclosed Streamflow locks for the current GFOF mint. Each schedule gives a full-cliff date, when its scheduled tokens become eligible for withdrawal under the contract.</p>
-  <p id="deck-lock-total-label" class="lock-total-label">Scheduled tokens still in escrow</p>
-  <div id="deck-lock-results" aria-busy="false" aria-labelledby="deck-lock-total-label" role="group">
-    <strong class="priced-total" id="deck-lock-total">Unavailable</strong>
-    <p id="deck-lock-percent" class="note">A current reading is needed to show the total.</p>
-  </div>
-  <div class="actions lock-actions">
-    <button id="deck-lock-refresh" type="button" aria-controls="deck-lock-results deck-lock-cards" hidden>Refresh public locks</button>
-    <a href="/treasury#current-mint-lock">View dated Treasury records</a>
-  </div>
-  <p id="deck-lock-message" class="note" role="status" aria-live="polite" aria-atomic="true"></p>
-  <div class="fed-tool-evidence">
-    <details>
-      <summary id="deck-lock-evidence-summary">Lock evidence path</summary>
-      <div class="fed-evidence-body">
-        <ol class="source-path" role="list">
-        <li>
-          <span class="path-marker" data-lock-source-marker aria-hidden="true"></span>
-          <div><div class="source-heading"><strong>Mint account</strong><span class="state-label" data-lock-source-state>Waiting</span></div>
-          <p class="source-detail">Checks the token mint, its precision and the minted supply used for the percentage.</p></div>
-        </li>
-        <li>
-          <span class="path-marker" data-lock-source-marker aria-hidden="true"></span>
-          <div><div class="source-heading"><strong>Streamflow schedules</strong><span class="state-label" data-lock-source-state>Waiting</span></div>
-          <p class="source-detail">Checks three contract accounts for the original scheduled principal, withdrawals and full-cliff time.</p></div>
-        </li>
-        <li>
-          <span class="path-marker" data-lock-source-marker aria-hidden="true"></span>
-          <div><div class="source-heading"><strong>Escrow balances</strong><span class="state-label" data-lock-source-state>Waiting</span></div>
-          <p class="source-detail">Checks the three token accounts that hold funds for these schedules. Extra escrow tokens are excluded from the scheduled total.</p></div>
-        </li>
-        </ol>
-        <div class="fed-evidence-footer">
-          <p class="preview-time" id="deck-lock-verification">No current verification available.</p>
-          <a href="#deck-lock-source-details" id="deck-lock-source-link">Open source details</a>
-        </div>
-        <details class="lock-source-technical">
-          <summary id="deck-lock-source-details">Source fields and limits</summary>
-          <p>One finalized Solana <code>getMultipleAccounts</code> response supplies the same slot for all seven accounts. The read checks the mint, three Streamflow contracts and three escrows. The endpoint can serve a cached response for up to 30 seconds.</p>
-          <p>For each active schedule, the displayed amount is the lower of the observed escrow balance and the remaining principal after recorded withdrawals. Canceled schedules contribute zero. The percentage uses verified minted supply for this mint.</p>
-          <p>Coverage is limited to these three contracts. Passing a cliff does not confirm that a withdrawal happened. This read does not establish staking rewards or a funded reward pool.</p>
-          <p><a href="/record/current-mint-locks-three-20261008.json">Open the saved October 8, 2026 account batch (JSON)</a></p>
-          <p><a href="#deck-lock-evidence-summary" id="deck-lock-evidence-return">Back to lock evidence path</a></p>
-        </details>
-      </div>
-    </details>
-  </div>
-  <div id="deck-lock-cards" class="lock-signals"></div>
-  <div id="deck-lock-timeline" class="lock-cliff-plot"></div>
-  <noscript><p class="note">Current balances need JavaScript. The dated Treasury records and source explanations are available here without it.</p></noscript>
-</section>
 <section class="panel" id="staking"><div class="panel-head"><h2>Staking Bay</h2><span class="status">PROPOSED · NOT OPEN</span></div><p>Compare a planning example. These terms are not an active offer.</p><fieldset class="term-picker"><legend>Choose a proposed term</legend><div class="terms"><button class="term" type="button" id="deck-term-1" aria-pressed="false">1 month<strong>1%</strong>Total-term target</button><button class="term" type="button" id="deck-term-3" aria-pressed="false">3 months<strong>3%</strong>Total-term target</button><button class="term" type="button" id="deck-term-6" aria-pressed="true">6 months<strong>8%</strong>Total-term target</button><button class="term" type="button" id="deck-term-12" aria-pressed="false">12 months<strong>12%</strong>Total-term target</button></div></fieldset><label for="deck-stake-amount">Example amount · GFOF</label><input id="deck-stake-amount" type="text" inputmode="decimal" value="100000" maxlength="25" autocomplete="off" spellcheck="false" aria-describedby="deck-stake-message deck-stake-disclaimer"><p id="deck-stake-message" class="note" role="status">Planning illustration only. Enable JavaScript to calculate.</p><h3 id="deck-stake-term">6 months · 8% proposed total-term reward</h3><dl class="stake-results" aria-live="polite"><dt>Example principal</dt><dd id="deck-stake-principal">—</dd><dt>Illustrated gross reward</dt><dd id="deck-stake-reward">—</dd><dt>Principal + illustrated reward</dt><dd id="deck-stake-total">—</dd></dl><label id="deck-stake-share-label" for="deck-stake-share">Illustrated reward share of principal + reward</label><meter id="deck-stake-share" min="0" max="1" value="0" hidden>Illustrated reward share</meter><div id="deck-stake-comparison" class="stake-comparison" hidden aria-labelledby="deck-compare-title"><h3 id="deck-compare-title">Four terms · one example amount</h3><p class="note">Bars compare proposed full-term percentages on a shared 0–12% scale. Token amounts below are rounded down. The outlined row is your selected term.</p><div class="stake-compare-row" id="deck-compare-row-1" data-selected="false"><label for="deck-compare-bar-1">1 month · 1%</label><strong id="deck-compare-reward-1">—</strong><meter id="deck-compare-bar-1" min="0" max="12" value="1" aria-label="1 month proposed total-term reward, 1 percent">1%</meter></div><div class="stake-compare-row" id="deck-compare-row-3" data-selected="false"><label for="deck-compare-bar-3">3 months · 3%</label><strong id="deck-compare-reward-3">—</strong><meter id="deck-compare-bar-3" min="0" max="12" value="3" aria-label="3 months proposed total-term reward, 3 percent">3%</meter></div><div class="stake-compare-row" id="deck-compare-row-6" data-selected="true"><label for="deck-compare-bar-6">6 months · 8%</label><strong id="deck-compare-reward-6">—</strong><meter id="deck-compare-bar-6" min="0" max="12" value="8" aria-label="6 months proposed total-term reward, 8 percent">8%</meter></div><div class="stake-compare-row" id="deck-compare-row-12" data-selected="false"><label for="deck-compare-bar-12">12 months · 12%</label><strong id="deck-compare-reward-12">—</strong><meter id="deck-compare-bar-12" min="0" max="12" value="12" aria-label="12 months proposed total-term reward, 12 percent">12%</meter></div></div><p id="deck-stake-disclaimer" class="note">One completed term, no compounding or dollar forecast. Rewards are rounded down to six decimal places. These percentages are proposed gross total-term targets, not APY. Funding, provider rules, fees, eligibility, caps and exit terms remain unresolved. This calculator does not use or establish your wallet balance.</p><a href="/staking">Review current staking preparation →</a></section>
 <section class="panel"><h2>Your position timeline</h2><span class="status">LAYOUT PREVIEW</span><div class="timeline"><span>01 · Position verified</span><span>02 · Term in progress</span><span>03 · Unlock date</span></div><p><strong>No active position.</strong> A live position would show deposited tokens, the provider's actual status, its unlock date and separately verified claimable rewards.</p><p class="note">A decorative countdown never establishes that tokens are locked or rewards have accrued.</p><a href="/security">Wallet security and disclosures →</a></section>
 </div>
