@@ -10,7 +10,7 @@ from reportlab.graphics.barcode.qrencoder import QRCode, QRErrorCorrectLevel
 
 ROOT = Path(__file__).resolve().parents[1]
 DESTINATIONS = {
-    "assets/federation/gfof-official-qr.png": "https://galacticfederation.co/#official-gfof",
+    "assets/federation/gfof-official-qr.png": "https://tebfun.xyz/token/Dc9CeuctqvP947ipnCJb8fSf6HhNWDooAQxsVHj2RNBV",
 }
 MODULE_SIZE = 8
 QUIET_MODULES = 4

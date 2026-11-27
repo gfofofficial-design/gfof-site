@@ -275,7 +275,7 @@
 }
 .cmd-token__qr-content img {
   display: block;
-  inline-size: 164px;
+  inline-size: 180px;
   max-inline-size: 100%;
   block-size: auto;
   image-rendering: pixelated;
