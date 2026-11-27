@@ -27,6 +27,15 @@ export function projectCash({cash, receipts, spend, upfront = 0}) {
   };
 }
 
+export function monthlySpendingLimit({cash, receipts, upfront = 0}, months) {
+  if (!Number.isSafeInteger(months) || months < 1) {
+    throw new RangeError('Choose a whole number of months.');
+  }
+  const openingCash = cash - upfront;
+  if (openingCash < 0) return null;
+  return receipts + Math.floor(openingCash / months);
+}
+
 function validPlanAmounts(amounts) {
   return amounts && typeof amounts === 'object' && !Array.isArray(amounts) &&
     Object.keys(amounts).length === planFields.length &&

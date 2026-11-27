@@ -155,7 +155,7 @@
   gap: .5rem .8rem;
   margin: .85rem 0;
 }
-.runway-metrics dt, .runway-months dt { color: var(--fed-muted); font-size: .8125rem; }
+.runway-metrics dt, .runway-months dt, .runway-limits dt { color: var(--fed-muted); font-size: .8125rem; }
 .runway-metrics dd, .runway-months dd {
   margin: 0;
   color: var(--fed-text-display);
@@ -167,6 +167,29 @@
 .runway-months > div { padding-top: .3rem; border-top: 1px solid var(--fed-border-strong); }
 .runway-months dd { font-size: .875rem; }
 .runway-page dd[data-state="gap"] { color: var(--fed-warning); }
+
+.runway-limit-control { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; }
+.runway-limit-control label { color: var(--fed-text-display); font-weight: 650; }
+.runway-limit-control select {
+  min-height: 44px;
+  max-width: 100%;
+  padding: .35rem .65rem;
+  border: 1px solid var(--fed-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--fed-text);
+  background: var(--fed-space-raised);
+  font: inherit;
+}
+.runway-limits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: .65rem 1rem;
+  margin: .75rem 0;
+}
+.runway-limits > div { padding-top: .5rem; border-top: 1px solid var(--fed-border-default); overflow-wrap: anywhere; }
+.runway-limits dd { margin: .1rem 0 0; }
+.runway-limits strong { color: var(--fed-text-display); font-variant-numeric: tabular-nums; }
+.runway-limits span { display: block; color: var(--fed-muted); font-size: .875rem; }
 
 .runway-method { margin-top: 1rem; padding: 0 clamp(1rem, 3vw, 1.55rem); }
 .runway-method > div { max-width: 70ch; padding: .5rem 0 1rem; }

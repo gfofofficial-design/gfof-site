@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {parseUsd, planFileLimit, projectCash, readPlanFile, writePlanFile} from '../assets/federation/fed-project-runway-core.mjs';
+import {
+  monthlySpendingLimit, parseUsd, planFileLimit, projectCash, readPlanFile, writePlanFile
+} from '../assets/federation/fed-project-runway-core.mjs';
 
 test('manual USD input distinguishes an unknown amount, zero, and exact cents', () => {
   for (const [input, expected] of [
@@ -52,6 +54,32 @@ test('display rounding stays conservative and month-end balances keep cents', ()
   assert.deepEqual(projectCash({cash: 99999999999, receipts: 99999999999, spend: 0}).months, [
     199999999998, 399999999996, 699999999993
   ]);
+});
+
+test('monthly spending limits split cash across the selected horizon and round down to cents', () => {
+  const current = {cash: 2_400_000, receipts: 600_000};
+  assert.deepEqual([3, 6, 12].map(months => monthlySpendingLimit(current, months)), [1_400_000, 1_000_000, 800_000]);
+  assert.equal(monthlySpendingLimit({...current, upfront: 400_000}, 6), 933_333);
+  assert.equal(monthlySpendingLimit({cash: 4, receipts: 1, upfront: 1}, 6), 1);
+  assert.equal(monthlySpendingLimit({cash: 99_999_999_999, receipts: 99_999_999_999}, 3), 133_333_333_332);
+});
+
+test('a spending limit leaves month-end cash nonnegative and another cent would exceed it', () => {
+  const plan = {cash: 103, receipts: 53, upfront: 5};
+  for (const months of [3, 6, 12]) {
+    const spending = monthlySpendingLimit(plan, months);
+    const lastBalance = plan.cash - plan.upfront + (plan.receipts - spending) * months;
+    assert.ok(lastBalance >= 0 && lastBalance < months);
+  }
+});
+
+test('an upfront gap has no spending limit and exactly funded costs leave receipts as the limit', () => {
+  assert.equal(monthlySpendingLimit({cash: 11_000, receipts: 20_000, upfront: 11_001}, 6), null);
+  assert.equal(monthlySpendingLimit({cash: 11_000, receipts: 20_000, upfront: 11_000}, 3), 20_000);
+  assert.equal(monthlySpendingLimit({cash: 0, receipts: 0}, 12), 0);
+  for (const months of [0, -3, 1.5, NaN, Infinity, '6']) {
+    assert.throws(() => monthlySpendingLimit({cash: 100, receipts: 100}, months), RangeError);
+  }
 });
 
 const planAmounts = {cash: 99_999_999_999, receipts: 1, spend: 33, upfront: null, planned: 0};
