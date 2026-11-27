@@ -42,6 +42,11 @@ function validSignature(signature,message,key){
  return verify(null,message,createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),key]),format:'der',type:'spki'}),signature);
 }
 const zero=s=>s.every(v=>v===0);
+export function unsignedMessageSha256(base64) {
+ const {message,signatures}=decode(base64);
+ if (!signatures.every(zero)) throw fail();
+ return hash(message);
+}
 export function inspectTransactionEnvelope(base64){
  const tx=decode(base64);
  for(let i=0;i<tx.signatures.length;i++)if(!zero(tx.signatures[i])&&!validSignature(tx.signatures[i],tx.message,tx.keys[i]))throw fail();
