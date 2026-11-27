@@ -192,7 +192,8 @@
   grid-template-columns: minmax(180px, 1fr) auto;
   grid-template-areas:
     "identity actions"
-    "contract contract";
+    "contract contract"
+    "qr qr";
   align-items: center;
   gap: var(--space-4);
   border: 1px solid color-mix(in srgb, var(--fed-authority) 42%, transparent);
@@ -247,10 +248,51 @@
   text-transform: uppercase;
 }
 .cmd-token__verify:hover { color: var(--fed-command); }
+.cmd-token__qr {
+  grid-area: qr;
+  min-width: 0;
+  border-top: 1px solid color-mix(in srgb, var(--fed-authority) 18%, transparent);
+}
+.cmd-token__qr > summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+  color: var(--fed-command);
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+.cmd-token__qr > summary:focus-visible {
+  outline: 2px solid var(--fed-command);
+  outline-offset: 3px;
+}
+.cmd-token__qr-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  padding-block: var(--space-2);
+}
+.cmd-token__qr-content img {
+  display: block;
+  inline-size: 164px;
+  max-inline-size: 100%;
+  block-size: auto;
+  image-rendering: pixelated;
+}
+.cmd-token__qr-content figcaption {
+  flex: 1 1 190px;
+  min-width: 0;
+  color: var(--fed-text);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+.cmd-token__qr-content p { margin: 0 0 var(--space-2); }
+.cmd-token__qr-content a { color: var(--fed-command); }
 @media (max-width: 639px) {
   .cmd-token {
     grid-template-columns: 1fr;
-    grid-template-areas: "identity" "actions" "contract";
+    grid-template-areas: "identity" "actions" "contract" "qr";
   }
   .cmd-token__actions { display: grid; grid-template-columns: 1fr auto; align-items: center; }
 }
