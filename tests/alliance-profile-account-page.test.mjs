@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {mountAllianceAccountMemberPage} from '../assets/federation/fed-alliance-member-account.mjs';
 import {profileDocument,profileHtml,origin} from './alliance-profile-document.fixture.mjs';
+import {memberHttpFixture,fields as sampleFields} from './alliance-member-http.fixture.mjs';
 const account={signedIn:true,user:{id:'11111111-1111-4111-8111-111111111111',email:'fixture@example.invalid'}};
 const profile={id:'33333333-3333-4333-8333-333333333333',name:'Fixture member',community:'Example crew',bio:'A synthetic member profile for account lifecycle acceptance.',role:'builder',listed:false,publication:'private',updatedAt:'2026-10-21T12:00:00Z'};
 const json=(v,status=200,headers={})=>new Response(JSON.stringify(v),{status,headers:{'content-type':'application/json','cache-control':'private, no-store',...headers}});
@@ -15,6 +16,64 @@ function fixture(fetcher,options={}){
  return {...f,calls,events,channel,host,channelClosed:()=>channelClosed};
 }
 const regular=url=>url.endsWith('/session')?json(account):json({profile,revision:1});
+
+test('interrupted owner save survives sign-out exactly once and the next member opens their own profile', {timeout:5000}, async () => {
+ const owner=memberHttpFixture();
+ const member=memberHttpFixture({identity:{actor:'22222222-1111-4111-8111-111111111111',session:'33333333-2222-4222-8222-222222222222',profileOffset:19}});
+ const accepted=deferred(), deliver=deferred();
+ let actor=owner;
+ const f=fixture(async (url,init) => {
+  if (!actor) return json({signedIn:false},401);
+  const response=await actor.fetcher(url,init);
+  if (init.method==='POST') {
+   assert.equal(response.status,200);
+   accepted.resolve();
+   await deliver.promise;
+  }
+  return response;
+ });
+ const signOut=() => {
+  actor=null;
+  f.channel.dispatchEvent(new MessageEvent('message',{data:{type:'signed-out',remoteRevoked:true}}));
+ };
+ const open=async accountFixture => {
+  actor=accountFixture;
+  assert.equal(await f.host.check(),true);
+  await f.get('read').emit('click');
+ };
+ const writes=()=>f.calls.filter(call=>call.init.method==='POST').length;
+ try {
+  await open(owner);
+  const fields=sampleFields();
+  for (const [key,value] of Object.entries(fields)) {
+   if (key==='listed') f.get(key).checked=value;
+   else f.get(key).value=value;
+   await f.get(key).emit('input');
+  }
+  const saving=f.get('form').emit('submit');
+  await accepted.promise;
+  assert.equal(owner.revision,1);
+  signOut();
+  assert.equal(f.get('name').value,'');
+  assert.equal(f.get('current-body').textContent,'');
+  assert.equal(f.get('form').getAttribute('aria-busy'),'false');
+  await open(member);
+  assert.equal(f.get('name').value,'');
+  deliver.resolve();
+  await saving;
+  await tick();
+  assert.equal(f.get('name').value,'');
+  assert.equal(member.revision,0);
+  assert.doesNotMatch(f.get('status').textContent,/was saved/);
+  signOut();
+  await open(owner);
+  assert.equal(f.get('name').value,fields.name);
+  assert.equal(f.get('listed').checked,fields.listed);
+  await f.get('form').emit('submit');
+  assert.equal(writes(),1);
+  assert.equal(owner.revision,1);
+ } finally { deliver.resolve(); f.host.dispose(); owner.close(); member.close(); }
+});
 
 const reviewOptions={collaborationEnabled:true,feedbackEnabled:true,reportReviewEnabled:true};
 const reportId='99999999-9999-4999-8999-999999999999';

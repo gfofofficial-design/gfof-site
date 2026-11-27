@@ -26,6 +26,7 @@ function fixture({enabled=true}={}){
  const server={profile:null,revision:0,lose:false,gate:null},calls=[];let factoryCalls=0,next=0;
  const controller=mountMemberProfileForm(document,{enabled,createClient:onState=>{factoryCalls++;return createMemberProfileClient({enabled:true,profileRevisions:true,origin:'https://deploy-preview-124--gfof.netlify.app',newOperationId:()=>`${String(++next).padStart(8,'0')}-5555-4555-8555-555555555555`,onState,fetcher:async(endpoint,init)=>{
   calls.push({endpoint,init});let body,status=200;
+  if(init.method==='POST'&&server.dropBeforeCommit){server.dropBeforeCommit=false;throw Error('Fictional connection interrupted before acceptance');}
   if(init.method==='GET')body={profile:structuredClone(server.profile),revision:server.revision};
   else{const request=JSON.parse(init.body);if(request.revision!==server.revision){body={state:'conflict',revision:server.revision};status=409;}else{server.revision++;server.profile=profile(request.profile);body={state:'saved',profile:structuredClone(server.profile),revision:server.revision,operationId:request.operationId};}}
   await server.gate?.promise;if(init.method==='POST'&&server.lose){server.lose=false;throw Error('Synthetic lost response');}
@@ -58,6 +59,54 @@ test('lost response preserves the draft and cannot be unlocked by a current read
  const f=fixture();try{await f.get('read').emit('click');await f.fill();f.server.lose=true;await f.get('form').emit('submit');assert.equal(f.server.revision,1);assert.match(f.get('status').textContent,/may have completed/);const count=f.calls.length;await f.get('form').emit('submit');assert.equal(f.calls.length,count);
  await f.get('read').emit('click');assert.equal(f.get('comparison').hidden,false);assert.equal(f.get('save').getAttribute('aria-disabled'),'true');assert.equal(f.get('bio').value,input().bio);await f.get('accept').emit('click');assert.equal(f.calls.length,count+1);
  }finally{f.controller.dispose();}
+});
+test('a recovered matching profile needs no second save and a changed directory choice remains editable', async () => {
+ const f=fixture();
+ try {
+  await f.get('read').emit('click');
+  await f.fill({...input(),name:'  Fixture Explorer  '});
+  f.server.lose=true;
+  await f.get('form').emit('submit');
+  const writes=()=>f.calls.filter(call=>call.init.method==='POST').length;
+  assert.equal(writes(),1);
+  await f.get('read').emit('click');
+  assert.match(f.get('status').textContent,/matches the recorded profile/i);
+  assert.equal(f.get('comparison').hidden,false);
+  assert.equal(f.get('name').value,'  Fixture Explorer  ');
+  await f.get('accept').emit('click');
+  assert.equal(f.document.activeElement,f.get('name'));
+  assert.equal(f.get('save').getAttribute('aria-disabled'),'true');
+  await f.get('form').emit('submit');
+  assert.equal(writes(),1);
+  assert.equal(f.server.revision,1);
+  f.get('listed').checked=true;
+  await f.get('listed').emit('change');
+  assert.equal(f.get('save').getAttribute('aria-disabled'),'false');
+  await f.get('form').emit('submit');
+  assert.equal(writes(),2);
+  assert.equal(f.server.profile.listed,true);
+ } finally { f.controller.dispose(); }
+});
+test('a lost save that never arrived needs an explicit comparison and a new save', async () => {
+ const f=fixture();
+ try {
+  await f.get('read').emit('click');
+  await f.fill();
+  f.server.dropBeforeCommit=true;
+  await f.get('form').emit('submit');
+  assert.match(f.get('status').textContent,/may have completed/);
+  await f.get('read').emit('click');
+  assert.doesNotMatch(f.get('status').textContent,/matches the recorded profile/i);
+  assert.equal(f.get('save').getAttribute('aria-disabled'),'true');
+  await f.get('form').emit('submit');
+  assert.equal(f.server.revision,0);
+  await f.get('accept').emit('click');
+  assert.equal(f.document.activeElement,f.get('save'));
+  assert.equal(f.calls.filter(call=>call.init.method==='POST').length,1);
+  await f.get('form').emit('submit');
+  assert.equal(f.server.revision,1);
+  assert.equal(f.server.profile.name,input().name);
+ } finally { f.controller.dispose(); }
 });
 test('field errors focus their input, keep help text and clear on correction without changing the draft',async()=>{
  const f=fixture();try{await f.get('read').emit('click');await f.fill({...input(),name:'X'});await f.get('form').emit('submit');assert.equal(f.calls.length,1);assert.equal(f.document.activeElement,f.get('name'));assert.equal(f.get('name').getAttribute('aria-invalid'),'true');assert.equal(f.get('name').getAttribute('aria-describedby'),'ap-name-help ap-name-error');

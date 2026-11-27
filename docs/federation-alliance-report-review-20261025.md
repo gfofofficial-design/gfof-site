@@ -124,3 +124,17 @@ explicit synthetic adapters with ephemeral test keys. Actual PostgreSQL/session
 and signed application interactions do not establish hosted-provider, independent
 machine or assistive-technology acceptance. All disposable services and scratch
 must be removed after the run. This fixture never contacts hosted services.
+
+## Stable review inventories across time zones
+
+The member store sets UTC and ISO date formatting locally in every review
+transaction, matching native backup capture. A review timestamp otherwise changes
+its JSON encoding with the connection's time zone, producing different recovery
+hashes for unchanged rows. Commit restores the connection's original settings.
+Database function definitions, permissions and backup packages are unchanged.
+
+The native regression seeds a fictional nonempty review, reproduces the original
+hash difference, then compares actual restricted-store inventories under UTC/ISO
+and Chicago/German connection defaults. It also verifies restored session defaults
+and unchanged function identity, body, configuration and permissions. This source
+fix requires a separately reviewed closed member-runtime update before hosted use.

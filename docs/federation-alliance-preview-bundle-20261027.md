@@ -41,6 +41,19 @@ shutdown of all dependencies; repeated closes share the same completion. Driver
 errors never escape the fixed bundle error. Shutdown completion is a local
 lifecycle result, not independent proof that a provider ended remote sessions.
 
+The finite host now exposes an explicit `drain({timeoutMs})` observation (at most
+45 seconds). It closes admission first and waits for the underlying preparation
+or request jobs to settle, including retirement of a bundle constructed after
+cancellation. The earlier unavailable/unknown HTTP response is not treated as
+job completion. A timeout or reported bundle-close failure returns `unknown`;
+the host remains closed and cannot prepare a replacement generation. A later
+observation can confirm that the original job finally settled, without repeating
+the request. Success is deliberately named `local_work_settled`, and always sets
+`providerClosureVerified:false`. Existing pool shutdown may have its own bounded
+wait, so fresh independent database session/prepared-transaction observations
+and fleet/ingress fencing are still required before maintenance or reopening.
+No remote lifecycle authority follows from this local result.
+
 Use this factory only inside the existing finite host's explicit
 `openApplication({signal})` operation. The finite host supplies the reviewed
 preview identity, immutable UTC window, admission budget and expiry handling.
