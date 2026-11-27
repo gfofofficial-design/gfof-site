@@ -18,6 +18,29 @@ test('production and branch deploys inherit the same restricted output as previe
   }
 });
 
+test('Federation Learn links to named lessons and keeps the new exercises readable without scripts', async () => {
+  const html = await readFile(new URL('../learn.html', import.meta.url), 'utf8');
+  const topics = [...html.matchAll(/<a href="#([a-z-]+)"><strong>/g)].map(([, id]) => id);
+  const articles = [...html.matchAll(/<article class="learn-lesson" id="([a-z-]+)" tabindex="-1" aria-labelledby="([a-z-]+)">([\s\S]*?)<\/article>/g)];
+  assert.deepEqual(topics, articles.map(([, id]) => id));
+  assert.equal(new Set(topics).size, topics.length);
+  for (const [, id, heading, lesson] of articles) {
+    assert.ok(lesson.includes(`<h2 id="${heading}">`), id);
+  }
+  const sourceByLesson = new Map([
+    ['transaction-receipts', 'https://solana.com/docs/rpc/http/gettransaction'],
+    ['token-delegation', 'https://solana.com/docs/tokens/basics/approve-delegate'],
+    ['lock-records', 'https://docs.streamflow.finance/en/articles/9670511-token-lock-faq'],
+  ]);
+  for (const [id, source] of sourceByLesson) {
+    const lesson = articles.find(([, candidate]) => candidate === id)?.[3];
+    assert.ok(lesson, id);
+    assert.match(lesson, /<details>\s*<summary>[^<]+<\/summary>\s*<p>In this fictional /);
+    assert.ok(lesson.includes(`href="${source}"`), id);
+    assert.doesNotMatch(lesson, /<form|<script/i);
+  }
+});
+
 async function fixture(t,files) {
   const root=await mkdtemp(join(tmpdir(),'federation-static-'));
   t.after(()=>rm(root,{recursive:true,force:true}));
