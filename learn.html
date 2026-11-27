@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Learn blockchain basics, stablecoins, DeFi lending, bridges, token controls and wallet safety with practical Federation examples.">
+  <meta name="description" content="Practice reading Solana transactions, spending permissions and token locks. Explore beginner lessons on blockchain, DeFi and wallet safety.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
   <title>Federation Learn · Galactic Federation</title>
   <link rel="canonical" href="https://galacticfederation.co/learn">
@@ -35,12 +35,15 @@
       </div>
       <nav class="learn-index" id="lesson-topics" tabindex="-1" aria-label="Lesson topics">
         <a href="#blockchain"><strong>Blockchain basics</strong><span>Addresses, mints and transactions</span></a>
+        <a href="#transaction-receipts"><strong>Transaction receipts</strong><span>Check the outcome, fee and balances</span></a>
         <a href="#liquidity"><strong>Liquidity</strong><span>Compare what the same order could cost</span></a>
         <a href="#wallet-safety"><strong>Wallet safety</strong><span>Read permissions before approving</span></a>
+        <a href="#token-delegation"><strong>Delegated spending</strong><span>Check who can use a token account</span></a>
         <a href="#stablecoins"><strong>Stablecoins</strong><span>A price target is not a guarantee</span></a>
         <a href="#defi-lending"><strong>DeFi lending</strong><span>See what a collateral price drop changes</span></a>
         <a href="#bridges"><strong>Bridges</strong><span>Check the asset on both sides</span></a>
         <a href="#token-controls"><strong>Token controls</strong><span>Read the rules behind a token</span></a>
+        <a href="#lock-records"><strong>Token lock records</strong><span>Verify what is locked and when</span></a>
       </nav>
     </header>
 
@@ -60,6 +63,25 @@
         <div class="learn-links">
           <a href="https://dossiertrack.co/token-structure">Inspect a Solana mint with Dossier</a>
           <a href="https://solana.com/docs/core">Solana core concepts</a>
+        </div>
+      </article>
+
+      <article class="learn-lesson" id="transaction-receipts" tabindex="-1" aria-labelledby="receipts-title">
+        <h2 id="receipts-title">Read a Solana transaction receipt</h2>
+        <p>Look up the transaction signature in a trusted explorer on the correct network. Check the outcome and confirmation status separately before interpreting the balances.</p>
+        <dl class="learn-terms">
+          <div><dt>Outcome</dt><dd>Look for success or an error. A finalized record can show either outcome.</dd></div>
+          <div><dt>Fee</dt><dd>Find the SOL fee and the account that paid it. A transaction that runs and fails can still charge the fee payer.</dd></div>
+          <div><dt>Balance changes</dt><dd>Compare the same accounts and mints before and after. Read the instructions alongside the balance changes to understand what happened.</dd></div>
+        </dl>
+        <details>
+          <summary>A finalized 10 USDC transfer shows an error. What changed?</summary>
+          <p>In this fictional receipt, the transfer failed. The recipient received 0 USDC and the fee payer paid 0.000005 SOL.</p>
+        </details>
+        <div class="learn-links">
+          <a href="https://dossiertrack.co/transaction-trail">Practice reading records in Dossier Transaction Trail</a>
+          <a href="https://solana.com/docs/rpc/http/gettransaction">Solana transaction fields</a>
+          <a href="https://solana.com/docs/core/fees">Solana fee rules</a>
         </div>
       </article>
 
@@ -125,6 +147,25 @@
         </div>
       </article>
 
+      <article class="learn-lesson" id="token-delegation" tabindex="-1" aria-labelledby="delegation-title">
+        <h2 id="delegation-title">Check delegated spending before signing</h2>
+        <p>A Solana token-account delegate can transfer or burn tokens from that account up to the approved amount. Read the token account, mint, delegate address and limit in the request.</p>
+        <dl class="learn-terms">
+          <div><dt>Wallet connection</dt><dd>An app can see the public address you share. Review any request to sign separately.</dd></div>
+          <div><dt>On-chain approval</dt><dd>The token account records the delegate and its allowance. A remaining allowance can outlast the app connection.</dd></div>
+          <div><dt>Revocation</dt><dd>Follow your wallet's official instructions. Once revocation succeeds, the delegate's remaining allowance clears. Any completed transfers remain recorded.</dd></div>
+        </dl>
+        <details>
+          <summary>A 10-token deposit asks for a 100-token allowance. What should you check?</summary>
+          <p>In this fictional request, the delegate would be allowed to use up to 100 tokens from the account. Pause and check why the app requests more than the deposit. Verify the delegate, mint and amount against the action you intend before signing.</p>
+        </details>
+        <div class="learn-links">
+          <a href="https://solana.com/docs/tokens/basics/approve-delegate">Solana delegate approvals</a>
+          <a href="https://solana.com/docs/tokens/basics/revoke-delegate">Solana delegate revocation</a>
+          <a href="https://help.phantom.com/articles/29995498642195">Phantom app connection guidance</a>
+        </div>
+      </article>
+
       <article class="learn-lesson" id="stablecoins" tabindex="-1" aria-labelledby="stablecoins-title">
         <h2 id="stablecoins-title">Stablecoins: what supports the price?</h2>
         <p>A stablecoin targets a reference value, often one US dollar. The market price can move away from that target. Compare the backing, redemption route and who can change or restrict the token. Fiat reserves, crypto collateral and algorithmic designs have different failure modes.</p>
@@ -155,8 +196,26 @@
         <p>For project teams: publish the purpose of each control, its current authority, who can change it and the evidence date. Explain limitations in ordinary language.</p>
         <div class="learn-links"><a href="https://solana.com/docs/tokens/extensions">Solana: token extensions</a><a href="https://dossiertrack.co/token-structure">Inspect controls with Dossier Lens</a><a href="https://dossiertrack.co/volume-watch">Explore fictional volume evidence</a></div>
       </article>
+      <article class="learn-lesson" id="lock-records" tabindex="-1" aria-labelledby="lock-records-title">
+        <h2 id="lock-records-title">Verify a token lock record</h2>
+        <p>Start with a particular lock address and the asset it holds. A record may cover project tokens or LP tokens that represent a share of a liquidity pool. Match the asset and amount to the claim you are checking.</p>
+        <dl class="learn-terms">
+          <div><dt>Asset and amount</dt><dd>Match the exact mint and check how much the contract holds at the time of the read.</dd></div>
+          <div><dt>Release schedule</dt><dd>Find the next release date, the final release date and the amount eligible at each step.</dd></div>
+          <div><dt>Permissions</dt><dd>Check who, if anyone, can cancel the contract or transfer the recipient's claim. Record missing terms as unknown.</dd></div>
+        </dl>
+        <details>
+          <summary>A project reports 100,000 locked tokens. One record shows 40,000. What can you confirm?</summary>
+          <p>In this fictional example, the record supports 40,000 tokens held in that lock at the observed time. The status of the other 60,000 tokens remains unknown until another record accounts for them.</p>
+        </details>
+        <div class="learn-links">
+          <a href="/treasury">Read the Federation's published lock records</a>
+          <a href="https://docs.streamflow.finance/en/articles/9670511-token-lock-faq">Streamflow token lock rules</a>
+          <a href="https://docs.streamflow.finance/en/articles/9670413-create-a-vesting-contract">Streamflow vesting settings</a>
+        </div>
+      </article>
     </div>
-    <p>Education sources reviewed November 23, 2026. Protocol rules can change. Examples use fictional inputs and do not offer a trade, loan or return.</p>
+    <p>Education sources reviewed November 23–27, 2026. Protocol rules can change. Examples use fictional inputs and do not offer a trade, loan or return.</p>
   </main>
 
   <footer class="learn-footer learn-wrap">
