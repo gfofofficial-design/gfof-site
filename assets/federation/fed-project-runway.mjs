@@ -1,5 +1,5 @@
 import {
-  parseUsd, planFields, planFileLimit, projectCash, projectionMonths, readPlanFile, writePlanFile
+  monthlySpendingLimit, parseUsd, planFields, planFileLimit, projectCash, projectionMonths, readPlanFile, writePlanFile
 } from './fed-project-runway-core.mjs';
 
 const byId = id => document.getElementById('runway-' + id);
@@ -12,6 +12,9 @@ const form = byId('form');
 const change = byId('change');
 const status = byId('status');
 const result = byId('results');
+const scenarioOutput = byId('scenarios');
+const limitMonths = byId('limit-months');
+const limitOutput = byId('limits');
 const exampleButton = byId('example');
 const clearButton = byId('clear');
 const initialStatus = status.textContent;
@@ -97,6 +100,41 @@ function renderScenario(title, scenario) {
   return card;
 }
 
+function renderSpendingLimit({title, inputs}, months) {
+  const row = byId('limit').content.firstElementChild.cloneNode(true);
+  const limit = monthlySpendingLimit(inputs, months);
+  let amount;
+  let comparison;
+  if (limit === null) {
+    amount = usd(inputs.upfront - inputs.cash) + ' short today';
+    comparison = 'The upfront gap must be covered before setting a monthly limit.';
+  } else {
+    amount = usd(limit) + ' per month';
+    const difference = inputs.spend - limit;
+    comparison = difference === 0 ? 'Entered spending matches this limit.' :
+      'Entered spending is ' + usd(Math.abs(difference)) + (difference > 0 ? ' above' : ' below') + ' this limit per month.';
+  }
+  const values = {title, amount, comparison};
+  for (const node of row.querySelectorAll('[data-limit]')) {
+    node.textContent = values[node.dataset.limit];
+  }
+  return row;
+}
+
+function renderSpendingLimits() {
+  if (!calculatedPlan) return;
+  const months = Number(limitMonths.value);
+  limitOutput.replaceChildren(...calculatedPlan.plans.map(plan => renderSpendingLimit(plan, months)));
+}
+
+function clearCalculation() {
+  calculatedPlan = undefined;
+  result.hidden = true;
+  scenarioOutput.replaceChildren();
+  limitOutput.replaceChildren();
+  downloadStatus.textContent = '';
+}
+
 function updateActions() {
   const empty = fields.every(({input}) => input.value === '');
   clearButton.hidden = empty;
@@ -104,8 +142,7 @@ function updateActions() {
 }
 
 function calculate() {
-  calculatedPlan = undefined;
-  downloadStatus.textContent = '';
+  clearCalculation();
   const amounts = {};
   let firstInvalid;
   for (const field of fields) {
@@ -120,7 +157,6 @@ function calculate() {
   }
 
   if (firstInvalid) {
-    result.hidden = true;
     status.textContent = 'Check the highlighted amounts and calculate again.';
     if (change.contains(firstInvalid)) change.open = true;
     firstInvalid.focus();
@@ -128,17 +164,16 @@ function calculate() {
   }
 
   const {cash, receipts, spend, upfront, planned} = amounts;
-  const cards = [renderScenario('Current plan', projectCash({cash, receipts, spend}))];
+  const plans = [{title: 'Current plan', inputs: {cash, receipts, spend}}];
   if (upfront !== null || planned !== null) {
-    cards.push(renderScenario('Planned change', projectCash({
-      cash, receipts, spend: planned ?? spend, upfront: upfront ?? 0
-    })));
+    plans.push({title: 'Planned change', inputs: {cash, receipts, spend: planned ?? spend, upfront: upfront ?? 0}});
   }
 
   const source = sources[inputSource];
-  calculatedPlan = {amounts, example: source.example};
+  calculatedPlan = {amounts, example: source.example, plans};
   byId('provenance').textContent = 'Source · ' + source.label;
-  byId('scenarios').replaceChildren(...cards);
+  scenarioOutput.replaceChildren(...plans.map(({title, inputs}) => renderScenario(title, projectCash(inputs))));
+  renderSpendingLimits();
   status.textContent = '';
   result.hidden = false;
   byId('results-title').focus();
@@ -224,15 +259,16 @@ form.addEventListener('submit', event => {
   calculate();
 });
 
+limitMonths.addEventListener('change', renderSpendingLimits);
+
 for (const field of fields) {
   field.input.addEventListener('input', () => {
     inputSource = editedSources[inputSource] ?? inputSource;
-    calculatedPlan = undefined;
     showFieldError(field);
     if (!result.hidden) {
-      result.hidden = true;
       status.textContent = 'Amounts changed. Calculate again to update the estimate.';
     }
+    clearCalculation();
     updateActions();
   });
 }
@@ -248,12 +284,10 @@ exampleButton.addEventListener('click', () => {
 clearButton.addEventListener('click', () => {
   form.reset();
   clearFileSelection();
-  calculatedPlan = undefined;
+  clearCalculation();
   for (const field of fields) showFieldError(field);
   change.open = false;
   inputSource = 'entered';
-  result.hidden = true;
-  byId('scenarios').replaceChildren();
   status.textContent = initialStatus;
   updateActions();
   fields[0].input.focus();

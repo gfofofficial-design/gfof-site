@@ -100,6 +100,21 @@
         <div id="runway-results" hidden>
           <p id="runway-provenance" class="runway-source"></p>
           <div id="runway-scenarios"></div>
+          <details class="runway-disclosure">
+            <summary>Monthly spending limit</summary>
+            <div class="runway-limit-control">
+              <label for="runway-limit-months">Planning horizon</label>
+              <select id="runway-limit-months" aria-describedby="runway-limit-hint">
+                <option value="3">3 months</option>
+                <option value="6" selected>6 months</option>
+                <option value="12">12 months</option>
+              </select>
+            </div>
+            <p id="runway-limit-hint" class="runway-hint">The limit targets a $0 ending balance. Bills due before receipts can still create a gap.</p>
+            <div role="status" aria-atomic="true">
+              <dl id="runway-limits" class="runway-limits"></dl>
+            </div>
+          </details>
           <div class="runway-actions">
             <button id="runway-download" type="button">Download plan (.json)</button>
           </div>
@@ -120,6 +135,7 @@
         <p>The projection applies the same receipts and spending each month. Paydays, late payments, taxes and irregular costs affect the result only through the amounts you enter. In practice, a bill can be due before receipts arrive. A projected funding gap shows how much extra cash the plan would require by that month-end.</p>
         <h2>Worked example</h2>
         <p>A small studio has $24,000, receives $6,000 per month and spends $10,000 per month. At a $4,000 monthly shortfall, its cash covers 6 months. With a $4,000 upfront expense and monthly spending of $12,000, it has $20,000 at the start and a $6,000 monthly shortfall. That covers about 3.3 months.</p>
+        <p>The six-month spending limit is $10,000 per month for the current plan and $9,333.33 per month after the upfront cost. Divide the cash left after upfront costs by six, round down to the cent, and add monthly receipts.</p>
         <p><a href="https://www.sba.gov/counseling/manage-your-business/">U.S. Small Business Administration guide to managing business finances</a></p>
       </div>
     </details>
@@ -141,6 +157,12 @@
         <div><dt>Month 6</dt><dd data-value="month-6"></dd></div>
       </dl>
     </article>
+  </template>
+  <template id="runway-limit">
+    <div>
+      <dt data-limit="title"></dt>
+      <dd><strong data-limit="amount"></strong><span data-limit="comparison"></span></dd>
+    </div>
   </template>
 </body>
 </html>
