@@ -224,6 +224,54 @@
     <p class="small">The team reviews details and links before they appear in the public directory. The reply email stays with the private request.</p>
   </section>
   <form id="project-send-form" name="alliance-project-request" method="POST" action="/alliance-request-received" data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="alliance-project-request"><input type="hidden" name="subject" value="Alliance project request (%{submissionId})"><p hidden><label>Leave this empty<input name="bot-field" autocomplete="off" tabindex="-1"></label></p><label for="project-brief">Prepared public brief</label><textarea id="project-brief" name="proposal" rows="10" readonly spellcheck="false"></textarea><div class="plan-actions"><button type="button" id="project-copy">Copy draft</button><a id="project-download" class="text-link" download="federation-project-introduction.txt" hidden>Download .txt ↓</a></div><p id="project-copy-status" class="small" role="status" aria-live="polite"></p><label for="project-reply-email">Reply email</label><input id="project-reply-email" type="email" name="email" maxlength="254" autocomplete="email" required aria-describedby="project-send-help"><label><input id="project-send-consent" name="review-consent" type="checkbox" value="send-for-review" required> Send this proposal and my reply email to GFOF for project-request review.</label><p id="project-send-help" class="small">The request is stored privately through Netlify Forms and a notification is configured for gfofofficial@gmail.com. This is a request for review, not an accepted partnership or match. Do not include credentials or private financial information. Your selected artwork is not uploaded; arrange sharing separately. <a href="/command-deck-privacy">Data and privacy</a>.</p><button id="project-send" type="submit" class="button primary">Send request to GFOF</button></form></div><p class="console-note">A submitted request is not partner approval. Both projects must agree on a challenge before it is published.</p><a class="text-link" href="#bring-your-project">How to start the conversation ↓</a></div></div>
+      <details class="project-decision" id="project-decision">
+        <summary>Prepare a project decision brief</summary>
+        <p class="small" id="decision-help">Put a decision and its options in a short brief. Your draft stays in this tab until you copy or download it.</p>
+        <div class="project-kit-layout">
+          <form id="decision-form" autocomplete="off" novalidate aria-describedby="decision-help">
+            <fieldset id="decision-fields" disabled>
+              <legend>Decision and options</legend>
+              <label for="decision-question">Decision to make</label>
+              <input id="decision-question" type="text" maxlength="180" required aria-describedby="decision-status" placeholder="Which guide should we publish first?">
+              <label for="decision-options">Options to compare</label>
+              <p class="small" id="decision-options-help">Enter two to four options, one per line.</p>
+              <textarea id="decision-options" rows="3" maxlength="643" required aria-describedby="decision-options-help decision-status"></textarea>
+              <div class="decision-ownership">
+                <div>
+                  <label for="decision-owner">Decision owner <span class="small">· optional</span></label>
+                  <input id="decision-owner" type="text" maxlength="80" aria-describedby="decision-status">
+                </div>
+                <div>
+                  <label for="decision-review-date">Review date <span class="small">· optional</span></label>
+                  <input id="decision-review-date" type="date" aria-describedby="decision-status">
+                </div>
+              </div>
+              <label for="decision-sources">Evidence links <span class="small">· optional</span></label>
+              <p class="small" id="decision-sources-help">Use up to three public HTTPS links you are ready to share, one per line.</p>
+              <textarea id="decision-sources" rows="2" maxlength="1502" spellcheck="false" aria-describedby="decision-sources-help decision-status"></textarea>
+              <label for="decision-unknowns">Open questions <span class="small">· optional</span></label>
+              <textarea id="decision-unknowns" rows="3" maxlength="480" aria-describedby="decision-status" placeholder="What do both teams still need to confirm?"></textarea>
+              <div class="plan-actions">
+                <button type="submit" class="button primary">Prepare decision brief</button>
+                <button type="button" id="decision-clear">Clear decision</button>
+              </div>
+            </fieldset>
+          </form>
+          <div class="project-draft">
+            <h3 id="decision-draft-title" tabindex="-1">Review your decision brief</h3>
+            <p id="decision-status" class="console-status" role="status" aria-live="polite">The decision worksheet needs JavaScript.</p>
+            <div id="decision-output" hidden>
+              <label for="decision-brief">Prepared decision brief</label>
+              <textarea id="decision-brief" rows="10" readonly spellcheck="false"></textarea>
+              <div class="plan-actions">
+                <button type="button" id="decision-copy">Copy decision brief</button>
+                <a id="decision-download" class="text-link" download="alliance-decision-brief.txt" hidden>Download .txt ↓</a>
+              </div>
+              <p id="decision-copy-status" class="small" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+      </details>
     </section>
 
     <section class="section community-hub" id="community-hub" aria-labelledby="hub-title">

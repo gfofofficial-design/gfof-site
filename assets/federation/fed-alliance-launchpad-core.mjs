@@ -1,5 +1,5 @@
 import {publishedStations, safeWebsite, validMint} from './fed-alliance-registry.mjs';
-import {projectSocialLinks} from './fed-alliance-socials.mjs';
+import {projectSocialLinks, publicProjectUrl} from './fed-alliance-socials.mjs';
 
 // Reviewed local activities. No clicks, plans or checkboxes are completion evidence.
 export const ACTIVITIES = Object.freeze([
@@ -150,4 +150,82 @@ export function prepareProjectBrief(fields, checks=[]) {
     'No wallet keys, private contact details or account credentials belong in this brief.',
     'Alliance: https://galacticfederation.co/alliance#bring-your-project'].join('\n');
   return {ok:true,text,prepared:checks.length,preview:{name,website,summary,links:social.links}};
+}
+
+const briefControls = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u2028-\u202e\u2066-\u2069]/u;
+
+function decisionValue(value) {
+  return typeof value === 'string' ? value.replace(/\r\n?/g, '\n').trim() : '';
+}
+
+function decisionLines(value) {
+  return decisionValue(value).split('\n').map(line => line.trim()).filter(Boolean);
+}
+
+function decisionLine(value, limit) {
+  return value.length <= limit && !briefControls.test(value) && !/[\n\t]/.test(value);
+}
+
+export function prepareDecisionBrief(fields = {}) {
+  const question = decisionValue(fields?.question);
+  if (!question || !decisionLine(question, 180)) {
+    return {ok:false, field:'question', message:'Enter the decision in one line of up to 180 characters.'};
+  }
+
+  const options = decisionLines(fields.options);
+  const uniqueOptions = new Set(options.map(line => line.toLowerCase()));
+  if (options.length < 2 || options.length > 4 || uniqueOptions.size !== options.length ||
+      options.some(line => !decisionLine(line, 160))) {
+    return {ok:false, field:'options', message:'Enter two to four distinct options, one per line and up to 160 characters each.'};
+  }
+
+  const owner = decisionValue(fields.owner);
+  if (!decisionLine(owner, 80)) {
+    return {ok:false, field:'owner', message:'Use one line of up to 80 characters for the decision owner.'};
+  }
+
+  const reviewDate = decisionValue(fields.reviewDate);
+  if (reviewDate) {
+    const date = new Date(reviewDate + 'T00:00:00Z');
+    if (!/^(?!0000)\d{4}-\d{2}-\d{2}$/.test(reviewDate) ||
+        !Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== reviewDate) {
+      return {ok:false, field:'reviewDate', message:'Choose a valid calendar date for the review.'};
+    }
+  }
+
+  const sourceLines = decisionLines(fields.sources);
+  if (sourceLines.length > 3) {
+    return {ok:false, field:'sources', message:'Enter up to three HTTPS evidence links, one per line.'};
+  }
+  const sources = new Set();
+  for (const [index, line] of sourceLines.entries()) {
+    const url = publicProjectUrl(line);
+    if (!url) {
+      return {ok:false, field:'sources', message:'Use a public HTTPS evidence link on entry ' + (index + 1) + '.'};
+    }
+    sources.add(url.href);
+  }
+
+  const unknowns = decisionValue(fields.unknowns);
+  if (unknowns.length > 480 || briefControls.test(unknowns)) {
+    return {ok:false, field:'unknowns', message:'Use up to 480 characters of readable text for open questions.'};
+  }
+
+  const text = [
+    'ALLIANCE DECISION BRIEF // DISCUSSION DRAFT',
+    'Decision · ' + question,
+    '',
+    'Options',
+    ...options.map((option, index) => `${index + 1}. ${option}`),
+    '',
+    'Decision owner · ' + (owner || 'Not provided'),
+    'Review date · ' + (reviewDate || 'Not provided'),
+    '',
+    'Evidence',
+    ...(sources.size ? [...sources].map(url => '- ' + url) : ['No evidence links provided.']),
+    '',
+    'Open questions',
+    unknowns || 'No open questions recorded.',
+  ].join('\n');
+  return {ok:true, text};
 }

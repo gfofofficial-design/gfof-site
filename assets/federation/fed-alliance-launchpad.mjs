@@ -1,4 +1,4 @@
-import {ACTIVITIES, ROUTES, PREP_CHECKS, COMPETITION_FORMATS, COMPETITION_STARTERS, matchingActivities, updateSelection, crewPlan, prepareProjectBrief} from './fed-alliance-launchpad-core.mjs';
+import {ACTIVITIES, ROUTES, PREP_CHECKS, COMPETITION_FORMATS, COMPETITION_STARTERS, matchingActivities, updateSelection, crewPlan, prepareProjectBrief, prepareDecisionBrief} from './fed-alliance-launchpad-core.mjs';
 import {publishedStations} from './fed-alliance-registry.mjs';
 import {createArtworkSelection, artworkBrief} from './fed-alliance-artwork.mjs';
 
@@ -48,7 +48,7 @@ export function mountAllianceLaunchpad(document, options={}) {
       invalidateCopy(key);
       const token={}; copies.set(key,token);
       const current=()=>copies.get(key) === token && area.value === text && !byId(key+'-output').hidden;
-      byId(key+'-copy-status').textContent='Copying… The text remains available below.';
+      byId(key+'-copy-status').textContent='Copying…';
       try {
         const interrupted=new Promise((_,reject)=>{
           token.cancel=()=>{unschedule(token.timer);reject(Error('Copy superseded'));};
@@ -59,7 +59,7 @@ export function mountAllianceLaunchpad(document, options={}) {
         if(current()) byId(key+'-copy-status').textContent='Copied. Review the draft before you choose to share it.';
       } catch {
         if(!current()) return;
-        byId(key+'-copy-status').textContent='Select and copy the text below. Nothing has been sent.';
+        byId(key+'-copy-status').textContent='Select and copy the draft text. Nothing has been sent.';
         area.focus(); area.select();
       } finally {
         unschedule(token.timer);
@@ -252,11 +252,81 @@ export function mountAllianceLaunchpad(document, options={}) {
     byId('project-interest').value='education';byId('project-format').value='creative';byId('project-goal').value='';syncCompetition();for(const key of Object.keys(PREP_CHECKS))byId('prep-'+key).checked=false;
     clearProjectOutput();prepCount();byId('project-prep-status').textContent='Worksheet cleared from this tab. Copies or downloaded files are not deleted.';byId('project-name').focus();
   });
-  bindCopy('crew'); bindCopy('project');
+
+  const decisionInputs = {
+    question: byId('decision-question'),
+    options: byId('decision-options'),
+    owner: byId('decision-owner'),
+    reviewDate: byId('decision-review-date'),
+    sources: byId('decision-sources'),
+    unknowns: byId('decision-unknowns'),
+  };
+  const decisionStatus = byId('decision-status');
+  const decisionOutput = byId('decision-output');
+  const decisionBrief = byId('decision-brief');
+  const decisionPrompt = 'Enter the decision and at least two options to prepare a brief.';
+  const decisionChanged = 'Draft changed. Prepare it again to share the latest version.';
+
+  function clearDecisionOutput() {
+    invalidateCopy('decision');
+    download('decision', '');
+    decisionOutput.hidden = true;
+    decisionBrief.value = '';
+    for (const field of Object.values(decisionInputs)) field.removeAttribute('aria-invalid');
+  }
+
+  function clearDecisionFields() {
+    for (const field of Object.values(decisionInputs)) field.value = '';
+    clearDecisionOutput();
+  }
+
+  function decisionError(field, message) {
+    decisionStatus.textContent = message;
+    decisionInputs[field].setAttribute('aria-invalid', 'true');
+    decisionInputs[field].focus();
+  }
+
+  listen(byId('decision-form'), 'submit', event => {
+    event.preventDefault();
+    clearDecisionOutput();
+    const fields = Object.fromEntries(Object.entries(decisionInputs).map(([key, field]) => [key, field.value]));
+    const result = prepareDecisionBrief(fields);
+    if (!result.ok) {
+      decisionError(result.field, result.message);
+      return;
+    }
+    if (decisionInputs.reviewDate.validity?.badInput) {
+      decisionError('reviewDate', 'Choose a valid calendar date for the review.');
+      return;
+    }
+    decisionBrief.value = result.text;
+    decisionOutput.hidden = false;
+    download('decision', result.text);
+    decisionStatus.textContent = 'Brief ready. Review it before sharing.';
+    byId('decision-draft-title').focus();
+  });
+  for (const field of Object.values(decisionInputs)) {
+    listen(field, 'input', () => {
+      const hadOutput = !decisionOutput.hidden;
+      clearDecisionOutput();
+      if (hadOutput) decisionStatus.textContent = decisionChanged;
+      else if (decisionStatus.textContent !== decisionChanged && decisionStatus.textContent !== decisionPrompt) {
+        decisionStatus.textContent = decisionPrompt;
+      }
+    });
+  }
+  listen(byId('decision-clear'), 'click', () => {
+    clearDecisionFields();
+    decisionStatus.textContent = 'Decision brief cleared.';
+    decisionInputs.question.focus();
+  });
+  bindCopy('crew'); bindCopy('project'); bindCopy('decision');
   renderActivities();renderPlan();prepCount();
   byId('crew-plan-title').setAttribute('tabindex','-1');
   for(const id of ['activity-controls','crew-controls','crew-output'])byId(id).hidden=false;
   byId('project-fields').disabled=false;
+  byId('decision-fields').disabled = false;
+  decisionStatus.textContent = decisionPrompt;
   if (profileTarget || requestProfile) byId('project-interest').value = 'profile';
   if (profileTarget) {
     for (const name of ['name','website','mint','summary']) byId('project-'+name).value = profileTarget[name];
@@ -266,7 +336,34 @@ export function mountAllianceLaunchpad(document, options={}) {
     byId('project-prep-status').textContent = 'Use public project details. You can review, copy, or send your draft.';
   }
   syncCompetition();
-  return {getSelection:()=>[...selected],dispose(){if(disposed)return;disposed=true;for(const removeListener of listeners)removeListener();listeners.length=0;byId('project-fields').disabled=true;byId('project-send').disabled=true;byId('project-reply-email').value='';byId('project-send-consent').checked=false;for(const key of ['crew','project']){byId(key+'-copy').disabled=true;byId(key+'-output').hidden=true;}byId('project-use-starter').disabled=true;byId('arena-prepare').disabled=true;artwork.dispose();for(const key of ['crew','project']){invalidateCopy(key);download(key,'');}}};
+  return {
+    getSelection: () => [...selected],
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      for (const removeListener of listeners) removeListener();
+      listeners.length = 0;
+      byId('project-fields').disabled = true;
+      byId('project-send').disabled = true;
+      byId('project-reply-email').value = '';
+      byId('project-send-consent').checked = false;
+      byId('project-use-starter').disabled = true;
+      byId('arena-prepare').disabled = true;
+      byId('decision-fields').disabled = true;
+      byId('decision-copy').disabled = true;
+      clearDecisionFields();
+      decisionStatus.textContent = '';
+      for (const key of ['crew', 'project']) {
+        byId(key + '-copy').disabled = true;
+        byId(key + '-output').hidden = true;
+      }
+      artwork.dispose();
+      for (const key of ['crew', 'project']) {
+        invalidateCopy(key);
+        download(key, '');
+      }
+    },
+  };
 }
 
 if(typeof document !== 'undefined') {

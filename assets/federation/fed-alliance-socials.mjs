@@ -15,7 +15,7 @@ const platforms = new Map([
   ['linktr.ee', 'Linktree'],
 ]);
 
-function publicUrl(value) {
+export function publicProjectUrl(value) {
   if (typeof value !== 'string' || value.length > 500 || !value.startsWith('https://') ||
     /[\s\p{Cc}\p{Cf}<>\\]/u.test(value)) return null;
   try {
@@ -35,7 +35,7 @@ export function projectSocialLinks(values = []) {
   }
   const links = new Map();
   for (const [index, value] of values.entries()) {
-    const url = publicUrl(value);
+    const url = publicProjectUrl(value);
     if (!url) return { error: 'Use a public HTTPS link on line ' + (index + 1) + '.' };
     const host = url.hostname.replace(/^(?:www|m)\./, '');
     links.set(url.href, { label: platforms.get(host) ?? host, host: url.hostname, href: url.href });
