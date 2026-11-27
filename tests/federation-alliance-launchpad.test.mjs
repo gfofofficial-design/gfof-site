@@ -1,11 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {ACTIVITIES, ROUTES, PREP_CHECKS, matchingActivities, selectActivities, updateSelection, crewPlan, prepareProjectBrief} from '../assets/federation/fed-alliance-launchpad-core.mjs';
+import {ACTIVITIES, ROUTES, PREP_CHECKS, matchingActivities, selectActivities, updateSelection, crewPlan, prepareProjectBrief, prepareDecisionBrief} from '../assets/federation/fed-alliance-launchpad-core.mjs';
 import {mountAllianceLaunchpad} from '../assets/federation/fed-alliance-launchpad.mjs';
 import {ARTWORK_LIMITS, artworkFileProblem, artworkSignature, artworkDimensions, artworkBrief, createArtworkSelection} from '../assets/federation/fed-alliance-artwork.mjs';
 
 const publicFields=()=>({name:'Example Community',website:'https://example.com/',mint:'',interest:'education'});
+const decisionFields = () => ({
+  question: 'Which wallet-safety lesson should we publish first?',
+  options: 'Draft a written guide\r\nRun a joint learning session',
+  owner: 'Both project leads',
+  reviewDate: '2028-02-29',
+  sources: 'https://galacticfederation.co/learn\nhttps://dossiertrack.co/token-structure?mint=Example\nhttps://galacticfederation.co/learn',
+  unknowns: 'Which team can review accessibility?\nWho will record feedback?',
+});
 const flush=()=>new Promise(setImmediate);
 function deferred(){let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};}
 
@@ -95,7 +103,12 @@ function fixture(options={}){
     clearTimeout:id=>timers.delete(id),
   });
   function setProject(fields=publicFields()){for(const [key,value] of Object.entries(fields))get('project-'+(key==='website'?'website':key)).value=value;}
-  return {get,api,document,created,revoked,copies,clock,setProject};
+  function setDecision(fields=decisionFields()) {
+    for (const [key, value] of Object.entries(fields)) {
+      get('decision-' + (key === 'reviewDate' ? 'review-date' : key)).value = value;
+    }
+  }
+  return {get,api,document,created,revoked,copies,clock,setProject,setDecision};
 }
 test('the console mounts eight activities, a usable route and no enrollment state',()=>{
   const b=fixture();assert.equal(b.get('activity-list').children.length,10);assert.deepEqual(b.api.getSelection(),ROUTES.welcome.ids);
@@ -352,4 +365,126 @@ test('a profile link targets only an already published project in the review dra
   const proof = {...publicFields(), interest:'profile', profileId:'gfof'};
   assert.match(prepareProjectBrief(proof).text, /Existing published profile: https:\/\/galacticfederation\.co\/projects\/gfof\//);
   assert.doesNotMatch(prepareProjectBrief({...proof,profileId:'unpublished'}).text, /Existing published profile/);
+});
+
+test('decision brief preserves option order, evidence queries, and explicit unknowns', () => {
+  const draft = prepareDecisionBrief(decisionFields());
+  assert.equal(draft.ok, true);
+  assert.match(draft.text, /DISCUSSION DRAFT\nDecision · Which wallet-safety lesson/);
+  assert.match(draft.text, /Options\n1\. Draft a written guide\n2\. Run a joint learning session/);
+  assert.match(draft.text, /Decision owner · Both project leads\nReview date · 2028-02-29/);
+  assert.match(draft.text, /Evidence\n- https:\/\/galacticfederation\.co\/learn\n- https:\/\/dossiertrack\.co\/token-structure\?mint=Example\n\nOpen questions/);
+  assert.match(draft.text, /Which team can review accessibility\?\nWho will record feedback\?$/);
+
+  const minimal = prepareDecisionBrief({question:'Choose a release order', options:'Publish first\nReview first'});
+  assert.match(minimal.text, /Decision owner · Not provided\nReview date · Not provided/);
+  assert.match(minimal.text, /No evidence links provided/);
+  assert.match(minimal.text, /No open questions recorded/);
+});
+
+test('decision brief identifies malformed fields without producing share text', () => {
+  assert.equal(prepareDecisionBrief(null).field, 'question');
+  for (const [field, value] of [
+    ['question', 'Wait\nPublish'],
+    ['options', 'Only one'],
+    ['options', 'Review first\nreview first '],
+    ['options', 'One\nTwo\nThree\nFour\nFive'],
+    ['reviewDate', '2026-02-29'],
+    ['reviewDate', '2026-04-31'],
+    ['sources', 'javascript:example'],
+    ['sources', 'https://u:p@example.com/'],
+    ['sources', 'https://127.0.0.1/'],
+    ['sources', 'https://example.com/\nhttps://example.com/a\nhttps://example.com/b\nhttps://example.com/c'],
+    ['unknowns', 'Invisible\u202E characters'],
+  ]) {
+    const invalid = prepareDecisionBrief({...decisionFields(), [field]:value});
+    assert.equal(invalid.ok, false, field);
+    assert.equal(invalid.field, field);
+    assert.equal(invalid.text, undefined);
+  }
+});
+
+test('decision export is explicit and independent of the project request', async () => {
+  const browser = fixture();
+  browser.setProject();
+  browser.get('project-form').emit('submit');
+  const introduction = browser.get('project-brief').value;
+  browser.setDecision();
+  browser.get('decision-form').emit('submit');
+
+  const brief = browser.get('decision-brief').value;
+  assert.equal(browser.get('decision-fields').disabled, false);
+  assert.equal(browser.get('decision-output').hidden, false);
+  assert.equal(browser.document.activeElement, browser.get('decision-draft-title'));
+  assert.deepEqual(browser.created.at(-1), {url:browser.get('decision-download').href, text:brief});
+  assert.equal(browser.get('project-brief').value, introduction);
+  assert.equal(browser.copies.length, 0);
+  await browser.get('decision-copy').emit('click');
+  assert.deepEqual(browser.copies, [brief]);
+
+  browser.get('project-clear').emit('click');
+  assert.equal(browser.get('decision-brief').value, brief);
+  browser.api.dispose();
+  assert.equal(browser.get('decision-brief').value, '');
+  assert.equal(browser.get('decision-question').value, '');
+  assert.equal(browser.get('decision-fields').disabled, true);
+
+  const markup = readFileSync(new URL('../alliance.html', import.meta.url), 'utf8');
+  const form = markup.match(/<form id="decision-form"[\s\S]*?<\/form>/)?.[0];
+  const intake = markup.match(/<form id="project-send-form"[\s\S]*?<\/form>/)?.[0];
+  assert.ok(form && intake);
+  assert.doesNotMatch(form, /\b(?:data-netlify|name\s*=|action\s*=|method\s*=)/i);
+  assert.doesNotMatch(intake, /id="decision-/);
+});
+
+test('editing a decision revokes its download and ignores late clipboard feedback', async () => {
+  const write = deferred();
+  const browser = fixture({copy:() => write.promise});
+  browser.setDecision();
+  browser.get('decision-form').emit('submit');
+  const downloadUrl = browser.get('decision-download').href;
+  const copying = browser.get('decision-copy').emit('click');
+
+  browser.get('decision-owner').value = 'New decision owner';
+  browser.get('decision-owner').emit('input');
+  write.resolve();
+  await copying;
+  assert.ok(browser.revoked.includes(downloadUrl));
+  assert.equal(browser.get('decision-download').href, undefined);
+  assert.equal(browser.get('decision-output').hidden, true);
+  assert.equal(browser.get('decision-copy-status').textContent, '');
+  assert.equal(browser.clock.timers.size, 0);
+
+  browser.get('decision-form').emit('submit');
+  assert.match(browser.get('decision-brief').value, /New decision owner/);
+  browser.get('decision-clear').emit('click');
+  assert.equal(browser.get('decision-review-date').value, '');
+  assert.equal(browser.get('decision-brief').value, '');
+  assert.equal(browser.document.activeElement, browser.get('decision-question'));
+  browser.api.dispose();
+});
+
+test('decision form focuses the correction and keeps its text available when copy fails', async () => {
+  const browser = fixture({copy:() => Promise.reject(new Error('Clipboard refused'))});
+  browser.setDecision({...decisionFields(),options:'Only one option'});
+  browser.get('decision-form').emit('submit');
+  assert.equal(browser.document.activeElement, browser.get('decision-options'));
+  assert.equal(browser.get('decision-options').attributes['aria-invalid'], 'true');
+  assert.equal(browser.get('decision-output').hidden, true);
+
+  browser.setDecision({...decisionFields(),reviewDate:''});
+  const date = browser.get('decision-review-date');
+  date.validity = {badInput:true};
+  browser.get('decision-form').emit('submit');
+  assert.equal(browser.document.activeElement, date);
+  assert.equal(date.attributes['aria-invalid'], 'true');
+
+  date.validity = {badInput:false};
+  browser.get('decision-form').emit('submit');
+  const brief = browser.get('decision-brief');
+  await browser.get('decision-copy').emit('click');
+  assert.equal(browser.document.activeElement, brief);
+  assert.equal(brief.selectCount, 1);
+  assert.match(browser.get('decision-copy-status').textContent, /Select and copy the draft text/);
+  browser.api.dispose();
 });
