@@ -51,6 +51,26 @@
 .quote-result .output-value { font-size: clamp(1.6rem, 3.8vw, 2.5rem); }
 .quote-card .trading-gate p { font-size: .875rem; }
 
+.swap-budget {
+  margin-block: 1rem;
+  padding-inline: .85rem;
+  border: 1px solid var(--fed-border-default);
+  border-radius: .65rem;
+  background: var(--fed-space-raised);
+}
+.swap-budget > summary {
+  min-height: 44px;
+  align-content: center;
+  color: var(--fed-command);
+  font-weight: 650;
+  cursor: pointer;
+}
+.swap-budget label { margin-top: .45rem; }
+.swap-budget .swap-budget-status { color: var(--fed-text-display); }
+.swap-budget[data-state="over"] .swap-budget-status { color: var(--fed-warning); font-weight: 650; }
+.swap-budget :is(dt, dd) { font-size: .875rem; }
+.swap-budget dd { font-variant-numeric: tabular-nums; }
+
 @media (max-width: 760px) {
   .site-header nav a { min-height: 44px; }
   .token-pair select { font-size: 1rem; }
