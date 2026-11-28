@@ -29,6 +29,20 @@
 <div class="form-actions"><button class="primary fed-workbench-primary" id="swap-check" type="submit" aria-controls="swap-result" disabled>Check indicative quote</button><button id="swap-cancel" type="button" hidden>Cancel check</button><button id="swap-clear" type="button">Clear</button></div>
 <p class="help-text privacy-line">Manual checks only. The pair and amount go to Jupiter; your wallet address and Federation account do not. <a href="#swap-help">Data &amp; help</a></p>
 </form>
+<details class="swap-budget" id="swap-budget-panel" hidden>
+  <summary>Check SOL budget</summary>
+  <label for="swap-budget-amount">Total SOL budget</label>
+  <input id="swap-budget-amount" type="text" inputmode="decimal" maxlength="40" autocomplete="off" spellcheck="false" aria-describedby="swap-budget-help swap-budget-status" placeholder="For example, 0.012">
+  <p class="help-text" id="swap-budget-help">Compare the SOL amount above with your total spending limit. Your budget stays on this page.</p>
+  <div role="status" aria-live="polite" aria-atomic="true">
+    <dl id="swap-budget-figures" hidden>
+      <div><dt>SOL input</dt><dd id="swap-budget-input"></dd></div>
+      <div><dt id="swap-budget-difference-label">Left before fees and setup</dt><dd id="swap-budget-difference"></dd></div>
+    </dl>
+    <p class="help-text swap-budget-status" id="swap-budget-status"></p>
+  </div>
+  <p class="help-text">Network fees, priority charges and account setup require separate route evidence.</p>
+</details>
 <noscript><p class="notice">JavaScript is needed to check quotes. Trading stays closed. The official trading link and Federation tools remain available.</p></noscript>
 <p class="fed-workbench-status" id="swap-message" data-state="idle" role="status" aria-live="polite" aria-atomic="true">No quote requested. Trading is closed; wallet address preview is optional.</p>
 <section id="swap-result" class="quote-result" aria-labelledby="result-title" aria-busy="false" hidden>

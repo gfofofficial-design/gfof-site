@@ -1,5 +1,5 @@
 // Quote-only foundation. There is deliberately no wallet, signing or submission path.
-import {QUOTE_PAIRS, SWAP_CATALOG} from './token-registry.mjs';
+import {QUOTE_PAIRS, SOL, SWAP_CATALOG} from './token-registry.mjs';
 import {parseDecimalUnits,formatDecimalUnits} from './decimal-units.mjs';
 export {GFOF, SOL, USDC} from './token-registry.mjs';
 export const TRADING_ENABLED = false;
@@ -30,6 +30,20 @@ function units(value, allowZero = false) {
 
 export function formatUnits(value, decimals) {
   try{return formatDecimalUnits(value,decimals,MAX_UNITS);}catch{throw failure('unavailable');}
+}
+
+export function checkSolBudget(inputValue, budgetValue) {
+  let input, budget;
+  try { input = BigInt(parseAmount(inputValue, SOL.decimals)); }
+  catch { return {state: 'input'}; }
+  try { budget = BigInt(parseAmount(budgetValue, SOL.decimals)); }
+  catch { return {state: 'budget'}; }
+  const difference = budget - input;
+  return {
+    state: difference < 0n ? 'over' : difference === 0n ? 'exact' : 'remainder',
+    input: formatUnits(input.toString(), SOL.decimals),
+    difference: formatUnits((difference < 0n ? -difference : difference).toString(), SOL.decimals),
+  };
 }
 
 export function makeQuoteRequest(direction, amount) {

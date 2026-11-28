@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {GFOF, SOL, TRADING_ENABLED, parseAmount, formatUnits, makeQuoteRequest, projectQuote, createQuoteController} from '../assets/federation/swap/quote-core.mjs';
+import {GFOF, SOL, TRADING_ENABLED, parseAmount, formatUnits, checkSolBudget, makeQuoteRequest, projectQuote, createQuoteController} from '../assets/federation/swap/quote-core.mjs';
 import {USDC, QUOTE_TOKENS, QUOTE_PAIRS} from '../assets/federation/swap/token-registry.mjs';
 
 const request = () => makeQuoteRequest('buy', '0.01');
@@ -36,6 +36,16 @@ test('amount conversion uses integer arithmetic through the full u64 range', () 
   assert.equal(parseAmount('18446744073.709551615', 9), '18446744073709551615');
   assert.equal(formatUnits('18446744073709551615', 9), '18,446,744,073.709551615');
   assert.equal(formatUnits('1', 6), '0.000001');
+});
+
+test('the SOL budget check preserves single lamports and rejects unknown amounts', () => {
+  assert.deepEqual(checkSolBudget('0.010', '0.012'), {state: 'remainder', input: '0.01', difference: '0.002'});
+  assert.deepEqual(checkSolBudget('0.012', '0.012'), {state: 'exact', input: '0.012', difference: '0'});
+  assert.deepEqual(checkSolBudget('0.012000001', '0.012'), {state: 'over', input: '0.012000001', difference: '0.000000001'});
+  const atU64 = checkSolBudget('18446744073.709551614', '18446744073.709551615');
+  assert.deepEqual(atU64, {state: 'remainder', input: '18,446,744,073.709551614', difference: '0.000000001'});
+  assert.equal(checkSolBudget('0.01', '1e-2').state, 'budget');
+  assert.equal(checkSolBudget('0.0100000001', '0.012').state, 'input');
 });
 
 test('invalid, zero, excessive-precision and overflow amounts never become requests', () => {

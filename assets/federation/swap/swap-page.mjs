@@ -1,6 +1,6 @@
 import {createWalletPreview} from './wallet-preview.mjs';
-import {createQuoteController, pairFor} from './quote-core.mjs';
-import {QUOTE_PAIRS,QUOTE_TOKENS} from './token-registry.mjs';
+import {checkSolBudget, createQuoteController, pairFor} from './quote-core.mjs';
+import {QUOTE_PAIRS,QUOTE_TOKENS,SOL} from './token-registry.mjs';
 
 const MESSAGES = Object.freeze({idle: 'No quote requested. Trading is closed; wallet address preview is optional.',
   loading: 'Checking an indicative quote with Jupiter. No wallet or transaction is involved.',
@@ -32,10 +32,34 @@ export function mountSwapPage(doc, options = {}) {
   const message = $('swap-message'), receiptTime = $('swap-time');
   const evidence = $('swap-evidence'), sourceDetails = $('swap-source-details');
   const coverage = $('swap-evidence-coverage'), coverageMarker = $('swap-evidence-marker');
+  const budgetPanel = $('swap-budget-panel'), budgetInput = $('swap-budget-amount');
   const resultFields = ['swap-input', 'swap-output', 'swap-router', 'swap-fee', 'swap-time',
     'swap-impact', 'swap-minimum', 'swap-slippage', 'swap-review-notes',
     'swap-evidence-coverage', 'swap-evidence-description'];
   const selection = () => $('swap-from').value + ':' + $('swap-to').value;
+  function renderBudget() {
+    if (!budgetPanel || !budgetInput) return;
+    const direction = selection();
+    const solInput = QUOTE_PAIRS.some(pair => pair.id === direction && pair.input.id === SOL.id);
+    const budget = solInput ? checkSolBudget($('swap-amount').value, budgetInput.value) : {state: 'unsupported'};
+    const status = {
+      unsupported: 'Choose SOL as the input token for this check. SOL fees for this pair remain unknown.',
+      input: 'Enter a valid SOL amount above to begin.',
+      budget: 'Enter a positive SOL budget with up to 9 decimal places.',
+      over: 'The input alone exceeds your budget.',
+      exact: 'The input alone uses your entire budget.',
+      remainder: 'Some of your budget remains before fees and setup.',
+    };
+    budgetInput.disabled = budget.state === 'unsupported';
+    budgetInput.setAttribute('aria-invalid', String(budget.state === 'budget' && budgetInput.value.trim() !== ''));
+    $('swap-budget-figures').hidden = budget.difference === undefined;
+    $('swap-budget-input').textContent = budget.input === undefined ? '' : budget.input + ' SOL';
+    $('swap-budget-difference').textContent = budget.difference === undefined ? '' : budget.difference + ' SOL';
+    $('swap-budget-difference-label').textContent = budget.state === 'over' ?
+      'Input over budget' : 'Left before fees and setup';
+    $('swap-budget-status').textContent = status[budget.state];
+    budgetPanel.setAttribute('data-state', budget.state);
+  }
   const updateLabels = () => {
     let pair;
     try { pair = pairFor(selection()); } catch { return false; }
@@ -135,9 +159,10 @@ export function mountSwapPage(doc, options = {}) {
   }
   const onWalletConnect = () => void walletPreview?.connect(Number($('swap-wallet-select').value));
   const onWalletDisconnect = () => void walletPreview?.disconnect();
-  const onEdit = () => controller.invalidate();
+  const onEdit = () => { controller.invalidate(); renderBudget(); };
   const onPairChange = () => {
     controller.invalidate(); $('swap-amount').value = '';
+    renderBudget();
     if (!updateLabels()) { controller.invalidate('invalidPair'); return; }
     const {input, output} = pairFor(selection());
     $('swap-message').textContent = 'Quote pair changed to ' + input.symbol + ' → ' + output.symbol + '. Amount and previous quote cleared. Enter a new amount to check.';
@@ -154,7 +179,13 @@ export function mountSwapPage(doc, options = {}) {
     else if ($('swap-from').getAttribute('aria-invalid') === 'true') $('swap-from').focus();
   };
   const onCancel = () => controller.invalidate('cancelled');
-  const onClear = () => { controller.invalidate(); $('swap-amount').value = ''; $('swap-amount').focus(); };
+  const onClear = () => {
+    controller.invalidate();
+    $('swap-amount').value = '';
+    if (budgetInput) budgetInput.value = '';
+    renderBudget();
+    $('swap-amount').focus();
+  };
   const onVisibility = () => { controller.invalidate(); walletPreview?.invalidate(); };
   const onSourceDetails = event => {
     if (result.hidden) return;
@@ -174,9 +205,14 @@ export function mountSwapPage(doc, options = {}) {
     [$('swap-source-link'), 'click', onSourceDetails], [$('swap-source-return'), 'click', onSourceReturn],
     [doc, 'visibilitychange', onVisibility]];
   if (walletPreview) bindings.push([$('swap-wallet-connect'), 'click', onWalletConnect], [$('swap-wallet-disconnect'), 'click', onWalletDisconnect]);
+  if (budgetPanel && budgetInput) bindings.push([budgetInput, 'input', renderBudget]);
   if (doc.defaultView) bindings.push([doc.defaultView, 'pagehide', onVisibility], [doc.defaultView, 'pageshow', onVisibility]);
   bindings.forEach(([node, event, handler]) => node.addEventListener(event, handler));
   updateLabels();
+  if (budgetPanel && budgetInput) {
+    renderBudget();
+    budgetPanel.hidden = false;
+  }
   return Object.freeze({dispose() { if (disposed) return; walletPreview?.dispose(); controller.dispose(); disposed = true;
     if (walletPreview) { $('swap-wallet-address').textContent = 'No address displayed'; $('swap-wallet-connect').disabled = true; $('swap-wallet-disconnect').disabled = true; $('swap-wallet-select').disabled = true; $('swap-wallet-select').onchange = null; }
     bindings.forEach(([node, event, handler]) => node.removeEventListener(event, handler)); $('swap-check').disabled = true; }});

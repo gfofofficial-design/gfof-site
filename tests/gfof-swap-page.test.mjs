@@ -48,6 +48,54 @@ test('page initialization enables quote checks only and requests nothing', () =>
   assert.match(f.get('swap-message').textContent, /Trading is closed/); f.api.dispose();
 });
 
+test('the budget check updates offline and clears when the quote form is cleared', () => {
+  const f = fixture();
+  const amount = f.get('swap-amount'), budget = f.get('swap-budget-amount');
+  const status = f.get('swap-budget-status'), figures = f.get('swap-budget-figures');
+  assert.equal(f.get('swap-budget-panel').hidden, false);
+  assert.equal(figures.hidden, true);
+  amount.value = '0.01'; amount.emit('input');
+  budget.value = '0.012'; budget.emit('input');
+  assert.equal(figures.hidden, false);
+  assert.equal(f.get('swap-budget-difference').textContent, '0.002 SOL');
+  assert.match(status.textContent, /before fees and setup/);
+  budget.value = '0.009'; budget.emit('input');
+  assert.match(status.textContent, /input alone exceeds/);
+  assert.equal(f.get('swap-budget-difference-label').textContent, 'Input over budget');
+  budget.value = '1e-2'; budget.emit('input');
+  assert.equal(figures.hidden, true);
+  assert.equal(f.get('swap-budget-difference').textContent, '');
+  assert.equal(budget.getAttribute('aria-invalid'), 'true');
+  f.get('swap-reverse').emit('click');
+  assert.equal(budget.disabled, true);
+  assert.match(status.textContent, /SOL fees for this pair remain unknown/);
+  f.get('swap-reverse').emit('click');
+  assert.equal(budget.disabled, false);
+  f.get('swap-clear').emit('click');
+  assert.equal(budget.value, '');
+  assert.equal(f.calls.length, 0);
+  assert.equal(f.get('swap-trade').disabled, true);
+  f.api.dispose();
+  assert.equal(budget.events.size, 0);
+});
+
+test('the explicit quote sends the selected amount and keeps the budget on the page', async () => {
+  const f = fixture();
+  const amount = f.get('swap-amount'), budget = f.get('swap-budget-amount');
+  amount.value = '0.010'; amount.emit('input');
+  budget.value = '0.012'; budget.emit('input');
+  f.get('swap-form').emit('submit');
+  await flush();
+  assert.equal(f.calls.length, 1);
+  const quote = new URL(f.calls[0][0]);
+  assert.deepEqual(Object.fromEntries(quote.searchParams), {
+    inputMint: SOL.mint, outputMint: GFOF.mint, amount:'10000000',
+  });
+  assert.equal(budget.value, '0.012');
+  assert.equal(f.get('swap-trade').disabled, true);
+  f.api.dispose();
+});
+
 test('invalid input is explained and focused before any provider request', () => {
   const f = fixture(); f.get('swap-amount').value = '1e6'; f.get('swap-form').emit('submit');
   assert.equal(f.calls.length, 0); assert.equal(f.doc.activeElement, f.get('swap-amount'));
